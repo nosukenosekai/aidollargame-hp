@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SNS AIエージェント | AIdollargame</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Noto+Sans+JP:wght@300;400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fafbfc;
+  --white: #ffffff;
+  --green: #00b964;
+  --green-d: #008d4c;
+  --green-l: #eef9f3;
+  --navy: #0e1a2b;
+  --text: #0e1a2b;
+  --muted: #6e7a8a;
+  --border: #ebeef2;
+  --shadow: 0 1px 2px rgba(14,26,43,0.04);
+  --shadow-lg: 0 4px 16px rgba(14,26,43,0.06);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--text); font-family:'Noto Sans JP',sans-serif; overflow-x:hidden; }
+
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1.1rem 3rem;
+  background:rgba(255,255,255,0.9); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo {
+  font-family:'Noto Sans JP',sans-serif; font-size:1.15rem; font-weight:900;
+  color:var(--navy); text-decoration:none;
+  display:inline-block; letter-spacing:-0.01em; line-height:1.5;
+}
+.nav-logo span { color:var(--green); }
+.nav-links { display:flex; gap:2rem; list-style:none; }
+.nav-links a { color:var(--muted); text-decoration:none; font-size:0.85rem; transition:color 0.2s; }
+.nav-links a:hover { color:var(--navy); }
+.nav-cta { padding:0.6rem 1.4rem; background:var(--green); color:#fff; font-weight:700; font-size:0.82rem; border:none; cursor:pointer; font-family:'Noto Sans JP',sans-serif; text-decoration:none; border-radius:6px; transition:background 0.15s; }
+.nav-cta:hover { background:var(--green-d); }
+
+/* HERO */
+#hero {
+  position:relative;
+  min-height:100vh; display:grid; grid-template-columns:1fr 1fr;
+  align-items:center; gap:4rem;
+  padding:8rem 5rem 5rem;
+  max-width:1300px; margin:0 auto;
+}
+.hero-left { position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s 0.2s forwards; }
+.hero-badge {
+  display:inline-flex; align-items:center; gap:0.6rem;
+  font-size:0.75rem; letter-spacing:0.08em;
+  color:var(--muted); background:transparent;
+  border:1px solid var(--border);
+  padding:0.4rem 1rem; border-radius:100px;
+  margin-bottom:1.8rem; font-weight:600;
+}
+.hero-badge-dot { width:7px; height:7px; background:var(--green); border-radius:50%; animation:pulse 2s infinite; }
+.hero-title { font-family:'Noto Sans JP',sans-serif; font-size:clamp(2rem,3.6vw,3.2rem); font-weight:900; line-height:1.4; margin-bottom:1.5rem; color:var(--navy); letter-spacing:-0.015em; }
+.hero-title .accent { color:var(--green); display:inline; white-space:nowrap; }
+.num-span { font-family:'Noto Sans JP',sans-serif; font-weight:900; letter-spacing:0; }
+.hero-sub { font-size:1rem; color:var(--muted); line-height:2; margin-bottom:2.5rem; max-width:480px; }
+.hero-sub strong { color:var(--navy); }
+.hero-actions { display:flex; gap:1rem; flex-wrap:wrap; }
+.btn-green { padding:0.95rem 2rem; background:var(--green); color:#fff; font-weight:700; font-size:0.92rem; border:none; cursor:pointer; font-family:'Noto Sans JP',sans-serif; border-radius:6px; transition:background 0.15s; text-decoration:none; display:inline-block; }
+.btn-green:hover { background:var(--green-d); }
+.btn-line { padding:0.95rem 2rem; background:transparent; color:var(--navy); font-weight:700; font-size:0.92rem; border:1px solid var(--border); cursor:pointer; font-family:'Noto Sans JP',sans-serif; border-radius:6px; transition:border-color 0.15s; text-decoration:none; display:inline-block; }
+.btn-line:hover { border-color:var(--navy); }
+
+/* HERO RIGHT */
+.hero-right { position:relative; z-index:1; opacity:0; animation:fadeUp 0.8s 0.5s forwards; }
+.phone-wrap { position:relative; }
+.phone-frame {
+  width:310px; margin:0 auto; position:relative;
+  background:var(--white); border-radius:18px;
+  box-shadow:var(--shadow-lg);
+  border:1px solid var(--border);
+  overflow:hidden;
+}
+.phone-header {
+  background:var(--green);
+  padding:1.2rem 1.5rem;
+  display:flex; align-items:center; gap:0.8rem;
+}
+.phone-icon { width:34px; height:34px; background:rgba(255,255,255,0.2); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.9rem; flex-shrink:0; }
+.phone-title { font-size:0.88rem; font-weight:700; color:white; }
+.phone-status { font-size:0.65rem; color:rgba(255,255,255,0.8); }
+.phone-body { padding:1.2rem; display:flex; flex-direction:column; gap:0.7rem; background:#f0f2f5; }
+.bubble { max-width:82%; padding:0.65rem 0.9rem; font-size:0.78rem; line-height:1.6; }
+.bubble.user { align-self:flex-end; background:var(--green); color:white; border-radius:12px 12px 2px 12px; }
+.bubble.ai { align-self:flex-start; background:white; color:var(--text); border-radius:2px 12px 12px 12px; border:1px solid var(--border); }
+.bubble.ai .tag { display:inline-block; background:var(--navy); color:white; font-size:0.58rem; font-weight:700; padding:0.1rem 0.4rem; border-radius:3px; margin-bottom:0.3rem; letter-spacing:0.05em; }
+.fac-card { background:white; border-radius:8px; padding:0.8rem; border:1px solid var(--border); }
+.fac-type { font-size:0.62rem; color:var(--muted); font-weight:700; margin-bottom:0.2rem; letter-spacing:0.04em; }
+.fac-name { font-size:0.78rem; font-weight:700; color:var(--navy); margin-bottom:0.2rem; }
+.fac-price { font-size:0.72rem; color:var(--muted); margin-bottom:0.6rem; }
+.fac-btn { background:var(--green); color:white; text-align:center; padding:0.4rem; border-radius:5px; font-size:0.7rem; font-weight:700; }
+.cal-card { background:white; border-radius:8px; padding:0.8rem; border:1px solid var(--border); }
+.cal-label { font-size:0.62rem; color:var(--muted); margin-bottom:0.5rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; }
+.cal-slot { display:flex; justify-content:space-between; align-items:center; padding:0.3rem 0; border-bottom:1px solid #f3f5f8; font-size:0.7rem; color:var(--navy); gap:0.5rem; }
+.cal-slot:last-child { border-bottom:none; }
+.cal-btn { background:var(--green); color:white; padding:0.2rem 0.5rem; border-radius:4px; font-size:0.6rem; font-weight:700; white-space:nowrap; }
+.done-bubble { align-self:flex-start; background:var(--green-l); border-radius:2px 12px 12px 12px; padding:0.65rem 0.9rem; font-size:0.75rem; line-height:1.6; color:var(--green-d); display:flex; gap:0.4rem; align-items:flex-start; }
+.done-bubble svg { flex-shrink:0; margin-top:0.15rem; }
+
+/* TRUST BAR */
+.trust-bar {
+  background:var(--white); border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  padding:1.6rem 5rem; display:flex; justify-content:space-around; align-items:center; flex-wrap:wrap; gap:1.5rem;
+}
+.trust-item { display:flex; align-items:center; gap:0.55rem; font-size:0.82rem; color:var(--muted); font-weight:500; }
+.trust-item svg { flex-shrink:0; color:var(--green-d); }
+
+/* SECTIONS */
+.section-wrap { max-width:1180px; margin:0 auto; padding:7rem 5rem; }
+.section-label { font-size:0.72rem; letter-spacing:0.22em; color:var(--green-d); font-weight:700; margin-bottom:1.2rem; text-transform:uppercase; }
+.section-title { font-family:'Noto Sans JP',sans-serif; font-size:clamp(1.6rem,3vw,2.4rem); font-weight:900; color:var(--navy); line-height:1.4; margin-bottom:1rem; letter-spacing:-0.005em; }
+.section-sub { color:var(--muted); font-size:0.95rem; line-height:1.9; max-width:580px; }
+
+/* PAIN */
+.pain-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:3.5rem; }
+.pain-card {
+  background:white; border:1px solid var(--border); border-radius:10px;
+  padding:2rem; transition:border-color 0.2s;
+}
+.pain-card:hover { border-color:var(--green); }
+.pain-illust { width:48px; height:48px; margin-bottom:1.4rem; color:var(--green); }
+.pain-illust svg { width:100%; height:100%; }
+.pain-title { font-size:1rem; font-weight:700; margin-bottom:0.8rem; color:var(--navy); line-height:1.6; }
+.pain-desc { font-size:0.85rem; color:var(--muted); line-height:1.9; }
+
+/* ARROW */
+.arrow-mid { text-align:center; padding:0 0 3rem; }
+.arrow-mid p { display:inline-block; color:var(--muted); font-size:0.85rem; font-weight:500; letter-spacing:0.02em; }
+.arrow-mid p::before { content:''; display:inline-block; width:24px; height:1px; background:var(--green); vertical-align:middle; margin-right:0.8rem; }
+.arrow-mid p::after { content:''; display:inline-block; width:24px; height:1px; background:var(--green); vertical-align:middle; margin-left:0.8rem; }
+
+/* HOW */
+.how-bg { background:var(--white); }
+.how-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; margin-top:4rem; }
+.steps { display:flex; flex-direction:column; gap:0; }
+.step { display:flex; gap:1.5rem; padding-bottom:2rem; position:relative; }
+.step:not(:last-child)::after { content:''; position:absolute; left:19px; top:42px; bottom:0; width:1px; background:var(--border); }
+.step-circle { width:38px; height:38px; border-radius:50%; background:var(--white); border:1px solid var(--green); display:flex; align-items:center; justify-content:center; font-family:'Noto Sans JP',sans-serif; font-size:0.95rem; font-weight:800; color:var(--green-d); flex-shrink:0; z-index:1; line-height:1; }
+.step-body { padding-top:0.6rem; }
+.step-body h4 { font-size:1rem; font-weight:700; margin-bottom:0.4rem; color:var(--navy); }
+.step-body p { font-size:0.85rem; color:var(--muted); line-height:1.9; }
+.flow-card { background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:1.5rem; }
+.flow-item { display:flex; align-items:center; gap:1rem; padding:1rem; border-radius:6px; margin-bottom:0.4rem; background:white; border:1px solid var(--border); }
+.flow-item:last-child { margin-bottom:0; }
+.flow-icon { width:32px; height:32px; flex-shrink:0; color:var(--green); display:flex; align-items:center; justify-content:center; }
+.flow-icon svg { width:100%; height:100%; }
+.flow-text h5 { font-size:0.85rem; font-weight:700; color:var(--navy); margin-bottom:0.2rem; }
+.flow-text p { font-size:0.75rem; color:var(--muted); }
+.flow-chip { margin-left:auto; color:var(--muted); font-size:0.65rem; font-weight:600; letter-spacing:0.08em; white-space:nowrap; text-transform:uppercase; }
+
+/* AI FEATURE */
+.ai-feature-bg { background:var(--white); }
+.ai-features { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:3.5rem; }
+.ai-card {
+  background:white; border:1px solid var(--border); border-radius:10px;
+  padding:2rem; transition:border-color 0.2s;
+  text-align:left;
+}
+.ai-card:hover { border-color:var(--green); }
+.ai-icon-wrap { width:40px; height:40px; margin-bottom:1.4rem; display:flex; align-items:center; justify-content:center; color:var(--green); }
+.ai-icon-wrap svg { width:100%; height:100%; }
+.ai-card h3 { font-size:1rem; font-weight:700; margin-bottom:0.6rem; color:var(--navy); line-height:1.6; }
+.ai-card p { font-size:0.82rem; color:var(--muted); line-height:1.9; }
+
+/* INDUSTRIES */
+.industry-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-top:3.5rem; }
+.ind-card {
+  background:white; border:1px solid var(--border); border-radius:10px;
+  padding:1.5rem; transition:border-color 0.2s;
+  display:flex; gap:1rem; align-items:flex-start;
+}
+.ind-card:hover { border-color:var(--green); }
+.ind-icon-svg { width:32px; height:32px; flex-shrink:0; display:flex; align-items:center; justify-content:center; color:var(--green); }
+.ind-icon-svg svg { width:100%; height:100%; }
+.ind-name { font-size:0.9rem; font-weight:700; margin-bottom:0.3rem; color:var(--navy); }
+.ind-use { font-size:0.78rem; color:var(--muted); line-height:1.8; }
+
+/* CTA */
+.cta-section {
+  background:var(--navy);
+  padding:7rem 5rem; text-align:center; position:relative;
+}
+.cta-title { font-family:'Noto Sans JP',sans-serif; font-size:clamp(1.8rem,3.2vw,2.6rem); font-weight:900; color:white; margin-bottom:1rem; line-height:1.4; letter-spacing:-0.01em; }
+.cta-title .accent { color:var(--green); }
+.cta-sub { color:rgba(255,255,255,0.6); font-size:0.95rem; margin-bottom:2.8rem; line-height:1.9; }
+.cta-form { display:flex; flex-direction:column; gap:0.7rem; align-items:center; max-width:400px; margin:0 auto; }
+.cta-input { width:100%; padding:0.95rem 1.2rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); color:white; font-family:'Noto Sans JP',sans-serif; font-size:0.9rem; outline:none; border-radius:6px; transition:border-color 0.2s; }
+.cta-input::placeholder { color:rgba(255,255,255,0.4); }
+.cta-input:focus { border-color:var(--green); }
+.cta-form .btn-green { width:100%; text-align:center; }
+.cta-note { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-top:1.2rem; }
+
+/* FAQ */
+.faq-wrap { max-width:760px; margin:0 auto; padding:7rem 2rem; }
+.faq-list { margin-top:3rem; display:flex; flex-direction:column; }
+.faq-item { background:transparent; border-top:1px solid var(--border); }
+.faq-item:last-child { border-bottom:1px solid var(--border); }
+.faq-q { padding:1.5rem 0.2rem; font-size:0.95rem; font-weight:700; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:1rem; color:var(--navy); }
+.faq-icon { color:var(--green); font-size:1.2rem; flex-shrink:0; transition:transform 0.25s; font-weight:400; line-height:1; }
+.faq-a { padding:0 0.2rem 1.5rem; font-size:0.88rem; color:var(--muted); line-height:2; display:none; }
+.faq-item.open .faq-a { display:block; }
+.faq-item.open .faq-icon { transform:rotate(45deg); }
+
+/* FOOTER */
+footer { background:var(--white); border-top:1px solid var(--border); padding:2.5rem 5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+.footer-logo {
+  font-family:'Noto Sans JP',sans-serif; font-size:1rem; font-weight:900;
+  color:var(--navy); text-decoration:none;
+  display:inline-block; letter-spacing:-0.01em; line-height:1.5;
+}
+.footer-logo span { color:var(--green); }
+.footer-links { display:flex; gap:2rem; }
+.footer-links a { font-size:0.8rem; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+.footer-links a:hover { color:var(--navy); }
+.footer-copy { font-size:0.75rem; color:var(--muted); }
+
+/* DIVIDER */
+.divider { height:1px; background:var(--border); }
+
+/* UTILS */
+.reveal { opacity:0; transform:translateY(24px); transition:opacity 0.7s,transform 0.7s; }
+.reveal.visible { opacity:1; transform:none; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);} }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.85);} }
+
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem;} .nav-links{display:none;}
+  #hero{grid-template-columns:1fr;padding:7rem 1.5rem 3rem;gap:3rem;}
+  .trust-bar{padding:1.5rem;}
+  .stats-wrap{padding:4rem 1.5rem;} .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .section-wrap{padding:5rem 1.5rem;}
+  .pain-grid,.ai-features,.industry-grid{grid-template-columns:1fr;}
+  .how-grid{grid-template-columns:1fr;gap:3rem;}
+  .cta-section{padding:5rem 1.5rem;}
+  .faq-wrap{padding:5rem 1.5rem;}
+  footer{padding:2rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><span>AI</span>dollargame</a>
+  <ul class="nav-links">
+    <li><a href="#how">仕組み</a></li>
+    <li><a href="#industries">業種</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">無料相談する</a>
+</nav>
+
+<!-- HERO -->
+<div id="hero">
+  <div class="hero-left">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      LINE / Instagram / X / WhatsApp / WeChat 対応
+    </div>
+    <h1 class="hero-title">
+      顧客対応を、<br>
+      AIが<span class="accent"><span class="num-span">24</span>時間</span><br>
+      担います。
+    </h1>
+    <p class="hero-sub">
+      LINEにAIエージェントを搭載し、<strong>問い合わせ・施設案内・予約・カレンダー登録</strong>まで自動化。<br>
+      企業の「対応コスト」を減らし、スタッフが本当に必要な仕事に集中できる環境をつくります。
+    </p>
+    <div class="hero-actions">
+      <a href="#cta" class="btn-green">無料デモを見る →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="phone-wrap">
+      <div class="phone-glow"></div>
+      <div class="phone-frame">
+        <div class="phone-header">
+          <div class="phone-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div>
+            <div class="phone-title">AI介護施設さがし</div>
+            <div class="phone-status">応答中 ● ONLINE 24H</div>
+          </div>
+        </div>
+        <div class="phone-body">
+          <div class="bubble user">東京目黒周辺でサービス付き</div>
+          <div class="bubble ai">
+            <span class="tag">AI</span><br>
+            目黒区は空きなしですが、品川区に2件ございます。入居一時金0円のプランもあります！
+          </div>
+          <div class="fac-card">
+            <div class="fac-type">サービス付き高齢者向け住宅</div>
+            <div class="fac-name">東急ウェリナ旗の台</div>
+            <div class="fac-price">月額 25〜62万円 ｜ 入居一時金 90万〜</div>
+            <div class="fac-btn">詳細を見る</div>
+          </div>
+          <div class="bubble user">見学したい</div>
+          <div class="cal-card">
+            <div class="cal-label">空き日程</div>
+            <div class="cal-slot">4月25日（金）10:00 <span class="cal-btn">この日時で予約</span></div>
+            <div class="cal-slot">4月28日（月）13:00 <span class="cal-btn">この日時で予約</span></div>
+          </div>
+          <div class="done-bubble">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>予約完了。カレンダーへ自動追加、担当者にも通知しました。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    不動産業界 導入実績あり
+  </div>
+  <div class="trust-item">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+    介護福祉業界 導入実績あり
+  </div>
+  <div class="trust-item">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    個人情報の取り扱いは厳格に管理
+  </div>
+  <div class="trust-item">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    日本語特化・国内サポート対応
+  </div>
+  <div class="trust-item">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    最短1週間で導入
+  </div>
+</div>
+
+<!-- PAIN -->
+<div class="divider"></div>
+<div class="section-wrap">
+  <div class="reveal">
+    <div class="section-label">THE PROBLEM</div>
+    <h2 class="section-title">こんな課題、<br>抱えていませんか？</h2>
+  </div>
+  <div class="pain-grid reveal">
+    <div class="pain-card">
+      <div class="pain-illust">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+      </div>
+      <h3 class="pain-title">「夜の問い合わせ」が<br>全部取りこぼしになっている</h3>
+      <p class="pain-desc">検討中の顧客は昼間だけ動いていない。深夜・休日に届いた問い合わせへの返信が翌朝になる間に、その見込み顧客は競合に流れている。</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-illust">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>
+      </div>
+      <h3 class="pain-title">同じ質問の繰り返しに<br>スタッフが消耗している</h3>
+      <p class="pain-desc">「料金は？」「予約できますか？」毎日繰り返される対応で、スタッフが本来の仕事に集中できない。人が増えてもこの構造は変わらない。</p>
+    </div>
+    <div class="pain-card">
+      <div class="pain-illust">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-7v16L3 13z"/><path d="M3 13v3a2 2 0 0 0 2 2h3"/></svg>
+      </div>
+      <h3 class="pain-title">せっかくのSNSが<br>発信に使えていない</h3>
+      <p class="pain-desc">キャンペーン情報・新商品・お知らせを届けたくても、手動配信の手間で後回しになる。LINE登録者への情報発信が機能していない。</p>
+    </div>
+  </div>
+</div>
+<div class="arrow-mid reveal">
+  <p>AIエージェントが、これをすべて解決します</p>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-bg" id="how">
+  <div class="section-wrap">
+    <div class="reveal">
+      <div class="section-label">HOW IT WORKS</div>
+      <h2 class="section-title">設定したら、<br>あとはAIが動き続けます。</h2>
+      <p class="section-sub">複雑な操作は一切不要。御社のLINEにAIを繋ぐだけで、顧客対応から予約管理まで自動で回り始めます。</p>
+    </div>
+    <div class="how-grid">
+      <div class="steps reveal">
+        <div class="step">
+          <div class="step-circle">1</div>
+          <div class="step-body">
+            <h4>LINEにAIエージェントを設置</h4>
+            <p>既存のLINE公式アカウントにAIを搭載します。よくある質問・商品情報・予約フローをインプットし、御社専用のエージェントに育てます。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-circle">2</div>
+          <div class="step-body">
+            <h4>顧客の問い合わせに即時・自動応答</h4>
+            <p>時間帯・曜日を問わず、AIが自然な日本語で対応します。施設案内・料金説明・条件ヒアリングまで、まるで優秀なスタッフのように。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-circle">3</div>
+          <div class="step-body">
+            <h4>空き日程を提示・ワンタップで予約確定</h4>
+            <p>カレンダーと連携して空き枠を自動取得。顧客がLINE上で選ぶだけで予約が完了し、顧客・担当者双方のカレンダーに自動登録されます。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-circle">4</div>
+          <div class="step-body">
+            <h4>データを蓄積し、精度を高め続ける</h4>
+            <p>会話ログから「よく聞かれる質問」や「離脱ポイント」を分析。定期チューニングで、使えば使うほど賢くなります。</p>
+          </div>
+        </div>
+      </div>
+      <div class="flow-card reveal">
+        <div class="flow-item">
+          <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg></div>
+          <div class="flow-text"><h5>顧客がLINEでメッセージ</h5><p>深夜・土日・祝日も即応答</p></div>
+          <div class="flow-chip">自動</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="12" rx="2"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/><path d="M12 4v4M9 4h6"/></svg></div>
+          <div class="flow-text"><h5>AIが意図を理解して返答</h5><p>条件ヒアリング・案内・FAQ</p></div>
+          <div class="flow-chip">自動</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="6" rx="1"/><rect x="3" y="14" width="18" height="6" rx="1"/></svg></div>
+          <div class="flow-text"><h5>最適な選択肢をカード表示</h5><p>詳細情報・料金・アクセスをその場で提示</p></div>
+          <div class="flow-chip">自動</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="flow-text"><h5>予約確定・双方カレンダーに登録</h5><p>顧客・担当者ともに自動反映</p></div>
+          <div class="flow-chip">自動</div>
+        </div>
+        <div class="flow-item">
+          <div class="flow-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="20" x2="4" y2="10"/><line x1="10" y1="20" x2="10" y2="4"/><line x1="16" y1="20" x2="16" y2="14"/><line x1="22" y1="20" x2="2" y2="20"/></svg></div>
+          <div class="flow-text"><h5>CRM登録・月次レポート</h5><p>入力作業ゼロ・継続改善</p></div>
+          <div class="flow-chip">自動</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI FEATURES -->
+<div class="divider"></div>
+<div class="ai-feature-bg">
+  <div class="section-wrap">
+    <div class="reveal" style="text-align:center;">
+      <div class="section-label" style="justify-content:center;display:flex;">AI の強み</div>
+      <h2 class="section-title" style="text-align:center;">AIエージェントが<br>もたらす6つの変化。</h2>
+    </div>
+    <div class="ai-features reveal">
+      <div class="ai-card">
+        <div class="ai-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </div>
+        <h3>見込み顧客を取りこぼさない</h3>
+        <p>深夜・休日・祝日も即応答。「今すぐ知りたい」タイミングを逃さず、商機を確実にキャッチします。</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-7v16L3 13z"/><path d="M3 13v3a2 2 0 0 0 2 2h3"/></svg>
+        </div>
+        <h3>定期的な情報発信を自動化</h3>
+        <p>キャンペーン・新着情報・リマインドをLINE登録者へ自動配信。手動配信の手間なく、顧客接点を維持します。</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><line x1="3" y1="12" x2="21" y2="12"/></svg>
+        </div>
+        <h3>国内外のSNSに対応</h3>
+        <p>LINE・Instagram・X・WhatsApp・WeChatなど、顧客が使うチャネルに合わせて柔軟に展開できます。</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg>
+        </div>
+        <h3>自然な会話で顧客をナビゲート</h3>
+        <p>口語・略語・曖昧な表現も正確に理解。複数条件のヒアリングから提案まで、会話の流れで完結します。</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 15 11 17 15 13"/></svg>
+        </div>
+        <h3>予約・カレンダー登録まで全自動</h3>
+        <p>空き確認・日程提示・予約確定・双方カレンダー登録・リマインド送信。担当者は何もしなくていい。</p>
+      </div>
+      <div class="ai-card">
+        <div class="ai-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 4v6c0 5-3.5 9-9 10-5.5-1-9-5-9-10V6z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <h3>対応品質を均一に保つ</h3>
+        <p>スタッフの経験・体調・時間帯に関係なく、常に一定品質で応答。ミスやムラをなくし、信頼を積み上げます。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INDUSTRIES -->
+<div class="divider"></div>
+<div class="section-wrap" id="industries">
+  <div class="reveal">
+    <div class="section-label">INDUSTRIES</div>
+    <h2 class="section-title">あらゆる業種に。</h2>
+    <p class="section-sub">不動産・介護福祉業界での実績をもとに、どの業種でも最適化して導入できます。</p>
+  </div>
+  <div class="industry-grid reveal">
+    <div class="ind-card">
+      <div class="ind-icon-svg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <div><div class="ind-name">不動産</div><div class="ind-use">物件問い合わせ・内見予約・顧客属性の自動ヒアリング</div></div>
+    </div>
+    <div class="ind-card">
+      <div class="ind-icon-svg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      </div>
+      <div><div class="ind-name">介護・福祉</div><div class="ind-use">施設見学予約・家族への情報発信・採用問い合わせ対応</div></div>
+    </div>
+    <div class="ind-card">
+      <div class="ind-icon-svg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      </div>
+      <div><div class="ind-name">飲食・カフェ</div><div class="ind-use">予約受付・メニュー案内・クーポン配信・満席対応</div></div>
+    </div>
+    <div class="ind-card">
+      <div class="ind-icon-svg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <div><div class="ind-name">サロン・美容</div><div class="ind-use">予約管理・リマインド送信・新メニュー案内</div></div>
+    </div>
+    <div class="ind-card">
+      <div class="ind-icon-svg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div><div class="ind-name">フィットネス</div><div class="ind-use">体験予約・プログラム案内・会員向け情報配信</div></div>
+    </div>
+    <div class="ind-card">
+      <div class="ind-icon-svg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      </div>
+      <div><div class="ind-name">EC・小売</div><div class="ind-use">商品問い合わせ・在庫確認・リピート促進</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="divider"></div>
+<div class="faq-wrap" id="faq">
+  <div class="reveal" style="text-align:center;">
+    <div class="section-label" style="justify-content:center;display:flex;">FAQ</div>
+    <h2 class="section-title" style="text-align:center;">よくある質問</h2>
+  </div>
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <div class="faq-q">既存のLINE公式アカウントに導入できますか？<span class="faq-icon">+</span></div>
+      <div class="faq-a">はい、既存アカウントにそのまま連携できます。アカウントの作り直しや移行は不要です。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">AIが間違った回答をしてしまうことはありますか？<span class="faq-icon">+</span></div>
+      <div class="faq-a">初期設定時に御社の情報を精緻にインプットし、回答できない質問は担当者へ自動エスカレーションする設計にしています。導入後の定期チューニングで精度を継続的に高めます。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">導入までどのくらい時間がかかりますか？<span class="faq-icon">+</span></div>
+      <div class="faq-a">既存のLINE公式アカウントを活用する場合、最短1週間での導入が可能です。CRM連携などカスタマイズが必要な場合は2〜4週間程度をいただきます。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">LINE以外のSNSにも対応できますか？<span class="faq-icon">+</span></div>
+      <div class="faq-a">Instagram DM、X（旧Twitter）のDMなど複数チャネルへの対応が可能です。まずはお気軽にご相談ください。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">料金はどのくらいかかりますか？<span class="faq-icon">+</span></div>
+      <div class="faq-a">導入規模・機能・連携システムによって異なります。まずは無料相談にてご要件をお聞かせください。お見積もりを無料でお出しします。</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <h2 class="cta-title">今夜から、<span class="accent">顧客対応を<br>自動化</span>しませんか。</h2>
+  <p class="cta-sub">まずは無料デモでAIエージェントの動作をご確認ください。<br>導入後のサポートも含め、丁寧にご支援します。</p>
+  <form action="https://formspree.io/f/xeevwrgp" method="POST" class="cta-form">
+    <input type="hidden" name="_replyto" value="nosuke@aidollargame.com">
+    <input type="hidden" name="_subject" value="【SNS AIエージェント】無料デモお申し込み">
+    <input type="text" name="company" class="cta-input" placeholder="会社名" required>
+    <input type="text" name="name" class="cta-input" placeholder="お名前" required>
+    <input type="email" name="email" class="cta-input" placeholder="メールアドレス" required>
+    <button type="submit" class="btn-green" style="border-radius:8px;border:none;cursor:pointer;font-family:'Noto Sans JP',sans-serif;">無料デモを申し込む →</button>
+  </form>
+  <div class="cta-note">nosuke@aidollargame.com へ直接ご連絡も歓迎です</div>
+</section>
+
+<footer>
+  <a href="index.html" class="footer-logo"><span>AI</span>dollargame</a>
+  <div class="footer-links">
+    <a href="index.html">トップページ</a>
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="tokushoho.html">特定商取引法</a>
+  </div>
+  <div class="footer-copy">© 2025 株式会社AIdollargame</div>
+</footer>
+
+<script>
+// REVEAL
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }), {threshold:0.1});
+document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+
+// COUNTER
+const cObs = new IntersectionObserver(es => es.forEach(e => {
+  if(!e.isIntersecting) return;
+  const el = e.target, target = +el.dataset.target;
+  let s = 0; const step = target / 50;
+  const t = setInterval(() => {
+    s += step; if(s >= target){ el.textContent = target; clearInterval(t); return; }
+    el.textContent = Math.floor(s);
+  }, 20);
+  cObs.unobserve(el);
+}), {threshold:0.5});
+document.querySelectorAll('.num[data-target]').forEach(c => cObs.observe(c));
+
+// FAQ
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if(!isOpen) item.classList.add('open');
+  });
+});
+</script>
+</body>
+</html>

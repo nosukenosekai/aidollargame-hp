@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIクローン | あなたの野望に終わりはない</title>
+<meta name="description" content="あなたを学び続ける、もう一人のあなた ── AIクローン。創業者の意志を組織のOSとして永続させる知性。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void:        #000000;
+    --abyss:       #04060a;
+    --night:       #06090f;
+    --text:        #e6ecf5;
+    --text-bright: #ffffff;
+    --muted:       rgba(230,236,245,0.42);
+    --muted-2:     rgba(230,236,245,0.62);
+    --accent:      #5b9bff;
+    --accent-bright:#a4c5ff;
+    --accent-deep: #2d6dd6;
+    --accent-soft: rgba(91,155,255,0.10);
+    --accent-glow: rgba(91,155,255,0.32);
+    --before:      #ff6a52;
+    --rule:        rgba(230,236,245,0.08);
+    --rule-strong: rgba(91,155,255,0.32);
+    --radius:      4px;
+    --radius-lg:   8px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; background:var(--void); }
+  body {
+    background-color: var(--void);
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(91,155,255,0.07) 0%, transparent 65%),
+      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(91,155,255,0.04) 0%, transparent 60%),
+      radial-gradient(circle at 50% 50%, rgba(91,155,255,0.18) 0.6px, transparent 0.7px);
+    background-size: auto, auto, 30px 30px;
+    background-attachment: fixed;
+    animation: gridDrift 60s linear infinite;
+    color: var(--text);
+    font-family: 'Noto Serif JP', serif;
+    font-weight: 500;
+    line-height: 1.95;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    letter-spacing: 0.04em;
+  }
+  @keyframes gridDrift {
+    from { background-position: 0 0, 0 0, 0 0; }
+    to   { background-position: 0 0, 0 0, 30px 30px; }
+  }
+
+  /* slow vertical scan */
+  .scan {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(180deg, transparent 49.85%, rgba(91,155,255,0.05) 49.95%, transparent 50.15%);
+    background-size: 100% 220%;
+    animation: scan 18s linear infinite;
+  }
+  @keyframes scan { from { background-position: 0 -110%; } to { background-position: 0 110%; } }
+
+  #pulse-canvas {
+    position: fixed; inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  body::before {
+    content:'';
+    position:fixed; inset:0; z-index:1;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+    pointer-events:none;
+    opacity:0.04;
+    mix-blend-mode:overlay;
+  }
+  .stage { position:relative; z-index:3; }
+  a { color:inherit; text-decoration:none; }
+
+  /* ── NAV ── */
+  nav {
+    position:fixed; top:0; left:0; right:0;
+    z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:1.4rem 3rem;
+    background:rgba(0,0,0,0.55);
+    backdrop-filter:blur(28px);
+    border-bottom:1px solid var(--rule);
+  }
+  .logo {
+    font-family:'Noto Serif JP',serif;
+    font-size:1.15rem;
+    font-weight:900;
+    color:var(--text-bright);
+    letter-spacing:0.06em;
+  }
+  .logo .ai { color: var(--accent); }
+  .brand-mark {
+    font-family:'Noto Serif JP',serif;
+    font-size:1rem;
+    font-weight:900;
+    color: var(--accent);
+    letter-spacing:0.32em;
+    padding-left:0.32em;
+  }
+  .brand-mark .en { font-family:'JetBrains Mono', monospace; font-weight:500; letter-spacing:0.2em; margin-right:0.3em; }
+  nav ul { display:flex; list-style:none; gap:2.4rem; align-items:center; }
+  nav a {
+    font-family:'Noto Sans JP',sans-serif;
+    color: var(--muted-2);
+    font-size:0.78rem;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    font-weight:500;
+    transition:color 0.4s;
+  }
+  nav a:hover { color: var(--text-bright); }
+  .nav-cta {
+    padding:0.6rem 1.6rem;
+    border:1px solid var(--accent);
+    color: var(--accent) !important;
+    font-weight:700;
+    border-radius: var(--radius);
+  }
+  .nav-cta:hover { background:var(--accent-soft); }
+
+  /* ── SECTION ── */
+  section {
+    padding: 7rem 2rem;
+    width: 100%;
+  }
+  .container {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .container.narrow { max-width: 760px; }
+  .container.wide   { max-width: 1180px; }
+
+  .eyebrow {
+    font-family:'JetBrains Mono', 'Noto Sans JP', sans-serif;
+    font-size:0.74rem;
+    letter-spacing:0.42em;
+    color: var(--accent);
+    text-transform:uppercase;
+    font-weight:500;
+    margin-bottom:1.6rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+  }
+  .eyebrow .tag {
+    border:1px solid var(--accent);
+    color: var(--accent);
+    padding: 0.18rem 0.7rem;
+    font-size:0.64rem;
+    letter-spacing:0.3em;
+    border-radius: var(--radius);
+  }
+  .h-section {
+    font-family:'Noto Serif JP',serif;
+    font-size: clamp(1.7rem, 2.9vw, 2.35rem);
+    font-weight:900;
+    color: var(--text-bright);
+    letter-spacing: 0.08em;
+    line-height: 1.7;
+    margin-bottom: 1.6rem;
+  }
+  .lead {
+    font-family:'Noto Serif JP',serif;
+    font-size: 1.05rem;
+    color: var(--muted-2);
+    line-height: 2.15;
+    letter-spacing: 0.04em;
+    max-width: 42rem;
+    font-weight: 500;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 9rem 2rem 4rem;
+  }
+  .hero-brand {
+    font-family:'Noto Serif JP',serif;
+    font-size: clamp(1rem, 1.4vw, 1.18rem);
+    font-weight:900;
+    color: var(--accent);
+    letter-spacing: 0.42em;
+    margin-bottom: 2rem;
+    padding-left: 0.42em;
+  }
+  .hero-brand .en {
+    font-family:'JetBrains Mono', monospace;
+    font-weight: 500;
+    margin-right: 0.5em;
+    letter-spacing: 0.32em;
+  }
+  .hero-brand-rule {
+    width: 28px;
+    height: 1px;
+    background: var(--accent);
+    margin: 0 auto 2.4rem;
+    opacity: 0.5;
+  }
+  .hero-title {
+    font-family:'Noto Serif JP',serif;
+    font-weight: 900;
+    color: var(--text-bright);
+    font-size: clamp(2.4rem, 5.4vw, 4rem);
+    line-height: 1.55;
+    letter-spacing: 0.10em;
+    margin-bottom: 2.4rem;
+    text-shadow: 0 0 36px rgba(0,0,0,0.85);
+  }
+  .hero-sub {
+    font-family:'Noto Serif JP',serif;
+    font-weight: 700;
+    color: var(--accent);
+    font-size: clamp(1rem, 1.45vw, 1.18rem);
+    letter-spacing: 0.16em;
+    line-height: 1.95;
+    margin-bottom: 3rem;
+    text-shadow: 0 0 24px rgba(0,0,0,0.85);
+  }
+  .scroll-cue {
+    font-family:'JetBrains Mono', sans-serif;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-top: 1rem;
+  }
+  .scroll-cue::after {
+    content: '';
+    display: block;
+    width: 1px;
+    height: 38px;
+    background: var(--accent);
+    margin: 0.6rem auto 0;
+    opacity: 0.5;
+  }
+
+  /* ── DEFINITION ── */
+  #definition { padding-top: 4rem; }
+  .def-text {
+    font-family:'Noto Serif JP',serif;
+    font-weight: 900;
+    font-size: clamp(1.4rem, 2.6vw, 2.05rem);
+    color: var(--text-bright);
+    line-height: 2.05;
+    letter-spacing: 0.06em;
+    text-align: center;
+    text-shadow: 0 0 26px rgba(0,0,0,0.85);
+  }
+  .def-text .neg {
+    display: block;
+    color: var(--muted-2);
+    font-weight: 700;
+    font-size: clamp(1.05rem, 1.85vw, 1.35rem);
+    margin-bottom: 1.4rem;
+    letter-spacing: 0.05em;
+  }
+  .def-text .accent { color: var(--accent); }
+
+  /* ── WHAT IT DOES ── */
+  .cap-head { margin-bottom: 4rem; }
+  .cap-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .cap {
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 2.8rem 2.4rem;
+    transition: background 0.5s;
+  }
+  .cap:nth-child(2n) { border-right: none; }
+  .cap:nth-last-child(-n+2) { border-bottom: none; }
+  .cap:hover { background: rgba(91,155,255,0.025); }
+  .cap-num {
+    font-family:'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-size: 0.78rem;
+    margin-bottom: 1.2rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+  }
+  .cap h3 {
+    font-family:'Noto Serif JP',serif;
+    font-weight: 900;
+    color: var(--text-bright);
+    font-size: 1.22rem;
+    line-height: 1.65;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.1rem;
+  }
+  .cap p {
+    font-family:'Noto Serif JP',serif;
+    font-weight: 500;
+    color: var(--muted-2);
+    font-size: 1rem;
+    line-height: 2.05;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── CYCLE OF INTELLIGENCE ── */
+  #cycle { padding: 6rem 2rem 8rem; }
+  .cycle-stage {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 1;
+    margin: 4rem auto 2rem;
+  }
+  .cycle-svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  .cycle-svg .ring-bg { fill: none; stroke: rgba(91,155,255,0.18); stroke-width: 0.6; }
+  .cycle-svg .tick { stroke: rgba(91,155,255,0.25); stroke-width: 0.6; }
+  .cycle-svg .tick.major { stroke: var(--accent); stroke-width: 1; opacity: 0.55; }
+  .cycle-svg .marker {
+    fill: rgba(91,155,255,0.30);
+    stroke: var(--accent);
+    stroke-width: 0.8;
+    transition: fill 0.4s, r 0.4s;
+  }
+  .cycle-svg .marker.active {
+    fill: var(--accent);
+    filter: drop-shadow(0 0 10px var(--accent-glow));
+  }
+  .cycle-svg .trail { fill: none; stroke: var(--accent); stroke-width: 1.2; stroke-linecap: round; opacity: 0.55; }
+  .cycle-svg .light-head {
+    fill: #ffffff;
+    filter: drop-shadow(0 0 10px var(--accent-bright)) drop-shadow(0 0 18px var(--accent));
+  }
+  .cycle-svg .core {
+    fill: rgba(91,155,255,0.12);
+    stroke: var(--accent);
+    stroke-width: 0.5;
+  }
+  .hour-label {
+    font-family:'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    fill: var(--muted-2);
+    letter-spacing: 0.1em;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+  .cycle-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    pointer-events: none;
+    padding: 0 22%;
+  }
+  .cycle-time {
+    font-family:'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    letter-spacing: 0.06em;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+    transition: opacity 0.4s;
+  }
+  .cycle-time .h {
+    font-size: 0.55em;
+    letter-spacing: 0.32em;
+    color: var(--muted);
+    margin-left: 0.5rem;
+  }
+  .cycle-desc {
+    font-family:'Noto Serif JP',serif;
+    color: var(--text);
+    font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.85;
+    transition: opacity 0.4s;
+  }
+  .cycle-foot {
+    text-align: center;
+    margin-top: 2.5rem;
+    font-family:'Noto Serif JP',serif;
+    font-size: 0.95rem;
+    color: var(--muted-2);
+    letter-spacing: 0.04em;
+    font-weight: 500;
+    line-height: 2;
+  }
+
+  /* ── WHAT CHANGES ── */
+  .change-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-top: 2.6rem;
+  }
+  .change-col {
+    padding: 2.2rem 2rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: rgba(255,255,255,0.012);
+  }
+  .change-col.after {
+    border-color: var(--rule-strong);
+    background: rgba(91,155,255,0.04);
+  }
+  .change-label {
+    font-family:'JetBrains Mono', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .change-col.before .change-label { color: var(--muted-2); }
+  .change-col.after  .change-label { color: var(--accent); }
+  .change-label .dot { display:inline-block; width:7px; height:7px; border-radius:50%; }
+  .change-col.before .change-label .dot { background: var(--before); opacity: 0.7; }
+  .change-col.after  .change-label .dot { background: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+  .change-list { list-style: none; }
+  .change-list li {
+    font-family:'Noto Serif JP',serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 2.05;
+    padding: 0.7rem 0;
+    letter-spacing: 0.03em;
+    border-bottom: 1px solid rgba(230,236,245,0.06);
+    position: relative;
+    padding-left: 1.4rem;
+  }
+  .change-list li:last-child { border-bottom: none; }
+  .change-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 1.55em;
+    width: 6px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.55;
+  }
+  .change-col.before .change-list li { color: var(--muted-2); font-weight: 500; }
+  .change-col.after  .change-list li { color: var(--text-bright); font-weight: 900; }
+
+  /* ── FORBIDDEN ── */
+  #forbidden {
+    text-align: center;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .f-line {
+    font-family:'Noto Serif JP',serif;
+    font-weight: 700;
+    color: var(--text);
+    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+    line-height: 1.85;
+    letter-spacing: 0.10em;
+    margin-bottom: 1.4rem;
+    text-shadow: 0 0 26px rgba(0,0,0,0.85);
+  }
+  .f-line.last {
+    color: var(--accent);
+    font-weight: 900;
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-top: 3rem;
+    letter-spacing: 0.12em;
+    text-shadow: 0 0 36px var(--accent-glow), 0 0 20px rgba(0,0,0,0.85);
+  }
+
+  /* ── MANIFESTO ── */
+  #manifesto {
+    text-align: center;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 8rem 2rem;
+  }
+  .m-line {
+    font-family:'Noto Serif JP',serif;
+    color: var(--text);
+    font-weight: 700;
+    font-size: clamp(1.35rem, 2.5vw, 2rem);
+    line-height: 2.15;
+    letter-spacing: 0.10em;
+    margin-bottom: 1.1rem;
+  }
+  .m-line.strong {
+    color: var(--accent);
+    font-weight: 900;
+    font-size: clamp(1.55rem, 2.9vw, 2.3rem);
+    margin-top: 1.6rem;
+  }
+  .m-attr {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--muted-2);
+    font-size: 1.05rem;
+    letter-spacing: 0.16em;
+    margin-top: 3.5rem;
+    font-weight: 400;
+  }
+
+  /* ── CONTACT (steps + form) ── */
+  #contact { padding: 8rem 2rem 7rem; }
+  .contact-head { text-align: center; margin-bottom: 4rem; }
+  .contact-title {
+    font-family:'Noto Serif JP',serif;
+    font-weight: 900;
+    color: var(--text-bright);
+    font-size: clamp(1.9rem, 3.8vw, 2.7rem);
+    line-height: 1.7;
+    letter-spacing: 0.10em;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 36px var(--accent-glow), 0 0 20px rgba(0,0,0,0.85);
+  }
+  .contact-rule { width: 36px; height: 1px; background: var(--accent); margin: 0 auto 2rem; opacity: 0.6; }
+  .contact-body {
+    font-family:'Noto Serif JP',serif;
+    font-weight: 500;
+    color: var(--text);
+    font-size: clamp(1rem, 1.3vw, 1.1rem);
+    line-height: 2.2;
+    letter-spacing: 0.04em;
+    max-width: 36rem;
+    margin: 0 auto 1rem;
+  }
+  .contact-body strong { color: var(--accent); font-weight: 700; }
+
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    max-width: 720px;
+    margin: 3rem auto 0;
+  }
+  .step {
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    padding: 1.6rem 1.4rem;
+    background: rgba(255,255,255,0.012);
+    text-align: center;
+  }
+  .step .num {
+    font-family:'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-size: 0.74rem;
+    letter-spacing: 0.2em;
+    font-weight: 500;
+    margin-bottom: 0.7rem;
+  }
+  .step .name {
+    font-family:'Noto Serif JP',serif;
+    color: var(--text-bright);
+    font-weight: 900;
+    font-size: 1.05rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.4rem;
+  }
+  .step .desc {
+    font-family:'Noto Serif JP',serif;
+    color: var(--muted-2);
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    line-height: 1.85;
+    font-weight: 500;
+  }
+
+  .form-wrap {
+    max-width: 640px;
+    margin: 4rem auto 0;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius-lg);
+    background: rgba(91,155,255,0.025);
+    padding: 3rem 3rem 2.6rem;
+  }
+  .form-eyebrow {
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-size: 0.7rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 2.2rem;
+  }
+  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .form-label {
+    font-family:'JetBrains Mono', monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.32em;
+    color: var(--muted-2);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .form-input, .form-textarea {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 0.95rem 1.1rem;
+    color: var(--text-bright);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    outline: none;
+    transition: border-color 0.3s, background 0.3s;
+    letter-spacing: 0.04em;
+  }
+  .form-input::placeholder, .form-textarea::placeholder {
+    color: rgba(230,236,245,0.32);
+    font-weight: 400;
+  }
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--accent);
+    background: rgba(91,155,255,0.05);
+    box-shadow: 0 0 0 3px rgba(91,155,255,0.10);
+  }
+  .form-textarea { min-height: 140px; resize: vertical; }
+
+  .btn {
+    font-family:'Noto Sans JP',sans-serif;
+    padding: 1.1rem 3rem;
+    font-size: 0.92rem;
+    letter-spacing: 0.32em;
+    font-weight: 500;
+    border: 1px solid;
+    border-radius: var(--radius);
+    transition: all 0.4s;
+    cursor: pointer;
+    display: inline-block;
+    text-transform: uppercase;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--void);
+    border-color: var(--accent);
+    align-self: flex-start;
+    margin-top: 0.5rem;
+  }
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--accent);
+    box-shadow: 0 0 36px var(--accent-glow);
+  }
+
+  footer {
+    position: relative; z-index: 3;
+    border-top: 1px solid var(--rule);
+    padding: 3rem 4rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1rem;
+    background: var(--void);
+  }
+  .footer-copy, footer a {
+    font-family:'Noto Sans JP',sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted-2);
+    letter-spacing: 0.16em;
+    font-weight: 500;
+  }
+  footer a:hover { color: var(--accent); }
+
+  .reveal { opacity: 0; transition: opacity 1.1s ease-out; }
+  .reveal.visible { opacity: 1; }
+
+  @media(max-width:980px){
+    .cap-grid { grid-template-columns: 1fr; }
+    .cap { border-right: none; }
+    .cap:last-child { border-bottom: none; }
+    .change-grid { grid-template-columns: 1fr; }
+    .steps-row { grid-template-columns: 1fr; }
+  }
+  @media(max-width:768px){
+    nav { padding: 1rem 1.5rem; }
+    nav ul { gap: 1rem; }
+    section { padding: 5rem 1.5rem; }
+    footer { padding: 2rem 1.5rem; }
+    .form-wrap { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="pulse-canvas"></canvas>
+<div class="scan"></div>
+
+<div class="stage">
+
+<nav>
+  <a href="index.html" class="logo"><span class="ai">AI</span>dollargame</a>
+  <ul>
+    <li><span class="brand-mark"><span class="en">AI</span>クローン</span></li>
+    <li><a href="https://human-clone-frontend.hassy.workers.dev" target="_blank" rel="noopener" class="nav-cta">DEMO</a></li>
+    <li><a href="#contact" class="nav-cta">CONTACT</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-brand"><span class="en">AI</span>クローン</div>
+  <div class="hero-brand-rule"></div>
+  <h1 class="hero-title">あなたの野望に<br>終わりはない</h1>
+  <p class="hero-sub">あなたを学び続ける、もう一人のあなた</p>
+  <div class="scroll-cue">SCROLL</div>
+</section>
+
+<!-- DEFINITION -->
+<section id="definition">
+  <div class="container narrow">
+    <div class="eyebrow" style="justify-content:center;">— WHAT IT IS —</div>
+    <p class="def-text reveal">
+      <span class="neg">これはAIツールではありません。</span>
+      創業者の<span class="accent">独裁的なまでの美学</span>を、<br>
+      組織のOSとして永続させる、<br>
+      もう一つの知性。
+    </p>
+  </div>
+</section>
+
+<!-- WHAT IT DOES -->
+<section id="capabilities">
+  <div class="container">
+    <div class="cap-head">
+      <div class="eyebrow">— WHAT IT DOES —</div>
+      <h2 class="h-section">AIクローンが、組織で動かしているもの。</h2>
+      <p class="lead">創業者を六つの場面で同時に存在させ、判断停止の時間を組織から消します。</p>
+    </div>
+    <div class="cap-grid">
+      <div class="cap">
+        <div class="cap-num">/ 01</div>
+        <h3>24/365 不眠不休の判断</h3>
+        <p>深夜・出張・休日。あなたが対応できない時、もう一人のあなたが判断軸を引き継ぎ、即答します。決裁待ちの滞留が消えます。</p>
+      </div>
+      <div class="cap">
+        <div class="cap-num">/ 02</div>
+        <h3>判断履歴のライブラリ</h3>
+        <p>あなたが下してきた全ての決断が構造化されて保管されます。後継者や幹部が「先代ならどう判断したか」を、いつでも引き出せます。</p>
+      </div>
+      <div class="cap">
+        <div class="cap-num">/ 03</div>
+        <h3>全社員の対話メンター</h3>
+        <p>新人からマネージャーまで、全員にあなたの分身が常時応答します。理念浸透が、面談ではなく日常になります。</p>
+      </div>
+      <div class="cap">
+        <div class="cap-num">/ 04</div>
+        <h3>後継者の壁打ち相手</h3>
+        <p>後継者が経営判断の前に「あなたならどう決めるか」を相談できます。経営感覚の継承が、引退の何年も前から始まります。</p>
+      </div>
+      <div class="cap">
+        <div class="cap-num">/ 05</div>
+        <h3>新規アイデアの一次審査</h3>
+        <p>新サービス・新規投資・提携の打診。あなたの基準で一次審査されます。凡庸なアイデアが、上に上がってこなくなります。</p>
+      </div>
+      <div class="cap">
+        <div class="cap-num">/ 06</div>
+        <h3>永続する個人ブランド</h3>
+        <p>引退の後も、他界の後も、あなたの哲学が組織と社会に残り続けます。事業承継の、最後の答え。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CYCLE OF INTELLIGENCE -->
+<section id="cycle">
+  <div class="container">
+    <div class="cap-head" style="text-align:center;">
+      <div class="eyebrow" style="justify-content:center;"><span class="tag">EXAMPLE</span>例えば、こんな24時間が回り続ける</div>
+      <h2 class="h-section">あなたが眠っていても、意志は止まらない。</h2>
+    </div>
+
+    <div class="cycle-stage">
+      <svg class="cycle-svg" viewBox="-240 -240 480 480" id="cycle-svg" aria-hidden="true">
+        <circle class="ring-bg" cx="0" cy="0" r="180"/>
+        <g id="hour-ticks"></g>
+        <g id="hour-labels"></g>
+        <path id="cycle-trail" class="trail"/>
+        <g id="task-markers"></g>
+        <circle id="cycle-light" class="light-head" r="6" cx="0" cy="-180"/>
+        <circle class="core" cx="0" cy="0" r="14"/>
+      </svg>
+      <div class="cycle-center">
+        <div class="cycle-time" id="cycle-time">02:14<span class="h">JST</span></div>
+        <div class="cycle-desc" id="cycle-desc">深夜の緊急稟議に、あなたの判断軸で即答する。</div>
+      </div>
+    </div>
+
+    <p class="cycle-foot">創業者の意志は、24時間、組織の中を循環し続けます。</p>
+  </div>
+</section>
+
+<!-- WHAT CHANGES -->
+<section id="changes">
+  <div class="container">
+    <div class="cap-head">
+      <div class="eyebrow">— WHAT CHANGES —</div>
+      <h2 class="h-section">AIクローンを入れた、前と後で。</h2>
+      <p class="lead">創業者一人がボトルネックの組織から、創業者の意志がOSとして稼働する組織へ。</p>
+    </div>
+    <div class="change-grid">
+      <div class="change-col before">
+        <div class="change-label"><span class="dot"></span>BEFORE</div>
+        <ul class="change-list">
+          <li>社長確認待ちで、案件が常時滞留する</li>
+          <li>創業者依存で、銀行・投資家の評価が下がる</li>
+          <li>「社長に聞いてからじゃないと」が常態化</li>
+          <li>退任後、文化と哲学が薄まっていく</li>
+          <li>後継者が手探りで、経営感覚を学ぶ</li>
+        </ul>
+      </div>
+      <div class="change-col after">
+        <div class="change-label"><span class="dot"></span>AFTER</div>
+        <ul class="change-list">
+          <li>判断停止の時間が、ゼロになる</li>
+          <li>事業継続体制が、与信やM&A評価で実数値化される</li>
+          <li>創業者の判断軸が、組織のOSとして定着する</li>
+          <li>100年後の社員にも、創業者の哲学が届く</li>
+          <li>後継者が、引退前から創業者と壁打ちできる</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FORBIDDEN -->
+<section id="forbidden">
+  <div class="container narrow">
+    <p class="f-line reveal">あなたが築いた王国が</p>
+    <p class="f-line reveal">あなたの死と共に朽ちていく</p>
+    <p class="f-line last reveal">その未来を<br>終わらせる</p>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="container narrow">
+    <p class="m-line reveal">あなたが去っても</p>
+    <p class="m-line reveal">あなたの意志は止まらない</p>
+    <p class="m-line strong reveal">もう一人のあなたが</p>
+    <p class="m-line strong reveal">永遠に学び続ける</p>
+    <div class="m-attr reveal">— from a founder, before he became one of us</div>
+  </div>
+</section>
+
+<!-- CONTACT (steps + form) -->
+<section id="contact">
+  <div class="container narrow">
+    <div class="contact-head">
+      <div class="eyebrow" style="justify-content:center;">— AN INVITATION —</div>
+      <h2 class="contact-title reveal">歴史の主役で、<br>あり続けろ。</h2>
+      <div class="contact-rule reveal"></div>
+      <p class="contact-body reveal">
+        これはAI導入の商談ではありません。<br>
+        <strong>あなたの孤独な闘いを、次の100年へ繋ぐための、特別な一時間。</strong>
+      </p>
+    </div>
+
+    <div class="steps-row reveal">
+      <div class="step">
+        <div class="num">/ 01</div>
+        <div class="name">対話</div>
+        <div class="desc">あなたの内側を聴き取る</div>
+      </div>
+      <div class="step">
+        <div class="num">/ 02</div>
+        <div class="name">結晶</div>
+        <div class="desc">思考をひとつの知性へ</div>
+      </div>
+      <div class="step">
+        <div class="num">/ 03</div>
+        <div class="name">継承</div>
+        <div class="desc">組織のあらゆる接点へ</div>
+      </div>
+    </div>
+
+    <div class="form-wrap reveal">
+      <div class="form-eyebrow">— BEGIN HERE —</div>
+      <form class="contact-form" action="https://formspree.io/f/nosuke@aidollargame.com" method="POST">
+        <input type="hidden" name="_replyto" value="nosuke@aidollargame.com">
+        <input type="hidden" name="_subject" value="【AIクローン】お問い合わせ">
+        <div class="form-group">
+          <label class="form-label">COMPANY</label>
+          <input type="text" name="company" class="form-input" placeholder="株式会社〇〇" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">YOUR NAME</label>
+          <input type="text" name="name" class="form-input" placeholder="山田 太郎" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">EMAIL</label>
+          <input type="email" name="email" class="form-input" placeholder="email@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">MESSAGE</label>
+          <textarea name="message" class="form-textarea" placeholder="お話しになりたいことを、自由にご記入ください。"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">意 志 を 預 け る</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <a href="index.html" class="logo"><span class="ai">AI</span>dollargame</a>
+  <div style="display:flex;gap:2rem;align-items:center;flex-wrap:wrap;">
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="tokushoho.html">特定商取引法に基づく表記</a>
+    <span class="footer-copy">© 2025 AIdollargame</span>
+  </div>
+</footer>
+
+<script>
+// ════════════════════════════════════════════════
+// CYCLE OF INTELLIGENCE — 24時間を循環する一点の光
+// ════════════════════════════════════════════════
+(function buildCycle(){
+  const tasks = [
+    { mins: 134,  time: '02:14', desc: '深夜の緊急稟議に、あなたの判断軸で即答する。' },
+    { mins: 540,  time: '09:00', desc: '朝会で、前日の判断ログが対話形式で残されている。' },
+    { mins: 690,  time: '11:30', desc: '新規事業の打診を、あなたの基準で一次審査する。' },
+    { mins: 1005, time: '16:45', desc: '後継者と「先代ならどう決めるか」を壁打ちする。' },
+    { mins: 1380, time: '23:00', desc: 'あなたが眠っても、思考は止まらず学び続ける。' }
+  ];
+  const RING = 180;
+
+  function angleFor(mins){ return (mins / 1440) * Math.PI * 2; }
+  function pos(theta, r){ return { x: Math.sin(theta) * r, y: -Math.cos(theta) * r }; }
+
+  // hour ticks
+  const ticksG = document.getElementById('hour-ticks');
+  const labelsG = document.getElementById('hour-labels');
+  for (let h = 0; h < 24; h++){
+    const theta = (h / 24) * Math.PI * 2;
+    const major = h % 6 === 0;
+    const inner = major ? 168 : 174;
+    const outer = 184;
+    const p1 = pos(theta, inner);
+    const p2 = pos(theta, outer);
+    const tick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    tick.setAttribute('x1', p1.x); tick.setAttribute('y1', p1.y);
+    tick.setAttribute('x2', p2.x); tick.setAttribute('y2', p2.y);
+    tick.setAttribute('class', 'tick' + (major ? ' major' : ''));
+    ticksG.appendChild(tick);
+
+    if (major){
+      const lp = pos(theta, 202);
+      const tx = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      tx.setAttribute('x', lp.x); tx.setAttribute('y', lp.y);
+      tx.setAttribute('class', 'hour-label');
+      tx.textContent = String(h).padStart(2, '0');
+      labelsG.appendChild(tx);
+    }
+  }
+
+  // task markers
+  const markersG = document.getElementById('task-markers');
+  const markerEls = [];
+  tasks.forEach((task, i) => {
+    const theta = angleFor(task.mins);
+    const p = pos(theta, RING);
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('cx', p.x); c.setAttribute('cy', p.y);
+    c.setAttribute('r', 5);
+    c.setAttribute('class', 'marker');
+    c.dataset.idx = i;
+    markersG.appendChild(c);
+    markerEls.push(c);
+  });
+
+  const lightHead = document.getElementById('cycle-light');
+  const trail = document.getElementById('cycle-trail');
+  const timeEl = document.getElementById('cycle-time');
+  const descEl = document.getElementById('cycle-desc');
+  let currentIdx = -1;
+
+  let lightTheta = 0;
+  let lastFrame = performance.now();
+  function loop(now){
+    const dt = now - lastFrame;
+    lastFrame = now;
+    // continuous slow rotation: full revolution every 36 seconds
+    lightTheta += (dt / 36000) * Math.PI * 2;
+    if (lightTheta >= Math.PI * 2) lightTheta -= Math.PI * 2;
+
+    const lp = pos(lightTheta, RING);
+    lightHead.setAttribute('cx', lp.x);
+    lightHead.setAttribute('cy', lp.y);
+
+    // trail (recent path of light)
+    const trailLen = 1.0;
+    const ts = lightTheta - trailLen;
+    const sp = pos(ts, RING);
+    const ep = lp;
+    // draw arc from sp → ep clockwise (sweep flag = 1)
+    trail.setAttribute('d', `M ${sp.x} ${sp.y} A ${RING} ${RING} 0 0 1 ${ep.x} ${ep.y}`);
+
+    // find nearest task
+    let nearest = 0, minDiff = Infinity;
+    for (let i = 0; i < tasks.length; i++){
+      const ta = angleFor(tasks[i].mins);
+      let diff = Math.abs(lightTheta - ta);
+      if (diff > Math.PI) diff = Math.PI * 2 - diff;
+      if (diff < minDiff){ minDiff = diff; nearest = i; }
+    }
+
+    if (nearest !== currentIdx){
+      currentIdx = nearest;
+      timeEl.innerHTML = tasks[nearest].time + '<span class="h">JST</span>';
+      descEl.textContent = tasks[nearest].desc;
+      markerEls.forEach((m, i) => m.classList.toggle('active', i === nearest));
+    }
+
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+
+// ════════════════════════════════════════════════
+// 控えめな波紋 ── 操作に応えて、一度だけ広がる
+// ════════════════════════════════════════════════
+(function ripples(){
+  const canvas = document.getElementById('pulse-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+
+  function resize(){
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.scale(dpr, dpr);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const ripples = [];
+  function spawn(x, y){
+    ripples.push({ x, y, r: 0, maxR: 220 + Math.random() * 100, life: 0, maxLife: 90 });
+  }
+
+  // throttled mouse spawn
+  let lastSpawn = 0;
+  window.addEventListener('mousemove', e => {
+    const now = performance.now();
+    if (now - lastSpawn > 600){
+      spawn(e.clientX, e.clientY);
+      lastSpawn = now;
+    }
+  });
+  window.addEventListener('click', e => spawn(e.clientX, e.clientY));
+
+  function loop(){
+    ctx.clearRect(0, 0, W, H);
+
+    // breathing data core (top center, distant — subtle ambient)
+    const t = performance.now() * 0.001;
+    const breath = 0.55 + 0.20 * Math.sin(t * 1.4) + 0.08 * Math.sin(t * 2.3);
+    const cx = W * 0.5, cy = H * 0.42;
+    const halo = ctx.createRadialGradient(cx, cy, 4, cx, cy, 220);
+    halo.addColorStop(0, 'rgba(91,155,255,0)');
+    halo.addColorStop(0.18, `rgba(91,155,255,${(0.06 * breath).toFixed(3)})`);
+    halo.addColorStop(0.5, `rgba(91,155,255,${(0.02 * breath).toFixed(3)})`);
+    halo.addColorStop(1, 'transparent');
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 220, 0, Math.PI*2);
+    ctx.fill();
+
+    // ripples
+    for (let i = ripples.length - 1; i >= 0; i--){
+      const r = ripples[i];
+      r.life++;
+      r.r = (r.life / r.maxLife) * r.maxR;
+      if (r.life > r.maxLife){ ripples.splice(i, 1); continue; }
+      const lr = r.life / r.maxLife;
+      const alpha = (1 - lr) * 0.32;
+      ctx.beginPath();
+      ctx.arc(r.x, r.y, r.r, 0, Math.PI*2);
+      ctx.strokeStyle = `rgba(91,155,255,${alpha.toFixed(3)})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+// reveal
+const obs = new IntersectionObserver(
+  es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+  { threshold: 0.1 }
+);
+document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+</script>
+</body>
+</html>

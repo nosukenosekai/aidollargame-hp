@@ -458,60 +458,87 @@
     margin-bottom: 2rem;
   }
 
-  /* chat panel */
+  /* chat panel — phone-style mockup */
   .chat-panel {
     margin: 3rem auto 2rem;
-    padding: 1.4rem 1.6rem 1.4rem;
+    padding: 0;
     border: 1px solid var(--rule);
-    border-radius: var(--radius-lg);
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(14px);
-    max-width: 540px;
-    box-shadow: 0 10px 36px rgba(45,109,214,0.08), 0 1px 0 rgba(255,255,255,1) inset;
+    border-radius: 28px;
+    background: #fff;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 30px 70px rgba(20,30,60,0.18), 0 8px 20px rgba(45,109,214,0.10);
     text-align: left;
     position: relative;
+    overflow: hidden;
+  }
+  .chat-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 110px; height: 22px;
+    background: #0a0a12;
+    border-radius: 0 0 14px 14px;
+    z-index: 3;
   }
   .chat-head {
-    display:flex; justify-content:space-between; align-items:center;
-    padding-bottom: 0.85rem; margin-bottom: 1.1rem;
-    border-bottom: 1px solid var(--rule);
+    display:flex; align-items:center; gap:0.8rem;
+    padding: 2.2rem 1.2rem 1rem;
+    background: linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
+    border-bottom: none;
+    margin-bottom: 0;
   }
-  .chat-title {
+  .chat-head .avatar {
+    width: 38px; height: 38px;
+    background: rgba(255,255,255,0.18);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.95rem; font-weight: 700;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.25) inset;
+  }
+  .chat-head .who-block { flex: 1; line-height: 1.3; }
+  .chat-head .who-name {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 0.92rem; font-weight: 700; color: #fff;
+    letter-spacing: 0.02em;
+  }
+  .chat-live {
     font-family:'JetBrains Mono',monospace;
-    font-size:0.66rem; color: var(--ink-muted);
-    letter-spacing:0.26em; text-transform:uppercase;
-    font-weight:600;
+    font-size:0.6rem; color: rgba(255,255,255,0.85);
+    letter-spacing:0.22em; text-transform:uppercase;
+    font-weight:500; display:flex; align-items:center; gap:0.35rem;
+    margin-top: 0.15rem;
   }
+  .chat-live .dot { width:6px; height:6px; border-radius:50%; background: #86efac; box-shadow: 0 0 8px #86efac; animation: ldotPulse 1.6s ease-in-out infinite; }
   .chat-context {
     font-family:'Noto Sans JP',sans-serif;
-    font-size:0.78rem;
+    font-size:0.74rem;
     color: var(--ink-mute-2);
-    margin-bottom: 1rem;
-    padding: 0.6rem 0.9rem;
-    background: rgba(45,109,214,0.04);
-    border-left: 2px solid var(--accent);
-    border-radius: 0 var(--radius) var(--radius) 0;
+    margin: 0;
+    padding: 0.7rem 1.2rem;
+    background: rgba(45,109,214,0.05);
+    border-left: none;
+    border-bottom: 1px solid var(--rule);
+    border-radius: 0;
     line-height: 1.6;
   }
   .chat-context .label {
     font-family:'JetBrains Mono',monospace;
-    font-size:0.6rem;
+    font-size:0.58rem;
     letter-spacing:0.2em;
     color: var(--accent);
     text-transform: uppercase;
     margin-right: 0.5rem;
     font-weight: 600;
   }
-  .chat-live {
-    font-family:'JetBrains Mono',monospace;
-    font-size:0.62rem; color: var(--live-green);
-    letter-spacing:0.26em; text-transform:uppercase;
-    font-weight:500; display:flex; align-items:center; gap:0.4rem;
-  }
-  .chat-live .dot { width:5px; height:5px; border-radius:50%; background: var(--live-green); box-shadow: 0 0 8px var(--live-green); animation: ldotPulse 1.6s ease-in-out infinite; }
   .chat-stage {
     display:flex; flex-direction:column; gap:0.7rem;
-    min-height: 320px;
+    min-height: 360px;
+    padding: 1.2rem 1rem 1.4rem;
+    background: #f7f8fb;
   }
   .chat-msg {
     opacity:0;
@@ -819,8 +846,11 @@
 
     <div class="chat-panel reveal">
       <div class="chat-head">
-        <span class="chat-title">/ CONVERSATION</span>
-        <span class="chat-live"><span class="dot"></span>LIVE</span>
+        <div class="avatar">分</div>
+        <div class="who-block">
+          <div class="who-name">あなたの分身</div>
+          <div class="chat-live"><span class="dot"></span>ONLINE</div>
+        </div>
       </div>
       <div class="chat-context">
         <span class="label">SCENE</span>新しい事業を始めるか迷っている

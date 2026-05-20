@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIside（アイサイド） | ずっとそばにいる、あなたの付き人AI — AIdollargame</title>
+<meta name="description" content="AIsideはあなたを覚え、先回りして動き、ツールを横断する付き人AI。ひとり社長・フリーランス・超多忙な経営者の、もう一人の自分として、毎日そばで支えます。">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #f7f8fa;
+    --bg-section: #fafbfc;
+    --ink: #0e1a2b;
+    --ink-soft: #334155;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --line-soft: #eef0f3;
+    --navy: #1e3a5f;
+    --navy-d: #102540;
+    --navy-l: #eaf0f7;
+    --accent: #2563eb;
+    --shadow-sm: 0 1px 2px rgba(14,26,43,0.04);
+    --shadow: 0 4px 14px rgba(14,26,43,0.06);
+    --shadow-lg: 0 24px 50px -22px rgba(14,26,43,0.16);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--ink); font-family:'Noto Sans JP',-apple-system,BlinkMacSystemFont,sans-serif; line-height:1.85; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+
+  /* NAV */
+  nav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:1.1rem 3rem;
+    background:rgba(255,255,255,0.92); backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo {
+    font-size:1.1rem; font-weight:700; color:var(--ink); text-decoration:none;
+    display:inline-flex; align-items:baseline; gap:0.55rem; letter-spacing:-0.005em;
+  }
+  .logo .product { font-size:0.78rem; font-weight:600; color:var(--navy); padding-left:0.6rem; border-left:1px solid var(--line); }
+  nav ul { display:flex; list-style:none; gap:2.2rem; align-items:center; }
+  nav a { color:var(--ink-soft); text-decoration:none; font-size:0.86rem; transition:color 0.2s; font-weight:500; }
+  nav a:hover { color:var(--navy); }
+  .nav-cta { padding:0.6rem 1.3rem; background:var(--navy); color:#fff !important; font-weight:600; font-size:0.84rem; border-radius:6px; transition:background 0.2s, transform 0.2s; }
+  .nav-cta:hover { background:var(--navy-d); transform:translateY(-1px); }
+
+  /* HERO */
+  #hero {
+    position:relative; padding:9rem 3rem 6rem; max-width:1240px; margin:0 auto;
+    display:grid; grid-template-columns:1.05fr 0.95fr; gap:5rem; align-items:center;
+  }
+  .hero-eyebrow {
+    font-size:0.78rem; letter-spacing:0.18em; color:var(--navy); margin-bottom:1.8rem;
+    font-weight:600; opacity:0; animation:fadeUp 0.8s 0.15s forwards;
+    display:inline-flex; align-items:center; gap:0.7rem;
+  }
+  .hero-eyebrow::before { content:''; display:inline-block; width:22px; height:1px; background:var(--navy); }
+  .hero-title {
+    font-size:clamp(2.1rem,3.6vw,3.4rem); font-weight:900; line-height:1.45;
+    margin-bottom:1.8rem; color:var(--ink); letter-spacing:-0.01em;
+    opacity:0; animation:fadeUp 0.8s 0.3s forwards;
+  }
+  .hero-title .em { color:var(--navy); }
+  .hero-sub {
+    font-size:1rem; color:var(--ink-soft); line-height:2; margin-bottom:2.5rem;
+    max-width:500px; opacity:0; animation:fadeUp 0.8s 0.5s forwards;
+  }
+  .hero-sub strong { color:var(--ink); font-weight:700; }
+  .hero-actions { display:flex; gap:0.9rem; flex-wrap:wrap; opacity:0; animation:fadeUp 0.8s 0.7s forwards; }
+  .btn-primary {
+    padding:0.95rem 2rem; background:var(--navy); color:#fff; font-weight:600; font-size:0.92rem;
+    border:none; cursor:pointer; font-family:inherit; border-radius:6px;
+    text-decoration:none; display:inline-flex; align-items:center; gap:0.45rem;
+    transition:background 0.2s, transform 0.2s, box-shadow 0.25s;
+  }
+  .btn-primary:hover { background:var(--navy-d); transform:translateY(-2px); box-shadow:0 14px 30px -10px rgba(30,58,95,0.5); }
+  .btn-primary::after { content:'→'; transition:transform 0.2s; }
+  .btn-primary:hover::after { transform:translateX(4px); }
+  .btn-ghost {
+    padding:0.95rem 1.7rem; background:transparent; color:var(--ink); font-weight:600; font-size:0.92rem;
+    border:1px solid var(--line); cursor:pointer; font-family:inherit; border-radius:6px;
+    text-decoration:none; display:inline-block; transition:border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color:var(--navy); color:var(--navy); }
+  .hero-trust {
+    margin-top:2.2rem; display:flex; gap:1.6rem; flex-wrap:wrap;
+    font-size:0.82rem; color:var(--muted); opacity:0; animation:fadeUp 0.8s 0.9s forwards;
+  }
+  .hero-trust .ck { color:var(--navy); margin-right:0.35rem; }
+
+  /* HERO RIGHT — chat mockup */
+  .hero-right { position:relative; display:flex; justify-content:center; opacity:0; animation:fadeUp 0.8s 0.5s forwards; }
+  .chat-stage { width:100%; max-width:420px; position:relative; }
+  .chat-card {
+    background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    box-shadow:var(--shadow-lg);
+  }
+  .chat-head {
+    background:var(--navy); padding:1.1rem 1.3rem; display:flex; align-items:center; gap:0.85rem;
+  }
+  .chat-avatar {
+    width:38px; height:38px; background:rgba(255,255,255,0.16); color:#fff; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.78rem; letter-spacing:0.02em; flex-shrink:0;
+  }
+  .chat-name { font-size:0.95rem; font-weight:600; color:#fff; }
+  .chat-status { font-size:0.7rem; color:rgba(255,255,255,0.7); margin-top:2px; display:flex; align-items:center; gap:0.4rem; }
+  .chat-status .dot { width:6px; height:6px; background:#86efac; border-radius:50%; }
+  .chat-body { padding:1.2rem 1rem 1.4rem; display:flex; flex-direction:column; gap:0.65rem; background:#fafbfc; min-height:480px; }
+  .chat-time { text-align:center; font-size:0.68rem; color:var(--muted); padding:0.2rem 0; }
+  .bubble { max-width:84%; padding:0.7rem 0.95rem; font-size:0.82rem; line-height:1.75; opacity:0; animation:bubbleIn 0.45s cubic-bezier(.2,.8,.2,1) forwards; }
+  .bubble.user { align-self:flex-end; background:var(--navy); color:#fff; border-radius:14px 14px 4px 14px; }
+  .bubble.ai { align-self:flex-start; background:#fff; color:var(--ink); border:1px solid var(--line); border-radius:4px 14px 14px 14px; box-shadow:var(--shadow-sm); }
+  .bubble .tag { display:inline-block; background:var(--navy-l); color:var(--navy); font-size:0.62rem; font-weight:700; padding:0.18rem 0.5rem; border-radius:4px; margin-bottom:0.4rem; letter-spacing:0.04em; }
+  .bubble:nth-of-type(1){animation-delay:0.7s;}
+  .bubble:nth-of-type(2){animation-delay:1.2s;}
+  .bubble:nth-of-type(3){animation-delay:1.7s;}
+  .bubble:nth-of-type(4){animation-delay:2.6s;}
+  @keyframes bubbleIn { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+
+  .task-card {
+    background:#fff; border:1px solid var(--line); border-radius:10px; padding:0.85rem 0.95rem;
+    opacity:0; animation:bubbleIn 0.5s 2.1s forwards; align-self:flex-start; max-width:92%;
+    box-shadow:var(--shadow-sm);
+  }
+  .tc-head { display:flex; align-items:center; gap:0.45rem; margin-bottom:0.55rem; padding-bottom:0.55rem; border-bottom:1px solid var(--line-soft); }
+  .tc-dot { width:7px; height:7px; border-radius:50%; background:var(--navy); }
+  .tc-title { font-size:0.72rem; font-weight:700; color:var(--ink); letter-spacing:0.01em; }
+  .tc-row { display:flex; align-items:center; gap:0.5rem; padding:0.3rem 0; font-size:0.74rem; color:var(--ink); }
+  .tc-row .tc-time { color:var(--muted); font-weight:600; min-width:40px; font-size:0.66rem; }
+  .tc-row .tc-task { flex:1; }
+  .tc-row .tc-status { font-size:0.6rem; font-weight:700; padding:0.14rem 0.45rem; border-radius:3px; letter-spacing:0.02em; }
+  .tc-row .tc-status.done { background:#ecfdf5; color:#047857; }
+  .tc-row .tc-status.todo { background:var(--navy-l); color:var(--navy); }
+
+  /* SECTIONS */
+  section.block { padding:7rem 3rem; max-width:1100px; margin:0 auto; }
+  .section-bg-soft { background:var(--bg-section); }
+  .section-eyebrow { font-size:0.76rem; letter-spacing:0.18em; color:var(--navy); margin-bottom:1.2rem; font-weight:600; display:inline-flex; align-items:center; gap:0.7rem; }
+  .section-eyebrow::before { content:''; display:inline-block; width:22px; height:1px; background:var(--navy); }
+  .section-title { font-size:clamp(1.7rem,2.6vw,2.3rem); font-weight:900; color:var(--ink); margin-bottom:1.3rem; line-height:1.55; letter-spacing:-0.005em; }
+  .section-title .em { color:var(--navy); }
+  .section-desc { color:var(--ink-soft); font-size:0.98rem; line-height:2.1; max-width:640px; }
+  .section-desc strong { color:var(--ink); font-weight:700; }
+
+  /* PAIN */
+  .pain-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-top:3.5rem; }
+  .pain-card {
+    background:#fff; border:1px solid var(--line); border-radius:10px;
+    padding:1.7rem 1.9rem; transition:border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    display:flex; gap:1.1rem; align-items:flex-start;
+  }
+  .pain-card:hover { border-color:var(--navy); box-shadow:var(--shadow); transform:translateY(-2px); }
+  .pain-num {
+    flex-shrink:0; width:32px; height:32px; border:1px solid var(--navy); color:var(--navy);
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:0.78rem; font-weight:700;
+  }
+  .pain-text { font-size:0.93rem; line-height:1.95; color:var(--ink-soft); }
+  .pain-text strong { color:var(--ink); font-weight:700; display:block; margin-bottom:0.3rem; }
+
+  .pain-bridge {
+    margin-top:2.5rem; padding:2rem 2.2rem; background:var(--navy-l);
+    border-radius:10px; border-left:3px solid var(--navy);
+    font-size:0.98rem; line-height:1.95; color:var(--ink);
+  }
+  .pain-bridge strong { color:var(--navy); font-weight:700; }
+
+  /* DAYLIFE */
+  .day-flow { display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; margin-top:3.8rem; }
+  .day-card {
+    background:#fff; border:1px solid var(--line); border-radius:12px; padding:2.2rem 1.9rem;
+    transition:border-color 0.3s, box-shadow 0.3s, transform 0.3s; position:relative;
+  }
+  .day-card:hover { border-color:var(--navy); box-shadow:var(--shadow-lg); transform:translateY(-4px); }
+  .day-time {
+    font-size:0.74rem; letter-spacing:0.16em; color:var(--navy); font-weight:700;
+    margin-bottom:1.2rem; display:flex; align-items:center; gap:0.55rem;
+  }
+  .day-time::before { content:''; display:inline-block; width:6px; height:6px; background:var(--navy); border-radius:50%; }
+  .day-title { font-size:1.18rem; font-weight:800; color:var(--ink); margin-bottom:0.9rem; line-height:1.55; }
+  .day-desc { font-size:0.9rem; color:var(--ink-soft); line-height:2; margin-bottom:1.5rem; }
+  .day-list { display:flex; flex-direction:column; gap:0.55rem; padding-top:1.4rem; border-top:1px solid var(--line); }
+  .day-list li { font-size:0.85rem; color:var(--ink-soft); display:flex; gap:0.55rem; align-items:flex-start; line-height:1.7; list-style:none; }
+  .day-list li::before { content:''; flex-shrink:0; width:5px; height:5px; background:var(--navy); border-radius:50%; margin-top:0.55rem; }
+
+  /* CONCEPT */
+  .pillars { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:3.8rem; }
+  .pillar {
+    background:#fff; border:1px solid var(--line); border-radius:12px; padding:2.3rem 2rem;
+    transition:border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  }
+  .pillar:hover { border-color:var(--navy); box-shadow:var(--shadow-lg); transform:translateY(-3px); }
+  .pillar-num { font-size:0.74rem; letter-spacing:0.18em; color:var(--muted); margin-bottom:1.4rem; font-weight:700; }
+  .pillar-num .key { color:var(--navy); }
+  .pillar-title { font-size:1.3rem; font-weight:900; color:var(--ink); margin-bottom:1.1rem; line-height:1.55; letter-spacing:-0.005em; }
+  .pillar-title .em { color:var(--navy); }
+  .pillar-desc { font-size:0.93rem; color:var(--ink-soft); line-height:2.05; margin-bottom:1.5rem; }
+  .pillar-example { background:var(--bg-section); padding:1rem 1.1rem; border-radius:6px; font-size:0.84rem; color:var(--ink-soft); line-height:1.85; border-left:2px solid var(--navy); }
+  .pillar-example .lab { color:var(--navy); font-weight:700; margin-right:0.4rem; }
+
+  /* COMPARE */
+  .compare-table {
+    background:#fff; border:1px solid var(--line); border-radius:12px;
+    overflow:hidden; margin-top:3.8rem;
+  }
+  .compare-row { display:grid; grid-template-columns:1.1fr 1fr 1fr; border-bottom:1px solid var(--line); }
+  .compare-row:last-child { border-bottom:none; }
+  .compare-row.head { background:var(--bg-section); }
+  .compare-row.head .compare-cell { padding:1.3rem 1.5rem; font-size:0.85rem; font-weight:700; color:var(--ink); letter-spacing:0.01em; }
+  .compare-row.head .compare-cell.us { background:var(--navy); color:#fff; }
+  .compare-cell { padding:1.25rem 1.5rem; font-size:0.88rem; color:var(--ink-soft); line-height:1.85; }
+  .compare-cell.label { font-weight:700; color:var(--ink); background:var(--bg-section); font-size:0.85rem; }
+  .compare-cell.us { background:var(--navy-l); color:var(--ink); font-weight:500; }
+
+  /* BENEFITS */
+  .benefits-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.2rem; margin-top:3.8rem; }
+  .benefit {
+    background:#fff; border:1px solid var(--line); border-radius:10px; padding:2rem 2.1rem;
+    display:grid; grid-template-columns:auto 1fr; gap:1.2rem; align-items:flex-start;
+    transition:border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+  }
+  .benefit:hover { border-color:var(--navy); box-shadow:var(--shadow); transform:translateY(-2px); }
+  .benefit-num {
+    flex-shrink:0; width:44px; height:44px; background:var(--navy-l); color:var(--navy);
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:0.95rem;
+  }
+  .benefit-body h4 { font-size:1.1rem; font-weight:800; color:var(--ink); margin-bottom:0.5rem; line-height:1.55; }
+  .benefit-body p { font-size:0.9rem; color:var(--ink-soft); line-height:2; }
+
+  /* INTEGRATIONS */
+  .integ-grid { display:flex; flex-wrap:wrap; gap:0.7rem; margin-top:3rem; }
+  .integ-chip {
+    padding:0.6rem 1.1rem 0.6rem 0.85rem; background:#fff; border:1px solid var(--line); border-radius:100px;
+    font-size:0.86rem; color:var(--ink); transition:all 0.2s; display:inline-flex; align-items:center; gap:0.55rem; font-weight:500;
+  }
+  .integ-chip:hover { border-color:var(--navy); transform:translateY(-1px); box-shadow:var(--shadow-sm); }
+  .integ-chip .ico { width:18px; height:18px; object-fit:contain; flex-shrink:0; display:block; }
+  .integ-chip .ico-fb { width:18px; height:18px; flex-shrink:0; background:var(--navy-l); color:var(--navy); border-radius:4px; display:inline-flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:800; letter-spacing:-0.02em; }
+  .integ-note { margin-top:1.5rem; font-size:0.82rem; color:var(--muted); }
+
+  /* SECURITY */
+  .sec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.3rem; margin-top:3.8rem; }
+  .sec-card {
+    background:#fff; border:1px solid var(--line); border-radius:10px; padding:2rem 1.9rem;
+    transition:border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+  }
+  .sec-card:hover { border-color:var(--navy); box-shadow:var(--shadow); transform:translateY(-2px); }
+  .sec-icon {
+    width:44px; height:44px; background:var(--navy-l); color:var(--navy);
+    border-radius:10px; display:flex; align-items:center; justify-content:center;
+    font-size:1.05rem; font-weight:700; margin-bottom:1.2rem;
+  }
+  .sec-title { font-size:1.02rem; font-weight:800; color:var(--ink); margin-bottom:0.7rem; }
+  .sec-desc { font-size:0.86rem; color:var(--ink-soft); line-height:2; }
+
+  /* PRICING */
+  .price-card {
+    background:var(--navy); color:#fff; padding:3.3rem 3rem; border-radius:14px; margin-top:3.2rem;
+    display:grid; grid-template-columns:1.3fr 1fr; gap:2.5rem; align-items:center; position:relative; overflow:hidden;
+  }
+  .price-card::before {
+    content:''; position:absolute; top:-100px; right:-100px; width:340px; height:340px;
+    border-radius:50%; background:rgba(255,255,255,0.04);
+  }
+  .price-info h3 { font-size:1.5rem; font-weight:900; margin-bottom:1rem; line-height:1.55; position:relative; letter-spacing:-0.005em; }
+  .price-info p { font-size:0.94rem; color:rgba(255,255,255,0.78); line-height:2.1; position:relative; }
+  .price-action { text-align:right; position:relative; }
+  .price-tag { font-size:0.72rem; color:rgba(255,255,255,0.7); letter-spacing:0.14em; margin-bottom:0.55rem; font-weight:600; }
+  .price-amount { font-size:2.3rem; font-weight:900; color:#fff; margin-bottom:0.3rem; line-height:1; letter-spacing:-0.01em; }
+  .price-amount .small { font-size:0.9rem; font-weight:600; color:rgba(255,255,255,0.7); margin-left:0.3rem; }
+  .price-note { font-size:0.78rem; color:rgba(255,255,255,0.6); margin-bottom:1.6rem; }
+  .btn-white {
+    padding:0.95rem 2rem; background:#fff; color:var(--navy); font-weight:700; font-size:0.92rem;
+    border:none; cursor:pointer; font-family:inherit; border-radius:6px;
+    text-decoration:none; display:inline-flex; align-items:center; gap:0.45rem;
+    transition:transform 0.2s, box-shadow 0.25s;
+  }
+  .btn-white:hover { transform:translateY(-2px); box-shadow:0 14px 30px -10px rgba(0,0,0,0.3); }
+  .btn-white::after { content:'→'; transition:transform 0.2s; }
+  .btn-white:hover::after { transform:translateX(4px); }
+
+  /* FAQ */
+  .faq-list { margin-top:3rem; max-width:820px; }
+  .faq-item { background:#fff; border:1px solid var(--line); border-radius:8px; margin-bottom:0.7rem; overflow:hidden; transition:border-color 0.2s; }
+  .faq-item.open { border-color:var(--navy); }
+  .faq-q { padding:1.3rem 1.6rem; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; font-weight:700; color:var(--ink); font-size:0.95rem; line-height:1.65; }
+  .faq-q .q-mark { color:var(--navy); margin-right:0.6rem; flex-shrink:0; font-weight:800; }
+  .faq-q .q-text { flex:1; }
+  .faq-icon { color:var(--navy); font-size:1.3rem; flex-shrink:0; transition:transform 0.25s; font-weight:300; line-height:1; }
+  .faq-item.open .faq-icon { transform:rotate(45deg); }
+  .faq-a { padding:0 1.6rem; max-height:0; overflow:hidden; transition:max-height 0.3s, padding 0.3s; color:var(--ink-soft); font-size:0.9rem; line-height:2; }
+  .faq-item.open .faq-a { max-height:340px; padding:0 1.6rem 1.4rem; }
+
+  /* CTA */
+  .cta-final {
+    text-align:center; padding:6rem 2rem; max-width:680px; margin:0 auto;
+  }
+  .cta-final h2 {
+    font-size:clamp(1.7rem,2.8vw,2.4rem); font-weight:900; color:var(--ink);
+    margin-bottom:1.3rem; line-height:1.55; letter-spacing:-0.005em;
+  }
+  .cta-final h2 .em { color:var(--navy); }
+  .cta-final p { font-size:0.98rem; color:var(--ink-soft); line-height:2.1; margin-bottom:2.6rem; }
+  .cta-form { display:flex; flex-direction:column; gap:0.85rem; max-width:420px; margin:0 auto; }
+  .cta-form input, .cta-form textarea {
+    width:100%; padding:0.95rem 1.2rem; background:#fff; border:1px solid var(--line);
+    border-radius:6px; font-family:inherit; font-size:0.92rem; color:var(--ink); outline:none;
+    transition:border-color 0.2s, box-shadow 0.2s;
+  }
+  .cta-form input::placeholder, .cta-form textarea::placeholder { color:var(--muted); }
+  .cta-form input:focus, .cta-form textarea:focus { border-color:var(--navy); box-shadow:0 0 0 3px rgba(30,58,95,0.08); }
+  .cta-form textarea { resize:vertical; min-height:100px; line-height:1.7; }
+  .cta-form .btn-primary { width:100%; justify-content:center; }
+  .cta-mini { margin-top:1.2rem; font-size:0.8rem; color:var(--muted); }
+
+  /* FOOTER */
+  footer {
+    border-top:1px solid var(--line); padding:2.4rem 3rem;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:1rem; background:#fff;
+  }
+  .footer-logo { font-size:0.92rem; font-weight:700; color:var(--ink); text-decoration:none; }
+  .footer-logo .pr { color:var(--navy); margin-left:0.5rem; font-size:0.78rem; font-weight:600; }
+  .footer-links { display:flex; gap:1.8rem; }
+  .footer-links a { font-size:0.82rem; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+  .footer-links a:hover { color:var(--ink); }
+  .footer-copy { font-size:0.78rem; color:var(--muted); }
+
+  /* UTILS */
+  .reveal { opacity:0; transform:translateY(24px); transition:opacity 0.7s, transform 0.7s; }
+  .reveal.visible { opacity:1; transform:none; }
+  @keyframes fadeUp { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+
+  /* RESPONSIVE */
+  @media (max-width:980px) {
+    nav { padding:1rem 1.3rem; }
+    nav ul { gap:1rem; }
+    nav ul li:not(:last-child) { display:none; }
+    #hero { grid-template-columns:1fr; padding:7rem 1.5rem 4rem; gap:3rem; }
+    .hero-right { order:-1; }
+    .chat-stage { max-width:340px; }
+    section.block { padding:5rem 1.5rem; }
+    .pain-grid { grid-template-columns:1fr; }
+    .day-flow { grid-template-columns:1fr; }
+    .pillars { grid-template-columns:1fr; }
+    .compare-row { grid-template-columns:1fr; }
+    .compare-row .compare-cell { border-bottom:1px solid var(--line); }
+    .compare-row.head .compare-cell { padding:0.9rem 1.2rem; font-size:0.82rem; }
+    .compare-cell.label { background:var(--bg-section); }
+    .benefits-grid { grid-template-columns:1fr; }
+    .sec-grid { grid-template-columns:1fr; }
+    .price-card { grid-template-columns:1fr; padding:2.5rem 1.8rem; gap:1.8rem; text-align:left; }
+    .price-action { text-align:left; }
+    footer { padding:2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">AIdollargame<span class="product">／ AIside</span></a>
+  <ul>
+    <li><a href="#problem">課題</a></li>
+    <li><a href="#daylife">1日の流れ</a></li>
+    <li><a href="#concept">3つの特徴</a></li>
+    <li><a href="#compare">違い</a></li>
+    <li><a href="#price">料金</a></li>
+    <li><a href="#cta" class="nav-cta">無料相談する</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">AIside（アイサイド）／ あなたの付き人AI</div>
+    <h1 class="hero-title">
+      ずっと、そばにいる。<br>
+      あなたの<span class="em">付き人AI</span>。
+    </h1>
+    <p class="hero-sub">
+      <strong>AIside（アイサイド）</strong>は、あなたを覚え、先回りして動き、ツールを横断する<strong>付き人AI</strong>。<br>
+      ひとり社長・フリーランス・超多忙な経営者の<strong>もう一人の自分</strong>として、毎日そばで支えます。
+    </p>
+    <div class="hero-actions">
+      <a href="#cta" class="btn-primary">無料相談を予約する</a>
+      <a href="#daylife" class="btn-ghost">1日の使い方を見る</a>
+    </div>
+    <div class="hero-trust">
+      <span><span class="ck">●</span>日本国内データ完結</span>
+      <span><span class="ck">●</span>既存ツールへ接続</span>
+      <span><span class="ck">●</span>初期費用ゼロ</span>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="chat-stage">
+      <div class="chat-card">
+        <div class="chat-head">
+          <div class="chat-avatar">AI</div>
+          <div>
+            <div class="chat-name">AIside</div>
+            <div class="chat-status"><span class="dot"></span>あなたの付き人AI</div>
+          </div>
+        </div>
+        <div class="chat-body">
+          <div class="chat-time">7:42 ・ 月曜日</div>
+          <div class="bubble ai">
+            <span class="tag">朝のブリーフ</span>
+            おはようございます。今日は商談2件、決裁待ち3件、未返信メール14件。<br>9時の山田様への提案書、昨夜の修正メモを反映して下書きまで作っておきました。
+          </div>
+          <div class="bubble user">提案書、見せて。あと夕方の打合せ、30分後ろにずらせる?</div>
+          <div class="bubble ai">
+            提案書ドラフトをご確認ください。<br>夕方の件、先方に「16:30→17:00で可能」と打診済み。確定したらカレンダーも更新します。
+          </div>
+          <div class="task-card">
+            <div class="tc-head"><span class="tc-dot"></span><span class="tc-title">今日のフォロー（自動追跡）</span></div>
+            <div class="tc-row"><span class="tc-time">10:00</span><span class="tc-task">田中様 見積返信（3日経過）</span><span class="tc-status todo">予約</span></div>
+            <div class="tc-row"><span class="tc-time">14:00</span><span class="tc-task">経理 月次資料の確認依頼</span><span class="tc-status done">完了</span></div>
+            <div class="tc-row"><span class="tc-time">17:30</span><span class="tc-task">明日のアジェンダ送付</span><span class="tc-status todo">予約</span></div>
+          </div>
+          <div class="bubble user">佐藤さんに、先週の議事録の要点だけまとめて送っといて</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="block" id="problem">
+  <div class="reveal">
+    <div class="section-eyebrow">課題</div>
+    <h2 class="section-title">こんな状態、<br>ひとりで<span class="em">抱えていませんか</span>。</h2>
+    <p class="section-desc">
+      小さな会社の代表、フリーランス、二刀流の事業家。<strong>「自分しか把握していない仕事」</strong>が多すぎて、判断と実務が両方詰まっていく。AIsideはそこに最初に入る、もう一人の自分です。
+    </p>
+  </div>
+
+  <div class="pain-grid reveal">
+    <div class="pain-card">
+      <div class="pain-num">01</div>
+      <div class="pain-text"><strong>朝起きた瞬間に、もう疲れている。</strong>未読・未返信・未決裁。何から手をつけるか判断するだけで30分溶ける。</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-num">02</div>
+      <div class="pain-text"><strong>「あの件、どうなってる？」が頭の中だけ。</strong>誰に何を頼んだか、何を待っているのか、リスト化する時間すら惜しい。</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-num">03</div>
+      <div class="pain-text"><strong>同じ説明を、何度もしている。</strong>新しいツール、新しい人、新しいAI。コンテキストを毎回ゼロから話すのが苦痛。</div>
+    </div>
+    <div class="pain-card">
+      <div class="pain-num">04</div>
+      <div class="pain-text"><strong>秘書を雇うほどではない、でも限界。</strong>月20〜40万円を払い続けるリスクは取れない。けど自分の時給は5万を超えている。</div>
+    </div>
+  </div>
+
+  <div class="pain-bridge reveal">
+    AIsideは、<strong>「あなたを覚えている前提」</strong>で動く付き人AI。毎朝の判断を肩代わりし、進行中の仕事を全部覚えていてくれます。
+  </div>
+</section>
+
+<!-- DAYLIFE -->
+<div class="section-bg-soft">
+<section class="block" id="daylife">
+  <div class="reveal">
+    <div class="section-eyebrow">1日の流れ</div>
+    <h2 class="section-title">AIsideのいる、<br>ある<span class="em">一人社長の一日</span>。</h2>
+    <p class="section-desc">
+      「指示を待つAI」ではなく「先回りするAI」。朝・昼・夜、それぞれの時間帯であなたの代わりに考え、動き、つなぎます。
+    </p>
+  </div>
+
+  <div class="day-flow reveal">
+    <div class="day-card">
+      <div class="day-time">07:00　朝</div>
+      <h3 class="day-title">起きる前に、<br>今日の地図ができている。</h3>
+      <p class="day-desc">寝ている間にメール・Slack・カレンダーを横断。今日の優先順位、潰れた予定、リスクのある案件を1通のブリーフにまとめて届けます。</p>
+      <ul class="day-list">
+        <li>未返信のうち急ぎ3件を抽出</li>
+        <li>提案書・見積の下書きを準備</li>
+        <li>本日のアジェンダを案件単位で整理</li>
+      </ul>
+    </div>
+    <div class="day-card">
+      <div class="day-time">12:00　昼</div>
+      <h3 class="day-title">商談中も、<br>裏で全部回している。</h3>
+      <p class="day-desc">ミーティング音声を聞き取り、議事録・タスク・次回アクションを自動生成。話している間に、必要な人へ依頼まで投げ終えています。</p>
+      <ul class="day-list">
+        <li>議事録 → 要点 → 共有まで自動</li>
+        <li>合意したタスクを担当者にDM送付</li>
+        <li>次回MTGをカレンダー仮押さえ</li>
+      </ul>
+    </div>
+    <div class="day-card">
+      <div class="day-time">22:00　夜</div>
+      <h3 class="day-title">寝る前に、<br>明日の自分を軽くする。</h3>
+      <p class="day-desc">今日の動きを振り返り、放置されている案件・期日が近い決裁・お礼を入れるべき相手を抽出。明日の朝にやるべき3つだけ提案します。</p>
+      <ul class="day-list">
+        <li>進行中案件のステータス棚卸し</li>
+        <li>明日の優先タスクをトップ3に</li>
+        <li>感謝・フォロー漏れを検知</li>
+      </ul>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- CONCEPT -->
+<section class="block" id="concept">
+  <div class="reveal">
+    <div class="section-eyebrow">3つの特徴</div>
+    <h2 class="section-title">「秘書を雇う」のと、<br><span class="em">何が違うのか</span>。</h2>
+    <p class="section-desc">
+      AIsideは、ただの自動返信でも、ただのチャットボットでもありません。<strong>記憶し、先回りし、つなぐ</strong>——この3つだけを徹底的に磨いた、あなた専属の秘書です。
+    </p>
+  </div>
+
+  <div class="pillars reveal">
+    <div class="pillar">
+      <div class="pillar-num">特徴<span class="key"> 01</span>　／　記憶する</div>
+      <h3 class="pillar-title">同じ話を、<br><span class="em">二度しなくていい</span>。</h3>
+      <p class="pillar-desc">取引先の名前、案件の経緯、好きな言い回し、嫌いな提案パターン。一度話したことは全部覚えています。日が経つほど、あなた専用の脳になります。</p>
+      <div class="pillar-example">
+        <span class="lab">例：</span>「いつもの山田さんに、いつものトーンで」だけで、過去のやり取り・呼び方・温度感を踏まえたメールを起案。
+      </div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">特徴<span class="key"> 02</span>　／　先回りする</div>
+      <h3 class="pillar-title">指示の前に、<br><span class="em">もう動いている</span>。</h3>
+      <p class="pillar-desc">指示待ちでは秘書になりません。AIsideは、放置されている案件、期日が近い返信、合意済みなのに止まっているタスクを自分で見つけて、先回りで提案します。</p>
+      <div class="pillar-example">
+        <span class="lab">例：</span>「3日返事がない案件があります。フォロー文の下書きを作りました。送って良いですか？」と朝の通知。
+      </div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">特徴<span class="key"> 03</span>　／　つなぐ</div>
+      <h3 class="pillar-title">使ってるツールを、<br><span class="em">そのまま横断する</span>。</h3>
+      <p class="pillar-desc">Gmail、カレンダー、Slack、Notion、freee。新しい画面を開かせません。AIsideはあなたの既存ツールに住み着いて、横断して動くタイプの秘書です。</p>
+      <div class="pillar-example">
+        <span class="lab">例：</span>Slackで「経費まとめて」→ freeeから抽出 → スプレッドシートに整形 → 経理担当にメール、まで一連で。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<div class="section-bg-soft">
+<section class="block" id="compare">
+  <div class="reveal">
+    <div class="section-eyebrow">違い</div>
+    <h2 class="section-title">社長クローンAIと、<br>AIsideの<span class="em">使い分け</span>。</h2>
+    <p class="section-desc">
+      AIdollargameの「社長クローンAI」は、<strong>あなたの代わりに社外と話すAI</strong>。<br>AIsideは反対に、<strong>あなた自身を支えるAI</strong>。役割が違います。
+    </p>
+  </div>
+
+  <div class="compare-table reveal">
+    <div class="compare-row head">
+      <div class="compare-cell">　</div>
+      <div class="compare-cell">社長クローンAI</div>
+      <div class="compare-cell us">AIside</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell label">役割</div>
+      <div class="compare-cell">あなたの代理として社外・社内と対話する</div>
+      <div class="compare-cell us">あなた自身の隣で、判断と実務を支える</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell label">向いている人</div>
+      <div class="compare-cell">問い合わせ・面談が多い経営者／専門家</div>
+      <div class="compare-cell us">一人社長、フリーランス、超多忙な事業家</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell label">主な仕事</div>
+      <div class="compare-cell">代理応答、初回ヒアリング、相談対応</div>
+      <div class="compare-cell us">朝のブリーフ、進捗管理、メール起案、議事録</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell label">話す相手</div>
+      <div class="compare-cell">あなたの顧客・取引先</div>
+      <div class="compare-cell us">あなた自身（とあなたが指示する範囲）</div>
+    </div>
+    <div class="compare-row">
+      <div class="compare-cell label">学習する対象</div>
+      <div class="compare-cell">あなたの考え方・話し方・知識</div>
+      <div class="compare-cell us">あなたの仕事の流れ・人間関係・優先順位</div>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- BENEFITS -->
+<section class="block">
+  <div class="reveal">
+    <div class="section-eyebrow">導入後の変化</div>
+    <h2 class="section-title">最初の<span class="em">2週間</span>で、<br>変わる4つのこと。</h2>
+    <p class="section-desc">使い始めて2週間で、ほぼ全員が体感する変化です。</p>
+  </div>
+
+  <div class="benefits-grid reveal">
+    <div class="benefit">
+      <div class="benefit-num">01</div>
+      <div class="benefit-body">
+        <h4>朝のメール処理が、半分以下に。</h4>
+        <p>急ぎ3件と下書きが、起きた瞬間に並んでいる。判断するだけで朝が終わる。</p>
+      </div>
+    </div>
+    <div class="benefit">
+      <div class="benefit-num">02</div>
+      <div class="benefit-body">
+        <h4>「あの件どうなってる？」が消える。</h4>
+        <p>進行中の案件は全部AIsideが追跡。週1回のレビューだけで把握できる。</p>
+      </div>
+    </div>
+    <div class="benefit">
+      <div class="benefit-num">03</div>
+      <div class="benefit-body">
+        <h4>議事録を書かなくなる。</h4>
+        <p>商談の音声から要点・タスク・次回アクションまで自動。共有も自動。</p>
+      </div>
+    </div>
+    <div class="benefit">
+      <div class="benefit-num">04</div>
+      <div class="benefit-body">
+        <h4>夜、頭の中が静かになる。</h4>
+        <p>「やり残し」を全部AIsideが持ってくれている。寝る前に明日の3つだけ確認。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTEGRATIONS -->
+<div class="section-bg-soft">
+<section class="block">
+  <div class="reveal">
+    <div class="section-eyebrow">連携ツール</div>
+    <h2 class="section-title">いま使ってる<span class="em">そのツール</span>に、<br>AIsideを住み込ませる。</h2>
+    <p class="section-desc">新しいUIに乗り換える必要はありません。あなたが既に使っているところに、AIsideが入ってきます。</p>
+  </div>
+
+  <div class="integ-grid reveal">
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=mail.google.com&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;G&lt;/span&gt;'">Gmail</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=outlook.com&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;O&lt;/span&gt;'">Outlook</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=calendar.google.com&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;C&lt;/span&gt;'">Google カレンダー</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=slack.com&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;S&lt;/span&gt;'">Slack</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=chatwork.com&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;CW&lt;/span&gt;'">Chatwork</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=worksmobile.com&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;LW&lt;/span&gt;'">LINE WORKS</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=notion.so&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;N&lt;/span&gt;'">Notion</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=drive.google.com&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;D&lt;/span&gt;'">Google Drive</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=dropbox.com&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;D&lt;/span&gt;'">Dropbox</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=zoom.us&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;Z&lt;/span&gt;'">Zoom／Meet 録画</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=freee.co.jp&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;f&lt;/span&gt;'">freee</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=moneyforward.com&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;MF&lt;/span&gt;'">マネーフォワード</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=hubspot.com&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;H&lt;/span&gt;'">HubSpot</span>
+    <span class="integ-chip"><img class="ico" src="https://www.google.com/s2/favicons?domain=salesforce.com&sz=64" alt="" loading="lazy" onerror="this.outerHTML='&lt;span class=&quot;ico-fb&quot;&gt;SF&lt;/span&gt;'">Salesforce</span>
+    <span class="integ-chip"><span class="ico-fb">+</span>その他、API公開ツール</span>
+  </div>
+  <div class="integ-note reveal">※ご利用ツールに合わせて個別接続の調整可。一覧にないツールもまずはご相談ください。</div>
+</section>
+</div>
+
+<!-- SECURITY -->
+<section class="block">
+  <div class="reveal">
+    <div class="section-eyebrow">セキュリティ</div>
+    <h2 class="section-title">経営者の手帳を渡せる、<br><span class="em">日本国内完結</span>の運用。</h2>
+    <p class="section-desc">AIsideはあなたの仕事の機微情報を扱います。情報の置き場、操作ログ、止め方——すべて契約時に明示します。</p>
+  </div>
+
+  <div class="sec-grid reveal">
+    <div class="sec-card">
+      <div class="sec-icon">JP</div>
+      <h3 class="sec-title">国内データセンター完結</h3>
+      <p class="sec-desc">あなたの会話・メール・予定は国内サーバ内で処理。海外モデル経由でも、生データは社外に持ち出しません。</p>
+    </div>
+    <div class="sec-card">
+      <div class="sec-icon">●●●</div>
+      <h3 class="sec-title">完全な操作ログ</h3>
+      <p class="sec-desc">AIsideが「いつ・何を見て・誰に何をしたか」全件記録。あとから検証も差し戻しも可能です。</p>
+    </div>
+    <div class="sec-card">
+      <div class="sec-icon">⏻</div>
+      <h3 class="sec-title">即時停止と削除</h3>
+      <p class="sec-desc">学習データ・記憶領域・接続トークンは、解約時にすべて削除。証跡もお渡しします。</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<div class="section-bg-soft">
+<section class="block" id="price">
+  <div class="reveal">
+    <div class="section-eyebrow">料金</div>
+    <h2 class="section-title">秘書を雇う前に、<br><span class="em">月額で試せる</span>。</h2>
+    <p class="section-desc">最初の1ヶ月で、あなたの仕事の流れ・接続するツール・任せたい領域に合わせてセットアップします。詳細プランは無料相談時に業務を伺ってご提案します。</p>
+  </div>
+
+  <div class="price-card reveal">
+    <div class="price-info">
+      <h3>初期費用ゼロ円。<br>月額で、ひとまず始められる。</h3>
+      <p>人を雇う一桁下のコストで、24時間動く秘書を一人配置。<br>合わなければ翌月解約OK・違約金なし。まずは1ヶ月、隣に置いてみてください。</p>
+    </div>
+    <div class="price-action">
+      <div class="price-tag">FROM</div>
+      <div class="price-amount">¥58,000<span class="small">／月〜</span></div>
+      <div class="price-note">業務範囲・接続ツール数で調整</div>
+      <a href="#cta" class="btn-white">料金を相談する</a>
+    </div>
+  </div>
+</section>
+</div>
+
+<!-- FAQ -->
+<section class="block">
+  <div class="reveal">
+    <div class="section-eyebrow">よくある質問</div>
+    <h2 class="section-title">よくある質問</h2>
+  </div>
+
+  <div class="faq-list reveal">
+    <div class="faq-item">
+      <div class="faq-q"><span class="q-mark">Q.</span><span class="q-text">ChatGPTやClaudeを自分で使うのと、何が違いますか？</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">汎用AIは「指示すれば答える」道具です。AIsideは、あなたの仕事の文脈・人間関係・進行中の案件を継続的に覚え、自分から先回りして動く「秘書」として運用します。指示する手間そのものを減らすのが目的です。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span class="q-mark">Q.</span><span class="q-text">機密情報を扱うのが心配です。安全ですか？</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">国内データセンターでの運用、操作ログの完全保存、解約時の即時削除を契約に明記します。海外AIモデルを利用する場合も生データは送らず、必要に応じて国産モデル運用にも対応します。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span class="q-mark">Q.</span><span class="q-text">使っているツールに対応していますか？</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">Gmail、Outlook、Google／Outlookカレンダー、Slack、Chatwork、LINE WORKS、Notion、Drive、Dropbox、freee、マネーフォワード、HubSpot、Salesforceなど主要ツールに対応。一覧にないツールも、APIが公開されていれば個別接続を検討します。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span class="q-mark">Q.</span><span class="q-text">立ち上げにどのくらい時間がかかりますか？</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">最短1週間で初期セットアップ・接続・基本ルールの学習まで完了します。本格的に「あなたを覚えた秘書」になるのは、運用開始から2〜4週間が目安です。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span class="q-mark">Q.</span><span class="q-text">合わなかったらどうなりますか？</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">月額契約のため、翌月解約が可能です。違約金はありません。記憶データ・接続トークンも削除証跡付きで完全消去します。</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span class="q-mark">Q.</span><span class="q-text">「社長クローンAI」とどちらを選べばいいですか？</span><span class="faq-icon">+</span></div>
+      <div class="faq-a">「自分の代わりに顧客と話してほしい」なら社長クローン、「自分の隣で仕事を片付けてほしい」ならAIside。両方を組み合わせて運用するお客様もいます。無料相談で適切な構成を提案します。</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="section-bg-soft">
+<section class="block" id="cta">
+  <div class="cta-final reveal">
+    <div class="section-eyebrow" style="justify-content:center;">無料相談</div>
+    <h2>まずは1回、<br><span class="em">無料で話しましょう</span>。</h2>
+    <p>あなたの一日と、いま抱えている「やらなきゃ」を聞かせてください。<br>AIsideで何を肩代わりできるか、その場で具体的に答えます。<br>30分・オンライン・無料です。</p>
+    <form action="https://formspree.io/f/xeevwrgp" method="POST" class="cta-form">
+      <input type="hidden" name="_subject" value="AIside 無料相談リクエスト">
+      <input type="hidden" name="product" value="AIside / あなたの付き人AI">
+      <input type="text" name="name" placeholder="お名前" required>
+      <input type="email" name="email" placeholder="メールアドレス" required>
+      <textarea name="message" placeholder="任せたい業務・困っていること（任意）"></textarea>
+      <button type="submit" class="btn-primary">無料相談を申し込む</button>
+    </form>
+    <div class="cta-mini">送信後1営業日以内にこちらから日程候補をお送りします。</div>
+  </div>
+</section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html" class="footer-logo">AIdollargame<span class="pr">／ AIside</span></a>
+  <div class="footer-links">
+    <a href="index.html">プロダクト一覧</a>
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="tokushoho.html">特定商取引法</a>
+  </div>
+  <div class="footer-copy">© 2026 株式会社AIdollargame</div>
+</footer>
+
+<script>
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); } });
+},{threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+document.querySelectorAll('.faq-item').forEach(item=>{
+  item.querySelector('.faq-q').addEventListener('click', ()=> item.classList.toggle('open'));
+});
+</script>
+
+</body>
+</html>

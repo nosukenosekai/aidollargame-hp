@@ -3,789 +3,948 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AIクローン | あなたの野望に終わりはない</title>
-<meta name="description" content="あなたを学び続ける、もう一人のあなた ── AIクローン。創業者の意志を組織のOSとして永続させる知性。">
+<title>AIwill | あなたの判断と意志を、デジタルに残す</title>
+<meta name="description" content="AIwill ── あなたの判断と哲学を学び続けるAIクローン。もう一人のあなた。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700;800&family=Noto+Serif+JP:wght@500;700&family=JetBrains+Mono:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --void:        #000000;
-    --abyss:       #04060a;
-    --night:       #06090f;
-    --text:        #e6ecf5;
-    --text-bright: #ffffff;
-    --muted:       rgba(230,236,245,0.42);
-    --muted-2:     rgba(230,236,245,0.62);
-    --accent:      #5b9bff;
-    --accent-bright:#a4c5ff;
-    --accent-deep: #2d6dd6;
-    --accent-soft: rgba(91,155,255,0.10);
-    --accent-glow: rgba(91,155,255,0.32);
-    --before:      #ff6a52;
-    --rule:        rgba(230,236,245,0.08);
-    --rule-strong: rgba(91,155,255,0.32);
-    --radius:      4px;
-    --radius-lg:   8px;
+    --paper:        #FCFCFA;
+    --paper-2:      #F5F4EC;
+    --paper-3:      #EFEEE5;
+    --ink:          #1a1a22;
+    --ink-strong:   #0a0a12;
+    --ink-muted:    #666674;
+    --ink-mute-2:   #8e8e9a;
+    --accent:       #2d6dd6;
+    --accent-bright:#4a8eff;
+    --accent-deep:  #1a4f9d;
+    --accent-soft:  rgba(45,109,214,0.07);
+    --accent-glow:  rgba(45,109,214,0.18);
+    --aurora-blue:  rgba(109,180,255,0.22);
+    --aurora-pink:  rgba(255,155,208,0.16);
+    --aurora-mint:  rgba(109,228,180,0.13);
+    --aurora-yellow:rgba(255,212,112,0.11);
+    --rule:         rgba(20,20,30,0.07);
+    --rule-strong:  rgba(45,109,214,0.30);
+    --live-green:   #1eb58a;
+    --before:       #b09080;
+    --radius:       6px;
+    --radius-lg:    14px;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior:smooth; background:var(--void); }
+  html { scroll-behavior:smooth; background:var(--paper); }
   body {
-    background-color: var(--void);
-    background-image:
-      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(91,155,255,0.07) 0%, transparent 65%),
-      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(91,155,255,0.04) 0%, transparent 60%),
-      radial-gradient(circle at 50% 50%, rgba(91,155,255,0.18) 0.6px, transparent 0.7px);
-    background-size: auto, auto, 30px 30px;
-    background-attachment: fixed;
-    animation: gridDrift 60s linear infinite;
-    color: var(--text);
-    font-family: 'Noto Serif JP', serif;
-    font-weight: 500;
-    line-height: 1.95;
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Sans JP', 'Inter', sans-serif;
+    font-weight: 400;
+    line-height: 1.85;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
-    letter-spacing: 0.04em;
-  }
-  @keyframes gridDrift {
-    from { background-position: 0 0, 0 0, 0 0; }
-    to   { background-position: 0 0, 0 0, 30px 30px; }
+    letter-spacing: 0.02em;
   }
 
-  /* slow vertical scan */
-  .scan {
-    position: fixed; inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    background: linear-gradient(180deg, transparent 49.85%, rgba(91,155,255,0.05) 49.95%, transparent 50.15%);
-    background-size: 100% 220%;
-    animation: scan 18s linear infinite;
+  .aurora {
+    position:fixed; inset:-10%; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(ellipse 55% 45% at 18% 22%, var(--aurora-blue),  transparent 60%),
+      radial-gradient(ellipse 45% 38% at 82% 14%, var(--aurora-pink),  transparent 60%),
+      radial-gradient(ellipse 60% 50% at 70% 78%, var(--aurora-mint),  transparent 60%),
+      radial-gradient(ellipse 38% 30% at 22% 86%, var(--aurora-yellow),transparent 60%);
+    mix-blend-mode: soft-light;
+    animation: auroraDrift 28s ease-in-out infinite;
+    filter: blur(2px);
   }
-  @keyframes scan { from { background-position: 0 -110%; } to { background-position: 0 110%; } }
-
-  #pulse-canvas {
-    position: fixed; inset: 0;
-    z-index: 0;
-    pointer-events: none;
+  @keyframes auroraDrift {
+    0%,100% { transform: translate3d(0,0,0) scale(1); }
+    33%     { transform: translate3d(-1.5%,1%,0) scale(1.05); }
+    66%     { transform: translate3d(1%,-1.2%,0) scale(1.03); }
   }
-
   body::before {
-    content:'';
-    position:fixed; inset:0; z-index:1;
+    content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
     background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
-    pointer-events:none;
-    opacity:0.04;
-    mix-blend-mode:overlay;
+    opacity:0.04; mix-blend-mode:multiply;
   }
+  #pulse-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
   .stage { position:relative; z-index:3; }
   a { color:inherit; text-decoration:none; }
 
-  /* ── NAV ── */
+  /* BRAND MARK */
+  .brand {
+    display: inline-flex; flex-direction: column; align-items: center;
+    line-height: 1;
+  }
+  .brand-name {
+    font-family: 'Cormorant Garamond', 'Noto Serif JP', serif;
+    font-weight: 500;
+    color: var(--ink-strong);
+    letter-spacing: 0.04em;
+  }
+  .brand-name .dot { color: var(--accent); }
+  .brand-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-top: 0.5em;
+  }
+
+  /* NAV */
   nav {
-    position:fixed; top:0; left:0; right:0;
-    z-index:100;
+    position:fixed; top:0; left:0; right:0; z-index:100;
     display:flex; justify-content:space-between; align-items:center;
-    padding:1.4rem 3rem;
-    background:rgba(0,0,0,0.55);
-    backdrop-filter:blur(28px);
+    padding:1rem 2.2rem;
+    background:rgba(252,252,250,0.8);
+    backdrop-filter:blur(28px) saturate(160%);
     border-bottom:1px solid var(--rule);
   }
-  .logo {
-    font-family:'Noto Serif JP',serif;
-    font-size:1.15rem;
-    font-weight:900;
-    color:var(--text-bright);
-    letter-spacing:0.06em;
-  }
+  .logo { font-family:'Inter','Noto Sans JP',sans-serif; font-size:1.05rem; font-weight:700; color:var(--ink-strong); letter-spacing:0.02em; }
   .logo .ai { color: var(--accent); }
-  .brand-mark {
-    font-family:'Noto Serif JP',serif;
-    font-size:1rem;
-    font-weight:900;
-    color: var(--accent);
-    letter-spacing:0.32em;
-    padding-left:0.32em;
-  }
-  .brand-mark .en { font-family:'JetBrains Mono', monospace; font-weight:500; letter-spacing:0.2em; margin-right:0.3em; }
-  nav ul { display:flex; list-style:none; gap:2.4rem; align-items:center; }
-  nav a {
-    font-family:'Noto Sans JP',sans-serif;
-    color: var(--muted-2);
-    font-size:0.78rem;
-    letter-spacing:0.28em;
-    text-transform:uppercase;
-    font-weight:500;
-    transition:color 0.4s;
-  }
-  nav a:hover { color: var(--text-bright); }
-  .nav-cta {
-    padding:0.6rem 1.6rem;
-    border:1px solid var(--accent);
-    color: var(--accent) !important;
-    font-weight:700;
-    border-radius: var(--radius);
-  }
-  .nav-cta:hover { background:var(--accent-soft); }
+  .nav-brand .brand-name { font-size: 1.15rem; }
+  .nav-brand .brand-tag { font-size: 0.55rem; letter-spacing: 0.28em; margin-top: 0.2em; }
+  nav ul { display:flex; list-style:none; gap:2rem; align-items:center; }
+  nav a { font-family:'Inter','Noto Sans JP',sans-serif; color: var(--ink-muted); font-size:0.78rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:500; transition:color 0.4s; }
+  nav a:hover { color: var(--ink-strong); }
+  .nav-cta { padding:0.55rem 1.4rem; border:1px solid var(--accent); color: var(--accent) !important; font-weight:600; border-radius: var(--radius); transition: all 0.3s; }
+  .nav-cta:hover { background: var(--accent-soft); box-shadow: 0 4px 16px var(--accent-glow); }
 
-  /* ── SECTION ── */
-  section {
-    padding: 7rem 2rem;
-    width: 100%;
-  }
-  .container {
-    max-width: 980px;
-    margin: 0 auto;
-  }
+  section { padding: 7rem 2rem; width: 100%; }
+  .container { max-width: 980px; margin: 0 auto; }
   .container.narrow { max-width: 760px; }
-  .container.wide   { max-width: 1180px; }
 
   .eyebrow {
-    font-family:'JetBrains Mono', 'Noto Sans JP', sans-serif;
-    font-size:0.74rem;
-    letter-spacing:0.42em;
-    color: var(--accent);
-    text-transform:uppercase;
-    font-weight:500;
-    margin-bottom:1.6rem;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.7rem;
+    font-family:'JetBrains Mono','Inter',monospace;
+    font-size:0.72rem; letter-spacing:0.32em;
+    color: var(--accent); text-transform:uppercase;
+    font-weight:600; margin-bottom:1.4rem;
+    display:flex; align-items:center; flex-wrap:wrap; gap:0.7rem;
   }
-  .eyebrow .tag {
-    border:1px solid var(--accent);
-    color: var(--accent);
-    padding: 0.18rem 0.7rem;
-    font-size:0.64rem;
-    letter-spacing:0.3em;
-    border-radius: var(--radius);
-  }
+  .eyebrow .tag { border:1px solid var(--accent); color: var(--accent); padding: 0.18rem 0.7rem; font-size:0.62rem; letter-spacing:0.24em; border-radius: 4px; }
   .h-section {
-    font-family:'Noto Serif JP',serif;
-    font-size: clamp(1.7rem, 2.9vw, 2.35rem);
-    font-weight:900;
-    color: var(--text-bright);
-    letter-spacing: 0.08em;
-    line-height: 1.7;
-    margin-bottom: 1.6rem;
+    font-family:'Noto Sans JP','Inter',sans-serif;
+    font-size: clamp(1.65rem, 2.8vw, 2.3rem);
+    font-weight:700; color: var(--ink-strong);
+    letter-spacing: 0.02em; line-height: 1.55;
+    margin-bottom: 1.2rem;
   }
   .lead {
-    font-family:'Noto Serif JP',serif;
-    font-size: 1.05rem;
-    color: var(--muted-2);
-    line-height: 2.15;
-    letter-spacing: 0.04em;
-    max-width: 42rem;
-    font-weight: 500;
+    font-size: 1rem; color: var(--ink-muted);
+    line-height: 2.05; letter-spacing: 0.02em;
+    max-width: 42rem; font-weight: 400;
   }
 
-  /* ── HERO ── */
+  /* HERO */
   #hero {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 9rem 2rem 4rem;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center;
+    padding: 9rem 2rem 5rem;
+    position:relative;
   }
-  .hero-brand {
-    font-family:'Noto Serif JP',serif;
-    font-size: clamp(1rem, 1.4vw, 1.18rem);
-    font-weight:900;
-    color: var(--accent);
-    letter-spacing: 0.42em;
-    margin-bottom: 2rem;
-    padding-left: 0.42em;
+  #hero::before {
+    content:''; position:absolute;
+    top:30%; left:50%; transform:translate(-50%,-50%);
+    width:90vw; max-width:900px; height:60vh;
+    background: radial-gradient(ellipse, rgba(180,210,255,0.20), rgba(255,200,230,0.07) 40%, transparent 70%);
+    filter: blur(40px); pointer-events:none; z-index:0;
   }
-  .hero-brand .en {
-    font-family:'JetBrains Mono', monospace;
-    font-weight: 500;
-    margin-right: 0.5em;
-    letter-spacing: 0.32em;
+  #hero > * { position:relative; z-index:1; }
+  .hero-status {
+    font-family:'JetBrains Mono',monospace; font-size:0.7rem;
+    color: var(--live-green); letter-spacing:0.32em; text-transform:uppercase;
+    margin-bottom:3rem; display:flex; align-items:center; justify-content:center; gap:0.5rem;
   }
-  .hero-brand-rule {
-    width: 28px;
-    height: 1px;
-    background: var(--accent);
-    margin: 0 auto 2.4rem;
-    opacity: 0.5;
+  .hero-status .ldot {
+    width:7px; height:7px; border-radius:50%;
+    background: var(--live-green); box-shadow: 0 0 10px var(--live-green);
+    animation: ldotPulse 1.6s ease-in-out infinite;
   }
-  .hero-title {
-    font-family:'Noto Serif JP',serif;
-    font-weight: 900;
-    color: var(--text-bright);
-    font-size: clamp(2.4rem, 5.4vw, 4rem);
-    line-height: 1.55;
-    letter-spacing: 0.10em;
+  @keyframes ldotPulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.4; transform:scale(0.85); } }
+
+  .hero-brand-block {
     margin-bottom: 2.4rem;
-    text-shadow: 0 0 36px rgba(0,0,0,0.85);
+    display: inline-flex; flex-direction: column; align-items: center;
+    line-height: 1;
   }
-  .hero-sub {
+  .hero-brand-block .brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    color: var(--ink-strong);
+    font-size: clamp(3.2rem, 8vw, 6rem);
+    letter-spacing: 0.02em;
+  }
+  .hero-brand-block .brand-name .dot { color: var(--accent); font-weight: 500; }
+  .hero-brand-block .brand-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-top: 1.4rem;
+  }
+
+  .hero-life {
+    font-family:'Inter','JetBrains Mono',monospace;
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+    font-weight:500; color: var(--ink-muted);
+    letter-spacing: 0.4em; margin-bottom: 3rem;
+  }
+  .hero-life .infinity { color: var(--accent); font-size:1.4em; vertical-align:-0.05em; font-weight:600; }
+  .hero-headline {
     font-family:'Noto Serif JP',serif;
-    font-weight: 700;
-    color: var(--accent);
-    font-size: clamp(1rem, 1.45vw, 1.18rem);
-    letter-spacing: 0.16em;
-    line-height: 1.95;
-    margin-bottom: 3rem;
-    text-shadow: 0 0 24px rgba(0,0,0,0.85);
+    font-weight:700;
+    color: var(--ink-strong);
+    font-size: clamp(1.5rem, 2.8vw, 2.3rem);
+    line-height:1.65;
+    letter-spacing:0.04em;
+    margin-bottom: 1.4rem;
+    display: flex; flex-direction: column;
+    gap: 0.3rem;
+    align-items: center;
   }
+  .hero-headline span { display:block; white-space:nowrap; }
+  @media(max-width:600px){
+    .hero-headline { font-size: clamp(1.15rem, 5.4vw, 1.5rem); }
+  }
+  .hero-sub-jp {
+    font-family:'Noto Sans JP',sans-serif;
+    font-size: clamp(0.95rem, 1.3vw, 1.05rem);
+    color: var(--ink-muted);
+    line-height: 1.95;
+    margin-bottom: 3.4rem;
+    max-width: 36rem;
+    letter-spacing: 0.04em;
+  }
+  .hero-send {
+    font-family:'Inter','Noto Sans JP',sans-serif;
+    font-size: 1rem; font-weight:600;
+    color: var(--paper); background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 1rem 2.6rem;
+    letter-spacing: 0.06em;
+    transition: all 0.4s;
+    cursor:pointer; display:inline-block;
+    box-shadow: 0 6px 24px var(--accent-glow);
+  }
+  .hero-send:hover { background: var(--accent-deep); transform: translateY(-2px); box-shadow: 0 10px 36px var(--accent-glow); }
+  .hero-send .arrow { display:inline-block; margin-left:0.6em; transition: transform 0.3s; }
+  .hero-send:hover .arrow { transform: translateX(4px); }
   .scroll-cue {
-    font-family:'JetBrains Mono', sans-serif;
-    font-size: 0.7rem;
+    font-family:'JetBrains Mono',monospace; font-size:0.65rem;
+    color: var(--ink-mute-2); letter-spacing:0.4em; text-transform:uppercase;
+    font-weight:500; margin-top:3.5rem;
+  }
+  .scroll-cue::after { content:''; display:block; width:1px; height:32px; background: linear-gradient(to bottom, var(--ink-mute-2), transparent); margin:0.5rem auto 0; opacity:0.5; }
+
+  /* live feed ticker (now belongs to a thin section under hero) */
+  #ticker-section {
+    padding: 4rem 2rem 2rem;
+  }
+  .ticker {
+    max-width:720px; margin-left:auto; margin-right:auto;
+    border:1px solid var(--rule); border-radius: var(--radius);
+    padding:0.85rem 1.4rem;
+    background: rgba(252,252,250,0.5);
+    backdrop-filter: blur(8px);
+    overflow:hidden; position:relative;
+  }
+  .ticker-label {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.66rem; color: var(--accent);
+    letter-spacing:0.28em; text-transform:uppercase;
+    font-weight:600; margin-right:1rem; display:inline-block;
+  }
+  .ticker-stream {
+    display:inline-block;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.76rem; color: var(--ink-muted);
+    white-space:nowrap;
+    animation: tickerScroll 38s linear infinite;
+    letter-spacing:0.04em;
+  }
+  @keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* FEATURES — 3 tier */
+  .cap-head { margin-bottom: 2.4rem; }
+  .tier { margin-top: 4rem; }
+  .tier:first-of-type { margin-top: 2.6rem; }
+  .tier-head {
+    display: flex; align-items: baseline; gap: 0.7rem;
+    margin-bottom: 0.4rem;
+  }
+  .tier-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
     color: var(--accent);
-    letter-spacing: 0.5em;
+    font-weight: 500;
+  }
+  .tier-title {
+    font-family:'Noto Sans JP',sans-serif;
+    font-size: 1.3rem; font-weight:700;
+    color: var(--ink-strong);
+    letter-spacing: 0.04em;
+  }
+  .tier-2 .tier-title { color: #2a3f5f; }
+  .tier-3 .tier-title { color: #4a5470; }
+  .tier-sub {
+    font-family:'Noto Sans JP',sans-serif;
+    font-size: 0.88rem; font-weight:400;
+    color: var(--ink-muted);
+    margin-bottom: 1.4rem; margin-left: 0.1rem;
+    letter-spacing: 0.02em;
+    line-height: 1.7;
+  }
+  .tier-grid {
+    display: grid; gap: 0;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 30px rgba(20,20,30,0.04);
+  }
+  .tier-1 .tier-grid { grid-template-columns: 1fr 1fr; }
+  .tier-2 .tier-grid { grid-template-columns: 1fr; }
+  .tier-3 .tier-grid { grid-template-columns: repeat(3, 1fr); }
+  .feat {
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 2rem 1.8rem;
+    transition: background 0.5s;
+  }
+  .tier-1 .feat:nth-child(2n) { border-right: none; }
+  .tier-1 .feat:nth-last-child(-n+2) { border-bottom: none; }
+  .tier-2 .feat { border-right: none; border-bottom: none; padding: 2.4rem 2.4rem; }
+  .tier-3 .feat:nth-child(3n) { border-right: none; }
+  .tier-3 .feat:nth-last-child(-n+3) { border-bottom: none; }
+  .feat:hover { background: rgba(45,109,214,0.025); }
+  .feat-num {
+    font-family:'JetBrains Mono',monospace;
+    color: var(--accent);
+    font-size:0.72rem; font-weight:600;
+    letter-spacing:0.18em; margin-bottom:0.9rem;
+  }
+  .feat h4 {
+    font-family:'Noto Sans JP',sans-serif;
+    font-weight:700; color: var(--ink-strong);
+    font-size:1.05rem; line-height:1.55;
+    letter-spacing:0.02em; margin-bottom:0.7rem;
+  }
+  .feat p {
+    color: var(--ink-muted);
+    font-size:0.88rem; line-height:1.85;
+    letter-spacing:0.02em; font-weight:400;
+  }
+
+  /* HOW IT WORKS */
+  .how-grid {
+    display:grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 3rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(8px);
+    overflow: hidden;
+  }
+  .how-step {
+    padding: 2.6rem 2rem;
+    text-align: left;
+    border-right: 1px solid var(--rule);
+    position: relative;
+  }
+  .how-step:last-child { border-right: none; }
+  .how-step::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    height: 3px; width: 0;
+    background: var(--accent);
+    transition: width 0.5s ease;
+  }
+  .how-step.hs-1::before { width: 33.33%; }
+  .how-step.hs-2::before { width: 66.66%; }
+  .how-step.hs-3::before { width: 100%; }
+  .how-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--accent);
+    font-size:1.4rem; font-weight:500;
+    letter-spacing:0.06em; margin-bottom:1.4rem;
+  }
+  .how-step h3 {
+    font-family:'Noto Sans JP',sans-serif;
+    font-weight:700; color: var(--ink-strong);
+    font-size:1.3rem; line-height:1.5;
+    letter-spacing:0.04em; margin-bottom:1rem;
+  }
+  .how-step p {
+    color: var(--ink-muted);
+    font-size:0.92rem; line-height:1.95;
+    letter-spacing:0.02em; font-weight:500;
+  }
+
+  /* CYCLE */
+  #cycle { padding: 5rem 2rem 7rem; }
+  .cycle-stage {
+    position:relative; width:100%; max-width:520px;
+    aspect-ratio:1; margin:3rem auto 1.5rem;
+  }
+  .cycle-svg { width:100%; height:100%; display:block; overflow:visible; }
+  .cycle-svg .ring-bg { fill:none; stroke:rgba(45,109,214,0.18); stroke-width:0.6; }
+  .cycle-svg .tick { stroke:rgba(45,109,214,0.28); stroke-width:0.6; }
+  .cycle-svg .tick.major { stroke:var(--accent); stroke-width:1; opacity:0.6; }
+  .cycle-svg .marker { fill: rgba(45,109,214,0.18); stroke: var(--accent); stroke-width:0.8; transition: fill 0.4s; }
+  .cycle-svg .marker.active { fill: var(--accent); filter: drop-shadow(0 0 12px var(--accent-glow)); }
+  .cycle-svg .trail { fill:none; stroke:var(--accent); stroke-width:1.2; stroke-linecap:round; opacity:0.55; }
+  .cycle-svg .light-head { fill: var(--accent-bright); filter: drop-shadow(0 0 10px var(--accent-bright)) drop-shadow(0 0 18px var(--accent)); }
+  .cycle-svg .core { fill: rgba(45,109,214,0.06); stroke: var(--accent); stroke-width:0.5; }
+  .hour-label { font-family:'JetBrains Mono',monospace; font-size:8.5px; fill: var(--ink-mute-2); letter-spacing:0.08em; text-anchor:middle; dominant-baseline:middle; }
+  .cycle-center {
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    justify-content:center; align-items:center;
+    text-align:center; pointer-events:none; padding:0 22%;
+  }
+  .cycle-time {
+    font-family:'JetBrains Mono',monospace;
+    color: var(--accent);
+    font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+    letter-spacing:0.04em; font-weight:600;
+    margin-bottom:0.5rem;
+    transition: opacity 0.4s;
+  }
+  .cycle-time .h { font-size:0.55em; letter-spacing:0.32em; color: var(--ink-mute-2); margin-left:0.5rem; }
+  .cycle-desc {
+    font-family:'Noto Sans JP',sans-serif;
+    color: var(--ink-strong);
+    font-size: clamp(0.9rem, 1.15vw, 1rem);
+    font-weight:600; letter-spacing:0.03em;
+    line-height:1.75;
+    transition: opacity 0.4s;
+  }
+
+  /* DIGITAL MEMORY */
+  #memory {
+    text-align:center; padding:9rem 2rem;
+    position:relative;
+  }
+  #memory::before {
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(180,210,255,0.18), transparent 70%);
+    pointer-events:none;
+  }
+  #memory > * { position:relative; }
+  .memory-eyebrow {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.7rem; letter-spacing:0.4em;
+    color: var(--accent); text-transform:uppercase;
+    font-weight:600; margin-bottom:2.5rem;
+  }
+  .memory-line {
+    font-family:'Noto Serif JP',serif;
+    font-weight:700; color: var(--accent-deep);
+    font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+    line-height:1.95; letter-spacing:0.06em;
+    text-shadow: 0 0 28px rgba(45,109,214,0.18);
+    margin-bottom: 2rem;
+  }
+
+  /* chat panel */
+  .chat-panel {
+    margin: 3rem auto 2rem;
+    padding: 1.4rem 1.6rem 1.4rem;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(14px);
+    max-width: 540px;
+    box-shadow: 0 10px 36px rgba(45,109,214,0.08), 0 1px 0 rgba(255,255,255,1) inset;
+    text-align: left;
+    position: relative;
+  }
+  .chat-head {
+    display:flex; justify-content:space-between; align-items:center;
+    padding-bottom: 0.85rem; margin-bottom: 1.1rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .chat-title {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.66rem; color: var(--ink-muted);
+    letter-spacing:0.26em; text-transform:uppercase;
+    font-weight:600;
+  }
+  .chat-context {
+    font-family:'Noto Sans JP',sans-serif;
+    font-size:0.78rem;
+    color: var(--ink-mute-2);
+    margin-bottom: 1rem;
+    padding: 0.6rem 0.9rem;
+    background: rgba(45,109,214,0.04);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    line-height: 1.6;
+  }
+  .chat-context .label {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.6rem;
+    letter-spacing:0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-right: 0.5rem;
+    font-weight: 600;
+  }
+  .chat-live {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.62rem; color: var(--live-green);
+    letter-spacing:0.26em; text-transform:uppercase;
+    font-weight:500; display:flex; align-items:center; gap:0.4rem;
+  }
+  .chat-live .dot { width:5px; height:5px; border-radius:50%; background: var(--live-green); box-shadow: 0 0 8px var(--live-green); animation: ldotPulse 1.6s ease-in-out infinite; }
+  .chat-stage {
+    display:flex; flex-direction:column; gap:0.7rem;
+    min-height: 320px;
+  }
+  .chat-msg {
+    opacity:0;
+    animation: chatIn 0.45s ease-out forwards;
+    max-width: 80%;
+  }
+  @keyframes chatIn {
+    from { opacity:0; transform: translateY(6px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  .chat-msg.user { align-self: flex-end; }
+  .chat-msg.clone { align-self: flex-start; }
+  .chat-who {
+    font-family:'Noto Sans JP',sans-serif;
+    font-size:0.66rem; color: var(--accent);
+    letter-spacing:0.08em;
+    font-weight:600; margin-bottom:0.25rem; padding-left:0.2rem;
+  }
+  .chat-bubble {
+    padding:0.7rem 1rem;
+    border-radius: 16px;
+    font-size:0.92rem; line-height:1.65;
+    letter-spacing:0.02em;
+    font-family:'Noto Sans JP',sans-serif;
+    font-weight:500;
+  }
+  .chat-msg.user .chat-bubble {
+    background: rgba(20,20,30,0.06);
+    color: var(--ink-strong);
+    border-bottom-right-radius:4px;
+  }
+  .chat-msg.clone .chat-bubble {
+    background: rgba(45,109,214,0.10);
+    color: var(--ink-strong);
+    border-bottom-left-radius:4px;
+  }
+  .chat-typing-bubble {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 0.85rem 1rem;
+    background: rgba(45,109,214,0.10);
+    border-radius: 16px;
+    border-bottom-left-radius: 4px;
+  }
+  .chat-typing-bubble span {
+    width: 6px; height: 6px; border-radius:50%;
+    background: var(--accent);
+    animation: typingDot 1.2s infinite ease-in-out;
+  }
+  .chat-typing-bubble span:nth-child(2) { animation-delay: 0.15s; }
+  .chat-typing-bubble span:nth-child(3) { animation-delay: 0.30s; }
+  @keyframes typingDot {
+    0%, 70%, 100% { opacity: 0.3; transform: translateY(0); }
+    35% { opacity: 1; transform: translateY(-3px); }
+  }
+
+  .memory-counter {
+    margin-top:3rem;
+    display:inline-flex; flex-direction:column; align-items:center;
+    padding: 1.4rem 2.6rem;
+    border:1px solid var(--rule-strong);
+    border-radius: var(--radius-lg);
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 32px rgba(45,109,214,0.10);
+  }
+  .memory-counter .label {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.66rem; color: var(--ink-mute-2);
+    letter-spacing:0.32em; text-transform:uppercase;
+    margin-bottom:0.4rem; font-weight:500;
+  }
+  .memory-counter .num {
+    font-family:'JetBrains Mono',monospace;
+    color: var(--accent);
+    font-size: clamp(1.6rem, 2.6vw, 2rem);
+    font-weight:600; letter-spacing:0.06em;
+    animation: numPulse 3s ease-in-out infinite;
+  }
+  .memory-counter .num .infinity { font-size:1.3em; }
+  @keyframes numPulse { 0%,100% { text-shadow: 0 0 0 transparent; } 50% { text-shadow: 0 0 24px var(--accent-glow); } }
+
+  /* CHANGES */
+  .change-grid { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-top:2.4rem; }
+  .change-col {
+    padding:2rem 1.8rem;
+    border:1px solid var(--rule);
+    border-radius: var(--radius-lg);
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(8px);
+  }
+  .change-col.after {
+    border-color: var(--rule-strong);
+    background: linear-gradient(180deg, rgba(180,210,255,0.18), rgba(255,255,255,0.55));
+    box-shadow: 0 6px 28px rgba(45,109,214,0.10);
+  }
+  .change-label {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.7rem; letter-spacing:0.32em;
+    text-transform:uppercase; font-weight:600;
+    margin-bottom:1.4rem;
+    display:flex; align-items:center; gap:0.7rem;
+  }
+  .change-col.before .change-label { color: var(--ink-mute-2); }
+  .change-col.after  .change-label { color: var(--accent); }
+  .change-label .dot { width:7px; height:7px; border-radius:50%; }
+  .change-col.before .change-label .dot { background: var(--before); opacity:0.7; }
+  .change-col.after  .change-label .dot { background: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+  .change-list { list-style:none; }
+  .change-list li {
+    font-family:'Noto Sans JP',sans-serif;
+    font-weight:500; font-size:0.95rem;
+    line-height:1.95; padding:0.6rem 0;
+    letter-spacing:0.02em;
+    border-bottom:1px solid var(--rule);
+    position:relative; padding-left:1.3rem;
+  }
+  .change-list li:last-child { border-bottom:none; }
+  .change-list li::before { content:''; position:absolute; left:0; top:1.45em; width:6px; height:1px; background:currentColor; opacity:0.55; }
+  .change-col.before .change-list li { color: var(--ink-muted); }
+  .change-col.after  .change-list li { color: var(--ink-strong); font-weight:600; }
+
+  /* CLOSING */
+  #closing {
+    text-align:center;
+    padding: 10rem 2rem 5rem;
+    border-top: 1px solid var(--rule);
+    background: linear-gradient(180deg, transparent, rgba(245,244,236,0.5));
+    position:relative;
+  }
+  .closing-brand { display:inline-flex; flex-direction:column; align-items:center; line-height: 1; margin-bottom: 1.6rem; }
+  .closing-brand .brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    color: var(--ink-strong);
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    letter-spacing: 0.02em;
+  }
+  .closing-brand .brand-name .dot { color: var(--accent); }
+  .closing-brand .brand-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.66rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.36em;
     text-transform: uppercase;
     font-weight: 500;
     margin-top: 1rem;
   }
-  .scroll-cue::after {
-    content: '';
-    display: block;
-    width: 1px;
-    height: 38px;
-    background: var(--accent);
-    margin: 0.6rem auto 0;
-    opacity: 0.5;
+  .closing-life {
+    font-family:'Inter','JetBrains Mono',monospace;
+    font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+    color: var(--ink-muted);
+    letter-spacing:0.4em; margin-bottom:2.6rem; font-weight:500;
   }
+  .closing-life .infinity { color: var(--accent); font-size:1.4em; vertical-align:-0.05em; font-weight:600; }
+  .closing-quote {
+    font-family:'Noto Serif JP',serif;
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    color: var(--ink); line-height:2;
+    margin: 0 auto 4rem; max-width:36rem;
+    font-weight:500; letter-spacing:0.04em;
+  }
+  .closing-quote em { font-style:normal; color: var(--accent); font-weight:700; }
 
-  /* ── DEFINITION ── */
-  #definition { padding-top: 4rem; }
-  .def-text {
-    font-family:'Noto Serif JP',serif;
-    font-weight: 900;
-    font-size: clamp(1.4rem, 2.6vw, 2.05rem);
-    color: var(--text-bright);
-    line-height: 2.05;
-    letter-spacing: 0.06em;
-    text-align: center;
-    text-shadow: 0 0 26px rgba(0,0,0,0.85);
-  }
-  .def-text .neg {
-    display: block;
-    color: var(--muted-2);
-    font-weight: 700;
-    font-size: clamp(1.05rem, 1.85vw, 1.35rem);
-    margin-bottom: 1.4rem;
-    letter-spacing: 0.05em;
-  }
-  .def-text .accent { color: var(--accent); }
-
-  /* ── WHAT IT DOES ── */
-  .cap-head { margin-bottom: 4rem; }
-  .cap-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0;
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-  .cap {
-    border-right: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    padding: 2.8rem 2.4rem;
-    transition: background 0.5s;
-  }
-  .cap:nth-child(2n) { border-right: none; }
-  .cap:nth-last-child(-n+2) { border-bottom: none; }
-  .cap:hover { background: rgba(91,155,255,0.025); }
-  .cap-num {
-    font-family:'JetBrains Mono', monospace;
-    color: var(--accent);
-    font-size: 0.78rem;
-    margin-bottom: 1.2rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-  }
-  .cap h3 {
-    font-family:'Noto Serif JP',serif;
-    font-weight: 900;
-    color: var(--text-bright);
-    font-size: 1.22rem;
-    line-height: 1.65;
-    letter-spacing: 0.05em;
-    margin-bottom: 1.1rem;
-  }
-  .cap p {
-    font-family:'Noto Serif JP',serif;
-    font-weight: 500;
-    color: var(--muted-2);
-    font-size: 1rem;
-    line-height: 2.05;
-    letter-spacing: 0.03em;
-  }
-
-  /* ── CYCLE OF INTELLIGENCE ── */
-  #cycle { padding: 6rem 2rem 8rem; }
-  .cycle-stage {
-    position: relative;
-    width: 100%;
-    max-width: 520px;
-    aspect-ratio: 1;
-    margin: 4rem auto 2rem;
-  }
-  .cycle-svg { width: 100%; height: 100%; display: block; overflow: visible; }
-  .cycle-svg .ring-bg { fill: none; stroke: rgba(91,155,255,0.18); stroke-width: 0.6; }
-  .cycle-svg .tick { stroke: rgba(91,155,255,0.25); stroke-width: 0.6; }
-  .cycle-svg .tick.major { stroke: var(--accent); stroke-width: 1; opacity: 0.55; }
-  .cycle-svg .marker {
-    fill: rgba(91,155,255,0.30);
-    stroke: var(--accent);
-    stroke-width: 0.8;
-    transition: fill 0.4s, r 0.4s;
-  }
-  .cycle-svg .marker.active {
-    fill: var(--accent);
-    filter: drop-shadow(0 0 10px var(--accent-glow));
-  }
-  .cycle-svg .trail { fill: none; stroke: var(--accent); stroke-width: 1.2; stroke-linecap: round; opacity: 0.55; }
-  .cycle-svg .light-head {
-    fill: #ffffff;
-    filter: drop-shadow(0 0 10px var(--accent-bright)) drop-shadow(0 0 18px var(--accent));
-  }
-  .cycle-svg .core {
-    fill: rgba(91,155,255,0.12);
-    stroke: var(--accent);
-    stroke-width: 0.5;
-  }
-  .hour-label {
-    font-family:'JetBrains Mono', monospace;
-    font-size: 8.5px;
-    fill: var(--muted-2);
-    letter-spacing: 0.1em;
-    text-anchor: middle;
-    dominant-baseline: middle;
-  }
-  .cycle-center {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    pointer-events: none;
-    padding: 0 22%;
-  }
-  .cycle-time {
-    font-family:'JetBrains Mono', monospace;
-    color: var(--accent);
-    font-size: clamp(1.5rem, 2.6vw, 2rem);
-    letter-spacing: 0.06em;
-    font-weight: 500;
-    margin-bottom: 0.6rem;
-    transition: opacity 0.4s;
-  }
-  .cycle-time .h {
-    font-size: 0.55em;
-    letter-spacing: 0.32em;
-    color: var(--muted);
-    margin-left: 0.5rem;
-  }
-  .cycle-desc {
-    font-family:'Noto Serif JP',serif;
-    color: var(--text);
-    font-size: clamp(0.95rem, 1.2vw, 1.05rem);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    line-height: 1.85;
-    transition: opacity 0.4s;
-  }
-  .cycle-foot {
-    text-align: center;
-    margin-top: 2.5rem;
-    font-family:'Noto Serif JP',serif;
-    font-size: 0.95rem;
-    color: var(--muted-2);
-    letter-spacing: 0.04em;
-    font-weight: 500;
-    line-height: 2;
-  }
-
-  /* ── WHAT CHANGES ── */
-  .change-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.2rem;
-    margin-top: 2.6rem;
-  }
-  .change-col {
-    padding: 2.2rem 2rem;
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-lg);
-    background: rgba(255,255,255,0.012);
-  }
-  .change-col.after {
-    border-color: var(--rule-strong);
-    background: rgba(91,155,255,0.04);
-  }
-  .change-label {
-    font-family:'JetBrains Mono', sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 0.42em;
-    text-transform: uppercase;
-    font-weight: 500;
-    margin-bottom: 1.6rem;
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-  }
-  .change-col.before .change-label { color: var(--muted-2); }
-  .change-col.after  .change-label { color: var(--accent); }
-  .change-label .dot { display:inline-block; width:7px; height:7px; border-radius:50%; }
-  .change-col.before .change-label .dot { background: var(--before); opacity: 0.7; }
-  .change-col.after  .change-label .dot { background: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
-  .change-list { list-style: none; }
-  .change-list li {
-    font-family:'Noto Serif JP',serif;
-    font-weight: 700;
-    font-size: 1rem;
-    line-height: 2.05;
-    padding: 0.7rem 0;
-    letter-spacing: 0.03em;
-    border-bottom: 1px solid rgba(230,236,245,0.06);
-    position: relative;
-    padding-left: 1.4rem;
-  }
-  .change-list li:last-child { border-bottom: none; }
-  .change-list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 1.55em;
-    width: 6px;
-    height: 1px;
-    background: currentColor;
-    opacity: 0.55;
-  }
-  .change-col.before .change-list li { color: var(--muted-2); font-weight: 500; }
-  .change-col.after  .change-list li { color: var(--text-bright); font-weight: 900; }
-
-  /* ── FORBIDDEN ── */
-  #forbidden {
-    text-align: center;
-    border-top: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-  }
-  .f-line {
-    font-family:'Noto Serif JP',serif;
-    font-weight: 700;
-    color: var(--text);
-    font-size: clamp(1.6rem, 3.2vw, 2.4rem);
-    line-height: 1.85;
-    letter-spacing: 0.10em;
-    margin-bottom: 1.4rem;
-    text-shadow: 0 0 26px rgba(0,0,0,0.85);
-  }
-  .f-line.last {
-    color: var(--accent);
-    font-weight: 900;
-    font-size: clamp(2rem, 4vw, 3rem);
-    margin-top: 3rem;
-    letter-spacing: 0.12em;
-    text-shadow: 0 0 36px var(--accent-glow), 0 0 20px rgba(0,0,0,0.85);
-  }
-
-  /* ── MANIFESTO ── */
-  #manifesto {
-    text-align: center;
-    border-top: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    padding: 8rem 2rem;
-  }
-  .m-line {
-    font-family:'Noto Serif JP',serif;
-    color: var(--text);
-    font-weight: 700;
-    font-size: clamp(1.35rem, 2.5vw, 2rem);
-    line-height: 2.15;
-    letter-spacing: 0.10em;
-    margin-bottom: 1.1rem;
-  }
-  .m-line.strong {
-    color: var(--accent);
-    font-weight: 900;
-    font-size: clamp(1.55rem, 2.9vw, 2.3rem);
-    margin-top: 1.6rem;
-  }
-  .m-attr {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    color: var(--muted-2);
-    font-size: 1.05rem;
-    letter-spacing: 0.16em;
-    margin-top: 3.5rem;
-    font-weight: 400;
-  }
-
-  /* ── CONTACT (steps + form) ── */
-  #contact { padding: 8rem 2rem 7rem; }
-  .contact-head { text-align: center; margin-bottom: 4rem; }
-  .contact-title {
-    font-family:'Noto Serif JP',serif;
-    font-weight: 900;
-    color: var(--text-bright);
-    font-size: clamp(1.9rem, 3.8vw, 2.7rem);
-    line-height: 1.7;
-    letter-spacing: 0.10em;
-    margin-bottom: 2rem;
-    text-shadow: 0 0 36px var(--accent-glow), 0 0 20px rgba(0,0,0,0.85);
-  }
-  .contact-rule { width: 36px; height: 1px; background: var(--accent); margin: 0 auto 2rem; opacity: 0.6; }
-  .contact-body {
-    font-family:'Noto Serif JP',serif;
-    font-weight: 500;
-    color: var(--text);
-    font-size: clamp(1rem, 1.3vw, 1.1rem);
-    line-height: 2.2;
-    letter-spacing: 0.04em;
-    max-width: 36rem;
-    margin: 0 auto 1rem;
-  }
-  .contact-body strong { color: var(--accent); font-weight: 700; }
-
-  .steps-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    max-width: 720px;
-    margin: 3rem auto 0;
-  }
-  .step {
-    border: 1px solid var(--rule);
-    border-radius: var(--radius-lg);
-    padding: 1.6rem 1.4rem;
-    background: rgba(255,255,255,0.012);
-    text-align: center;
-  }
-  .step .num {
-    font-family:'JetBrains Mono', monospace;
-    color: var(--accent);
-    font-size: 0.74rem;
-    letter-spacing: 0.2em;
-    font-weight: 500;
-    margin-bottom: 0.7rem;
-  }
-  .step .name {
-    font-family:'Noto Serif JP',serif;
-    color: var(--text-bright);
-    font-weight: 900;
-    font-size: 1.05rem;
-    letter-spacing: 0.18em;
-    margin-bottom: 0.4rem;
-  }
-  .step .desc {
-    font-family:'Noto Serif JP',serif;
-    color: var(--muted-2);
-    font-size: 0.85rem;
-    letter-spacing: 0.03em;
-    line-height: 1.85;
-    font-weight: 500;
-  }
-
+  /* CONTACT */
+  #contact { padding: 4rem 2rem 7rem; }
   .form-wrap {
-    max-width: 640px;
-    margin: 4rem auto 0;
-    border: 1px solid var(--rule-strong);
+    max-width: 600px; margin:0 auto;
+    border:1px solid var(--rule-strong);
     border-radius: var(--radius-lg);
-    background: rgba(91,155,255,0.025);
-    padding: 3rem 3rem 2.6rem;
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(12px);
+    padding:2.6rem 2.6rem 2.4rem;
+    box-shadow: 0 8px 40px rgba(45,109,214,0.10), 0 1px 0 rgba(255,255,255,1) inset;
   }
   .form-eyebrow {
-    text-align: center;
-    font-family: 'JetBrains Mono', monospace;
-    color: var(--accent);
-    font-size: 0.7rem;
-    letter-spacing: 0.5em;
-    text-transform: uppercase;
-    font-weight: 500;
-    margin-bottom: 2.2rem;
+    text-align:center;
+    font-family:'JetBrains Mono',monospace;
+    color: var(--accent); font-size:0.7rem;
+    letter-spacing:0.4em; text-transform:uppercase;
+    font-weight:600; margin-bottom:2rem;
   }
-  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
-  .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .contact-form { display:flex; flex-direction:column; gap:1.1rem; }
+  .form-group { display:flex; flex-direction:column; gap:0.4rem; }
   .form-label {
-    font-family:'JetBrains Mono', monospace;
-    font-size: 0.66rem;
-    letter-spacing: 0.32em;
-    color: var(--muted-2);
-    text-transform: uppercase;
-    font-weight: 500;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.66rem; letter-spacing:0.28em;
+    color: var(--ink-mute-2);
+    text-transform:uppercase; font-weight:600;
   }
   .form-input, .form-textarea {
-    background: rgba(255,255,255,0.025);
+    background: rgba(252,252,250,0.7);
     border: 1px solid var(--rule);
     border-radius: var(--radius);
-    padding: 0.95rem 1.1rem;
-    color: var(--text-bright);
-    font-family: 'Noto Sans JP', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 500;
-    outline: none;
-    transition: border-color 0.3s, background 0.3s;
-    letter-spacing: 0.04em;
+    padding: 0.9rem 1.1rem;
+    color: var(--ink-strong);
+    font-family:'Noto Sans JP',sans-serif;
+    font-size:0.95rem; font-weight:500;
+    outline:none;
+    transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    letter-spacing:0.02em;
   }
-  .form-input::placeholder, .form-textarea::placeholder {
-    color: rgba(230,236,245,0.32);
-    font-weight: 400;
-  }
+  .form-input::placeholder, .form-textarea::placeholder { color: var(--ink-mute-2); opacity:0.55; font-weight:400; }
   .form-input:focus, .form-textarea:focus {
     border-color: var(--accent);
-    background: rgba(91,155,255,0.05);
-    box-shadow: 0 0 0 3px rgba(91,155,255,0.10);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(45,109,214,0.10);
   }
-  .form-textarea { min-height: 140px; resize: vertical; }
-
-  .btn {
-    font-family:'Noto Sans JP',sans-serif;
-    padding: 1.1rem 3rem;
-    font-size: 0.92rem;
-    letter-spacing: 0.32em;
-    font-weight: 500;
-    border: 1px solid;
-    border-radius: var(--radius);
-    transition: all 0.4s;
-    cursor: pointer;
-    display: inline-block;
-    text-transform: uppercase;
-  }
-  .btn-primary {
+  .form-textarea { min-height:120px; resize:vertical; }
+  .btn-send {
+    font-family:'Inter','Noto Sans JP',sans-serif;
+    padding:1rem 2.6rem; font-size:1rem;
+    letter-spacing:0.16em; font-weight:600;
+    color: var(--paper);
     background: var(--accent);
-    color: var(--void);
-    border-color: var(--accent);
-    align-self: flex-start;
-    margin-top: 0.5rem;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    transition: all 0.4s; cursor:pointer;
+    align-self: flex-start; margin-top:0.4rem;
+    box-shadow: 0 4px 18px var(--accent-glow);
   }
-  .btn-primary:hover {
-    background: transparent;
-    color: var(--accent);
-    box-shadow: 0 0 36px var(--accent-glow);
-  }
+  .btn-send:hover { background: var(--accent-deep); box-shadow: 0 8px 30px var(--accent-glow); transform: translateY(-1px); }
 
   footer {
-    position: relative; z-index: 3;
-    border-top: 1px solid var(--rule);
-    padding: 3rem 4rem;
-    display: flex; justify-content: space-between; align-items: center;
-    flex-wrap: wrap; gap: 1rem;
-    background: var(--void);
+    position:relative; z-index:3;
+    border-top:1px solid var(--rule);
+    padding:2.4rem 2.2rem;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:1rem;
+    background: var(--paper-2);
   }
   .footer-copy, footer a {
-    font-family:'Noto Sans JP',sans-serif;
-    font-size: 0.78rem;
-    color: var(--muted-2);
-    letter-spacing: 0.16em;
-    font-weight: 500;
+    font-family:'Inter','Noto Sans JP',sans-serif;
+    font-size:0.74rem; color: var(--ink-mute-2);
+    letter-spacing:0.12em; font-weight:500;
   }
   footer a:hover { color: var(--accent); }
 
-  .reveal { opacity: 0; transition: opacity 1.1s ease-out; }
-  .reveal.visible { opacity: 1; }
+  .reveal { opacity:0; filter: blur(8px) brightness(1.5); transition: opacity 1.2s ease-out, filter 1.2s ease-out; }
+  .reveal.visible { opacity:1; filter: blur(0) brightness(1); }
 
   @media(max-width:980px){
-    .cap-grid { grid-template-columns: 1fr; }
-    .cap { border-right: none; }
-    .cap:last-child { border-bottom: none; }
+    .tier-1 .tier-grid, .tier-3 .tier-grid { grid-template-columns: 1fr; }
+    .feat { border-right:none; }
+    .feat:last-child { border-bottom:none; }
+    .how-grid { grid-template-columns: 1fr; }
+    .how-step { border-right: none; border-bottom: 1px solid var(--rule); }
+    .how-step:last-child { border-bottom: none; }
     .change-grid { grid-template-columns: 1fr; }
-    .steps-row { grid-template-columns: 1fr; }
   }
   @media(max-width:768px){
-    nav { padding: 1rem 1.5rem; }
-    nav ul { gap: 1rem; }
-    section { padding: 5rem 1.5rem; }
-    footer { padding: 2rem 1.5rem; }
-    .form-wrap { padding: 2rem 1.5rem; }
+    nav { padding:1rem 1.5rem; }
+    nav ul { gap:1rem; }
+    section { padding:5rem 1.5rem; }
+    footer { padding:2rem 1.5rem; }
+    .form-wrap { padding:2rem 1.5rem; }
   }
 </style>
 </head>
 <body>
 
+<div class="aurora"></div>
 <canvas id="pulse-canvas"></canvas>
-<div class="scan"></div>
 
 <div class="stage">
 
 <nav>
   <a href="index.html" class="logo"><span class="ai">AI</span>dollargame</a>
   <ul>
-    <li><span class="brand-mark"><span class="en">AI</span>クローン</span></li>
-    <li><a href="https://human-clone-frontend.hassy.workers.dev" target="_blank" rel="noopener" class="nav-cta">DEMO</a></li>
+    <li>
+      <span class="brand nav-brand">
+        <span class="brand-name">AIwill<span class="dot">.</span></span>
+        <span class="brand-tag">AI Clone</span>
+      </span>
+    </li>
     <li><a href="#contact" class="nav-cta">CONTACT</a></li>
   </ul>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-brand"><span class="en">AI</span>クローン</div>
-  <div class="hero-brand-rule"></div>
-  <h1 class="hero-title">あなたの野望に<br>終わりはない</h1>
-  <p class="hero-sub">あなたを学び続ける、もう一人のあなた</p>
+  <div class="hero-status"><span class="ldot"></span>ONLINE  ·  LIVING NOW</div>
+
+  <div class="hero-brand-block">
+    <span class="brand-name">AIwill<span class="dot">.</span></span>
+    <span class="brand-tag">AI Clone — あなたの判断と意志を学ぶ</span>
+  </div>
+
+  <div class="hero-life">— &nbsp;<span class="infinity">∞</span></div>
+
+  <h1 class="hero-headline"><span>あなたが眠っても</span><span>もう一人のあなたが動いている</span></h1>
+  <p class="hero-sub-jp">AIwill は あなたの判断と哲学を学び続ける分身</p>
+
+  <a href="https://human-clone-frontend.hassy.workers.dev/" target="_blank" rel="noopener" class="hero-send">デモ版を試してみる<span class="arrow">→</span></a>
   <div class="scroll-cue">SCROLL</div>
 </section>
 
-<!-- DEFINITION -->
-<section id="definition">
+<!-- CONVERSATION DEMO — moved above FEATURES per spec -->
+<section id="conversation-demo">
   <div class="container narrow">
-    <div class="eyebrow" style="justify-content:center;">— WHAT IT IS —</div>
-    <p class="def-text reveal">
-      <span class="neg">これはAIツールではありません。</span>
-      創業者の<span class="accent">独裁的なまでの美学</span>を、<br>
-      組織のOSとして永続させる、<br>
-      もう一つの知性。
-    </p>
+    <div class="cap-head" style="text-align:center;">
+      <div class="eyebrow" style="justify-content:center;"><span class="tag">DEMO</span>あなたと分身の対話</div>
+      <h2 class="h-section">これが あなたの分身です</h2>
+      <p class="lead" style="margin-left:auto;margin-right:auto;">AIwill は あなたの判断軸で 相談に応え 助言する</p>
+    </div>
+
+    <div class="chat-panel reveal">
+      <div class="chat-head">
+        <span class="chat-title">/ CONVERSATION</span>
+        <span class="chat-live"><span class="dot"></span>LIVE</span>
+      </div>
+      <div class="chat-context">
+        <span class="label">SCENE</span>新しい事業を始めるか迷っている
+      </div>
+      <div class="chat-stage" id="chat-stage"></div>
+    </div>
   </div>
 </section>
 
-<!-- WHAT IT DOES -->
-<section id="capabilities">
+<!-- FEATURES — 3 tier -->
+<section id="features">
   <div class="container">
     <div class="cap-head">
       <div class="eyebrow">— WHAT IT DOES —</div>
-      <h2 class="h-section">AIクローンが、組織で動かしているもの。</h2>
-      <p class="lead">創業者を六つの場面で同時に存在させ、判断停止の時間を組織から消します。</p>
+      <h2 class="h-section">もう一人のあなたが こうして働く</h2>
+      <p class="lead">社員のため 未来のため そしてあなた自身のためにも</p>
     </div>
-    <div class="cap-grid">
-      <div class="cap">
-        <div class="cap-num">/ 01</div>
-        <h3>24/365 不眠不休の判断</h3>
-        <p>深夜・出張・休日。あなたが対応できない時、もう一人のあなたが判断軸を引き継ぎ、即答します。決裁待ちの滞留が消えます。</p>
+
+    <div class="tier tier-1 reveal">
+      <div class="tier-head">
+        <span class="tier-num">i.</span>
+        <h3 class="tier-title">社員のために</h3>
       </div>
-      <div class="cap">
-        <div class="cap-num">/ 02</div>
-        <h3>判断履歴のライブラリ</h3>
-        <p>あなたが下してきた全ての決断が構造化されて保管されます。後継者や幹部が「先代ならどう判断したか」を、いつでも引き出せます。</p>
+      <p class="tier-sub">組織の中で 社員の質問や悩みにいつでも応える</p>
+      <div class="tier-grid">
+        <div class="feat">
+          <div class="feat-num">/ 01</div>
+          <h4>眠らずに判断する</h4>
+          <p>あなたが寝ていても社員の質問に答え続ける</p>
+        </div>
+        <div class="feat">
+          <div class="feat-num">/ 02</div>
+          <h4>新人に創業の話を伝える</h4>
+          <p>入社初日から創業者と一対一で話せる</p>
+        </div>
+        <div class="feat">
+          <div class="feat-num">/ 03</div>
+          <h4>後継者と日常的に対話する</h4>
+          <p>引退する前から 考え方を渡せる</p>
+        </div>
+        <div class="feat">
+          <div class="feat-num">/ 04</div>
+          <h4>企画や採用に視点を返す</h4>
+          <p>企画書のレビューや採用面接で 創業者の評価が即座に返る</p>
+        </div>
       </div>
-      <div class="cap">
-        <div class="cap-num">/ 03</div>
-        <h3>全社員の対話メンター</h3>
-        <p>新人からマネージャーまで、全員にあなたの分身が常時応答します。理念浸透が、面談ではなく日常になります。</p>
+    </div>
+
+    <div class="tier tier-2 reveal">
+      <div class="tier-head">
+        <span class="tier-num">ii.</span>
+        <h3 class="tier-title">未来へ届く</h3>
       </div>
-      <div class="cap">
-        <div class="cap-num">/ 04</div>
-        <h3>後継者の壁打ち相手</h3>
-        <p>後継者が経営判断の前に「あなたならどう決めるか」を相談できます。経営感覚の継承が、引退の何年も前から始まります。</p>
+      <p class="tier-sub">時間を超えて 家族や未来の社員にも</p>
+      <div class="tier-grid">
+        <div class="feat">
+          <div class="feat-num">/ 05</div>
+          <h4>家族や未来の社員にも届く</h4>
+          <p>孫や まだ入社していない社員も いつでもあなたに会える</p>
+        </div>
       </div>
-      <div class="cap">
-        <div class="cap-num">/ 05</div>
-        <h3>新規アイデアの一次審査</h3>
-        <p>新サービス・新規投資・提携の打診。あなたの基準で一次審査されます。凡庸なアイデアが、上に上がってこなくなります。</p>
+    </div>
+
+    <div class="tier tier-3 reveal">
+      <div class="tier-head">
+        <span class="tier-num">iii.</span>
+        <h3 class="tier-title">あなた自身にも 返ってくる</h3>
       </div>
-      <div class="cap">
-        <div class="cap-num">/ 06</div>
-        <h3>永続する個人ブランド</h3>
-        <p>引退の後も、他界の後も、あなたの哲学が組織と社会に残り続けます。事業承継の、最後の答え。</p>
+      <p class="tier-sub">あなたの対話と判断が あなた自身の財産になる</p>
+      <div class="tier-grid">
+        <div class="feat">
+          <div class="feat-num">/ 06</div>
+          <h4>対話したことが すべて残る</h4>
+          <p>日々の対話が 判断の記録として自動で蓄積される</p>
+        </div>
+        <div class="feat">
+          <div class="feat-num">/ 07</div>
+          <h4>蓄積が 自伝の素材になる</h4>
+          <p>数年運用すれば 編集して一冊の本にできる量になる</p>
+        </div>
+        <div class="feat">
+          <div class="feat-num">/ 08</div>
+          <h4>もう一人の自分と相談できる</h4>
+          <p>過去の判断パターンに基づいて 新しい判断の参考が返る</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CYCLE OF INTELLIGENCE -->
+<!-- HOW IT WORKS -->
+<section id="howitworks">
+  <div class="container">
+    <div class="cap-head" style="text-align:center;">
+      <div class="eyebrow" style="justify-content:center;">— HOW IT WORKS —</div>
+      <h2 class="h-section">あなたを デジタルに移す</h2>
+      <p class="lead" style="margin-left:auto;margin-right:auto;">対話 蓄積 応答 たった三つの工程</p>
+    </div>
+    <div class="how-grid reveal">
+      <div class="how-step hs-1">
+        <div class="how-num">i.</div>
+        <h3>残す</h3>
+        <p>対話を通じて あなたの判断と哲学を蓄積する</p>
+      </div>
+      <div class="how-step hs-2">
+        <div class="how-num">ii.</div>
+        <h3>つなぐ</h3>
+        <p>対話を重ねるほど 応答の解像度が上がる</p>
+      </div>
+      <div class="how-step hs-3">
+        <div class="how-num">iii.</div>
+        <h3>応える</h3>
+        <p>蓄積したデータをもとに 分身があなたの代わりに応答する</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CYCLE -->
 <section id="cycle">
   <div class="container">
     <div class="cap-head" style="text-align:center;">
-      <div class="eyebrow" style="justify-content:center;"><span class="tag">EXAMPLE</span>例えば、こんな24時間が回り続ける</div>
-      <h2 class="h-section">あなたが眠っていても、意志は止まらない。</h2>
+      <div class="eyebrow" style="justify-content:center;"><span class="tag">EXAMPLE</span>24時間 循環する意志</div>
+      <h2 class="h-section">あなたが眠っているあいだも<br>もう一人のあなたが動いている</h2>
     </div>
 
     <div class="cycle-stage">
@@ -799,122 +958,97 @@
         <circle class="core" cx="0" cy="0" r="14"/>
       </svg>
       <div class="cycle-center">
-        <div class="cycle-time" id="cycle-time">02:14<span class="h">JST</span></div>
-        <div class="cycle-desc" id="cycle-desc">深夜の緊急稟議に、あなたの判断軸で即答する。</div>
+        <div class="cycle-time" id="cycle-time">03:00<span class="h">JST</span></div>
+        <div class="cycle-desc" id="cycle-desc">海外の取引先に判断を返している</div>
       </div>
     </div>
-
-    <p class="cycle-foot">創業者の意志は、24時間、組織の中を循環し続けます。</p>
   </div>
 </section>
 
-<!-- WHAT CHANGES -->
+<!-- DIGITAL MEMORY -->
+<section id="memory">
+  <div class="container narrow">
+    <div class="memory-eyebrow">— DIGITAL MEMORY —</div>
+    <p class="memory-line reveal">あなたの記憶は もう消えない</p>
+
+    <div class="memory-counter reveal">
+      <span class="label">MEMORIES PRESERVED</span>
+      <span class="num"><span class="infinity">∞</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- CHANGES -->
 <section id="changes">
   <div class="container">
     <div class="cap-head">
       <div class="eyebrow">— WHAT CHANGES —</div>
-      <h2 class="h-section">AIクローンを入れた、前と後で。</h2>
-      <p class="lead">創業者一人がボトルネックの組織から、創業者の意志がOSとして稼働する組織へ。</p>
+      <h2 class="h-section">入れる前と 入れた後で</h2>
     </div>
-    <div class="change-grid">
+    <div class="change-grid reveal">
       <div class="change-col before">
         <div class="change-label"><span class="dot"></span>BEFORE</div>
         <ul class="change-list">
-          <li>社長確認待ちで、案件が常時滞留する</li>
-          <li>創業者依存で、銀行・投資家の評価が下がる</li>
-          <li>「社長に聞いてからじゃないと」が常態化</li>
-          <li>退任後、文化と哲学が薄まっていく</li>
-          <li>後継者が手探りで、経営感覚を学ぶ</li>
+          <li>社長確認待ちで 案件が止まる</li>
+          <li>あなた一人に決裁が集中している</li>
+          <li>「社長に聞かないと」が社員の口癖になる</li>
+          <li>あなたの不在時間に判断が止まる</li>
+          <li>後継者が手探りで経営を学ぶ</li>
         </ul>
       </div>
       <div class="change-col after">
         <div class="change-label"><span class="dot"></span>AFTER</div>
         <ul class="change-list">
-          <li>判断停止の時間が、ゼロになる</li>
-          <li>事業継続体制が、与信やM&A評価で実数値化される</li>
-          <li>創業者の判断軸が、組織のOSとして定着する</li>
-          <li>100年後の社員にも、創業者の哲学が届く</li>
-          <li>後継者が、引退前から創業者と壁打ちできる</li>
+          <li>判断が 止まらなくなる</li>
+          <li>あなたが不在でも 組織が動き続ける</li>
+          <li>判断軸が 社員に共有される</li>
+          <li>未来の社員にも 創業者の哲学が届く</li>
+          <li>後継者が いつでも創業者と話せる</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FORBIDDEN -->
-<section id="forbidden">
+<!-- CLOSING -->
+<section id="closing">
   <div class="container narrow">
-    <p class="f-line reveal">あなたが築いた王国が</p>
-    <p class="f-line reveal">あなたの死と共に朽ちていく</p>
-    <p class="f-line last reveal">その未来を<br>終わらせる</p>
+    <div class="closing-brand reveal">
+      <span class="brand-name">AIwill<span class="dot">.</span></span>
+      <span class="brand-tag">AI Clone</span>
+    </div>
+    <div class="closing-life reveal">— &nbsp;<span class="infinity">∞</span></div>
+    <p class="closing-quote reveal">
+      <em>記憶は 消えない</em><br>
+      あなたの判断と哲学が デジタルに残り続ける
+    </p>
   </div>
 </section>
 
-<!-- MANIFESTO -->
-<section id="manifesto">
-  <div class="container narrow">
-    <p class="m-line reveal">あなたが去っても</p>
-    <p class="m-line reveal">あなたの意志は止まらない</p>
-    <p class="m-line strong reveal">もう一人のあなたが</p>
-    <p class="m-line strong reveal">永遠に学び続ける</p>
-    <div class="m-attr reveal">— from a founder, before he became one of us</div>
-  </div>
-</section>
-
-<!-- CONTACT (steps + form) -->
+<!-- CONTACT -->
 <section id="contact">
-  <div class="container narrow">
-    <div class="contact-head">
-      <div class="eyebrow" style="justify-content:center;">— AN INVITATION —</div>
-      <h2 class="contact-title reveal">歴史の主役で、<br>あり続けろ。</h2>
-      <div class="contact-rule reveal"></div>
-      <p class="contact-body reveal">
-        これはAI導入の商談ではありません。<br>
-        <strong>あなたの孤独な闘いを、次の100年へ繋ぐための、特別な一時間。</strong>
-      </p>
-    </div>
-
-    <div class="steps-row reveal">
-      <div class="step">
-        <div class="num">/ 01</div>
-        <div class="name">対話</div>
-        <div class="desc">あなたの内側を聴き取る</div>
+  <div class="form-wrap reveal">
+    <div class="form-eyebrow">— SEND.  ·  対話を始める —</div>
+    <form class="contact-form" action="https://formspree.io/f/xeevwrgp" method="POST">
+      <input type="hidden" name="_subject" value="【AIwill / AIクローン】お問い合わせ">
+      <div class="form-group">
+        <label class="form-label">COMPANY</label>
+        <input type="text" name="company" class="form-input" placeholder="株式会社〇〇" required>
       </div>
-      <div class="step">
-        <div class="num">/ 02</div>
-        <div class="name">結晶</div>
-        <div class="desc">思考をひとつの知性へ</div>
+      <div class="form-group">
+        <label class="form-label">YOUR NAME</label>
+        <input type="text" name="name" class="form-input" placeholder="山田 太郎" required>
       </div>
-      <div class="step">
-        <div class="num">/ 03</div>
-        <div class="name">継承</div>
-        <div class="desc">組織のあらゆる接点へ</div>
+      <div class="form-group">
+        <label class="form-label">EMAIL</label>
+        <input type="email" name="email" class="form-input" placeholder="email@example.com" required>
       </div>
-    </div>
-
-    <div class="form-wrap reveal">
-      <div class="form-eyebrow">— BEGIN HERE —</div>
-      <form class="contact-form" action="https://formspree.io/f/xeevwrgp" method="POST">
-        <input type="hidden" name="_subject" value="【AIクローン】お問い合わせ">
-        <div class="form-group">
-          <label class="form-label">COMPANY</label>
-          <input type="text" name="company" class="form-input" placeholder="株式会社〇〇" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">YOUR NAME</label>
-          <input type="text" name="name" class="form-input" placeholder="山田 太郎" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">EMAIL</label>
-          <input type="email" name="email" class="form-input" placeholder="email@example.com" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">MESSAGE</label>
-          <textarea name="message" class="form-textarea" placeholder="お話しになりたいことを、自由にご記入ください。"></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">意 志 を 預 け る</button>
-      </form>
-    </div>
+      <div class="form-group">
+        <label class="form-label">MESSAGE</label>
+        <textarea name="message" class="form-textarea" placeholder="お話しになりたいことを 自由にご記入ください"></textarea>
+      </div>
+      <button type="submit" class="btn-send">Send.</button>
+    </form>
   </div>
 </section>
 
@@ -922,7 +1056,7 @@
 
 <footer>
   <a href="index.html" class="logo"><span class="ai">AI</span>dollargame</a>
-  <div style="display:flex;gap:2rem;align-items:center;flex-wrap:wrap;">
+  <div style="display:flex;gap:1.6rem;align-items:center;flex-wrap:wrap;">
     <a href="privacy.html">プライバシーポリシー</a>
     <a href="tokushoho.html">特定商取引法に基づく表記</a>
     <span class="footer-copy">© 2025 AIdollargame</span>
@@ -930,25 +1064,46 @@
 </footer>
 
 <script>
-// ════════════════════════════════════════════════
-// CYCLE OF INTELLIGENCE — 24時間を循環する一点の光
-// ════════════════════════════════════════════════
+// LIVE FEED
+(function ticker(){
+  const el = document.getElementById('ticker-stream');
+  if (!el) return;
+  const items = [
+    '▸ 03:00 JST  海外の取引先に判断を返している',
+    '▸ 04:22 JST  深夜の社員からの質問に応えている',
+    '▸ 05:48 JST  Slackで朝の挨拶を送っている',
+    '▸ 07:00 JST  入社初日の新人に創業の話をしている',
+    '▸ 08:15 JST  メディア取材の事前ロールプレイをしている',
+    '▸ 09:33 JST  幹部会議に同席している',
+    '▸ 10:55 JST  採用面接の一次対応をしている',
+    '▸ 11:30 JST  新しい企画案に視点を返している',
+    '▸ 13:18 JST  顧客からの相談に応えている',
+    '▸ 15:42 JST  投資家の質問に応答している',
+    '▸ 17:45 JST  後継者の悩みを聞いている',
+    '▸ 19:20 JST  講演原稿の下書きを生成している',
+    '▸ 21:10 JST  孫からの質問に答えている',
+    '▸ 23:10 JST  社員からの質問に答えている'
+  ];
+  const text = items.join('     ') + '     ';
+  el.textContent = text + text;
+})();
+
+// CYCLE
 (function buildCycle(){
   const tasks = [
-    { mins: 134,  time: '02:14', desc: '深夜の緊急稟議に、あなたの判断軸で即答する。' },
-    { mins: 540,  time: '09:00', desc: '朝会で、前日の判断ログが対話形式で残されている。' },
-    { mins: 690,  time: '11:30', desc: '新規事業の打診を、あなたの基準で一次審査する。' },
-    { mins: 1005, time: '16:45', desc: '後継者と「先代ならどう決めるか」を壁打ちする。' },
-    { mins: 1380, time: '23:00', desc: 'あなたが眠っても、思考は止まらず学び続ける。' }
+    { mins: 180,  time: '03:00', desc: '海外の取引先に判断を返している' },
+    { mins: 420,  time: '07:00', desc: '入社初日の新人に創業の話をしている' },
+    { mins: 690,  time: '11:30', desc: '新しい企画案に視点を返している' },
+    { mins: 1065, time: '17:45', desc: '後継者の悩みを聞いている' },
+    { mins: 1390, time: '23:10', desc: '社員からの質問に答えている' }
   ];
   const RING = 180;
-
   function angleFor(mins){ return (mins / 1440) * Math.PI * 2; }
   function pos(theta, r){ return { x: Math.sin(theta) * r, y: -Math.cos(theta) * r }; }
 
-  // hour ticks
   const ticksG = document.getElementById('hour-ticks');
   const labelsG = document.getElementById('hour-labels');
+  if (!ticksG) return;
   for (let h = 0; h < 24; h++){
     const theta = (h / 24) * Math.PI * 2;
     const major = h % 6 === 0;
@@ -961,7 +1116,6 @@
     tick.setAttribute('x2', p2.x); tick.setAttribute('y2', p2.y);
     tick.setAttribute('class', 'tick' + (major ? ' major' : ''));
     ticksG.appendChild(tick);
-
     if (major){
       const lp = pos(theta, 202);
       const tx = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -972,7 +1126,6 @@
     }
   }
 
-  // task markers
   const markersG = document.getElementById('task-markers');
   const markerEls = [];
   tasks.forEach((task, i) => {
@@ -982,7 +1135,6 @@
     c.setAttribute('cx', p.x); c.setAttribute('cy', p.y);
     c.setAttribute('r', 5);
     c.setAttribute('class', 'marker');
-    c.dataset.idx = i;
     markersG.appendChild(c);
     markerEls.push(c);
   });
@@ -991,30 +1143,25 @@
   const trail = document.getElementById('cycle-trail');
   const timeEl = document.getElementById('cycle-time');
   const descEl = document.getElementById('cycle-desc');
-  let currentIdx = -1;
+  let currentIdx = -1, lightTheta = 0, lastFrame = performance.now();
 
-  let lightTheta = 0;
-  let lastFrame = performance.now();
+  let started = false;
+  const cycSec = document.getElementById('cycle');
+  const cycObs = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting && !started) { started = true; lastFrame = performance.now(); requestAnimationFrame(loop); }
+  }), { threshold: 0.15 });
+  cycObs.observe(cycSec);
+
   function loop(now){
-    const dt = now - lastFrame;
-    lastFrame = now;
-    // continuous slow rotation: full revolution every 36 seconds
-    lightTheta += (dt / 36000) * Math.PI * 2;
+    const dt = now - lastFrame; lastFrame = now;
+    lightTheta += (dt / 20000) * Math.PI * 2;
     if (lightTheta >= Math.PI * 2) lightTheta -= Math.PI * 2;
-
     const lp = pos(lightTheta, RING);
     lightHead.setAttribute('cx', lp.x);
     lightHead.setAttribute('cy', lp.y);
-
-    // trail (recent path of light)
-    const trailLen = 1.0;
-    const ts = lightTheta - trailLen;
+    const ts = lightTheta - 1.0;
     const sp = pos(ts, RING);
-    const ep = lp;
-    // draw arc from sp → ep clockwise (sweep flag = 1)
-    trail.setAttribute('d', `M ${sp.x} ${sp.y} A ${RING} ${RING} 0 0 1 ${ep.x} ${ep.y}`);
-
-    // find nearest task
+    trail.setAttribute('d', `M ${sp.x} ${sp.y} A ${RING} ${RING} 0 0 1 ${lp.x} ${lp.y}`);
     let nearest = 0, minDiff = Infinity;
     for (let i = 0; i < tasks.length; i++){
       const ta = angleFor(tasks[i].mins);
@@ -1022,86 +1169,160 @@
       if (diff > Math.PI) diff = Math.PI * 2 - diff;
       if (diff < minDiff){ minDiff = diff; nearest = i; }
     }
-
     if (nearest !== currentIdx){
       currentIdx = nearest;
-      timeEl.innerHTML = tasks[nearest].time + '<span class="h">JST</span>';
-      descEl.textContent = tasks[nearest].desc;
+      timeEl.style.opacity = '0';
+      descEl.style.opacity = '0';
+      setTimeout(() => {
+        timeEl.innerHTML = tasks[nearest].time + '<span class="h">JST</span>';
+        descEl.textContent = tasks[nearest].desc;
+        timeEl.style.opacity = '1';
+        descEl.style.opacity = '1';
+      }, 220);
       markerEls.forEach((m, i) => m.classList.toggle('active', i === nearest));
     }
-
     requestAnimationFrame(loop);
   }
-  requestAnimationFrame(loop);
 })();
 
-// ════════════════════════════════════════════════
-// 控えめな波紋 ── 操作に応えて、一度だけ広がる
-// ════════════════════════════════════════════════
-(function ripples(){
+// CHAT — single focused scenario
+(function chat(){
+  const stage = document.getElementById('chat-stage');
+  if (!stage) return;
+  const messages = [
+    { side: 'user',  text: '来年 新しい事業を始めるか迷ってる' },
+    { side: 'clone', text: '迷う理由は何だ 資金か 人材か', typingMs: 1500 },
+    { side: 'user',  text: '任せられる人材がいない' },
+    { side: 'clone', text: '人は事業を始めてから集まる 先に固めるべきは 自分の覚悟だ', typingMs: 1900 },
+    { side: 'user',  text: 'まだ覚悟が固まってない' },
+    { side: 'clone', text: 'なら半年後にもう一度話そう それまでに本を読み 人に会え', typingMs: 1700 }
+  ];
+
+  const wait = (ms) => new Promise(r => setTimeout(r, ms));
+  const clear = () => { while (stage.firstChild) stage.removeChild(stage.firstChild); };
+
+  function addUserMsg(text){
+    const wrap = document.createElement('div');
+    wrap.className = 'chat-msg user';
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-bubble';
+    bubble.textContent = text;
+    wrap.appendChild(bubble);
+    stage.appendChild(wrap);
+    return wrap;
+  }
+  function addCloneTyping(){
+    const wrap = document.createElement('div');
+    wrap.className = 'chat-msg clone';
+    const who = document.createElement('div');
+    who.className = 'chat-who';
+    who.textContent = 'あなたの分身';
+    wrap.appendChild(who);
+    const bubble = document.createElement('div');
+    bubble.className = 'chat-typing-bubble';
+    bubble.innerHTML = '<span></span><span></span><span></span>';
+    wrap.appendChild(bubble);
+    stage.appendChild(wrap);
+    return { wrap, replaceWithText: (text) => {
+      bubble.classList.remove('chat-typing-bubble');
+      bubble.classList.add('chat-bubble');
+      bubble.innerHTML = '';
+      bubble.textContent = text;
+    }};
+  }
+
+  async function run(){
+    while (true){
+      clear();
+      for (const m of messages){
+        if (m.side === 'user'){
+          addUserMsg(m.text);
+          await wait(900);
+        } else {
+          const t = addCloneTyping();
+          await wait(m.typingMs || 1400);
+          t.replaceWithText(m.text);
+          await wait(1600);
+        }
+      }
+      await wait(4500);
+    }
+  }
+
+  let started = false;
+  const demoSec = document.getElementById('conversation-demo');
+  if (demoSec){
+    const obs = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting && !started){ started = true; setTimeout(run, 600); }
+    }), { threshold: 0.2 });
+    obs.observe(demoSec);
+  }
+})();
+
+// LIGHT RIPPLES + floating particles
+(function lightRipples(){
   const canvas = document.getElementById('pulse-canvas');
   const ctx = canvas.getContext('2d');
   let W, H;
   const dpr = Math.min(2, window.devicePixelRatio || 1);
-
   function resize(){
     W = window.innerWidth; H = window.innerHeight;
     canvas.width = W * dpr; canvas.height = H * dpr;
     canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
-    ctx.setTransform(1,0,0,1,0,0);
-    ctx.scale(dpr, dpr);
+    ctx.setTransform(1,0,0,1,0,0); ctx.scale(dpr, dpr);
   }
   resize();
   window.addEventListener('resize', resize);
 
   const ripples = [];
-  function spawn(x, y){
-    ripples.push({ x, y, r: 0, maxR: 220 + Math.random() * 100, life: 0, maxLife: 90 });
-  }
-
-  // throttled mouse spawn
+  function spawn(x, y){ ripples.push({ x, y, r: 0, maxR: 240 + Math.random() * 100, life: 0, maxLife: 100, hue: Math.random() < 0.5 ? 'blue' : 'pink' }); }
   let lastSpawn = 0;
   window.addEventListener('mousemove', e => {
     const now = performance.now();
-    if (now - lastSpawn > 600){
-      spawn(e.clientX, e.clientY);
-      lastSpawn = now;
-    }
+    if (now - lastSpawn > 700){ spawn(e.clientX, e.clientY); lastSpawn = now; }
   });
   window.addEventListener('click', e => spawn(e.clientX, e.clientY));
 
+  const particles = [];
+  for (let i = 0; i < 36; i++){
+    particles.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: -0.10 - Math.random() * 0.18,
+      r: 0.6 + Math.random() * 1.0,
+      phase: Math.random() * Math.PI * 2,
+      hue: Math.random() < 0.5 ? 'blue' : 'pink'
+    });
+  }
+
   function loop(){
     ctx.clearRect(0, 0, W, H);
-
-    // breathing data core (top center, distant — subtle ambient)
-    const t = performance.now() * 0.001;
-    const breath = 0.55 + 0.20 * Math.sin(t * 1.4) + 0.08 * Math.sin(t * 2.3);
-    const cx = W * 0.5, cy = H * 0.42;
-    const halo = ctx.createRadialGradient(cx, cy, 4, cx, cy, 220);
-    halo.addColorStop(0, 'rgba(91,155,255,0)');
-    halo.addColorStop(0.18, `rgba(91,155,255,${(0.06 * breath).toFixed(3)})`);
-    halo.addColorStop(0.5, `rgba(91,155,255,${(0.02 * breath).toFixed(3)})`);
-    halo.addColorStop(1, 'transparent');
-    ctx.fillStyle = halo;
-    ctx.beginPath();
-    ctx.arc(cx, cy, 220, 0, Math.PI*2);
-    ctx.fill();
-
-    // ripples
+    for (const p of particles){
+      p.x += p.vx + Math.sin(p.phase) * 0.06;
+      p.y += p.vy;
+      p.phase += 0.018;
+      if (p.y < -10){ p.y = H + 10; p.x = Math.random() * W; }
+      if (p.x < -10){ p.x = W + 10; }
+      if (p.x > W + 10){ p.x = -10; }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.hue === 'blue' ? 'rgba(91,155,255,0.30)' : 'rgba(255,155,208,0.24)';
+      ctx.fill();
+    }
     for (let i = ripples.length - 1; i >= 0; i--){
       const r = ripples[i];
       r.life++;
       r.r = (r.life / r.maxLife) * r.maxR;
       if (r.life > r.maxLife){ ripples.splice(i, 1); continue; }
       const lr = r.life / r.maxLife;
-      const alpha = (1 - lr) * 0.32;
+      const alpha = (1 - lr) * 0.30;
       ctx.beginPath();
       ctx.arc(r.x, r.y, r.r, 0, Math.PI*2);
-      ctx.strokeStyle = `rgba(91,155,255,${alpha.toFixed(3)})`;
+      ctx.strokeStyle = r.hue === 'blue' ? `rgba(109,180,255,${alpha.toFixed(3)})` : `rgba(255,155,208,${(alpha * 0.7).toFixed(3)})`;
       ctx.lineWidth = 1;
       ctx.stroke();
     }
-
     requestAnimationFrame(loop);
   }
   loop();

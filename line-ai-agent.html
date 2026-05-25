@@ -138,6 +138,40 @@ nav {
 .done-bubble { align-self:flex-start; background:var(--green-l); border-radius:2px 12px 12px 12px; padding:0.65rem 0.9rem; font-size:0.75rem; line-height:1.6; color:var(--green-d); display:flex; gap:0.4rem; align-items:flex-start; }
 .done-bubble svg { flex-shrink:0; margin-top:0.15rem; }
 
+/* DEMO TABS */
+.demo-tabs { display:grid; grid-template-columns:repeat(3,1fr); gap:0.4rem; margin:0 auto 0.9rem; max-width:310px; }
+.demo-tab { padding:0.45rem 0.4rem; border-radius:100px; border:1px solid var(--border); background:var(--white); color:var(--muted); font-size:0.72rem; font-weight:700; cursor:pointer; transition:all 0.18s; font-family:'Noto Sans JP',sans-serif; line-height:1; text-align:center; }
+.demo-tab:hover { color:var(--navy); border-color:var(--navy); }
+.demo-tab.active { background:var(--green); color:#fff; border-color:var(--green); box-shadow:0 4px 10px -3px rgba(0,185,100,0.4); }
+.demo-pattern { display:none; }
+.demo-pattern.active { display:block; }
+.demo-caption { text-align:center; font-size:0.72rem; color:var(--muted); margin-top:0.9rem; max-width:310px; margin-left:auto; margin-right:auto; line-height:1.7; }
+
+/* Sequential reveal of chat bubbles when pattern becomes active */
+.demo-pattern .phone-body > * { opacity:0; transform:translateY(6px); }
+.demo-pattern.active .phone-body > * { animation:msgIn 0.35s ease forwards; }
+.demo-pattern.active .phone-body > *:nth-child(1) { animation-delay:0.15s; }
+.demo-pattern.active .phone-body > *:nth-child(2) { animation-delay:0.55s; }
+.demo-pattern.active .phone-body > *:nth-child(3) { animation-delay:2.35s; }
+.demo-pattern.active .phone-body > *:nth-child(4) { animation-delay:3.4s; }
+.demo-pattern.active .phone-body > *:nth-child(5) { animation-delay:3.85s; }
+.demo-pattern.active .phone-body > *:nth-child(6) { animation-delay:5.1s; }
+@keyframes msgIn { to { opacity:1; transform:translateY(0); } }
+
+/* AI thinking (typing) dots — inside the AI bubble */
+.ai-typing { display:flex; gap:5px; align-items:center; padding:0.2rem 0; max-height:24px; opacity:1; overflow:hidden; }
+.ai-typing span { width:6px; height:6px; border-radius:50%; background:#9aa8b8; animation:typingDot 1.2s infinite ease-in-out; flex-shrink:0; }
+.ai-typing span:nth-child(2) { animation-delay:0.18s; }
+.ai-typing span:nth-child(3) { animation-delay:0.36s; }
+.ai-message { max-height:0; opacity:0; overflow:hidden; }
+@keyframes typingDot { 0%,60%,100% { opacity:0.25; transform:scale(0.7); } 30% { opacity:1; transform:scale(1); } }
+
+/* After the bubble has appeared, swap dots → message */
+.demo-pattern.active .ai-typing { animation:hideTyping 0.25s ease 1.7s forwards; }
+.demo-pattern.active .ai-message { animation:showMsg 0.3s ease 1.85s forwards; }
+@keyframes hideTyping { to { max-height:0; opacity:0; padding:0; } }
+@keyframes showMsg { 0% { max-height:300px; opacity:0; } 100% { max-height:300px; opacity:1; } }
+
 /* TRUST BAR */
 .trust-bar {
   background:var(--white); border-top:1px solid var(--border); border-bottom:1px solid var(--border);
@@ -315,40 +349,243 @@ footer { background:var(--white); border-top:1px solid var(--border); padding:2.
   <div class="hero-right">
     <div class="phone-wrap">
       <div class="phone-glow"></div>
-      <div class="phone-frame">
-        <div class="phone-header">
-          <div class="phone-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </div>
-          <div>
-            <div class="phone-title">AI介護施設さがし</div>
-            <div class="phone-status">応答中 ● ONLINE 24H</div>
-          </div>
-        </div>
-        <div class="phone-body">
-          <div class="bubble user">東京目黒周辺でサービス付き</div>
-          <div class="bubble ai">
-            <span class="tag">AI</span><br>
-            目黒区は空きなしですが、品川区に2件ございます。入居一時金0円のプランもあります！
-          </div>
-          <div class="fac-card">
-            <div class="fac-type">サービス付き高齢者向け住宅</div>
-            <div class="fac-name">東急ウェリナ旗の台</div>
-            <div class="fac-price">月額 25〜62万円 ｜ 入居一時金 90万〜</div>
-            <div class="fac-btn">詳細を見る</div>
-          </div>
-          <div class="bubble user">見学したい</div>
-          <div class="cal-card">
-            <div class="cal-label">空き日程</div>
-            <div class="cal-slot">4月25日（金）10:00 <span class="cal-btn">この日時で予約</span></div>
-            <div class="cal-slot">4月28日（月）13:00 <span class="cal-btn">この日時で予約</span></div>
-          </div>
-          <div class="done-bubble">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            <span>予約完了。カレンダーへ自動追加、担当者にも通知しました。</span>
-          </div>
-        </div>
+
+      <div class="demo-tabs">
+        <button type="button" class="demo-tab active" data-idx="0">介護</button>
+        <button type="button" class="demo-tab" data-idx="1">不動産</button>
+        <button type="button" class="demo-tab" data-idx="2">飲食</button>
+        <button type="button" class="demo-tab" data-idx="3">美容</button>
+        <button type="button" class="demo-tab" data-idx="4">教室</button>
+        <button type="button" class="demo-tab" data-idx="5">病院</button>
       </div>
+
+      <div class="phone-frame">
+
+        <!-- PATTERN 0: 介護 -->
+        <div class="demo-pattern active" data-pattern="0">
+          <div class="phone-header">
+            <div class="phone-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div>
+              <div class="phone-title">AI介護施設さがし</div>
+              <div class="phone-status">応答中 ● ONLINE 24H</div>
+            </div>
+          </div>
+          <div class="phone-body">
+            <div class="bubble user">東京目黒周辺でサービス付き</div>
+            <div class="bubble ai">
+              <span class="tag">AI</span>
+              <div class="ai-typing"><span></span><span></span><span></span></div>
+              <div class="ai-message">目黒区は空きなしですが、品川区に2件ございます。入居一時金0円のプランもあります！</div>
+            </div>
+            <div class="fac-card">
+              <div class="fac-type">サービス付き高齢者向け住宅</div>
+              <div class="fac-name">みどり苑 品川(仮)</div>
+              <div class="fac-price">月額 25〜62万円 ｜ 入居一時金 90万〜</div>
+              <div class="fac-btn">詳細を見る</div>
+            </div>
+            <div class="bubble user">見学したい</div>
+            <div class="cal-card">
+              <div class="cal-label">空き日程</div>
+              <div class="cal-slot">4月25日(金)10:00 <span class="cal-btn">この日時で予約</span></div>
+              <div class="cal-slot">4月28日(月)13:00 <span class="cal-btn">この日時で予約</span></div>
+            </div>
+            <div class="done-bubble">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>予約完了。カレンダーへ自動追加、担当者にも通知しました。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PATTERN 1: 不動産 -->
+        <div class="demo-pattern" data-pattern="1">
+          <div class="phone-header">
+            <div class="phone-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div>
+              <div class="phone-title">AI賃貸物件さがし</div>
+              <div class="phone-status">応答中 ● ONLINE 24H</div>
+            </div>
+          </div>
+          <div class="phone-body">
+            <div class="bubble user">渋谷駅徒歩10分、2LDK 15万以内</div>
+            <div class="bubble ai">
+              <span class="tag">AI</span>
+              <div class="ai-typing"><span></span><span></span><span></span></div>
+              <div class="ai-message">条件に合う物件が4件あります。築浅・敷礼ゼロの物件もご紹介できます。</div>
+            </div>
+            <div class="fac-card">
+              <div class="fac-type">賃貸マンション</div>
+              <div class="fac-name">グランハイツ恵比寿 305(仮)</div>
+              <div class="fac-price">月額 14.8万円 ｜ 敷礼ゼロ</div>
+              <div class="fac-btn">詳細を見る</div>
+            </div>
+            <div class="bubble user">内見したい</div>
+            <div class="cal-card">
+              <div class="cal-label">内見可能日</div>
+              <div class="cal-slot">5月25日(月)14:00 <span class="cal-btn">この日時で予約</span></div>
+              <div class="cal-slot">5月27日(水)11:00 <span class="cal-btn">この日時で予約</span></div>
+            </div>
+            <div class="done-bubble">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>内見予約完了。担当エージェントから当日ご案内します。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PATTERN 2: 飲食 -->
+        <div class="demo-pattern" data-pattern="2">
+          <div class="phone-header">
+            <div class="phone-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18l-1.5 9a2 2 0 0 1-2 2H6.5a2 2 0 0 1-2-2L3 11z"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <div class="phone-title">AIレストラン予約</div>
+              <div class="phone-status">応答中 ● ONLINE 24H</div>
+            </div>
+          </div>
+          <div class="phone-body">
+            <div class="bubble user">金曜の夜、6名で個室の和食</div>
+            <div class="bubble ai">
+              <span class="tag">AI</span>
+              <div class="ai-typing"><span></span><span></span><span></span></div>
+              <div class="ai-message">銀座エリアで2件ご提案できます。個室確約のコース予約が可能です。</div>
+            </div>
+            <div class="fac-card">
+              <div class="fac-type">和食・割烹</div>
+              <div class="fac-name">割烹 さくら 銀座本店(仮)</div>
+              <div class="fac-price">個室コース 8,800円〜 ｜ 飲み放題付</div>
+              <div class="fac-btn">メニューを見る</div>
+            </div>
+            <div class="bubble user">予約したい</div>
+            <div class="cal-card">
+              <div class="cal-label">空き時間</div>
+              <div class="cal-slot">5月29日(金)19:00 <span class="cal-btn">この日時で予約</span></div>
+              <div class="cal-slot">5月30日(土)18:30 <span class="cal-btn">この日時で予約</span></div>
+            </div>
+            <div class="done-bubble">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>予約完了。お店からの確認LINEもこちらに届きます。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PATTERN 3: 美容 -->
+        <div class="demo-pattern" data-pattern="3">
+          <div class="phone-header">
+            <div class="phone-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+            </div>
+            <div>
+              <div class="phone-title">AI美容室予約</div>
+              <div class="phone-status">応答中 ● ONLINE 24H</div>
+            </div>
+          </div>
+          <div class="phone-body">
+            <div class="bubble user">土曜に縮毛矯正できる店ある？</div>
+            <div class="bubble ai">
+              <span class="tag">AI</span>
+              <div class="ai-typing"><span></span><span></span><span></span></div>
+              <div class="ai-message">渋谷駅近で3店ご案内できます。当日空きありの店舗もあります。</div>
+            </div>
+            <div class="fac-card">
+              <div class="fac-type">ヘアサロン</div>
+              <div class="fac-name">ヘアサロン LUMI 渋谷(仮)</div>
+              <div class="fac-price">縮毛矯正コース 14,800円〜 ｜ 約3時間</div>
+              <div class="fac-btn">スタイリスト指名</div>
+            </div>
+            <div class="bubble user">予約したい</div>
+            <div class="cal-card">
+              <div class="cal-label">空き枠</div>
+              <div class="cal-slot">5月24日(土)13:00 <span class="cal-btn">この日時で予約</span></div>
+              <div class="cal-slot">5月24日(土)16:30 <span class="cal-btn">この日時で予約</span></div>
+            </div>
+            <div class="done-bubble">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>予約完了。前日リマインドもAIから自動送信します。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PATTERN 4: 教室・スクール -->
+        <div class="demo-pattern" data-pattern="4">
+          <div class="phone-header">
+            <div class="phone-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div>
+              <div class="phone-title">AI教室・体験予約</div>
+              <div class="phone-status">応答中 ● ONLINE 24H</div>
+            </div>
+          </div>
+          <div class="phone-body">
+            <div class="bubble user">小学生向けプログラミング体験は？</div>
+            <div class="bubble ai">
+              <span class="tag">AI</span>
+              <div class="ai-typing"><span></span><span></span><span></span></div>
+              <div class="ai-message">土日に体験会を実施中です。Scratch入門コースに空きがあります。</div>
+            </div>
+            <div class="fac-card">
+              <div class="fac-type">プログラミング教室</div>
+              <div class="fac-name">KIDS LAB 表参道校(仮)</div>
+              <div class="fac-price">体験 1,500円 ｜ 90分・教材費込</div>
+              <div class="fac-btn">カリキュラムを見る</div>
+            </div>
+            <div class="bubble user">体験申し込みしたい</div>
+            <div class="cal-card">
+              <div class="cal-label">体験会日程</div>
+              <div class="cal-slot">5月31日(土)10:30 <span class="cal-btn">この日時で予約</span></div>
+              <div class="cal-slot">6月 1日(日)14:00 <span class="cal-btn">この日時で予約</span></div>
+            </div>
+            <div class="done-bubble">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>体験予約完了。持ち物のご案内をAIから自動送信します。</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PATTERN 5: 病院・クリニック -->
+        <div class="demo-pattern" data-pattern="5">
+          <div class="phone-header">
+            <div class="phone-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="12" y1="10" x2="12" y2="18"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+            </div>
+            <div>
+              <div class="phone-title">AI診療予約</div>
+              <div class="phone-status">応答中 ● ONLINE 24H</div>
+            </div>
+          </div>
+          <div class="phone-body">
+            <div class="bubble user">明日、内科を初診で受けたい</div>
+            <div class="bubble ai">
+              <span class="tag">AI</span>
+              <div class="ai-typing"><span></span><span></span><span></span></div>
+              <div class="ai-message">明日の午後、内科の空きがあります。発熱外来をご希望の場合は別枠になります。</div>
+            </div>
+            <div class="fac-card">
+              <div class="fac-type">内科・一般診療</div>
+              <div class="fac-name">みなと総合クリニック(仮)</div>
+              <div class="fac-price">初診 約20分 ｜ 各種保険適用</div>
+              <div class="fac-btn">診療科目を見る</div>
+            </div>
+            <div class="bubble user">予約したい</div>
+            <div class="cal-card">
+              <div class="cal-label">空き枠</div>
+              <div class="cal-slot">5月26日(火)14:30 <span class="cal-btn">この日時で予約</span></div>
+              <div class="cal-slot">5月26日(火)16:00 <span class="cal-btn">この日時で予約</span></div>
+            </div>
+            <div class="done-bubble">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>予約完了。問診票のURLをLINEで自動送信しました。</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="demo-caption">業種に合わせて学習。問い合わせから予約までを完結します。</div>
     </div>
   </div>
 </div>
@@ -554,7 +791,7 @@ footer { background:var(--white); border-top:1px solid var(--border); padding:2.
     </div>
     <div class="ind-card">
       <div class="ind-icon-svg">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       </div>
       <div><div class="ind-name">介護・福祉</div><div class="ind-use">施設見学予約・家族への情報発信・採用問い合わせ対応</div></div>
     </div>
@@ -566,13 +803,13 @@ footer { background:var(--white); border-top:1px solid var(--border); padding:2.
     </div>
     <div class="ind-card">
       <div class="ind-icon-svg">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
       </div>
       <div><div class="ind-name">サロン・美容</div><div class="ind-use">予約管理・リマインド送信・新メニュー案内</div></div>
     </div>
     <div class="ind-card">
       <div class="ind-icon-svg">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="4" y2="18"/><line x1="8" y1="9" x2="8" y2="15"/><line x1="16" y1="9" x2="16" y2="15"/><line x1="20" y1="6" x2="20" y2="18"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
       </div>
       <div><div class="ind-name">フィットネス</div><div class="ind-use">体験予約・プログラム案内・会員向け情報配信</div></div>
     </div>
@@ -658,6 +895,35 @@ const cObs = new IntersectionObserver(es => es.forEach(e => {
   cObs.unobserve(el);
 }), {threshold:0.5});
 document.querySelectorAll('.num[data-target]').forEach(c => cObs.observe(c));
+
+// DEMO ROTATION
+(function(){
+  const patterns = document.querySelectorAll('.demo-pattern');
+  const tabs = document.querySelectorAll('.demo-tab');
+  if(!patterns.length) return;
+  let idx = 0;
+  let timer;
+  const INTERVAL = 7000;
+
+  function show(i){
+    idx = i;
+    patterns.forEach((p,n) => {
+      p.classList.remove('active');
+      if(n === i){
+        // force reflow so the staggered animations replay every time
+        void p.offsetWidth;
+        p.classList.add('active');
+      }
+    });
+    tabs.forEach((t,n) => t.classList.toggle('active', n === i));
+  }
+  function start(){
+    clearInterval(timer);
+    timer = setInterval(() => show((idx + 1) % patterns.length), INTERVAL);
+  }
+  tabs.forEach((t,n) => t.addEventListener('click', () => { show(n); start(); }));
+  start();
+})();
 
 // FAQ
 document.querySelectorAll('.faq-q').forEach(q => {

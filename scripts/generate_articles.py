@@ -19,6 +19,44 @@ ARTICLE_HTML = """\
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title} | AIdollargame</title>
 <meta name="description" content="{description}">
+<meta name="author" content="AIdollargame 編集部">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/articles/{slug}.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AIdollargame">
+<meta property="og:title" content="{title}">
+<meta property="og:description" content="{description}">
+<meta property="og:url" content="https://aidollargame.com/articles/{slug}.html">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="{date_iso}">
+<meta property="article:author" content="AIdollargame 編集部">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{description}">
+<meta name="twitter:image" content="https://aidollargame.com/og-default.png">
+
+<script type="application/ld+json">
+{{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{title}",
+  "description": "{description}",
+  "datePublished": "{date_iso}",
+  "author": {{"@type":"Organization","name":"AIdollargame 編集部"}},
+  "publisher": {{
+    "@type":"Organization",
+    "name":"AIdollargame",
+    "logo":{{"@type":"ImageObject","url":"https://aidollargame.com/og-default.png"}}
+  }},
+  "mainEntityOfPage": "https://aidollargame.com/articles/{slug}.html",
+  "image": "https://aidollargame.com/og-default.png",
+  "inLanguage": "ja"
+}}
+</script>
+
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root{{--cyan:#00d8ff;--blue:#1a6dff;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#1a6dff);}}
@@ -220,6 +258,7 @@ def main():
 
     today = datetime.now(JST)
     date_str = today.strftime("%Y / %m / %d")
+    date_iso = today.strftime("%Y-%m-%d")
 
     articles = generate_articles(news, date_str)
 
@@ -227,7 +266,9 @@ def main():
         html = ARTICLE_HTML.format(
             title=a["title"],
             description=a["description"],
+            slug=a["slug"],
             date=date_str,
+            date_iso=date_iso,
             body=a["body"],
         )
         path = ARTICLES_DIR / f"{a['slug']}.html"

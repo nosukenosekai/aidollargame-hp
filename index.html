@@ -294,6 +294,22 @@
   .footer-copy { font-size:0.78rem; color:var(--muted); font-family:'Share Tech Mono',monospace; }
   .divider { position:relative; z-index:2; width:100%; height:1px; background:linear-gradient(90deg,transparent,rgba(0,245,255,0.2),transparent); }
 
+  /* ARTICLES */
+  .articles-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.5rem; margin-top:3rem; }
+  .article-card { background:linear-gradient(180deg,rgba(28,38,80,0.92),rgba(16,24,60,0.96)); border:1px solid rgba(255,255,255,0.10); border-radius:10px; overflow:hidden; transition:transform 0.35s cubic-bezier(.2,.8,.2,1),border-color 0.3s,box-shadow 0.4s; text-decoration:none; color:inherit; display:flex; flex-direction:column; position:relative; }
+  .article-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--grad); transform:scaleX(0.2); transform-origin:left; transition:transform 0.5s cubic-bezier(.2,.8,.2,1); border-radius:10px 10px 0 0; }
+  .article-card:hover { transform:translateY(-6px); border-color:rgba(0,216,255,0.35); box-shadow:0 24px 60px -20px rgba(0,216,255,0.4); }
+  .article-card:hover::before { transform:scaleX(1); }
+  .article-body-inner { padding:1.8rem; flex:1; display:flex; flex-direction:column; gap:0.6rem; }
+  .article-cat { font-family:'Share Tech Mono',monospace; font-size:0.62rem; letter-spacing:0.25em; color:var(--cyan); }
+  .article-date { font-family:'Share Tech Mono',monospace; font-size:0.65rem; color:var(--muted); }
+  .article-title-card { font-size:0.98rem; font-weight:700; line-height:1.6; color:#fff; margin-top:0.2rem; }
+  .article-desc { font-size:0.82rem; color:var(--muted); line-height:1.85; flex:1; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .article-link { font-family:'Share Tech Mono',monospace; font-size:0.68rem; color:var(--cyan); letter-spacing:0.1em; margin-top:auto; padding-top:0.8rem; border-top:1px solid rgba(255,255,255,0.06); }
+  .articles-source { margin-top:2rem; text-align:right; }
+  .articles-source a { font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:var(--muted); text-decoration:none; letter-spacing:0.1em; transition:color 0.3s; }
+  .articles-source a:hover { color:var(--cyan); }
+
   @keyframes fadeUp { from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);} }
   @keyframes scrollPulse { 0%,100%{opacity:0.3;}50%{opacity:1;} }
   @keyframes dotBounce { 0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);} }
@@ -323,6 +339,7 @@
     <li><a href="#products">PRODUCTS</a></li>
     <li><a href="#about">ABOUT</a></li>
     <li><a href="#news">NEWS</a></li>
+    <li><a href="#articles">ARTICLES</a></li>
     <li><a href="#contact" class="nav-cta">無料相談 →</a></li>
   </ul>
 </nav>
@@ -555,6 +572,57 @@
       <span class="news-title">株式会社AIdollargameを設立</span>
       <span class="news-arrow" style="opacity:0;">→</span>
     </div>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- ARTICLES -->
+<section id="articles">
+  <div class="reveal">
+    <div class="section-tag">ARTICLES</div>
+    <h2 class="section-title">記事・発信</h2>
+    <p class="section-desc">AIと人間の未来について、CEOが書き続けています。</p>
+  </div>
+  <div class="articles-grid reveal">
+    <a href="./articles/sns-疲弊とai.html" class="article-card">
+      <div class="article-body-inner">
+        <div class="article-cat">FOUNDER STORY</div>
+        <div class="article-date">2026 / 05 / 20</div>
+        <div class="article-title-card">SNSで燃え尽きた起業家が、それでも「発信」を続ける理由</div>
+        <div class="article-desc">SNS疲弊を体験した起業家が、なぜAIで「愛は人間に」を実現しようとしているのか。創業の原点。</div>
+        <div class="article-link">READ MORE →</div>
+      </div>
+    </a>
+    <a href="./articles/line-ai-agent.html" class="article-card">
+      <div class="article-body-inner">
+        <div class="article-cat">PRODUCT</div>
+        <div class="article-date">2026 / 05 / 18</div>
+        <div class="article-title-card">LINE公式アカウントにAIを入れると何が変わるか</div>
+        <div class="article-desc">問い合わせ・予約・CRM連携まで自動化。不動産・介護福祉業界での活用イメージと導入ステップ。</div>
+        <div class="article-link">READ MORE →</div>
+      </div>
+    </a>
+    <a href="./articles/shacho-clone.html" class="article-card">
+      <div class="article-body-inner">
+        <div class="article-cat">PRODUCT</div>
+        <div class="article-date">2026 / 05 / 15</div>
+        <div class="article-title-card">「社長の頭の中」をAIに継承する — 後継者不足時代の経営</div>
+        <div class="article-desc">経営者の思考・判断をAIに移植する社長クローンAI。後継者不足時代の経営継承の新しい形。</div>
+        <div class="article-link">READ MORE →</div>
+      </div>
+    </a>
+    <a href="./articles/ai-reskilling.html" class="article-card">
+      <div class="article-body-inner">
+        <div class="article-cat">CONSULTING</div>
+        <div class="article-date">2026 / 05 / 10</div>
+        <div class="article-title-card">中小企業にAIを根付かせるリスキリングの設計</div>
+        <div class="article-desc">AI導入が失敗する企業と成功する企業の違いは「ツール」ではなく「人」にある。4フェーズの実践手法。</div>
+        <div class="article-link">READ MORE →</div>
+      </div>
+    </a>
+  </div>
+  <div class="articles-source reveal">
+    <a href="./articles/index.html">全記事を見る →</a>
   </div>
 </section>
 <div class="divider"></div>

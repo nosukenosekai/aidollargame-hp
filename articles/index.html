@@ -21,10 +21,15 @@
   .section-tag::before { content:''; display:inline-block; width:30px; height:1px; background:var(--cyan); }
   .hero h1 { font-size:clamp(2rem,5vw,3.5rem); font-weight:900; line-height:1.15; margin-bottom:1rem; }
   .hero p { color:var(--muted); font-size:1rem; line-height:2; }
-  .articles-section { max-width:1100px; margin:0 auto; padding:3rem 2rem 8rem; }
-  .articles-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.8rem; margin-top:1rem; }
+  .articles-section { max-width:1100px; margin:0 auto; padding:2rem 2rem 8rem; }
+  .filter-tabs { display:flex; gap:0.6rem; margin-bottom:2.5rem; flex-wrap:wrap; }
+  .filter-tab { font-family:'Share Tech Mono',monospace; font-size:0.68rem; letter-spacing:0.2em; padding:0.45rem 1.1rem; border-radius:20px; border:1px solid rgba(255,255,255,0.15); background:transparent; color:var(--muted); cursor:pointer; transition:all 0.25s; }
+  .filter-tab:hover { border-color:rgba(0,216,255,0.4); color:var(--cyan); }
+  .filter-tab.active { border-color:var(--cyan); color:var(--cyan); background:rgba(0,216,255,0.08); }
+  .articles-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.8rem; }
   .article-card { background:linear-gradient(180deg,rgba(28,38,80,0.92),rgba(16,24,60,0.96)); border:1px solid rgba(255,255,255,0.10); border-radius:10px; overflow:hidden; text-decoration:none; color:inherit; display:flex; flex-direction:column; transition:transform 0.35s cubic-bezier(.2,.8,.2,1), border-color 0.3s, box-shadow 0.4s; }
   .article-card:hover { transform:translateY(-6px); border-color:rgba(0,216,255,0.35); box-shadow:0 24px 60px -20px rgba(0,216,255,0.4); }
+  .article-card.hidden { display:none; }
   .card-color-bar { height:3px; background:var(--grad); }
   .card-color-bar.accent { background:linear-gradient(90deg,var(--accent),#ff9a9a); }
   .card-color-bar.blue { background:linear-gradient(90deg,var(--blue),var(--cyan)); }
@@ -53,9 +58,19 @@
 </div>
 
 <div class="articles-section">
+  <div class="filter-tabs">
+    <button class="filter-tab active" data-filter="all">ALL</button>
+    <button class="filter-tab" data-filter="news">NEWS</button>
+    <button class="filter-tab" data-filter="product">PRODUCT</button>
+    <button class="filter-tab" data-filter="insight">INSIGHT</button>
+    <button class="filter-tab" data-filter="philosophy">PHILOSOPHY</button>
+    <button class="filter-tab" data-filter="future">FUTURE</button>
+  </div>
   <div class="articles-grid">
+<!-- AUTO-ARTICLES-START -->
+<!-- AUTO-ARTICLES-END -->
 
-    <a href="./sns-ai-agent.html" class="article-card">
+    <a href="./sns-ai-agent.html" class="article-card" data-tag="product">
       <div class="card-color-bar"></div>
       <div class="card-body">
         <div class="card-tag">PRODUCT</div>
@@ -66,7 +81,7 @@
       </div>
     </a>
 
-    <a href="./aiwill.html" class="article-card">
+    <a href="./aiwill.html" class="article-card" data-tag="product">
       <div class="card-color-bar blue"></div>
       <div class="card-body">
         <div class="card-tag">PRODUCT</div>
@@ -77,7 +92,7 @@
       </div>
     </a>
 
-    <a href="./aiside.html" class="article-card">
+    <a href="./aiside.html" class="article-card" data-tag="product">
       <div class="card-color-bar"></div>
       <div class="card-body">
         <div class="card-tag">PRODUCT</div>
@@ -88,7 +103,7 @@
       </div>
     </a>
 
-    <a href="./ai-adoption-now.html" class="article-card">
+    <a href="./ai-adoption-now.html" class="article-card" data-tag="insight">
       <div class="card-color-bar accent"></div>
       <div class="card-body">
         <div class="card-tag accent">INSIGHT</div>
@@ -99,7 +114,7 @@
       </div>
     </a>
 
-    <a href="./ai-frees-humans.html" class="article-card">
+    <a href="./ai-frees-humans.html" class="article-card" data-tag="philosophy">
       <div class="card-color-bar"></div>
       <div class="card-body">
         <div class="card-tag">PHILOSOPHY</div>
@@ -110,13 +125,13 @@
       </div>
     </a>
 
-    <a href="./ai-and-future.html" class="article-card">
+    <a href="./ai-and-future.html" class="article-card" data-tag="future">
       <div class="card-color-bar blue"></div>
       <div class="card-body">
         <div class="card-tag">FUTURE</div>
         <div class="card-date">2026 / 05 / 08</div>
         <div class="card-title">AIが役割を引き受けるとき、人間は何を手に入れるか</div>
-        <div class="card-desc">「AIに仕事を奪われる」ではなく、「AIが引き受けた後に何を手に入れるか」。時間・つながり・自分らしさの回復について。</div>
+        <div class="card-desc">「奪われる」ではなく「手に入れる」。時間・つながり・自分らしさの回復について考える。</div>
         <div class="card-link">READ MORE →</div>
       </div>
     </a>
@@ -128,5 +143,18 @@
   <a href="../index.html" class="logo"><span class="ai">AI</span>dollargame</a>
   <div class="footer-copy">© 2025 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
 </footer>
+<script>
+document.querySelectorAll('.filter-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    var filter = this.dataset.filter;
+    document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
+    this.classList.add('active');
+    document.querySelectorAll('.article-card').forEach(function(card) {
+      var tag = (card.dataset.tag || '').toLowerCase();
+      card.classList.toggle('hidden', filter !== 'all' && tag !== filter);
+    });
+  });
+});
+</script>
 </body>
 </html>

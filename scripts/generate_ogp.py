@@ -16,11 +16,43 @@ RED = (255, 87, 87)
 WHITE = (255, 255, 255)
 MUTED = (154, 168, 208)
 
-FONT_REGULAR = "/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc"
-FONT_BOLD = "/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc"
-FONT_BLACK = "/System/Library/Fonts/ヒラギノ角ゴシック W8.ttc"
-if not os.path.exists(FONT_BLACK):
-    FONT_BLACK = FONT_BOLD
+# 日本語フォントをOS横断で解決する。
+# macOS(ヒラギノ) でもLinux/CI(Noto CJK・wqy-zenhei) でも動くよう、
+# 太さごとに候補を上から探して最初に見つかったものを使う。
+def _resolve_font(candidates):
+    for path in candidates:
+        if os.path.exists(path):
+            return path
+    # 最後の保険: 環境のどれかの日本語対応フォント
+    for fallback in (
+        "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+        "/usr/share/fonts/opentype/unifont/unifont_jp.otf",
+    ):
+        if os.path.exists(fallback):
+            return fallback
+    raise FileNotFoundError(
+        "日本語フォントが見つかりません。CIなら `apt-get install -y fonts-noto-cjk` 等を追加してください。"
+    )
+
+
+FONT_REGULAR = _resolve_font([
+    "/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc",
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+    "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
+    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+])
+FONT_BOLD = _resolve_font([
+    "/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc",
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+    "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
+    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+])
+FONT_BLACK = _resolve_font([
+    "/System/Library/Fonts/ヒラギノ角ゴシック W8.ttc",
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Black.ttc",
+    "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
+    "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
+])
 
 OUTPUT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 

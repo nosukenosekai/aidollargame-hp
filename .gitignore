@@ -33,6 +33,12 @@ dist/
 build/
 .cache/
 
-# Claude（設定ファイルだけは共有のためコミット、それ以外は無視）
+# Claude（設定ファイルとスキルは共有のためコミット、それ以外は無視）
 .claude/*
 !.claude/settings.json
+!.claude/skills/
+!.claude/skills/**
+
+# Python
+__pycache__/
+*.pyc

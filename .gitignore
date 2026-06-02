@@ -33,5 +33,6 @@ dist/
 build/
 .cache/
 
-# Claude
-.claude/
+# Claude（設定ファイルだけは共有のためコミット、それ以外は無視）
+.claude/*
+!.claude/settings.json

@@ -346,6 +346,8 @@
   .article-card:hover { transform:translateY(-6px); border-color:rgba(0,216,255,0.35); box-shadow:0 24px 60px -20px rgba(0,216,255,0.4); }
   .article-card:hover::before { transform:scaleX(1); }
   .article-body-inner { padding:1.8rem; flex:1; display:flex; flex-direction:column; gap:0.6rem; }
+  .article-img { height:130px; background-size:cover; background-position:center; position:relative; overflow:hidden; flex-shrink:0; background-color:rgba(0,216,255,0.05); }
+  .article-img::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(10,18,56,0.2) 0%,rgba(10,18,56,0.55) 100%); }
   .article-cat { font-family:'Share Tech Mono',monospace; font-size:0.62rem; letter-spacing:0.25em; color:var(--cyan); }
   .article-date { font-family:'Share Tech Mono',monospace; font-size:0.65rem; color:var(--muted); }
   .article-title-card { font-size:0.98rem; font-weight:700; line-height:1.6; color:#fff; margin-top:0.2rem; }
@@ -631,6 +633,7 @@
   <div class="articles-grid reveal">
 <!-- ARTICLES-GRID-START -->
     <a href="./articles/ai-top20-strategy-2026.html" class="article-card">
+      <div class="article-img" style="background-image:url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80&fit=crop')"></div>
       <div class="article-body-inner">
         <div class="article-cat">INSIGHT</div>
         <div class="article-date">2026 / 06 / 02</div>
@@ -640,6 +643,7 @@
       </div>
     </a>
     <a href="./articles/anthropic-beats-openai-2026.html" class="article-card">
+      <div class="article-img" style="background-image:url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=600&q=80&fit=crop')"></div>
       <div class="article-body-inner">
         <div class="article-cat">NEWS</div>
         <div class="article-date">2026 / 06 / 02</div>
@@ -649,6 +653,7 @@
       </div>
     </a>
     <a href="./articles/japan-gov-ai-mandate-2026.html" class="article-card">
+      <div class="article-img" style="background-image:url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=80&fit=crop')"></div>
       <div class="article-body-inner">
         <div class="article-cat">NEWS</div>
         <div class="article-date">2026 / 06 / 02</div>
@@ -658,6 +663,7 @@
       </div>
     </a>
     <a href="./articles/inquiry-ai-risk-2026.html" class="article-card">
+      <div class="article-img" style="background-image:url('https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=80&fit=crop')"></div>
       <div class="article-body-inner">
         <div class="article-cat">INSIGHT</div>
         <div class="article-date">2026 / 05 / 29</div>
@@ -667,6 +673,7 @@
       </div>
     </a>
     <a href="./articles/anthropic-valuation-2026.html" class="article-card">
+      <div class="article-img" style="background-image:url('https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&q=80&fit=crop')"></div>
       <div class="article-body-inner">
         <div class="article-cat">NEWS</div>
         <div class="article-date">2026 / 05 / 29</div>
@@ -676,6 +683,7 @@
       </div>
     </a>
     <a href="./articles/ai-jobs-misconception-2026.html" class="article-card">
+      <div class="article-img" style="background-image:url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&q=80&fit=crop')"></div>
       <div class="article-body-inner">
         <div class="article-cat">INSIGHT</div>
         <div class="article-date">2026 / 05 / 29</div>

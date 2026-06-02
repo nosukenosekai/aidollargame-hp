@@ -16,6 +16,7 @@ ARTICLE_HTML = """\
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../logo-unicorn.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title} | AIdollargame</title>
 <meta name="description" content="{description}">
@@ -98,7 +99,7 @@ ARTICLE_HTML = """\
 </head>
 <body>
 <nav>
-  <a href="../index.html" class="logo"><span class="ai">AI</span>dollargame</a>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center"><img src="../logo-unicorn.png" alt="AIdollargame" style="height:34px;width:auto;margin-right:8px"><span class="ai">AI</span>dollargame</a>
   <a href="./index.html" class="nav-back">← ARTICLES</a>
 </nav>
 <div class="hero">

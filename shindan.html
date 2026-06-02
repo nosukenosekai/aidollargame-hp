@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="logo-unicorn.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI診断 ｜ あなたの会社、どのAIで変わる？ — AIdollargame</title>
+<meta name="description" content="3分でわかるAI活用診断。今の悩みから、AIdollargameのどのソリューションが合うかを診断します。">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{ --cyan:#00d8ff; --blue:#1a6dff; --accent:#ff5757; --navy:#0a1238; --text:#eef3ff; --muted:#9aa8d0; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{background:#0a1238;-webkit-text-size-adjust:100%;}
+  body{min-height:100vh;background:radial-gradient(1200px 700px at 50% -10%,rgba(26,109,255,.18),transparent 60%),linear-gradient(180deg,#0a1238 0%,#0c1542 55%,#0a1340 100%);background-attachment:fixed;color:var(--text);font-family:'Noto Sans JP',sans-serif;line-height:1.8;display:flex;flex-direction:column;overflow-x:hidden;}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 2.2rem;border-bottom:1px solid rgba(0,245,255,0.1);background:rgba(6,9,26,0.6);backdrop-filter:blur(14px);position:sticky;top:0;z-index:50;}
+  .logo{font-family:'Rajdhani',sans-serif;font-size:1.3rem;font-weight:700;color:#fff;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,.6);}
+  .nav-back{font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--muted);text-decoration:none;transition:.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:3rem 1.4rem 4rem;}
+  .card{width:100%;max-width:700px;}
+  .anim{animation:fade .45s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+
+  /* ===== INTRO ===== */
+  .orb{width:64px;height:64px;margin:0 auto 1.6rem;border-radius:16px;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,rgba(0,216,255,.16),rgba(26,109,255,.16));border:1px solid rgba(0,216,255,.3);}
+  .orb svg{width:32px;height:32px;stroke:var(--cyan);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+  .kicker{font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.4em;color:var(--cyan);text-align:center;margin-bottom:1.3rem;}
+  .intro h1{font-size:clamp(1.9rem,5.4vw,2.9rem);font-weight:900;line-height:1.3;text-align:center;margin-bottom:1.2rem;}
+  .intro h1 .em{background:linear-gradient(110deg,#00d8ff,#6fb4ff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .intro p{color:var(--muted);text-align:center;font-size:1rem;margin-bottom:2rem;}
+  .meta-row{display:flex;gap:1.6rem;justify-content:center;margin-bottom:2.4rem;flex-wrap:wrap;}
+  .meta-row .m{font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.1em;color:var(--muted);display:flex;align-items:center;gap:.55rem;}
+  .meta-row .m::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--cyan);display:inline-block;}
+  .meta-row .m b{color:var(--cyan);font-weight:400;}
+  .center{text-align:center;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;padding:1.05rem 2.6rem;color:#001428;font-weight:700;font-size:1.02rem;border-radius:10px;background:linear-gradient(110deg,#00d8ff,#1a6dff 55%,#00d8ff);background-size:220% 100%;border:none;cursor:pointer;text-decoration:none;transition:transform .25s,box-shadow .4s,background-position .6s;font-family:'Noto Sans JP',sans-serif;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px -8px rgba(0,216,255,.6);background-position:100% 0;}
+
+  /* ===== QUESTION ===== */
+  .progress{display:flex;gap:7px;margin-bottom:.7rem;justify-content:center;}
+  .progress span{width:38px;height:4px;border-radius:3px;background:rgba(255,255,255,.12);transition:.4s;}
+  .progress span.on{background:linear-gradient(90deg,#00d8ff,#1a6dff);box-shadow:0 0 12px rgba(0,216,255,.5);}
+  .qcount{text-align:center;font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.25em;color:var(--muted);margin-bottom:1.6rem;}
+  .qtitle{font-size:clamp(1.35rem,3.6vw,1.8rem);font-weight:900;text-align:center;line-height:1.45;margin-bottom:2rem;}
+  .opts{display:grid;gap:.85rem;}
+  .opt{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.4rem;border:1px solid rgba(255,255,255,.12);border-radius:13px;background:rgba(255,255,255,.025);cursor:pointer;transition:.2s;text-align:left;color:var(--text);font-size:.98rem;font-family:'Noto Sans JP',sans-serif;width:100%;line-height:1.55;}
+  .opt:hover{border-color:rgba(0,216,255,.6);background:rgba(0,216,255,.08);transform:translateY(-2px);box-shadow:0 10px 26px -14px rgba(0,216,255,.6);}
+  .opt .dot{width:19px;height:19px;border-radius:50%;border:2px solid rgba(255,255,255,.28);flex:none;transition:.2s;}
+  .opt:hover .dot{border-color:var(--cyan);box-shadow:inset 0 0 0 4px var(--cyan);}
+  .opt .ar{margin-left:auto;color:var(--muted);font-size:1.1rem;opacity:0;transition:.2s;}
+  .opt:hover .ar{opacity:1;transform:translateX(3px);color:var(--cyan);}
+  .back{display:block;margin:1.8rem auto 0;background:none;border:none;color:var(--muted);font-size:.8rem;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:.08em;transition:.25s;}
+  .back:hover{color:var(--cyan);}
+
+  /* ===== LOADING ===== */
+  .load{text-align:center;padding:2rem 0;}
+  .scanner{width:90px;height:90px;margin:0 auto 1.8rem;border-radius:50%;border:3px solid rgba(0,216,255,.18);border-top-color:var(--cyan);animation:spin .9s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .load .lt{font-size:1.15rem;font-weight:700;margin-bottom:.5rem;}
+  .load .ls{color:var(--muted);font-family:'Share Tech Mono',monospace;font-size:.78rem;letter-spacing:.1em;}
+
+  /* ===== RESULT ===== */
+  .res-tag{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.3em;color:var(--cyan);text-align:center;margin-bottom:.9rem;}
+  .res-lead{text-align:center;color:var(--muted);font-size:.92rem;margin-bottom:.3rem;}
+  .res-name{font-size:clamp(1.7rem,4.6vw,2.5rem);font-weight:900;text-align:center;line-height:1.3;margin-bottom:.6rem;display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;}
+  .res-name .em{background:linear-gradient(110deg,#00d8ff,#6fb4ff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .res-name #resIcon{display:inline-flex;}
+  .res-name #resIcon svg{width:34px;height:34px;stroke:var(--cyan);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+  .res-tagline{text-align:center;color:#c7d4f5;font-size:1rem;margin-bottom:1.8rem;}
+  .res-box{background:linear-gradient(180deg,rgba(28,38,80,.92),rgba(16,24,60,.96));border:1px solid rgba(0,216,255,.25);border-radius:16px;padding:1.9rem 2.1rem;margin-bottom:1.4rem;box-shadow:0 22px 64px -24px rgba(0,216,255,.3);}
+  .res-box .why-h{font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.22em;color:var(--cyan);margin-bottom:.7rem;}
+  .res-box .why{font-size:.94rem;color:rgba(238,243,255,.9);line-height:2;margin-bottom:1.4rem;}
+  .benefits{list-style:none;padding:0;margin:0;display:grid;gap:.6rem;border-top:1px solid rgba(255,255,255,.09);padding-top:1.3rem;}
+  .benefits li{font-size:.9rem;color:rgba(238,243,255,.92);padding-left:1.7rem;position:relative;line-height:1.6;}
+  .benefits li::before{content:'✓';position:absolute;left:0;color:var(--cyan);font-weight:700;}
+  .res-cta{display:flex;gap:.9rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.2rem;}
+  .btn-ghost{display:inline-flex;align-items:center;gap:.5rem;padding:1.05rem 1.9rem;border:1px solid rgba(0,216,255,.4);border-radius:10px;color:var(--cyan);text-decoration:none;font-weight:500;font-size:.94rem;background:transparent;transition:.25s;cursor:pointer;font-family:'Noto Sans JP',sans-serif;}
+  .btn-ghost:hover{background:rgba(0,216,255,.1);border-color:var(--cyan);}
+  .runner{text-align:center;font-size:.86rem;color:var(--muted);}
+  .runner a{color:#9fc6ff;text-decoration:none;border-bottom:1px dotted rgba(159,198,255,.5);}
+  .runner a:hover{color:var(--cyan);}
+  .retry{display:block;margin:1.6rem auto 0;background:none;border:none;color:var(--muted);font-size:.8rem;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:.08em;transition:.25s;}
+  .retry:hover{color:var(--cyan);}
+  .hide{display:none;}
+  @media(max-width:560px){
+    nav{padding:1rem 1.3rem;}
+    .res-box{padding:1.5rem 1.3rem;}
+    .opt{padding:1rem 1.1rem;font-size:.93rem;}
+    .res-cta{flex-direction:column;}
+    .res-cta .btn,.res-cta .btn-ghost{width:100%;}
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo" style="display:inline-flex;align-items:center"><img src="logo-unicorn.png" alt="AIdollargame" style="height:34px;width:auto;margin-right:8px"><span class="ai">AI</span>dollargame</a>
+  <a href="index.html" class="nav-back">← HOME</a>
+</nav>
+
+<div class="wrap">
+  <div class="card">
+
+    <!-- INTRO -->
+    <section id="intro" class="intro anim">
+      <div class="orb"><svg viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/></svg></div>
+      <div class="kicker">3つの悩みから診断</div>
+      <h1>あなたの会社、<br><span class="em">どのAI</span>で変わる？</h1>
+      <p>今の悩みから、あなたの会社に最適なAIの使い方を診断します。<br>当てはまるものを選んでいくだけ。</p>
+      <div class="meta-row">
+        <span class="m"><b>約1分</b></span>
+        <span class="m"><b>5つの質問</b></span>
+        <span class="m"><b>5つの解決策から診断</b></span>
+      </div>
+      <div class="center"><button class="btn" onclick="start()">診断をはじめる →</button></div>
+    </section>
+
+    <!-- QUESTION -->
+    <section id="quiz" class="hide">
+      <div class="progress" id="prog"></div>
+      <div class="qcount" id="qcount"></div>
+      <h2 class="qtitle" id="qtitle"></h2>
+      <div class="opts" id="opts"></div>
+      <button class="back" id="backBtn" onclick="back()">← 前の質問に戻る</button>
+    </section>
+
+    <!-- LOADING -->
+    <section id="loading" class="load hide">
+      <div class="scanner"></div>
+      <div class="lt">あなたに最適なAIを分析中…</div>
+      <div class="ls" id="loadMsg">回答を読み解いています</div>
+    </section>
+
+    <!-- RESULT -->
+    <section id="result" class="hide">
+      <div class="res-tag">YOUR BEST MATCH</div>
+      <p class="res-lead">あなたの会社におすすめのAIは</p>
+      <h2 class="res-name"><span id="resIcon"></span><span class="em" id="resName"></span></h2>
+      <p class="res-tagline" id="resTagline"></p>
+      <div class="res-box">
+        <div class="why-h">なぜ、これがあなたに合うのか</div>
+        <p class="why" id="resWhy"></p>
+        <ul class="benefits" id="resBenefits"></ul>
+      </div>
+      <div class="res-cta" id="resCta"></div>
+      <p class="runner" id="resRunner"></p>
+      <button class="retry" onclick="reset()">↺ もう一度診断する</button>
+    </section>
+
+  </div>
+</div>
+
+<script>
+const HP = "index.html";
+const PRODUCTS = {
+  sns:{ name:"SNS AIエージェント", icon:'<svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 20l1.1-4A8.4 8.4 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/></svg>', tagline:"お客様対応を、24時間ぶん肩代わり。",
+    detail:"line-ai-agent.html",
+    why:"あなたの一番の負担は「顧客対応・問い合わせ・予約」に時間を奪われていること。SNS AIエージェントは、LINEなどお客様が普段使うSNS上で自然に会話し、予約管理やCRM連携まで自動でこなします。",
+    benefits:["問い合わせ・予約対応を24時間365日自動化","お客様が使い慣れたLINE等の上で完結","不動産・介護福祉での導入実績あり、あらゆる業種に対応"] },
+  clone:{ name:"社長クローンAI", icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>', tagline:"社長の頭脳を、いつでも参照できる分身に。",
+    detail:"human-clone-ai.html",
+    why:"あなたの会社は「社長への依存・属人化・引き継ぎ」が課題。社長クローンAIは、経営者の思考・判断・経験をAIにインプットし、いつでも意思決定を参照できる分身をつくります。後継者不足の解決にも効きます。",
+    benefits:["経営者の判断・知見をAIに継承","社長への一極集中・属人化を解消","スティーブ・ジョブズ版のデモを公開中"] },
+  side:{ name:"AIside（あなたの付き人AI）", icon:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3 2.6-5 5.5-5"/><circle cx="17" cy="10.5" r="2.4"/><path d="M13.5 19c0-2.4 1.8-3.9 3.5-3.9s3.5 1.5 3.5 3.9"/></svg>', tagline:"もう一人の自分が、隣で先回りして動く。",
+    detail:"aiside.html",
+    why:"あなたは「一人 or 少人数で雑務まで全部抱えている」状態。AIsideは、Gmail・カレンダー・Slackなど既存ツールを横断し、覚えて・先回りして・つなぐ、あなた専属の付き人AIです。あなた自身を隣で支えます。",
+    benefits:["Gmail・カレンダー・Slackなど既存ツールを横断","覚えて・先回りして・つなぎ、雑務を肩代わり","一人社長・フリーランス・多忙な経営者に最適"] },
+  cons:{ name:"AIコンサルティング・研修", icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/></svg>', tagline:"まず「何から始めるか」を、一緒に決める。",
+    detail:HP+"#contact",
+    why:"あなたの悩みは「何から始めればいいか分からない／社員がAIを使いこなせていない」。AIdollargameのコンサル・研修は、AI導入戦略の立案から社員のリスキリングまで一貫して伴走し、『使えるAI』を組織に根付かせます。",
+    benefits:["AI導入の戦略立案から実行まで伴走","社員のリスキリング・定着フォロー","Z世代への訴求や新規事業企画にも対応"] }
+};
+
+const QUESTIONS = [
+  { title:"今、一番あなたの時間を奪っているのは？", opts:[
+    {ic:"💬",t:"お客様からの問い合わせ・予約対応",k:"sns"},
+    {ic:"🧠",t:"自分にしかできない判断・経営",k:"clone"},
+    {ic:"🤝",t:"雑務・スケジュール・連絡調整",k:"side"},
+    {ic:"🧭",t:"そもそも何にAIを使えばいいか分からない",k:"cons"} ]},
+  { title:"あなたの会社・働き方に近いのは？", opts:[
+    {ic:"📞",t:"接客・対応の人手がいつも足りない",k:"sns"},
+    {ic:"👤",t:"社長に依存していて、継ぐ人もいない",k:"clone"},
+    {ic:"🌀",t:"一人 or 少人数で全部を抱えている",k:"side"},
+    {ic:"🏢",t:"社員がAIをうまく使えていない",k:"cons"} ]},
+  { title:"AIに、一番任せたいことは？", opts:[
+    {ic:"🕐",t:"24時間お客様の窓口になってほしい",k:"sns"},
+    {ic:"🧬",t:"自分の頭脳を分身として残したい",k:"clone"},
+    {ic:"🪄",t:"自分の隣で雑務を先回りしてほしい",k:"side"},
+    {ic:"🌱",t:"会社全体にAIを根付かせたい",k:"cons"} ]},
+  { title:"いま、一番手に入れたいのは？", opts:[
+    {ic:"😊",t:"お客様を待たせない、対応の安心感",k:"sns"},
+    {ic:"♾️",t:"自分がいなくても回る仕組み",k:"clone"},
+    {ic:"⏳",t:"自分が自由に使える時間",k:"side"},
+    {ic:"🚀",t:"会社の成長スピードそのもの",k:"cons"} ]},
+  { title:"あなたの会社のAI活用は、今どの段階？", opts:[
+    {ic:"🌐",t:"顧客接点にAIを置きたい段階",k:"sns"},
+    {ic:"🏛️",t:"事業の継続・承継を考える段階",k:"clone"},
+    {ic:"🧩",t:"日々の業務を軽くしたい段階",k:"side"},
+    {ic:"🔰",t:"まだ何も始められていない段階",k:"cons"} ]}
+];
+
+const ORDER=['sns','clone','side','cons'];
+const LOAD_MSGS=["回答を読み解いています","あなたの状況を分析中","最適なソリューションを照合中","結果をまとめています"];
+let step=0; const scores={}; const history=[];
+
+function start(){ step=0; ORDER.forEach(k=>scores[k]=0); history.length=0; swap('quiz'); render(); }
+function swap(id){ ['intro','quiz','loading','result'].forEach(s=>{const el=document.getElementById(s);el.classList.toggle('hide',s!==id);}); const cur=document.getElementById(id); cur.classList.remove('anim'); void cur.offsetWidth; cur.classList.add('anim'); window.scrollTo(0,0); }
+
+function render(){
+  const q=QUESTIONS[step];
+  const prog=document.getElementById('prog'); prog.innerHTML='';
+  QUESTIONS.forEach((_,i)=>{const s=document.createElement('span'); if(i<=step)s.className='on'; prog.appendChild(s);});
+  document.getElementById('qcount').textContent='QUESTION '+(step+1)+' / '+QUESTIONS.length;
+  document.getElementById('qtitle').textContent=q.title;
+  document.getElementById('backBtn').style.visibility=step===0?'hidden':'visible';
+  const box=document.getElementById('opts'); box.innerHTML='';
+  q.opts.forEach(o=>{const b=document.createElement('button'); b.className='opt';
+    b.innerHTML='<span class="dot"></span><span>'+o.t+'</span><span class="ar">→</span>';
+    b.onclick=()=>choose(o.k); box.appendChild(b);});
+  const quiz=document.getElementById('quiz'); quiz.classList.remove('anim'); void quiz.offsetWidth; quiz.classList.add('anim');
+}
+
+function weight(){ return QUESTIONS.length - step; } // 序盤の質問ほど重い
+function choose(k){ scores[k]+=weight(); history.push(k); if(step<QUESTIONS.length-1){step++;render();} else loadingThenFinish(); }
+function back(){ if(step===0)return; const last=history.pop(); step--; scores[last]-=weight(); render(); }
+
+function loadingThenFinish(){
+  swap('loading'); let i=0; const el=document.getElementById('loadMsg');
+  const iv=setInterval(()=>{ i++; if(i<LOAD_MSGS.length){el.textContent=LOAD_MSGS[i];} },420);
+  setTimeout(()=>{ clearInterval(iv); finish(); }, 1700);
+}
+
+function finish(){
+  let best=ORDER[0], second=null;
+  ORDER.forEach(k=>{ if(scores[k]>scores[best]) best=k; });
+  ORDER.forEach(k=>{ if(k!==best && (second===null || scores[k]>scores[second])) second=k; });
+  const p=PRODUCTS[best];
+  document.getElementById('resIcon').innerHTML=p.icon;
+  document.getElementById('resName').textContent=p.name;
+  document.getElementById('resTagline').textContent=p.tagline;
+  document.getElementById('resWhy').textContent=p.why;
+  const bl=document.getElementById('resBenefits'); bl.innerHTML='';
+  p.benefits.forEach(b=>{const li=document.createElement('li'); li.textContent=b; bl.appendChild(li);});
+  const cta=document.getElementById('resCta'); cta.innerHTML='';
+  const a=document.createElement('a'); a.className='btn'; a.href=p.detail; a.textContent=p.name+'を詳しく見る →';
+  if(p.detail.startsWith('http')){a.target='_blank';a.rel='noopener';}
+  const c=document.createElement('a'); c.className='btn-ghost'; c.href=HP+'#contact'; c.textContent='まずは無料相談する';
+  cta.appendChild(a); cta.appendChild(c);
+  const sp=PRODUCTS[second];
+  const rn=document.getElementById('resRunner');
+  rn.innerHTML='次点：<a href="'+sp.detail+'"'+(sp.detail.startsWith('http')?' target="_blank" rel="noopener"':'')+'>'+sp.name+'</a> も検討の価値あり';
+  swap('result');
+}
+function reset(){ swap('intro'); }
+</script>
+</body>
+</html>

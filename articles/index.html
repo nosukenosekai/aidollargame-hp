@@ -57,6 +57,13 @@
   .card-title { font-size:1.05rem; font-weight:700; line-height:1.55; color:#fff; }
   .card-desc { font-size:0.85rem; color:var(--muted); line-height:1.85; flex:1; }
   .card-link { font-family:'Share Tech Mono',monospace; font-size:0.68rem; color:var(--cyan); letter-spacing:0.1em; margin-top:auto; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.06); }
+  .card-image { height:150px; background-size:cover; background-position:center; position:relative; overflow:hidden; flex-shrink:0; }
+  .card-image::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(10,18,56,0.25) 0%,rgba(10,18,56,0.65) 100%); }
+  .contact-nudge { display:flex; align-items:center; gap:1.5rem; margin:3rem 0 0; padding:1.8rem 2rem; background:rgba(0,216,255,0.04); border:1px solid rgba(0,216,255,0.15); border-radius:10px; }
+  .nudge-photo { width:52px; height:52px; border-radius:50%; object-fit:cover; object-position:center top; border:2px solid rgba(0,216,255,0.35); flex-shrink:0; }
+  .nudge-body p { font-size:0.88rem; color:var(--muted); margin-bottom:0.4rem; line-height:1.6; }
+  .nudge-link { font-family:'Share Tech Mono',monospace; font-size:0.75rem; color:var(--cyan); text-decoration:none; letter-spacing:0.1em; transition:opacity 0.2s; }
+  .nudge-link:hover { opacity:0.7; }
   footer { border-top:1px solid rgba(255,255,255,0.08); padding:2.5rem 3rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; background:rgba(6,9,26,0.6); }
   .footer-copy { font-size:0.75rem; color:var(--muted); font-family:'Share Tech Mono',monospace; }
   @media(max-width:768px) { nav{padding:1rem 1.2rem;} .hero,.articles-section{padding-left:1.2rem;padding-right:1.2rem;} .articles-grid{grid-template-columns:1fr;} footer{padding:2rem 1.5rem;} }
@@ -71,7 +78,7 @@
 <div class="hero">
   <div class="section-tag">ARTICLES</div>
   <h1>記事・発信</h1>
-  <p>AIと人間の関係、経営、プロダクトについて書き続けています。</p>
+  <p>AIが引き受けた先に何が生まれるか。現場で感じたこと、業界で起きていること、プロダクトが向かう先を書き続けています。<br>読んで「うちの会社のことだ」と思ったら、そのまま話しかけてください。</p>
 </div>
 
 <div class="articles-section">
@@ -87,6 +94,7 @@
 <!-- AUTO-ARTICLES-START -->
     <a href="./ai-top20-strategy-2026.html" class="article-card" data-tag="insight">
       <div class="card-color-bar accent"></div>
+      <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80&fit=crop')"></div>
       <div class="card-body">
         <div class="card-tag accent">INSIGHT</div>
         <div class="card-date">2026 / 06 / 02</div>
@@ -98,6 +106,7 @@
 
     <a href="./anthropic-beats-openai-2026.html" class="article-card" data-tag="news">
       <div class="card-color-bar"></div>
+      <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80&fit=crop')"></div>
       <div class="card-body">
         <div class="card-tag">NEWS</div>
         <div class="card-date">2026 / 06 / 02</div>
@@ -109,6 +118,7 @@
 
     <a href="./japan-gov-ai-mandate-2026.html" class="article-card" data-tag="news">
       <div class="card-color-bar blue"></div>
+      <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1555255707-c19b68a54adc?w=600&q=80&fit=crop')"></div>
       <div class="card-body">
         <div class="card-tag">NEWS</div>
         <div class="card-date">2026 / 06 / 02</div>
@@ -120,6 +130,7 @@
 
     <a href="./inquiry-ai-risk-2026.html" class="article-card" data-tag="insight">
       <div class="card-color-bar accent"></div>
+      <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1551434678-e076c223a692?w=600&q=80&fit=crop')"></div>
       <div class="card-body">
         <div class="card-tag accent">INSIGHT</div>
         <div class="card-date">2026 / 05 / 29</div>
@@ -131,6 +142,7 @@
 
     <a href="./anthropic-valuation-2026.html" class="article-card" data-tag="news">
       <div class="card-color-bar"></div>
+      <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=600&q=80&fit=crop')"></div>
       <div class="card-body">
         <div class="card-tag">NEWS</div>
         <div class="card-date">2026 / 05 / 29</div>
@@ -142,6 +154,7 @@
 
     <a href="./ai-jobs-misconception-2026.html" class="article-card" data-tag="insight">
       <div class="card-color-bar blue"></div>
+      <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&q=80&fit=crop')"></div>
       <div class="card-body">
         <div class="card-tag accent">INSIGHT</div>
         <div class="card-date">2026 / 05 / 29</div>
@@ -154,6 +167,7 @@
 
     <a href="./sns-ai-agent.html" class="article-card" data-tag="product">
       <div class="card-color-bar"></div>
+      <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=80&fit=crop')"></div>
       <div class="card-body">
         <div class="card-tag">PRODUCT</div>
         <div class="card-date">2026 / 05 / 22</div>
@@ -165,6 +179,7 @@
 
     <a href="./aiwill.html" class="article-card" data-tag="product">
       <div class="card-color-bar blue"></div>
+      <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop')"></div>
       <div class="card-body">
         <div class="card-tag">PRODUCT</div>
         <div class="card-date">2026 / 05 / 20</div>
@@ -176,6 +191,7 @@
 
     <a href="./aiside.html" class="article-card" data-tag="product">
       <div class="card-color-bar"></div>
+      <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600&q=80&fit=crop')"></div>
       <div class="card-body">
         <div class="card-tag">PRODUCT</div>
         <div class="card-date">2026 / 05 / 18</div>
@@ -187,6 +203,7 @@
 
     <a href="./ai-adoption-now.html" class="article-card" data-tag="insight">
       <div class="card-color-bar accent"></div>
+      <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80&fit=crop')"></div>
       <div class="card-body">
         <div class="card-tag accent">INSIGHT</div>
         <div class="card-date">2026 / 05 / 15</div>
@@ -198,6 +215,7 @@
 
     <a href="./ai-frees-humans.html" class="article-card" data-tag="philosophy">
       <div class="card-color-bar"></div>
+      <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&q=80&fit=crop')"></div>
       <div class="card-body">
         <div class="card-tag">PHILOSOPHY</div>
         <div class="card-date">2026 / 05 / 12</div>
@@ -209,6 +227,7 @@
 
     <a href="./ai-and-future.html" class="article-card" data-tag="future">
       <div class="card-color-bar blue"></div>
+      <div class="card-image" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&q=80&fit=crop')"></div>
       <div class="card-body">
         <div class="card-tag">FUTURE</div>
         <div class="card-date">2026 / 05 / 08</div>
@@ -218,6 +237,13 @@
       </div>
     </a>
 
+  </div>
+  <div class="contact-nudge">
+    <img src="../sato.jpg" alt="佐藤 徳之介 / CEO" class="nudge-photo">
+    <div class="nudge-body">
+      <p>読んで「うちの会社のことだな」と思ったら</p>
+      <a href="../index.html#contact" class="nudge-link">そのまま話しかけてください →</a>
+    </div>
   </div>
 </div>
 

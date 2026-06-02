@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="../logo-unicorn.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コードが書けない私が、AIだけで自社サイトを作り変えた話 | AIdollargame</title>
+<meta name="description" content="エンジニアではない経営者が、対話だけで自社HPに記事システム・画像・SEO・自動更新まで実装した数日間の実録。「作業はAIに」を自分で実証した記録。">
+<meta name="author" content="佐藤徳之介">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/articles/ai-built-my-site.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AIdollargame">
+<meta property="og:title" content="コードが書けない私が、AIだけで自社サイトを作り変えた話">
+<meta property="og:description" content="エンジニアではない経営者が、対話だけで自社HPに記事システム・画像・SEO・自動更新まで実装した数日間の実録。">
+<meta property="og:url" content="https://aidollargame.com/articles/ai-built-my-site.html">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-06-03">
+<meta property="article:author" content="佐藤徳之介">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="コードが書けない私が、AIだけで自社サイトを作り変えた話">
+<meta name="twitter:description" content="エンジニアではない経営者が、対話だけで自社HPを作り変えた数日間の実録。">
+<meta name="twitter:image" content="https://aidollargame.com/og-default.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "コードが書けない私が、AIだけで自社サイトを作り変えた話",
+  "description": "エンジニアではない経営者が、対話だけで自社HPに記事システム・画像・SEO・自動更新まで実装した数日間の実録。",
+  "datePublished": "2026-06-03",
+  "author": {"@type":"Person","name":"佐藤徳之介","alternateName":"NORINOSUKE SATO"},
+  "publisher": {
+    "@type":"Organization",
+    "name":"AIdollargame",
+    "logo":{"@type":"ImageObject","url":"https://aidollargame.com/og-default.png"}
+  },
+  "mainEntityOfPage": "https://aidollargame.com/articles/ai-built-my-site.html",
+  "image": "https://aidollargame.com/og-default.png",
+  "inLanguage": "ja"
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{--cyan:#00d8ff;--blue:#1a6dff;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#1a6dff);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;background:#0a1238;}
+  body{background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%);color:var(--text);font-family:'Noto Sans JP',sans-serif;overflow-x:hidden;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,9,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);}
+  .nav-back{font-family:'Share Tech Mono',monospace;font-size:0.78rem;letter-spacing:0.12em;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .hero{padding:9rem 2rem 4rem;max-width:800px;margin:0 auto;}
+  .tag{font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.4em;color:var(--cyan);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem;}
+  .tag::before{content:'';display:inline-block;width:30px;height:1px;background:var(--cyan);}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;}
+  .meta{display:flex;gap:2rem;align-items:center;font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}
+  .body{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}
+  .body h2{font-size:1.4rem;font-weight:900;margin:3.5rem 0 1.2rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}
+  .body p{font-size:0.97rem;color:rgba(238,243,255,0.85);line-height:2.1;margin-bottom:1.4rem;}
+  .body strong{color:#fff;font-weight:700;}
+  .body ul{padding-left:1.5rem;margin-bottom:1.4rem;}
+  .body li{font-size:0.95rem;color:rgba(238,243,255,0.85);line-height:2;margin-bottom:0.5rem;}
+  .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
+  .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
+  .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
+  .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2rem;color:#001428;font-weight:700;font-size:0.9rem;border-radius:8px;background:linear-gradient(110deg,#00d8ff 0%,#1a6dff 50%,#00d8ff 100%);background-size:220% 100%;text-decoration:none;transition:transform 0.25s,box-shadow 0.4s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(0,216,255,0.6);}
+  .related{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+  .related h3{font-family:'Share Tech Mono',monospace;font-size:0.72rem;letter-spacing:0.3em;color:var(--muted);margin-bottom:1.5rem;}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .rcard{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.4rem;text-decoration:none;color:inherit;transition:all 0.3s;display:block;}
+  .rcard:hover{border-color:rgba(0,216,255,0.35);transform:translateY(-4px);}
+  .rcard .rt{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--cyan);margin-bottom:0.5rem;}
+  .rcard .rttl{font-size:0.88rem;font-weight:700;line-height:1.5;}
+  footer{border-top:1px solid rgba(255,255,255,0.08);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:rgba(6,9,26,0.6);}
+  .fc{font-size:0.75rem;color:var(--muted);font-family:'Share Tech Mono',monospace;}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.hero,.body,.related{padding-left:1.2rem;padding-right:1.2rem;}footer{padding:2rem 1.5rem;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center"><img src="../logo-unicorn.png" alt="AIdollargame" style="height:34px;width:auto;margin-right:8px"><span class="ai">AI</span>dollargame</a>
+  <a href="./index.html" class="nav-back">← ARTICLES</a>
+</nav>
+<div class="hero">
+  <div class="tag">STORY</div>
+  <h1>コードが書けない私が、<br>AIだけで自社サイトを作り変えた話</h1>
+  <div class="meta"><span>2026 / 06 / 03</span><span>佐藤 徳之介 / CEO</span><span>読了 約6分</span></div>
+</div>
+<article class="body">
+
+<p>正直に告白する。私はコードが一行も書けない。HTMLもサーバーの仕組みも、説明されても半分しか分からない。</p>
+<p>それでもこの数日で、AIdollargameのサイトに記事システムを新設し、十数本の記事を公開し、各記事にサムネイル画像を入れ、検索対策（SEO）を整え、さらに<strong>毎週ニュースを拾って記事が自動で増える仕組み</strong>まで作った。コードエディタは一度も開いていない。やったのは「AIに話しかけること」だけだ。</p>
+
+<h2>きっかけは「ちゃんとした会社に見せたい」だった</h2>
+
+<p>サイトはあったが、記事のひとつもない状態だった。「ちゃんと事業をやっている会社だ」と思ってもらうには、発信が要る。でも記事を書く時間はないし、エンジニアに毎回お願いする予算と手間もかけたくない。</p>
+<p>そこでAIに相談した。「会社のサイトに記事の欄を作りたい」——それだけ伝えた。返ってきたのは、デザインに馴染んだ記事一覧と、記事ページの雛形だった。ここから一気に進んだ。</p>
+
+<h2>やったこと（全部、話しかけただけ）</h2>
+
+<p>この数日で実際にできたことを並べる。すべて対話だけ、コードは書いていない。</p>
+<ul>
+  <li>サイトに<strong>記事セクションを新設</strong>。トップページからも一覧ページからも読める形に</li>
+  <li>記事を<strong>カテゴリで絞り込めるフィルター</strong>（NEWS / INSIGHT など）を実装</li>
+  <li>各記事に<strong>サムネイル画像</strong>を設定。内容に合わないものは差し替え</li>
+  <li><strong>SEO・SNSシェア時の見え方（OGP）・構造化データ</strong>を整備</li>
+  <li>ブラウザのタブに出る<strong>アイコン（ファビコン）</strong>を設定</li>
+  <li><strong>毎週、最新AIニュースから記事が自動で公開される仕組み</strong>を構築</li>
+</ul>
+<p>並べてみると、外注したら数十万円かかってもおかしくない内容だ。それを、移動中や空き時間に、スマホとパソコンで指示するだけで終わらせた。</p>
+
+<h2>一番大事だったのは「ダメ出し」だった</h2>
+
+<p>勘違いされがちだが、AIに丸投げすれば勝手に良いものが出てくるわけではない。AIが選んできた画像を見て「これは工場の写真で、何の記事か分からない」と差し戻した。ある文章は「これは会社の品位を下げる表現だ」と却下した。</p>
+<p>AIは速く、大量に、疲れずに作る。でも<strong>「これは違う」「これが良い」と判断するのは人間の仕事</strong>だった。私がやっていたのは、まさにその判断だ。手は動かさない。目と頭を使う。</p>
+
+<h2>これが「作業はAIに、愛は人間に」だった</h2>
+
+<p>コードを書く、画像を探す、文章の下書きを作る——こういった<strong>「やらなきゃいけないが、私じゃなくてもいい作業」は全部AIに渡した</strong>。私がやったのは、方向を決め、良し悪しを判断し、最後に自分の言葉で魂を入れることだけ。</p>
+<p>その結果、空いた時間で取引先に会いに行けた。これが弊社の掲げる「作業はAIに、愛は人間に」の、私自身による実証だ。</p>
+
+<blockquote><p>「専門知識がないとAIは使えない」は誤解だった。本当に必要なのは、"何が良いか"を判断する目だけだ。</p></blockquote>
+
+<div class="cta">
+  <h3>同じことを、あなたの会社でもやりませんか</h3>
+  <p>「うちのサイトもこうしたい」「何から手をつければいいか分からない」——コードの話は一切不要です。話しかけてくれれば、あとはこちらでやります。</p>
+  <a href="../index.html#contact" class="btn">話しかける →</a>
+</div>
+</article>
+<div class="related">
+  <h3>RELATED ARTICLES</h3>
+  <div class="rgrid">
+    <a href="./i-proved-our-vision.html" class="rcard"><div class="rt">STORY</div><div class="rttl">「作業はAIに、愛は人間に」を、自分で実証してみた</div></a>
+    <a href="./what-ai-let-me-do.html" class="rcard"><div class="rt">STORY</div><div class="rttl">非エンジニアの経営者が数日でできたこと、全部リストにしてみた</div></a>
+    <a href="./ai-frees-humans.html" class="rcard"><div class="rt">PHILOSOPHY</div><div class="rttl">「作業はAIに、愛は人間に」の本当の意味</div></a>
+  </div>
+</div>
+<footer>
+  <a href="../index.html" class="logo"><span class="ai">AI</span>dollargame</a>
+  <div class="fc">© 2025 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
+</footer>
+</body>
+</html>

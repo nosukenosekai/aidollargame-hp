@@ -5,24 +5,24 @@
 <link rel="icon" type="image/png" href="../logo-unicorn.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>コードが書けない私が、AIだけで自社サイトを作り変えた話 | AIdollargame</title>
-<meta name="description" content="エンジニアではない経営者が、対話だけで自社HPに記事システム・画像・SEO・自動更新まで実装した数日間の実録。「作業はAIに」を自分で実証した記録。">
-<meta name="author" content="佐藤徳之介">
+<meta name="description" content="エンジニアではない経営者が、対話だけで自社HPに記事システム・画像・SEO・自動更新まで実装した実録。コードは一行も書いていない。鍵は専門知識ではなく「妥協しないこと」だった。">
+<meta name="author" content="AIdollargame CEO">
 <meta name="theme-color" content="#0a1238">
 <link rel="canonical" href="https://aidollargame.com/articles/ai-built-my-site.html">
 
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="AIdollargame">
 <meta property="og:title" content="コードが書けない私が、AIだけで自社サイトを作り変えた話">
-<meta property="og:description" content="エンジニアではない経営者が、対話だけで自社HPに記事システム・画像・SEO・自動更新まで実装した数日間の実録。">
+<meta property="og:description" content="エンジニアではない経営者が、対話だけで自社HPを作り変えた実録。鍵は「妥協しないこと」だった。">
 <meta property="og:url" content="https://aidollargame.com/articles/ai-built-my-site.html">
 <meta property="og:image" content="https://aidollargame.com/og-default.png">
 <meta property="og:locale" content="ja_JP">
 <meta property="article:published_time" content="2026-06-03">
-<meta property="article:author" content="佐藤徳之介">
+<meta property="article:author" content="AIdollargame CEO">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="コードが書けない私が、AIだけで自社サイトを作り変えた話">
-<meta name="twitter:description" content="エンジニアではない経営者が、対話だけで自社HPを作り変えた数日間の実録。">
+<meta name="twitter:description" content="エンジニアではない経営者が、対話だけで自社HPを作り変えた実録。鍵は「妥協しないこと」だった。">
 <meta name="twitter:image" content="https://aidollargame.com/og-default.png">
 
 <script type="application/ld+json">
@@ -30,9 +30,9 @@
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "コードが書けない私が、AIだけで自社サイトを作り変えた話",
-  "description": "エンジニアではない経営者が、対話だけで自社HPに記事システム・画像・SEO・自動更新まで実装した数日間の実録。",
+  "description": "エンジニアではない経営者が、対話だけで自社HPを作り変えた実録。鍵は「妥協しないこと」だった。",
   "datePublished": "2026-06-03",
-  "author": {"@type":"Person","name":"佐藤徳之介","alternateName":"NORINOSUKE SATO"},
+  "author": {"@type":"Organization","name":"AIdollargame"},
   "publisher": {
     "@type":"Organization",
     "name":"AIdollargame",
@@ -65,7 +65,7 @@
   .body p{font-size:0.97rem;color:rgba(238,243,255,0.85);line-height:2.1;margin-bottom:1.4rem;}
   .body strong{color:#fff;font-weight:700;}
   .body ul{padding-left:1.5rem;margin-bottom:1.4rem;}
-  .body li{font-size:0.95rem;color:rgba(238,243,255,0.85);line-height:2;margin-bottom:0.5rem;}
+  .body li{font-size:0.95rem;color:rgba(238,243,255,0.85);line-height:1.95;margin-bottom:0.3rem;}
   .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
   .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
   .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
@@ -93,42 +93,48 @@
 <div class="hero">
   <div class="tag">STORY</div>
   <h1>コードが書けない私が、<br>AIだけで自社サイトを作り変えた話</h1>
-  <div class="meta"><span>2026 / 06 / 03</span><span>佐藤 徳之介 / CEO</span><span>読了 約6分</span></div>
+  <div class="meta"><span>2026 / 06 / 03</span><span>AIdollargame CEO</span><span>読了 約7分</span></div>
 </div>
 <article class="body">
 
-<p>正直に告白する。私はコードが一行も書けない。HTMLもサーバーの仕組みも、説明されても半分しか分からない。</p>
-<p>それでもこの数日で、AIdollargameのサイトに記事システムを新設し、十数本の記事を公開し、各記事にサムネイル画像を入れ、検索対策（SEO）を整え、さらに<strong>毎週ニュースを拾って記事が自動で増える仕組み</strong>まで作った。コードエディタは一度も開いていない。やったのは「AIに話しかけること」だけだ。</p>
+<p>正直に告白する。私はコードが一行も書けない。HTMLもサーバーの仕組みも、説明されても半分しか分からない。それでもこの数日で、AIdollargameのサイトに記事システムを新設し、十数本の記事を公開し、各記事に画像を入れ、検索対策を整え、さらに<strong>毎週ニュースを拾って記事が自動で増える仕組み</strong>まで作った。</p>
+<p>コードエディタは一度も開いていない。やったのは、AIに話しかけて、出てきたものに「良い・悪い」を伝え続けること。それだけだ。この記事では、何をどうやったのか、そして何が一番大事だったのかを、できるだけ正直に書く。</p>
 
 <h2>きっかけは「ちゃんとした会社に見せたい」だった</h2>
 
-<p>サイトはあったが、記事のひとつもない状態だった。「ちゃんと事業をやっている会社だ」と思ってもらうには、発信が要る。でも記事を書く時間はないし、エンジニアに毎回お願いする予算と手間もかけたくない。</p>
-<p>そこでAIに相談した。「会社のサイトに記事の欄を作りたい」——それだけ伝えた。返ってきたのは、デザインに馴染んだ記事一覧と、記事ページの雛形だった。ここから一気に進んだ。</p>
+<p>サイトはあったが、記事のひとつもない、のっぺりした状態だった。事業をやっている以上、「この会社はちゃんと動いている」と感じてもらうには、発信が要る。だが、記事を書き続ける時間はないし、そのたびにエンジニアへ依頼するのも違う気がしていた。</p>
+<p>そこでAIに相談した。「会社のサイトに記事の欄を作りたい」——伝えたのはそれだけだ。返ってきたのは、既存のデザインに自然に馴染んだ記事一覧と、記事ページの雛形だった。「これならいける」と思えた瞬間から、一気に進み始めた。</p>
 
 <h2>やったこと（全部、話しかけただけ）</h2>
 
 <p>この数日で実際にできたことを並べる。すべて対話だけ、コードは書いていない。</p>
 <ul>
   <li>サイトに<strong>記事セクションを新設</strong>。トップページからも一覧ページからも読める形に</li>
-  <li>記事を<strong>カテゴリで絞り込めるフィルター</strong>（NEWS / INSIGHT など）を実装</li>
-  <li>各記事に<strong>サムネイル画像</strong>を設定。内容に合わないものは差し替え</li>
-  <li><strong>SEO・SNSシェア時の見え方（OGP）・構造化データ</strong>を整備</li>
+  <li>記事を<strong>カテゴリで絞り込めるフィルター</strong>（NEWS / INSIGHT / STORY など）を実装</li>
+  <li>各記事に<strong>サムネイル画像</strong>を設定。内容に合わないものは何度も差し替え</li>
+  <li><strong>検索対策（SEO）・SNSシェア時の見え方・構造化データ</strong>を整備</li>
   <li>ブラウザのタブに出る<strong>アイコン（ファビコン）</strong>を設定</li>
   <li><strong>毎週、最新AIニュースから記事が自動で公開される仕組み</strong>を構築</li>
 </ul>
-<p>並べてみると、外注したら数十万円かかってもおかしくない内容だ。それを、移動中や空き時間に、スマホとパソコンで指示するだけで終わらせた。</p>
+<p>少し前なら、外部の制作会社や社内のエンジニアに頼むのが当たり前だった内容だ。それを、移動中や本業の合間に、スマホとパソコンで指示するだけで形にできた。</p>
 
-<h2>一番大事だったのは「ダメ出し」だった</h2>
+<h2>エンジニアの時間まで、最適化された</h2>
 
-<p>勘違いされがちだが、AIに丸投げすれば勝手に良いものが出てくるわけではない。AIが選んできた画像を見て「これは工場の写真で、何の記事か分からない」と差し戻した。ある文章は「これは会社の品位を下げる表現だ」と却下した。</p>
-<p>AIは速く、大量に、疲れずに作る。でも<strong>「これは違う」「これが良い」と判断するのは人間の仕事</strong>だった。私がやっていたのは、まさにその判断だ。手は動かさない。目と頭を使う。</p>
+<p>これは導入してみて初めて気づいたことだが、効果は私の時間だけにとどまらなかった。<strong>エンジニアの時間まで最適化された</strong>のだ。</p>
+<p>エンジニアは本来、プロダクトの開発にこそ集中すべき人間だ。サイトの細かい修正や記事ページの調整は、開発に比べれば優先度が低い。それでもこれまでは、そこに彼らの貴重な時間を使わせてしまっていた。AIがその部分を巻き取ったことで、エンジニアは開発に専念できるようになった。<strong>AIは誰かの仕事を奪ったのではなく、それぞれを「本来やるべき仕事」に戻した</strong>のだ。</p>
+
+<h2>一番大事だったのは「妥協しないこと」だった</h2>
+
+<p>勘違いされがちだが、AIに丸投げすれば勝手に良いものが出てくるわけではない。<strong>「AIに頼めばいい感じのものができる」と思い込むと、イメージと違うものが出てきたときに、つい受け入れてしまう</strong>。ここに落とし穴がある。</p>
+<p>実際、AIが選んできた画像には「これは工場の写真で、何の記事か分からない」と感じるものがあったし、ある文章は「これは会社の品位を下げる」と却下した。そこでサボらず、妥協せず、「ここが違う」「こうしたい」と伝えて、納得いくまで何度も修正させる。<strong>この粘りがあるかどうかで、最終的な仕上がりはまったく変わる</strong>。</p>
+<p>AIによってできることは格段に増え、時間も大きく短縮できる。でもAIは万能ではない。だからこそ、<strong>人間の判断基準を最後まで手放さないこと</strong>が要る。手は動かさなくていい。けれど、目と基準は、絶対に妥協してはいけない。</p>
 
 <h2>これが「作業はAIに、愛は人間に」だった</h2>
 
-<p>コードを書く、画像を探す、文章の下書きを作る——こういった<strong>「やらなきゃいけないが、私じゃなくてもいい作業」は全部AIに渡した</strong>。私がやったのは、方向を決め、良し悪しを判断し、最後に自分の言葉で魂を入れることだけ。</p>
-<p>その結果、空いた時間で取引先に会いに行けた。これが弊社の掲げる「作業はAIに、愛は人間に」の、私自身による実証だ。</p>
+<p>コードを書く、画像を探す、文章の下書きを作る——こういった「やらなければいけないが、私じゃなくてもいい作業」は、すべてAIに渡した。私がやったのは、方向を決め、良し悪しを妥協せず判断し、最後に自分の言葉で魂を入れることだけだ。</p>
+<p>その結果、空いた時間で取引先に会いに行けた。これは弊社が掲げる「作業はAIに、愛は人間に」の、私自身による実証でもある。<strong>AIに作業を任せるほど、人間にしかできない仕事に向き合う時間が増える</strong>——それを、自分の手で確かめられた。</p>
 
-<blockquote><p>「専門知識がないとAIは使えない」は誤解だった。本当に必要なのは、"何が良いか"を判断する目だけだ。</p></blockquote>
+<blockquote><p>「専門知識がないとAIは使えない」は誤解だった。本当に必要なのは、"何が良いか"の基準を持ち、それを妥協しない粘りだけだ。</p></blockquote>
 
 <div class="cta">
   <h3>同じことを、あなたの会社でもやりませんか</h3>

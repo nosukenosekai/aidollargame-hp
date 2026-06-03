@@ -251,6 +251,19 @@ nav {
 .ind-name { font-size:0.9rem; font-weight:700; margin-bottom:0.3rem; color:var(--navy); }
 .ind-use { font-size:0.78rem; color:var(--muted); line-height:1.8; }
 
+/* INTEGRATIONS */
+.integ-head { text-align:center; }
+.integ-head .section-label { display:inline-block; }
+.integ-head .section-sub { margin:0 auto; }
+.logo-strip { display:grid; grid-template-columns:repeat(5,1fr); gap:1rem; margin:3.5rem auto 0; max-width:920px; }
+.logo-item { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.7rem; padding:1.5rem 0.8rem; background:white; border:1px solid var(--border); border-radius:12px; transition:border-color 0.2s, transform 0.2s; }
+.logo-item:hover { border-color:var(--green); transform:translateY(-3px); }
+.logo-item img { width:30px; height:30px; filter:grayscale(1); opacity:0.55; transition:filter 0.2s, opacity 0.2s; }
+.logo-item:hover img { filter:grayscale(0); opacity:1; }
+.logo-item span { font-size:0.72rem; color:var(--muted); font-weight:600; letter-spacing:0.01em; }
+.integ-note { text-align:center; font-size:0.8rem; color:var(--muted); margin-top:2rem; line-height:1.8; }
+.integ-note strong { color:var(--navy); font-weight:700; }
+
 /* CTA */
 .cta-section {
   background:var(--navy);
@@ -307,6 +320,7 @@ footer { background:var(--white); border-top:1px solid var(--border); padding:2.
   .stats-wrap{padding:4rem 1.5rem;} .stats-grid{grid-template-columns:repeat(2,1fr);}
   .section-wrap{padding:5rem 1.5rem;}
   .pain-grid,.ai-features,.industry-grid{grid-template-columns:1fr;}
+  .logo-strip{grid-template-columns:repeat(3,1fr);}
   .how-grid{grid-template-columns:1fr;gap:3rem;}
   .cta-section{padding:5rem 1.5rem;}
   .faq-wrap{padding:5rem 1.5rem;}

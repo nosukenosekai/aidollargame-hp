@@ -208,14 +208,15 @@
   .phone-actions { display:flex; gap:0.7rem; color:#666; font-size:0.85rem; }
 
   .chat-stream {
-    flex:1; padding:1rem 0.85rem; overflow:hidden;
+    flex:1; padding:1rem 0.85rem; overflow-y:auto; scrollbar-width:none;
     display:flex; flex-direction:column; gap:0.5rem;
     background:linear-gradient(180deg,#8eb5e0 0%,#7da4d2 100%);
     position:relative;
   }
+  .chat-stream::-webkit-scrollbar { display:none; }
   .line-msg { display:flex; gap:0.5rem; align-items:flex-end; opacity:0; animation:lineSlide 0.55s cubic-bezier(.2,.8,.2,1) forwards; }
   .line-msg.user { flex-direction:row-reverse; animation-name:lineSlideRight; }
-  .line-avatar { width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#5cb85c,#3a8a3a); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:0.65rem; font-weight:700; box-shadow:0 2px 6px rgba(0,0,0,0.2); }
+  .line-avatar { width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,#7ad99a,#5dc680); flex-shrink:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:0.65rem; font-weight:700; box-shadow:0 2px 6px rgba(0,0,0,0.15); }
   .line-bubble {
     max-width:75%;
     padding:0.55rem 0.8rem;

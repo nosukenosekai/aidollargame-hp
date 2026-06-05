@@ -3,7 +3,7 @@
   "language": "japanese",
   "fileCheckpointingEnabled": true,
   "permissions": {
-    "defaultMode": "bypassPermissions",
+    "defaultMode": "auto",
     "allow": [
       "Edit",
       "Write",
@@ -46,13 +46,25 @@
       "Bash(pip install *)",
       "Bash(pip3 install *)",
       "Bash(npm install *)",
-      "Bash(npx *)",
-      "Bash(python3 scripts/generate_articles.py*)",
-      "Bash(python scripts/generate_articles.py*)"
+      "Bash(npx *)"
     ],
     "deny": [
-      "Bash(rm -rf *)",
-      "Bash(rm -fr *)",
+      "Bash(rm *)",
+      "Bash(*rm -rf*)",
+      "Bash(*rm -fr*)",
+      "Bash(rmdir *)",
+      "Bash(*shred *)",
+      "Bash(*truncate *)",
+      "Bash(*git clean *)",
+      "Bash(*git reset --hard*)",
+      "Bash(*git push --force*)",
+      "Bash(*git push -f *)",
+      "Bash(*find * -delete*)",
+      "Bash(*generate_articles.py*)",
+      "Bash(*npm publish*)",
+      "Bash(*stripe *)",
+      "Bash(*aws *)",
+      "Bash(*gcloud *)",
       "Read(./**/.env)",
       "Read(./**/.env.*)",
       "Read(./**/*credential*)",
@@ -62,6 +74,13 @@
       "Read(~/.aws/**)"
     ]
   },
+  "autoMode": {
+    "hard_deny": [
+      "$defaults",
+      "ファイルやディレクトリの削除・破壊（rm / rmdir / shred / truncate / git clean / git reset --hard / git push --force / find -delete など）。形を変えても、cdで連結されていても、削除系は一切実行しない。",
+      "お金が発生する操作・課金される可能性のあるAPI呼び出しや支払い（例: 有料APIを叩く scripts/generate_articles.py の実行、npm publish、stripe/aws/gcloud などの課金コマンド、決済）。一切実行しない。"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -69,7 +88,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "c=$(jq -r '.tool_input.command // empty'); case \"$c\" in *curl*|*wget*|*pip\\ install*|*pip3\\ install*|*npx*|*npm\\ install*|*generate_articles.py*) printf '%s' '{\"systemMessage\":\"⚠️ 費用または外部通信が発生する可能性がある操作です（API課金・ネット接続・パッケージ導入など）。内容をよく確認してから許可してください。\"}';; esac"
+            "command": "c=$(jq -r '.tool_input.command // empty'); case \"$c\" in *rm\\ -rf*|*rm\\ -fr*|*git\\ clean*|*git\\ reset\\ --hard*|*git\\ push\\ --force*|*generate_articles.py*) printf '%s' '{\"systemMessage\":\"🚫 削除または課金につながる可能性のある操作です。お金・削除は実行しない方針のため、内容を必ず確認してください。\"}';; esac"
           }
         ]
       }

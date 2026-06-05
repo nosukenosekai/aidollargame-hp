@@ -454,10 +454,17 @@
   .team-card { background:#fff !important; border:1px solid #e5e7eb !important; }
   .team-card::before { background:#000 !important; }
   .award-item::before { border-color:#000 !important; background:rgba(0,0,0,0.06) !important; }
-  .ceo-message-block { background:#ffffff !important; border:1px solid #e5e7eb !important; }
+  .ceo-message-block { background:#ffffff !important; border:1px solid #e5e7eb !important; position:relative !important; }
   .ceo-message-block::before { background:#000 !important; }
+  .ceo-message-block::after {
+    content:'\2665'; position:absolute; right:-1.5rem; bottom:-2.5rem;
+    color:#ff5757; opacity:0.10; font-size:18rem; line-height:1;
+    pointer-events:none; transform:rotate(-8deg);
+  }
   .message-tagline { line-height:1.3 !important; margin-bottom:1.5rem !important; }
   .message-tagline, .message-tagline span { background:none !important; -webkit-text-fill-color:#000 !important; color:#000 !important; -webkit-background-clip:initial !important; background-clip:initial !important; }
+  .message-body { color:#000 !important; opacity:1 !important; }
+  .message-body strong { color:#000 !important; opacity:1 !important; font-weight:900 !important; }
   .news-item { background:#ffffff !important; border:1px solid #e5e7eb !important; }
   .news-item:hover { border-color:#000 !important; box-shadow:0 10px 28px -16px rgba(0,0,0,0.18) !important; }
   .news-badge { background:#fafbfc !important; border-color:#e5e7eb !important; color:#000 !important; }
@@ -521,7 +528,7 @@
 <section id="products">
   <div class="reveal">
     <div class="section-tag">WHAT WE DO</div>
-    <h2 class="section-title">AIが変える、<br><span class="accent">ビジネスのすべて。</span></h2>
+    <h2 class="section-title">作業は、<span class="accent">AIに。</span></h2>
     <p class="section-desc">自社プロダクトの開発から導入支援まで、AIによる事業変革をワンストップで提供します。</p>
   </div>
   <div class="products-grid reveal">
@@ -626,7 +633,7 @@
   </div>
 
   <div class="ceo-message-block reveal">
-    <div class="message-tagline">AIdollargame —<br><span>「AIで、人生を再定義する。」</span></div>
+    <div class="message-tagline">AIdollargame —<br><span>「AIで人生を再定義する。」</span></div>
     <div class="message-body"><strong>作業はAIに、人間には愛を。</strong>
 
 機械ができる作業に、人生を捧げるのはもう終わりにしましょう。
@@ -657,12 +664,11 @@
       <div class="team-role">LEAD ENGINEER / CTO</div>
       <div class="team-name">橋本 一輝</div>
       <div class="team-name-en">KAZUKI HASHIMOTO</div>
-      <p class="team-bio">AI・Web3・空間コンピューティングを横断するフルスタックエンジニア。世界水準の技術で、人間の熱量を取り戻すプロダクトを設計する。</p>
+      <p class="team-bio">私は、AIの最前線を実装し続けてきました。生成AI・ブロックチェーン・空間コンピューティング——次に来る技術の臨界点を、6年間ずっと最前線で見ています。私の仕事は、世界最高の「魔法」を、現場で本当に動くプロダクトに落とし込むこと。経営者の意思とエンジニアの精度、その両方を持ったチームでしか作れないものを、ここで作っています。</p>
       <div class="award-list">
-        <div class="award-item">Apple Vision Pro向けAIアプリ「VirtuAlly」— App Storeにてグローバルリリース</div>
-        <div class="award-item">Apple Foundation Models Hackathon — 優勝（2025）</div>
-        <div class="award-item">ETHGlobal Tokyo — Best Public Good with Account Abstraction（2023）</div>
-        <div class="award-item">学生ブロックチェーンハッカソン — 最優秀賞（2022）</div>
+        <div class="award-item">大手IT企業にて生成AI・ブロックチェーン・法人向け大規模アプリの新規事業を6年間リード</div>
+        <div class="award-item">Apple Vision Pro向けAIアプリ「VirtuAlly」— App Storeにてグローバルリリース／Apple Foundation Models Hackathon 優勝（2025）</div>
+        <div class="award-item">大手主導のWeb3ゲームプロジェクトに参画 — NFT売買機能の実装、次世代ゲームエコシステム設計に貢献</div>
       </div>
     </div>
   </div>
@@ -817,10 +823,10 @@
       <button class="btn-primary" style="align-self:flex-start;font-size:0.9rem;cursor:pointer;">送信する →</button>
     </form>
     <div class="contact-info">
-      <div class="info-item"><div class="info-text"><h4>EMAIL</h4><p><a href="mailto:nosuke@aidollargame.com" style="color:var(--cyan);text-decoration:none;">nosuke@aidollargame.com</a></p></div></div>
-      <div class="info-item"><div class="info-text"><h4>COMPANY</h4><p>株式会社AIdollargame</p></div></div>
-      <div class="info-item"><div class="info-text"><h4>WEBSITE</h4><p>aidollargame.com</p></div></div>
-      <div class="info-item"><div class="info-text"><h4>SERVICES</h4><p>SNS AI Agent<br>AI Consulting & Reskilling<br>Apomeru</p></div></div>
+      <div class="info-item"><div class="info-text"><h4>メール</h4><p><a href="mailto:nosuke@aidollargame.com" style="color:var(--cyan);text-decoration:none;">nosuke@aidollargame.com</a></p></div></div>
+      <div class="info-item"><div class="info-text"><h4>会社名</h4><p>株式会社AIdollargame</p></div></div>
+      <div class="info-item"><div class="info-text"><h4>ウェブサイト</h4><p>aidollargame.com</p></div></div>
+      <div class="info-item"><div class="info-text"><h4>プロダクト・サービス</h4><p>SNS AIエージェント<br>社長クローンAI（AIwill）<br>付き人AI（AIside）<br>AIコンサルティング・社員リスキリング研修<br>AI活用診断ツール</p></div></div>
     </div>
   </div>
 </section>

@@ -25,30 +25,152 @@
 <meta name="twitter:description" content="AI秘書AIside・AIwill（社長クローン）・SNS AIエージェントなど、人間が「愛」に集中できる時間を作るプロダクトを提供。">
 <meta name="twitter:image" content="https://aidollargame.com/og-default.png">
 
+<!-- Structured Data: Organization (entity hub — すべてのプロダクトをこの法人に紐付ける) -->
+<!-- ▼ sameAs に公式SNS/外部プロフィールのURLを入れると、AI・Googleの実体識別が一気に正確になります（同住所の他社との誤連結対策にも有効） -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "AIdollargame",
-  "alternateName": "株式会社AIdollargame",
+  "@id": "https://aidollargame.com/#organization",
+  "name": "株式会社AIdollargame",
+  "legalName": "株式会社AIdollargame",
+  "alternateName": ["AIdollargame", "アイドルガゲーム"],
   "url": "https://aidollargame.com/",
-  "logo": "https://aidollargame.com/og-default.png",
-  "description": "作業はAIに、人間には愛を。AIで人間が「愛」に集中できる時間を作る企業。",
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https://aidollargame.com/og-default.png"
+  },
+  "image": "https://aidollargame.com/og-default.png",
+  "description": "作業はAIに、人間には愛を。株式会社AIdollargameは、AI秘書AIside・AIwill（社長クローン）・SNS AIエージェントなどのAIプロダクト開発と、AIコンサルティング・導入支援を提供する企業です。",
+  "slogan": "作業はAIに、人間には愛を。",
+  "foundingDate": "2025-04-08",
+  "email": "nosuke@aidollargame.com",
   "founder": {
     "@type": "Person",
+    "@id": "https://aidollargame.com/#founder",
     "name": "佐藤徳之介",
-    "alternateName": "NORINOSUKE SATO"
+    "alternateName": "NORINOSUKE SATO",
+    "jobTitle": "代表取締役 CEO"
+  },
+  "knowsAbout": [
+    "AIエージェント", "生成AI導入", "LINE公式アカウントの自動化", "AIコンサルティング", "社員リスキリング研修", "AI秘書", "社長クローンAI", "DX推進"
+  ],
+  "areaServed": "JP",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "email": "nosuke@aidollargame.com",
+    "contactType": "customer support",
+    "availableLanguage": ["ja"]
+  },
+  "sameAs": [],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "AIdollargame プロダクト・サービス",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "SoftwareApplication",
+          "name": "SNS AIエージェント",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web, LINE",
+          "description": "LINEをはじめとするSNSにAIエージェントを搭載し、顧客対応・CRM連携した予約管理・情報発信を24時間365日自動化。不動産・介護福祉業界での導入実績あり。",
+          "url": "https://aidollargame.com/line-ai-agent.html",
+          "provider": { "@id": "https://aidollargame.com/#organization" }
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "SoftwareApplication",
+          "name": "AIwill（社長クローンAI）",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "description": "経営者の思考・判断・経験をAIにインプットし、後継者不足の課題を解決する人間クローン型AI。社長の意思決定をいつでも参照可能。",
+          "url": "https://aidollargame.com/human-clone-ai.html",
+          "provider": { "@id": "https://aidollargame.com/#organization" }
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "SoftwareApplication",
+          "name": "AIside（アイサイド）／ あなたの付き人AI",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "description": "一人社長・フリーランス・多忙な経営者のもう一人の自分として、Gmail・カレンダー・Slackなど既存ツールを横断し、覚えて・先回りして・つなぐ付き人AI。",
+          "url": "https://aidollargame.com/aiside.html",
+          "provider": { "@id": "https://aidollargame.com/#organization" }
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "AIコンサルティング・導入支援",
+          "serviceType": "AIコンサルティング",
+          "description": "AI導入戦略の立案からDX推進・社員リスキリングまで一貫支援。新規事業企画にも対応し、「使えるAI」を組織に根付かせる。",
+          "url": "https://aidollargame.com/ai-consulting.html",
+          "provider": { "@id": "https://aidollargame.com/#organization" }
+        }
+      }
+    ]
   }
 }
 </script>
 
+<!-- Structured Data: WebSite -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": "https://aidollargame.com/#website",
   "name": "AIdollargame",
   "url": "https://aidollargame.com/",
-  "inLanguage": "ja"
+  "inLanguage": "ja",
+  "publisher": { "@id": "https://aidollargame.com/#organization" }
+}
+</script>
+
+<!-- Structured Data: FAQ (AIが「AIdollargameとは/誰が/何を」を正しく引用できるようにする) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "AIdollargame（株式会社AIdollargame）はどんな会社ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "株式会社AIdollargameは「作業はAIに、人間には愛を。」を掲げ、AI秘書AIside・AIwill（社長クローンAI）・SNS AIエージェントなどの自社AIプロダクト開発と、AIコンサルティング・導入支援を提供する企業です。2025年4月に設立されました。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "AIdollargameの代表者は誰ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "代表取締役CEOは佐藤徳之介（英字表記：NORINOSUKE SATO）です。SNS運用での疲弊体験を原点に、「人間が愛に集中できる時間をAIで取り戻す」ことを掲げて株式会社AIdollargameを創業しました。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "AIdollargameはどんなプロダクト・サービスを提供していますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "主なプロダクトは、(1)SNS AIエージェント（LINE等のSNSを24時間自動化）、(2)AIwill（社長クローンAI／経営者の判断をAI化）、(3)AIside（経営者の付き人AI）です。加えて、AIコンサルティング・導入支援とリスキリング研修を提供しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "AIdollargameへの問い合わせ・相談はどうすればよいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "公式サイト https://aidollargame.com/ のお問い合わせフォーム、またはメール nosuke@aidollargame.com から連絡できます。AI導入・プロダクト・研修に関する無料相談を受け付けています。"
+      }
+    }
+  ]
 }
 </script>
 

@@ -72,6 +72,15 @@
   .step-num{font-family:'Share Tech Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--cyan);min-width:48px;line-height:1.2;}
   .step-body h4{font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:0.5rem;}
   .step-body p{font-size:0.9rem;color:rgba(238,243,255,0.8);line-height:1.9;margin-bottom:0;}
+  .calc{background:rgba(0,216,255,0.05);border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:1.8rem 2rem;margin:2.5rem 0;}
+  .calc .clabel{font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.22em;color:var(--cyan);margin-bottom:1rem;}
+  .calc .crow{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;padding:0.6rem 0;border-bottom:1px dashed rgba(255,255,255,0.1);font-size:0.92rem;}
+  .calc .crow:last-of-type{border-bottom:none;}
+  .calc .crow span:first-child{color:rgba(238,243,255,0.8);}
+  .calc .crow span:last-child{color:#fff;font-weight:700;white-space:nowrap;}
+  .calc .cresult{margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(0,216,255,0.25);font-size:1.05rem;font-weight:900;color:#fff;text-align:center;line-height:1.6;}
+  .calc .cresult b{color:var(--cyan);}
+  .calc .cnote{font-size:0.76rem;color:var(--muted);line-height:1.7;margin-top:1rem;}
   .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
   .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
   .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
@@ -131,6 +140,22 @@
   </div>
 </div>
 
+<h2>どれくらい時間が戻るのか、試算してみる</h2>
+
+<p>「で、結局どれだけ効果があるの？」と思うはずだ。正直に言うと、弊社はまだ創業まもなく、誇れる導入実績の数字を並べる段階にはない。だから、ここでは<strong>実績ではなく「試算（モデルケース）」</strong>として、効果の考え方を示す。前提さえ分かれば、あなたの会社の数字を当てはめて計算できる。</p>
+
+<div class="calc">
+  <div class="clabel">▷ モデルケース：問い合わせ対応をAI化した場合</div>
+  <div class="crow"><span>1日に問い合わせ対応へ使う時間</span><span>2時間</span></div>
+  <div class="crow"><span>AIが巻き取れる割合（定型的なもの）</span><span>約8割</span></div>
+  <div class="crow"><span>1日あたり戻る時間</span><span>約1.6時間</span></div>
+  <div class="crow"><span>月20営業日で</span><span>約32時間</span></div>
+  <div class="cresult">月に <b>約32時間</b> ＝ ほぼ <b>4営業日分</b> が戻る計算</div>
+  <div class="cnote">※ これはあくまで前提を置いた試算であり、実際の導入実績ではありません。対象業務・自動化の範囲・運用方法によって結果は変わります。自社の「1日に使っている時間」を当てはめると、おおよその目安が出せます。</div>
+</div>
+
+<p>大事なのは数字の大きさより、<strong>「自分の会社だと、どの業務に何時間使っているか」を一度可視化すること</strong>だ。そこが見えれば、AIで戻る時間も、その時間を何に使い直せるかも、具体的に考えられるようになる。</p>
+
 <h2>やってはいけない3つの失敗</h2>
 
 <p>逆に、これをやると失敗する。</p>
@@ -150,7 +175,7 @@
 
 <div class="cta">
   <h3>あなたの会社の「最初の1つ」を一緒に見つけます</h3>
-  <p>現状の業務をうかがって、最も効果が出るAI活用の第一歩を無料で提案します。何から始めるか、だけでも相談してください。</p>
+  <p>現状の業務をうかがって、最も効果が出るAI活用の第一歩と、御社の数字での試算を無料でお出しします。何から始めるか、だけでも相談してください。</p>
   <div class="cta-row">
     <a href="../index.html#contact" class="btn">無料相談を予約する →</a>
     <a href="./what-is-ai-consulting.html" class="btn-ghost">導入支援の中身を見る →</a>

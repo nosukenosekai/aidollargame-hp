@@ -94,8 +94,8 @@
   }
   .hero-eyebrow::before { content:''; display:inline-block; width:22px; height:1px; background:#000; }
   .hero-title {
-    font-size:clamp(2.1rem,4vw,3.4rem); font-weight:900; line-height:1.4;
-    margin-bottom:1.6rem; color:#000; letter-spacing:-0.01em;
+    font-size:clamp(2rem,3.6vw,3.1rem); font-weight:900; line-height:1.45;
+    margin-bottom:1.6rem; color:#000; letter-spacing:-0.01em; word-break:keep-all;
   }
   .hero-title .em { color:#ff5757; }
   .hero-sub { font-size:1.02rem; color:#000; line-height:2.1; margin-bottom:2.4rem; max-width:520px; }
@@ -121,6 +121,9 @@
     padding:2.3rem 2rem; box-shadow:var(--shadow-lg);
   }
   .trust-card .tc-title { font-size:0.78rem; letter-spacing:0.16em; color:#000; font-weight:700; margin-bottom:1.6rem; }
+  .trust-point { font-size:0.95rem; font-weight:600; color:#000; line-height:1.85; padding:1.1rem 0; border-bottom:1px solid var(--line); display:flex; gap:0.7rem; }
+  .trust-point:last-child { border-bottom:none; padding-bottom:0; }
+  .trust-point::before { content:'—'; color:#ff5757; font-weight:900; flex-shrink:0; }
   .trust-row {
     display:flex; justify-content:space-between; align-items:baseline; padding:1.05rem 0;
     border-bottom:1px solid var(--line);
@@ -279,24 +282,18 @@
   <div class="hero-grid">
     <div>
       <div class="hero-eyebrow">AIコンサルティング・導入支援</div>
-      <h1 class="hero-title">AIを、<span class="em">会社の武器</span>に変える</h1>
-      <p class="hero-sub">
-        「何から始めればいいか分からない」「現場が使いこなせない」——<br>
-        その状態のまま、競合に半歩先を譲り続けますか。<br><br>
-        <strong>AIdollargame</strong>は、自社でAIプロダクトを開発・運用してきた経験を、そのままあなたの現場に持ち込みます。戦略立案から運用伴走まで一気通貫で、AIを「使える組織」に変える伴走者です。
-      </p>
+      <h1 class="hero-title">AIを、<br><span class="em">会社の武器</span>に変える</h1>
+      <p class="hero-sub"><strong>AIdollargame</strong>は自社でAIプロダクトを開発・運用してきたチームです。その経験をそのまま現場に持ち込み、戦略立案から運用まで一気通貫でAIを「使える組織」に変える伴走をします。</p>
       <div class="hero-actions">
         <a href="#cta" class="btn-primary">無料相談を予約する</a>
         <a href="#pillars" class="btn-ghost">サービス内容を見る</a>
       </div>
     </div>
     <div class="trust-card">
-      <div class="tc-title">私たちの立ち位置</div>
-      <div class="trust-row"><div class="k">自社AIプロダクト</div><div class="v">3 <span class="unit">事業</span></div></div>
-      <div class="trust-row"><div class="k">CTOのAI実装歴</div><div class="v">6 <span class="unit">年</span></div></div>
-      <div class="trust-row"><div class="k">対応業種</div><div class="v">6 <span class="unit">業界以上</span></div></div>
-      <div class="trust-row"><div class="k">初回相談</div><div class="v">無料</div></div>
-      <div class="trust-row"><div class="k">料金体系</div><div class="v">個別見積もり</div></div>
+      <div class="tc-title">3行でわかるAIdollargame</div>
+      <div class="trust-point">自社でAIプロダクトを開発・運用するチームがそのまま現場に入ります</div>
+      <div class="trust-point">戦略・実装・研修・運用・経営まで一気通貫で伴走します</div>
+      <div class="trust-point">初回相談は無料。料金は業務に合わせた個別見積もりです</div>
     </div>
   </div>
 </section>

@@ -1,3 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <path fill="#ff5757" d="M16 28S4 20 4 12a6 6 0 0 1 12-3 6 6 0 0 1 12 3c0 8-12 16-12 16z"/>
+  <rect width="32" height="32" rx="6" fill="#ffffff"/>
+  <text x="16" y="25" text-anchor="middle" font-family="Helvetica Neue, Arial Black, Arial, sans-serif" font-weight="900" font-size="22" fill="#000" letter-spacing="-1">Aı</text>
+  <path fill="#ff5757" d="M22.5 5.5 C 21.7 5.5 21.1 5.95 20.8 6.5 C 20.5 5.95 19.9 5.5 19.1 5.5 C 17.95 5.5 17 6.4 17 7.55 C 17 9.5 20.8 11.5 20.8 11.5 C 20.8 11.5 24.6 9.5 24.6 7.55 C 24.6 6.4 23.65 5.5 22.5 5.5 Z"/>
 </svg>

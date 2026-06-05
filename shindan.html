@@ -7,7 +7,7 @@
 <meta name="description" content="3分でわかるAI活用診断。今の悩みから、AIdollargameのどのソリューションが合うかを診断します。">
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
-  :root{ --cyan:#00d8ff; --blue:#1a6dff; --accent:#ff5757; --navy:#0a1238; --text:#eef3ff; --muted:#9aa8d0; }
+  :root{ --cyan:#00d8ff; --blue:#000; --accent:#ff5757; --navy:#0a1238; --text:#eef3ff; --muted:#9aa8d0; }
   *{margin:0;padding:0;box-sizing:border-box;}
   html{background:#0a1238;-webkit-text-size-adjust:100%;}
   body{min-height:100vh;background:radial-gradient(1200px 700px at 50% -10%,rgba(26,109,255,.18),transparent 60%),linear-gradient(180deg,#0a1238 0%,#0c1542 55%,#0a1340 100%);background-attachment:fixed;color:var(--text);font-family:'Noto Sans JP',sans-serif;line-height:1.8;display:flex;flex-direction:column;overflow-x:hidden;}
@@ -35,13 +35,13 @@
   .meta-row .m::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--cyan);display:inline-block;}
   .meta-row .m b{color:var(--cyan);font-weight:400;}
   .center{text-align:center;}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;padding:1.05rem 2.6rem;color:#001428;font-weight:700;font-size:1.02rem;border-radius:10px;background:linear-gradient(110deg,#00d8ff,#1a6dff 55%,#00d8ff);background-size:220% 100%;border:none;cursor:pointer;text-decoration:none;transition:transform .25s,box-shadow .4s,background-position .6s;font-family:'Noto Sans JP',sans-serif;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;padding:1.05rem 2.6rem;color:#001428;font-weight:700;font-size:1.02rem;border-radius:10px;background:linear-gradient(110deg,#00d8ff,#000 55%,#00d8ff);background-size:220% 100%;border:none;cursor:pointer;text-decoration:none;transition:transform .25s,box-shadow .4s,background-position .6s;font-family:'Noto Sans JP',sans-serif;}
   .btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px -8px rgba(0,216,255,.6);background-position:100% 0;}
 
   /* ===== QUESTION ===== */
   .progress{display:flex;gap:7px;margin-bottom:.7rem;justify-content:center;}
   .progress span{width:38px;height:4px;border-radius:3px;background:rgba(255,255,255,.12);transition:.4s;}
-  .progress span.on{background:linear-gradient(90deg,#00d8ff,#1a6dff);box-shadow:0 0 12px rgba(0,216,255,.5);}
+  .progress span.on{background:linear-gradient(90deg,#00d8ff,#000);box-shadow:0 0 12px rgba(0,216,255,.5);}
   .qcount{text-align:center;font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.25em;color:var(--muted);margin-bottom:1.6rem;}
   .qtitle{font-size:clamp(1.35rem,3.6vw,1.8rem);font-weight:900;text-align:center;line-height:1.45;margin-bottom:2rem;}
   .opts{display:grid;gap:.85rem;}
@@ -94,28 +94,28 @@
 
 /* ============ LIGHT THEME OVERRIDE ============ */
 html { background:#ffffff !important; }
-body { background:#ffffff !important; color:#0e1a2b !important; }
+body { background:#ffffff !important; color:#000 !important; }
 body::before { display:none !important; }
 nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
-.logo { color:#0e1a2b !important; }
-.logo .ai { color:#0e1a2b !important; text-shadow:none !important; }
-.back-link { color:#6b7280 !important; }
-.back-link:hover { color:#0e1a2b !important; }
-h1, h2 { color:#0e1a2b !important; }
-.page-tag { color:#6b7280 !important; }
-.page-tag::before { background:#6b7280 !important; }
-.updated { color:#94a3b8 !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.back-link { color:#000 !important; }
+.back-link:hover { color:#000 !important; }
+h1, h2 { color:#000 !important; }
+.page-tag { color:#000 !important; }
+.page-tag::before { background:#000 !important; }
+.updated { color:#000 !important; }
 .table-wrap { background:#ffffff !important; border:1px solid #e5e7eb !important; }
 tr { border-bottom:1px solid #f1f3f6 !important; }
-th { color:#0e1a2b !important; background:#fafbfc !important; }
-td { color:#475569 !important; }
-td a { color:#1a6dff !important; }
-.section { background:#ffffff !important; border:1px solid #e5e7eb !important; border-left-color:#1a6dff !important; }
-p, ul li { color:#475569 !important; }
-ul li::before { color:#1a6dff !important; }
-a { color:#1a6dff !important; }
-footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#6b7280 !important; }
-footer a { color:#6b7280 !important; }
+th { color:#000 !important; background:#fafbfc !important; }
+td { color:#000 !important; }
+td a { color:#000 !important; }
+.section { background:#ffffff !important; border:1px solid #e5e7eb !important; border-left-color:#000 !important; }
+p, ul li { color:#000 !important; }
+ul li::before { color:#000 !important; }
+a { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
+footer a { color:#000 !important; }
 </style>
 </head>
 <body>

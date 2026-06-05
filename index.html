@@ -69,7 +69,7 @@
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior:smooth; background:#0a1238; }
-  body { background:linear-gradient(180deg, #0a1238 0%, #0c1542 50%, #0a1340 100%); color:var(--text); font-family:'Noto Sans JP',sans-serif; overflow-x:hidden; }
+  body { background:linear-gradient(180deg, #0a1238 0%, #0c1542 50%, #0a1340 100%); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; overflow-x:hidden; }
   #canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
   /* OZ-style ambient — soft cyan/blue mesh, no rainbow */
   .bg-mesh {
@@ -89,35 +89,35 @@
   }
 
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.2rem 3rem; background:rgba(6,9,26,0.78); backdrop-filter:blur(20px); border-bottom:1px solid rgba(0,245,255,0.1); }
-  .logo { font-family:'Rajdhani',sans-serif; font-size:1.4rem; font-weight:700; color:white; }
+  .logo { font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; font-size:1.4rem; font-weight:700; color:white; }
   .logo .ai { color:var(--cyan); text-shadow:0 0 20px rgba(0,245,255,0.6); }
   .logo .heart-i { position:relative; display:inline-block; line-height:1; color:#ff5757 !important; }
   .logo .heart-i::after { content:'\2665'; position:absolute; left:50%; bottom:75%; transform:translateX(-50%); font-size:0.42em; line-height:1; color:#ff5757 !important; pointer-events:none; }
   nav ul { display:flex; list-style:none; gap:2.5rem; align-items:center; }
-  nav a { color:var(--muted); text-decoration:none; font-size:0.82rem; letter-spacing:0.12em; transition:color 0.3s; font-family:'Share Tech Mono',monospace; }
+  nav a { color:var(--muted); text-decoration:none; font-size:0.82rem; letter-spacing:0.12em; transition:color 0.3s; font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; }
   nav a:hover { color:var(--cyan); }
-  .nav-cta { padding:0.55rem 1.2rem; background:var(--grad); color:#000 !important; font-weight:700; font-family:'Noto Sans JP',sans-serif !important; font-size:0.78rem !important; letter-spacing:0.08em; border-radius:6px; box-shadow:0 4px 18px -4px rgba(0,216,255,0.5); }
+  .nav-cta { padding:0.55rem 1.2rem; background:var(--grad); color:#000 !important; font-weight:700; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif !important; font-size:0.78rem !important; letter-spacing:0.08em; border-radius:6px; box-shadow:0 4px 18px -4px rgba(0,216,255,0.5); }
   .nav-cta:hover { transform:translateY(-1px); }
 
   #hero { position:relative; z-index:2; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:8rem 2rem 4rem; overflow:hidden; }
-  .hero-eyebrow { font-family:'Share Tech Mono',monospace; font-size:0.75rem; letter-spacing:0.4em; color:var(--cyan); margin-bottom:1.5rem; opacity:0; animation:fadeUp 0.8s 0.3s forwards; }
+  .hero-eyebrow { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.75rem; letter-spacing:0.4em; color:var(--cyan); margin-bottom:1.5rem; opacity:0; animation:fadeUp 0.8s 0.3s forwards; }
   .hero-title { font-size:clamp(3rem,7vw,6.5rem); font-weight:900; line-height:1.2; margin-bottom:1.5rem; opacity:0; animation:fadeUp 0.8s 0.5s forwards; }
   .hero-title .line1 { display:block; color:white; padding:0.08em 0; }
   .hero-title .line2 { display:block; padding:0.08em 0; background:linear-gradient(90deg,var(--cyan),var(--blue),var(--cyan)); background-size:200% 100%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:gradFlow 6s linear infinite; }
   @keyframes gradFlow { 0%{background-position:0% 0%;} 100%{background-position:200% 0%;} }
   .hero-sub { font-size:1.05rem; color:var(--muted); max-width:560px; line-height:1.9; margin-bottom:3rem; opacity:0; animation:fadeUp 0.8s 0.7s forwards; }
   .hero-cta { display:flex; gap:1rem; opacity:0; animation:fadeUp 0.8s 0.9s forwards; flex-wrap:wrap; justify-content:center; }
-  .btn-primary { padding:0.95rem 2.4rem; background:var(--grad); color:#000; font-weight:700; border:none; cursor:pointer; font-family:'Noto Sans JP',sans-serif; font-size:0.9rem; letter-spacing:0.05em; clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%); transition:transform 0.2s,box-shadow 0.2s; text-decoration:none; display:inline-block; }
+  .btn-primary { padding:0.95rem 2.4rem; background:var(--grad); color:#000; font-weight:700; border:none; cursor:pointer; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; font-size:0.9rem; letter-spacing:0.05em; clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%); transition:transform 0.2s,box-shadow 0.2s; text-decoration:none; display:inline-block; }
   .btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(0,216,255,0.5); }
-  .btn-outline { padding:0.95rem 2.4rem; background:rgba(255,255,255,0.04); color:var(--cyan); border:1px solid var(--cyan); cursor:pointer; font-family:'Noto Sans JP',sans-serif; font-size:0.9rem; letter-spacing:0.05em; clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%); transition:all 0.2s; text-decoration:none; display:inline-block; }
+  .btn-outline { padding:0.95rem 2.4rem; background:rgba(255,255,255,0.04); color:var(--cyan); border:1px solid var(--cyan); cursor:pointer; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; font-size:0.9rem; letter-spacing:0.05em; clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%); transition:all 0.2s; text-decoration:none; display:inline-block; }
   .btn-outline:hover { background:rgba(0,245,255,0.12); }
   .glitch-badge { position:absolute; bottom:1rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:0.4rem; opacity:0; animation:fadeUp 0.8s 1.2s forwards; pointer-events:none; }
   .glitch-badge .scroll-line { height:40px; }
   .scroll-line { width:1px; height:60px; background:linear-gradient(to bottom,var(--cyan),transparent); animation:scrollPulse 2s infinite; }
-  .scroll-text { font-family:'Share Tech Mono',monospace; font-size:0.65rem; letter-spacing:0.3em; color:var(--muted); }
+  .scroll-text { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.65rem; letter-spacing:0.3em; color:var(--muted); }
 
   section { position:relative; z-index:2; padding:7rem 4rem; max-width:1200px; margin:0 auto; }
-  .section-tag { font-family:'Share Tech Mono',monospace; font-size:0.7rem; letter-spacing:0.4em; color:var(--cyan); margin-bottom:1rem; display:flex; align-items:center; gap:0.8rem; }
+  .section-tag { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.7rem; letter-spacing:0.4em; color:var(--cyan); margin-bottom:1rem; display:flex; align-items:center; gap:0.8rem; }
   .section-tag::before { content:''; display:inline-block; width:30px; height:1px; background:var(--cyan); }
   .section-title { font-size:clamp(1.8rem,4vw,3rem); font-weight:900; line-height:1.2; margin-bottom:1.5rem; }
   .section-title .accent { background:linear-gradient(90deg,var(--cyan),var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
@@ -138,11 +138,11 @@
   .product-card .glow { position:absolute; top:-100px; right:-100px; width:300px; height:300px; border-radius:50%; opacity:0.18; filter:blur(70px); pointer-events:none; background:var(--cyan); animation:glowPulse 6s ease-in-out infinite; }
   @keyframes glowPulse { 0%,100% { opacity:0.14; transform:scale(1); } 50% { opacity:0.22; transform:scale(1.06); } }
 
-  .card-num { font-family:'Share Tech Mono',monospace; font-size:0.65rem; letter-spacing:0.3em; margin-bottom:0.8rem; color:var(--cyan); }
+  .card-num { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.65rem; letter-spacing:0.3em; margin-bottom:0.8rem; color:var(--cyan); }
   .card-title { font-size:1.4rem; font-weight:700; margin-bottom:1rem; line-height:1.4; color:#fff; }
   .card-desc { color:var(--muted); font-size:0.9rem; line-height:1.95; }
   .card-tags { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.5rem; }
-  .tag { font-family:'Share Tech Mono',monospace; font-size:0.65rem; padding:0.3rem 0.8rem; border:1px solid rgba(0,216,255,0.25); color:var(--cyan); border-radius:3px; }
+  .tag { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.65rem; padding:0.3rem 0.8rem; border:1px solid rgba(0,216,255,0.25); color:var(--cyan); border-radius:3px; }
 
   /* Unified CTA — single cyan gradient, clean shimmer */
   .card-actions { display:flex; gap:0.8rem; margin-top:2rem; flex-wrap:wrap; }
@@ -295,10 +295,10 @@
   .team-card.ceo { border-color:rgba(0,216,255,0.22); }
   .team-photo-wrap { margin-bottom:2rem; }
   .ceo-photo { width:120px; height:120px; border-radius:50%; object-fit:cover; border:2px solid rgba(0,216,255,0.4); box-shadow:0 0 30px rgba(0,216,255,0.2); display:block; }
-  .ceo-photo-placeholder { width:120px; height:120px; border-radius:50%; border:1px dashed rgba(255,255,255,0.2); background:rgba(255,255,255,0.03); display:flex; align-items:center; justify-content:center; font-size:0.7rem; color:var(--muted); font-family:'Share Tech Mono',monospace; letter-spacing:0.15em; }
-  .team-role { font-family:'Share Tech Mono',monospace; font-size:0.68rem; letter-spacing:0.25em; color:var(--cyan); margin-bottom:0.4rem; }
+  .ceo-photo-placeholder { width:120px; height:120px; border-radius:50%; border:1px dashed rgba(255,255,255,0.2); background:rgba(255,255,255,0.03); display:flex; align-items:center; justify-content:center; font-size:0.7rem; color:var(--muted); font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; letter-spacing:0.15em; }
+  .team-role { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.68rem; letter-spacing:0.25em; color:var(--cyan); margin-bottom:0.4rem; }
   .team-name { font-size:1.5rem; font-weight:900; margin-bottom:0.3rem; color:#fff; }
-  .team-name-en { font-family:'Rajdhani',sans-serif; font-size:0.85rem; color:var(--muted); margin-bottom:1.5rem; letter-spacing:0.1em; }
+  .team-name-en { font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; font-size:0.85rem; color:var(--muted); margin-bottom:1.5rem; letter-spacing:0.1em; }
   .team-bio { font-size:0.85rem; color:var(--muted); line-height:2; margin-bottom:1.5rem; }
   .award-list { display:flex; flex-direction:column; gap:0.7rem; padding-top:1.4rem; border-top:1px solid rgba(255,255,255,0.08); }
   .award-item { display:flex; gap:0.9rem; align-items:flex-start; font-size:0.78rem; color:var(--text); line-height:1.5; }
@@ -319,8 +319,8 @@
   .news-list { display:flex; flex-direction:column; gap:0.8rem; margin-top:3rem; }
   .news-item { display:grid; grid-template-columns:120px 100px 1fr auto; align-items:center; gap:1.5rem; padding:1.4rem 1.8rem; background:linear-gradient(180deg, rgba(20,28,55,0.7), rgba(10,16,40,0.8)); border:1px solid rgba(255,255,255,0.06); transition:all 0.3s; text-decoration:none; color:inherit; border-radius:6px; }
   .news-item:hover { border-color:rgba(0,216,255,0.3); transform:translateX(4px); }
-  .news-date { font-family:'Share Tech Mono',monospace; font-size:0.78rem; color:var(--muted); white-space:nowrap; }
-  .news-badge { font-family:'Share Tech Mono',monospace; font-size:0.62rem; padding:0.3rem 0.7rem; border:1px solid; white-space:nowrap; text-align:center; border-radius:3px; font-weight:700; letter-spacing:0.08em; }
+  .news-date { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.78rem; color:var(--muted); white-space:nowrap; }
+  .news-badge { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.62rem; padding:0.3rem 0.7rem; border:1px solid; white-space:nowrap; text-align:center; border-radius:3px; font-weight:700; letter-spacing:0.08em; }
   .news-badge.launch { border-color:var(--cyan); color:var(--cyan); background:rgba(0,216,255,0.06); }
   .news-badge.company { border-color:rgba(255,255,255,0.5); color:rgba(255,255,255,0.85); background:rgba(255,255,255,0.04); }
   .news-badge.partner { border-color:var(--accent); color:var(--accent); background:rgba(255,87,87,0.06); }
@@ -334,17 +334,17 @@
   .contact-grid { display:grid; grid-template-columns:1fr 1fr; gap:4rem; margin-top:4rem; align-items:start; }
   .contact-form { display:flex; flex-direction:column; gap:1rem; }
   .form-group { display:flex; flex-direction:column; gap:0.4rem; }
-  .form-label { font-family:'Share Tech Mono',monospace; font-size:0.7rem; letter-spacing:0.2em; color:var(--muted); }
-  .form-input,.form-textarea { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); padding:0.9rem 1.2rem; color:var(--text); font-family:'Noto Sans JP',sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.3s; border-radius:5px; }
+  .form-label { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.7rem; letter-spacing:0.2em; color:var(--muted); }
+  .form-input,.form-textarea { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); padding:0.9rem 1.2rem; color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.3s; border-radius:5px; }
   .form-input:focus,.form-textarea:focus { border-color:var(--cyan); background:rgba(0,245,255,0.04); }
   .form-textarea { min-height:140px; resize:vertical; }
   .contact-info { display:flex; flex-direction:column; gap:1.8rem; }
   .info-item { display:flex; flex-direction:column; gap:0.4rem; padding-left:1rem; border-left:2px solid; border-image:linear-gradient(180deg,var(--cyan),var(--blue)) 1; }
-  .info-text h4 { font-size:0.8rem; font-family:'Share Tech Mono',monospace; letter-spacing:0.2em; color:var(--muted); margin-bottom:0.3rem; }
+  .info-text h4 { font-size:0.8rem; font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; letter-spacing:0.2em; color:var(--muted); margin-bottom:0.3rem; }
   .info-text p { font-size:0.95rem; color:var(--text); }
 
   footer { position:relative; z-index:2; border-top:1px solid rgba(255,255,255,0.08); padding:3rem 4rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; background:rgba(6,9,26,0.6); }
-  .footer-copy { font-size:0.78rem; color:var(--muted); font-family:'Share Tech Mono',monospace; }
+  .footer-copy { font-size:0.78rem; color:var(--muted); font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; }
   .divider { position:relative; z-index:2; width:100%; height:1px; background:linear-gradient(90deg,transparent,rgba(0,245,255,0.2),transparent); }
 
   /* ARTICLES */
@@ -356,13 +356,13 @@
   .article-body-inner { padding:1.8rem; flex:1; display:flex; flex-direction:column; gap:0.6rem; }
   .article-img { height:130px; background-size:cover; background-position:center; position:relative; overflow:hidden; flex-shrink:0; background-color:rgba(0,216,255,0.05); }
   .article-img::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(10,18,56,0.2) 0%,rgba(10,18,56,0.55) 100%); }
-  .article-cat { font-family:'Share Tech Mono',monospace; font-size:0.62rem; letter-spacing:0.25em; color:var(--cyan); }
-  .article-date { font-family:'Share Tech Mono',monospace; font-size:0.65rem; color:var(--muted); }
+  .article-cat { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.62rem; letter-spacing:0.25em; color:var(--cyan); }
+  .article-date { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.65rem; color:var(--muted); }
   .article-title-card { font-size:0.98rem; font-weight:700; line-height:1.6; color:#fff; margin-top:0.2rem; }
   .article-desc { font-size:0.82rem; color:var(--muted); line-height:1.85; flex:1; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
-  .article-link { font-family:'Share Tech Mono',monospace; font-size:0.68rem; color:var(--cyan); letter-spacing:0.1em; margin-top:auto; padding-top:0.8rem; border-top:1px solid rgba(255,255,255,0.06); }
+  .article-link { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.68rem; color:var(--cyan); letter-spacing:0.1em; margin-top:auto; padding-top:0.8rem; border-top:1px solid rgba(255,255,255,0.06); }
   .articles-source { margin-top:2rem; text-align:right; }
-  .articles-source a { font-family:'Share Tech Mono',monospace; font-size:0.72rem; color:var(--muted); text-decoration:none; letter-spacing:0.1em; transition:color 0.3s; }
+  .articles-source a { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.72rem; color:var(--muted); text-decoration:none; letter-spacing:0.1em; transition:color 0.3s; }
   .articles-source a:hover { color:var(--cyan); }
 
   @keyframes fadeUp { from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);} }
@@ -502,7 +502,7 @@
 </nav>
 
 <section id="hero">
-  <div class="hero-eyebrow">AIで、人と人を ❤︎ でつなぐ。</div>
+  <div class="hero-eyebrow">AIで、人と人をつなぐ。</div>
   <h1 class="hero-title">
     <span class="line1">作業はAIに</span>
     <span class="line2">人間には愛を</span>
@@ -830,48 +830,40 @@
 <footer>
   <div class="logo">A<span class="heart-i">ı</span>dollargame</div>
   <div style="display:flex;gap:2rem;align-items:center;flex-wrap:wrap;">
-    <a href="privacy.html" style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--muted);text-decoration:none;letter-spacing:0.05em;transition:color 0.3s;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--muted)'">プライバシーポリシー</a>
-    <a href="tokushoho.html" style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--muted);text-decoration:none;letter-spacing:0.05em;transition:color 0.3s;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--muted)'">特定商取引法に基づく表記</a>
+    <a href="privacy.html" style="font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;color:var(--muted);text-decoration:none;letter-spacing:0.05em;transition:color 0.3s;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--muted)'">プライバシーポリシー</a>
+    <a href="tokushoho.html" style="font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;color:var(--muted);text-decoration:none;letter-spacing:0.05em;transition:color 0.3s;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='var(--muted)'">特定商取引法に基づく表記</a>
     <div class="footer-copy">© 2025 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
   </div>
 </footer>
 
 <script>
-/* Quiet AI network — slow, subtle nodes + thin links */
+/* Apple-style aurora mesh — slow drifting color blobs */
 const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d');
 function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
 resize();window.addEventListener('resize',resize);
-const N=70;
-const nodes=Array.from({length:N},()=>({
-  x:Math.random()*canvas.width,
-  y:Math.random()*canvas.height,
-  vx:(Math.random()-.5)*.15,
-  vy:(Math.random()-.5)*.15,
-  r:Math.random()*1.2+1
-}));
-const linkDist=150;
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  nodes.forEach(n=>{
-    n.x+=n.vx; n.y+=n.vy;
-    if(n.x<0||n.x>canvas.width)n.vx*=-1;
-    if(n.y<0||n.y>canvas.height)n.vy*=-1;
-  });
-  for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
-    const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);
-    if(d<linkDist){
-      const t=1-d/linkDist;
-      ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);
-      ctx.strokeStyle=`rgba(26,109,255,${t*0.22})`;ctx.lineWidth=0.6;ctx.stroke();
-    }
-  }
-  nodes.forEach(n=>{
-    ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
-    ctx.fillStyle='rgba(26,109,255,0.55)';ctx.fill();
+const blobs=[
+  {c:'0,216,255',  a:0.18, x:.22, y:.22, ax:.18, ay:.20, fx:.00021, fy:.00018, ph:0,   rs:.55},
+  {c:'26,109,255', a:0.16, x:.78, y:.30, ax:.16, ay:.22, fx:.00018, fy:.00024, ph:1.3, rs:.50},
+  {c:'255,150,200',a:0.10, x:.50, y:.78, ax:.20, ay:.18, fx:.00022, fy:.00020, ph:2.1, rs:.55},
+  {c:'255,200,120',a:0.07, x:.18, y:.82, ax:.18, ay:.20, fx:.00019, fy:.00023, ph:3.4, rs:.48},
+];
+function draw(t){
+  const W=canvas.width,H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+  const R=Math.max(W,H);
+  blobs.forEach(b=>{
+    const px=(b.x+Math.sin(t*b.fx+b.ph)*b.ax)*W;
+    const py=(b.y+Math.cos(t*b.fy+b.ph)*b.ay)*H;
+    const r=R*b.rs;
+    const g=ctx.createRadialGradient(px,py,0,px,py,r);
+    g.addColorStop(0,`rgba(${b.c},${b.a})`);
+    g.addColorStop(1,`rgba(${b.c},0)`);
+    ctx.fillStyle=g;
+    ctx.fillRect(0,0,W,H);
   });
   requestAnimationFrame(draw);
 }
-draw();
+requestAnimationFrame(draw);
 
 /* Reveal on scroll */
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.1});

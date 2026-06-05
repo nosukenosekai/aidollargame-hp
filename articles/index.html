@@ -30,22 +30,22 @@
   :root { --cyan:#00d8ff; --blue:#000; --accent:#ff5757; --dark:#0a1238; --text:#eef3ff; --muted:#9aa8d0; --grad:linear-gradient(135deg,#00d8ff,#000); }
   * { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior:smooth; background:#0a1238; }
-  body { background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%); color:var(--text); font-family:'Noto Sans JP',sans-serif; overflow-x:hidden; }
+  body { background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; overflow-x:hidden; }
   nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.2rem 3rem; background:rgba(6,9,26,0.88); backdrop-filter:blur(20px); border-bottom:1px solid rgba(0,245,255,0.1); }
-  .logo { font-family:'Rajdhani',sans-serif; font-size:1.4rem; font-weight:700; color:white; text-decoration:none; }
+  .logo { font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; font-size:1.4rem; font-weight:700; color:white; text-decoration:none; }
   .logo .ai { color:var(--cyan); text-shadow:0 0 20px rgba(0,245,255,0.6); }
   .logo .heart-i { position:relative; display:inline-block; line-height:1; color:#ff5757 !important; }
   .logo .heart-i::after { content:'\2665'; position:absolute; left:50%; bottom:75%; transform:translateX(-50%); font-size:0.42em; line-height:1; color:#ff5757 !important; pointer-events:none; }
-  .nav-home { font-family:'Share Tech Mono',monospace; font-size:0.78rem; letter-spacing:0.12em; color:var(--muted); text-decoration:none; transition:color 0.3s; }
+  .nav-home { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.78rem; letter-spacing:0.12em; color:var(--muted); text-decoration:none; transition:color 0.3s; }
   .nav-home:hover { color:var(--cyan); }
   .hero { padding:9rem 2rem 4rem; max-width:1100px; margin:0 auto; }
-  .section-tag { font-family:'Share Tech Mono',monospace; font-size:0.7rem; letter-spacing:0.4em; color:var(--cyan); margin-bottom:1rem; display:flex; align-items:center; gap:0.8rem; }
+  .section-tag { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.7rem; letter-spacing:0.4em; color:var(--cyan); margin-bottom:1rem; display:flex; align-items:center; gap:0.8rem; }
   .section-tag::before { content:''; display:inline-block; width:30px; height:1px; background:var(--cyan); }
   .hero h1 { font-size:clamp(2rem,5vw,3.5rem); font-weight:900; line-height:1.15; margin-bottom:1rem; }
   .hero p { color:var(--muted); font-size:1rem; line-height:2; }
   .articles-section { max-width:1100px; margin:0 auto; padding:2rem 2rem 8rem; }
   .filter-tabs { display:flex; gap:0.6rem; margin-bottom:2.5rem; flex-wrap:wrap; }
-  .filter-tab { font-family:'Share Tech Mono',monospace; font-size:0.68rem; letter-spacing:0.2em; padding:0.45rem 1.1rem; border-radius:20px; border:1px solid rgba(255,255,255,0.15); background:transparent; color:var(--muted); cursor:pointer; transition:all 0.25s; }
+  .filter-tab { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.68rem; letter-spacing:0.2em; padding:0.45rem 1.1rem; border-radius:20px; border:1px solid rgba(255,255,255,0.15); background:transparent; color:var(--muted); cursor:pointer; transition:all 0.25s; }
   .filter-tab:hover { border-color:rgba(0,216,255,0.4); color:var(--cyan); }
   .filter-tab.active { border-color:var(--cyan); color:var(--cyan); background:rgba(0,216,255,0.08); }
   .articles-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:1.8rem; }
@@ -56,21 +56,21 @@
   .card-color-bar.accent { background:linear-gradient(90deg,var(--accent),#ff9a9a); }
   .card-color-bar.blue { background:linear-gradient(90deg,var(--blue),var(--cyan)); }
   .card-body { padding:2rem; flex:1; display:flex; flex-direction:column; gap:0.8rem; }
-  .card-tag { font-family:'Share Tech Mono',monospace; font-size:0.65rem; letter-spacing:0.25em; color:var(--cyan); }
+  .card-tag { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.65rem; letter-spacing:0.25em; color:var(--cyan); }
   .card-tag.accent { color:var(--accent); }
-  .card-date { font-family:'Share Tech Mono',monospace; font-size:0.65rem; color:var(--muted); }
+  .card-date { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.65rem; color:var(--muted); }
   .card-title { font-size:1.05rem; font-weight:700; line-height:1.55; color:#fff; }
   .card-desc { font-size:0.85rem; color:var(--muted); line-height:1.85; flex:1; }
-  .card-link { font-family:'Share Tech Mono',monospace; font-size:0.68rem; color:var(--cyan); letter-spacing:0.1em; margin-top:auto; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.06); }
+  .card-link { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.68rem; color:var(--cyan); letter-spacing:0.1em; margin-top:auto; padding-top:1rem; border-top:1px solid rgba(255,255,255,0.06); }
   .card-image { height:150px; background-size:cover; background-position:center; position:relative; overflow:hidden; flex-shrink:0; }
   .card-image::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(10,18,56,0.25) 0%,rgba(10,18,56,0.65) 100%); }
   .contact-nudge { display:flex; align-items:center; gap:1.5rem; margin:3rem 0 0; padding:1.8rem 2rem; background:rgba(0,216,255,0.04); border:1px solid rgba(0,216,255,0.15); border-radius:10px; }
   .nudge-photo { width:52px; height:52px; border-radius:50%; object-fit:cover; object-position:center top; border:2px solid rgba(0,216,255,0.35); flex-shrink:0; }
   .nudge-body p { font-size:0.88rem; color:var(--muted); margin-bottom:0.4rem; line-height:1.6; }
-  .nudge-link { font-family:'Share Tech Mono',monospace; font-size:0.75rem; color:var(--cyan); text-decoration:none; letter-spacing:0.1em; transition:opacity 0.2s; }
+  .nudge-link { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.75rem; color:var(--cyan); text-decoration:none; letter-spacing:0.1em; transition:opacity 0.2s; }
   .nudge-link:hover { opacity:0.7; }
   footer { border-top:1px solid rgba(255,255,255,0.08); padding:2.5rem 3rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; background:rgba(6,9,26,0.6); }
-  .footer-copy { font-size:0.75rem; color:var(--muted); font-family:'Share Tech Mono',monospace; }
+  .footer-copy { font-size:0.75rem; color:var(--muted); font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; }
   @media(max-width:768px) { nav{padding:1rem 1.2rem;} .hero,.articles-section{padding-left:1.2rem;padding-right:1.2rem;} .articles-grid{grid-template-columns:1fr;} footer{padding:2rem 1.5rem;} }
 
 /* ============ LIGHT THEME OVERRIDE ============ */

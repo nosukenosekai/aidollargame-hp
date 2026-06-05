@@ -645,7 +645,7 @@
       <div class="team-role">REPRESENTATIVE DIRECTOR / CEO</div>
       <div class="team-name">佐藤 徳之介</div>
       <div class="team-name-en">NORINOSUKE SATO</div>
-      <p class="team-bio">私は、エンジニアのような精巧なプロダクトを作れません。だからこそ、AIが人間に何をもたらすべきか、誰よりも深く考えています。私の仕事は、世界最高のエンジニアたちが生み出す「魔法」を、あなたの人生における「感動」へと翻訳すること。「効率化」のその先にある人間の熱量を取り戻すために、このチームを率いています。技術と感情、戦略と現場——その翻訳者として、AIdollargameを動かしています。</p>
+      <p class="team-bio">私は、エンジニアのような精巧なプロダクトを作れません。だからこそ、AIが人間に何をもたらすべきか、誰よりも深く考えています。私の仕事は、世界最高のエンジニアたちが生み出す「魔法」を、あなたの人生における「感動」として届けること。「効率化」のその先にある人間の熱量を取り戻すために、このチームを率いています。技術と感情、戦略と現場——その橋渡し役として、AIdollargameを動かしています。</p>
       <div class="award-list">
         <div class="award-item">慶應義塾大学在学中にAI開発会社を起業</div>
         <div class="award-item">NEC PC社と「LAVIE SOL」を共同企画・開発 — 2025年3・4月 売上全国No.1</div>
@@ -837,65 +837,38 @@
 </footer>
 
 <script>
-/* Connected-by-heart network — AI nodes connect, hearts bloom at links */
+/* Quiet AI network — slow, subtle nodes + thin links */
 const canvas=document.getElementById('canvas'),ctx=canvas.getContext('2d');
 function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
 resize();window.addEventListener('resize',resize);
-const N=60;
+const N=70;
 const nodes=Array.from({length:N},()=>({
   x:Math.random()*canvas.width,
   y:Math.random()*canvas.height,
-  vx:(Math.random()-.5)*.35,
-  vy:(Math.random()-.5)*.35,
-  r:Math.random()*1.6+1.2
+  vx:(Math.random()-.5)*.15,
+  vy:(Math.random()-.5)*.15,
+  r:Math.random()*1.2+1
 }));
-const hearts=[];
-const linkDist=160;
-const heartPath=new Path2D("M0 -3 C -1.5 -4.5 -4 -3.8 -4 -1.6 C -4 0.6 -2 2.4 0 4 C 2 2.4 4 0.6 4 -1.6 C 4 -3.8 1.5 -4.5 0 -3 Z");
-function drawHeart(x,y,size,alpha){
-  ctx.save();
-  ctx.translate(x,y);
-  ctx.scale(size,size);
-  ctx.fillStyle=`rgba(255,87,87,${alpha})`;
-  ctx.fill(heartPath);
-  ctx.restore();
-}
+const linkDist=150;
 function draw(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  // move
   nodes.forEach(n=>{
     n.x+=n.vx; n.y+=n.vy;
     if(n.x<0||n.x>canvas.width)n.vx*=-1;
     if(n.y<0||n.y>canvas.height)n.vy*=-1;
   });
-  // links + occasional heart bloom
   for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
     const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);
     if(d<linkDist){
       const t=1-d/linkDist;
       ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);
-      ctx.strokeStyle=`rgba(26,109,255,${t*0.28})`;ctx.lineWidth=0.7;ctx.stroke();
-      // very close → small chance to spawn a heart at midpoint
-      if(d<48 && Math.random()<0.004){
-        hearts.push({x:(nodes[i].x+nodes[j].x)/2,y:(nodes[i].y+nodes[j].y)/2,life:0,maxLife:90,size:1.4+Math.random()*0.6});
-      }
+      ctx.strokeStyle=`rgba(26,109,255,${t*0.22})`;ctx.lineWidth=0.6;ctx.stroke();
     }
   }
-  // dots
   nodes.forEach(n=>{
     ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
-    ctx.fillStyle='rgba(26,109,255,0.75)';ctx.fill();
+    ctx.fillStyle='rgba(26,109,255,0.55)';ctx.fill();
   });
-  // hearts (rise + fade)
-  for(let k=hearts.length-1;k>=0;k--){
-    const h=hearts[k];
-    h.life++;
-    const p=h.life/h.maxLife;
-    h.y-=0.35;
-    const alpha=Math.sin(p*Math.PI)*0.85;
-    drawHeart(h.x,h.y,h.size+p*0.6,alpha);
-    if(h.life>=h.maxLife) hearts.splice(k,1);
-  }
   requestAnimationFrame(draw);
 }
 draw();

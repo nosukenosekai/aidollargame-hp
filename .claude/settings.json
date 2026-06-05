@@ -3,7 +3,7 @@
   "language": "japanese",
   "fileCheckpointingEnabled": true,
   "permissions": {
-    "defaultMode": "acceptEdits",
+    "defaultMode": "auto",
     "allow": [
       "Edit",
       "Write",

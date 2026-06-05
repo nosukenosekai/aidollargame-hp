@@ -386,8 +386,14 @@
   /* ============ LIGHT THEME OVERRIDE ============ */
   html { background:#ffffff !important; }
   body { background:#ffffff !important; color:#0e1a2b !important; }
-  body::before { display:none !important; }
-  .bg-mesh { display:none !important; }
+  body::before { opacity:0.12 !important; mix-blend-mode:multiply; }
+  .bg-mesh {
+    background:
+      radial-gradient(circle at 12% 8%, rgba(0,216,255,0.22), transparent 45%),
+      radial-gradient(circle at 88% 18%, rgba(255,150,200,0.18), transparent 50%),
+      radial-gradient(circle at 78% 82%, rgba(26,109,255,0.20), transparent 50%),
+      radial-gradient(circle at 22% 86%, rgba(255,212,112,0.14), transparent 50%) !important;
+  }
 
   nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
   .logo { color:#0e1a2b !important; }
@@ -454,8 +460,7 @@
   footer a { color:#6b7280 !important; }
   footer a:hover { color:#0e1a2b !important; }
 
-  /* particle canvas overlay color via mix-blend - canvas JS still draws cyan; we let it through softly */
-  #canvas { opacity:0.35 !important; mix-blend-mode:multiply; }
+  #canvas { opacity:1 !important; }
 </style>
 </head>
 <body>
@@ -827,11 +832,11 @@ function draw(){
     const dx=n.x-mouse.x,dy=n.y-mouse.y,d=Math.sqrt(dx*dx+dy*dy);
     if(d<120){n.vx+=dx/d*.15;n.vy+=dy/d*.15;}
     ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
-    ctx.fillStyle='rgba(0,245,255,0.55)';ctx.fill();
+    ctx.fillStyle='rgba(26,109,255,0.7)';ctx.fill();
   });
   for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
     const dx=nodes[i].x-nodes[j].x,dy=nodes[i].y-nodes[j].y,d=Math.sqrt(dx*dx+dy*dy);
-    if(d<130){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(0,245,255,${(1-d/130)*.25})`;ctx.lineWidth=.6;ctx.stroke();}
+    if(d<130){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.strokeStyle=`rgba(26,109,255,${(1-d/130)*.35})`;ctx.lineWidth=.7;ctx.stroke();}
   }
   requestAnimationFrame(draw);
 }

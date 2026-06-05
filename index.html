@@ -426,22 +426,23 @@
   .award-item { display:flex; gap:0.9rem; align-items:flex-start; font-size:0.78rem; color:var(--text); line-height:1.5; }
   .award-item::before { content:''; flex-shrink:0; width:6px; height:6px; margin-top:0.55rem; border:1px solid var(--cyan); transform:rotate(45deg); background:rgba(0,245,255,0.15); }
 
-  .ceo-message-block { margin-top:3rem; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg, rgba(20,28,55,0.85), rgba(10,16,40,0.92)); padding:4rem 3.5rem; position:relative; overflow:hidden; border-radius:8px; display:grid; grid-template-columns:1.45fr 1fr; gap:3.2rem; align-items:start; }
-  .message-right { position:relative; padding-left:2rem; border-left:1px solid rgba(255,255,255,0.08); display:flex; flex-direction:column; gap:1.4rem; }
-  .pull-mark { font-family:Georgia,serif; font-size:6rem; line-height:0.8; color:var(--cyan); opacity:0.6; margin-bottom:-0.6rem; }
-  .pull-quote { font-size:clamp(1.5rem,2.2vw,1.95rem); font-weight:900; line-height:1.55; letter-spacing:-0.005em; color:#fff; }
-  .pull-sig { margin-top:auto; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.08); }
-  .sig-name { font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:0.2rem; }
-  .sig-role { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.65rem; letter-spacing:0.18em; color:var(--muted); }
+  .ceo-message-block { margin-top:3rem; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg, rgba(20,28,55,0.85), rgba(10,16,40,0.92)); padding:5rem 3rem; position:relative; overflow:hidden; border-radius:8px; text-align:center; }
+  .message-left { max-width:760px; margin:0 auto; }
+  .message-right { max-width:680px; margin:3.5rem auto 0; padding-top:3rem; border-top:1px solid rgba(255,255,255,0.10); display:flex; flex-direction:column; gap:1.2rem; align-items:center; }
+  .pull-mark { font-family:Georgia,serif; font-size:5.5rem; line-height:0.8; color:var(--cyan); opacity:0.55; margin-bottom:-0.4rem; }
+  .pull-quote { font-size:clamp(1.4rem,2.1vw,1.85rem); font-weight:900; line-height:1.7; letter-spacing:-0.005em; color:#fff; }
+  .pull-sig { margin-top:1rem; }
+  .sig-name { font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.3rem; }
+  .sig-role { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.7rem; letter-spacing:0.22em; color:var(--muted); }
   @media(max-width:780px){
-    .ceo-message-block{grid-template-columns:1fr;gap:2rem;padding:3rem 1.7rem;}
-    .message-right{border-left:none;padding-left:0;border-top:1px solid rgba(255,255,255,0.08);padding-top:2rem;}
+    .ceo-message-block{padding:3.5rem 1.7rem;}
+    .message-right{margin-top:2.5rem;padding-top:2rem;}
   }
   .ceo-message-block::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:var(--grad); }
-  .message-tagline { font-size:clamp(1.5rem,2.6vw,2.1rem); font-weight:900; margin-bottom:1.6rem; line-height:1.45; }
+  .message-tagline { font-size:clamp(1.8rem,3.2vw,2.6rem); font-weight:900; margin-bottom:2rem; line-height:1.45; }
   .message-tagline span { background:linear-gradient(90deg,var(--cyan),var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-  .message-body { font-size:1.08rem; color:var(--text); line-height:2.1; white-space:pre-line; opacity:0.92; }
-  .message-body strong { color:#fff; font-weight:700; opacity:1; display:inline-block; font-size:1.18rem; margin-bottom:0.6rem; }
+  .message-body { font-size:1.18rem; color:var(--text); line-height:2.1; white-space:pre-line; opacity:0.92; }
+  .message-body strong { color:#fff; font-weight:700; opacity:1; display:inline-block; font-size:1.35rem; margin-bottom:0.8rem; }
 
   .partner-badge { background:linear-gradient(135deg, rgba(255,180,0,0.08), rgba(255,140,0,0.04)); border:1px solid rgba(255,180,0,0.25); padding:2rem 2.5rem; margin-top:2rem; border-radius:6px; }
   .partner-badge h4 { font-size:0.95rem; font-weight:700; margin-bottom:0.4rem; color:#ffd060; }

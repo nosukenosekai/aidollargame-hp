@@ -222,12 +222,12 @@
   .nav-cta:hover { transform:translateY(-1px); }
 
   #hero { position:relative; z-index:2; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:8rem 2rem 4rem; overflow:hidden; }
-  .hero-eyebrow { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.75rem; letter-spacing:0.4em; color:var(--cyan); margin-bottom:1.5rem; opacity:0; animation:fadeUp 0.8s 0.3s forwards; }
-  .hero-title { font-size:clamp(2.2rem,4.6vw,4.4rem); font-weight:900; line-height:1.25; margin-bottom:1.5rem; opacity:0; animation:fadeUp 0.8s 0.5s forwards; letter-spacing:-0.01em; }
+  .hero-eyebrow { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.95rem; letter-spacing:0.3em; color:var(--cyan); margin-bottom:1.8rem; opacity:0; animation:fadeUp 0.8s 0.3s forwards; }
+  .hero-title { font-size:clamp(2.6rem,5.2vw,5rem); font-weight:900; line-height:1.22; margin-bottom:2rem; opacity:0; animation:fadeUp 0.8s 0.5s forwards; letter-spacing:-0.015em; }
   .hero-title .line1 { display:block; color:white; padding:0.08em 0; }
   .hero-title .line2 { display:block; padding:0.08em 0; background:linear-gradient(90deg,var(--cyan),var(--blue),var(--cyan)); background-size:200% 100%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:gradFlow 6s linear infinite; }
   @keyframes gradFlow { 0%{background-position:0% 0%;} 100%{background-position:200% 0%;} }
-  .hero-sub { font-size:1.05rem; color:var(--muted); max-width:560px; line-height:1.9; margin-bottom:3rem; opacity:0; animation:fadeUp 0.8s 0.7s forwards; }
+  .hero-sub { font-size:1.25rem; color:var(--muted); max-width:680px; line-height:1.85; margin-bottom:3rem; opacity:0; animation:fadeUp 0.8s 0.7s forwards; font-weight:400; }
   .hero-cta { display:flex; gap:1rem; opacity:0; animation:fadeUp 0.8s 0.9s forwards; flex-wrap:wrap; justify-content:center; }
   .btn-primary { padding:0.95rem 2.4rem; background:var(--grad); color:#000; font-weight:700; border:none; cursor:pointer; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; font-size:0.9rem; letter-spacing:0.05em; clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%); transition:transform 0.2s,box-shadow 0.2s; text-decoration:none; display:inline-block; }
   .btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(0,216,255,0.5); }
@@ -426,12 +426,22 @@
   .award-item { display:flex; gap:0.9rem; align-items:flex-start; font-size:0.78rem; color:var(--text); line-height:1.5; }
   .award-item::before { content:''; flex-shrink:0; width:6px; height:6px; margin-top:0.55rem; border:1px solid var(--cyan); transform:rotate(45deg); background:rgba(0,245,255,0.15); }
 
-  .ceo-message-block { margin-top:3rem; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg, rgba(20,28,55,0.85), rgba(10,16,40,0.92)); padding:3.5rem; position:relative; overflow:hidden; border-radius:8px; }
+  .ceo-message-block { margin-top:3rem; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg, rgba(20,28,55,0.85), rgba(10,16,40,0.92)); padding:4rem 3.5rem; position:relative; overflow:hidden; border-radius:8px; display:grid; grid-template-columns:1.45fr 1fr; gap:3.2rem; align-items:start; }
+  .message-right { position:relative; padding-left:2rem; border-left:1px solid rgba(255,255,255,0.08); display:flex; flex-direction:column; gap:1.4rem; }
+  .pull-mark { font-family:Georgia,serif; font-size:6rem; line-height:0.8; color:var(--cyan); opacity:0.6; margin-bottom:-0.6rem; }
+  .pull-quote { font-size:clamp(1.5rem,2.2vw,1.95rem); font-weight:900; line-height:1.55; letter-spacing:-0.005em; color:#fff; }
+  .pull-sig { margin-top:auto; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.08); }
+  .sig-name { font-size:0.95rem; font-weight:700; color:#fff; margin-bottom:0.2rem; }
+  .sig-role { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.65rem; letter-spacing:0.18em; color:var(--muted); }
+  @media(max-width:780px){
+    .ceo-message-block{grid-template-columns:1fr;gap:2rem;padding:3rem 1.7rem;}
+    .message-right{border-left:none;padding-left:0;border-top:1px solid rgba(255,255,255,0.08);padding-top:2rem;}
+  }
   .ceo-message-block::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:var(--grad); }
-  .message-tagline { font-size:clamp(1.4rem,3vw,2rem); font-weight:900; margin-bottom:2rem; line-height:1.4; }
+  .message-tagline { font-size:clamp(1.5rem,2.6vw,2.1rem); font-weight:900; margin-bottom:1.6rem; line-height:1.45; }
   .message-tagline span { background:linear-gradient(90deg,var(--cyan),var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-  .message-body { font-size:0.95rem; color:var(--text); line-height:2.4; white-space:pre-line; opacity:0.85; }
-  .message-body strong { color:#fff; font-weight:700; opacity:1; }
+  .message-body { font-size:1.08rem; color:var(--text); line-height:2.1; white-space:pre-line; opacity:0.92; }
+  .message-body strong { color:#fff; font-weight:700; opacity:1; display:inline-block; font-size:1.18rem; margin-bottom:0.6rem; }
 
   .partner-badge { background:linear-gradient(135deg, rgba(255,180,0,0.08), rgba(255,140,0,0.04)); border:1px solid rgba(255,180,0,0.25); padding:2rem 2.5rem; margin-top:2rem; border-radius:6px; }
   .partner-badge h4 { font-size:0.95rem; font-weight:700; margin-bottom:0.4rem; color:#ffd060; }
@@ -577,6 +587,15 @@
   .team-card::before { background:#000 !important; }
   .award-item::before { border-color:#000 !important; background:rgba(0,0,0,0.06) !important; }
   .ceo-message-block { background:#ffffff !important; border:1px solid #e5e7eb !important; }
+  .message-right { border-left:1px solid #e5e7eb !important; }
+  .pull-mark { color:#000 !important; opacity:0.18 !important; }
+  .pull-quote { color:#000 !important; }
+  .pull-sig { border-top:1px solid #e5e7eb !important; }
+  .sig-name { color:#000 !important; }
+  .sig-role { color:#000 !important; opacity:0.55 !important; }
+  @media(max-width:780px){
+    .message-right { border-left:none !important; border-top:1px solid #e5e7eb !important; }
+  }
   .ceo-message-block::before { background:#000 !important; }
   .ceo-message-block::after { display:none !important; }
   .message-tagline { line-height:1.3 !important; margin-bottom:1.5rem !important; }
@@ -751,12 +770,22 @@
   </div>
 
   <div class="ceo-message-block reveal">
-    <div class="message-tagline">AIdollargame —<br><span>「AIで人生を再定義する。」</span></div>
-    <div class="message-body"><strong>作業はAIに 人間には愛を</strong>
+    <div class="message-left">
+      <div class="message-tagline">AIdollargame —<br><span>「AIで人生を再定義する。」</span></div>
+      <div class="message-body"><strong>作業はAIに 人間には愛を</strong>
 
 機械ができる作業に、人生を捧げるのはもう終わりにしましょう。
 ルーティンはAIに任せ、空いた時間で<strong>人と向き合う</strong>。
 私たちが作っているのは、人と人が情熱をぶつけ合い、新しい価値を共創するための「舞台」です。</div>
+    </div>
+    <div class="message-right">
+      <div class="pull-mark">"</div>
+      <div class="pull-quote">人と人が、<br>情熱を<br>ぶつけ合う場所を、<br>つくる。</div>
+      <div class="pull-sig">
+        <div class="sig-name">佐藤 徳之介</div>
+        <div class="sig-role">REPRESENTATIVE DIRECTOR / CEO</div>
+      </div>
+    </div>
   </div>
 
   <div class="team-grid reveal">

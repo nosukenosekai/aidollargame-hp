@@ -15,6 +15,8 @@
   nav{display:flex;justify-content:space-between;align-items:center;padding:1.1rem 2.2rem;border-bottom:1px solid rgba(0,245,255,0.1);background:rgba(6,9,26,0.6);backdrop-filter:blur(14px);position:sticky;top:0;z-index:50;}
   .logo{font-family:'Rajdhani',sans-serif;font-size:1.3rem;font-weight:700;color:#fff;text-decoration:none;}
   .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,.6);}
+  .logo .heart-i{position:relative;display:inline-block;line-height:1;}
+  .logo .heart-i::after{content:'\2665';position:absolute;left:50%;bottom:72%;transform:translateX(-50%);font-size:0.48em;line-height:1;color:var(--accent);pointer-events:none;}
   .nav-back{font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.12em;color:var(--muted);text-decoration:none;transition:.3s;}
   .nav-back:hover{color:var(--cyan);}
   .wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:3rem 1.4rem 4rem;}
@@ -94,7 +96,7 @@
 </head>
 <body>
 <nav>
-  <a href="index.html" class="logo" style="display:inline-flex;align-items:center"><img src="logo-unicorn.png" alt="AIdollargame" style="height:34px;width:auto;margin-right:8px"><span class="ai">AI</span>dollargame</a>
+  <a href="index.html" class="logo" style="display:inline-flex;align-items:center"><img src="logo-unicorn.png" alt="AIdollargame" style="height:34px;width:auto;margin-right:8px">A<span class="heart-i">ı</span>dollargame</a>
   <a href="index.html" class="nav-back">← HOME</a>
 </nav>
 

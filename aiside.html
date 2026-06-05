@@ -71,6 +71,8 @@
     display:inline-flex; align-items:baseline; gap:0.55rem; letter-spacing:-0.005em;
   }
   .logo .product { font-size:0.78rem; font-weight:600; color:var(--navy); padding-left:0.6rem; border-left:1px solid var(--line); }
+  .logo .heart-i, .footer-logo .heart-i { position:relative; display:inline-block; line-height:1; }
+  .logo .heart-i::after, .footer-logo .heart-i::after { content:'\2665'; position:absolute; left:50%; bottom:72%; transform:translateX(-50%); font-size:0.48em; line-height:1; color:var(--accent); pointer-events:none; }
   nav ul { display:flex; list-style:none; gap:2.2rem; align-items:center; }
   nav a { color:var(--ink-soft); text-decoration:none; font-size:0.86rem; transition:color 0.2s; font-weight:500; }
   nav a:hover { color:var(--navy); }
@@ -392,7 +394,7 @@
 <body>
 
 <nav>
-  <a href="index.html" class="logo" style="display:inline-flex;align-items:center"><img src="logo-unicorn-blue.png" alt="AIdollargame" style="height:34px;width:auto;margin-right:8px">AIdollargame<span class="product">／ AIside</span></a>
+  <a href="index.html" class="logo" style="display:inline-flex;align-items:center"><img src="logo-unicorn-blue.png" alt="AIdollargame" style="height:34px;width:auto;margin-right:8px"><span class="wm">A<span class="heart-i">ı</span>dollargame</span><span class="product">／ AIside</span></a>
   <ul>
     <li><a href="#problem">課題</a></li>
     <li><a href="#daylife">1日の流れ</a></li>
@@ -801,7 +803,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <a href="index.html" class="footer-logo">AIdollargame<span class="pr">／ AIside</span></a>
+  <a href="index.html" class="footer-logo"><span class="wm">A<span class="heart-i">ı</span>dollargame</span><span class="pr">／ AIside</span></a>
   <div class="footer-links">
     <a href="index.html">プロダクト一覧</a>
     <a href="privacy.html">プライバシーポリシー</a>

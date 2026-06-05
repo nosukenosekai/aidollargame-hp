@@ -138,6 +138,17 @@
 
   /* PAIN CARDS */
   #pain { background:var(--bg-section); }
+  /* CASE STUDIES */
+  .cases { display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem; margin-top:3rem; }
+  .case-card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:1.8rem; display:flex; flex-direction:column; gap:0.8rem; transition:transform 0.25s, box-shadow 0.3s; }
+  .case-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
+  .case-industry { font-size:0.7rem; letter-spacing:0.2em; color:#000; font-weight:700; padding:0.25rem 0.7rem; background:var(--bg-section); border:1px solid var(--line); border-radius:4px; width:max-content; }
+  .case-h { font-size:1.02rem; font-weight:900; color:#000; line-height:1.55; }
+  .case-impact { font-size:1.8rem; font-weight:900; color:#ff5757; line-height:1; margin-top:0.4rem; }
+  .case-impact .small { font-size:0.7rem; color:#000; font-weight:600; letter-spacing:0.05em; margin-left:0.25rem; }
+  .case-p { font-size:0.85rem; color:#000; line-height:1.9; }
+  .case-note { font-size:0.7rem; color:#000; opacity:0.55; margin-top:0.4rem; }
+
   .pain-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem; margin-top:3rem; }
   .pain-card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:2rem 1.8rem; transition:transform 0.25s, box-shadow 0.3s; }
   .pain-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
@@ -320,12 +331,12 @@
 <section id="pillars">
   <div class="container">
     <div class="section-tag">私たちができること</div>
-    <h2 class="section-title">戦略から運用まで<br>5つの領域で並走します</h2>
-    <p class="section-sub">部分的なツール導入だけでは、AIは定着しません。戦略・診断・実装・教育・運用の5つを一気通貫で見るからこそ、現場の数字が変わります。</p>
+    <h2 class="section-title">戦略から運用まで<br>6つの領域で並走します</h2>
+    <p class="section-sub">部分的なツール導入だけでは、AIは定着しません。戦略・診断・実装・教育・運用・経営伴走の6領域を一気通貫で見るからこそ、現場の数字が変わります。</p>
     <div class="pillars">
       <div class="pillar">
         <div class="pl-num">01 戦略立案</div>
-        <div class="pl-h">経営目標から逆算する<br>AI活用ロードマップ</div>
+        <div class="pl-h">経営目標から逆算する<br>AI導入ロードマップ</div>
         <div class="pl-p">3年後の事業計画と現場の業務を突き合わせ、どこにAIを当てれば最大効果が出るかを設計。投資配分と優先順位まで提示します。</div>
       </div>
       <div class="pillar">
@@ -351,7 +362,7 @@
       <div class="pillar">
         <div class="pl-num">06 経営伴走</div>
         <div class="pl-h">経営層の意思決定にも<br>AIを組み込む</div>
-        <div class="pl-p">AIwill（社長クローンAI）の知見を活かし、意思決定の属人化・引き継ぎ問題まで踏み込んだ支援が可能です。</div>
+        <div class="pl-p">自社プロダクトの<a href="human-clone-ai.html" style="color:#000;text-decoration:underline;">AIwill（社長クローンAI）</a>で培った知見を活かし、意思決定の属人化・引き継ぎ問題まで踏み込んだ支援が可能です。</div>
       </div>
     </div>
   </div>
@@ -434,6 +445,38 @@
   </div>
 </section>
 
+<!-- CASE STUDIES -->
+<section id="cases">
+  <div class="container">
+    <div class="section-tag">支援イメージ</div>
+    <h2 class="section-title">どんな成果が出るか<br>業種別のミニケース</h2>
+    <p class="section-sub">守秘義務の範囲で、想定される成果イメージをお伝えします。実際の数値はお客様ごとの業務量・人件費単価により変動します。</p>
+    <div class="cases">
+      <div class="case-card">
+        <div class="case-industry">不動産</div>
+        <div class="case-h">物件要約・問い合わせ返信のAI化</div>
+        <div class="case-impact">月50<span class="small">時間削減</span></div>
+        <div class="case-p">レインズの物件情報からChatGPT＋自社プロンプト基盤で物件要約と初回返信ドラフトを生成。営業担当の資料作成時間を月50時間削減。</div>
+        <div class="case-note">※モデルケース／実数は要件次第</div>
+      </div>
+      <div class="case-card">
+        <div class="case-industry">介護・福祉</div>
+        <div class="case-h">記録業務とシフト調整の自動化</div>
+        <div class="case-impact">月80<span class="small">時間削減</span></div>
+        <div class="case-p">音声入力＋AI要約で日々の記録時間を短縮、シフト調整の連絡もLINEで自動化。介護現場の事務時間を月80時間相当圧縮した想定。</div>
+        <div class="case-note">※モデルケース／実数は要件次第</div>
+      </div>
+      <div class="case-card">
+        <div class="case-industry">士業・コンサル</div>
+        <div class="case-h">提案書ドラフトと議事録の高速化</div>
+        <div class="case-impact">3倍<span class="small">スピード</span></div>
+        <div class="case-p">過去案件を学習させた専用AIで提案書ドラフトを起こし、Zoom議事録もAIで構造化。同じ人員での提案件数を約3倍に。</div>
+        <div class="case-note">※モデルケース／実数は要件次第</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- INDUSTRIES -->
 <section id="industries">
   <div class="container">
@@ -464,7 +507,7 @@
       <div class="mode">
         <span class="tag">SPOT</span>
         <div class="m-name">単発相談・業務診断</div>
-        <div class="m-price">個別見積もり</div>
+        <div class="m-price">20万円〜（業務範囲により個別見積もり）</div>
         <div class="m-desc">まずは現状を客観的に診てほしい、社内で議論する材料が欲しい、という方向け。</div>
         <ul>
           <li>業務棚卸＋AI化候補の優先順位レポート</li>
@@ -522,7 +565,7 @@
       </div>
       <div class="faq-item">
         <div class="faq-q">契約後、合わないと感じたらどうなりますか</div>
-        <div class="faq-a">プロジェクト型・月額伴走ともに、契約書に解約条件を明記しています。継続契約の解約条件は個別契約書に準じます。詳しくは「<a href="tokushoho.html">特定商取引法に基づく表記</a>」をご確認ください。</div>
+        <div class="faq-a">中途解約の条件や通知期間（例：1ヶ月前通知など）の詳細は、ご契約時に締結する業務委託契約書の定めに準じます。プロジェクトの途中でフェーズを終わらせる選択もできるよう、契約書面で明確化します。</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">最初の相談で営業されたくないのですが</div>

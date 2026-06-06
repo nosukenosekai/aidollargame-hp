@@ -441,8 +441,8 @@
   .ceo-message-block::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:var(--grad); }
   .message-tagline { font-size:clamp(1.8rem,3.2vw,2.6rem); font-weight:900; margin-bottom:2rem; line-height:1.45; }
   .message-tagline span { background:linear-gradient(90deg,var(--cyan),var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-  .message-body { font-size:1.05rem; color:var(--text); line-height:1.95; opacity:0.92; word-break:auto-phrase; }
-  .message-body p { margin:0 0 1.1rem; }
+  .message-body { font-size:1.2rem; color:var(--text); line-height:1.95; opacity:0.92; text-align:left; max-width:780px; margin:0 auto; word-break:keep-all; line-break:strict; }
+  .message-body p { margin:0 0 1.4rem; }
   .message-body p:last-child { margin-bottom:0; }
   .message-body strong { color:#fff; font-weight:700; opacity:1; }
   .message-body .lead { display:block; font-size:1.35rem; font-weight:700; margin-bottom:1.4rem; }
@@ -779,7 +779,8 @@
       <div class="message-body">
         <span class="lead">作業はAIに 人間には愛を</span>
         <p>機械ができる作業に、人生を捧げるのはもう終わり。ルーティンはAIに任せ、空いた時間で<strong>人と向き合う</strong>。</p>
-        <p>目指すのは、ただ<strong>「楽（らく）」</strong>になることではない。人と人が情熱をぶつけ合い、新しい価値を共創する——その<strong>「楽（たの）しい」</strong>を生み出す「舞台」を、私たちはつくっています。</p>
+        <p>目指すのは、ただ<strong>「楽（らく）」</strong>になることではない。</p>
+        <p>人と人が情熱をぶつけ合い、新しい価値を共創する。<br><strong>「楽（たの）しい」</strong>を生み出す「舞台」を、私たちはつくっています。</p>
       </div>
     </div>
     <div class="message-right">

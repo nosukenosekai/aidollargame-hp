@@ -223,7 +223,10 @@
 
   #hero { position:relative; z-index:2; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:8rem 2rem 4rem; overflow:hidden; }
   .hero-eyebrow { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.95rem; letter-spacing:0.3em; color:var(--cyan); margin-bottom:1.8rem; opacity:0; animation:fadeUp 0.8s 0.3s forwards; }
-  .hero-title { font-size:clamp(2.6rem,5.2vw,5rem); font-weight:900; line-height:1.22; margin-bottom:2rem; opacity:0; animation:fadeUp 0.8s 0.5s forwards; letter-spacing:-0.015em; }
+  .hero-title { font-size:clamp(2.6rem,5.2vw,5rem); font-weight:900; line-height:1.32; margin-bottom:2rem; letter-spacing:-0.015em; }
+  .hero-title .em { color:var(--accent); }
+  .hero-title .ch { display:inline-block; opacity:0; transform:translateY(8px); filter:blur(4px); }
+  .hero-title.writing .ch { animation:brushWrite 0.55s cubic-bezier(.2,.7,.3,1) forwards; }
   .hero-title .line1 { display:block; color:white; padding:0.08em 0; }
   .hero-title .line2 { display:block; padding:0.08em 0; background:linear-gradient(90deg,var(--cyan),var(--blue),var(--cyan)); background-size:200% 100%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; animation:gradFlow 6s linear infinite; }
   @keyframes gradFlow { 0%{background-position:0% 0%;} 100%{background-position:200% 0%;} }
@@ -551,6 +554,7 @@
   .info-text h4, .info-text p,
   p, h1, h2, h3, h4, h5, span, div, li, a { color:#000 !important; }
   .hero-title .line2 { background:none !important; -webkit-text-fill-color:#000 !important; animation:none !important; }
+  .hero-title .em, .hero-title .em * { color:var(--accent) !important; }
   .section-title .accent { background:none !important; -webkit-text-fill-color:#000 !important; }
   .logo .ai { text-shadow:none !important; }
   .logo .heart-i::after { color:var(--accent) !important; }
@@ -660,10 +664,7 @@
 
 <section id="hero">
   <div class="hero-eyebrow">AIで、人と人をつなぐ。</div>
-  <h1 class="hero-title">
-    <span class="line1">作業はAIに</span>
-    <span class="line2">人間には愛を</span>
-  </h1>
+  <h1 class="hero-title" data-brush data-stagger="0.12">AIで<span class="em">「<ruby>楽<rt>らく</rt></ruby>」</span>ではなく<span class="em">「<ruby>楽<rt>たの</rt></ruby>しい」</span>を考える</h1>
   <p class="hero-sub">仕事を「<ruby>楽<rt>らく</rt></ruby>」にすることが、私たちの目的ではありません。<br>人と人が本気で向き合える「<ruby>楽<rt>たの</rt></ruby>しい」現場を、ともに育てる。<br>AIプロダクト開発と現場のAI活用支援を通じて、その挑戦をご一緒します。</p>
   <div class="hero-cta">
     <a href="#contact" class="btn-primary">無料相談を予約する</a>
@@ -1029,35 +1030,39 @@ function draw(t){
 }
 requestAnimationFrame(draw);
 
-/* Brush-write effect for kaisho pull quotes */
+/* Brush-write effect for kaisho quotes and hero */
 function setupBrushQuote(el){
-  let idx=0;
-  const wrap=(node)=>{
-    const frag=document.createDocumentFragment();
+  const stagger=parseFloat(el.dataset.stagger)||0.16;
+  const state={idx:0};
+  function process(node){
+    const result=[];
     [...node.childNodes].forEach(n=>{
       if(n.nodeType===Node.TEXT_NODE){
         [...n.textContent].forEach(ch=>{
-          if(/\s/.test(ch)){ frag.appendChild(document.createTextNode(ch)); return; }
+          if(/\s/.test(ch)){ result.push(document.createTextNode(ch)); return; }
           const s=document.createElement('span');
           s.className='ch'; s.textContent=ch;
-          s.style.animationDelay=(idx*0.16)+'s';
-          idx++; frag.appendChild(s);
+          s.style.animationDelay=(state.idx*stagger)+'s';
+          state.idx++; result.push(s);
         });
       } else if(n.tagName==='BR'){
-        frag.appendChild(n.cloneNode());
+        result.push(n.cloneNode());
       } else if(n.tagName==='RUBY'){
         const s=document.createElement('span');
-        s.className='ch'; s.style.animationDelay=(idx*0.16)+'s';
+        s.className='ch'; s.style.animationDelay=(state.idx*stagger)+'s';
         s.appendChild(n.cloneNode(true));
-        idx++; frag.appendChild(s);
+        state.idx++; result.push(s);
       } else {
-        frag.appendChild(n.cloneNode(true));
+        const clone=n.cloneNode(false);
+        process(n).forEach(child=>clone.appendChild(child));
+        result.push(clone);
       }
     });
-    return frag;
-  };
-  const wrapped=wrap(el);
-  el.innerHTML=''; el.appendChild(wrapped);
+    return result;
+  }
+  const out=process(el);
+  el.innerHTML='';
+  out.forEach(c=>el.appendChild(c));
 }
 const brushObs=new IntersectionObserver((es)=>{
   es.forEach(e=>{
@@ -1070,7 +1075,7 @@ const brushObs=new IntersectionObserver((es)=>{
       brushObs.unobserve(e.target);
     }
   });
-},{threshold:0.5});
+},{threshold:0.2});
 document.querySelectorAll('[data-brush]').forEach(el=>brushObs.observe(el));
 
 /* Reveal on scroll */

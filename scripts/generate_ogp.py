@@ -146,11 +146,46 @@ def render_card(title, subtitle, output_filename, title_size=64, sub_size=28):
     print(f"  ✓ {output_filename}  ({os.path.getsize(path) // 1024} KB)")
 
 
+def draw_heart(d, cx, cy, s, color=RED):
+    rr = s / 4
+    d.ellipse([cx - s / 2, cy - rr, cx, cy + rr], fill=color)
+    d.ellipse([cx, cy - rr, cx + s / 2, cy + rr], fill=color)
+    d.polygon([(cx - s / 2 + 1, cy), (cx + s / 2 - 1, cy), (cx, cy + s * 0.62)], fill=color)
+
+
+def draw_wordmark(d, x, y, font, fill=WHITE):
+    """ブランドロゴ『Aıdollargame』— ı の上に赤いハート(♥)を載せる"""
+    d.text((x, y), "A", font=font, fill=fill)
+    ix = x + d.textlength("A", font=font)
+    d.text((ix, y), "ı", font=font, fill=fill)
+    iw = d.textlength("ı", font=font)
+    rx = ix + iw
+    d.text((rx, y), "dollargame", font=font, fill=fill)
+    fs = font.size
+    draw_heart(d, ix + iw / 2, y + fs * 0.30, fs * 0.34)
+
+
+def render_default():
+    """トップ用OG: ハートi仕様のロゴ＋新スローガン"""
+    img = make_background()
+    d = ImageDraw.Draw(img)
+    draw_wordmark(d, 60, 50, ImageFont.truetype(FONT_BOLD, 36))
+    d.text((60, 98), "AI × DOLLAR × GAME",
+           font=ImageFont.truetype(FONT_REGULAR, 16), fill=MUTED)
+    draw_accent_line(d)
+    draw_url(d)
+    draw_wordmark(d, 90, 250, ImageFont.truetype(FONT_BLACK, 100))
+    d.text((92, 400), "楽ではなく、楽しいを考える。",
+           font=ImageFont.truetype(FONT_REGULAR, 36), fill=CYAN)
+    path = os.path.join(OUTPUT_DIR, "og-default.png")
+    img.save(path, "PNG", optimize=True)
+    print(f"  ✓ og-default.png (heart-i)  ({os.path.getsize(path) // 1024} KB)")
+
+
 def main():
     print("Generating OGP images...")
     # TOP
-    render_card("AIdollargame", "楽ではなく、楽しいを考える。",
-                "og-default.png", title_size=104, sub_size=36)
+    render_default()
     # Product LPs
     render_card("AIside（アイサイド）", "ずっとそばにいる、あなたの付き人AI",
                 "og-aiside.png", title_size=80)

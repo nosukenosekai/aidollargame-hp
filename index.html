@@ -431,6 +431,13 @@
   .message-right { max-width:680px; margin:3.5rem auto 0; padding-top:3rem; border-top:1px solid rgba(255,255,255,0.10); display:flex; flex-direction:column; gap:1.2rem; align-items:center; }
   .pull-quote { font-family:'Yuji Syuku','Hiragino Mincho ProN','Yu Mincho',serif; font-size:clamp(2.2rem,3.4vw,3rem); font-weight:400; line-height:1.7; letter-spacing:0.06em; color:#fff; }
   .pull-quote ruby rt { font-size:0.45em; letter-spacing:0.05em; }
+  .pull-quote .ch { display:inline-block; opacity:0; transform:translateY(8px); filter:blur(4px); }
+  .pull-quote.writing .ch { animation:brushWrite 0.55s cubic-bezier(.2,.7,.3,1) forwards; }
+  @keyframes brushWrite {
+    0% { opacity:0; transform:translateY(8px); filter:blur(4px); }
+    55% { opacity:0.7; transform:translateY(2px); filter:blur(1.5px); }
+    100% { opacity:1; transform:translateY(0); filter:blur(0); }
+  }
   .pull-sig { margin-top:1rem; }
   .sig-name { font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.3rem; }
   .sig-role { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.7rem; letter-spacing:0.22em; color:var(--muted); }
@@ -785,7 +792,7 @@
       </div>
     </div>
     <div class="message-right">
-      <div class="pull-quote">「<ruby>楽<rt>らく</rt></ruby>」ではなく<br>「<ruby>楽<rt>たの</rt></ruby>しい」を考える</div>
+      <div class="pull-quote" data-brush>「<ruby>楽<rt>らく</rt></ruby>」ではなく<br>「<ruby>楽<rt>たの</rt></ruby>しい」を考える</div>
     </div>
   </div>
 
@@ -1016,6 +1023,50 @@ function draw(t){
   requestAnimationFrame(draw);
 }
 requestAnimationFrame(draw);
+
+/* Brush-write effect for kaisho pull quotes */
+function setupBrushQuote(el){
+  let idx=0;
+  const wrap=(node)=>{
+    const frag=document.createDocumentFragment();
+    [...node.childNodes].forEach(n=>{
+      if(n.nodeType===Node.TEXT_NODE){
+        [...n.textContent].forEach(ch=>{
+          if(/\s/.test(ch)){ frag.appendChild(document.createTextNode(ch)); return; }
+          const s=document.createElement('span');
+          s.className='ch'; s.textContent=ch;
+          s.style.animationDelay=(idx*0.16)+'s';
+          idx++; frag.appendChild(s);
+        });
+      } else if(n.tagName==='BR'){
+        frag.appendChild(n.cloneNode());
+      } else if(n.tagName==='RUBY'){
+        const s=document.createElement('span');
+        s.className='ch'; s.style.animationDelay=(idx*0.16)+'s';
+        s.appendChild(n.cloneNode(true));
+        idx++; frag.appendChild(s);
+      } else {
+        frag.appendChild(n.cloneNode(true));
+      }
+    });
+    return frag;
+  };
+  const wrapped=wrap(el);
+  el.innerHTML=''; el.appendChild(wrapped);
+}
+const brushObs=new IntersectionObserver((es)=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      if(!e.target.dataset.brushReady){
+        setupBrushQuote(e.target);
+        e.target.dataset.brushReady='1';
+      }
+      e.target.classList.add('writing');
+      brushObs.unobserve(e.target);
+    }
+  });
+},{threshold:0.5});
+document.querySelectorAll('[data-brush]').forEach(el=>brushObs.observe(el));
 
 /* Reveal on scroll */
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.1});

@@ -149,7 +149,7 @@ def render_card(title, subtitle, output_filename, title_size=64, sub_size=28):
 def main():
     print("Generating OGP images...")
     # TOP
-    render_card("AIdollargame", "作業はAIに、愛は人間に。",
+    render_card("AIdollargame", "楽ではなく、楽しいを考える。",
                 "og-default.png", title_size=104, sub_size=36)
     # Product LPs
     render_card("AIside（アイサイド）", "ずっとそばにいる、あなたの付き人AI",

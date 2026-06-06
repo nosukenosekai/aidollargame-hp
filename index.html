@@ -174,7 +174,7 @@
 }
 </script>
 
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Share+Tech+Mono&family=Klee+One:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Share+Tech+Mono&family=Yuji+Syuku&display=swap" rel="stylesheet">
 <style>
   :root {
     /* OZ-inspired palette: clean white + cyan/blue + single warm accent */
@@ -429,7 +429,8 @@
   .ceo-message-block { margin-top:3rem; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg, rgba(20,28,55,0.85), rgba(10,16,40,0.92)); padding:5rem 3rem; position:relative; overflow:hidden; border-radius:8px; text-align:center; }
   .message-left { max-width:760px; margin:0 auto; }
   .message-right { max-width:680px; margin:3.5rem auto 0; padding-top:3rem; border-top:1px solid rgba(255,255,255,0.10); display:flex; flex-direction:column; gap:1.2rem; align-items:center; }
-  .pull-quote { font-family:'Klee One','Hiragino Mincho ProN','Yu Mincho',serif; font-size:clamp(2.2rem,3.4vw,3rem); font-weight:600; line-height:1.5; letter-spacing:0.05em; color:#fff; }
+  .pull-quote { font-family:'Yuji Syuku','Hiragino Mincho ProN','Yu Mincho',serif; font-size:clamp(2.2rem,3.4vw,3rem); font-weight:400; line-height:1.7; letter-spacing:0.06em; color:#fff; }
+  .pull-quote ruby rt { font-size:0.45em; letter-spacing:0.05em; }
   .pull-sig { margin-top:1rem; }
   .sig-name { font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.3rem; }
   .sig-role { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.7rem; letter-spacing:0.22em; color:var(--muted); }
@@ -440,8 +441,11 @@
   .ceo-message-block::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:var(--grad); }
   .message-tagline { font-size:clamp(1.8rem,3.2vw,2.6rem); font-weight:900; margin-bottom:2rem; line-height:1.45; }
   .message-tagline span { background:linear-gradient(90deg,var(--cyan),var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-  .message-body { font-size:1.18rem; color:var(--text); line-height:1.85; white-space:pre-line; opacity:0.92; }
-  .message-body strong { color:#fff; font-weight:700; opacity:1; display:inline-block; font-size:1.35rem; margin-bottom:0.8rem; }
+  .message-body { font-size:1.1rem; color:var(--text); line-height:1.75; opacity:0.92; }
+  .message-body p { margin:0 0 0.55rem; }
+  .message-body p:last-child { margin-bottom:0; }
+  .message-body strong { color:#fff; font-weight:700; opacity:1; }
+  .message-body .lead { display:block; font-size:1.35rem; font-weight:700; margin-bottom:1.4rem; }
 
   .partner-badge { background:linear-gradient(135deg, rgba(255,180,0,0.08), rgba(255,140,0,0.04)); border:1px solid rgba(255,180,0,0.25); padding:2rem 2.5rem; margin-top:2rem; border-radius:6px; }
   .partner-badge h4 { font-size:0.95rem; font-weight:700; margin-bottom:0.4rem; color:#ffd060; }
@@ -772,14 +776,15 @@
   <div class="ceo-message-block reveal">
     <div class="message-left">
       <div class="message-tagline">AIdollargame —<br><span>「AIで人生を再定義する。」</span></div>
-      <div class="message-body"><strong>作業はAIに 人間には愛を</strong>
-
-機械ができる作業に、人生を捧げるのはもう終わりにしましょう。
-ルーティンはAIに任せ、空いた時間で<strong>人と向き合う</strong>。
-私たちが作っているのは、人と人が情熱をぶつけ合い、新しい価値を共創するための「舞台」です。</div>
+      <div class="message-body">
+        <span class="lead">作業はAIに 人間には愛を</span>
+        <p>機械ができる作業に、人生を捧げるのはもう終わりにしましょう。</p>
+        <p>ルーティンはAIに任せ、空いた時間で<strong>人と向き合う</strong>。</p>
+        <p>私たちが作っているのは、人と人が情熱をぶつけ合い、新しい価値を共創するための「舞台」です。</p>
+      </div>
     </div>
     <div class="message-right">
-      <div class="pull-quote">「楽しい」を考える</div>
+      <div class="pull-quote">「<ruby>楽<rt>らく</rt></ruby>」ではなく<br>「<ruby>楽<rt>たの</rt></ruby>しい」を考える</div>
       <div class="pull-sig">
         <div class="sig-name">佐藤 徳之介</div>
         <div class="sig-role">REPRESENTATIVE DIRECTOR / CEO</div>

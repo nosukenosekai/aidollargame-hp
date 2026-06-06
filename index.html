@@ -428,7 +428,7 @@
 
   .ceo-message-block { margin-top:3rem; border:1px solid rgba(255,255,255,0.08); background:linear-gradient(180deg, rgba(20,28,55,0.85), rgba(10,16,40,0.92)); padding:5rem 3rem; position:relative; overflow:hidden; border-radius:8px; text-align:center; }
   .message-left { max-width:760px; margin:0 auto; }
-  .message-right { max-width:680px; margin:3.5rem auto 0; padding-top:3rem; border-top:1px solid rgba(255,255,255,0.10); display:flex; flex-direction:column; gap:1.2rem; align-items:center; }
+  .message-right { max-width:680px; margin:3.5rem auto 0; padding-top:3rem; display:flex; flex-direction:column; gap:1.2rem; align-items:center; }
   .pull-quote { font-family:'Yuji Syuku','Hiragino Mincho ProN','Yu Mincho',serif; font-size:clamp(2.2rem,3.4vw,3rem); font-weight:400; line-height:1.7; letter-spacing:0.06em; color:#fff; }
   .pull-quote ruby rt { font-size:0.45em; letter-spacing:0.05em; }
   .pull-quote .ch { display:inline-block; opacity:0; transform:translateY(8px); filter:blur(4px); }
@@ -448,7 +448,7 @@
   .ceo-message-block::before { content:''; position:absolute; top:0; left:0; width:3px; height:100%; background:var(--grad); }
   .message-tagline { font-size:clamp(1.8rem,3.2vw,2.6rem); font-weight:900; margin-bottom:2rem; line-height:1.45; }
   .message-tagline span { background:linear-gradient(90deg,var(--cyan),var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-  .message-body { font-size:1.2rem; color:var(--text); line-height:1.95; opacity:0.92; text-align:left; max-width:780px; margin:0 auto; word-break:keep-all; line-break:strict; }
+  .message-body { font-size:1.2rem; color:var(--text); line-height:1.95; opacity:0.92; text-align:center; max-width:820px; margin:3rem auto 0; word-break:keep-all; line-break:strict; }
   .message-body p { margin:0 0 1.4rem; }
   .message-body p:last-child { margin-bottom:0; }
   .message-body strong { color:#fff; font-weight:700; opacity:1; }
@@ -598,14 +598,14 @@
   .team-card::before { background:#000 !important; }
   .award-item::before { border-color:#000 !important; background:rgba(0,0,0,0.06) !important; }
   .ceo-message-block { background:#ffffff !important; border:1px solid #e5e7eb !important; }
-  .message-right { border-left:1px solid #e5e7eb !important; }
+  .message-right { border-left:none !important; border-top:none !important; }
   .pull-mark { color:#000 !important; opacity:0.18 !important; }
   .pull-quote { color:#000 !important; }
   .pull-sig { border-top:1px solid #e5e7eb !important; }
   .sig-name { color:#000 !important; }
   .sig-role { color:#000 !important; opacity:0.55 !important; }
   @media(max-width:780px){
-    .message-right { border-left:none !important; border-top:1px solid #e5e7eb !important; }
+    .message-right { border-left:none !important; border-top:none !important; }
   }
   .ceo-message-block::before { background:#000 !important; }
   .ceo-message-block::after { display:none !important; }

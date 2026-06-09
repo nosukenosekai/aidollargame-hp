@@ -152,25 +152,43 @@ def fetch_news():
     return items[:25]
 
 
+def list_existing_articles():
+    """公開済み記事の (slug, title) 一覧を返す。重複防止に使う。"""
+    items = []
+    for p in sorted(ARTICLES_DIR.glob("*.html")):
+        if p.name == "index.html":
+            continue
+        t = p.read_text(encoding="utf-8")
+        m = re.search(r"<h1>(.*?)</h1>", t, re.S)
+        title = re.sub(r"<[^>]+>", "", m.group(1)).strip() if m else p.stem
+        items.append((p.stem, title))
+    return items
+
+
 def generate_articles(news_items, date_str):
     client = anthropic.Anthropic()
     news_text = "\n".join(
         f"{i+1}. {x['title']}\n   {x['summary'][:200]}"
         for i, x in enumerate(news_items)
     )
+    existing = list_existing_articles()
+    existing_titles = "\n".join(f"- {t}（{s}）" for s, t in existing)
     prompt = f"""あなたはAIdollargame（AI企業）のコンテンツライターです。
 今日: {date_str}
-ビジョン: 「作業はAIに、愛は人間に」— AIが役割仕事を担い、人間が人間らしい時間を取り戻す
+ビジョン: 「楽ではなく、楽しいを考える。」— AIが楽しくない作業を引き受け、人は「楽しい」と思えることに向かう
 
-以下のAI最新ニュースから最も重要な3つを選んで、日本語記事を生成してください。
+以下のAI最新ニュースから記事にする価値のある3つを選んで、日本語記事を生成してください。
+
+【最重要・重複禁止】次は既に公開済みの記事です。これらと内容・切り口が重複するテーマは絶対に選ばないでください。必ず新しい角度・新しいトピックにすること:
+{existing_titles}
 
 ニュース:
 {news_text}
 
 次のJSON形式のみで返答してください（マークダウン・コードブロック不要）:
-{{"articles":[{{"slug":"英数字ハイフンのみのファイル名例:gpt5-announced","title":"日本語タイトル30字以内","description":"カード説明60字以内","body":"<p>...</p>\\n<h2>...</h2>\\n<p>...</p>\\n<blockquote><p>...</p></blockquote>"}}]}}
+{{"articles":[{{"slug":"英数字ハイフンのみのファイル名(既存slugと重複しないこと)","title":"日本語タイトル30字以内(既存タイトルと似せないこと)","description":"カード説明60字以内","body":"<p>...</p>\\n<h2>...</h2>\\n<p>...</p>\\n<blockquote><p>...</p></blockquote>"}}]}}
 
-本文要件: 600-800字, h2を2-3個, blockquote1個, AIdollargameのビジョンと絡める, <strong>で重要語強調"""
+本文要件: 600-800字, h2を2-3個, blockquote1個, ビジョン「楽ではなく、楽しいを考える。」と絡める, <strong>で重要語強調, 偉そうにならず優しい語り口で"""
 
     msg = client.messages.create(
         model="claude-opus-4-5",
@@ -180,7 +198,21 @@ def generate_articles(news_items, date_str):
     raw = msg.content[0].text.strip()
     raw = re.sub(r"^```(?:json)?\s*", "", raw)
     raw = re.sub(r"\s*```$", "", raw)
-    return json.loads(raw)["articles"]
+    arts = json.loads(raw)["articles"]
+
+    # 既存slug・既存タイトルと重複するものは除外（二重の保険）
+    existing_slugs = {s for s, _ in existing}
+    existing_titles_set = {t for _, t in existing}
+    deduped = []
+    for a in arts:
+        if a.get("slug") in existing_slugs:
+            print(f"  skip (slug重複): {a.get('slug')}")
+            continue
+        if a.get("title") in existing_titles_set:
+            print(f"  skip (タイトル重複): {a.get('title')}")
+            continue
+        deduped.append(a)
+    return deduped
 
 
 def make_card_articles_index(article, date_str):

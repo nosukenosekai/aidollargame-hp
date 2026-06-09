@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Weekly AI news article generator for AIdollargame HP"""
 
-import os, re, json, feedparser, anthropic
+import os, re, json, html, feedparser, anthropic
 from datetime import datetime, timezone, timedelta
+from html.parser import HTMLParser
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).parent.parent
@@ -10,6 +11,78 @@ ARTICLES_DIR = REPO_ROOT / "articles"
 MAIN_INDEX = REPO_ROOT / "index.html"
 ARTICLES_INDEX = ARTICLES_DIR / "index.html"
 JST = timezone(timedelta(hours=9))
+
+# --- Sanitization -----------------------------------------------------------
+# The article fields come from an LLM that is itself fed untrusted RSS content,
+# and the output is auto-committed and published with no human review. Treat it
+# as untrusted: validate the slug (path traversal), escape title/description
+# (attribute / JSON-LD breakout), and allowlist-sanitize the body HTML.
+
+SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,79}$")
+
+# Tags the body template is meant to contain. Everything else is dropped.
+ALLOWED_TAGS = {
+    "p", "h2", "h3", "strong", "em", "b", "i",
+    "blockquote", "ul", "ol", "li", "a", "br",
+}
+VOID_TAGS = {"br"}
+ALLOWED_ATTRS = {"a": {"href"}}
+
+
+class _BodySanitizer(HTMLParser):
+    """Rebuild body HTML keeping only an allowlist of tags/attributes.
+
+    Text nodes are re-escaped, so any `<script>`, event-handler attribute, or
+    `javascript:` URI in the model output is neutralized rather than emitted.
+    """
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.out = []
+
+    def _open(self, tag, attrs):
+        if tag not in ALLOWED_TAGS:
+            return
+        safe = ""
+        for k, v in attrs:
+            if v is not None and k in ALLOWED_ATTRS.get(tag, set()):
+                if k == "href" and not re.match(r"https?://", v, re.I):
+                    continue
+                safe += f' {k}="{html.escape(v, quote=True)}"'
+        self.out.append(f"<{tag}{safe}>")
+
+    def handle_starttag(self, tag, attrs):
+        self._open(tag, attrs)
+
+    def handle_startendtag(self, tag, attrs):
+        self._open(tag, attrs)
+
+    def handle_endtag(self, tag):
+        if tag in ALLOWED_TAGS and tag not in VOID_TAGS:
+            self.out.append(f"</{tag}>")
+
+    def handle_data(self, data):
+        self.out.append(html.escape(data, quote=False))
+
+
+def sanitize_body(raw):
+    parser = _BodySanitizer()
+    parser.feed(raw or "")
+    parser.close()
+    return "".join(parser.out)
+
+
+def sanitize_article(a):
+    """Validate/escape one article dict in place. Returns False if unusable."""
+    slug = (a.get("slug") or "").strip()
+    if not SLUG_RE.match(slug):
+        print(f"Skipping article with invalid slug: {slug!r}")
+        return False
+    a["slug"] = slug
+    a["title"] = html.escape(a.get("title", ""))
+    a["description"] = html.escape(a.get("description", ""))
+    a["body"] = sanitize_body(a.get("body", ""))
+    return True
 
 ARTICLE_HTML = """\
 <!DOCTYPE html>
@@ -296,6 +369,11 @@ def main():
     date_iso = today.strftime("%Y-%m-%d")
 
     articles = generate_articles(news, date_str)
+
+    articles = [a for a in articles if sanitize_article(a)]
+    if not articles:
+        print("No valid articles after sanitization, exiting")
+        return
 
     for a in articles:
         html = ARTICLE_HTML.format(

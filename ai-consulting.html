@@ -258,9 +258,17 @@
     nav ul li:nth-child(-n+3) { display:none; }
     section { padding:4rem 1.4rem; }
     #hero { padding:6.5rem 1.4rem 3.5rem; }
+    .hero-title { font-size:clamp(1.6rem,6vw,2.4rem); white-space:normal; }
+    .hero-sub { font-size:0.95rem; }
     .hero-grid { grid-template-columns:1fr; gap:2.5rem; }
-    .pain-grid, .pillars, .why-grid, .modes { grid-template-columns:1fr; }
+    .pain-grid, .pillars, .why-grid, .modes, .cases { grid-template-columns:1fr; }
     .step { grid-template-columns:auto 1fr; gap:1rem; padding:1.4rem 1.4rem; }
+    .ind-list { gap:0.5rem; }
+    .ind { padding:0.6rem 1.1rem; font-size:0.9rem; }
+    #cta { padding:4rem 1.4rem; }
+    #cta .cta-actions { flex-direction:column; align-items:stretch; }
+    #cta .btn-primary, #cta .btn-ghost { width:100%; text-align:center; justify-content:center; }
+    .footer-grid { flex-direction:column; align-items:flex-start; gap:1rem; }
     footer { padding:2.2rem 1.4rem; }
   }
 </style>

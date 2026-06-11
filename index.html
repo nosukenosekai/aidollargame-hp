@@ -524,13 +524,32 @@
   @media(max-width:768px){
     nav{padding:1rem 1.2rem;} nav ul{gap:1rem;} nav ul li:not(:last-child){display:none;}
     section{padding:4rem 1.5rem;}
+    #hero{padding:6.5rem 1.4rem 3.5rem;}
+    .hero-eyebrow{font-size:0.78rem;letter-spacing:0.22em;}
+    .hero-title{white-space:normal !important;font-size:clamp(1.5rem,6vw,2.1rem);line-height:1.5;letter-spacing:0;}
+    .hero-title ruby rt{font-size:0.42em;}
+    .hero-sub{font-size:0.95rem;line-height:1.85;max-width:none;}
+    .hero-sub br{display:none;}
+    .hero-cta{flex-direction:column;align-items:stretch;width:100%;}
+    .hero-cta .btn-primary,.hero-cta .btn-outline{text-align:center;width:100%;clip-path:none;border-radius:8px;}
     .agent-showcase,.contact-grid,.team-grid{grid-template-columns:1fr;}
     .agent-showcase{padding:2rem 1.5rem;}
     .product-card{padding:2rem 1.5rem;}
+    .product-card .card-actions{flex-direction:column;align-items:stretch;}
+    .product-card .btn-cta,.product-card .btn-ghost{width:100%;justify-content:center;}
     .news-item{grid-template-columns:1fr;gap:0.5rem;padding:1.2rem 1.4rem;}
-    .ceo-message-block{padding:2rem 1.5rem;}
-    footer{padding:2rem 1.5rem;}
-    .phone-screen{height:520px;}
+    .ceo-message-block{padding:2.5rem 1.4rem;}
+    .message-tagline{font-size:clamp(1.2rem,5vw,1.6rem)!important;}
+    .message-body{font-size:1rem !important;max-width:none;margin-top:1.4rem;}
+    .message-right{margin-top:2.2rem;padding-top:2rem;}
+    .pull-quote{font-size:clamp(1.4rem,5vw,1.9rem) !important;}
+    .industries{gap:0.5rem;}
+    .industry{padding:0.55rem 1.1rem !important;font-size:0.85rem !important;}
+    .contact-grid{gap:2rem;}
+    .form-input,.form-textarea{font-size:16px;}
+    .info-item{padding:0.8rem 1rem !important;}
+    .articles-grid{grid-template-columns:1fr !important;}
+    footer{padding:2rem 1.5rem;flex-direction:column;align-items:flex-start;gap:0.7rem;}
   }
   /* 縦に余裕がない画面ではCTAと重なるのでSCROLL装飾を隠す */
   @media (max-height:940px){

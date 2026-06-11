@@ -36,6 +36,12 @@
     "title": "中小企業のAI導入、費用はどれくらい？相場と考え方"
   },
   {
+    "slug": "ai-fable5-explained",
+    "tag": "NEWS",
+    "date": "2026 / 06 / 11",
+    "title": "Anthropicの最新AI「Fable 5」で、実際に何ができる？やさしく解説"
+  },
+  {
     "slug": "ai-first-3-steps",
     "tag": "CONSULTING",
     "date": "2026 / 06 / 05",
@@ -58,6 +64,12 @@
     "tag": "INSIGHT",
     "date": "2026 / 05 / 29",
     "title": "「AIに仕事を任せたら社員がやることなくなる」——よくある誤解を解く"
+  },
+  {
+    "slug": "ai-prompt-tips",
+    "tag": "INSIGHT",
+    "date": "2026 / 06 / 11",
+    "title": "同じAIでも答えが変わる——AIに上手にお願いするコツ5つ"
   },
   {
     "slug": "ai-top20-strategy-2026",
@@ -118,6 +130,12 @@
     "tag": "STORY",
     "date": "2026 / 06 / 03",
     "title": "非エンジニアの経営者が数日でできたこと、全部リストにしてみた"
+  },
+  {
+    "slug": "what-is-ai-agent",
+    "tag": "INSIGHT",
+    "date": "2026 / 06 / 11",
+    "title": "「AIエージェント」って何？——いちばんやさしい説明"
   },
   {
     "slug": "what-is-ai-consulting",

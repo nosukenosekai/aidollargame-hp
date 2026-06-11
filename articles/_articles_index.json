@@ -1,145 +1,121 @@
 [
   {
     "slug": "about-aidollargame",
-    "tag": "CONSULTING",
     "date": "2026 / 06 / 05",
     "title": "AIdollargameとは？事業内容・対応業界・始め方をやさしく解説"
   },
   {
     "slug": "ai-adoption-now",
-    "tag": "INSIGHT",
     "date": "2026 / 05 / 15",
     "title": "2026年、AIを入れない会社が直面するリスク"
   },
   {
     "slug": "ai-agent-vs-chatbot",
-    "tag": "PRODUCT",
     "date": "2026 / 06 / 05",
     "title": "AIエージェントとチャットボットは何が違う？"
   },
   {
     "slug": "ai-and-future",
-    "tag": "FUTURE",
     "date": "2026 / 05 / 08",
     "title": "AIが役割を引き受けるとき、人間は何を手に入れるか"
   },
   {
     "slug": "ai-built-my-site",
-    "tag": "STORY",
     "date": "2026 / 06 / 03",
     "title": "コードが書けない私が、AIだけで自社サイトを作り変えた話"
   },
   {
     "slug": "ai-cost",
-    "tag": "CONSULTING",
     "date": "2026 / 06 / 05",
     "title": "中小企業のAI導入、費用はどれくらい？相場と考え方"
   },
   {
     "slug": "ai-fable5-explained",
-    "tag": "NEWS",
     "date": "2026 / 06 / 11",
     "title": "Anthropicの最新AI「Fable 5」で、実際に何ができる？やさしく解説"
   },
   {
     "slug": "ai-first-3-steps",
-    "tag": "CONSULTING",
     "date": "2026 / 06 / 05",
     "title": "AI導入は、どこから始めればいい？"
   },
   {
     "slug": "ai-frees-humans",
-    "tag": "PHILOSOPHY",
     "date": "2026 / 05 / 12",
     "title": "「楽ではなく、楽しいを考える。」の本当の意味"
   },
   {
     "slug": "ai-is-ally",
-    "tag": "CONSULTING",
     "date": "2026 / 06 / 05",
     "title": "AIは敵じゃない。味方として使えばいい"
   },
   {
     "slug": "ai-jobs-misconception-2026",
-    "tag": "INSIGHT",
     "date": "2026 / 05 / 29",
     "title": "「AIに仕事を任せたら社員がやることなくなる」——よくある誤解を解く"
   },
   {
     "slug": "ai-prompt-tips",
-    "tag": "INSIGHT",
     "date": "2026 / 06 / 11",
     "title": "同じAIでも答えが変わる——AIに上手にお願いするコツ5つ"
   },
   {
     "slug": "ai-top20-strategy-2026",
-    "tag": "INSIGHT",
     "date": "2026 / 06 / 02",
     "title": "AI導入企業の88%が成果を感じているのに、経済効果が上位20%に集中する理由"
   },
   {
     "slug": "aiside",
-    "tag": "PRODUCT",
     "date": "2026 / 05 / 18",
     "title": "AIside —「もう一人の自分」が時間を変える"
   },
   {
     "slug": "aiwill",
-    "tag": "PRODUCT",
     "date": "2026 / 05 / 20",
     "title": "AIwill —社長の思考をAIに移植する理由"
   },
   {
     "slug": "anthropic-beats-openai-2026",
-    "tag": "NEWS",
     "date": "2026 / 06 / 02",
     "title": "AnthropicがOpenAIを初めて抜いた——モデル選びより大事なこと"
   },
   {
     "slug": "anthropic-valuation-2026",
-    "tag": "NEWS",
     "date": "2026 / 05 / 29",
     "title": "Anthropicが評価額9,000億円超——AI産業に「乗り遅れコスト」が生まれている"
   },
   {
     "slug": "i-proved-our-vision",
-    "tag": "STORY",
     "date": "2026 / 06 / 03",
     "title": "「楽ではなく、楽しいを考える。」を、自分で実証してみた"
   },
   {
     "slug": "inquiry-ai-risk-2026",
-    "tag": "INSIGHT",
     "date": "2026 / 05 / 29",
     "title": "問い合わせ対応にAIを入れていない会社が、2026年下半期に直面すること"
   },
   {
     "slug": "japan-gov-ai-mandate-2026",
-    "tag": "NEWS",
     "date": "2026 / 06 / 02",
     "title": "日本政府が18万人にAIを義務化——民間企業はどう動くべきか"
   },
   {
     "slug": "sns-ai-agent",
-    "tag": "PRODUCT",
     "date": "2026 / 05 / 22",
     "title": "LINE公式アカウントで満足してますか？"
   },
   {
     "slug": "what-ai-let-me-do",
-    "tag": "STORY",
     "date": "2026 / 06 / 03",
     "title": "非エンジニアの経営者が数日でできたこと、全部リストにしてみた"
   },
   {
     "slug": "what-is-ai-agent",
-    "tag": "INSIGHT",
     "date": "2026 / 06 / 11",
-    "title": "「AIエージェント」って何？——いちばんやさしい説明"
+    "title": "「AIエージェント」って何？ やさしく解説します"
   },
   {
     "slug": "what-is-ai-consulting",
-    "tag": "CONSULTING",
     "date": "2026 / 06 / 05",
     "title": "AIコンサル・導入支援って、実際に何をしてくれるの？"
   }

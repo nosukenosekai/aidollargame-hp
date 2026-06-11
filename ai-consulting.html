@@ -137,6 +137,8 @@
   .section-tag { font-size:0.72rem; letter-spacing:0.28em; color:#000; font-weight:700; margin-bottom:1rem; display:inline-flex; align-items:center; gap:0.7rem; }
   .section-tag::before { content:''; display:inline-block; width:22px; height:1px; background:#000; }
   .section-title { font-size:clamp(1.7rem,3vw,2.4rem); font-weight:900; color:#000; line-height:1.4; margin-bottom:1.2rem; letter-spacing:-0.005em; }
+  .section-title .hl { position:relative; display:inline-block; isolation:isolate; }
+  .section-title .hl::after { content:''; position:absolute; left:0; right:0; bottom:0.12em; height:0.34em; background:linear-gradient(180deg,#ffe45c 0%,#ffd84a 100%); z-index:-1; border-radius:2px; }
   .section-sub { color:#000; font-size:1rem; line-height:2; max-width:640px; margin-bottom:3.5rem; }
 
   /* PAIN CARDS */
@@ -189,10 +191,11 @@
 
   /* WHY US */
   .why-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem; margin-top:3rem; }
-  .why-card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:2rem 1.8rem; }
-  .why-icon {
-    width:46px; height:46px; border-radius:10px; background:rgba(255,87,87,0.08);
-    display:flex; align-items:center; justify-content:center; margin-bottom:1rem; font-size:1.4rem;
+  .why-card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:2.2rem 1.8rem; position:relative; }
+  .why-num {
+    display:inline-block; font-size:0.75rem; letter-spacing:0.2em; font-weight:900;
+    color:#ff5757; padding:0.35rem 0.7rem; border:1.5px solid #ff5757; border-radius:4px;
+    margin-bottom:1.4rem;
   }
   .why-h { font-size:1.1rem; font-weight:900; color:#000; margin-bottom:0.7rem; }
   .why-p { font-size:0.9rem; color:#000; line-height:1.95; }
@@ -231,10 +234,11 @@
   /* CTA */
   #cta { background:#000; color:#fff; padding:6rem 3rem; }
   #cta .container { text-align:center; }
-  #cta .section-tag, #cta .section-tag::before { color:#fff; background:#fff; }
   #cta .section-tag { color:#fff; }
   #cta .section-tag::before { background:#fff; }
   #cta h2 { font-size:clamp(1.8rem,3.4vw,2.6rem); font-weight:900; line-height:1.4; margin-bottom:1.2rem; color:#fff; }
+  #cta h2 .hl-on-dark { position:relative; display:inline-block; isolation:isolate; }
+  #cta h2 .hl-on-dark::after { content:''; position:absolute; left:0; right:0; bottom:0.12em; height:0.34em; background:#ff5757; z-index:-1; border-radius:2px; }
   #cta p { font-size:1.02rem; color:#fff; opacity:0.85; line-height:2; margin-bottom:2.4rem; max-width:580px; margin-left:auto; margin-right:auto; }
   #cta .cta-actions { display:flex; gap:0.9rem; justify-content:center; flex-wrap:wrap; }
   #cta .btn-primary { background:#fff; color:#000; }
@@ -437,21 +441,21 @@
 <section id="why">
   <div class="container">
     <div class="section-tag">私たちが選ばれる理由</div>
-    <h2 class="section-title">「説明だけ」では終わらせない<br>作る側の知見を持ち込みます</h2>
+    <h2 class="section-title"><span class="hl">「説明だけ」</span>では終わらせない<br>作る側の知見を持ち込みます</h2>
     <p class="section-sub">資料を作って提示するだけのコンサルティングではありません。自社でAIプロダクトを動かしているからこそ、戦略から実装まで踏み込んで支援します。</p>
     <div class="why-grid">
       <div class="why-card">
-        <div class="why-icon">♥</div>
+        <div class="why-num">REASON 01</div>
         <div class="why-h">自社プロダクト開発の経験</div>
         <div class="why-p">SNS AIエージェント／社長クローンAI／付き人AI——3つのプロダクトを自社で開発・運用。「使える AI」と「使えない AI」の境界線を、現場で知っています。</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">♥</div>
+        <div class="why-num">REASON 02</div>
         <div class="why-h">経営者目線の戦略設計</div>
         <div class="why-p">CEOは事業設計と現場の「翻訳者」。AIをツールとしてではなく、事業構造に組み込む視点で組み立てます。経営会議にもそのまま同席できます。</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">♥</div>
+        <div class="why-num">REASON 03</div>
         <div class="why-h">世界水準の技術力</div>
         <div class="why-p">CTOは大手IT企業で生成AI・ブロックチェーン・法人向け大規模アプリの新規事業を6年間リード。Apple Foundation Models Hackathon 優勝の実装力で、実装に責任を持ちます。</div>
       </div>
@@ -593,7 +597,7 @@
 <section id="cta">
   <div class="container">
     <div class="section-tag">無料相談</div>
-    <h2>「最初の1業務」を、<br>一緒に見つけませんか</h2>
+    <h2><span class="hl-on-dark">「最初の1業務」</span>を<br>一緒に見つけませんか</h2>
     <p>初回30分は無料です。<br>業務の状況だけ簡単に共有いただければ、その場で「ここから始めるといい」をお伝えします。</p>
     <div class="cta-actions">
       <a href="index.html#contact" class="btn-primary">無料相談を予約する</a>

@@ -157,6 +157,35 @@ nav { background:rgba(255,255,255,0.95) !important; border-bottom:1px solid #e5e
 footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
 footer a { color:#000 !important; }
 .logo .heart-i, .logo .heart-i::after { color:#ff5757 !important; }
+
+/* ============ FLOATING WORRY BUBBLES + INTRO MOTION ============ */
+.card{position:relative;z-index:1;padding:2.6rem 2.2rem 3rem !important;}
+.field{position:fixed;inset:60px 0 0;overflow:hidden;pointer-events:none;z-index:0;}
+.field.hide{display:none;}
+.bubble{position:absolute;display:inline-flex;align-items:center;gap:.45rem;font-family:inherit;font-size:.94rem;font-weight:700;color:#111;background:#fff;border:2px solid #111;padding:.62rem 1.1rem;border-radius:18px 18px 18px 6px;white-space:nowrap;box-shadow:0 12px 26px -12px rgba(0,0,0,.32);opacity:0;transform-origin:bottom left;will-change:transform,opacity;animation:popBob 7s ease-in-out infinite;}
+.bubble .bi{font-size:1.08rem;line-height:1;}
+.bubble.hot{color:#fff;background:#ff5757;border-color:#ff5757;box-shadow:0 14px 30px -10px rgba(255,87,87,.6);}
+@keyframes popBob{
+  0%{opacity:0;transform:translateY(16px) scale(.4) rotate(-3deg);}
+  6%{opacity:1;transform:translateY(0) scale(1.1) rotate(0);}
+  12%{transform:translateY(0) scale(1);}
+  46%{transform:translateY(-10px) scale(1);}
+  80%{opacity:1;transform:translateY(0) scale(1);}
+  90%{opacity:0;transform:translateY(-10px) scale(.9);}
+  100%{opacity:0;transform:scale(.9);}
+}
+#intro{position:relative;z-index:1;}
+#intro.anim{animation:none;}
+#intro.anim .kicker{animation:rise .55s .08s both cubic-bezier(.2,.75,.25,1);}
+#intro.anim h1{animation:rise .65s .2s both cubic-bezier(.2,.75,.25,1);}
+#intro.anim p{animation:rise .55s .38s both cubic-bezier(.2,.75,.25,1);}
+#intro.anim .meta-row{animation:rise .55s .5s both cubic-bezier(.2,.75,.25,1);}
+#intro.anim .center{animation:rise .55s .62s both cubic-bezier(.2,.75,.25,1);}
+@keyframes rise{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:none;}}
+.intro h1{font-size:clamp(2.1rem,6vw,3.1rem) !important;}
+.wrap{padding-top:2rem !important;padding-bottom:3rem !important;}
+@media(prefers-reduced-motion:reduce){ .bubble{animation:none;opacity:.7;} #intro.anim *{animation:none !important;} }
+@media(max-width:680px){ .field{display:none !important;} .card{padding:2rem 1.5rem 2.4rem !important;} }
 </style>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
 <!-- Google tag (gtag.js) -->
@@ -173,6 +202,16 @@ footer a { color:#000 !important; }
   <a href="index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
   <a href="index.html" class="nav-back">← HOME</a>
 </nav>
+
+<div class="field" id="field" aria-hidden="true">
+  <span class="bubble"     style="left:39%;top:9%;animation-delay:0s;"><span class="bi">👤</span>社長がいないと回らない…</span>
+  <span class="bubble"     style="left:2.5%;top:28%;animation-delay:.7s;"><span class="bi">💬</span>問い合わせ対応に追われる…</span>
+  <span class="bubble"     style="right:2.5%;top:25%;animation-delay:1.4s;"><span class="bi">🌀</span>雑務で1日が終わる…</span>
+  <span class="bubble hot" style="left:3%;top:50%;animation-delay:2.1s;"><span class="bi">❓</span>AI、何から始めれば？</span>
+  <span class="bubble"     style="right:3%;top:48%;animation-delay:2.8s;"><span class="bi">📅</span>予約の管理が大変…</span>
+  <span class="bubble"     style="left:2.5%;top:72%;animation-delay:3.5s;"><span class="bi">📩</span>返信が追いつかない…</span>
+  <span class="bubble hot" style="right:2.5%;top:70%;animation-delay:4.2s;"><span class="bi">😨</span>属人化がこわい…</span>
+</div>
 
 <div class="wrap">
   <div class="card">
@@ -279,7 +318,7 @@ const LOAD_MSGS=["回答を読み解いています","あなたの状況を分�
 let step=0; const scores={}; const history=[];
 
 function start(){ step=0; ORDER.forEach(k=>scores[k]=0); history.length=0; swap('quiz'); render(); }
-function swap(id){ ['intro','quiz','loading','result'].forEach(s=>{const el=document.getElementById(s);el.classList.toggle('hide',s!==id);}); const cur=document.getElementById(id); cur.classList.remove('anim'); void cur.offsetWidth; cur.classList.add('anim'); window.scrollTo(0,0); }
+function swap(id){ ['intro','quiz','loading','result'].forEach(s=>{const el=document.getElementById(s);el.classList.toggle('hide',s!==id);}); const fld=document.getElementById('field'); if(fld)fld.classList.toggle('hide',id!=='intro'); const cur=document.getElementById(id); cur.classList.remove('anim'); void cur.offsetWidth; cur.classList.add('anim'); window.scrollTo(0,0); }
 
 function render(){
   const q=QUESTIONS[step];

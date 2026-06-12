@@ -6,6 +6,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>try{if(!matchMedia('(prefers-reduced-motion:reduce)').matches)document.documentElement.classList.add('anim-ready');}catch(e){}</script>
 <title>AIコンサルティング・導入支援 ｜ 戦略から運用までを一気通貫で — AIdollargame</title>
 <meta name="description" content="経営者が「AIを使える組織」を作るための伴走型コンサルティング。戦略立案・業務棚卸・プロダクト選定・社員リスキリング・運用伴走まで、自社プロダクト開発で培った知見をそのまま現場に。">
 <meta name="author" content="株式会社AIdollargame">
@@ -275,6 +276,34 @@
     .footer-grid { flex-direction:column; align-items:flex-start; gap:1rem; }
     footer { padding:2.2rem 1.4rem; }
   }
+
+  /* ===== SCROLL & MOTION ===== */
+  html.anim-ready .reveal { opacity:0; transform:translateY(26px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  html.anim-ready .reveal.in { opacity:1; transform:none; }
+  html.anim-ready .hero-title.reveal { transform:translateY(30px); }
+  /* pillar accent bar grows in */
+  html.anim-ready .pillar.reveal::before { transform:scaleY(0); transform-origin:top; transition:transform .6s .25s cubic-bezier(.2,.7,.2,1); }
+  html.anim-ready .pillar.reveal.in::before { transform:scaleY(1); }
+  /* step number pops */
+  html.anim-ready .step.reveal .step-n { transform:scale(.5); opacity:0; transition:transform .5s .15s cubic-bezier(.2,1.4,.4,1), opacity .4s .15s; }
+  html.anim-ready .step.reveal.in .step-n { transform:scale(1); opacity:1; }
+  /* highlight underline draws left→right */
+  html.anim-ready .section-title.reveal .hl::after,
+  html.anim-ready #cta h2.reveal .hl-on-dark::after { transform:scaleX(0); transform-origin:left; transition:transform .55s .3s cubic-bezier(.2,.7,.2,1); }
+  html.anim-ready .section-title.reveal.in .hl::after,
+  html.anim-ready #cta h2.reveal.in .hl-on-dark::after { transform:scaleX(1); }
+  /* pain number flashes accent (worry) */
+  html.anim-ready .pain-card.reveal.in .pain-num { animation:painPulse 1.5s ease 0.35s 2; }
+  @keyframes painPulse { 0%,100%{ color:#000; } 50%{ color:#ff5757; } }
+  /* nav gets a soft shadow once scrolled */
+  nav { transition:box-shadow .3s; }
+  nav.scrolled { box-shadow:0 8px 30px -20px rgba(0,0,0,.45); }
+  /* extra hover interactions */
+  .why-card, .mode, .faq-item { transition:transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .3s; }
+  .why-card:hover, .mode:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
+  .faq-item:hover { box-shadow:var(--shadow); }
+  .ind { transition:transform .2s, border-color .2s, background .2s; }
+  .ind:hover { transform:translateY(-2px); border-color:#000; }
 </style>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
 <!-- Google tag (gtag.js) -->
@@ -617,6 +646,78 @@
     <div class="footer-copy">© 2026 株式会社AIdollargame</div>
   </div>
 </footer>
+
+<script>
+(function(){
+  if (!document.documentElement.classList.contains('anim-ready')) return; // reduced-motion: skip
+
+  var SEL = '.hero-eyebrow,.hero-title,.hero-sub,.hero-actions,.trust-card,.trust-point,'
+          + '.section-tag,.section-title,.section-sub,.pain-card,.pillar,.step,.why-card,'
+          + '.case-card,.ind,.mode,.faq-item,#cta h2,#cta p,#cta .cta-actions';
+  var els = [].slice.call(document.querySelectorAll(SEL));
+
+  els.forEach(function(el){ el.classList.add('reveal'); });
+  // stagger siblings that reveal together
+  els.forEach(function(el){
+    var sibs = [].filter.call(el.parentNode.children, function(c){ return c.classList.contains('reveal'); });
+    var i = sibs.indexOf(el);
+    if (i > 0) el.style.transitionDelay = Math.min(i, 7) * 70 + 'ms';
+  });
+
+  function countUp(el){
+    if (el.__c) return; el.__c = 1;
+    var n = el.firstChild;
+    if (!n || n.nodeType !== 3) return;
+    var m = n.nodeValue.match(/^(\D*)(\d+)(\D*)$/);
+    if (!m) return;
+    var pre = m[1], target = +m[2], suf = m[3], start = null, dur = 1100;
+    function tick(t){
+      if (!start) start = t;
+      var p = Math.min((t - start) / dur, 1);
+      n.nodeValue = pre + Math.round(target * (1 - Math.pow(1 - p, 3))) + suf;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  function isNumNode(n){ return n && n.nodeType === 3 && /^(\D*)(\d+)(\D*)$/.test(n.nodeValue); }
+
+  // reset below-fold impact numbers to 0 so the count-up is visible
+  var impacts = [].slice.call(document.querySelectorAll('.case-impact'));
+  impacts.forEach(function(el){
+    var r = el.getBoundingClientRect();
+    if (!(r.top < window.innerHeight * 0.9 && r.bottom > 0)) {
+      var n = el.firstChild;
+      if (isNumNode(n)) n.nodeValue = n.nodeValue.replace(/\d+/, '0');
+    }
+  });
+
+  var pendEls = els.slice(), pendImp = impacts.slice();
+  function check(){
+    var trig = window.innerHeight * 0.9;
+    pendEls = pendEls.filter(function(el){
+      var r = el.getBoundingClientRect();
+      if (r.top < trig && r.bottom > 0) { el.classList.add('in'); return false; }
+      return true;
+    });
+    pendImp = pendImp.filter(function(el){
+      var r = el.getBoundingClientRect();
+      if (r.top < trig && r.bottom > 0) { countUp(el); return false; }
+      return true;
+    });
+  }
+
+  var nav = document.querySelector('nav');
+  var ticking = false;
+  function onScroll(){
+    if (nav) nav.classList.toggle('scrolled', window.pageYOffset > 12);
+    if (!ticking) { ticking = true; requestAnimationFrame(function(){ check(); ticking = false; }); }
+  }
+  check(); // reveal above-the-fold immediately
+  if (nav) nav.classList.toggle('scrolled', window.pageYOffset > 12);
+  window.addEventListener('scroll', onScroll, { passive:true });
+  window.addEventListener('resize', onScroll, { passive:true });
+})();
+</script>
 
 </body>
 </html>

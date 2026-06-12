@@ -940,7 +940,7 @@
     <div class="section-tag">ARTICLES</div>
     <h2 class="section-title">記事・発信</h2>
   </div>
-  <div class="articles-grid reveal">
+  <div class="articles-grid reveal" id="articlesGrid">
 <!-- ARTICLES-GRID-START -->
     <a href="./articles/ai-fable5-explained.html" class="article-card">
       <div class="article-img" style="background-image:url('https://images.unsplash.com/photo-1531746790731-6c087fecd65a?w=600&q=80&fit=crop')"></div>
@@ -1244,6 +1244,40 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
     });
   },{threshold:0.2});
   startObs.observe(document.getElementById('agent-demo'));
+})();
+</script>
+<script>
+/* 公式noteの最新記事を記事グリッド先頭に自動表示（取得失敗時は自前記事のみ表示） */
+(function(){
+  const grid = document.getElementById('articlesGrid');
+  if (!grid) return;
+  const RSS = 'https://note.com/aidollargame/rss';
+  const API = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS);
+  const esc = s => (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmt = d => { const x = new Date(d); return isNaN(x) ? '' : x.getFullYear()+' / '+String(x.getMonth()+1).padStart(2,'0')+' / '+String(x.getDate()).padStart(2,'0'); };
+  fetch(API).then(r=>r.json()).then(data=>{
+    if (!data || data.status !== 'ok' || !data.items || !data.items.length) return;
+    const frag = document.createDocumentFragment();
+    data.items.slice(0,3).forEach(item=>{
+      const desc = esc((item.description||'').replace(/<[^>]+>/g,'').trim()).slice(0,90);
+      const thumb = item.thumbnail || (item.enclosure && item.enclosure.link) || '';
+      const a = document.createElement('a');
+      a.href = item.link; a.target='_blank'; a.rel='noopener'; a.className='article-card';
+      a.innerHTML =
+        (thumb
+          ? `<div class="article-img" style="background-image:url('${esc(thumb)}')"></div>`
+          : `<div class="article-img" style="background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;"><span style="font-family:'Share Tech Mono',monospace;letter-spacing:0.3em;color:#fff;font-weight:700;">note</span></div>`) +
+        `<div class="article-body-inner">
+          <div class="article-cat">NOTE</div>
+          <div class="article-date">${fmt(item.pubDate)}</div>
+          <div class="article-title-card">${esc(item.title)}</div>
+          <div class="article-desc">${desc}${desc.length>=90?'…':''}</div>
+          <div class="article-link">noteで読む →</div>
+        </div>`;
+      frag.appendChild(a);
+    });
+    grid.insertBefore(frag, grid.firstChild);
+  }).catch(()=>{ /* 失敗時は自前記事をそのまま表示 */ });
 })();
 </script>
 </body>

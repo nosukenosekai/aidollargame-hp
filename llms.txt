@@ -31,6 +31,32 @@
 - AI導入の費用: https://aidollargame.com/articles/ai-cost.html
 - AIエージェントとチャットボットの違い: https://aidollargame.com/articles/ai-agent-vs-chatbot.html
 
+## 記事 (Articles)
+- AIdollargameとは？事業内容・対応業界・始め方をやさしく解説: https://aidollargame.com/articles/about-aidollargame.html
+- 2026年、AIを入れない会社が直面するリスク: https://aidollargame.com/articles/ai-adoption-now.html
+- AIエージェントとチャットボットは何が違う？: https://aidollargame.com/articles/ai-agent-vs-chatbot.html
+- AIが役割を引き受けるとき、人間は何を手に入れるか: https://aidollargame.com/articles/ai-and-future.html
+- コードが書けない私が、AIだけで自社サイトを作り変えた話: https://aidollargame.com/articles/ai-built-my-site.html
+- 中小企業のAI導入、費用はどれくらい？相場と考え方: https://aidollargame.com/articles/ai-cost.html
+- Anthropicの最新AI「Fable 5」で、実際に何ができる？: https://aidollargame.com/articles/ai-fable5-explained.html
+- AI導入は、どこから始めればいい？: https://aidollargame.com/articles/ai-first-3-steps.html
+- 「楽ではなく、楽しいを考える。」の本当の意味: https://aidollargame.com/articles/ai-frees-humans.html
+- AIは敵じゃない。味方として使えばいい: https://aidollargame.com/articles/ai-is-ally.html
+- 「AIに仕事を任せたら社員がやることなくなる」——よくある誤解を解く: https://aidollargame.com/articles/ai-jobs-misconception-2026.html
+- 同じAIでも答えが変わる——AIに上手にお願いするコツ5つ: https://aidollargame.com/articles/ai-prompt-tips.html
+- AI導入企業の88%が成果を感じているのに、経済効果が上位20%に集中する理由: https://aidollargame.com/articles/ai-top20-strategy-2026.html
+- AIside — 「もう一人の自分」が時間を変える: https://aidollargame.com/articles/aiside.html
+- AIwill — 社長の思考をAIに移植する理由: https://aidollargame.com/articles/aiwill.html
+- AnthropicがOpenAIを初めて抜いた——モデル選びより大事なこと: https://aidollargame.com/articles/anthropic-beats-openai-2026.html
+- Anthropicが評価額9,000億円超——AI産業に「乗り遅れコスト」が生まれている: https://aidollargame.com/articles/anthropic-valuation-2026.html
+- 「楽ではなく、楽しいを考える。」を、自分で実証してみた: https://aidollargame.com/articles/i-proved-our-vision.html
+- 問い合わせ対応にAIを入れていない会社が、2026年下半期に直面すること: https://aidollargame.com/articles/inquiry-ai-risk-2026.html
+- 日本政府が18万人にAIを義務化——民間企業はどう動くべきか: https://aidollargame.com/articles/japan-gov-ai-mandate-2026.html
+- LINE公式アカウントで満足してますか？ — SNS AIエージェントが変える顧客接点: https://aidollargame.com/articles/sns-ai-agent.html
+- 非エンジニアの経営者が数日でできたこと、全部リストにしてみた: https://aidollargame.com/articles/what-ai-let-me-do.html
+- 「答えるAI」から「やってくれるAI」へ——AIエージェントの正体: https://aidollargame.com/articles/what-is-ai-agent.html
+- AIコンサル・導入支援って、実際に何をしてくれるの？: https://aidollargame.com/articles/what-is-ai-consulting.html
+
 ## 連絡先 (Contact)
 - メール: nosuke@aidollargame.com
 - 問い合わせフォーム: https://aidollargame.com/#contact

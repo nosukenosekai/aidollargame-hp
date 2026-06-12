@@ -89,6 +89,8 @@ def priority_for(rel):
     if rel in {"aiside.html", "human-clone-ai.html", "line-ai-agent.html",
                "ai-consulting.html", "shindan.html"}:
         return "0.9", "monthly"
+    if rel == "ai-yougo.html":
+        return "0.8", "monthly"
     if rel.startswith("articles/"):
         return "0.7", "monthly"
     return "0.5", "monthly"

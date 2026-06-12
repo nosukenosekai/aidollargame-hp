@@ -71,3 +71,4 @@ if __name__ == "__main__":
     make(base + "thumb-products.png",      "私たちが作る3つのAIと、\nそこに込めた「想い」")
     make(base + "thumb-first-task.png",    "中小企業のAI、\n最初の1業務はこう選ぶ")
     make(base + "thumb-ai-terms.png",      "AI用語、ぜんぶ\n「たとえ話」で説明します")
+    make(base + "thumb-worldcup.png",      "AIにW杯の優勝国を\n予想させてみた")

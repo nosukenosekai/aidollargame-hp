@@ -1,25 +1,28 @@
 #!/usr/bin/env python3
 """OGP image generator for AIdollargame HP (1200x630).
 
-Cross-platform: uses bundled Linux fonts (IPAGothic / Liberation Sans) when the
-macOS Hiragino fonts are absent, so it runs in CI as well as locally. Composites
-the real brand mark (favicon-512.png) into every card and generates one unique
-OG image per article from articles/_articles_index.json — so each page gets its
-own first-party image instead of all sharing og-default.png."""
+Light, brand-consistent cards: the logo is black-on-white by design, so a light
+background keeps the mark crisp (a dark bg buries the black "A"). Cross-platform
+fonts (IPAGothic / Liberation Sans) let it run in CI as well as locally. The
+real brand mark (favicon-512.png) is composited into every card, and one unique
+OG image is generated per article (scanned from articles/*.html) so each page
+has its own first-party image instead of all sharing og-default.png."""
 
 import os, re
 from PIL import Image, ImageDraw, ImageFont
 
 WIDTH, HEIGHT = 1200, 630
-NAVY, NAVY2 = (10, 18, 56), (18, 26, 74)
-CYAN, BLUE, RED = (0, 216, 255), (26, 109, 255), (255, 87, 87)
-WHITE, MUTED = (255, 255, 255), (154, 168, 208)
+BG_TOP, BG_BOT = (255, 255, 255), (236, 240, 248)   # soft light gradient
+INK = (12, 20, 58)                                   # near-navy text (readable)
+RED = (255, 87, 87)                                  # brand accent (the heart)
+MUTED = (122, 134, 166)
+WHITE = (255, 255, 255)
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 ARTICLES_DIR = os.path.join(ROOT, "articles")
 ICON_SRC = os.path.join(ROOT, "favicon-512.png")
 
-# Font resolution: prefer macOS Hiragino (sharper), fall back to Linux fonts.
+
 def _first(paths, default):
     for p in paths:
         if os.path.exists(p):
@@ -45,7 +48,8 @@ def lat(sz): return ImageFont.truetype(LAT_FONT, sz)
 
 
 def load_icon(size):
-    """Brand mark with the white background knocked out to transparent."""
+    """Brand mark with the white background knocked out to transparent so it
+    sits cleanly on the light card (black A + red i/heart stay crisp)."""
     im = Image.open(ICON_SRC).convert("RGBA")
     px = im.load()
     for y in range(im.height):
@@ -56,43 +60,28 @@ def load_icon(size):
     return im.resize((size, size), Image.LANCZOS)
 
 
-ICON = load_icon(72)
+ICON = load_icon(76)
 
 
 def make_background():
-    img = Image.new("RGB", (WIDTH, HEIGHT), NAVY)
+    img = Image.new("RGB", (WIDTH, HEIGHT), BG_TOP)
     d = ImageDraw.Draw(img)
     for y in range(HEIGHT):
         t = y / HEIGHT
         d.line([(0, y), (WIDTH, y)],
-               fill=tuple(int(NAVY[i] * (1 - t) + NAVY2[i] * t) for i in range(3)))
-    glow = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
-    gd = ImageDraw.Draw(glow)
-    for cx, cy, col, r0, step in [(WIDTH - 100, 80, CYAN, 380, 14),
-                                  (80, HEIGHT - 60, BLUE, 420, 16)]:
-        for i in range(20):
-            alpha = int(40 - i * 1.8)
-            if alpha <= 0:
-                break
-            r = r0 - i * step
-            gd.ellipse([cx - r, cy - r, cx + r, cy + r], fill=(*col, alpha))
-    img.paste(glow, (0, 0), glow)
+               fill=tuple(int(BG_TOP[i] * (1 - t) + BG_BOT[i] * t) for i in range(3)))
     return img
 
 
 def draw_lockup(img, d):
     """Top-left brand lockup: real Ai icon + Aidollargame wordmark."""
     img.paste(ICON, (56, 44), ICON)
-    d.text((140, 52), "Aidollargame", font=lat(34), fill=WHITE)
-    d.text((142, 96), "AI × DOLLAR × GAME", font=jp(15), fill=MUTED)
+    d.text((144, 52), "Aidollargame", font=lat(34), fill=INK)
+    d.text((146, 96), "AI × DOLLAR × GAME", font=jp(15), fill=MUTED)
 
 
 def draw_accent(d):
-    x, y1, y2 = 60, 200, HEIGHT - 110
-    for y in range(y1, y2):
-        t = (y - y1) / (y2 - y1)
-        d.line([(x, y), (x + 4, y)],
-               fill=tuple(int(CYAN[i] * (1 - t) + BLUE[i] * t) for i in range(3)))
+    d.rectangle([60, 210, 150, 219], fill=RED)
 
 
 def draw_url(d):
@@ -135,15 +124,15 @@ def render_card(title, subtitle, out, title_size=60):
         f = jp(title_size)
         lines = wrap(title, f, max_w, d)
     lh = int(title_size * 1.4)
-    total = lh * len(lines) + (int(28 * 1.6) + 24 if subtitle else 0)
+    total = lh * len(lines) + (int(26 * 1.6) + 24 if subtitle else 0)
     y = (HEIGHT - total) // 2 + 26
     for ln in lines:
-        # faux-bold: redraw with a thin stroke to thicken regular-weight JP font
-        d.text((90, y), ln, font=f, fill=WHITE, stroke_width=1, stroke_fill=WHITE)
+        # faux-bold: redraw with a thin matching stroke to thicken the JP font
+        d.text((90, y), ln, font=f, fill=INK, stroke_width=1, stroke_fill=INK)
         y += lh
     if subtitle:
         y += 24
-        d.text((90, y), subtitle, font=jp(26), fill=CYAN)
+        d.text((90, y), subtitle, font=jp(26), fill=RED)
     img.save(os.path.join(ROOT, out), "PNG", optimize=True)
     print(f"  ✓ {out}")
 
@@ -154,14 +143,13 @@ def render_default():
     draw_lockup(img, d)
     draw_accent(d)
     draw_url(d)
-    d.text((90, 250), "Aidollargame", font=lat(96), fill=WHITE)
+    d.text((90, 250), "Aidollargame", font=lat(96), fill=INK)
     d.text((92, 392), "楽じゃなく、楽しいを考える。", font=jp(36),
-           fill=CYAN, stroke_width=1, stroke_fill=CYAN)
+           fill=INK, stroke_width=1, stroke_fill=INK)
     img.save(os.path.join(ROOT, "og-default.png"), "PNG", optimize=True)
     print("  ✓ og-default.png")
 
 
-# Subtitle / sizing hints for the fixed (non-article) pages.
 PRODUCTS = [
     ("AIside（アイサイド）", "ずっとそばにいる、あなたの付き人AI", "og-aiside.png", 80),
     ("AIwill", "経営者の判断と意志を、AIに残す", "og-human-clone-ai.png", 104),

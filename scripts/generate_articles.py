@@ -104,7 +104,7 @@ ARTICLE_HTML = """\
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{description}">
 <meta property="og:url" content="https://aidollargame.com/articles/{slug}.html">
-<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:image" content="https://aidollargame.com/og-articles-{slug}.png">
 <meta property="og:locale" content="ja_JP">
 <meta property="article:published_time" content="{date_iso}">
 <meta property="article:author" content="AIdollargame 編集部">
@@ -112,7 +112,7 @@ ARTICLE_HTML = """\
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{title}">
 <meta name="twitter:description" content="{description}">
-<meta name="twitter:image" content="https://aidollargame.com/og-default.png">
+<meta name="twitter:image" content="https://aidollargame.com/og-articles-{slug}.png">
 
 <script type="application/ld+json">
 {{
@@ -128,7 +128,7 @@ ARTICLE_HTML = """\
     "logo":{{"@type":"ImageObject","url":"https://aidollargame.com/og-default.png"}}
   }},
   "mainEntityOfPage": "https://aidollargame.com/articles/{slug}.html",
-  "image": "https://aidollargame.com/og-default.png",
+  "image": "https://aidollargame.com/og-articles-{slug}.png",
   "inLanguage": "ja"
 }}
 </script>

@@ -18,13 +18,22 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install Japanese font (for OG image generation)
+        run: sudo apt-get update && sudo apt-get install -y fonts-ipafont-gothic
+
       - name: Install dependencies
-        run: pip install anthropic feedparser
+        run: pip install anthropic feedparser Pillow
 
       - name: Generate articles
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scripts/generate_articles.py
+
+      - name: Generate per-article OG images
+        run: python scripts/generate_ogp.py
+
+      - name: Regenerate sitemap
+        run: python scripts/generate_sitemap.py
 
       - name: Commit and push if articles were generated
         run: |

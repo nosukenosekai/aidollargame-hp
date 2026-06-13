@@ -230,6 +230,29 @@
   .logo .heart-i { position:relative; display:inline-block; line-height:1; color:#ff5757 !important; }
   .logo .heart-i::after { content:'\2665'; position:absolute; left:50%; bottom:75%; transform:translateX(-50%); font-size:0.42em; line-height:1; color:#ff5757 !important; pointer-events:none; }
   nav ul { display:flex; list-style:none; gap:2.5rem; align-items:center; }
+  .dropdown { position:relative; }
+  .dropdown-trigger { display:inline-flex; align-items:center; gap:0.35rem; cursor:pointer; }
+  .dropdown-trigger .chev { font-size:0.7em; transition:transform 0.2s; }
+  .dropdown:hover .dropdown-trigger .chev, .dropdown.open .dropdown-trigger .chev { transform:rotate(180deg); }
+  .dropdown-menu {
+    position:absolute; top:calc(100% + 14px); left:-1.2rem; min-width:360px;
+    background:#fff; border:1px solid #e5e7eb; border-radius:12px;
+    box-shadow:0 24px 50px -22px rgba(0,0,0,0.18);
+    padding:0.7rem; z-index:120;
+    opacity:0; visibility:hidden; transform:translateY(-6px);
+    transition:opacity 0.2s, visibility 0.2s, transform 0.2s;
+  }
+  .dropdown:hover .dropdown-menu, .dropdown.open .dropdown-menu, .dropdown:focus-within .dropdown-menu {
+    opacity:1; visibility:visible; transform:translateY(0);
+  }
+  .dropdown-menu a {
+    display:block; padding:0.85rem 1rem; border-radius:8px;
+    color:#000 !important; text-decoration:none; font-family:inherit;
+    transition:background 0.18s;
+  }
+  .dropdown-menu a:hover { background:#f3f6fb; }
+  .dropdown-menu a strong { display:block; font-size:0.92rem; font-weight:700; margin-bottom:0.15rem; letter-spacing:0; }
+  .dropdown-menu a span { display:block; font-size:0.74rem; color:#555 !important; font-family:inherit; letter-spacing:0; }
   nav a { color:var(--muted); text-decoration:none; font-size:0.82rem; letter-spacing:0.12em; transition:color 0.3s; font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; }
   nav a:hover { color:var(--cyan); }
   .nav-cta { padding:0.55rem 1.2rem; background:var(--grad); color:#000 !important; font-weight:700; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif !important; font-size:0.78rem !important; letter-spacing:0.08em; border-radius:6px; box-shadow:0 4px 18px -4px rgba(0,216,255,0.5); }
@@ -701,12 +724,19 @@
 <nav>
   <div class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</div>
   <ul>
-    <li><a href="#products">プロダクト</a></li>
-    <li><a href="ai-consulting.html">AI導入支援</a></li>
+    <li class="dropdown">
+      <a href="#products" class="dropdown-trigger">プロダクト <span class="chev">▾</span></a>
+      <div class="dropdown-menu">
+        <a href="line-ai-agent.html"><strong>SNS AIエージェント</strong><span>LINE/SNSに、AIの接客を。</span></a>
+        <a href="human-clone-ai.html"><strong>AIwill（社長クローン）</strong><span>あなたの判断と意志を、デジタルに残す。</span></a>
+        <a href="aiside.html"><strong>AIside（アイサイド）</strong><span>ずっとそばにいる、あなたの付き人AI。</span></a>
+        <a href="ai-consulting.html"><strong>AI導入支援・コンサル</strong><span>戦略立案から運用伴走まで一気通貫。</span></a>
+        <a href="shindan.html"><strong>AI診断</strong><span>3分で自社に合うAIが分かる。</span></a>
+      </div>
+    </li>
     <li><a href="#about">私たちについて</a></li>
     <li><a href="#news">ニュース</a></li>
     <li><a href="./articles/">記事</a></li>
-    <li><a href="shindan.html">AI診断</a></li>
     <li><a href="#contact" class="nav-cta">無料相談 →</a></li>
   </ul>
 </nav>
@@ -1084,6 +1114,24 @@ function draw(t){
   requestAnimationFrame(draw);
 }
 requestAnimationFrame(draw);
+
+/* Dropdown nav: tap toggle for touch devices, close on outside click */
+document.querySelectorAll('.dropdown').forEach(d => {
+  const t = d.querySelector('.dropdown-trigger');
+  if (!t) return;
+  t.addEventListener('click', e => {
+    if (window.matchMedia('(hover: none)').matches) {
+      e.preventDefault();
+      document.querySelectorAll('.dropdown.open').forEach(o => { if (o !== d) o.classList.remove('open'); });
+      d.classList.toggle('open');
+    }
+  });
+});
+document.addEventListener('click', e => {
+  document.querySelectorAll('.dropdown.open').forEach(d => {
+    if (!d.contains(e.target)) d.classList.remove('open');
+  });
+});
 
 /* Brush-write effect for kaisho quotes and hero */
 function setupBrushQuote(el){

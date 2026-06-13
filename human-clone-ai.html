@@ -142,6 +142,16 @@
   .nav-brand .brand-name { font-size: 1.15rem; }
   .nav-brand .brand-tag { font-size: 0.55rem; letter-spacing: 0.28em; margin-top: 0.2em; }
   nav ul { display:flex; list-style:none; gap:2rem; align-items:center; }
+  .dropdown { position:relative; }
+  .dropdown-trigger { display:inline-flex; align-items:center; gap:0.35rem; cursor:pointer; }
+  .dropdown-trigger .chev { font-size:0.7em; transition:transform 0.2s; }
+  .dropdown:hover .dropdown-trigger .chev, .dropdown.open .dropdown-trigger .chev { transform:rotate(180deg); }
+  .dropdown-menu { position:absolute; top:calc(100% + 14px); left:-1.2rem; min-width:360px; background:#fff; border:1px solid var(--rule); border-radius:12px; box-shadow:0 24px 50px -22px rgba(0,0,0,0.18); padding:0.7rem; z-index:120; opacity:0; visibility:hidden; transform:translateY(-6px); transition:opacity 0.2s, visibility 0.2s, transform 0.2s; text-transform:none; letter-spacing:0; }
+  .dropdown:hover .dropdown-menu, .dropdown.open .dropdown-menu, .dropdown:focus-within .dropdown-menu { opacity:1; visibility:visible; transform:translateY(0); }
+  .dropdown-menu a { display:block; padding:0.85rem 1rem; border-radius:8px; color:var(--ink) !important; text-decoration:none; font-family:inherit; transition:background 0.18s; text-transform:none; letter-spacing:0; font-size:inherit; }
+  .dropdown-menu a:hover { background:#f3f6fb; color:var(--ink) !important; }
+  .dropdown-menu a strong { display:block; font-size:0.92rem; font-weight:700; margin-bottom:0.15rem; letter-spacing:0; }
+  .dropdown-menu a span { display:block; font-size:0.74rem; color:#555; font-family:inherit; letter-spacing:0; }
   nav a { font-family:'Inter',-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; color: var(--ink-muted); font-size:0.78rem; letter-spacing:0.18em; text-transform:uppercase; font-weight:500; transition:color 0.4s; }
   nav a:hover { color: var(--ink-strong); }
   .nav-cta { padding:0.55rem 1.4rem; border:1px solid var(--accent); color: var(--accent) !important; font-weight:600; border-radius: var(--radius); transition: all 0.3s; }
@@ -851,11 +861,15 @@
 <nav>
   <a href="index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
   <ul>
-    <li>
-      <span class="brand nav-brand">
-        <span class="brand-name">AIwill<span class="dot">.</span></span>
-        <span class="brand-tag">AI Clone</span>
-      </span>
+    <li class="dropdown">
+      <a href="index.html#products" class="dropdown-trigger">プロダクト <span class="chev">▾</span></a>
+      <div class="dropdown-menu">
+        <a href="line-ai-agent.html"><strong>SNS AIエージェント</strong><span>LINE/SNSに、AIの接客を。</span></a>
+        <a href="human-clone-ai.html"><strong>AIwill（社長クローン）</strong><span>あなたの判断と意志を、デジタルに残す。</span></a>
+        <a href="aiside.html"><strong>AIside（アイサイド）</strong><span>ずっとそばにいる、あなたの付き人AI。</span></a>
+        <a href="ai-consulting.html"><strong>AI導入支援・コンサル</strong><span>戦略立案から運用伴走まで一気通貫。</span></a>
+        <a href="shindan.html"><strong>AI診断</strong><span>3分で自社に合うAIが分かる。</span></a>
+      </div>
     </li>
     <li><a href="#contact" class="nav-cta">CONTACT</a></li>
   </ul>
@@ -1408,6 +1422,27 @@ const obs = new IntersectionObserver(
   { threshold: 0.1 }
 );
 document.querySelectorAll('.reveal').forEach(r => obs.observe(r));
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.dropdown').forEach(d => {
+    const t = d.querySelector('.dropdown-trigger');
+    if (!t) return;
+    t.addEventListener('click', e => {
+      if (window.matchMedia('(hover: none)').matches) {
+        e.preventDefault();
+        document.querySelectorAll('.dropdown.open').forEach(o => { if (o !== d) o.classList.remove('open'); });
+        d.classList.toggle('open');
+      }
+    });
+  });
+  document.addEventListener('click', e => {
+    document.querySelectorAll('.dropdown.open').forEach(d => {
+      if (!d.contains(e.target)) d.classList.remove('open');
+    });
+  });
+});
 </script>
 </body>
 </html>

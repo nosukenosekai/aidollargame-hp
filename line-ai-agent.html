@@ -73,7 +73,17 @@ nav {
 .nav-logo span { color:var(--green); }
 .nav-logo .heart-i, .footer-logo .heart-i { position:relative; display:inline-block; line-height:1; color:#ff5757 !important; }
 .nav-logo .heart-i::after, .footer-logo .heart-i::after { content:'\2665'; position:absolute; left:50%; bottom:75%; transform:translateX(-50%); font-size:0.42em; line-height:1; color:#ff5757 !important; pointer-events:none; }
-.nav-links { display:flex; gap:2rem; list-style:none; }
+.nav-links { display:flex; gap:2rem; list-style:none; align-items:center; }
+.dropdown { position:relative; }
+.dropdown-trigger { display:inline-flex; align-items:center; gap:0.35rem; cursor:pointer; }
+.dropdown-trigger .chev { font-size:0.7em; transition:transform 0.2s; }
+.dropdown:hover .dropdown-trigger .chev, .dropdown.open .dropdown-trigger .chev { transform:rotate(180deg); }
+.dropdown-menu { position:absolute; top:calc(100% + 14px); left:-1.2rem; min-width:360px; background:#fff; border:1px solid var(--border); border-radius:12px; box-shadow:0 24px 50px -22px rgba(0,0,0,0.18); padding:0.7rem; z-index:120; opacity:0; visibility:hidden; transform:translateY(-6px); transition:opacity 0.2s, visibility 0.2s, transform 0.2s; }
+.dropdown:hover .dropdown-menu, .dropdown.open .dropdown-menu, .dropdown:focus-within .dropdown-menu { opacity:1; visibility:visible; transform:translateY(0); }
+.dropdown-menu a { display:block; padding:0.85rem 1rem; border-radius:8px; color:var(--navy) !important; text-decoration:none; font-family:inherit; transition:background 0.18s; }
+.dropdown-menu a:hover { background:#f3f6fb; color:var(--navy) !important; }
+.dropdown-menu a strong { display:block; font-size:0.92rem; font-weight:700; margin-bottom:0.15rem; letter-spacing:0; }
+.dropdown-menu a span { display:block; font-size:0.74rem; color:#555; font-family:inherit; letter-spacing:0; }
 .nav-links a { color:var(--muted); text-decoration:none; font-size:0.85rem; transition:color 0.2s; }
 .nav-links a:hover { color:var(--navy); }
 .nav-cta { padding:0.6rem 1.4rem; background:var(--green); color:#fff; font-weight:700; font-size:0.82rem; border:none; cursor:pointer; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; text-decoration:none; border-radius:6px; transition:background 0.15s; }
@@ -348,8 +358,17 @@ footer { background:var(--white); border-top:1px solid var(--border); padding:2.
 <nav>
   <a href="index.html" class="nav-logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
   <ul class="nav-links">
+    <li class="dropdown">
+      <a href="index.html#products" class="dropdown-trigger">プロダクト <span class="chev">▾</span></a>
+      <div class="dropdown-menu">
+        <a href="line-ai-agent.html"><strong>SNS AIエージェント</strong><span>LINE/SNSに、AIの接客を。</span></a>
+        <a href="human-clone-ai.html"><strong>AIwill（社長クローン）</strong><span>あなたの判断と意志を、デジタルに残す。</span></a>
+        <a href="aiside.html"><strong>AIside（アイサイド）</strong><span>ずっとそばにいる、あなたの付き人AI。</span></a>
+        <a href="ai-consulting.html"><strong>AI導入支援・コンサル</strong><span>戦略立案から運用伴走まで一気通貫。</span></a>
+        <a href="shindan.html"><strong>AI診断</strong><span>3分で自社に合うAIが分かる。</span></a>
+      </div>
+    </li>
     <li><a href="#how">仕組み</a></li>
-    <li><a href="#industries">業種</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
   <a href="#cta" class="nav-cta">無料相談する</a>
@@ -981,6 +1000,27 @@ document.querySelectorAll('.faq-q').forEach(q => {
     const isOpen = item.classList.contains('open');
     document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
     if(!isOpen) item.classList.add('open');
+  });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.dropdown').forEach(d => {
+    const t = d.querySelector('.dropdown-trigger');
+    if (!t) return;
+    t.addEventListener('click', e => {
+      if (window.matchMedia('(hover: none)').matches) {
+        e.preventDefault();
+        document.querySelectorAll('.dropdown.open').forEach(o => { if (o !== d) o.classList.remove('open'); });
+        d.classList.toggle('open');
+      }
+    });
+  });
+  document.addEventListener('click', e => {
+    document.querySelectorAll('.dropdown.open').forEach(d => {
+      if (!d.contains(e.target)) d.classList.remove('open');
+    });
   });
 });
 </script>

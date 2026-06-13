@@ -19,7 +19,18 @@
   .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,.6);}
   .logo .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;}
   .logo .heart-i::after{content:'\2665';position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
+  .nav-right{display:flex;align-items:center;gap:2rem;}
   .nav-back{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:.72rem;letter-spacing:.12em;color:var(--muted);text-decoration:none;transition:.3s;}
+  .dropdown{position:relative;}
+  .dropdown-trigger{display:inline-flex;align-items:center;gap:0.35rem;cursor:pointer;color:var(--muted);text-decoration:none;font-size:.85rem;font-weight:500;}
+  .dropdown-trigger .chev{font-size:0.7em;transition:transform 0.2s;}
+  .dropdown:hover .dropdown-trigger .chev, .dropdown.open .dropdown-trigger .chev{transform:rotate(180deg);}
+  .dropdown-menu{position:absolute;top:calc(100% + 14px);right:-1.2rem;min-width:340px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 24px 50px -22px rgba(0,0,0,0.4);padding:0.7rem;z-index:120;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity 0.2s, visibility 0.2s, transform 0.2s;}
+  .dropdown:hover .dropdown-menu, .dropdown.open .dropdown-menu, .dropdown:focus-within .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0);}
+  .dropdown-menu a{display:block;padding:0.85rem 1rem;border-radius:8px;color:#000 !important;text-decoration:none;font-family:inherit;transition:background 0.18s;}
+  .dropdown-menu a:hover{background:#f3f6fb;color:#000 !important;}
+  .dropdown-menu a strong{display:block;font-size:0.92rem;font-weight:700;margin-bottom:0.15rem;letter-spacing:0;color:#000;}
+  .dropdown-menu a span{display:block;font-size:0.74rem;color:#555;font-family:inherit;letter-spacing:0;}
   .nav-back:hover{color:var(--cyan);}
   .wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:3rem 1.4rem 4rem;}
   .card{width:100%;max-width:700px;}
@@ -199,7 +210,19 @@ footer a { color:#000 !important; }
 <body>
 <nav>
   <a href="index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
-  <a href="index.html" class="nav-back">← HOME</a>
+  <div class="nav-right">
+    <div class="dropdown">
+      <a href="index.html#products" class="dropdown-trigger">プロダクト <span class="chev">▾</span></a>
+      <div class="dropdown-menu">
+        <a href="line-ai-agent.html"><strong>SNS AIエージェント</strong><span>LINE/SNSに、AIの接客を。</span></a>
+        <a href="human-clone-ai.html"><strong>AIwill（社長クローン）</strong><span>あなたの判断と意志を、デジタルに残す。</span></a>
+        <a href="aiside.html"><strong>AIside（アイサイド）</strong><span>ずっとそばにいる、あなたの付き人AI。</span></a>
+        <a href="ai-consulting.html"><strong>AI導入支援・コンサル</strong><span>戦略立案から運用伴走まで一気通貫。</span></a>
+        <a href="shindan.html"><strong>AI診断</strong><span>3分で自社に合うAIが分かる。</span></a>
+      </div>
+    </div>
+    <a href="index.html" class="nav-back">← HOME</a>
+  </div>
 </nav>
 
 <div class="field" id="field" aria-hidden="true">
@@ -365,6 +388,27 @@ function finish(){
   swap('result');
 }
 function reset(){ swap('intro'); }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.dropdown').forEach(d => {
+    const t = d.querySelector('.dropdown-trigger');
+    if (!t) return;
+    t.addEventListener('click', e => {
+      if (window.matchMedia('(hover: none)').matches) {
+        e.preventDefault();
+        document.querySelectorAll('.dropdown.open').forEach(o => { if (o !== d) o.classList.remove('open'); });
+        d.classList.toggle('open');
+      }
+    });
+  });
+  document.addEventListener('click', e => {
+    document.querySelectorAll('.dropdown.open').forEach(d => {
+      if (!d.contains(e.target)) d.classList.remove('open');
+    });
+  });
+});
 </script>
 </body>
 </html>

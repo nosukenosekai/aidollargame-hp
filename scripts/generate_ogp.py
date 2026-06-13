@@ -157,14 +157,22 @@ PRODUCTS = [
 ]
 
 
+EMOJI_RE = re.compile(
+    "[\U0001F1E6-\U0001F1FF\U0001F300-\U0001FAFF\U00002600-\U000027BF"
+    "\U0000FE00-\U0000FE0F\U0001F000-\U0001F0FF\U000E0000-\U000E007F]+")
+
+
 def article_title(path):
-    """Headline for an article file (from <h1>, falling back to <title>)."""
+    """Headline for an article file (from <h1>, falling back to <title>).
+    Emoji/flags are stripped — the OG font can't render them."""
     t = open(path, encoding="utf-8").read()
     m = re.search(r"<h1>(.*?)</h1>", t, re.S) or re.search(r"<title>(.*?)</title>", t, re.S)
     if not m:
         return None
     title = re.sub(r"<[^>]+>", "", m.group(1)).strip()
-    return re.sub(r"\s*\|\s*AIdollargame\s*$", "", title)
+    title = re.sub(r"\s*\|\s*AIdollargame\s*$", "", title)
+    title = EMOJI_RE.sub("", title)
+    return re.sub(r"\s{2,}", " ", title).strip()
 
 
 def main():

@@ -331,4 +331,14 @@
       <image:title>AIコンサル・導入支援って、実際に何をしてくれるの？ | AIdollargame</image:title>
     </image:image>
   </url>
+  <url>
+    <loc>https://aidollargame.com/articles/worldcup-2026.html</loc>
+    <lastmod>2026-06-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://aidollargame.com/og-articles-worldcup-2026.png</image:loc>
+      <image:title>「強い」と「勝つ」は違う。それでも優勝は🇪🇸スペインだと言い切れる理由 | AIdollargame</image:title>
+    </image:image>
+  </url>
 </urlset>

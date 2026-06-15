@@ -1317,7 +1317,8 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
 })();
 </script>
 <script>
-/* 公式noteの最新記事を記事グリッド先頭に自動表示（取得失敗時は自前記事のみ表示） */
+/* 公式noteの最新記事を記事グリッド先頭に自動表示（取得失敗時は自前記事のみ表示）
+   画像は (1)note本体のアイキャッチ → (2)記事内容に合うストック画像 → の順で選ぶ */
 (function(){
   const grid = document.getElementById('articlesGrid');
   if (!grid) return;
@@ -1325,19 +1326,51 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
   const API = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS);
   const esc = s => (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const fmt = d => { const x = new Date(d); return isNaN(x) ? '' : x.getFullYear()+' / '+String(x.getMonth()+1).padStart(2,'0')+' / '+String(x.getDate()).padStart(2,'0'); };
-  fetch(API).then(r=>r.json()).then(data=>{
+
+  // 内容に合わせたストック画像（タイトル＋抜粋のキーワードで判定）
+  const U = id => 'https://images.unsplash.com/photo-'+id+'?w=800&q=80&fit=crop';
+  const STOCK = [
+    [/(W杯|ワールドカップ|サッカー|代表|優勝|試合|スポーツ)/, U('1517466787929-bc90951d0974')],
+    [/(コード|プログラ|エンジニア|サイト|ホームページ|HTML|開発|アプリ|実装)/, U('1461749280684-dccba630e2f6')],
+    [/(投資|お金|資金|調達|株|IPO|費用|相場|コスト|経済)/, U('1554224155-6726b3ff858f')],
+    [/(ロボット|自動化|エージェント|未来)/, U('1485827404703-89b55fcc595e')],
+    [/(SNS|発信|マーケ|集客|ブランド)/, U('1611926653458-09294b3142bf')],
+    [/(採用|人材|チーム|組織|社員|働き方)/, U('1521737604893-d14cc237f11d')]
+  ];
+  const DEFAULT_IMG = U('1677442136019-21780ecad995'); // AI 抽象
+  const pickStock = (t) => { for (const [re,img] of STOCK) if (re.test(t)) return img; return DEFAULT_IMG; };
+
+  // note本体のRSSからアイキャッチ(media:thumbnail)を best-effort で取得（CORSプロキシ経由・失敗可）
+  const getThumbs = () => {
+    const ctl = new AbortController();
+    const to = setTimeout(()=>ctl.abort(), 4000);
+    const proxy = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(RSS);
+    return fetch(proxy, {signal: ctl.signal}).then(r=>r.text()).then(xml=>{
+      const doc = new DOMParser().parseFromString(xml, 'text/xml');
+      const map = {};
+      doc.querySelectorAll('item').forEach(it=>{
+        const link = (it.querySelector('link')?.textContent||'').trim();
+        const th = it.getElementsByTagName('media:thumbnail')[0];
+        const url = th ? (th.textContent||'').trim() : '';
+        if (link && url) map[link] = url;
+      });
+      return map;
+    }).catch(()=>({})).finally(()=>clearTimeout(to));
+  };
+
+  Promise.all([
+    fetch(API).then(r=>r.json()).catch(()=>null),
+    getThumbs()
+  ]).then(([data, thumbs])=>{
     if (!data || data.status !== 'ok' || !data.items || !data.items.length) return;
     const frag = document.createDocumentFragment();
     data.items.slice(0,3).forEach(item=>{
       const desc = esc((item.description||'').replace(/<[^>]+>/g,'').trim()).slice(0,90);
-      const firstImg = s => { const m = /<img[^>]+src=["']([^"']+)["']/i.exec(s||''); return m ? m[1] : ''; };
-      const thumb = item.thumbnail || (item.enclosure && item.enclosure.link) || firstImg(item.content) || firstImg(item.description) || '';
+      const img = (thumbs && thumbs[item.link]) || pickStock((item.title||'') + ' ' + (item.description||''));
       const a = document.createElement('a');
       a.href = item.link; a.target='_blank'; a.rel='noopener'; a.className='article-card';
       a.innerHTML =
-        (thumb
-          ? `<div class="article-img" style="background-image:url('${esc(thumb)}')"></div>`
-          : `<div class="article-img" style="background:linear-gradient(135deg,#0a1238,#1a6dff);display:flex;align-items:center;justify-content:center;"><span style="font-weight:800;font-size:1.2rem;letter-spacing:0.04em;color:#fff;"><span style="color:#00d8ff">AI</span>dollargame</span></div>`) +
+        `<div class="article-img" style="background-image:url('${esc(img)}')"></div>` +
         `<div class="article-body-inner">
           <div class="article-cat">NOTE</div>
           <div class="article-date">${fmt(item.pubDate)}</div>

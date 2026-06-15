@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIを使うとき本当に気をつけるべき6つのこと | AIdollargame</title>
+<meta name="description" content="便利なAIにも作法がある。ハルシネーション・情報漏えい・著作権・ディープフェイク詐欺・依存まで、誰もが知っておくべき注意点を実例とともにやさしく解説。">
+<meta name="author" content="AIdollargame 編集部">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/articles/ai-cautions.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AIdollargame">
+<meta property="og:title" content="AIを使うとき本当に気をつけるべき6つのこと">
+<meta property="og:description" content="便利なAIにも作法がある。ハルシネーション・情報漏えい・著作権・ディープフェイク詐欺・依存まで、誰もが知っておくべき注意点をやさしく解説。">
+<meta property="og:url" content="https://aidollargame.com/articles/ai-cautions.html">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-06-15">
+<meta property="article:author" content="AIdollargame 編集部">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AIを使うとき本当に気をつけるべき6つのこと">
+<meta name="twitter:description" content="誰もが知っておくべきAIの注意点を実例でやさしく解説。">
+<meta name="twitter:image" content="https://aidollargame.com/og-default.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "AIを使うとき本当に気をつけるべき6つのこと",
+  "description": "便利なAIにも作法がある。ハルシネーション・情報漏えい・著作権・ディープフェイク詐欺・依存まで、誰もが知っておくべき注意点をやさしく解説。",
+  "datePublished": "2026-06-15",
+  "author": {"@type":"Organization","name":"AIdollargame 編集部"},
+  "publisher": {
+    "@type":"Organization",
+    "name":"AIdollargame",
+    "logo":{"@type":"ImageObject","url":"https://aidollargame.com/og-default.png"}
+  },
+  "mainEntityOfPage": "https://aidollargame.com/articles/ai-cautions.html",
+  "image": "https://aidollargame.com/og-default.png",
+  "inLanguage": "ja"
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{--cyan:#00d8ff;--blue:#1a6dff;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#1a6dff);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;background:#0a1238;}
+  body{background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%);color:var(--text);font-family:'Noto Sans JP',sans-serif;overflow-x:hidden;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,9,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:'Rajdhani',sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);}
+  .nav-back{font-family:'Share Tech Mono',monospace;font-size:0.78rem;letter-spacing:0.12em;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .hero{padding:9rem 2rem 4rem;max-width:800px;margin:0 auto;}
+  .tag{font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.4em;color:var(--cyan);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem;}
+  .tag::before{content:'';display:inline-block;width:30px;height:1px;background:var(--cyan);}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;}
+  .meta{display:flex;gap:2rem;align-items:center;font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}
+  .body{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}
+  .body h2{font-size:1.4rem;font-weight:900;margin:3.5rem 0 1.2rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}
+  .body p{font-size:0.97rem;color:rgba(238,243,255,0.85);line-height:2.1;margin-bottom:1.4rem;}
+  .body strong{color:#fff;font-weight:700;}
+  .body ul{margin:0 0 1.4rem 1.4rem;}
+  .body li{font-size:0.97rem;color:rgba(238,243,255,0.85);line-height:2;margin-bottom:0.5rem;}
+  .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
+  .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
+  .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
+  .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2rem;color:#001428;font-weight:700;font-size:0.9rem;border-radius:8px;background:linear-gradient(110deg,#00d8ff 0%,#1a6dff 50%,#00d8ff 100%);background-size:220% 100%;text-decoration:none;transition:transform 0.25s,box-shadow 0.4s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(0,216,255,0.6);}
+  .related{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+  .related h3{font-family:'Share Tech Mono',monospace;font-size:0.72rem;letter-spacing:0.3em;color:var(--muted);margin-bottom:1.5rem;}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .rcard{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.4rem;text-decoration:none;color:inherit;transition:all 0.3s;display:block;}
+  .rcard:hover{border-color:rgba(0,216,255,0.35);transform:translateY(-4px);}
+  .rcard .rt{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--cyan);margin-bottom:0.5rem;}
+  .rcard .rttl{font-size:0.88rem;font-weight:700;line-height:1.5;}
+  footer{border-top:1px solid rgba(255,255,255,0.08);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:rgba(6,9,26,0.6);}
+  .fc{font-size:0.75rem;color:var(--muted);font-family:'Share Tech Mono',monospace;}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.hero,.body,.related{padding-left:1.2rem;padding-right:1.2rem;}footer{padding:2rem 1.5rem;}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center"><span class="ai">AI</span>dollargame</a>
+  <a href="./index.html" class="nav-back">← ARTICLES</a>
+</nav>
+<div class="hero">
+  <div class="tag">AI LITERACY</div>
+  <h1>AIを使うとき本当に気をつけるべき6つのこと</h1>
+  <div class="meta"><span>2026 / 06 / 15</span><span>AIdollargame 編集部</span><span>読了 約8分</span></div>
+</div>
+<article class="body">
+
+<p>AIはもう特別な道具ではない。文章も画像も音楽も一瞬で生み出せる。仕事は速くなり調べ物は楽になった。それ自体は素晴らしいことだ。</p>
+
+<p>ただし便利な道具ほど使い方の作法がある。作法を知らないまま全力で頼ると地味に事故る。情報を漏らしてしまったり間違った内容を世に出してしまったり気づけば自分の頭で考えなくなっていたりする。</p>
+
+<p>この記事ではAIを使う人すべてに知っておいてほしい注意点を6つにまとめた。専門用語はできるだけ使わない。今日から効く話だけを書く。</p>
+
+<h2>その1 AIは平気で「それっぽい嘘」をつく</h2>
+
+<p>まず大前提として<strong>AIは知らないことでも堂々と答える</strong>。事実に見えてまったくの作り話ということが普通に起きる。この現象は「ハルシネーション」と呼ばれる。AIの欠陥ではなく仕組み上どうしても起きる性質だと思っておいたほうがいい。</p>
+
+<p>とくに危ないのは人名や数字や日付や法律や出典まわりだ。それらしい体裁で出てくるので人間の側が信じてしまう。実在しない論文や条文を引用してくることさえある。</p>
+
+<blockquote><p>AIの答えは「下書き」であって「正解」ではない。最後に正しさを保証するのは使う人間の側だ。</p></blockquote>
+
+<p>対策はシンプルだ。<strong>大事な部分はそのまま世に出さず必ず自分で裏を取る</strong>。これだけで起きうる事故の大半は防げる。社外に出す資料やお客様に渡す情報ならなおさら確認は欠かせない。</p>
+
+<h2>その2 入れてはいけない情報がある</h2>
+
+<p>AIに打ち込んだ内容はその場で消えるとはかぎらない。サービスによっては学習に使われたり社外のサーバーに残ったりする。つまり<strong>入力した瞬間に自分の手を離れる可能性がある</strong>と考えたほうがいい。</p>
+
+<p>次のような情報は安易に貼らないことをおすすめする。</p>
+
+<ul>
+<li><strong>お客様の氏名や連絡先</strong>などの個人情報</li>
+<li><strong>契約書や見積書</strong>など取引先との機密</li>
+<li><strong>社内の売上や原価</strong>といった数字</li>
+<li><strong>パスワードやAPIキー</strong>などの認証情報</li>
+</ul>
+
+<p>判断基準は「他人に見られて困るものか」で十分だ。仕事で使うならまず会社の利用ルールを確認したい。多くのサービスには入力内容を学習に使わせない設定があるのでそこを必ずオンにしておく。法人向けプランなら情報の扱いがより安全に設計されていることも多い。</p>
+
+<h2>その3 つくったものの「権利」はまだ曖昧</h2>
+
+<p>AIが生んだ文章や画像や音楽は誰のものなのか。この問いに世界はまだ答えを出しきれていない。著作権をめぐる裁判が各国で進行中だ。</p>
+
+<p>たとえばAI作曲サービスのSunoは2026年6月に約600億円を調達し評価額を大きく伸ばした。その一方でレコード会社からは楽曲を無断で学習に使ったとして提訴されている。<strong>勢いのあるサービスでも法的な決着はついていない</strong>のが現状だ。</p>
+
+<p>だからこそ商用で使うときは一拍おいて考えたい。生成したものが既存の作品や特定の人物に似すぎていないか。元になった素材の権利は大丈夫か。自分のビジネスを守るためにも「誰かの権利を踏んでいないか」を確認する習慣をつけておきたい。</p>
+
+<h2>その4 あなた自身が「偽物」の標的になる</h2>
+
+<p>ここからは使う側ではなく狙われる側の話だ。今のAIは<strong>顔と声をかんたんに偽造できる</strong>。本人そっくりの動画も音声も数分で作れてしまう。</p>
+
+<p>2026年6月にはイギリスの中央銀行総裁が異例の公式警告を出した。自分の顔を使った偽の投資広告がネット上に出回っているという内容だ。一国の金融トップですら標的にされる時代になった。発信者や経営者のように顔と名前が世に出ている人ほど狙われやすい。</p>
+
+<p>身を守る一番の方法は事前の取り決めだ。<strong>「本人がSNSやメールで急に投資や送金を求めることはない」</strong>というルールを家族と社内で共有しておく。お金が絡む連絡は必ず別の手段で本人に確認する。この一手間が最大の防御になる。</p>
+
+<h2>その5 考えることを丸投げしない</h2>
+
+<p>AIは答えをすぐ出してくれる。だからこそ怖い。頼りすぎると判断力や自分の言葉が少しずつ痩せていく。便利さと引き換えに考える力を手放してしまう。</p>
+
+<p>この問題は子どもにとってより深刻だ。アメリカのニューヨーク州では2026年6月に18歳未満への「AI恋人チャットボット」の提供を禁じる法律が可決された。賛成多数どころか満場一致だった。常に肯定してくれるAIに依存し現実の人間関係や心の発達に悪影響が出ることを社会が問題視しはじめている。</p>
+
+<p>AIは「答えを出す機械」ではなく「壁打ち相手」として使うのがちょうどいい。アイデアを広げたり考えを整理したりするのは得意だ。<strong>でも最終的に決めるのは自分だというラインだけは手放さない</strong>。そこを守れる人にとってAIは思考を加速させる最高の相棒になる。</p>
+
+<h2>その6 AIの答えには「偏り」がある</h2>
+
+<p>AIは大量のデータを学んでいる。そのデータが偏っていればAIの答えも偏る。特定の立場や文化に寄った見方をさらりと一般論のように語ることがある。</p>
+
+<p>だから一つの答えを唯一の正解として鵜呑みにしないことが大切だ。重要な判断ほど<strong>別の角度から問い直したり複数のAIや情報源を突き合わせたりする</strong>。AIは「物知りな相談相手の一人」であって「全知の審判」ではない。この距離感を保てるかどうかで使いこなしの質が決まる。</p>
+
+<h2>まとめ AIは「優秀だが未熟な新人」</h2>
+
+<p>6つの注意点を一言でまとめるとこうなる。<strong>AIは優秀だが未熟な新人だ</strong>。仕事は速いし物知りだ。けれど平気で嘘をつくし秘密を守る意識はないし最後の責任は取れない。</p>
+
+<p>だから任せきりにしない。要所だけ人間が手綱を握る。そうすればAIは怖いものではなく頼れる戦力になる。恐れて遠ざけるのも全力で依存するのも違う。<strong>正しく怖がり賢く使う</strong>。それがこれからの時代に一番強い向き合い方だ。私たちが大切にしている「楽ではなく楽しいを考える」という姿勢も同じ場所につながっている。面倒な作業はAIに預けて人は楽しいと思えることに集中する。そのために最低限の作法だけは身につけておきたい。</p>
+
+<div class="cta">
+  <h3>自社にAIをどう取り入れるか相談する</h3>
+  <p>導入・社内ルールづくり・研修まで一貫して支援します。何から始めるべきか迷ったら話しかけてください。</p>
+  <a href="../index.html#contact" class="btn">話しかける →</a>
+</div>
+</article>
+<div class="related">
+  <h3>RELATED ARTICLES</h3>
+  <div class="rgrid">
+    <a href="./ai-prompt-tips.html" class="rcard"><div class="rt">INSIGHT</div><div class="rttl">同じAIでも答えが変わる——AIに上手にお願いするコツ5つ</div></a>
+    <a href="./ai-is-ally.html" class="rcard"><div class="rt">PHILOSOPHY</div><div class="rttl">AIは敵じゃない。味方として使えばいい</div></a>
+    <a href="./ai-fable5-explained.html" class="rcard"><div class="rt">NEWS</div><div class="rttl">Anthropicの最新AI「Fable 5」で、実際に何ができる？</div></a>
+  </div>
+</div>
+<footer>
+  <a href="../index.html" class="logo"><span class="ai">AI</span>dollargame</a>
+  <div class="fc">© 2025 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
+</footer>
+</body>
+</html>

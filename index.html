@@ -545,7 +545,7 @@
   .article-img::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(10,18,56,0.2) 0%,rgba(10,18,56,0.55) 100%); }
   .article-cat { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.62rem; letter-spacing:0.25em; color:var(--cyan); }
   .article-date { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.65rem; color:var(--muted); }
-  .article-title-card { font-size:0.98rem; font-weight:700; line-height:1.6; color:#fff; margin-top:0.2rem; }
+  .article-title-card { font-size:0.98rem; font-weight:700; line-height:1.6; color:#fff; margin-top:0.2rem; word-break:auto-phrase; }
   .article-desc { font-size:0.82rem; color:var(--muted); line-height:1.85; flex:1; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
   .article-link { font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.68rem; color:var(--cyan); letter-spacing:0.1em; margin-top:auto; padding-top:0.8rem; border-top:1px solid rgba(255,255,255,0.06); }
   .articles-source { margin-top:2rem; text-align:right; }
@@ -990,7 +990,7 @@
         <div class="article-cat">AI LITERACY</div>
         <div class="article-date">2026 / 06 / 15</div>
         <div class="article-title-card">AIを使うとき本当に気をつけるべき6つのこと</div>
-        <div class="article-desc">情報漏えい・著作権・ディープフェイク詐欺・依存まで。誰もが知っておくべきAIの注意点を実例でやさしく解説。</div>
+        <div class="article-desc">情報漏えい・著作権・ディープフェイク詐欺・依存まで。誰もが知っておくべきAIの注意点を実例で解説。</div>
         <div class="article-link">READ MORE →</div>
       </div>
     </a>
@@ -999,8 +999,8 @@
       <div class="article-body-inner">
         <div class="article-cat">NEWS</div>
         <div class="article-date">2026 / 06 / 11</div>
-        <div class="article-title-card">Anthropicの最新AI「Fable 5」で、実際に何ができる？やさしく解説</div>
-        <div class="article-desc">史上最高性能と話題のClaude Fable 5。何ができるのか、専門用語なしでやさしく解説。</div>
+        <div class="article-title-card">Anthropicの最新AI「Fable 5」で、実際に何ができる？</div>
+        <div class="article-desc">史上最高性能と話題のClaude Fable 5。何ができるのか、専門用語なしで解説。</div>
         <div class="article-link">READ MORE →</div>
       </div>
     </a>
@@ -1029,7 +1029,7 @@
       <div class="article-body-inner">
         <div class="article-cat">CONSULTING</div>
         <div class="article-date">2026 / 06 / 05</div>
-        <div class="article-title-card">AIdollargameとは？事業内容・対応業界・始め方をやさしく解説</div>
+        <div class="article-title-card">AIdollargameとは？事業内容・対応業界・始め方</div>
         <div class="article-desc">SNS向けAIエージェント・AI導入支援を行うIT企業。事業内容・対応業界・始め方をまとめて解説。</div>
         <div class="article-link">READ MORE →</div>
       </div>
@@ -1330,13 +1330,14 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
     const frag = document.createDocumentFragment();
     data.items.slice(0,3).forEach(item=>{
       const desc = esc((item.description||'').replace(/<[^>]+>/g,'').trim()).slice(0,90);
-      const thumb = item.thumbnail || (item.enclosure && item.enclosure.link) || '';
+      const firstImg = s => { const m = /<img[^>]+src=["']([^"']+)["']/i.exec(s||''); return m ? m[1] : ''; };
+      const thumb = item.thumbnail || (item.enclosure && item.enclosure.link) || firstImg(item.content) || firstImg(item.description) || '';
       const a = document.createElement('a');
       a.href = item.link; a.target='_blank'; a.rel='noopener'; a.className='article-card';
       a.innerHTML =
         (thumb
           ? `<div class="article-img" style="background-image:url('${esc(thumb)}')"></div>`
-          : `<div class="article-img" style="background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;"><span style="font-family:'Share Tech Mono',monospace;letter-spacing:0.3em;color:#fff;font-weight:700;">note</span></div>`) +
+          : `<div class="article-img" style="background:linear-gradient(135deg,#0a1238,#1a6dff);display:flex;align-items:center;justify-content:center;"><span style="font-weight:800;font-size:1.2rem;letter-spacing:0.04em;color:#fff;"><span style="color:#00d8ff">AI</span>dollargame</span></div>`) +
         `<div class="article-body-inner">
           <div class="article-cat">NOTE</div>
           <div class="article-date">${fmt(item.pubDate)}</div>

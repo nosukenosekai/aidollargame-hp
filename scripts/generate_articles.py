@@ -147,7 +147,7 @@ ARTICLE_HTML = """\
   .hero{{padding:9rem 2rem 4rem;max-width:800px;margin:0 auto;}}
   .tag{{font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.4em;color:var(--cyan);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem;}}
   .tag::before{{content:'';display:inline-block;width:30px;height:1px;background:var(--cyan);}}
-  h1{{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;}}
+  h1{{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;word-break:auto-phrase;}}
   .meta{{display:flex;gap:2rem;align-items:center;font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}}
   .body{{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}}
   .body h2{{font-size:1.4rem;font-weight:900;margin:3.5rem 0 1.2rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}}
@@ -205,6 +205,90 @@ ARTICLE_HTML = """\
 </body>
 </html>"""
 
+LIGHT_OVERRIDE = """/* ============ LIGHT THEME OVERRIDE ============ */
+html { background:#ffffff !important; }
+body { background:#ffffff !important; color:#000 !important; }
+body::before { display:none !important; }
+nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.nav-home, .back-link { color:#000 !important; }
+.nav-home:hover, .back-link:hover { color:#000 !important; }
+.hero h1, h1, h2, h3 { color:#000 !important; }
+.hero p, p, .lead { color:#000 !important; }
+.section-tag { color:#000 !important; }
+.section-tag::before { background:#000 !important; }
+.filter-tab { color:#000 !important; border-color:#e5e7eb !important; background:transparent !important; }
+.filter-tab:hover { color:#000 !important; border-color:#cbd5e1 !important; }
+.filter-tab.active { color:#fff !important; border-color:#000 !important; background:#000 !important; }
+.articles-grid .article-card,
+.article-card { background:#ffffff !important; border:1px solid #e5e7eb !important; color:#000 !important; }
+.article-card:hover { border-color:#000 !important; box-shadow:0 14px 36px -16px rgba(14,26,43,0.18) !important; }
+.card-color-bar { background:#000 !important; }
+.card-tag { color:#000 !important; }
+.card-date { color:#000 !important; }
+.card-title { color:#000 !important; }
+.card-desc { color:#000 !important; }
+.card-link { color:#000 !important; border-top-color:#f1f3f6 !important; }
+.card-image::after { background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(0,0,0,0.05) 100%) !important; }
+.contact-nudge { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.nudge-photo { border-color:#e5e7eb !important; }
+.nudge-body p { color:#000 !important; }
+.nudge-link { color:#000 !important; }
+article, .article-body, .post-body, .post-content { color:#000 !important; }
+article p, .article-body p, .post-body p { color:#000 !important; }
+blockquote, .quote { background:#fafbfc !important; border-left-color:#000 !important; color:#000 !important; }
+code { background:#f3f6fb !important; color:#000 !important; }
+.meta, .post-meta { color:#000 !important; }
+.byline { color:#000 !important; }
+footer, .site-footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
+footer a { color:#000 !important; }
+.footer-copy, .fc { color:#000 !important; }
+a { color:#000; }
+/* Dark step / calc / quote boxes -> light */
+.step { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.step-num { color:#000 !important; }
+.step-body h4 { color:#000 !important; }
+.step-body p { color:#000 !important; }
+.calc { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.calc .clabel { color:#000 !important; }
+.calc .crow { border-bottom:1px dashed #e5e7eb !important; color:#000 !important; }
+.body p, .body li, .body blockquote p { color:#000 !important; }
+.body blockquote { background:#fafbfc !important; color:#000 !important; }
+.body h2, .body h3, .body h4 { color:#000 !important; }
+.body strong { color:#000 !important; font-weight:900 !important; }
+.cta-box, .ending-cta, .cta-card { background:#fafbfc !important; border:1px solid #e5e7eb !important; color:#000 !important; }
+.cta-box *, .ending-cta *, .cta-card * { color:#000 !important; }
+.cta-box .btn, .ending-cta .btn, .cta-card .btn, .cta-box a.btn, .ending-cta a.btn { background:#000 !important; color:#fff !important; }
+.cta-box .btn *, .ending-cta .btn *, .cta-card .btn * { color:#fff !important; }
+.lead, .article-lead, .post-lead, article p, .body { color:#000 !important; }
+/* Article CTA + related cards */
+.cta { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.cta * { color:#000 !important; }
+.cta h2, .cta h3 { color:#000 !important; }
+.cta p { color:#000 !important; }
+.cta .btn, .btn { background:#000 !important; color:#fff !important; }
+.cta .btn:hover, .btn:hover { background:#222 !important; box-shadow:0 10px 30px -10px rgba(0,0,0,0.3) !important; }
+.cta .btn-ghost, .btn-ghost { color:#000 !important; background:#fff !important; border:1px solid #000 !important; }
+.cta .btn-ghost:hover, .btn-ghost:hover { background:#fafbfc !important; border-color:#000 !important; }
+.related h3 { color:#000 !important; }
+.rcard { background:#fff !important; border:1px solid #e5e7eb !important; }
+.rcard:hover { border-color:#000 !important; box-shadow:0 14px 36px -16px rgba(0,0,0,0.18) !important; }
+.rcard .rt { color:#000 !important; }
+.rcard .rttl { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; }
+footer * { color:#000 !important; }
+.fc { color:#000 !important; opacity:0.6 !important; }
+.box { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.box h4 { color:#000 !important; }
+.box p { color:#000 !important; }
+.box p strong { color:#000 !important; }
+.contrast-col.before { background:#fff5f5 !important; border:1px solid #f3c6c6 !important; }
+.contrast-col.after { background:#f0fbff !important; border:1px solid #bfe8f5 !important; }
+.contrast-col h4 { color:#000 !important; }
+.contrast-col li { color:#000 !important; }
+"""
+
 
 def fetch_news():
     feeds = [
@@ -261,6 +345,7 @@ def generate_articles(news_items, date_str):
 次のJSON形式のみで返答してください（マークダウン・コードブロック不要）:
 {{"articles":[{{"slug":"英数字ハイフンのみのファイル名(既存slugと重複しないこと)","title":"日本語タイトル30字以内(既存タイトルと似せないこと)","description":"カード説明60字以内","body":"<p>...</p>\\n<h2>...</h2>\\n<p>...</p>\\n<blockquote><p>...</p></blockquote>"}}]}}
 
+タイトル要件: 「解説」「解説」などの冗長な締め言葉は付けない。内容が分かる簡潔な見出しにする。
 本文要件: 600-800字, h2を2-3個, blockquote1個, ビジョン「楽ではなく、楽しいを考える。」と絡める, <strong>で重要語強調, 偉そうにならず優しい語り口で"""
 
     msg = client.messages.create(
@@ -384,6 +469,7 @@ def main():
             date_iso=date_iso,
             body=a["body"],
         )
+        html = html.replace("</style>", LIGHT_OVERRIDE + "</style>", 1)
         path = ARTICLES_DIR / f"{a['slug']}.html"
         path.write_text(html, encoding="utf-8")
         print(f"Saved: {path.name}")

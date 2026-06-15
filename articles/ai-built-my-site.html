@@ -182,54 +182,54 @@ footer * { color:#000 !important; }
 </div>
 <article class="body">
 
-<p>正直に告白する。私はコードが一行も書けない。HTMLもサーバーの仕組みも、説明されても半分しか分からない。それでもこの数日で、AIdollargameのサイトに記事システムを新設し、十数本の記事を公開し、各記事に画像を入れ、検索対策を整え、さらに<strong>毎週ニュースを拾って記事が自動で増える仕組み</strong>まで作った。</p>
-<p>コードエディタは一度も開いていない。やったのは、AIに話しかけて、出てきたものに「良い・悪い」を伝え続けること。それだけだ。この記事では、何をどうやったのか、そして何が一番大事だったのかを、できるだけ正直に書く。</p>
+<p data-en="I’ll confess honestly: I can’t write a single line of code. Even when HTML or how servers work is explained to me, I only understand half of it. And yet, over the past few days, I built a brand-new article system into the AIdollargame site, published a dozen-plus articles, added images to each one, set up search optimization, and even built &lt;strong&gt;a system that picks up news every week and grows the article count automatically&lt;/strong&gt;.">正直に告白する。私はコードが一行も書けない。HTMLもサーバーの仕組みも、説明されても半分しか分からない。それでもこの数日で、AIdollargameのサイトに記事システムを新設し、十数本の記事を公開し、各記事に画像を入れ、検索対策を整え、さらに<strong>毎週ニュースを拾って記事が自動で増える仕組み</strong>まで作った。</p>
+<p data-en="I never once opened a code editor. All I did was talk to the AI and keep telling it “good” or “bad” about what came out. That’s it. In this article, I’ll write as honestly as I can about what I did, how, and what mattered most.">コードエディタは一度も開いていない。やったのは、AIに話しかけて、出てきたものに「良い・悪い」を伝え続けること。それだけだ。この記事では、何をどうやったのか、そして何が一番大事だったのかを、できるだけ正直に書く。</p>
 
-<h2>きっかけは「ちゃんとした会社に見せたい」だった</h2>
+<h2 data-en="It started with “I want us to look like a proper company”">きっかけは「ちゃんとした会社に見せたい」だった</h2>
 
-<p>サイトはあったが、記事のひとつもない、のっぺりした状態だった。事業をやっている以上、「この会社はちゃんと動いている」と感じてもらうには、発信が要る。だが、記事を書き続ける時間はないし、そのたびにエンジニアへ依頼するのも違う気がしていた。</p>
-<p>そこでAIに相談した。「会社のサイトに記事の欄を作りたい」——伝えたのはそれだけだ。返ってきたのは、既存のデザインに自然に馴染んだ記事一覧と、記事ページの雛形だった。「これならいける」と思えた瞬間から、一気に進み始めた。</p>
+<p data-en="We had a site, but it was flat and bare, without a single article. As long as you’re running a business, you need to put out content for people to feel that “this company is genuinely up and running.” But I had no time to keep writing articles, and asking an engineer every single time felt off, too.">サイトはあったが、記事のひとつもない、のっぺりした状態だった。事業をやっている以上、「この会社はちゃんと動いている」と感じてもらうには、発信が要る。だが、記事を書き続ける時間はないし、そのたびにエンジニアへ依頼するのも違う気がしていた。</p>
+<p data-en="So I consulted the AI. “I want to create an articles section on the company site”—that’s all I said. What came back was an article list that naturally fit the existing design, plus a template for the article pages. The moment I thought “this could work,” things started moving fast.">そこでAIに相談した。「会社のサイトに記事の欄を作りたい」——伝えたのはそれだけだ。返ってきたのは、既存のデザインに自然に馴染んだ記事一覧と、記事ページの雛形だった。「これならいける」と思えた瞬間から、一気に進み始めた。</p>
 
-<h2>やったこと（全部、話しかけただけ）</h2>
+<h2 data-en="What I did (all just by talking)">やったこと（全部、話しかけただけ）</h2>
 
-<p>この数日で実際にできたことを並べる。すべて対話だけ、コードは書いていない。</p>
+<p data-en="Here’s what I actually got done over the past few days. All through conversation alone—I didn’t write any code.">この数日で実際にできたことを並べる。すべて対話だけ、コードは書いていない。</p>
 <ul>
-  <li>サイトに<strong>記事セクションを新設</strong>。トップページからも一覧ページからも読める形に</li>
-  <li>記事を<strong>カテゴリで絞り込めるフィルター</strong>（NEWS / INSIGHT / STORY など）を実装</li>
-  <li>各記事に<strong>サムネイル画像</strong>を設定。内容に合わないものは何度も差し替え</li>
-  <li><strong>検索対策（SEO）・SNSシェア時の見え方・構造化データ</strong>を整備</li>
-  <li>ブラウザのタブに出る<strong>アイコン（ファビコン）</strong>を設定</li>
-  <li><strong>毎週、最新AIニュースから記事が自動で公開される仕組み</strong>を構築</li>
+  <li data-en="&lt;strong&gt;Created a new articles section&lt;/strong&gt; on the site, readable from both the top page and the list page"><strong>記事セクションを新設</strong>。トップページからも一覧ページからも読める形に</li>
+  <li data-en="Implemented a &lt;strong&gt;filter to narrow articles by category&lt;/strong&gt; (NEWS / INSIGHT / STORY, and so on)">記事を<strong>カテゴリで絞り込めるフィルター</strong>（NEWS / INSIGHT / STORY など）を実装</li>
+  <li data-en="Set a &lt;strong&gt;thumbnail image&lt;/strong&gt; for each article, swapping out ones that didn’t fit the content again and again">各記事に<strong>サムネイル画像</strong>を設定。内容に合わないものは何度も差し替え</li>
+  <li data-en="Set up &lt;strong&gt;search optimization (SEO), how it looks when shared on social media, and structured data&lt;/strong&gt;"><strong>検索対策（SEO）・SNSシェア時の見え方・構造化データ</strong>を整備</li>
+  <li data-en="Set the &lt;strong&gt;icon (favicon)&lt;/strong&gt; that shows in the browser tab">ブラウザのタブに出る<strong>アイコン（ファビコン）</strong>を設定</li>
+  <li data-en="Built &lt;strong&gt;a system that automatically publishes articles each week from the latest AI news&lt;/strong&gt;"><strong>毎週、最新AIニュースから記事が自動で公開される仕組み</strong>を構築</li>
 </ul>
-<p>少し前なら、外部の制作会社や社内のエンジニアに頼むのが当たり前だった内容だ。それを、移動中や本業の合間に、スマホとパソコンで指示するだけで形にできた。</p>
+<p data-en="Not long ago, this was the kind of work you’d obviously hand to an outside production company or an in-house engineer. I was able to bring it to life just by giving instructions on my phone and laptop—while commuting and in the gaps between my main work.">少し前なら、外部の制作会社や社内のエンジニアに頼むのが当たり前だった内容だ。それを、移動中や本業の合間に、スマホとパソコンで指示するだけで形にできた。</p>
 
-<h2>実際のやり取りは、こんな感じだった</h2>
+<h2 data-en="Here’s what the actual exchanges were like">実際のやり取りは、こんな感じだった</h2>
 
-<p>どんなふうに進めたのか、具体的に書いておく。最初は「記事の欄を作って」と頼む。形ができたら、見て、気になるところを伝える。「カードが寂しいから画像を入れたい」「カテゴリで絞れるようにしたい」「タイトルの改行が不自然」——思いついたことを、その都度、普通の言葉で投げるだけだ。</p>
-<p>専門用語は使っていないし、使えない。それでも伝わる。<strong>大事なのは、一度で完成させようとしないこと</strong>。まず六〜七割の形にしてもらって、そこから対話で詰めていく。実際、画像は何度も差し替えたし、文章の言い回しも繰り返し直した。この往復ができるからこそ、専門知識がなくても理想に近づけられる。</p>
+<p data-en="Let me write concretely about how I went about it. First I ask, “Make an articles section.” Once it takes shape, I look at it and point out what bothers me. “The cards feel empty, so I want to add images,” “I want to be able to filter by category,” “the line break in the title looks unnatural”—I just throw out whatever comes to mind, each time, in plain words.">どんなふうに進めたのか、具体的に書いておく。最初は「記事の欄を作って」と頼む。形ができたら、見て、気になるところを伝える。「カードが寂しいから画像を入れたい」「カテゴリで絞れるようにしたい」「タイトルの改行が不自然」——思いついたことを、その都度、普通の言葉で投げるだけだ。</p>
+<p data-en="I don’t use technical jargon—and I can’t. It still gets through. &lt;strong&gt;What matters is not trying to finish it in one go.&lt;/strong&gt; First have it get to about 60–70% of the way there, then refine from there through dialogue. In fact, I swapped images out many times and reworked the phrasing of the text over and over. It’s precisely because you can do this back-and-forth that you can get close to your ideal without specialized knowledge.">専門用語は使っていないし、使えない。それでも伝わる。<strong>大事なのは、一度で完成させようとしないこと</strong>。まず六〜七割の形にしてもらって、そこから対話で詰めていく。実際、画像は何度も差し替えたし、文章の言い回しも繰り返し直した。この往復ができるからこそ、専門知識がなくても理想に近づけられる。</p>
 
-<h2>エンジニアの時間まで、最適化された</h2>
+<h2 data-en="It even optimized the engineers’ time">エンジニアの時間まで、最適化された</h2>
 
-<p>これは導入してみて初めて気づいたことだが、効果は私の時間だけにとどまらなかった。<strong>エンジニアの時間まで最適化された</strong>のだ。</p>
-<p>エンジニアは本来、プロダクトの開発にこそ集中すべき人間だ。サイトの細かい修正や記事ページの調整は、開発に比べれば優先度が低い。それでもこれまでは、そこに彼らの貴重な時間を使わせてしまっていた。AIがその部分を巻き取ったことで、エンジニアは開発に専念できるようになった。<strong>AIは誰かの仕事を奪ったのではなく、それぞれを「本来やるべき仕事」に戻した</strong>のだ。</p>
+<p data-en="This is something I only realized after trying it: the benefit didn’t stop at my own time. &lt;strong&gt;It even optimized the engineers’ time.&lt;/strong&gt;">これは導入してみて初めて気づいたことだが、効果は私の時間だけにとどまらなかった。<strong>エンジニアの時間まで最適化された</strong>のだ。</p>
+<p data-en="Engineers are people who should really be focusing on developing the product. Minor site fixes and tweaks to article pages are low priority compared with development. Yet until now, I’d been making them spend their precious time on exactly that. By having AI take that part over, the engineers could devote themselves to development. &lt;strong&gt;AI didn’t steal anyone’s job—it returned each of us to “the work we were meant to do.”&lt;/strong&gt;">エンジニアは本来、プロダクトの開発にこそ集中すべき人間だ。サイトの細かい修正や記事ページの調整は、開発に比べれば優先度が低い。それでもこれまでは、そこに彼らの貴重な時間を使わせてしまっていた。AIがその部分を巻き取ったことで、エンジニアは開発に専念できるようになった。<strong>AIは誰かの仕事を奪ったのではなく、それぞれを「本来やるべき仕事」に戻した</strong>のだ。</p>
 
-<h2>一番大事だったのは「妥協しないこと」だった</h2>
+<h2 data-en="What mattered most was “not compromising”">一番大事だったのは「妥協しないこと」だった</h2>
 
-<p>勘違いされがちだが、AIに丸投げすれば勝手に良いものが出てくるわけではない。<strong>「AIに頼めばいい感じのものができる」と思い込むと、イメージと違うものが出てきたときに、つい受け入れてしまう</strong>。ここに落とし穴がある。</p>
-<p>実際、AIが選んできた画像には「これは工場の写真で、何の記事か分からない」と感じるものがあったし、ある文章は「これは会社の品位を下げる」と却下した。そこでサボらず、妥協せず、「ここが違う」「こうしたい」と伝えて、納得いくまで何度も修正させる。<strong>この粘りがあるかどうかで、最終的な仕上がりはまったく変わる</strong>。</p>
-<p>AIによってできることは格段に増え、時間も大きく短縮できる。でもAIは万能ではない。だからこそ、<strong>人間の判断基準を最後まで手放さないこと</strong>が要る。手は動かさなくていい。けれど、目と基準は、絶対に妥協してはいけない。</p>
+<p data-en="It’s easy to misunderstand, but dumping everything on AI doesn’t mean good things come out on their own. &lt;strong&gt;If you assume “if I just ask AI, something decent will come out,” then when something different from your vision appears, you end up accepting it.&lt;/strong&gt; That’s the pitfall.">勘違いされがちだが、AIに丸投げすれば勝手に良いものが出てくるわけではない。<strong>「AIに頼めばいい感じのものができる」と思い込むと、イメージと違うものが出てきたときに、つい受け入れてしまう</strong>。ここに落とし穴がある。</p>
+<p data-en="In fact, among the images AI picked, there were some where I felt “this is a photo of a factory—you can’t tell what article it’s for,” and one piece of text I rejected as “this lowers the company’s dignity.” So you don’t slack off or compromise: you say “this is wrong,” “I want it like this,” and have it revise again and again until you’re satisfied. &lt;strong&gt;Whether or not you have this persistence completely changes the final result.&lt;/strong&gt;">実際、AIが選んできた画像には「これは工場の写真で、何の記事か分からない」と感じるものがあったし、ある文章は「これは会社の品位を下げる」と却下した。そこでサボらず、妥協せず、「ここが違う」「こうしたい」と伝えて、納得いくまで何度も修正させる。<strong>この粘りがあるかどうかで、最終的な仕上がりはまったく変わる</strong>。</p>
+<p data-en="AI dramatically increases what you can do and can save a great deal of time. But AI isn’t all-powerful. That’s exactly why you need &lt;strong&gt;to never let go of human judgment, right to the end&lt;/strong&gt;. You don’t have to move your hands. But your eyes and your standards—those you must never compromise on.">AIによってできることは格段に増え、時間も大きく短縮できる。でもAIは万能ではない。だからこそ、<strong>人間の判断基準を最後まで手放さないこと</strong>が要る。手は動かさなくていい。けれど、目と基準は、絶対に妥協してはいけない。</p>
 
-<h2>これが「楽ではなく、楽しいを考える。」だった</h2>
+<h2 data-en="This was “Think not about what’s easy, but about what’s fun.”">これが「楽ではなく、楽しいを考える。」だった</h2>
 
-<p>コードを書く、画像を探す、文章の下書きを作る——こういった「やらなければいけないが、私じゃなくてもいい作業」は、すべてAIに渡した。私がやったのは、方向を決め、良し悪しを妥協せず判断し、最後に自分の言葉で魂を入れることだけだ。</p>
-<p>その結果、空いた時間で取引先に会いに行けた。これは弊社が掲げる「楽ではなく、楽しいを考える。」の、私自身による実証でもある。<strong>AIに面倒な作業を任せるほど、自分が「楽しい」と思える仕事——人と会い、頭を使う仕事——に向き合う時間が増える</strong>——それを、自分の手で確かめられた。</p>
+<p data-en="Writing code, finding images, drafting text—all this “work that has to get done but doesn’t have to be me” I handed entirely to AI. All I did was set the direction, judge good from bad without compromising, and finally breathe a soul into it in my own words.">コードを書く、画像を探す、文章の下書きを作る——こういった「やらなければいけないが、私じゃなくてもいい作業」は、すべてAIに渡した。私がやったのは、方向を決め、良し悪しを妥協せず判断し、最後に自分の言葉で魂を入れることだけだ。</p>
+<p data-en="As a result, I was able to use the freed-up time to go meet a client in person. This is also my own proof of our company’s motto, “Think not about what’s easy, but about what’s fun.” &lt;strong&gt;The more you hand tedious work to AI, the more time you have to face the work you find “fun”—meeting people, work that engages your mind&lt;/strong&gt;—and I was able to confirm that with my own hands.">その結果、空いた時間で取引先に会いに行けた。これは弊社が掲げる「楽ではなく、楽しいを考える。」の、私自身による実証でもある。<strong>AIに面倒な作業を任せるほど、自分が「楽しい」と思える仕事——人と会い、頭を使う仕事——に向き合う時間が増える</strong>——それを、自分の手で確かめられた。</p>
 
-<blockquote><p>「専門知識がないとAIは使えない」は誤解だった。本当に必要なのは、"何が良いか"の基準を持ち、それを妥協しない粘りだけだ。</p></blockquote>
+<blockquote><p data-en="“You can’t use AI without specialized knowledge” was a misconception. What you really need is just a standard for “what is good,” and the persistence not to compromise on it.">「専門知識がないとAIは使えない」は誤解だった。本当に必要なのは、"何が良いか"の基準を持ち、それを妥協しない粘りだけだ。</p></blockquote>
 
 <div class="cta">
-  <h3>同じことを、あなたの会社でもやりませんか</h3>
-  <p>「うちのサイトもこうしたい」「何から手をつければいいか分からない」——コードの話は一切不要です。話しかけてくれれば、あとはこちらでやります。</p>
-  <a href="../index.html#contact" class="btn">話しかける →</a>
+  <h3 data-en="Why not do the same at your company?">同じことを、あなたの会社でもやりませんか</h3>
+  <p data-en="“I want our site to be like this too,” “I don’t know where to begin”—no talk of code required at all. Just reach out and talk to us, and we’ll handle the rest.">「うちのサイトもこうしたい」「何から手をつければいいか分からない」——コードの話は一切不要です。話しかけてくれれば、あとはこちらでやります。</p>
+  <a href="../index.html#contact" class="btn" data-en="Reach out →">話しかける →</a>
 </div>
 </article>
 <div class="related">
@@ -244,5 +244,6 @@ footer * { color:#000 !important; }
   <a href="../index.html" class="logo">A<span class="heart-i">ı</span>dollargame</a>
   <div class="fc">© 2025 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
 </footer>
+<script src="../i18n.js" defer></script>
 </body>
 </html>

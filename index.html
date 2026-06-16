@@ -1198,34 +1198,68 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
   const stream=document.getElementById('chatStream');
   if(!stream)return;
 
-  const facilities=[
-    {n:'プランA', t:'スタンダード', p:'月額 ◯◯万円〜', m:'入居一時金 ◯◯万円〜<br>都心部・駅近'},
-    {n:'プランB', t:'プレミアム', p:'月額 ◯◯万円〜', m:'入居一時金 ◯◯万円〜<br>緑豊かなエリア'},
-    {n:'プランC', t:'コンフォート', p:'月額 ◯◯万円〜', m:'入居一時金 ◯◯万円〜<br>医療連携充実'},
-  ];
+  const DATA={
+    ja:{
+      facilities:[
+        {n:'プランA', t:'スタンダード', p:'月額 ◯◯万円〜', m:'入居一時金 ◯◯万円〜<br>都心部・駅近'},
+        {n:'プランB', t:'プレミアム', p:'月額 ◯◯万円〜', m:'入居一時金 ◯◯万円〜<br>緑豊かなエリア'},
+        {n:'プランC', t:'コンフォート', p:'月額 ◯◯万円〜', m:'入居一時金 ◯◯万円〜<br>医療連携充実'},
+      ],
+      dates:[
+        {d:'◯月◯日(月)', t:'10:00'},
+        {d:'◯月◯日(火)', t:'14:00'},
+        {d:'◯月◯日(木)', t:'11:00'},
+      ],
+      script:[
+        {type:'ai', text:'こんにちは。AIコンシェルジュです。<br>どのようなご要望でお探しですか？', delay:600},
+        {type:'user', text:'プランを比較したいです', delay:1300},
+        {type:'ai', text:'承知しました。ご利用条件を教えてください。<br>(エリア・予算・希望日 など)', delay:1400},
+        {type:'user', text:'都心部で予算◯◯万円', delay:1300},
+        {type:'ai', text:'条件に合うプランを3件ご提案します。', delay:1500},
+        {type:'facilities', delay:600},
+        {type:'user', text:'プランAを詳しく見たい', delay:1500},
+        {type:'ai', text:'見学候補日をご案内します。<br>以下からお選びください。', delay:1400},
+        {type:'dates', delay:600},
+        {type:'user', text:'◯月◯日(月) 10:00 で予約', delay:1400},
+        {type:'ai', text:'ご予約ありがとうございます。<br>カレンダー連携も可能です。', delay:1500},
+      ],
+      lbl:{detail:'詳細を見る', tour:'見学予約', book:'この日時で予約', read:'既読'},
+    },
+    en:{
+      facilities:[
+        {n:'Plan A', t:'Standard', p:'From ¥◯◯◯k / mo', m:'Entry fee from ¥◯◯◯k<br>City center, near station'},
+        {n:'Plan B', t:'Premium', p:'From ¥◯◯◯k / mo', m:'Entry fee from ¥◯◯◯k<br>Green, spacious area'},
+        {n:'Plan C', t:'Comfort', p:'From ¥◯◯◯k / mo', m:'Entry fee from ¥◯◯◯k<br>Strong medical support'},
+      ],
+      dates:[
+        {d:'Mon ◯/◯', t:'10:00'},
+        {d:'Tue ◯/◯', t:'14:00'},
+        {d:'Thu ◯/◯', t:'11:00'},
+      ],
+      script:[
+        {type:'ai', text:'Hello! I’m the AI concierge.<br>What are you looking for today?', delay:600},
+        {type:'user', text:'I’d like to compare plans', delay:1300},
+        {type:'ai', text:'Sure — could you tell me your conditions?<br>(area, budget, preferred date, etc.)', delay:1400},
+        {type:'user', text:'City center, budget around ¥◯◯◯k', delay:1300},
+        {type:'ai', text:'Here are 3 plans that match your conditions.', delay:1500},
+        {type:'facilities', delay:600},
+        {type:'user', text:'I’d like details on Plan A', delay:1500},
+        {type:'ai', text:'Here are some available tour dates.<br>Please choose one below.', delay:1400},
+        {type:'dates', delay:600},
+        {type:'user', text:'Book Mon ◯/◯ at 10:00', delay:1400},
+        {type:'ai', text:'Thank you for your booking!<br>Calendar sync is also available.', delay:1500},
+      ],
+      lbl:{detail:'View details', tour:'Book a tour', book:'Book this slot', read:'Read'},
+    },
+  };
+  function L(){ return (window.ADGI18n && window.ADGI18n.lang) || 'ja'; }
+  let facilities, dates, script, lbl;
+  function loadLang(){ const d=DATA[L()]||DATA.ja; facilities=d.facilities; dates=d.dates; script=d.script; lbl=d.lbl; }
+  loadLang();
 
-  const dates=[
-    {d:'◯月◯日(月)', t:'10:00'},
-    {d:'◯月◯日(火)', t:'14:00'},
-    {d:'◯月◯日(木)', t:'11:00'},
-  ];
-
-  const script=[
-    {type:'ai', text:'こんにちは。AIコンシェルジュです。<br>どのようなご要望でお探しですか？', delay:600},
-    {type:'user', text:'プランを比較したいです', delay:1300},
-    {type:'ai', text:'承知しました。ご利用条件を教えてください。<br>(エリア・予算・希望日 など)', delay:1400},
-    {type:'user', text:'都心部で予算◯◯万円', delay:1300},
-    {type:'ai', text:'条件に合うプランを3件ご提案します。', delay:1500},
-    {type:'facilities', delay:600},
-    {type:'user', text:'プランAを詳しく見たい', delay:1500},
-    {type:'ai', text:'見学候補日をご案内します。<br>以下からお選びください。', delay:1400},
-    {type:'dates', delay:600},
-    {type:'user', text:'◯月◯日(月) 10:00 で予約', delay:1400},
-    {type:'ai', text:'ご予約ありがとうございます。<br>カレンダー連携も可能です。', delay:1500},
-  ];
-
-  let i=0;
+  let i=0, gen=0, started=false;
   function step(){
+    const g=gen;
     const item=script[i];
     if(item.type==='ai' || item.type==='user'){
       // typing indicator for AI
@@ -1236,6 +1270,7 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
         stream.appendChild(t);
         scroll();
         setTimeout(()=>{
+          if(g!==gen)return;
           t.remove();
           addBubble(item);
           next();
@@ -1254,8 +1289,8 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
           <div class="fc-price">${f.p}</div>
           <div class="fc-meta">${f.m}</div>
           <div class="fc-buttons">
-            <div class="fc-btn primary">詳細を見る</div>
-            <div class="fc-btn secondary">見学予約</div>
+            <div class="fc-btn primary">${lbl.detail}</div>
+            <div class="fc-btn secondary">${lbl.tour}</div>
           </div>
         </div>
       `).join('');
@@ -1269,7 +1304,7 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
         <div class="date-card">
           <div class="dc-date">${d.d}</div>
           <div class="dc-time">${d.t}</div>
-          <div class="dc-btn">この日時で予約</div>
+          <div class="dc-btn">${lbl.book}</div>
         </div>
       `).join('');
       stream.appendChild(wrap);
@@ -1284,7 +1319,7 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
     if(item.type==='ai'){
       m.innerHTML=`<div class="line-avatar">AI</div><div class="line-bubble ai">${item.text}</div>`;
     } else {
-      m.innerHTML=`<div class="line-bubble user-msg">${item.text}</div><div class="line-time">既読</div>`;
+      m.innerHTML=`<div class="line-bubble user-msg">${item.text}</div><div class="line-time">${lbl.read}</div>`;
     }
     stream.appendChild(m);
     scroll();
@@ -1296,19 +1331,31 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
   }
 
   function next(){
+    const g=gen;
     i++;
     if(i>=script.length){
       // restart demo after pause
-      setTimeout(()=>{ stream.innerHTML=''; i=0; step(); }, 4500);
+      setTimeout(()=>{ if(g!==gen)return; stream.innerHTML=''; i=0; step(); }, 4500);
       return;
     }
-    setTimeout(step, script[i-1].delay || 1200);
+    setTimeout(()=>{ if(g!==gen)return; step(); }, script[i-1].delay || 1200);
   }
+
+  // rebuild the demo from the start in the current language
+  function restart(){ gen++; loadLang(); stream.innerHTML=''; i=0; step(); }
+
+  // react to language toggle: before the demo starts just swap data;
+  // once running, restart it cleanly in the new language
+  window.ADGI18n = window.ADGI18n || { lang:null, _subs:[] };
+  (window.ADGI18n._subs = window.ADGI18n._subs || []).push(function(){
+    loadLang();
+    if(started) restart();
+  });
 
   // start when section visible
   const startObs=new IntersectionObserver((es)=>{
     es.forEach(e=>{
-      if(e.isIntersecting){ step(); startObs.disconnect(); }
+      if(e.isIntersecting){ started=true; loadLang(); step(); startObs.disconnect(); }
     });
   },{threshold:0.2});
   startObs.observe(document.getElementById('agent-demo'));

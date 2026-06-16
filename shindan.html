@@ -286,59 +286,123 @@ footer a { color:#000 !important; }
 
 <script>
 const HP = "index.html";
-const PRODUCTS = {
-  sns:{ name:"SNS AIエージェント", icon:'<svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 20l1.1-4A8.4 8.4 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/></svg>', tagline:"お客様対応を、24時間ぶん肩代わり。",
-    detail:"line-ai-agent.html",
-    why:"あなたの一番の負担は「顧客対応・問い合わせ・予約」に時間を奪われていること。SNS AIエージェントは、LINEなどお客様が普段使うSNS上で自然に会話し、予約管理やCRM連携まで自動でこなします。",
-    benefits:["問い合わせ・予約対応を24時間365日自動化","お客様が使い慣れたLINE等の上で完結","あらゆる業種に対応"] },
-  clone:{ name:"社長クローンAI", icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>', tagline:"社長の頭脳を、いつでも参照できる分身に。",
-    detail:"human-clone-ai.html",
-    why:"あなたの会社は「社長への依存・属人化・引き継ぎ」が課題。社長クローンAIは、経営者の思考・判断・経験をAIにインプットし、いつでも意思決定を参照できる分身をつくります。後継者不足の解決にも効きます。",
-    benefits:["経営者の判断・知見をAIに継承","社長への一極集中・属人化を解消","スティーブ・ジョブズ版のデモを公開中"] },
-  side:{ name:"AIside（あなたの付き人AI）", icon:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3 2.6-5 5.5-5"/><circle cx="17" cy="10.5" r="2.4"/><path d="M13.5 19c0-2.4 1.8-3.9 3.5-3.9s3.5 1.5 3.5 3.9"/></svg>', tagline:"もう一人の自分が、隣で先回りして動く。",
-    detail:"aiside.html",
-    why:"あなたは「一人 or 少人数で雑務まで全部抱えている」状態。AIsideは、Gmail・カレンダー・Slackなど既存ツールを横断し、覚えて・先回りして・つなぐ、あなた専属の付き人AIです。あなた自身を隣で支えます。",
-    benefits:["Gmail・カレンダー・Slackなど既存ツールを横断","覚えて・先回りして・つなぎ、雑務を肩代わり","一人社長・フリーランス・多忙な経営者に最適"] },
-  cons:{ name:"AIコンサルティング・研修", icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/></svg>', tagline:"まず「何から始めるか」を、一緒に決める。",
-    detail:HP+"#contact",
-    why:"あなたの悩みは「何から始めればいいか分からない／社員がAIを使いこなせていない」。AIdollargameのコンサル・研修は、AI導入戦略の立案から社員のリスキリングまで一貫して伴走し、『使えるAI』を組織に根付かせます。",
-    benefits:["AI導入の戦略立案から実行まで伴走","社員のリスキリング・定着フォロー","Z世代への訴求や新規事業企画にも対応"] }
+const ORDER=['sns','clone','side','cons'];
+const SVG={
+  sns:'<svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 20l1.1-4A8.4 8.4 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/></svg>',
+  clone:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>',
+  side:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3 2.6-5 5.5-5"/><circle cx="17" cy="10.5" r="2.4"/><path d="M13.5 19c0-2.4 1.8-3.9 3.5-3.9s3.5 1.5 3.5 3.9"/></svg>',
+  cons:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5 5-2z"/></svg>'
 };
 
-const QUESTIONS = [
-  { title:"今、一番あなたの時間を奪っているのは？", opts:[
-    {ic:"💬",t:"お客様からの問い合わせ・予約対応",k:"sns"},
-    {ic:"🧠",t:"自分にしかできない判断・経営",k:"clone"},
-    {ic:"🤝",t:"雑務・スケジュール・連絡調整",k:"side"},
-    {ic:"🧭",t:"そもそも何にAIを使えばいいか分からない",k:"cons"} ]},
-  { title:"あなたの会社・働き方に近いのは？", opts:[
-    {ic:"📞",t:"接客・対応の人手がいつも足りない",k:"sns"},
-    {ic:"👤",t:"社長に依存していて、継ぐ人もいない",k:"clone"},
-    {ic:"🌀",t:"一人 or 少人数で全部を抱えている",k:"side"},
-    {ic:"🏢",t:"社員がAIをうまく使えていない",k:"cons"} ]},
-  { title:"AIに、一番任せたいことは？", opts:[
-    {ic:"🕐",t:"24時間お客様の窓口になってほしい",k:"sns"},
-    {ic:"🧬",t:"自分の頭脳を分身として残したい",k:"clone"},
-    {ic:"🪄",t:"自分の隣で雑務を先回りしてほしい",k:"side"},
-    {ic:"🌱",t:"会社全体にAIを根付かせたい",k:"cons"} ]},
-  { title:"いま、一番手に入れたいのは？", opts:[
-    {ic:"😊",t:"お客様を待たせない、対応の安心感",k:"sns"},
-    {ic:"♾️",t:"自分がいなくても回る仕組み",k:"clone"},
-    {ic:"⏳",t:"自分が自由に使える時間",k:"side"},
-    {ic:"🚀",t:"会社の成長スピードそのもの",k:"cons"} ]},
-  { title:"あなたの会社のAI活用は、今どの段階？", opts:[
-    {ic:"🌐",t:"顧客接点にAIを置きたい段階",k:"sns"},
-    {ic:"🏛️",t:"事業の継続・承継を考える段階",k:"clone"},
-    {ic:"🧩",t:"日々の業務を軽くしたい段階",k:"side"},
-    {ic:"🔰",t:"まだ何も始められていない段階",k:"cons"} ]}
-];
-
-const ORDER=['sns','clone','side','cons'];
-const LOAD_MSGS=["回答を読み解いています","あなたの状況を分析中","最適なソリューションを照合中","結果をまとめています"];
+const I18N={
+  ja:{
+    products:{
+      sns:{ name:"SNS AIエージェント", icon:SVG.sns, tagline:"お客様対応を、24時間ぶん肩代わり。",
+        detail:"line-ai-agent.html",
+        why:"あなたの一番の負担は「顧客対応・問い合わせ・予約」に時間を奪われていること。SNS AIエージェントは、LINEなどお客様が普段使うSNS上で自然に会話し、予約管理やCRM連携まで自動でこなします。",
+        benefits:["問い合わせ・予約対応を24時間365日自動化","お客様が使い慣れたLINE等の上で完結","あらゆる業種に対応"] },
+      clone:{ name:"社長クローンAI", icon:SVG.clone, tagline:"社長の頭脳を、いつでも参照できる分身に。",
+        detail:"human-clone-ai.html",
+        why:"あなたの会社は「社長への依存・属人化・引き継ぎ」が課題。社長クローンAIは、経営者の思考・判断・経験をAIにインプットし、いつでも意思決定を参照できる分身をつくります。後継者不足の解決にも効きます。",
+        benefits:["経営者の判断・知見をAIに継承","社長への一極集中・属人化を解消","スティーブ・ジョブズ版のデモを公開中"] },
+      side:{ name:"AIside（あなたの付き人AI）", icon:SVG.side, tagline:"もう一人の自分が、隣で先回りして動く。",
+        detail:"aiside.html",
+        why:"あなたは「一人 or 少人数で雑務まで全部抱えている」状態。AIsideは、Gmail・カレンダー・Slackなど既存ツールを横断し、覚えて・先回りして・つなぐ、あなた専属の付き人AIです。あなた自身を隣で支えます。",
+        benefits:["Gmail・カレンダー・Slackなど既存ツールを横断","覚えて・先回りして・つなぎ、雑務を肩代わり","一人社長・フリーランス・多忙な経営者に最適"] },
+      cons:{ name:"AIコンサルティング・研修", icon:SVG.cons, tagline:"まず「何から始めるか」を、一緒に決める。",
+        detail:HP+"#contact",
+        why:"あなたの悩みは「何から始めればいいか分からない／社員がAIを使いこなせていない」。AIdollargameのコンサル・研修は、AI導入戦略の立案から社員のリスキリングまで一貫して伴走し、『使えるAI』を組織に根付かせます。",
+        benefits:["AI導入の戦略立案から実行まで伴走","社員のリスキリング・定着フォロー","Z世代への訴求や新規事業企画にも対応"] }
+    },
+    questions:[
+      { title:"今、一番あなたの時間を奪っているのは？", opts:[
+        {ic:"💬",t:"お客様からの問い合わせ・予約対応",k:"sns"},
+        {ic:"🧠",t:"自分にしかできない判断・経営",k:"clone"},
+        {ic:"🤝",t:"雑務・スケジュール・連絡調整",k:"side"},
+        {ic:"🧭",t:"そもそも何にAIを使えばいいか分からない",k:"cons"} ]},
+      { title:"あなたの会社・働き方に近いのは？", opts:[
+        {ic:"📞",t:"接客・対応の人手がいつも足りない",k:"sns"},
+        {ic:"👤",t:"社長に依存していて、継ぐ人もいない",k:"clone"},
+        {ic:"🌀",t:"一人 or 少人数で全部を抱えている",k:"side"},
+        {ic:"🏢",t:"社員がAIをうまく使えていない",k:"cons"} ]},
+      { title:"AIに、一番任せたいことは？", opts:[
+        {ic:"🕐",t:"24時間お客様の窓口になってほしい",k:"sns"},
+        {ic:"🧬",t:"自分の頭脳を分身として残したい",k:"clone"},
+        {ic:"🪄",t:"自分の隣で雑務を先回りしてほしい",k:"side"},
+        {ic:"🌱",t:"会社全体にAIを根付かせたい",k:"cons"} ]},
+      { title:"いま、一番手に入れたいのは？", opts:[
+        {ic:"😊",t:"お客様を待たせない、対応の安心感",k:"sns"},
+        {ic:"♾️",t:"自分がいなくても回る仕組み",k:"clone"},
+        {ic:"⏳",t:"自分が自由に使える時間",k:"side"},
+        {ic:"🚀",t:"会社の成長スピードそのもの",k:"cons"} ]},
+      { title:"あなたの会社のAI活用は、今どの段階？", opts:[
+        {ic:"🌐",t:"顧客接点にAIを置きたい段階",k:"sns"},
+        {ic:"🏛️",t:"事業の継続・承継を考える段階",k:"clone"},
+        {ic:"🧩",t:"日々の業務を軽くしたい段階",k:"side"},
+        {ic:"🔰",t:"まだ何も始められていない段階",k:"cons"} ]}
+    ],
+    load:["回答を読み解いています","あなたの状況を分析中","最適なソリューションを照合中","結果をまとめています"],
+    lbl:{ detail:"{n}を詳しく見る →", consult:"まずは無料相談する", runner:"次点：{n} も検討の価値あり" }
+  },
+  en:{
+    products:{
+      sns:{ name:"SNS AI Agent", icon:SVG.sns, tagline:"Take 24 hours of customer support off your hands.",
+        detail:"line-ai-agent.html",
+        why:"Your biggest burden is losing time to customer support, inquiries, and bookings. The SNS AI Agent chats naturally on the social apps your customers already use (like LINE) and handles booking management and CRM integration automatically.",
+        benefits:["Automate inquiries & bookings 24/7","Works right inside familiar apps like LINE","Fits any industry"] },
+      clone:{ name:"CEO Clone AI", icon:SVG.clone, tagline:"Turn the CEO’s mind into an alter ego you can consult anytime.",
+        detail:"human-clone-ai.html",
+        why:"Your company struggles with over-reliance on the CEO, key-person risk, and succession. The CEO Clone AI feeds an executive’s thinking, judgment, and experience into AI to create an alter ego you can consult for decisions anytime — a powerful answer to successor shortages too.",
+        benefits:["Pass an executive’s judgment & knowledge to AI","Ease over-concentration & key-person risk","A Steve Jobs demo is available"] },
+      side:{ name:"AIside (Your personal-assistant AI)", icon:SVG.side, tagline:"A second you, working a step ahead at your side.",
+        detail:"aiside.html",
+        why:"You’re running solo or with a small team and carrying every chore yourself. AIside works across your existing tools — Gmail, Calendar, Slack — remembering, anticipating, and connecting as your dedicated assistant AI, supporting you right by your side.",
+        benefits:["Works across Gmail, Calendar, Slack and more","Remembers, anticipates, and takes chores off your plate","Ideal for solo founders, freelancers, and busy executives"] },
+      cons:{ name:"AI Consulting & Training", icon:SVG.cons, tagline:"First, let’s decide together where to start.",
+        detail:HP+"#contact",
+        why:"Your worry is not knowing where to begin, or that your team can’t use AI well. AIdollargame’s consulting and training walk with you from AI strategy through staff reskilling, so usable AI takes root across your organization.",
+        benefits:["From AI strategy to execution, side by side","Staff reskilling and adoption follow-through","Also covers Gen-Z appeal and new-business planning"] }
+    },
+    questions:[
+      { title:"What’s eating up most of your time right now?", opts:[
+        {ic:"💬",t:"Customer inquiries & booking handling",k:"sns"},
+        {ic:"🧠",t:"Decisions & management only you can make",k:"clone"},
+        {ic:"🤝",t:"Chores, scheduling, and coordination",k:"side"},
+        {ic:"🧭",t:"I’m not even sure what to use AI for",k:"cons"} ]},
+      { title:"Which is closest to your company / way of working?", opts:[
+        {ic:"📞",t:"We’re always short-handed on customer service",k:"sns"},
+        {ic:"👤",t:"We depend on the CEO, with no successor",k:"clone"},
+        {ic:"🌀",t:"Solo or a small team carrying everything",k:"side"},
+        {ic:"🏢",t:"Our staff can’t use AI well",k:"cons"} ]},
+      { title:"What would you most like to hand to AI?", opts:[
+        {ic:"🕐",t:"Be a 24-hour customer desk",k:"sns"},
+        {ic:"🧬",t:"Leave my mind behind as an alter ego",k:"clone"},
+        {ic:"🪄",t:"Anticipate chores right beside me",k:"side"},
+        {ic:"🌱",t:"Embed AI across the whole company",k:"cons"} ]},
+      { title:"What do you most want to gain now?", opts:[
+        {ic:"😊",t:"Peace of mind from never keeping customers waiting",k:"sns"},
+        {ic:"♾️",t:"A system that runs without me",k:"clone"},
+        {ic:"⏳",t:"Time I can use freely",k:"side"},
+        {ic:"🚀",t:"Sheer company growth speed",k:"cons"} ]},
+      { title:"Where is your company’s AI adoption today?", opts:[
+        {ic:"🌐",t:"Ready to put AI at customer touchpoints",k:"sns"},
+        {ic:"🏛️",t:"Thinking about continuity & succession",k:"clone"},
+        {ic:"🧩",t:"Want to lighten daily operations",k:"side"},
+        {ic:"🔰",t:"Haven’t started anything yet",k:"cons"} ]}
+    ],
+    load:["Reading your answers","Analyzing your situation","Matching the best solution","Putting your results together"],
+    lbl:{ detail:"Learn more about {n} →", consult:"Start with a free consultation", runner:"Runner-up: {n} is also worth considering" }
+  }
+};
+function lang(){ return (window.ADGI18n && window.ADGI18n.lang) || 'ja'; }
+let PRODUCTS, QUESTIONS, LOAD_MSGS, LBL;
+function loadLang(){ const d=I18N[lang()]||I18N.ja; PRODUCTS=d.products; QUESTIONS=d.questions; LOAD_MSGS=d.load; LBL=d.lbl; }
+loadLang();
 let step=0; const scores={}; const history=[];
+let view='intro', lastBest=null, lastSecond=null;
 
 function start(){ step=0; ORDER.forEach(k=>scores[k]=0); history.length=0; swap('quiz'); render(); }
-function swap(id){ ['intro','quiz','loading','result'].forEach(s=>{const el=document.getElementById(s);el.classList.toggle('hide',s!==id);}); const fld=document.getElementById('field'); if(fld)fld.classList.toggle('hide',id!=='intro'); const cur=document.getElementById(id); cur.classList.remove('anim'); void cur.offsetWidth; cur.classList.add('anim'); window.scrollTo(0,0); }
+function swap(id){ view=id; ['intro','quiz','loading','result'].forEach(s=>{const el=document.getElementById(s);el.classList.toggle('hide',s!==id);}); const fld=document.getElementById('field'); if(fld)fld.classList.toggle('hide',id!=='intro'); const cur=document.getElementById(id); cur.classList.remove('anim'); void cur.offsetWidth; cur.classList.add('anim'); window.scrollTo(0,0); }
 
 function render(){
   const q=QUESTIONS[step];
@@ -368,6 +432,11 @@ function finish(){
   let best=ORDER[0], second=null;
   ORDER.forEach(k=>{ if(scores[k]>scores[best]) best=k; });
   ORDER.forEach(k=>{ if(k!==best && (second===null || scores[k]>scores[second])) second=k; });
+  renderResult(best,second);
+  swap('result');
+}
+function renderResult(best,second){
+  lastBest=best; lastSecond=second;
   const p=PRODUCTS[best];
   document.getElementById('resIcon').innerHTML=p.icon;
   document.getElementById('resName').textContent=p.name;
@@ -376,16 +445,24 @@ function finish(){
   const bl=document.getElementById('resBenefits'); bl.innerHTML='';
   p.benefits.forEach(b=>{const li=document.createElement('li'); li.textContent=b; bl.appendChild(li);});
   const cta=document.getElementById('resCta'); cta.innerHTML='';
-  const a=document.createElement('a'); a.className='btn'; a.href=p.detail; a.textContent=p.name+'を詳しく見る →';
+  const a=document.createElement('a'); a.className='btn'; a.href=p.detail; a.textContent=LBL.detail.replace('{n}',p.name);
   if(p.detail.startsWith('http')){a.target='_blank';a.rel='noopener';}
-  const c=document.createElement('a'); c.className='btn-ghost'; c.href=HP+'#contact'; c.textContent='まずは無料相談する';
+  const c=document.createElement('a'); c.className='btn-ghost'; c.href=HP+'#contact'; c.textContent=LBL.consult;
   cta.appendChild(a); cta.appendChild(c);
   const sp=PRODUCTS[second];
   const rn=document.getElementById('resRunner');
-  rn.innerHTML='次点：<a href="'+sp.detail+'"'+(sp.detail.startsWith('http')?' target="_blank" rel="noopener"':'')+'>'+sp.name+'</a> も検討の価値あり';
-  swap('result');
+  const link='<a href="'+sp.detail+'"'+(sp.detail.startsWith('http')?' target="_blank" rel="noopener"':'')+'>'+sp.name+'</a>';
+  rn.innerHTML=LBL.runner.replace('{n}',link);
 }
 function reset(){ swap('intro'); }
+
+// re-render the live quiz/result when the language toggles
+window.ADGI18n = window.ADGI18n || { lang:null, _subs:[] };
+(window.ADGI18n._subs = window.ADGI18n._subs || []).push(function(){
+  loadLang();
+  if(view==='quiz') render();
+  else if(view==='result' && lastBest) renderResult(lastBest,lastSecond);
+});
 </script>
 
 <script>

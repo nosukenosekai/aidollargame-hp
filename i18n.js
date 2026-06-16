@@ -18,6 +18,18 @@
 (function () {
   var STORAGE_KEY = "adg-lang";
 
+  // Shared pub/sub so JS-driven demos (chat demos, quiz, cycle animation) can
+  // react to language changes. Created defensively because inline page scripts
+  // may run before this deferred file loads.
+  var I = (window.ADGI18n = window.ADGI18n || { lang: null, _subs: [] });
+  if (!I._subs) I._subs = [];
+  if (!I.onChange) {
+    I.onChange = function (fn) {
+      this._subs.push(fn);
+      if (this.lang) { try { fn(this.lang); } catch (e) {} }
+    };
+  }
+
   function detect() {
     try {
       var saved = localStorage.getItem(STORAGE_KEY);
@@ -49,6 +61,12 @@
 
     var btn = document.getElementById("adg-lang-toggle");
     if (btn) btn.textContent = lang === "en" ? "日本語" : "EN";
+
+    // notify JS-driven demos
+    I.lang = lang;
+    for (var k = 0; k < I._subs.length; k++) {
+      try { I._subs[k](lang); } catch (e) {}
+    }
   }
 
   function setLang(lang) {

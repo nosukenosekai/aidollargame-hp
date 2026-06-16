@@ -1045,7 +1045,7 @@
       </svg>
       <div class="cycle-center">
         <div class="cycle-time" id="cycle-time">03:00<span class="h">JST</span></div>
-        <div class="cycle-desc" id="cycle-desc">海外の取引先に判断を返している</div>
+        <div class="cycle-desc" id="cycle-desc" data-en="Returning a decision to an overseas partner">海外の取引先に判断を返している</div>
       </div>
     </div>
   </div>
@@ -1154,35 +1154,70 @@
 (function ticker(){
   const el = document.getElementById('ticker-stream');
   if (!el) return;
-  const items = [
-    '▸ 03:00 JST  海外の取引先に判断を返している',
-    '▸ 04:22 JST  深夜の社員からの質問に応えている',
-    '▸ 05:48 JST  Slackで朝の挨拶を送っている',
-    '▸ 07:00 JST  入社初日の新人に創業の話をしている',
-    '▸ 08:15 JST  メディア取材の事前ロールプレイをしている',
-    '▸ 09:33 JST  幹部会議に同席している',
-    '▸ 10:55 JST  採用面接の一次対応をしている',
-    '▸ 11:30 JST  新しい企画案に視点を返している',
-    '▸ 13:18 JST  顧客からの相談に応えている',
-    '▸ 15:42 JST  投資家の質問に応答している',
-    '▸ 17:45 JST  後継者の悩みを聞いている',
-    '▸ 19:20 JST  講演原稿の下書きを生成している',
-    '▸ 21:10 JST  孫からの質問に答えている',
-    '▸ 23:10 JST  社員からの質問に答えている'
-  ];
-  const text = items.join('     ') + '     ';
-  el.textContent = text + text;
+  const TICK = {
+    ja:[
+      '▸ 03:00 JST  海外の取引先に判断を返している',
+      '▸ 04:22 JST  深夜の社員からの質問に応えている',
+      '▸ 05:48 JST  Slackで朝の挨拶を送っている',
+      '▸ 07:00 JST  入社初日の新人に創業の話をしている',
+      '▸ 08:15 JST  メディア取材の事前ロールプレイをしている',
+      '▸ 09:33 JST  幹部会議に同席している',
+      '▸ 10:55 JST  採用面接の一次対応をしている',
+      '▸ 11:30 JST  新しい企画案に視点を返している',
+      '▸ 13:18 JST  顧客からの相談に応えている',
+      '▸ 15:42 JST  投資家の質問に応答している',
+      '▸ 17:45 JST  後継者の悩みを聞いている',
+      '▸ 19:20 JST  講演原稿の下書きを生成している',
+      '▸ 21:10 JST  孫からの質問に答えている',
+      '▸ 23:10 JST  社員からの質問に答えている'
+    ],
+    en:[
+      '▸ 03:00 JST  Returning a decision to an overseas partner',
+      '▸ 04:22 JST  Answering a late-night question from an employee',
+      '▸ 05:48 JST  Sending a morning greeting on Slack',
+      '▸ 07:00 JST  Telling a first-day hire the founding story',
+      '▸ 08:15 JST  Running a pre-interview roleplay for the press',
+      '▸ 09:33 JST  Sitting in on the executive meeting',
+      '▸ 10:55 JST  Handling the first round of a job interview',
+      '▸ 11:30 JST  Offering a perspective on a new proposal',
+      '▸ 13:18 JST  Responding to a customer’s question',
+      '▸ 15:42 JST  Answering an investor’s question',
+      '▸ 17:45 JST  Listening to a successor’s worries',
+      '▸ 19:20 JST  Drafting a keynote script',
+      '▸ 21:10 JST  Answering a grandchild’s question',
+      '▸ 23:10 JST  Answering an employee’s question'
+    ]
+  };
+  function render(){
+    const items = TICK[(window.ADGI18n && window.ADGI18n.lang) || 'ja'] || TICK.ja;
+    const text = items.join('     ') + '     ';
+    el.textContent = text + text;
+  }
+  render();
+  window.ADGI18n = window.ADGI18n || { lang:null, _subs:[] };
+  (window.ADGI18n._subs = window.ADGI18n._subs || []).push(render);
 })();
 
 // CYCLE
 (function buildCycle(){
-  const tasks = [
-    { mins: 180,  time: '03:00', desc: '海外の取引先に判断を返している' },
-    { mins: 420,  time: '07:00', desc: '入社初日の新人に創業の話をしている' },
-    { mins: 690,  time: '11:30', desc: '新しい企画案に視点を返している' },
-    { mins: 1065, time: '17:45', desc: '後継者の悩みを聞いている' },
-    { mins: 1390, time: '23:10', desc: '社員からの質問に答えている' }
-  ];
+  const TASKS = {
+    ja:[
+      { mins: 180,  time: '03:00', desc: '海外の取引先に判断を返している' },
+      { mins: 420,  time: '07:00', desc: '入社初日の新人に創業の話をしている' },
+      { mins: 690,  time: '11:30', desc: '新しい企画案に視点を返している' },
+      { mins: 1065, time: '17:45', desc: '後継者の悩みを聞いている' },
+      { mins: 1390, time: '23:10', desc: '社員からの質問に答えている' }
+    ],
+    en:[
+      { mins: 180,  time: '03:00', desc: 'Returning a decision to an overseas partner' },
+      { mins: 420,  time: '07:00', desc: 'Telling a first-day hire the founding story' },
+      { mins: 690,  time: '11:30', desc: 'Offering a perspective on a new proposal' },
+      { mins: 1065, time: '17:45', desc: 'Listening to a successor’s worries' },
+      { mins: 1390, time: '23:10', desc: 'Answering an employee’s question' }
+    ]
+  };
+  function clang(){ return (window.ADGI18n && window.ADGI18n.lang) || 'ja'; }
+  let tasks = TASKS[clang()] || TASKS.ja;
   const RING = 180;
   function angleFor(mins){ return (mins / 1440) * Math.PI * 2; }
   function pos(theta, r){ return { x: Math.sin(theta) * r, y: -Math.cos(theta) * r }; }
@@ -1231,6 +1266,14 @@
   const descEl = document.getElementById('cycle-desc');
   let currentIdx = -1, lightTheta = 0, lastFrame = performance.now();
 
+  // initial label + react to language toggle
+  descEl.textContent = tasks[0].desc;
+  window.ADGI18n = window.ADGI18n || { lang:null, _subs:[] };
+  (window.ADGI18n._subs = window.ADGI18n._subs || []).push(function(){
+    tasks = TASKS[clang()] || TASKS.ja;
+    descEl.textContent = tasks[currentIdx >= 0 ? currentIdx : 0].desc;
+  });
+
   let started = false;
   const cycSec = document.getElementById('cycle');
   const cycObs = new IntersectionObserver(es => es.forEach(e => {
@@ -1275,14 +1318,26 @@
 (function chat(){
   const stage = document.getElementById('chat-stage');
   if (!stage) return;
-  const messages = [
-    { side: 'user',  text: '来年 新しい事業を始めるか迷ってる' },
-    { side: 'clone', text: '迷う理由は何だ 資金か 人材か', typingMs: 1500 },
-    { side: 'user',  text: '任せられる人材がいない' },
-    { side: 'clone', text: '人は事業を始めてから集まる 先に固めるべきは 自分の覚悟だ', typingMs: 1900 },
-    { side: 'user',  text: 'まだ覚悟が固まってない' },
-    { side: 'clone', text: 'なら半年後にもう一度話そう それまでに本を読み 人に会え', typingMs: 1700 }
-  ];
+  const MSGS = {
+    ja:[
+      { side: 'user',  text: '来年 新しい事業を始めるか迷ってる' },
+      { side: 'clone', text: '迷う理由は何だ 資金か 人材か', typingMs: 1500 },
+      { side: 'user',  text: '任せられる人材がいない' },
+      { side: 'clone', text: '人は事業を始めてから集まる 先に固めるべきは 自分の覚悟だ', typingMs: 1900 },
+      { side: 'user',  text: 'まだ覚悟が固まってない' },
+      { side: 'clone', text: 'なら半年後にもう一度話そう それまでに本を読み 人に会え', typingMs: 1700 }
+    ],
+    en:[
+      { side: 'user',  text: 'I’m torn about starting a new business next year' },
+      { side: 'clone', text: 'What’s holding you back — money, or people?', typingMs: 1500 },
+      { side: 'user',  text: 'I don’t have anyone I can entrust it to' },
+      { side: 'clone', text: 'People gather after you start. What to settle first is your own resolve.', typingMs: 1900 },
+      { side: 'user',  text: 'My resolve isn’t firm yet' },
+      { side: 'clone', text: 'Then let’s talk again in six months. Until then, read books and meet people.', typingMs: 1700 }
+    ]
+  };
+  const WHO = { ja:'あなたの分身', en:'Your alter ego' };
+  function clang(){ return (window.ADGI18n && window.ADGI18n.lang) || 'ja'; }
 
   const wait = (ms) => new Promise(r => setTimeout(r, ms));
   const clear = () => { while (stage.firstChild) stage.removeChild(stage.firstChild); };
@@ -1302,7 +1357,7 @@
     wrap.className = 'chat-msg clone';
     const who = document.createElement('div');
     who.className = 'chat-who';
-    who.textContent = 'あなたの分身';
+    who.textContent = WHO[clang()] || WHO.ja;
     wrap.appendChild(who);
     const bubble = document.createElement('div');
     bubble.className = 'chat-typing-bubble';
@@ -1320,6 +1375,7 @@
   async function run(){
     while (true){
       clear();
+      const messages = MSGS[clang()] || MSGS.ja;
       for (const m of messages){
         if (m.side === 'user'){
           addUserMsg(m.text);

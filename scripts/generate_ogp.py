@@ -191,7 +191,7 @@ def main():
                 "og-aiside.png", title_size=80)
     render_card("AIwill", "あなたの判断と意志を、デジタルに残す",
                 "og-human-clone-ai.png", title_size=104)
-    render_card("SNS AIエージェント", "LINEに、AIの接客を。",
+    render_card("接客・ナレッジAI", "サイトにも、LINEにも、社内にも。",
                 "og-line-ai-agent.png", title_size=80)
     # Articles
     render_card("2026年、AIを入れない会社が直面するリスク",
@@ -210,7 +210,7 @@ def main():
                 "PRODUCT",
                 "og-articles-aiwill.png", title_size=58)
     render_card("LINE公式で満足してますか？",
-                "SNS AIエージェントが変える顧客接点",
+                "接客・ナレッジAIが変える顧客接点",
                 "og-articles-sns-ai-agent.png", title_size=72)
     print("Done.")
 

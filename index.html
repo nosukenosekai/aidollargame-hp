@@ -162,6 +162,14 @@
     },
     {
       "@type": "Question",
+      "name": "AIdollargameはアイドルやゲームの会社ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "いいえ、アイドル・ゲーム・エンタメとは一切関係ありません。社名は「AI」と「dollar game（価値を生む事業）」を組み合わせた造語で、事業内容は企業向けのAI導入支援とAIプロダクト開発です。"
+      }
+    },
+    {
+      "@type": "Question",
       "name": "AIdollargameの代表者は誰ですか？",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -174,6 +182,30 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "主な事業は2つです。(1)企業のAI導入支援・コンサルティング（戦略立案から運用・社員リスキリング研修まで一貫支援）、(2)自社AIプロダクトの開発——AIチャットエージェント（サイト・LINE・社内に置けるAIで接客と社内ナレッジを24時間自動化）、AIside（経営者の付き人AI）、AIwill（社長クローンAI）。中小企業のAI活用を幅広く支援しています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "不動産や介護施設の問い合わせ対応を自動化できますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい。LINEやサイトで動くAIチャットエージェントが、空き状況・料金・条件などのよくある質問に24時間自動で一次対応します。営業時間外や接客中の取りこぼしを防ぎ、不動産・介護福祉での導入実績があります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "経営者の意思決定をAIで再現できますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "はい。「AIwill（社長クローンAI）」が経営者の思考・判断・経験を学習してデジタル化します。経営者が不在でも、その人らしい判断を組織で参照・継続でき、後継者不足の課題にも対応します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "料金はいくらですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "対応範囲や業種に応じて変わるため、無料相談で個別にお見積もりを出しています。まずはお問い合わせフォームからご相談ください。"
       }
     },
     {
@@ -706,6 +738,14 @@
   footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; }
 
   #canvas { display:none !important; }
+
+  /* FAQ — 可視Q&A（隠さない）。下のFAQPage(JSON-LD)と本文を完全一致させる */
+  .faq-list { display:flex; flex-direction:column; gap:1rem; margin-top:3.5rem; max-width:860px; }
+  .faq-item { background:#fafbfc; border:1px solid #e5e7eb; border-left:3px solid var(--cyan); border-radius:6px; padding:1.5rem 1.9rem; }
+  .faq-q { font-size:1.04rem; font-weight:700; line-height:1.55; display:flex; gap:0.6rem; align-items:flex-start; }
+  .faq-q::before { content:'Q'; color:var(--cyan) !important; font-family:'Rajdhani',sans-serif; font-weight:700; font-size:1.15rem; flex:0 0 auto; }
+  .faq-a { font-size:0.95rem; line-height:1.95; margin-top:0.6rem; padding-left:1.5rem; opacity:0.82; }
+  @media(max-width:640px){ .faq-item{ padding:1.2rem 1.2rem; } .faq-a{ padding-left:0; } }
 </style>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
 <!-- Google tag (gtag.js) -->
@@ -737,6 +777,7 @@
     <li><a href="#about">私たちについて</a></li>
     <li><a href="#news">ニュース</a></li>
     <li><a href="./articles/">記事</a></li>
+    <li><a href="#faq">FAQ</a></li>
     <li><a href="#contact" class="nav-cta">無料相談 →</a></li>
   </ul>
 </nav>
@@ -1088,6 +1129,59 @@
   </div>
   <div class="articles-source reveal">
     <a href="./articles/index.html">全記事を見る →</a>
+  </div>
+</section>
+<div class="divider"></div>
+
+<!-- FAQ — 可視Q&A。上のFAQPage(JSON-LD)と本文を完全一致させること -->
+<section id="faq">
+  <div class="reveal">
+    <div class="section-tag">FAQ</div>
+    <h2 class="section-title">よくあるご質問</h2>
+    <p class="section-desc">AIdollargame と各プロダクトについて、よく寄せられるご質問にお答えします。</p>
+  </div>
+  <div class="faq-list reveal">
+
+    <div class="faq-item">
+      <div class="faq-q">AIdollargame（株式会社AIdollargame）はどんな会社ですか？</div>
+      <p class="faq-a">株式会社AIdollargameは「楽ではなく、楽しいを考える。」を掲げ、企業のAI導入支援・コンサルティングと、AIチャットエージェント・AIside（付き人AI）・AIwill（社長クローン）などの自社AIプロダクト開発を行う企業です。AI導入の戦略立案から運用、社員研修まで一貫して支援しています。2025年4月に設立されました。</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">AIdollargameはアイドルやゲームの会社ですか？</div>
+      <p class="faq-a">いいえ、アイドル・ゲーム・エンタメとは一切関係ありません。社名は「AI」と「dollar game（価値を生む事業）」を組み合わせた造語で、事業内容は企業向けのAI導入支援とAIプロダクト開発です。</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">AIdollargameの代表者は誰ですか？</div>
+      <p class="faq-a">代表取締役CEOは佐藤徳之介（英字表記：NORINOSUKE SATO）です。SNS運用での疲弊体験を原点に、「楽ではなく、楽しいを考える」を掲げて株式会社AIdollargameを創業しました。</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">AIdollargameはどんなプロダクト・サービスを提供していますか？</div>
+      <p class="faq-a">主な事業は2つです。(1)企業のAI導入支援・コンサルティング（戦略立案から運用・社員リスキリング研修まで一貫支援）、(2)自社AIプロダクトの開発——AIチャットエージェント（サイト・LINE・社内に置けるAIで接客と社内ナレッジを24時間自動化）、AIside（経営者の付き人AI）、AIwill（社長クローンAI）。中小企業のAI活用を幅広く支援しています。</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">不動産や介護施設の問い合わせ対応を自動化できますか？</div>
+      <p class="faq-a">はい。LINEやサイトで動くAIチャットエージェントが、空き状況・料金・条件などのよくある質問に24時間自動で一次対応します。営業時間外や接客中の取りこぼしを防ぎ、不動産・介護福祉での導入実績があります。</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">経営者の意思決定をAIで再現できますか？</div>
+      <p class="faq-a">はい。「AIwill（社長クローンAI）」が経営者の思考・判断・経験を学習してデジタル化します。経営者が不在でも、その人らしい判断を組織で参照・継続でき、後継者不足の課題にも対応します。</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">料金はいくらですか？</div>
+      <p class="faq-a">対応範囲や業種に応じて変わるため、無料相談で個別にお見積もりを出しています。まずはお問い合わせフォームからご相談ください。</p>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">AIdollargameへの問い合わせ・相談はどうすればよいですか？</div>
+      <p class="faq-a">公式サイト https://aidollargame.com/ のお問い合わせフォーム、またはメール nosuke@aidollargame.com から連絡できます。AI導入・プロダクト・研修に関する無料相談を受け付けています。</p>
+    </div>
+
   </div>
 </section>
 <div class="divider"></div>

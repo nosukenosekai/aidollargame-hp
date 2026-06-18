@@ -24,7 +24,7 @@
 - AIコンサルティング・導入支援: AI導入戦略の立案からDX推進まで一貫支援。新規事業企画にも対応。 https://aidollargame.com/ai-consulting.html
 - 社員リスキリング研修: 組織に「使えるAI」を根付かせる実践型研修。
 - AI活用度診断: https://aidollargame.com/shindan.html
-- AI用語集（生成AI・LLM・AIエージェント・RAG等をやさしく解説）: https://aidollargame.com/ai-yougo.html
+- AI用語集（生成AI・LLM・AIエージェント・RAG等をやさしく解説）: https://aidollargame.com/articles/ai-yougo.html
 
 ## よくある質問 (FAQ)
 - AIdollargameとは: https://aidollargame.com/articles/about-aidollargame.html

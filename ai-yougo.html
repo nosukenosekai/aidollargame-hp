@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI用語集 | むずかしい言葉をやさしく | AIdollargame</title>
+<meta name="description" content="AIエージェント・LLM・生成AI・RAG・プロンプト・ハルシネーションなど、AI導入の現場でよく出てくる用語を、経営者・はじめての方向けにやさしく解説するAI用語集です。">
+<meta name="keywords" content="AI用語,AI用語集,生成AI,LLM,AIエージェント,RAG,プロンプト,ハルシネーション,ファインチューニング,AI導入">
+<link rel="canonical" href="https://aidollargame.com/ai-yougo.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI用語集 | むずかしい言葉をやさしく | AIdollargame">
+<meta property="og:description" content="AIエージェント・LLM・生成AI・RAGなど、AI導入の現場でよく出てくる用語を、はじめての方向けにやさしく解説。">
+<meta property="og:url" content="https://aidollargame.com/ai-yougo.html">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:site_name" content="AIdollargame">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "DefinedTermSet",
+  "name": "AI用語集",
+  "description": "AI導入の現場でよく出てくる用語を、はじめての方向けにやさしく解説するAI用語集。",
+  "url": "https://aidollargame.com/ai-yougo.html",
+  "publisher": { "@type": "Organization", "name": "株式会社AIdollargame", "url": "https://aidollargame.com/" }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700&family=Noto+Sans+JP:wght@300;400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{--cyan:#00f5ff;--blue:#0066ff;--dark:#020814;--text:#e0eaff;--muted:#6a7d9f;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--dark);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(2,8,20,0.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);} .logo .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;} .logo .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
+  .back-link{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.8rem;color:var(--muted);text-decoration:none;letter-spacing:0.1em;transition:color 0.3s;}
+  .back-link:hover{color:var(--cyan);}
+  .page-wrap{max-width:820px;margin:0 auto;padding:8rem 2rem 6rem;}
+  .page-tag{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.7rem;letter-spacing:0.4em;color:var(--cyan);margin-bottom:1rem;display:flex;align-items:center;gap:0.8rem;}
+  .page-tag::before{content:'';display:inline-block;width:30px;height:1px;background:var(--cyan);}
+  h1{font-size:2.4rem;font-weight:900;margin-bottom:0.8rem;line-height:1.3;}
+  .lead{font-size:0.95rem;color:var(--muted);line-height:2;margin-bottom:2.5rem;max-width:680px;}
+  .toc{display:flex;flex-wrap:wrap;gap:0.6rem;margin-bottom:3.5rem;}
+  .toc a{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.75rem;letter-spacing:0.05em;color:var(--muted);text-decoration:none;border:1px solid rgba(0,245,255,0.2);border-radius:999px;padding:0.45rem 1rem;transition:all 0.25s;}
+  .toc a:hover{color:var(--cyan);border-color:var(--cyan);}
+  .cat{margin-bottom:3.5rem;scroll-margin-top:6rem;}
+  .cat-head{display:flex;align-items:baseline;gap:0.9rem;margin-bottom:1.4rem;padding-bottom:0.7rem;border-bottom:1px solid rgba(0,245,255,0.15);}
+  .cat-num{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.85rem;color:var(--cyan);letter-spacing:0.1em;}
+  .cat-head h2{font-size:1.25rem;font-weight:800;}
+  .cat-sub{font-size:0.82rem;color:var(--muted);margin-bottom:1.4rem;}
+  .term{background:rgba(6,13,31,0.8);border:1px solid rgba(0,245,255,0.1);border-left:3px solid var(--cyan);padding:1.3rem 1.6rem;margin-bottom:1rem;}
+  .term-name{font-size:1.05rem;font-weight:700;margin-bottom:0.15rem;}
+  .term-en{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;letter-spacing:0.06em;color:var(--cyan);margin-bottom:0.7rem;display:block;}
+  .term p{font-size:0.9rem;color:var(--muted);line-height:1.95;}
+  .term .field{display:block;margin-top:0.6rem;font-size:0.82rem;color:var(--text);}
+  .term .field b{color:var(--cyan);font-weight:700;}
+  .cta{margin-top:4rem;background:rgba(6,13,31,0.9);border:1px solid rgba(0,245,255,0.2);border-radius:14px;padding:2.6rem 2rem;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:800;margin-bottom:0.8rem;line-height:1.5;}
+  .cta p{font-size:0.88rem;color:var(--muted);line-height:1.95;margin-bottom:1.6rem;max-width:520px;margin-left:auto;margin-right:auto;}
+  .cta a{display:inline-block;font-weight:700;font-size:0.92rem;text-decoration:none;background:var(--cyan);color:#020814;padding:0.85rem 2.2rem;border-radius:999px;transition:transform 0.2s;}
+  .cta a:hover{transform:translateY(-2px);}
+  a{color:var(--cyan);text-decoration:none;}
+  footer{border-top:1px solid rgba(0,245,255,0.1);padding:2rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.75rem;color:var(--muted);}
+  footer a{color:var(--muted);text-decoration:none;}
+  @media(max-width:640px){.page-wrap{padding:7rem 1.3rem 4rem;}h1{font-size:1.8rem;}nav{padding:1rem 1.3rem;}footer{flex-direction:column;align-items:flex-start;gap:0.7rem;}}
+
+/* ============ LIGHT THEME OVERRIDE ============ */
+html { background:#ffffff !important; }
+body { background:#ffffff !important; color:#000 !important; }
+nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.back-link { color:#555 !important; }
+.back-link:hover { color:#000 !important; }
+h1, h2, .cat-head h2 { color:#000 !important; }
+.page-tag { color:#000 !important; }
+.page-tag::before { background:#000 !important; }
+.lead, .cat-sub { color:#444 !important; }
+.toc a { color:#444 !important; border:1px solid #d7dbe3 !important; }
+.toc a:hover { color:#000 !important; border-color:#000 !important; }
+.cat-head { border-bottom:1px solid #e5e7eb !important; }
+.cat-num { color:#000 !important; }
+.term { background:#ffffff !important; border:1px solid #e5e7eb !important; border-left:3px solid #000 !important; }
+.term-name { color:#000 !important; }
+.term-en { color:#777 !important; }
+.term p { color:#333 !important; }
+.term .field { color:#000 !important; }
+.term .field b { color:#000 !important; }
+.cta { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.cta h3 { color:#000 !important; }
+.cta p { color:#444 !important; }
+.cta a { background:#000 !important; color:#fff !important; }
+a { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#555 !important; }
+footer a { color:#555 !important; }
+</style>
+<!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Q45D6XVQZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8Q45D6XVQZ');
+</script>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
+  <a href="index.html" class="back-link">← トップページへ</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-tag">GLOSSARY</div>
+  <h1>AI用語集<br>むずかしい言葉を、やさしく。</h1>
+  <p class="lead">AIの記事やニュースを読むと、横文字とカタカナばかりで疲れますよね。ここでは、AI導入の現場で実際によく出てくる言葉だけを集めて、専門知識がなくても分かるようにかみくだいて説明しています。気になった言葉から、つまみ食いでどうぞ。</p>
+
+  <div class="toc">
+    <a href="#basic">基本のキ</a>
+    <a href="#use">使うときに出てくる言葉</a>
+    <a href="#agent">AIエージェント・導入まわり</a>
+    <a href="#future">これから耳にする言葉</a>
+  </div>
+
+  <!-- ============ 基本のキ ============ -->
+  <section class="cat" id="basic">
+    <div class="cat-head"><span class="cat-num">01</span><h2>基本のキ</h2></div>
+    <p class="cat-sub">まずはこの5つ。ニュースに出てくるAIは、だいたいこの言葉でできています。</p>
+
+    <div class="term">
+      <div class="term-name">生成AI</div><span class="term-en">Generative AI</span>
+      <p>文章・画像・音声・プログラムなどを、ゼロから新しく“生成”するAIの総称です。ChatGPTやClaudeのように「お願いすると作ってくれる」タイプがこれにあたります。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">LLM（大規模言語モデル）</div><span class="term-en">Large Language Model</span>
+      <p>膨大な量の文章を学習して、人間のような自然な文章を理解・生成できるようにしたAIの中核技術です。ChatGPT・Claude・Geminiなどの“正体”がこれです。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">機械学習</div><span class="term-en">Machine Learning</span>
+      <p>大量のデータから、ルールやパターンをAI自身が自動で学ぶ仕組みです。人間が一つひとつルールを書かなくても、データさえあれば賢くなっていきます。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">ディープラーニング（深層学習）</div><span class="term-en">Deep Learning</span>
+      <p>機械学習の一種で、人間の脳の神経回路をまねた何層もの構造で、複雑なパターンを学びます。今のAIブームを支えている土台の技術です。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">自然言語処理（NLP）</div><span class="term-en">Natural Language Processing</span>
+      <p>人間が使う言葉を、コンピュータが扱えるようにする技術分野です。翻訳・要約・チャット対応など、「言葉を相手にするAI」の基盤になっています。</p>
+    </div>
+  </section>
+
+  <!-- ============ 使うときに出てくる言葉 ============ -->
+  <section class="cat" id="use">
+    <div class="cat-head"><span class="cat-num">02</span><h2>使うときに出てくる言葉</h2></div>
+    <p class="cat-sub">実際にAIを触り始めると、料金や使い勝手の話でこのあたりが出てきます。</p>
+
+    <div class="term">
+      <div class="term-name">プロンプト</div><span class="term-en">Prompt</span>
+      <p>AIへの指示文、つまり「お願いの言葉」です。同じAIでも、頼み方しだいで答えの質が大きく変わります。AIを使いこなす=プロンプトが上手、と言ってもいいくらいです。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">トークン</div><span class="term-en">Token</span>
+      <p>AIが文章を処理するときの最小単位です。料金や処理量は、このトークン数で数えます。日本語だとおおよそ1文字＝1〜2トークンが目安です。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">コンテキストウィンドウ</div><span class="term-en">Context Window</span>
+      <p>AIが一度に覚えていられる文章量の上限です。ここが大きいほど、長い資料や会話履歴をまるごと渡して、それを踏まえた回答をさせられます。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">ハルシネーション</div><span class="term-en">Hallucination</span>
+      <p>AIが、もっともらしい“ウソ”や誤りを、自信満々に答えてしまう現象です。AIの回答をそのまま鵜呑みにせず、事実確認が必要な理由がこれです。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">マルチモーダル</div><span class="term-en">Multimodal</span>
+      <p>文章だけでなく、画像・音声・動画なども一緒に理解したり生成したりできること。写真を見せて「これは何？」と聞けるAIは、マルチモーダルです。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">推論</div><span class="term-en">Inference</span>
+      <p>学習を終えたAIが、実際に答えを出す処理のことです。ざっくり言えば「AIを動かす＝推論させる」。最近は、じっくり考えてから答える“推論モデル”も増えています。</p>
+    </div>
+  </section>
+
+  <!-- ============ AIエージェント・導入まわり ============ -->
+  <section class="cat" id="agent">
+    <div class="cat-head"><span class="cat-num">03</span><h2>AIエージェント・導入まわり</h2></div>
+    <p class="cat-sub">「会社にAIを入れる」話になると登場する言葉です。ここが分かると検討がぐっと楽になります。</p>
+
+    <div class="term">
+      <div class="term-name">AIエージェント</div><span class="term-en">AI Agent</span>
+      <p>質問に答えるだけでなく、自分で段取りを考えて作業を実行し、“やってくれる”AIです。問い合わせ対応・予約管理・調査などを代行します。
+      <span class="field"><b>現場での意味：</b>「答えるAI」から「動くAI」へ。当社の<a href="line-ai-agent.html">AIチャットエージェント</a>もこのタイプです。</span></p>
+    </div>
+    <div class="term">
+      <div class="term-name">チャットボット</div><span class="term-en">Chatbot</span>
+      <p>あらかじめ決めたシナリオやFAQに沿って会話する仕組みです。便利ですが、想定外の質問には弱い。AIエージェントより自律性は低めです。
+      <span class="field"><b>ちがい：</b>詳しくは<a href="articles/ai-agent-vs-chatbot.html">AIエージェントとチャットボットの違い</a>で解説しています。</span></p>
+    </div>
+    <div class="term">
+      <div class="term-name">RAG（検索拡張生成）</div><span class="term-en">Retrieval-Augmented Generation</span>
+      <p>AIに社内マニュアルや自社データを参照させて、自分の会社の正確な情報で答えさせる仕組みです。ハルシネーション（誤答）を抑える、導入時の定番手法です。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">ファインチューニング</div><span class="term-en">Fine-tuning</span>
+      <p>既存のAIに自社のデータを追加で学習させ、専門分野や自社らしい口調に“仕立て直す”ことです。RAGと並んで、自社仕様にするときの選択肢になります。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">埋め込み／ベクトル</div><span class="term-en">Embedding</span>
+      <p>文章の“意味”を数値の列に変換したものです。意味の近い文書どうしを探せるようになり、RAGで「関係する資料」を見つけ出す土台になります。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">API</div><span class="term-en">Application Programming Interface</span>
+      <p>ソフトウェア同士をつなぐ「窓口」のことです。自社の予約システムや顧客管理にAIを組み込むときは、このAPI経由でつなぎます。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">MCP</div><span class="term-en">Model Context Protocol</span>
+      <p>AIを、外部のツールやデータに安全につなぐための共通規格です。AIエージェントが実際の業務をこなすための“配管”にあたり、近年急速に広まっています。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">ガードレール</div><span class="term-en">Guardrails</span>
+      <p>AIが不適切・危険・的外れな回答をしないように設ける、制御やルールのことです。会社で使うAIには、この“はみ出さない仕組み”が欠かせません。</p>
+    </div>
+  </section>
+
+  <!-- ============ これから耳にする言葉 ============ -->
+  <section class="cat" id="future">
+    <div class="cat-head"><span class="cat-num">04</span><h2>これから耳にする言葉</h2></div>
+    <p class="cat-sub">今すぐ必要ではないけれど、ニュースで見かけたときに「あれね」と分かると安心な言葉です。</p>
+
+    <div class="term">
+      <div class="term-name">基盤モデル（ファウンデーションモデル）</div><span class="term-en">Foundation Model</span>
+      <p>大量のデータで学習し、さまざまな用途に応用できる“土台”となる大型のAIモデルです。各社のLLMは、この基盤モデルの代表例です。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">オープンウェイト／オープンソースAI</div><span class="term-en">Open-weight / Open-source AI</span>
+      <p>モデルの中身（重み）が公開されていて、自社の環境でも動かせるAIです。社外にデータを出したくない用途で選ばれることがあります。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">AGI（汎用人工知能）</div><span class="term-en">Artificial General Intelligence</span>
+      <p>人間と同じように、幅広い知的作業を何でもこなせるAI——という、まだ実現していない“目標段階”を指す言葉です。ニュースで未来の話として登場します。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">量子化</div><span class="term-en">Quantization</span>
+      <p>AIモデルを軽く圧縮して、より安く・速く動かせるようにする技術です。性能を保ちつつコストを下げたいときに使われます。</p>
+    </div>
+    <div class="term">
+      <div class="term-name">蒸留</div><span class="term-en">Distillation</span>
+      <p>大きくて賢いモデルの“知恵”を、小さなモデルに移し替えて軽量化する技術です。スマホや手元の端末でも動く小型AIを作るときに使われます。</p>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <div class="cta">
+    <h3>言葉が分かったら、次は「自社にどう入れるか」。</h3>
+    <p>用語が分かっても、「結局うちは何から始めればいいの？」は別の問題です。AIdollargameは、AI導入の戦略づくりから実装・運用、社員研修までを一貫してお手伝いしています。まずは無料の相談から、気軽にどうぞ。</p>
+    <a href="index.html#contact">無料で相談してみる</a>
+  </div>
+</div>
+
+<footer>
+  <div class="logo" style="font-size:1.1rem;">A<span class="heart-i">ı</span>dollargame</div>
+  <div style="display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;">
+    <a href="articles/">記事一覧</a>
+    <a href="privacy.html">プライバシーポリシー</a>
+    <a href="tokushoho.html">特定商取引法に基づく表記</a>
+    <span>© 2025 株式会社AIdollargame</span>
+  </div>
+</footer>
+</body>
+</html>

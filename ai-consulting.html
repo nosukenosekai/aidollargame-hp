@@ -711,13 +711,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (i > 0) el.style.transitionDelay = Math.min(i, 7) * 70 + 'ms';
   });
 
-  function countUp(el){
-    if (el.__c) return; el.__c = 1;
+  // capture the REAL target numbers up front so a reset/animation can never lose them
+  var impacts = [].slice.call(document.querySelectorAll('.case-impact'));
+  impacts.forEach(function(el){
     var n = el.firstChild;
-    if (!n || n.nodeType !== 3) return;
-    var m = n.nodeValue.match(/^(\D*)(\d+)(\D*)$/);
-    if (!m) return;
-    var pre = m[1], target = +m[2], suf = m[3], start = null, dur = 1100;
+    if (n && n.nodeType === 3) {
+      var m = n.nodeValue.match(/^(\D*)(\d+)(\D*)$/);
+      if (m) { el.__node = n; el.__pre = m[1]; el.__target = +m[2]; el.__suf = m[3]; }
+    }
+  });
+  function countUp(el){
+    if (el.__c || el.__target == null) return; el.__c = 1;
+    var n = el.__node, pre = el.__pre, target = el.__target, suf = el.__suf, start = null, dur = 1100;
+    n.nodeValue = pre + '0' + suf; // start from 0 only once the animation actually begins
     function tick(t){
       if (!start) start = t;
       var p = Math.min((t - start) / dur, 1);
@@ -725,18 +731,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
+    // safety net: guarantee the real number lands even if rAF is throttled/stalled
+    setTimeout(function(){ n.nodeValue = pre + target + suf; }, dur + 250);
   }
-  function isNumNode(n){ return n && n.nodeType === 3 && /^(\D*)(\d+)(\D*)$/.test(n.nodeValue); }
-
-  // reset below-fold impact numbers to 0 so the count-up is visible
-  var impacts = [].slice.call(document.querySelectorAll('.case-impact'));
-  impacts.forEach(function(el){
-    var r = el.getBoundingClientRect();
-    if (!(r.top < window.innerHeight * 0.9 && r.bottom > 0)) {
-      var n = el.firstChild;
-      if (isNumNode(n)) n.nodeValue = n.nodeValue.replace(/\d+/, '0');
-    }
-  });
 
   var pendEls = els.slice(), pendImp = impacts.slice();
   function check(){

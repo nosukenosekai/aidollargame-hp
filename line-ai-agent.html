@@ -976,7 +976,7 @@ footer { background:var(--white); border-top:1px solid var(--border); padding:2.
     <a href="privacy.html">プライバシーポリシー</a>
     <a href="tokushoho.html">特定商取引法に基づく表記</a>
   </div>
-  <div class="footer-copy">© 2025 株式会社AIdollargame</div>
+  <div class="footer-copy">© <span class="cpy-y" data-since="2025">2025</span> 株式会社AIdollargame</div>
 </footer>
 
 <script>
@@ -1057,5 +1057,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+<script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
 </body>
 </html>

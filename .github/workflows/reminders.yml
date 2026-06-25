@@ -1,0 +1,32 @@
+name: リマインドメール（朝・夜）
+
+on:
+  schedule:
+    - cron: '0 22 * * *'   # 07:00 JST（朝）
+    - cron: '0 12 * * *'   # 21:00 JST（夜）
+  workflow_dispatch:
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50   # 作業報告のため直近のコミット履歴を取得
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Send reminder mail
+        env:
+          # どちらの時刻で起動したかを渡す（手動実行時は空＝時刻から自動判定）
+          REMIND_MODE: ${{ github.event.schedule == '0 22 * * *' && 'morning' || (github.event.schedule == '0 12 * * *' && 'evening' || '') }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
+          MAIL_FROM: ${{ secrets.MAIL_FROM }}
+        run: python scripts/send_reminders.py

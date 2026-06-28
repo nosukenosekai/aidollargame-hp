@@ -159,7 +159,7 @@
   .section-title { font-size:clamp(1.7rem,3vw,2.4rem); font-weight:900; color:#000; line-height:1.4; margin-bottom:1.2rem; letter-spacing:-0.005em; }
   .section-title .hl { position:relative; display:inline-block; isolation:isolate; }
   .section-title .hl::after { content:''; position:absolute; left:0; right:0; bottom:0.12em; height:0.34em; background:linear-gradient(180deg,#ffe45c 0%,#ffd84a 100%); z-index:-1; border-radius:2px; }
-  .section-sub { color:#000; font-size:1rem; line-height:2; max-width:640px; margin-bottom:3.5rem; }
+  .section-sub { color:#000; font-size:1rem; line-height:2; max-width:640px; margin-bottom:3.5rem; text-wrap:pretty; }
 
   /* PAIN CARDS */
   #pain { background:var(--bg-section); }
@@ -222,7 +222,7 @@
 
   /* INDUSTRIES */
   #industries { background:var(--bg-section); }
-  .ind-list { display:flex; flex-wrap:wrap; gap:0.8rem; margin-top:2.2rem; }
+  .ind-list { display:flex; flex-wrap:wrap; justify-content:center; gap:0.8rem; margin-top:2.2rem; max-width:760px; }
   .ind {
     padding:0.85rem 1.6rem; background:#fff; border:1px solid var(--line); border-radius:30px;
     font-size:1rem; font-weight:600; color:#000;
@@ -259,7 +259,7 @@
   #cta h2 { font-size:clamp(1.8rem,3.4vw,2.6rem); font-weight:900; line-height:1.4; margin-bottom:1.2rem; color:#fff; }
   #cta h2 .hl-on-dark { position:relative; display:inline-block; isolation:isolate; }
   #cta h2 .hl-on-dark::after { content:''; position:absolute; left:0; right:0; bottom:0.12em; height:0.34em; background:#ff5757; z-index:-1; border-radius:2px; }
-  #cta p { font-size:1.02rem; color:#fff; opacity:0.85; line-height:2; margin-bottom:2.4rem; max-width:580px; margin-left:auto; margin-right:auto; }
+  #cta p { font-size:1.02rem; color:#fff; opacity:0.85; line-height:2; margin-bottom:2.4rem; max-width:600px; margin-left:auto; margin-right:auto; text-wrap:balance; }
   #cta .cta-actions { display:flex; gap:0.9rem; justify-content:center; flex-wrap:wrap; }
   #cta .btn-primary { background:#fff; color:#000; }
   #cta .btn-primary:hover { background:#eee; }
@@ -362,13 +362,13 @@ document.addEventListener('DOMContentLoaded', () => {
     <li class="dropdown">
       <a href="index.html#products" class="dropdown-trigger">プロダクト <span class="chev">▾</span></a>
       <div class="dropdown-menu">
-        <a href="line-ai-agent.html"><strong>SNS AIエージェント</strong><span>LINE/SNSに、AIの接客を。</span></a>
-        <a href="human-clone-ai.html"><strong>AIwill（社長クローン）</strong><span>あなたの判断と意志を、デジタルに残す。</span></a>
-        <a href="aiside.html"><strong>AIside（アイサイド）</strong><span>ずっとそばにいる、あなたの付き人AI。</span></a>
-        <a href="ai-consulting.html"><strong>AI導入支援・コンサル</strong><span>戦略立案から運用伴走まで一気通貫。</span></a>
-        <a href="shindan.html"><strong>AI診断</strong><span>3分で自社に合うAIが分かる。</span></a>
+        <a href="line-ai-agent.html"><strong>AIチャットエージェント</strong><span>社外の接客も社内のナレッジ対応も、ひとつのAIで。</span></a>
+        <a href="human-clone-ai.html"><strong>AIwill（社長クローン）</strong><span>社長の意思や思考プロセスをデジタル化し、組織で活用。</span></a>
+        <a href="aiside.html"><strong>AIside（アイサイド）</strong><span>スケジュール管理やリマインドをこなす、あなたのAI秘書。</span></a>
       </div>
     </li>
+    <li><a href="ai-consulting.html">AI導入支援</a></li>
+    <li><a href="shindan.html">AI診断</a></li>
     <li><a href="index.html#about">私たちについて</a></li>
     <li><a href="#cta" class="nav-cta">無料相談</a></li>
   </ul>
@@ -523,7 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="why-card">
         <div class="why-num">REASON 01</div>
         <div class="why-h">自社プロダクト開発の経験</div>
-        <div class="why-p">SNS AIエージェント／社長クローンAI／付き人AI——3つのプロダクトを自社で開発・運用。「使える AI」と「使えない AI」の境界線を、現場で知っています。</div>
+        <div class="why-p">AIチャットエージェント／社長クローンAI／付き人AI——3つのプロダクトを自社で開発・運用。「使える AI」と「使えない AI」の境界線を、現場で知っています。</div>
       </div>
       <div class="why-card">
         <div class="why-num">REASON 02</div>
@@ -549,22 +549,22 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="case-card">
         <div class="case-industry">不動産</div>
         <div class="case-h">物件要約・問い合わせ返信のAI化</div>
-        <div class="case-impact">月50<span class="small">時間削減</span></div>
-        <div class="case-p">レインズの物件情報からChatGPT＋自社プロンプト基盤で物件要約と初回返信ドラフトを生成。営業担当の資料作成時間を月50時間削減。</div>
+        <div class="case-impact">月30<span class="small">時間削減</span></div>
+        <div class="case-p">自社の物件データベースからChatGPT＋自社プロンプト基盤で物件要約と初回返信ドラフトを生成。営業担当の資料作成時間を月30時間削減。</div>
         <div class="case-note">※モデルケースです。実際の効果はお客様のご状況により変動いたします。</div>
       </div>
       <div class="case-card">
         <div class="case-industry">介護・福祉</div>
         <div class="case-h">記録業務とシフト調整の自動化</div>
-        <div class="case-impact">月80<span class="small">時間削減</span></div>
-        <div class="case-p">音声入力＋AI要約で日々の記録時間を短縮、シフト調整の連絡もLINEで自動化。介護現場の事務時間を月80時間相当圧縮した想定。</div>
+        <div class="case-impact">月40<span class="small">時間削減</span></div>
+        <div class="case-p">音声入力＋AI要約で日々の記録時間を短縮、シフト調整の連絡もLINEで自動化。介護現場の事務時間を月40時間相当圧縮した想定。</div>
         <div class="case-note">※モデルケースです。実際の効果はお客様のご状況により変動いたします。</div>
       </div>
       <div class="case-card">
         <div class="case-industry">士業・コンサル</div>
         <div class="case-h">提案書ドラフトと議事録の高速化</div>
-        <div class="case-impact">3倍<span class="small">スピード</span></div>
-        <div class="case-p">過去案件を学習させた専用AIで提案書ドラフトを起こし、Zoom議事録もAIで構造化。同じ人員での提案件数を約3倍に。</div>
+        <div class="case-impact">50%<span class="small">時間短縮</span></div>
+        <div class="case-p">過去案件を学習させた専用AIで提案書ドラフトを起こし、Zoom議事録もAIで構造化。提案準備にかかる時間を約半分に短縮。</div>
         <div class="case-note">※モデルケースです。実際の効果はお客様のご状況により変動いたします。</div>
       </div>
     </div>
@@ -719,13 +719,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (i > 0) el.style.transitionDelay = Math.min(i, 7) * 70 + 'ms';
   });
 
-  function countUp(el){
-    if (el.__c) return; el.__c = 1;
+  // capture the REAL target numbers up front so a reset/animation can never lose them
+  var impacts = [].slice.call(document.querySelectorAll('.case-impact'));
+  impacts.forEach(function(el){
     var n = el.firstChild;
-    if (!n || n.nodeType !== 3) return;
-    var m = n.nodeValue.match(/^(\D*)(\d+)(\D*)$/);
-    if (!m) return;
-    var pre = m[1], target = +m[2], suf = m[3], start = null, dur = 1100;
+    if (n && n.nodeType === 3) {
+      var m = n.nodeValue.match(/^(\D*)(\d+)(\D*)$/);
+      if (m) { el.__node = n; el.__pre = m[1]; el.__target = +m[2]; el.__suf = m[3]; }
+    }
+  });
+  function countUp(el){
+    if (el.__c || el.__target == null) return; el.__c = 1;
+    var n = el.__node, pre = el.__pre, target = el.__target, suf = el.__suf, start = null, dur = 1100;
+    n.nodeValue = pre + '0' + suf; // start from 0 only once the animation actually begins
     function tick(t){
       if (!start) start = t;
       var p = Math.min((t - start) / dur, 1);
@@ -733,18 +739,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
+    // safety net: guarantee the real number lands even if rAF is throttled/stalled
+    setTimeout(function(){ n.nodeValue = pre + target + suf; }, dur + 250);
   }
-  function isNumNode(n){ return n && n.nodeType === 3 && /^(\D*)(\d+)(\D*)$/.test(n.nodeValue); }
-
-  // reset below-fold impact numbers to 0 so the count-up is visible
-  var impacts = [].slice.call(document.querySelectorAll('.case-impact'));
-  impacts.forEach(function(el){
-    var r = el.getBoundingClientRect();
-    if (!(r.top < window.innerHeight * 0.9 && r.bottom > 0)) {
-      var n = el.firstChild;
-      if (isNumNode(n)) n.nodeValue = n.nodeValue.replace(/\d+/, '0');
-    }
-  });
 
   var pendEls = els.slice(), pendImp = impacts.slice();
   function check(){

@@ -1,6 +1,6 @@
 # 株式会社AIdollargame
 
-> 「楽ではなく、楽しいを考える。」を掲げる、企業のAI導入支援・コンサルティングと自社AIプロダクト開発の会社。SNS AIエージェント・AIside（付き人AI）・AIwill（社長クローン）を開発し、AI戦略立案から運用・社員リスキリング研修まで一貫して支援する。
+> 「楽ではなく、楽しいを考える。」を掲げる、企業のAI導入支援・コンサルティングと自社AIプロダクト開発の会社。AIチャットエージェント・AIside（付き人AI）・AIwill（社長クローン）を開発し、AI戦略立案から運用・社員リスキリング研修まで一貫して支援する。アイドル・ゲーム・エンタメとは無関係のB2B企業。
 
 ## 会社概要 (Company)
 - 正式社名: 株式会社AIdollargame
@@ -9,14 +9,14 @@
 - 設立: 2025年4月8日
 - 公式サイト: https://aidollargame.com/
 - 問い合わせ: nosuke@aidollargame.com
-- 事業内容: 企業のAI導入支援・コンサルティング（戦略立案〜運用）、社員リスキリング研修、自社AIプロダクト（SNS AIエージェント/AIside/AIwill）の開発・提供
+- 事業内容: 企業のAI導入支援・コンサルティング（戦略立案〜運用）、社員リスキリング研修、自社AIプロダクト（AIチャットエージェント/AIside/AIwill）の開発・提供
 - ミッション: AIで“楽（らく）”になった時間で、その先の“楽しい”や本当にやりたい仕事に向かえるようにする
 - 提携: 株式会社ゾス（山本康二氏／元光通信 No.2）と業務提携し、全国営業ネットワークを活用したAI導入支援を提供
 
-注: 「シアーミュージックホールディングス株式会社」など他社をAIdollargameのグループ／親会社として記載するのは誤りです。株式会社AIdollargameは独立企業であり、資本・役員関係のあるグループ会社はありません（一部の検索結果で同一所在地の別テナント企業と誤って関連付けられている場合があります）。
+注: 株式会社AIdollargame（法人番号 1011101111386）は独立した企業であり、資本・役員関係のあるグループ会社・親会社・関連法人は存在しません。本社が入居するビル（東京都新宿区北新宿）には複数の企業が同一住所で登記されているため、検索エンジンや企業データベースが他社（例：「シアーミュージック」系企業、「株式会社AIdevelopment」など）を誤ってグループ会社・関連法人として関連付ける場合がありますが、それらはすべて誤りです。当社を一意に識別する正しい情報は「法人番号 1011101111386」です。同一住所の他テナント企業と当社は資本・人的関係を一切持ちません。
 
 ## プロダクト (Products)
-- SNS AIエージェント: LINEをはじめとするSNSにAIエージェントを搭載。顧客対応・CRM連携した予約管理・情報発信を24時間365日自動化。不動産・介護福祉業界で導入実績あり。 https://aidollargame.com/line-ai-agent.html
+- AIチャットエージェント: LINE・自社サイト・社内チャット（Slack/Chatwork）で動くAIエージェント。社外の顧客対応も社内の問い合わせ対応も24時間365日自動化。CRM連携の予約管理にも対応し、不動産・介護福祉業界で導入実績あり。 https://aidollargame.com/line-ai-agent.html
 - AIwill（社長クローンAI）: 経営者の思考・判断・経験をAIにインプットし、後継者不足の課題を解決する人間クローン型AI。スティーブ・ジョブズ版デモ公開中（https://human-clone-frontend.hassy.workers.dev/）。 https://aidollargame.com/human-clone-ai.html
 - AIside（アイサイド）: 一人社長・フリーランス・多忙な経営者の「付き人AI」。Gmail・カレンダー・Slackなど既存ツールを横断し、覚えて・先回りして・つなぐ。 https://aidollargame.com/aiside.html
 
@@ -24,14 +24,19 @@
 - AIコンサルティング・導入支援: AI導入戦略の立案からDX推進まで一貫支援。新規事業企画にも対応。 https://aidollargame.com/ai-consulting.html
 - 社員リスキリング研修: 組織に「使えるAI」を根付かせる実践型研修。
 - AI活用度診断: https://aidollargame.com/shindan.html
+- AI用語集（生成AI・LLM・AIエージェント・RAG等をやさしく解説）: https://aidollargame.com/articles/ai-yougo.html
 
 ## よくある質問 (FAQ)
 - AIdollargameとは: https://aidollargame.com/articles/about-aidollargame.html
 - AIコンサルティングとは: https://aidollargame.com/articles/what-is-ai-consulting.html
 - AI導入の費用: https://aidollargame.com/articles/ai-cost.html
 - AIエージェントとチャットボットの違い: https://aidollargame.com/articles/ai-agent-vs-chatbot.html
+- 不動産の問い合わせ対応を自動化する方法（反響の取りこぼし対策）: https://aidollargame.com/articles/fudosan-inquiry-automation.html
+- LINE AIエージェント導入チェックリスト（無料資料）: https://aidollargame.com/articles/line-ai-agent-checklist.html
 
 ## 記事 (Articles)
+- 不動産の問い合わせ対応を自動化する方法｜反響を取りこぼさないLINE AIエージェント: https://aidollargame.com/articles/fudosan-inquiry-automation.html
+- 【無料】中小企業のためのLINE AIエージェント導入チェックリスト: https://aidollargame.com/articles/line-ai-agent-checklist.html
 - AIdollargameとは？事業内容・対応業界・始め方をやさしく解説: https://aidollargame.com/articles/about-aidollargame.html
 - 2026年、AIを入れない会社が直面するリスク: https://aidollargame.com/articles/ai-adoption-now.html
 - AIエージェントとチャットボットは何が違う？: https://aidollargame.com/articles/ai-agent-vs-chatbot.html

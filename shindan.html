@@ -71,7 +71,7 @@
 
   /* ===== QUESTION ===== */
   .progress{display:flex;gap:7px;margin-bottom:.7rem;justify-content:center;}
-  .progress span{width:38px;height:4px;border-radius:3px;background:rgba(255,255,255,.12);transition:.4s;}
+  .progress span{flex:1;max-width:46px;height:4px;border-radius:3px;background:rgba(255,255,255,.12);transition:.4s;}
   .progress span.on{background:linear-gradient(90deg,#00d8ff,#000);box-shadow:0 0 12px rgba(0,216,255,.5);}
   .qcount{text-align:center;font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:.66rem;letter-spacing:.25em;color:var(--muted);margin-bottom:1.6rem;}
   .qtitle{font-size:clamp(1.35rem,3.6vw,1.8rem);font-weight:900;text-align:center;line-height:1.45;margin-bottom:2rem;}
@@ -130,6 +130,7 @@ body::before { display:none !important; }
 nav { background:rgba(255,255,255,0.95) !important; border-bottom:1px solid #e5e7eb !important; }
 .logo, .logo .ai { color:#000 !important; text-shadow:none !important; }
 .nav-back, .nav-back:hover { color:#000 !important; }
+.dropdown-trigger, .dropdown-trigger:hover { color:#000 !important; font-weight:600 !important; }
 
 /* INTRO */
 .card { background:#ffffff !important; border:1px solid #e5e7eb !important; box-shadow:0 1px 2px rgba(0,0,0,0.04) !important; }
@@ -231,13 +232,12 @@ footer a { color:#000 !important; }
     <div class="dropdown">
       <a href="index.html#products" class="dropdown-trigger">プロダクト <span class="chev">▾</span></a>
       <div class="dropdown-menu">
-        <a href="line-ai-agent.html"><strong>SNS AIエージェント</strong><span>LINE/SNSに、AIの接客を。</span></a>
-        <a href="human-clone-ai.html"><strong>AIwill（社長クローン）</strong><span>あなたの判断と意志を、デジタルに残す。</span></a>
-        <a href="aiside.html"><strong>AIside（アイサイド）</strong><span>ずっとそばにいる、あなたの付き人AI。</span></a>
-        <a href="ai-consulting.html"><strong>AI導入支援・コンサル</strong><span>戦略立案から運用伴走まで一気通貫。</span></a>
-        <a href="shindan.html"><strong>AI診断</strong><span>3分で自社に合うAIが分かる。</span></a>
+        <a href="line-ai-agent.html"><strong>AIチャットエージェント</strong><span>社外の接客も社内のナレッジ対応も、ひとつのAIで。</span></a>
+        <a href="human-clone-ai.html"><strong>AIwill（社長クローン）</strong><span>社長の意思や思考プロセスをデジタル化し、組織で活用。</span></a>
+        <a href="aiside.html"><strong>AIside（アイサイド）</strong><span>スケジュール管理やリマインドをこなす、あなたのAI秘書。</span></a>
       </div>
     </div>
+    <a href="ai-consulting.html" class="nav-back">AI導入支援</a>
     <a href="index.html" class="nav-back">← HOME</a>
   </div>
 </nav>
@@ -261,9 +261,9 @@ footer a { color:#000 !important; }
       <h1>あなたの会社、<br><span class="em">AI</span>でどう変わる？</h1>
       <p>今の悩みから、あなたの会社に最適なAIの使い方を診断します。<br>当てはまるものを選んでいくだけ。</p>
       <div class="meta-row">
-        <span class="m"><b>約1分</b></span>
-        <span class="m"><b>5つの質問</b></span>
-        <span class="m"><b>5つの解決策から診断</b></span>
+        <span class="m"><b>約3分</b></span>
+        <span class="m"><b>8つの質問</b></span>
+        <span class="m"><b>4つの解決策から診断</b></span>
       </div>
       <div class="center"><button class="btn" onclick="start()">診断をはじめる →</button></div>
     </section>
@@ -306,9 +306,9 @@ footer a { color:#000 !important; }
 <script>
 const HP = "index.html";
 const PRODUCTS = {
-  sns:{ name:"SNS AIエージェント", icon:'<svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 20l1.1-4A8.4 8.4 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/></svg>', tagline:"お客様対応を、24時間ぶん肩代わり。",
+  sns:{ name:"AIチャットエージェント", icon:'<svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 20l1.1-4A8.4 8.4 0 0 1 12 3a8.5 8.5 0 0 1 9 8.5z"/></svg>', tagline:"お客様対応を、24時間ぶん肩代わり。",
     detail:"line-ai-agent.html",
-    why:"あなたの一番の負担は「顧客対応・問い合わせ・予約」に時間を奪われていること。SNS AIエージェントは、LINEなどお客様が普段使うSNS上で自然に会話し、予約管理やCRM連携まで自動でこなします。",
+    why:"あなたの一番の負担は「顧客対応・問い合わせ・予約」に時間を奪われていること。AIチャットエージェントは、LINEなどお客様が普段使うSNS上で自然に会話し、予約管理やCRM連携まで自動でこなします。",
     benefits:["問い合わせ・予約対応を24時間365日自動化","お客様が使い慣れたLINE等の上で完結","あらゆる業種に対応"] },
   clone:{ name:"社長クローンAI", icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>', tagline:"社長の頭脳を、いつでも参照できる分身に。",
     detail:"human-clone-ai.html",
@@ -326,30 +326,45 @@ const PRODUCTS = {
 
 const QUESTIONS = [
   { title:"今、一番あなたの時間を奪っているのは？", opts:[
-    {ic:"💬",t:"お客様からの問い合わせ・予約対応",k:"sns"},
-    {ic:"🧠",t:"自分にしかできない判断・経営",k:"clone"},
-    {ic:"🤝",t:"雑務・スケジュール・連絡調整",k:"side"},
-    {ic:"🧭",t:"そもそも何にAIを使えばいいか分からない",k:"cons"} ]},
+    {t:"お客様からの問い合わせ・予約対応",k:"sns"},
+    {t:"自分にしかできない判断・経営",k:"clone"},
+    {t:"雑務・スケジュール・連絡調整",k:"side"},
+    {t:"そもそも何にAIを使えばいいか分からない",k:"cons"} ]},
   { title:"あなたの会社・働き方に近いのは？", opts:[
-    {ic:"📞",t:"接客・対応の人手がいつも足りない",k:"sns"},
-    {ic:"👤",t:"社長に依存していて、継ぐ人もいない",k:"clone"},
-    {ic:"🌀",t:"一人 or 少人数で全部を抱えている",k:"side"},
-    {ic:"🏢",t:"社員がAIをうまく使えていない",k:"cons"} ]},
+    {t:"接客・対応の人手がいつも足りない",k:"sns"},
+    {t:"社長に依存していて、継ぐ人もいない",k:"clone"},
+    {t:"一人 or 少人数で全部を抱えている",k:"side"},
+    {t:"社員がAIをうまく使えていない",k:"cons"} ]},
+  { title:"会社の規模は？", w:0.5, opts:[
+    {t:"一人 / フリーランス",k:"side"},
+    {t:"2〜10名の小規模",k:"side"},
+    {t:"11〜50名",k:"cons"},
+    {t:"51名以上 / 多店舗",k:"clone"} ]},
+  { title:"今のAI活用は、どの段階？", w:0.5, opts:[
+    {t:"まだ何も始めていない",k:"cons"},
+    {t:"個人でChatGPT等を試している",k:"cons"},
+    {t:"一部の業務で使い始めている",k:"side"},
+    {t:"組織全体に広げたい段階",k:"cons"} ]},
   { title:"AIに、一番任せたいことは？", opts:[
-    {ic:"🕐",t:"24時間お客様の窓口になってほしい",k:"sns"},
-    {ic:"🧬",t:"自分の頭脳を分身として残したい",k:"clone"},
-    {ic:"🪄",t:"自分の隣で雑務を先回りしてほしい",k:"side"},
-    {ic:"🌱",t:"会社全体にAIを根付かせたい",k:"cons"} ]},
+    {t:"24時間お客様の窓口になってほしい",k:"sns"},
+    {t:"自分の頭脳を分身として残したい",k:"clone"},
+    {t:"自分の隣で雑務を先回りしてほしい",k:"side"},
+    {t:"会社全体にAIを根付かせたい",k:"cons"} ]},
+  { title:"一番の不安・引っかかりは？", opts:[
+    {t:"顧客対応の質・スピードを落としたくない",k:"sns"},
+    {t:"自分がいないと回らないのが怖い",k:"clone"},
+    {t:"忙しすぎて新しいことを学ぶ余裕がない",k:"side"},
+    {t:"投資が無駄になる・定着しないのが怖い",k:"cons"} ]},
   { title:"いま、一番手に入れたいのは？", opts:[
-    {ic:"😊",t:"お客様を待たせない、対応の安心感",k:"sns"},
-    {ic:"♾️",t:"自分がいなくても回る仕組み",k:"clone"},
-    {ic:"⏳",t:"自分が自由に使える時間",k:"side"},
-    {ic:"🚀",t:"会社の成長スピードそのもの",k:"cons"} ]},
-  { title:"あなたの会社のAI活用は、今どの段階？", opts:[
-    {ic:"🌐",t:"顧客接点にAIを置きたい段階",k:"sns"},
-    {ic:"🏛️",t:"事業の継続・承継を考える段階",k:"clone"},
-    {ic:"🧩",t:"日々の業務を軽くしたい段階",k:"side"},
-    {ic:"🔰",t:"まだ何も始められていない段階",k:"cons"} ]}
+    {t:"お客様を待たせない、対応の安心感",k:"sns"},
+    {t:"自分がいなくても回る仕組み",k:"clone"},
+    {t:"自分が自由に使える時間",k:"side"},
+    {t:"会社の成長スピードそのもの",k:"cons"} ]},
+  { title:"どう進めたい？", opts:[
+    {t:"まず特定の業務を自動化したい",k:"sns"},
+    {t:"経営・意思決定の仕組みを残したい",k:"clone"},
+    {t:"まず自分の生産性を上げたい",k:"side"},
+    {t:"戦略から一緒に伴走してほしい",k:"cons"} ]}
 ];
 
 const ORDER=['sns','clone','side','cons'];
@@ -373,7 +388,7 @@ function render(){
   const quiz=document.getElementById('quiz'); quiz.classList.remove('anim'); void quiz.offsetWidth; quiz.classList.add('anim');
 }
 
-function weight(){ return QUESTIONS.length - step; } // 序盤の質問ほど重い
+function weight(){ var q=QUESTIONS[step]; return (QUESTIONS.length - step) * (q.w||1); } // 序盤ほど重い・規模/成熟度は軽め
 function choose(k){ scores[k]+=weight(); history.push(k); if(step<QUESTIONS.length-1){step++;render();} else loadingThenFinish(); }
 function back(){ if(step===0)return; const last=history.pop(); step--; scores[last]-=weight(); render(); }
 

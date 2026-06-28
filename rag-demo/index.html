@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, follow">
+<title>RAGデモ ｜ 御社の知見を、御社だけのAIに — AIdollargame</title>
+<meta name="description" content="AIdollargameのRAG（ナレッジ基盤）デモ。架空の介護事業所のマニュアルを取り込んで、自社データに基づくAI回答を体験できます。">
+<style>
+  :root { --accent:#2563eb; --line:#e5e7eb; --heart:#ff5757; --ink:#000; --soft:#fafbfc; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { background:#fff; scroll-behavior:smooth; }
+  body { font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue",sans-serif; background:#fff; color:#000; line-height:1.75; -webkit-font-smoothing:antialiased; }
+
+  nav { position:fixed; top:0; left:0; right:0; padding:1rem 2rem; background:rgba(255,255,255,0.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--line); z-index:100; display:flex; justify-content:space-between; align-items:center; }
+  .logo { font-weight:900; font-size:1.1rem; display:inline-flex; align-items:baseline; letter-spacing:-0.02em; color:#000; text-decoration:none; }
+  .logo .heart-i { position:relative; display:inline-block; line-height:1; color:var(--heart); }
+  .logo .heart-i::after { content:'\2665'; position:absolute; left:50%; bottom:75%; transform:translateX(-50%); font-size:0.42em; line-height:1; color:var(--heart); pointer-events:none; }
+  .back { font-size:0.82rem; font-weight:600; color:#000; text-decoration:none; opacity:0.7; }
+  .back:hover { opacity:1; }
+
+  main { max-width:1100px; margin:0 auto; padding:7rem 2rem 4rem; }
+  .hero { text-align:center; margin-bottom:3.5rem; }
+  .eyebrow { font-size:0.74rem; letter-spacing:0.28em; font-weight:700; color:var(--accent); margin-bottom:1rem; }
+  h1 { font-size:clamp(1.7rem,4vw,2.5rem); font-weight:900; line-height:1.3; letter-spacing:-0.015em; margin-bottom:1.2rem; }
+  h1 .em { position:relative; display:inline-block; isolation:isolate; }
+  h1 .em::after { content:''; position:absolute; left:0; right:0; bottom:0.08em; height:0.32em; background:#ffe45c; z-index:-1; border-radius:2px; }
+  .sub { font-size:1rem; line-height:1.95; max-width:740px; margin:0 auto; color:#222; }
+
+  .layout { display:grid; grid-template-columns:1.55fr 1fr; gap:2.4rem; }
+
+  .ask-card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:1.8rem; box-shadow:0 1px 2px rgba(0,0,0,0.04); }
+  .ask-label { font-size:0.74rem; letter-spacing:0.22em; font-weight:700; color:var(--accent); margin-bottom:1rem; }
+  .ask-input { width:100%; padding:1rem 1.2rem; font-size:1.04rem; border:1.5px solid var(--line); border-radius:10px; font-family:inherit; outline:none; transition:border-color 0.2s; }
+  .ask-input:focus { border-color:var(--accent); }
+  .ask-actions { display:flex; gap:0.7rem; margin-top:1rem; flex-wrap:wrap; }
+  .btn-ask { padding:0.9rem 1.6rem; background:#000; color:#fff; border:none; border-radius:8px; font-weight:700; font-size:0.95rem; cursor:pointer; font-family:inherit; transition:background 0.2s, transform 0.2s; }
+  .btn-ask:hover { background:#1a1a1a; transform:translateY(-1px); }
+  .btn-sample { padding:0.55rem 1rem; background:var(--soft); color:#000; border:1px solid var(--line); border-radius:6px; font-size:0.8rem; cursor:pointer; font-family:inherit; transition:background 0.18s, border-color 0.18s; }
+  .btn-sample:hover { background:#eef3fa; border-color:var(--accent); color:var(--accent); }
+
+  .answer-box { margin-top:2rem; opacity:0; transform:translateY(8px); transition:opacity 0.3s, transform 0.3s; }
+  .answer-box.show { opacity:1; transform:translateY(0); }
+  .answer-label { font-size:0.74rem; letter-spacing:0.22em; font-weight:700; color:var(--accent); margin-bottom:0.7rem; display:flex; align-items:center; gap:0.6rem; }
+  .answer-label::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  .answer { background:var(--soft); border-left:3px solid var(--accent); padding:1.4rem 1.6rem; font-size:0.97rem; line-height:2; border-radius:0 10px 10px 0; }
+  .answer .placeholder { color:#888; font-style:italic; }
+  .answer .cite { display:inline-block; margin-top:0.8rem; font-size:0.78rem; color:#555; }
+
+  .evidence-list { margin-top:1.6rem; }
+  .evidence-h { font-size:0.74rem; letter-spacing:0.22em; font-weight:700; color:#000; margin-bottom:0.8rem; }
+  .evidence-item { background:#fff; border:1px solid var(--line); border-radius:10px; padding:1.05rem 1.3rem; margin-bottom:0.7rem; font-size:0.88rem; line-height:1.85; }
+  .evidence-item .src { font-size:0.7rem; color:var(--accent); font-weight:700; letter-spacing:0.04em; margin-bottom:0.45rem; display:flex; justify-content:space-between; align-items:center; gap:0.6rem; flex-wrap:wrap; }
+  .evidence-item .score { background:#eff6ff; padding:0.15rem 0.55rem; border-radius:4px; color:var(--accent); font-size:0.66rem; font-weight:700; }
+  .evidence-item .text { color:#000; }
+
+  .sidebar { background:var(--soft); border:1px solid var(--line); border-radius:14px; padding:1.6rem 1.8rem; height:max-content; position:sticky; top:5.5rem; }
+  .sb-h { font-size:0.74rem; letter-spacing:0.22em; font-weight:700; color:var(--accent); margin-bottom:1rem; }
+  .sb-h:not(:first-child) { margin-top:1.6rem; padding-top:1.4rem; border-top:1px solid var(--line); }
+  .docs-list { list-style:none; }
+  .docs-list li { padding:0.55rem 0; border-bottom:1px solid var(--line); font-size:0.85rem; display:flex; gap:0.7rem; align-items:baseline; }
+  .docs-list li:last-child { border-bottom:none; }
+  .docs-list .num { font-family:'SF Mono',Menlo,monospace; color:#888; font-size:0.7rem; flex-shrink:0; }
+  .sidebar p { font-size:0.85rem; line-height:1.9; color:#222; }
+
+  .note { margin-top:2rem; padding:1.2rem 1.6rem; background:#fef9e7; border-left:3px solid #fbbf24; border-radius:0 10px 10px 0; font-size:0.85rem; line-height:1.85; }
+  .note strong { color:#000; }
+
+  .next { margin-top:5rem; padding:2.5rem; background:#000; color:#fff; border-radius:16px; text-align:center; }
+  .next h2 { font-size:1.5rem; font-weight:900; margin-bottom:0.8rem; line-height:1.4; }
+  .next p { font-size:0.95rem; opacity:0.85; line-height:1.9; margin-bottom:1.6rem; max-width:640px; margin-left:auto; margin-right:auto; }
+  .next a { display:inline-block; padding:0.9rem 1.8rem; background:#fff; color:#000; border-radius:8px; font-weight:700; text-decoration:none; font-size:0.92rem; transition:transform 0.2s; }
+  .next a:hover { transform:translateY(-2px); }
+  .next a + a { margin-left:0.7rem; background:transparent; color:#fff; border:1.5px solid #fff; }
+
+  @media (max-width:780px) {
+    .layout { grid-template-columns:1fr; }
+    main { padding:6rem 1.4rem 3rem; }
+    .sidebar { position:static; }
+    .ask-card { padding:1.4rem; }
+    .next { padding:2rem 1.4rem; }
+    .next a + a { margin-left:0; margin-top:0.7rem; display:block; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="logo">A<span class="heart-i">ı</span>dollargame</a>
+  <a href="../ai-consulting.html" class="back">← AI導入支援</a>
+</nav>
+
+<main>
+  <div class="hero">
+    <div class="eyebrow">RAG DEMO ／ ナレッジ基盤体験</div>
+    <h1>御社の知見を、<br><span class="em">御社だけのAI</span>に</h1>
+    <p class="sub">下のサンプルは架空の介護事業所「みらい」のマニュアル18点を取り込んだRAGです。<br>実案件では、御社の議事録・マニュアル・契約書・FAQ等を取り込み、御社専用の「知のAI」を構築します。</p>
+  </div>
+
+  <div class="layout">
+    <div>
+      <div class="ask-card">
+        <div class="ask-label">質問を入力してください</div>
+        <input id="q" class="ask-input" placeholder="例：夜勤中に転倒事故が起きたらどう対応する？" />
+        <div class="ask-actions">
+          <button class="btn-ask" onclick="ask()">AIに質問する →</button>
+          <button class="btn-sample" onclick="sample('夜勤中に転倒事故が起きたらどう対応する？')">転倒対応</button>
+          <button class="btn-sample" onclick="sample('入浴介助で気をつけることは？')">入浴介助</button>
+          <button class="btn-sample" onclick="sample('家族から食事内容について問い合わせがあった時')">家族対応</button>
+          <button class="btn-sample" onclick="sample('新人スタッフの研修期間と内容')">新人研修</button>
+          <button class="btn-sample" onclick="sample('夜勤シフトの体制と仮眠')">夜勤</button>
+        </div>
+      </div>
+
+      <div class="answer-box" id="answer-box">
+        <div class="answer-label">AIの回答</div>
+        <div class="answer" id="answer"></div>
+      </div>
+
+      <div class="evidence-list" id="evidence-list" style="display:none;">
+        <div class="evidence-h">根拠となった社内資料（関連度順）</div>
+        <div id="evidence"></div>
+      </div>
+
+      <div class="note">
+        <strong>このデモについて。</strong><br>
+        ブラウザ内検索（BM25・日本語バイグラム）＋テンプレート回答で動かしています。サーバー不要・無料。本番実装では、御社データをベクトル化したうえでClaude等のLLMが自然な回答文を生成します。詳細は<a href="README.md" style="color:var(--accent);font-weight:600;">README</a>または<a href="../ai-consulting.html" style="color:var(--accent);font-weight:600;">AI導入支援ページ</a>へ。
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="sb-h">仕込んでいる資料</div>
+      <ul class="docs-list" id="docs-list"></ul>
+
+      <div class="sb-h">なぜRAGが効くのか</div>
+      <p>御社の社内知見をAIに学習させると、暗黙知が「いつでも引ける資産」になります。モデル（Claude等）を入れ替えても御社固有のデータは消えません。これが御社だけの<strong>token capital</strong>となり、模倣されない競合優位を作ります。</p>
+    </aside>
+  </div>
+
+  <div class="next">
+    <h2>御社のデータでも、同じ仕組みが作れます</h2>
+    <p>議事録・マニュアル・FAQ・契約書 — 社内に散らばった知見をいただければ、御社専用のRAG（ナレッジ基盤）を構築します。NDA締結後にデータをお預かりし、最短2週間でデモ環境を納品します。</p>
+    <a href="../ai-consulting.html">AI導入支援を見る</a>
+    <a href="../index.html#contact">無料相談を予約</a>
+  </div>
+</main>
+
+<script src="data.js"></script>
+<script>
+  // sidebar — document list
+  (function(){
+    const docList = document.getElementById('docs-list');
+    const seen = new Set();
+    const sources = [];
+    DATA.forEach(d => { if (!seen.has(d.source)) { seen.add(d.source); sources.push(d.source); } });
+    sources.forEach((s,i)=>{
+      const li = document.createElement('li');
+      li.innerHTML = '<span class="num">' + String(i+1).padStart(2,'0') + '</span><span>' + s + '</span>';
+      docList.appendChild(li);
+    });
+  })();
+
+  function sample(q){
+    document.getElementById('q').value = q;
+    ask();
+  }
+
+  // Japanese-friendly retrieval: character bigrams + BM25
+  function bigrams(s){
+    const t = s.replace(/[\s\.,。、！？!?「」『』（）\(\)]/g,'').toLowerCase();
+    const out = [];
+    for (let i=0; i<t.length-1; i++) out.push(t.slice(i,i+2));
+    return out;
+  }
+
+  const corpus = DATA.map(d => ({
+    ...d,
+    terms: bigrams(d.text + ' ' + (d.section||''))
+  }));
+  const N = corpus.length;
+  const df = {};
+  corpus.forEach(d => {
+    new Set(d.terms).forEach(t => { df[t] = (df[t]||0) + 1; });
+  });
+  const avgLen = corpus.reduce((s,d)=>s+d.terms.length,0)/N;
+
+  function search(query){
+    const qterms = bigrams(query);
+    const k1 = 1.5, b = 0.75;
+    return corpus.map(d => {
+      const tf = {};
+      d.terms.forEach(t => { tf[t] = (tf[t]||0) + 1; });
+      let s = 0;
+      qterms.forEach(t => {
+        if (!(t in tf)) return;
+        const idf = Math.log((N - (df[t]||0) + 0.5)/((df[t]||0) + 0.5) + 1);
+        const num = tf[t]*(k1+1);
+        const den = tf[t] + k1*(1 - b + b*d.terms.length/avgLen);
+        s += idf * num/den;
+      });
+      return { doc:d, score:s };
+    }).sort((a,b) => b.score - a.score);
+  }
+
+  function ask(){
+    const q = document.getElementById('q').value.trim();
+    if (!q) return;
+    const results = search(q);
+    const hits = results.filter(r => r.score > 0).slice(0,3);
+
+    // build answer (template-based)
+    const answer = document.getElementById('answer');
+    const answerBox = document.getElementById('answer-box');
+    if (hits.length === 0){
+      answer.innerHTML = '<span class="placeholder">関連する情報が現在の社内資料からは見つかりませんでした。資料を増やすほど、回答精度は上がります。</span>';
+    } else {
+      const intros = [
+        '社内マニュアルを確認しました。要点は以下のとおりです。',
+        '社内資料に基づいてお答えします。',
+        '以下、関連する社内ルールです。'
+      ];
+      const intro = intros[Math.floor(Math.random()*intros.length)];
+      const top = hits[0];
+      const cite = '出典：「' + top.doc.source + '：' + top.doc.section + '」';
+      answer.innerHTML = intro + '<br><br>' + top.doc.text + '<br><span class="cite">' + cite + '</span>';
+    }
+    answerBox.classList.add('show');
+
+    // evidence
+    const evList = document.getElementById('evidence-list');
+    const evBox = document.getElementById('evidence');
+    if (hits.length === 0){
+      evList.style.display = 'none';
+    } else {
+      evBox.innerHTML = hits.map(r => (
+        '<div class="evidence-item">' +
+        '<div class="src"><span>' + r.doc.source + ' ／ ' + r.doc.section + '</span>' +
+        '<span class="score">関連スコア ' + r.score.toFixed(2) + '</span></div>' +
+        '<div class="text">' + r.doc.text + '</div></div>'
+      )).join('');
+      evList.style.display = 'block';
+    }
+
+    setTimeout(()=>answerBox.scrollIntoView({behavior:'smooth', block:'start'}), 100);
+  }
+
+  document.getElementById('q').addEventListener('keydown', e => {
+    if (e.key === 'Enter') ask();
+  });
+</script>
+
+</body>
+</html>

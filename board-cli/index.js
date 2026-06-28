@@ -1,17 +1,20 @@
 #!/usr/bin/env node
 /**
- * 仮想役員会CLI
+ * 仮想役員会CLI（Gemini版 / 無料枠で動く）
  *
  * 相談を投げると、立場(レンズ)の違う5人の役員が議論して、結論を1つに絞る。
  *
- *   役員の発言   : claude-haiku-4-5-20251001 (安い・並列)
- *   最終まとめ   : claude-sonnet-4-6        (1回だけ)
+ *   役員の発言   : gemini-2.5-flash (速い・並列・無料枠が緩め)
+ *   最終まとめ   : gemini-2.5-pro   (1回だけ)
+ *
+ * モデルは環境変数で差し替え可:
+ *   GEMINI_MEMBER_MODEL  / GEMINI_SUMMARY_MODEL
  *
  * 役員は「役割(レンズ)」で定義する。名前はただのラベルで、本人の実発言は再現しない。
  * 数字や固有事実には必ず [要裏取り] を付けさせる。
  */
 
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenAI } from "@google/genai";
 import { readFile, readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -21,8 +24,8 @@ import readline from "node:readline";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BOARDS_DIR = join(__dirname, "boards");
 
-const MODEL_MEMBER = "claude-haiku-4-5-20251001";
-const MODEL_SUMMARY = "claude-sonnet-4-6";
+const MODEL_MEMBER = process.env.GEMINI_MEMBER_MODEL || "gemini-2.5-flash";
+const MODEL_SUMMARY = process.env.GEMINI_SUMMARY_MODEL || "gemini-2.5-pro";
 
 // ── 端末の色付け（依存を増やさず最小限）─────────────────────────
 const C = {
@@ -72,19 +75,17 @@ function memberSystemPrompt(member) {
   ].join("\n");
 }
 
-// ── Anthropic 呼び出しの薄いラッパ ──────────────────────────────
+// ── Gemini 呼び出しの薄いラッパ ─────────────────────────────────
 async function ask(client, { model, system, prompt, maxTokens = 1024 }) {
-  const res = await client.messages.create({
+  const res = await client.models.generateContent({
     model,
-    max_tokens: maxTokens,
-    system,
-    messages: [{ role: "user", content: prompt }],
+    contents: prompt,
+    config: {
+      systemInstruction: system,
+      maxOutputTokens: maxTokens,
+    },
   });
-  return res.content
-    .filter((b) => b.type === "text")
-    .map((b) => b.text)
-    .join("")
-    .trim();
+  return (res.text || "").trim();
 }
 
 // ── ラウンド1: 各役員が自分のレンズで意見を出す（並列）──────────
@@ -151,7 +152,7 @@ async function roundBiggestConcern(client, board, topic, premises, opinions, reb
   return { member: skeptic, text };
 }
 
-// ── ラウンド4: sonnet に全部渡して結論を1つに強制 ──────────────
+// ── ラウンド4: gemini-pro に全部渡して結論を1つに強制 ──────────────
 async function roundFinalDecision(client, board, topic, premises, opinions, rebuttals, concern) {
   const ctx = buildContext(topic, premises);
   const transcript = renderTranscriptForModel(opinions, rebuttals);
@@ -252,11 +253,11 @@ async function runBoard(client, board, topic, premises) {
   );
   console.log(indent(concern.text));
 
-  process.stdout.write(paint("\n…議長(sonnet)が結論を1つに絞っています\n", C.dim));
+  process.stdout.write(paint("\n…議長(gemini-pro)が結論を1つに絞っています\n", C.dim));
   const decision = await roundFinalDecision(
     client, board, topic, premises, opinions, rebuttals, concern
   );
-  header("④ 最終結論（議長 / sonnet）", C.green);
+  header("④ 最終結論（議長 / gemini-pro）", C.green);
   console.log("\n" + indent(paint(decision, C.bold)));
   console.log(
     "\n" + paint("※ [要裏取り] が付いた数字・事実は、決定前に必ず裏を取ること。", C.yellow)
@@ -350,7 +351,10 @@ function printHelp() {
            :quit または空 Enter で終了
 
 環境変数:
-  ANTHROPIC_API_KEY  (必須)  Anthropic の APIキー
+  GEMINI_API_KEY        (必須)  Google AI Studio の無料APIキー
+                                 https://aistudio.google.com/apikey
+  GEMINI_MEMBER_MODEL   (任意)  役員の発言モデル (既定: gemini-2.5-flash)
+  GEMINI_SUMMARY_MODEL  (任意)  最終まとめモデル (既定: gemini-2.5-pro)
 `);
 }
 
@@ -447,8 +451,15 @@ async function main() {
     return;
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    console.error(paint("環境変数 ANTHROPIC_API_KEY が設定されていません。", C.red));
+  const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY;
+  if (!apiKey) {
+    console.error(
+      paint(
+        "環境変数 GEMINI_API_KEY が設定されていません。\n" +
+          "https://aistudio.google.com/apikey で無料のキーを取得して設定してください。",
+        C.red
+      )
+    );
     process.exit(1);
   }
 
@@ -470,7 +481,7 @@ async function main() {
     }
   }
 
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  const client = new GoogleGenAI({ apiKey });
   const state = { board, topic, premises: [...args.premises] };
 
   await runBoard(client, state.board, state.topic, state.premises);

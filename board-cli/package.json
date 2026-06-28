@@ -1,0 +1,19 @@
+{
+  "name": "virtual-board-cli",
+  "version": "1.0.0",
+  "description": "相談を投げると立場の違う5人が議論して結論を1つ出す仮想役員会CLI",
+  "type": "module",
+  "bin": {
+    "board": "./index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.65.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

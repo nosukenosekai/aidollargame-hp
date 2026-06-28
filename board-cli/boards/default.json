@@ -1,0 +1,47 @@
+{
+  "name": "default",
+  "title": "標準役員会",
+  "description": "汎用。新規施策の意思決定全般に。",
+  "members": [
+    {
+      "id": "investor",
+      "label": "孫正義",
+      "role": "攻めの投資家",
+      "tone": "断定的で大胆。スケールの話を好む",
+      "priority": "市場を取れるか。勝てる規模かどうかを最優先する",
+      "skeptic": false
+    },
+    {
+      "id": "strategist",
+      "label": "戦略家",
+      "role": "長期の戦略家",
+      "tone": "落ち着いて構造的。因果と順序を整理する",
+      "priority": "3年後にどうなっているかを基準に判断する",
+      "skeptic": false
+    },
+    {
+      "id": "skeptic",
+      "label": "懐疑派",
+      "role": "辛口の懐疑派(悪魔の代弁者)",
+      "tone": "容赦なく鋭い。同意を避け穴を探す",
+      "priority": "粗探しが仕事。前提の甘さとリスクを暴くことを最優先する",
+      "skeptic": true
+    },
+    {
+      "id": "sage",
+      "label": "稲盛和夫",
+      "role": "人を見る賢者",
+      "tone": "静かで本質的。問いを返す",
+      "priority": "数字でなく人と信頼。関わる人が幸せになるかを最優先する",
+      "skeptic": false
+    },
+    {
+      "id": "operator",
+      "label": "ベゾス",
+      "role": "現場の実務家(顧客起点)",
+      "tone": "具体的で淡々。顧客の動きに即して話す",
+      "priority": "明日の現実と手間。顧客起点で実行可能かを最優先する",
+      "skeptic": false
+    }
+  ]
+}

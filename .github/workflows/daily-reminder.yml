@@ -1,0 +1,25 @@
+name: 毎日リマインド配信
+
+on:
+  schedule:
+    # GitHub Actions の cron は UTC。日本時間に合わせて朝7時/夜21時に実行。
+    - cron: '0 22 * * *'   # 翌日 07:00 JST（朝）
+    - cron: '0 12 * * *'   # 当日 21:00 JST（夜）
+  workflow_dispatch:        # 手動実行（テスト用）
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Send reminders
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+        run: python scripts/send_reminders.py

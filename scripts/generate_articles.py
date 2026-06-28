@@ -349,7 +349,7 @@ def generate_articles(news_items, date_str):
 本文要件: 600-800字, h2を2-3個, blockquote1個, ビジョン「楽ではなく、楽しいを考える。」と絡める, <strong>で重要語強調, 偉そうにならず優しい語り口で"""
 
     msg = client.messages.create(
-        model="claude-opus-4-5",
+        model="claude-opus-4-8",
         max_tokens=6000,
         messages=[{"role": "user", "content": prompt}],
     )

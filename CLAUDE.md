@@ -58,7 +58,7 @@ slug は小文字英数字とハイフンのみ（`^[a-z0-9][a-z0-9-]{0,79}$`）
 
 `.github/workflows/auto-articles.yml` が毎週月曜 00:00 UTC に
 `scripts/generate_articles.py` を実行 → Google News RSS を取得 →
-Claude（`anthropic` SDK、現在 `model="claude-opus-4-5"`）で記事生成 →
+Claude（`anthropic` SDK、現在 `model="claude-opus-4-8"`）で記事生成 →
 `articles/` に保存し索引・トップを自動更新して push する。
 
 セキュリティ上重要な前提（スクリプト改変時は壊さないこと）:

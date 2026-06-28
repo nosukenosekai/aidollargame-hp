@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Weekly AI news article generator for AIdollargame HP"""
 
-import os, re, json, html, feedparser, anthropic
+import os, re, json, html, feedparser
+from google import genai
 from datetime import datetime, timezone, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
@@ -323,7 +324,8 @@ def list_existing_articles():
 
 
 def generate_articles(news_items, date_str):
-    client = anthropic.Anthropic()
+    # Gemini 無料枠（Google AI Studio）を利用。キーは GEMINI_API_KEY 環境変数から。
+    client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
     news_text = "\n".join(
         f"{i+1}. {x['title']}\n   {x['summary'][:200]}"
         for i, x in enumerate(news_items)
@@ -348,12 +350,12 @@ def generate_articles(news_items, date_str):
 タイトル要件: 「解説」「解説」などの冗長な締め言葉は付けない。内容が分かる簡潔な見出しにする。
 本文要件: 600-800字, h2を2-3個, blockquote1個, ビジョン「楽ではなく、楽しいを考える。」と絡める, <strong>で重要語強調, 偉そうにならず優しい語り口で"""
 
-    msg = client.messages.create(
-        model="claude-opus-4-5",
-        max_tokens=6000,
-        messages=[{"role": "user", "content": prompt}],
+    resp = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+        config=genai.types.GenerateContentConfig(max_output_tokens=8000),
     )
-    raw = msg.content[0].text.strip()
+    raw = resp.text.strip()
     raw = re.sub(r"^```(?:json)?\s*", "", raw)
     raw = re.sub(r"\s*```$", "", raw)
     arts = json.loads(raw)["articles"]
@@ -442,6 +444,17 @@ def update_main_index(articles, date_str):
 
 
 def main():
+    # GEMINI_API_KEY が未設定なら、エラーで落とさず何もせず正常終了する。
+    # キーが無い間はスキップして CI を緑のままに保つ（失敗メールを出さない）。
+    # 週次生成を有効にするには、無料の Gemini API キーをリポジトリ Secrets に
+    # GEMINI_API_KEY として登録するだけでよい（https://aistudio.google.com/apikey）。
+    if not os.environ.get("GEMINI_API_KEY"):
+        print(
+            "GEMINI_API_KEY が未設定のため、記事生成をスキップします（no-op）。"
+            "週次生成を有効にするにはリポジトリ Secrets に GEMINI_API_KEY を登録してください。"
+        )
+        return
+
     print("Fetching news...")
     news = fetch_news()
     if not news:

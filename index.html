@@ -1501,6 +1501,18 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
 (function(){
   const grid = document.getElementById('articlesGrid');
   if (!grid) return;
+  // 記事カードを日付（.article-date）で新しい順に並べ替える
+  const sortGrid = () => {
+    const dkey = a => {
+      const t = (a.querySelector('.article-date')?.textContent || '').trim().replace(/\s*\/\s*/g, '-');
+      const d = new Date(t);
+      return isNaN(d) ? -Infinity : d.getTime();
+    };
+    Array.from(grid.querySelectorAll('.article-card'))
+      .sort((a, b) => dkey(b) - dkey(a))
+      .forEach(c => grid.appendChild(c));
+  };
+  sortGrid(); // 初期表示（静的カード）を即ソート
   const RSS = 'https://note.com/aidollargame/rss';
   const API = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(RSS);
   const esc = s => (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1560,7 +1572,7 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
       frag.appendChild(a);
     });
     grid.insertBefore(frag, grid.firstChild);
-  }).catch(()=>{ /* 失敗時は自前記事をそのまま表示 */ });
+  }).catch(()=>{ /* 失敗時は自前記事をそのまま表示 */ }).finally(()=>{ try { sortGrid(); } catch (_) {} });
 })();
 </script>
 <script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>

@@ -75,17 +75,47 @@ function memberSystemPrompt(member) {
   ].join("\n");
 }
 
-// ── Gemini 呼び出しの薄いラッパ ─────────────────────────────────
-async function ask(client, { model, system, prompt, maxTokens = 1024 }) {
-  const res = await client.models.generateContent({
-    model,
-    contents: prompt,
-    config: {
-      systemInstruction: system,
-      maxOutputTokens: maxTokens,
-    },
-  });
-  return (res.text || "").trim();
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// 429(レート制限)のとき、Geminiが返す待ち時間を拾う。無ければ指数バックオフ。
+function retryDelayMs(err, attempt) {
+  const msg = typeof err?.message === "string" ? err.message : "";
+  const m = msg.match(/retry in ([\d.]+)s/i) || msg.match(/"retryDelay":\s*"([\d.]+)s"/);
+  if (m) return Math.ceil(parseFloat(m[1]) * 1000) + 1000; // 念のため+1秒
+  return Math.min(60000, 2000 * 2 ** attempt); // 2s,4s,8s… 最大60s
+}
+function isRateLimit(err) {
+  const s = err?.status;
+  const msg = typeof err?.message === "string" ? err.message : "";
+  return s === 429 || /RESOURCE_EXHAUSTED|quota|rate.?limit|\b429\b/i.test(msg);
+}
+
+// ── Gemini 呼び出しの薄いラッパ（無料枠のレート制限を自動でしのぐ）──
+async function ask(client, { model, system, prompt, maxTokens = 1024 }, opts = {}) {
+  const maxRetries = opts.maxRetries ?? 5;
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const res = await client.models.generateContent({
+        model,
+        contents: prompt,
+        config: { systemInstruction: system, maxOutputTokens: maxTokens },
+      });
+      return (res.text || "").trim();
+    } catch (err) {
+      if (isRateLimit(err) && attempt < maxRetries) {
+        const wait = retryDelayMs(err, attempt);
+        process.stdout.write(
+          paint(
+            `  (無料枠の上限。${Math.ceil(wait / 1000)}秒待って再試行… ${attempt + 1}/${maxRetries})\n`,
+            C.dim
+          )
+        );
+        await sleep(wait);
+        continue;
+      }
+      throw err;
+    }
+  }
 }
 
 // ── ラウンド1: 各役員が自分のレンズで意見を出す（並列）──────────

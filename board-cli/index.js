@@ -4,8 +4,8 @@
  *
  * 相談を投げると、立場(レンズ)の違う5人の役員が議論して、結論を1つに絞る。
  *
- *   役員の発言   : gemini-2.5-flash (速い・並列・無料枠が緩め)
- *   最終まとめ   : gemini-2.5-pro   (1回だけ)
+ *   役員の発言   : gemini-2.5-flash (速い・並列・無料枠で動く)
+ *   最終まとめ   : gemini-2.5-flash (1回だけ。有料なら pro に上書き可)
  *
  * モデルは環境変数で差し替え可:
  *   GEMINI_MEMBER_MODEL  / GEMINI_SUMMARY_MODEL
@@ -24,8 +24,10 @@ import readline from "node:readline";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BOARDS_DIR = join(__dirname, "boards");
 
+// どちらも無料枠で使えるモデルを既定にする（gemini-2.5-pro は無料枠 limit:0 で使えない）。
+// 有料プランなら GEMINI_SUMMARY_MODEL=gemini-2.5-pro 等に上書きすると、まとめの質が上がる。
 const MODEL_MEMBER = process.env.GEMINI_MEMBER_MODEL || "gemini-2.5-flash";
-const MODEL_SUMMARY = process.env.GEMINI_SUMMARY_MODEL || "gemini-2.5-pro";
+const MODEL_SUMMARY = process.env.GEMINI_SUMMARY_MODEL || "gemini-2.5-flash";
 
 // ── 端末の色付け（依存を増やさず最小限）─────────────────────────
 const C = {
@@ -89,6 +91,11 @@ function isRateLimit(err) {
   const msg = typeof err?.message === "string" ? err.message : "";
   return s === 429 || /RESOURCE_EXHAUSTED|quota|rate.?limit|\b429\b/i.test(msg);
 }
+// 「待っても無駄」な制限か（無料枠で使えないモデル= limit:0、または1日上限）
+function isHardQuota(err) {
+  const msg = typeof err?.message === "string" ? err.message : "";
+  return /"limit":\s*0\b|limit:\s*0\b|PerDay/i.test(msg);
+}
 
 // ── Gemini 呼び出しの薄いラッパ（無料枠のレート制限を自動でしのぐ）──
 async function ask(client, { model, system, prompt, maxTokens = 1024 }, opts = {}) {
@@ -102,6 +109,18 @@ async function ask(client, { model, system, prompt, maxTokens = 1024 }, opts = {
       });
       return (res.text || "").trim();
     } catch (err) {
+      if (isRateLimit(err) && isHardQuota(err)) {
+        const limit = (err.message?.match(/limit:\s*(\d+)/) || [])[1];
+        throw new Error(
+          `モデル「${model}」が無料枠の1日上限に達しました` +
+            (limit ? `(1日 ${limit} リクエストまで)。` : "。") +
+            "\n  対策:\n" +
+            "  ・日付が変わる(太平洋時間の0時)まで待つ\n" +
+            "  ・boards/*.json の members を減らして1回あたりの消費を抑える\n" +
+            "    (役員5人=1回あたり最低12リクエスト。3人なら8リクエスト)\n" +
+            "  ・有料プランを有効にして上限を上げる"
+        );
+      }
       if (isRateLimit(err) && attempt < maxRetries) {
         const wait = retryDelayMs(err, attempt);
         process.stdout.write(
@@ -182,7 +201,7 @@ async function roundBiggestConcern(client, board, topic, premises, opinions, reb
   return { member: skeptic, text };
 }
 
-// ── ラウンド4: gemini-pro に全部渡して結論を1つに強制 ──────────────
+// ── ラウンド4: まとめモデルに全部渡して結論を1つに強制 ──────────────
 async function roundFinalDecision(client, board, topic, premises, opinions, rebuttals, concern) {
   const ctx = buildContext(topic, premises);
   const transcript = renderTranscriptForModel(opinions, rebuttals);
@@ -283,11 +302,11 @@ async function runBoard(client, board, topic, premises) {
   );
   console.log(indent(concern.text));
 
-  process.stdout.write(paint("\n…議長(gemini-pro)が結論を1つに絞っています\n", C.dim));
+  process.stdout.write(paint("\n…議長が結論を1つに絞っています\n", C.dim));
   const decision = await roundFinalDecision(
     client, board, topic, premises, opinions, rebuttals, concern
   );
-  header("④ 最終結論（議長 / gemini-pro）", C.green);
+  header("④ 最終結論（議長 / まとめ）", C.green);
   console.log("\n" + indent(paint(decision, C.bold)));
   console.log(
     "\n" + paint("※ [要裏取り] が付いた数字・事実は、決定前に必ず裏を取ること。", C.yellow)
@@ -384,7 +403,7 @@ function printHelp() {
   GEMINI_API_KEY        (必須)  Google AI Studio の無料APIキー
                                  https://aistudio.google.com/apikey
   GEMINI_MEMBER_MODEL   (任意)  役員の発言モデル (既定: gemini-2.5-flash)
-  GEMINI_SUMMARY_MODEL  (任意)  最終まとめモデル (既定: gemini-2.5-pro)
+  GEMINI_SUMMARY_MODEL  (任意)  最終まとめモデル (既定: gemini-2.5-flash)
 `);
 }
 

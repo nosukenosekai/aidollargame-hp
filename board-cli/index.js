@@ -91,6 +91,15 @@ function isRateLimit(err) {
   const msg = typeof err?.message === "string" ? err.message : "";
   return s === 429 || /RESOURCE_EXHAUSTED|quota|rate.?limit|\b429\b/i.test(msg);
 }
+// 一時的なサーバー側の不調(混雑/瞬断)。待てば直るので再試行する。
+function isTransient(err) {
+  const s = err?.status;
+  const msg = typeof err?.message === "string" ? err.message : "";
+  return (
+    s === 503 || s === 500 || s === 502 || s === 504 ||
+    /UNAVAILABLE|high demand|overloaded|INTERNAL|try again later|\b50[0234]\b/i.test(msg)
+  );
+}
 // 「待っても無駄」な制限か（無料枠で使えないモデル= limit:0、または1日上限）
 function isHardQuota(err) {
   const msg = typeof err?.message === "string" ? err.message : "";
@@ -121,11 +130,12 @@ async function ask(client, { model, system, prompt, maxTokens = 1024 }, opts = {
             "  ・有料プランを有効にして上限を上げる"
         );
       }
-      if (isRateLimit(err) && attempt < maxRetries) {
+      if ((isRateLimit(err) || isTransient(err)) && attempt < maxRetries) {
         const wait = retryDelayMs(err, attempt);
+        const why = isTransient(err) ? "サーバー混雑" : "無料枠の上限";
         process.stdout.write(
           paint(
-            `  (無料枠の上限。${Math.ceil(wait / 1000)}秒待って再試行… ${attempt + 1}/${maxRetries})\n`,
+            `  (${why}。${Math.ceil(wait / 1000)}秒待って再試行… ${attempt + 1}/${maxRetries})\n`,
             C.dim
           )
         );

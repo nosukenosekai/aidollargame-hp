@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>士業事務所のAI活用｜税理士・社労士の問い合わせ対応と文書作成を効率化 | AIdollargame</title>
+<meta name="description" content="顧問先からの問い合わせ、定型的な文書作成に追われる税理士・社労士事務所へ。AIで一次対応や下書きを効率化しつつ、守秘義務を守るための注意点まで、士業ならではの観点で整理しました。">
+<meta name="author" content="AIdollargame 編集部">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/articles/ai-for-shigyo.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="AIdollargame">
+<meta property="og:title" content="士業事務所のAI活用｜税理士・社労士の効率化">
+<meta property="og:description" content="顧問先対応や文書作成をAIで効率化。一方で守秘義務をどう守るか——士業ならではの注意点まで整理。">
+<meta property="og:url" content="https://aidollargame.com/articles/ai-for-shigyo.html">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-06-29">
+<meta property="article:author" content="AIdollargame 編集部">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="士業事務所のAI活用｜税理士・社労士の効率化">
+<meta name="twitter:description" content="顧問先対応や文書作成をAIで効率化。一方で守秘義務をどう守るか——士業ならではの注意点まで整理。">
+<meta name="twitter:image" content="https://aidollargame.com/og-default.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "士業事務所のAI活用｜税理士・社労士の問い合わせ対応と文書作成を効率化",
+  "description": "顧問先対応や文書作成をAIで効率化。一方で守秘義務をどう守るか——士業ならではの注意点まで整理。",
+  "datePublished": "2026-06-29",
+  "author": {"@type":"Organization","name":"AIdollargame 編集部"},
+  "publisher": {
+    "@type":"Organization",
+    "name":"AIdollargame",
+    "logo":{"@type":"ImageObject","url":"https://aidollargame.com/og-default.png"}
+  },
+  "mainEntityOfPage": "https://aidollargame.com/articles/ai-for-shigyo.html",
+  "image": "https://aidollargame.com/og-default.png",
+  "inLanguage": "ja"
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{--cyan:#00d8ff;--blue:#000;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#000);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;background:#0a1238;}
+  body{background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;overflow-x:hidden;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,9,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);} .logo .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;} .logo .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
+  .nav-back{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.78rem;letter-spacing:0.12em;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .hero{padding:9rem 2rem 4rem;max-width:800px;margin:0 auto;}
+  .tag{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.7rem;letter-spacing:0.4em;color:var(--cyan);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem;}
+  .tag::before{content:'';display:inline-block;width:30px;height:1px;background:var(--cyan);}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;word-break:auto-phrase;}
+  .meta{display:flex;gap:2rem;align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}
+  .body{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}
+  .body h2{font-size:1.4rem;font-weight:900;margin:3.5rem 0 1.2rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}
+  .body p{font-size:1.06rem;color:rgba(238,243,255,0.85);line-height:1.9;margin-bottom:1.4rem;}
+  .body strong{color:#fff;font-weight:700;}
+  .body ul{padding-left:1.5rem;margin-bottom:1.4rem;}
+  .body li{font-size:1.02rem;color:rgba(238,243,255,0.85);line-height:1.8;margin-bottom:0.4rem;}
+  .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
+  .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
+  .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
+  .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2rem;color:#001428;font-weight:700;font-size:0.9rem;border-radius:8px;background:linear-gradient(110deg,#00d8ff 0%,#000 50%,#00d8ff 100%);background-size:220% 100%;text-decoration:none;transition:transform 0.25s,box-shadow 0.4s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(0,216,255,0.6);}
+  .related{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+  .related h3{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;letter-spacing:0.3em;color:var(--muted);margin-bottom:1.5rem;}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .rcard{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.4rem;text-decoration:none;color:inherit;transition:all 0.3s;display:block;}
+  .rcard:hover{border-color:rgba(0,216,255,0.35);transform:translateY(-4px);}
+  .rcard .rt{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.65rem;color:var(--cyan);margin-bottom:0.5rem;}
+  .rcard .rttl{font-size:0.88rem;font-weight:700;line-height:1.5;}
+  footer{border-top:1px solid rgba(255,255,255,0.08);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:rgba(6,9,26,0.6);}
+  .fc{font-size:0.75rem;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.hero,.body,.related{padding-left:1.2rem;padding-right:1.2rem;}footer{padding:2rem 1.5rem;}}
+
+/* ============ LIGHT THEME OVERRIDE ============ */
+html { background:#ffffff !important; }
+body { background:#ffffff !important; color:#000 !important; }
+body::before { display:none !important; }
+nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.nav-home, .back-link { color:#000 !important; }
+.nav-home:hover, .back-link:hover { color:#000 !important; }
+.hero h1, h1, h2, h3 { color:#000 !important; }
+.hero p, p, .lead { color:#000 !important; }
+.section-tag { color:#000 !important; }
+.section-tag::before { background:#000 !important; }
+.filter-tab { color:#000 !important; border-color:#e5e7eb !important; background:transparent !important; }
+.filter-tab:hover { color:#000 !important; border-color:#cbd5e1 !important; }
+.filter-tab.active { color:#fff !important; border-color:#000 !important; background:#000 !important; }
+.articles-grid .article-card,
+.article-card { background:#ffffff !important; border:1px solid #e5e7eb !important; color:#000 !important; }
+.article-card:hover { border-color:#000 !important; box-shadow:0 14px 36px -16px rgba(14,26,43,0.18) !important; }
+.card-color-bar { background:#000 !important; }
+.card-tag { color:#000 !important; }
+.card-date { color:#000 !important; }
+.card-title { color:#000 !important; }
+.card-desc { color:#000 !important; }
+.card-link { color:#000 !important; border-top-color:#f1f3f6 !important; }
+.card-image::after { background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(0,0,0,0.05) 100%) !important; }
+.contact-nudge { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.nudge-photo { border-color:#e5e7eb !important; }
+.nudge-body p { color:#000 !important; }
+.nudge-link { color:#000 !important; }
+article, .article-body, .post-body, .post-content { color:#000 !important; }
+article p, .article-body p, .post-body p { color:#000 !important; }
+blockquote, .quote { background:#fafbfc !important; border-left-color:#000 !important; color:#000 !important; }
+code { background:#f3f6fb !important; color:#000 !important; }
+.meta, .post-meta { color:#000 !important; }
+.byline { color:#000 !important; }
+footer, .site-footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
+footer a { color:#000 !important; }
+.footer-copy, .fc { color:#000 !important; }
+a { color:#000; }
+/* Dark step / calc / quote boxes -> light */
+.step { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.step-num { color:#000 !important; }
+.step-body h4 { color:#000 !important; }
+.step-body p { color:#000 !important; }
+.calc { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.calc .clabel { color:#000 !important; }
+.calc .crow { border-bottom:1px dashed #e5e7eb !important; color:#000 !important; }
+.body p, .body li, .body blockquote p { color:#000 !important; }
+.body blockquote { background:#fafbfc !important; color:#000 !important; }
+.body h2, .body h3, .body h4 { color:#000 !important; }
+.body strong { color:#000 !important; font-weight:900 !important; }
+.cta-box, .ending-cta, .cta-card { background:#fafbfc !important; border:1px solid #e5e7eb !important; color:#000 !important; }
+.cta-box *, .ending-cta *, .cta-card * { color:#000 !important; }
+.cta-box .btn, .ending-cta .btn, .cta-card .btn, .cta-box a.btn, .ending-cta a.btn { background:#000 !important; color:#fff !important; }
+.cta-box .btn *, .ending-cta .btn *, .cta-card .btn * { color:#fff !important; }
+.lead, .article-lead, .post-lead, article p, .body { color:#000 !important; }
+/* Article CTA + related cards */
+.cta { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.cta * { color:#000 !important; }
+.cta h2, .cta h3 { color:#000 !important; }
+.cta p { color:#000 !important; }
+.cta .btn, .btn { background:#000 !important; color:#fff !important; }
+.cta .btn:hover, .btn:hover { background:#222 !important; box-shadow:0 10px 30px -10px rgba(0,0,0,0.3) !important; }
+.cta .btn-ghost, .btn-ghost { color:#000 !important; background:#fff !important; border:1px solid #000 !important; }
+.cta .btn-ghost:hover, .btn-ghost:hover { background:#fafbfc !important; border-color:#000 !important; }
+.related h3 { color:#000 !important; }
+.rcard { background:#fff !important; border:1px solid #e5e7eb !important; }
+.rcard:hover { border-color:#000 !important; box-shadow:0 14px 36px -16px rgba(0,0,0,0.18) !important; }
+.rcard .rt { color:#000 !important; }
+.rcard .rttl { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; }
+footer * { color:#000 !important; }
+.fc { color:#000 !important; opacity:0.6 !important; }
+</style>
+<!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Q45D6XVQZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8Q45D6XVQZ');
+</script>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
+  <a href="./index.html" class="nav-back">← ARTICLES</a>
+</nav>
+<div class="hero">
+  <h1>士業事務所のAI活用<br>税理士・社労士の業務効率化</h1>
+  <div class="meta"><span>2026 / 06 / 29</span><span>AIdollargame 編集部</span><span>読了 約5分</span></div>
+</div>
+<article class="body">
+
+<p>税理士・社労士などの士業事務所は、専門業務に加えて、顧問先からの細かな問い合わせや、定型的な文書作成にも追われています。「同じような質問への回答に時間が取られる」「案内文や通知の作成が地味に重い」——よくある声です。</p>
+<p>AIは、こうした<strong>定型的なやり取りや文書作成を効率化し、専門的な判断に時間を回す</strong>のに役立ちます。ただし、守秘義務を扱う士業ならではの注意点もあります。</p>
+<h2>士業事務所のよくある困りごと</h2>
+<ul>
+  <li>顧問先からの<strong>よくある問い合わせ</strong>に都度対応している</li>
+  <li>案内文・通知・社内向け資料など<strong>定型文書</strong>の作成負担</li>
+  <li>制度改正のたびに<strong>説明文をゼロから</strong>書いている</li>
+</ul>
+<h2>AIに任せられること</h2>
+<p><strong>1. よくある質問への回答下書き</strong>：「年末調整の必要書類は？」といった定番の質問に対する回答文の下書きを、AIが用意します。</p>
+<p><strong>2. 案内文・通知文の作成</strong>：顧問先へのお知らせや、制度改正の解説文など、定型的な文書の素案づくりが得意分野です。</p>
+<p><strong>3. 長い資料の要約</strong>：通達や資料の要点整理の下書きにも使えます（※内容は必ず専門家がチェックしてください）。</p>
+<h2>小さく始めるなら</h2>
+<p>まずは<strong>顧問先に出さない、社内向けの下書き</strong>から始めるのが安全です。外に出す前提でない作業なら、気軽に試せます。</p>
+<h2>注意点：守秘義務とAI</h2>
+<p>士業にとって最重要なのが守秘義務です。<strong>顧問先の個人情報や申告内容などを、そのままAIに入力しない</strong>。学習に使わない設定や法人向けプランを使い、固有名詞は伏せる——この徹底が大前提になります。詳しくは別記事「情報漏洩させないAIの使い方」も参考にしてください。</p>
+<h2>まとめ</h2>
+<p>AIは、士業の専門性を置き換えるものではありません。<strong>定型業務を軽くして、判断と顧客対応に集中する</strong>ための道具です。守秘義務という線をしっかり引いたうえで、安全な範囲から始めましょう。</p>
+<blockquote><p>判断と信頼は人が、下書きと整理はAIが。守秘義務の線さえ守れば、士業とAIは相性がいい。</p></blockquote>
+
+<div class="cta">
+  <h3>士業事務所のAI活用、一緒に考えませんか</h3>
+  <p>御社の業種と現場に合わせて、どの業務からAIを始めるかを一緒に整理します。AIdollargameが無料相談で、はじめの一歩から伴走します。</p>
+  <a href="../index.html#contact" class="btn">無料相談を予約する →</a>
+</div>
+</article>
+<div class="related">
+  <h3>RELATED ARTICLES</h3>
+  <div class="rgrid">
+    <a href="./ai-data-security.html" class="rcard"><div class="rt">SECURITY</div><div class="rttl">情報漏洩させないAIの使い方</div></a>
+    <a href="./ai-privacy-copyright.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">AIと個人情報・著作権、最低限おさえる線引き</div></a>
+    <a href="./verbalize-before-ai.html" class="rcard"><div class="rt">HOW-TO</div><div class="rttl">AIに仕事を任せる前に｜業務を言語化する5ステップ</div></a>
+  </div>
+</div>
+<footer>
+  <a href="../index.html" class="logo">A<span class="heart-i">ı</span>dollargame</a>
+  <div class="fc">© <span class="cpy-y" data-since="2025">2025</span> 株式会社 AIdollargame. ALL RIGHTS RESERVED.</div>
+</footer>
+<script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
+</body>
+</html>

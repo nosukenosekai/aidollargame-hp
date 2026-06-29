@@ -39,3 +39,6 @@ build/
 
 # Claude
 .claude/
+
+# Scratchpad (一時ファイル)
+scratchpad/

@@ -235,7 +235,8 @@ async function roundFinalDecision(client, board, topic, premises, opinions, rebu
       "3. 最大の懸念への手当て(1つ): \n" +
       "4. 最初の一歩(明日できる具体行動1つ): \n" +
       "5. 撤回・見直しの条件(これが起きたら考え直す): ",
-    maxTokens: 1200,
+    // gemini-3系など"思考"するモデルは思考でトークンを食うので多めに確保
+    maxTokens: 4000,
   });
   return text;
 }

@@ -61,6 +61,12 @@
 - 非エンジニアの経営者が数日でできたこと、全部リストにしてみた: https://aidollargame.com/articles/what-ai-let-me-do.html
 - 「答えるAI」から「やってくれるAI」へ——AIエージェントの正体: https://aidollargame.com/articles/what-is-ai-agent.html
 - AIコンサル・導入支援って、実際に何をしてくれるの？: https://aidollargame.com/articles/what-is-ai-consulting.html
+- 中小企業の5社に1社がもうAIを使っている——最後の壁は「何から始めればいいか分からない」: https://aidollargame.com/articles/sme-ai-adoption-2026.html
+- AI導入に最大450万円、締切7/21迫る——IT導入補助金でAIを始める: https://aidollargame.com/articles/ai-subsidy-2026.html
+- AIを使うとき本当に気をつけるべき6つのこと: https://aidollargame.com/articles/ai-cautions.html
+- 呪文みたいなAI用語を、ぜんぶ身近なものに例えてみた: https://aidollargame.com/articles/ai-jargon-analogies.html
+- AI時代の椅子取りゲームは、もう始まっている: https://aidollargame.com/articles/ai-musical-chairs.html
+- マイクロソフトCEOの問い：AIに「仕事」は渡せても、学びは渡せない: https://aidollargame.com/articles/token-capital.html
 
 ## 連絡先 (Contact)
 - メール: nosuke@aidollargame.com

@@ -754,6 +754,46 @@
   .faq-q::before { content:'Q'; color:var(--cyan) !important; font-family:'Rajdhani',sans-serif; font-weight:700; font-size:1.15rem; flex:0 0 auto; }
   .faq-a { font-size:0.95rem; line-height:1.95; margin-top:0.6rem; padding-left:1.5rem; opacity:0.82; }
   @media(max-width:640px){ .faq-item{ padding:1.2rem 1.2rem; } .faq-a{ padding-left:0; } }
+
+  /* ===== Motion layer — smooth scroll / custom cursor / progress / marquee / stagger ===== */
+  html.lenis { scroll-behavior:auto; } /* Lenis有効時はネイティブsmoothを無効化(競合防止) */
+
+  /* スクロール進捗バー (ライトテーマ配色) */
+  .scroll-progress { position:fixed; top:0; left:0; right:0; height:2px; z-index:300; pointer-events:none; }
+  .scroll-progress span { display:block; height:100%; background:linear-gradient(90deg,#2563eb,#00b7ff); transform:scaleX(0); transform-origin:left; }
+
+  /* カスタムカーソル (JSがhas-cursorを付けたデスクトップのみ・ライトテーマ配色) */
+  .cur-dot, .cur-ring { position:fixed; top:0; left:0; border-radius:50%; pointer-events:none; z-index:9999; opacity:0; }
+  .cur-dot { width:6px; height:6px; background:#2563eb; transition:opacity 0.3s; }
+  .cur-ring { width:34px; height:34px; border:1.5px solid rgba(37,99,235,0.5); transition:width 0.25s, height 0.25s, border-color 0.25s, background 0.25s, opacity 0.3s; }
+  .cur-ring.is-hover { width:54px; height:54px; border-color:rgba(37,99,235,0.9); background:rgba(37,99,235,0.06); }
+  body.has-cursor, body.has-cursor a, body.has-cursor button, body.has-cursor summary { cursor:none; }
+  body.has-cursor input, body.has-cursor textarea, body.has-cursor select { cursor:auto; }
+
+  /* キーワードマーキー帯 (ライトテーマ配色) */
+  .belt { position:relative; z-index:2; overflow:hidden; padding:1.05rem 0; border-top:1px solid #e5e7eb; border-bottom:1px solid #e5e7eb; background:#fafbfc; }
+  .belt__track { display:flex; width:max-content; animation:beltScroll 32s linear infinite; }
+  .belt:hover .belt__track { animation-play-state:paused; }
+  .belt__inner { display:flex; align-items:center; gap:2.8rem; padding-right:2.8rem; white-space:nowrap; font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace; font-size:0.72rem; letter-spacing:0.28em; }
+  .belt__inner b { font-weight:500; color:rgba(0,0,0,0.72); }
+  .belt__dot { width:5px; height:5px; border-radius:50%; background:#2563eb; opacity:0.6; flex:none; }
+  @keyframes beltScroll { to { transform:translateX(-50%); } }
+
+  /* reveal の子要素をスタッガー(時間差)で出現させる */
+  .reveal.visible > * { animation:fadeUp 0.65s cubic-bezier(.2,.7,.3,1) backwards; }
+  .reveal.visible > :nth-child(2) { animation-delay:0.08s; }
+  .reveal.visible > :nth-child(3) { animation-delay:0.16s; }
+  .reveal.visible > :nth-child(4) { animation-delay:0.24s; }
+  .reveal.visible > :nth-child(5) { animation-delay:0.32s; }
+  .reveal.visible > :nth-child(6) { animation-delay:0.40s; }
+  .reveal.visible > :nth-child(7) { animation-delay:0.48s; }
+  .reveal.visible > :nth-child(8) { animation-delay:0.56s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .belt__track { animation:none; }
+    .reveal.visible > * { animation:none; }
+    .reveal { opacity:1; transform:none; transition:none; }
+  }
 </style>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
 <!-- Google tag (gtag.js) -->
@@ -768,6 +808,7 @@
 <body>
 <canvas id="canvas"></canvas>
 <div class="bg-mesh"></div>
+<div class="scroll-progress" aria-hidden="true"><span></span></div>
 
 <nav>
   <div class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</div>
@@ -803,6 +844,26 @@
     <div class="scroll-line"></div>
   </div>
 </section>
+
+<!-- キーワードマーキー帯 -->
+<div class="belt" aria-hidden="true">
+  <div class="belt__track">
+    <div class="belt__inner">
+      <b>AI CHAT AGENT</b><span class="belt__dot"></span>
+      <b>AIwill — 社長クローンAI</b><span class="belt__dot"></span>
+      <b>AIside — 付き人AI</b><span class="belt__dot"></span>
+      <b>AI CONSULTING</b><span class="belt__dot"></span>
+      <b>「楽」ではなく「楽しい」を考える</b><span class="belt__dot"></span>
+    </div>
+    <div class="belt__inner">
+      <b>AI CHAT AGENT</b><span class="belt__dot"></span>
+      <b>AIwill — 社長クローンAI</b><span class="belt__dot"></span>
+      <b>AIside — 付き人AI</b><span class="belt__dot"></span>
+      <b>AI CONSULTING</b><span class="belt__dot"></span>
+      <b>「楽」ではなく「楽しい」を考える</b><span class="belt__dot"></span>
+    </div>
+  </div>
+</div>
 
 <div class="divider"></div>
 
@@ -1564,5 +1625,100 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
 })();
 </script>
 <script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
+<!-- Lenis smooth scroll v1.1.18 同梱版 (デスクトップのみ有効化・読み込み失敗時は通常スクロールのまま) -->
+<script src="scripts/lenis.min.js"></script>
+<script>
+/* ===== Motion layer: Lenis慣性スクロール / カスタムカーソル / 進捗バー / ヒーローパララックス / マグネットボタン ===== */
+(function(){
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  /* スクロール進捗バー + ヒーローパララックス */
+  const bar = document.querySelector('.scroll-progress span');
+  const hero = document.getElementById('hero');
+  const parallaxOn = fine && !reduced;
+  let ticking = false;
+  function onScroll(){
+    if(ticking) return; ticking = true;
+    requestAnimationFrame(()=>{
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if(bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, window.scrollY / max) : 0) + ')';
+      if(hero && parallaxOn){
+        const y = window.scrollY, h = window.innerHeight;
+        if(y <= h){
+          hero.style.transform = 'translate3d(0,' + (y * 0.28).toFixed(1) + 'px,0)';
+          hero.style.opacity = Math.max(0.1, 1 - (y / h) * 0.9).toFixed(3);
+        }
+      }
+      ticking = false;
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  if(reduced) return;
+
+  /* Lenis 慣性スクロール (デスクトップのみ・CDN失敗時は何もしない) */
+  let lenisInited = false;
+  function initLenis(){
+    if(lenisInited || typeof Lenis === 'undefined' || !fine) return;
+    lenisInited = true;
+    const lenis = new Lenis({ duration: 1.15, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+    function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+    /* ページ内アンカーはLenis経由で滑らかに (固定ナビ分オフセット) */
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const id = a.getAttribute('href');
+        if(!id || id.length < 2) return;
+        const target = document.querySelector(id);
+        if(!target) return;
+        e.preventDefault();
+        lenis.scrollTo(target, { offset: -70 });
+      });
+    });
+  }
+  /* CDNの読み込み完了タイミングに依存しないよう、少し待ちながら初期化を試みる */
+  let lenisTries = 0;
+  (function pollLenis(){
+    initLenis();
+    if(!lenisInited && ++lenisTries < 20) setTimeout(pollLenis, 250);
+  })();
+
+  if(!fine) return;
+
+  /* カスタムカーソル (ドット+遅れて追うリング) */
+  document.body.classList.add('has-cursor');
+  const dot = document.createElement('div'); dot.className = 'cur-dot';
+  const ring = document.createElement('div'); ring.className = 'cur-ring';
+  document.body.append(dot, ring);
+  let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my, curVisible = false;
+  window.addEventListener('mousemove', e=>{
+    mx = e.clientX; my = e.clientY;
+    if(!curVisible){ curVisible = true; dot.style.opacity = 1; ring.style.opacity = 1; }
+    dot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0) translate(-50%,-50%)';
+  }, {passive:true});
+  document.documentElement.addEventListener('mouseleave', ()=>{ curVisible = false; dot.style.opacity = 0; ring.style.opacity = 0; });
+  (function follow(){
+    rx += (mx - rx) * 0.16; ry += (my - ry) * 0.16;
+    ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0) translate(-50%,-50%)';
+    requestAnimationFrame(follow);
+  })();
+  const HOVER = 'a, button, summary, .product-card, .article-card, .news-item, .faq-item, .industry';
+  document.addEventListener('mouseover', e=>{ if(e.target.closest(HOVER)) ring.classList.add('is-hover'); });
+  document.addEventListener('mouseout', e=>{ if(e.target.closest(HOVER)) ring.classList.remove('is-hover'); });
+
+  /* ヒーローCTAのマグネットボタン */
+  document.querySelectorAll('.hero-cta .btn-primary, .hero-cta .btn-outline').forEach(btn=>{
+    btn.addEventListener('mousemove', e=>{
+      const r = btn.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width/2)) * 0.22;
+      const dy = (e.clientY - (r.top + r.height/2)) * 0.3;
+      btn.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px)';
+    });
+    btn.addEventListener('mouseleave', ()=>{ btn.style.transform = ''; });
+  });
+})();
+</script>
 </body>
 </html>

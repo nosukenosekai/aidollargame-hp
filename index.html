@@ -282,7 +282,9 @@
     position:fixed; top:0; left:0; right:0; z-index:100;
     display:flex; justify-content:space-between; align-items:center;
     padding:1.1rem 3rem;
-    background:rgba(245,244,240,0.82); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    background:rgba(245,244,240,0.96);
+    /* backdrop-filter は使わない: 固定ナビにbackdrop-filterを付けると背後のページ全体が1枚の巨大テクスチャに合成され、
+       縦長ページ×Retina(dpr2)で最大テクスチャサイズを超えて縮小描画→巨大な見出しがモザイク状にぼやける(Chromium既知の不具合) */
     border-bottom:1px solid var(--line-soft);
   }
   .logo { font-family:var(--font-display); font-weight:800; font-size:1.35rem; letter-spacing:-0.01em; color:var(--ink); }

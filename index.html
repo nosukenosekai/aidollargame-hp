@@ -271,11 +271,7 @@
   img { max-width:100%; }
   ::selection { background:var(--accent); color:#fff; }
   :focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
-  /* 紙のような微細ノイズ */
-  body::before {
-    content:''; position:fixed; inset:0; z-index:1; pointer-events:none; opacity:0.5;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  }
+  /* 全画面固定のノイズ層は廃止(fixed+opacityの全画面レイヤーがページ全体を合成レイヤー化し、Retinaでスクロール中に文字が薄く描画される一因になるため) */
 
   /* ---------- NAV ---------- */
   nav {
@@ -366,9 +362,9 @@
   }
   /* 巨大な見出しはtransform/filterを動かすとGPU合成でぼやける(モザイク化)ため、一切アニメせず常時くっきり表示する */
   .hero-title .em { color:inherit; }
-  .hero-title .em.hl { position:relative; display:inline-block; isolation:isolate; }
-  .hero-title .em.hl::after { content:''; position:absolute; left:0; right:0; bottom:0.13em; height:0.32em; background:linear-gradient(180deg,#ffe45c 0%,#ffd84a 100%); z-index:-1; transform:scaleX(0); transform-origin:left center; animation:hlDraw 0.55s cubic-bezier(.4,0,.2,1) 1.15s forwards; }
-  @keyframes hlDraw { to { transform:scaleX(1); } }
+  /* マーカーは背景グラデーションで描画(疑似要素/isolation/z-indexを使うとスタッキングコンテキストが生まれ、
+     「楽しい」の行が合成レイヤー化してRetinaで薄く描画される。背景なら合成を誘発せず常に濃く出る) */
+  .hero-title .em.hl { background:linear-gradient(180deg, transparent 0, transparent 60%, #ffe45c 60%, #ffd84a 84%, transparent 84%); }
   .hero-sub {
     font-size:1.05rem; color:var(--muted); max-width:640px; line-height:2.1;
     margin-bottom:3rem; opacity:0; animation:fadeUp 0.8s 0.7s forwards;
@@ -408,8 +404,7 @@
 
   /* ---------- キーワードマーキー帯 (Archivo・塗り/縁取り交互) ---------- */
   .belt { position:relative; z-index:2; overflow:hidden; padding:1.5rem 0; border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); background:var(--surface); }
-  .belt__track { display:flex; width:max-content; animation:beltScroll 36s linear infinite; }
-  .belt:hover .belt__track { animation-play-state:paused; }
+  .belt__track { display:flex; width:max-content; }
   .belt__inner { display:flex; align-items:center; gap:3.2rem; padding-right:3.2rem; white-space:nowrap; }
   .belt__item { font-family:var(--font-display); font-weight:850; font-size:1.15rem; letter-spacing:0.08em; }
   .belt__item--fill { color:var(--ink); }
@@ -426,7 +421,7 @@
   .section-tag .st-num { color:var(--muted); }
   .section-tag::after { content:''; display:inline-block; width:48px; height:1px; background:var(--accent); opacity:0.5; }
   .section-title { font-family:var(--font-display); font-size:clamp(1.9rem,4.4vw,3.2rem); font-weight:900; line-height:1.25; letter-spacing:-0.015em; margin-bottom:1.5rem; color:var(--ink); }
-  .section-title .accent { color:var(--accent); }
+  .section-title .accent { color:var(--ink); } /* 見出しは黒で統一(AI等を青くしない) */
   .section-desc { color:var(--muted); font-size:1rem; line-height:2.05; max-width:640px; }
   .divider { position:relative; z-index:2; width:100%; height:1px; background:var(--line-soft); max-width:1200px; margin:0 auto; }
 
@@ -622,17 +617,8 @@
   @keyframes fadeUp { from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);} }
   @keyframes scrollPulse { 0%,100%{opacity:0.3;}50%{opacity:1;} }
   @keyframes dotBounce { 0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);} }
-  .reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s,transform 0.7s; }
-  .reveal.visible { opacity:1; transform:none; }
-  /* reveal の子要素をスタッガー(時間差)で出現させる */
-  .reveal.visible > * { animation:fadeUp 0.65s cubic-bezier(.2,.7,.3,1) backwards; }
-  .reveal.visible > :nth-child(2) { animation-delay:0.08s; }
-  .reveal.visible > :nth-child(3) { animation-delay:0.16s; }
-  .reveal.visible > :nth-child(4) { animation-delay:0.24s; }
-  .reveal.visible > :nth-child(5) { animation-delay:0.32s; }
-  .reveal.visible > :nth-child(6) { animation-delay:0.40s; }
-  .reveal.visible > :nth-child(7) { animation-delay:0.48s; }
-  .reveal.visible > :nth-child(8) { animation-delay:0.56s; }
+  /* スクロール表示アニメは廃止し常時表示(opacity/transformを動かすとRetinaで合成レイヤー化し文字が薄く/ぼやけて描画されスクロール中ずっと付き纏うため) */
+  .reveal { opacity:1; transform:none; }
 
   /* ---------- Motion layer (進捗バー/カーソル) ---------- */
   .scroll-progress { position:fixed; top:0; left:0; right:0; height:2px; z-index:300; pointer-events:none; }
@@ -751,13 +737,6 @@
   <div class="glitch-badge">
     <span class="scroll-text">SCROLL</span>
     <div class="scroll-line"></div>
-  </div>
-  <div class="hero-badge" aria-hidden="true">
-    <svg viewBox="0 0 120 120">
-      <defs><path id="badgePath" d="M60,60 m-46,0 a46,46 0 1,1 92,0 a46,46 0 1,1 -92,0"/></defs>
-      <text><textPath href="#badgePath">AIDOLLARGAME&#160;&#160;•&#160;&#160;RAKU → TANOSHII&#160;&#160;•&#160;&#160;SINCE 2025&#160;&#160;•&#160;&#160;</textPath></text>
-    </svg>
-    <span class="hero-badge__dot"></span>
   </div>
 </section>
 
@@ -1515,8 +1494,6 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
 })();
 </script>
 <script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
-<!-- Lenis smooth scroll v1.1.18 同梱版 (デスクトップのみ有効化・読み込み失敗時は通常スクロールのまま) -->
-<script src="scripts/lenis.min.js"></script>
 <script>
 /* ===== Motion layer: Lenis慣性スクロール / カスタムカーソル / 進捗バー / ヒーローパララックス / マグネットボタン ===== */
 (function(){
@@ -1555,68 +1532,12 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
   window.addEventListener('scroll', onScroll, {passive:true});
   onScroll();
 
-  if(reduced) return;
+  /* Lenis慣性スクロールは廃止: スクロール中にページ内容が合成レイヤー化され、Retinaで文字が薄く/ぼやけて描画される主因になっていた。
+     ネイティブスクロール(CSSのscroll-behavior:smooth)に戻し、常にくっきり表示する。 */
 
-  /* Lenis 慣性スクロール (デスクトップのみ・CDN失敗時は何もしない) */
-  let lenisInited = false;
-  function initLenis(){
-    if(lenisInited || typeof Lenis === 'undefined' || !fine) return;
-    lenisInited = true;
-    const lenis = new Lenis({ duration: 1.15, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
-    function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
-    /* ページ内アンカーはLenis経由で滑らかに (固定ナビ分オフセット) */
-    document.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', e=>{
-        const id = a.getAttribute('href');
-        if(!id || id.length < 2) return;
-        const target = document.querySelector(id);
-        if(!target) return;
-        e.preventDefault();
-        lenis.scrollTo(target, { offset: -70 });
-      });
-    });
-  }
-  /* CDNの読み込み完了タイミングに依存しないよう、少し待ちながら初期化を試みる */
-  let lenisTries = 0;
-  (function pollLenis(){
-    initLenis();
-    if(!lenisInited && ++lenisTries < 20) setTimeout(pollLenis, 250);
-  })();
-
-  if(!fine) return;
-
-  /* カスタムカーソル (ドット+遅れて追うリング) */
-  document.body.classList.add('has-cursor');
-  const dot = document.createElement('div'); dot.className = 'cur-dot';
-  const ring = document.createElement('div'); ring.className = 'cur-ring';
-  document.body.append(dot, ring);
-  let mx = innerWidth/2, my = innerHeight/2, rx = mx, ry = my, curVisible = false;
-  window.addEventListener('mousemove', e=>{
-    mx = e.clientX; my = e.clientY;
-    if(!curVisible){ curVisible = true; dot.style.opacity = 1; ring.style.opacity = 1; }
-    dot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0) translate(-50%,-50%)';
-  }, {passive:true});
-  document.documentElement.addEventListener('mouseleave', ()=>{ curVisible = false; dot.style.opacity = 0; ring.style.opacity = 0; });
-  (function follow(){
-    rx += (mx - rx) * 0.16; ry += (my - ry) * 0.16;
-    ring.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0) translate(-50%,-50%)';
-    requestAnimationFrame(follow);
-  })();
-  const HOVER = 'a, button, summary, .product-card, .article-card, .news-item, .faq-item, .industry';
-  document.addEventListener('mouseover', e=>{ if(e.target.closest(HOVER)) ring.classList.add('is-hover'); });
-  document.addEventListener('mouseout', e=>{ if(e.target.closest(HOVER)) ring.classList.remove('is-hover'); });
-
-  /* ヒーローCTAのマグネットボタン */
-  document.querySelectorAll('.hero-cta .btn-primary, .hero-cta .btn-outline').forEach(btn=>{
-    btn.addEventListener('mousemove', e=>{
-      const r = btn.getBoundingClientRect();
-      const dx = (e.clientX - (r.left + r.width/2)) * 0.22;
-      const dy = (e.clientY - (r.top + r.height/2)) * 0.3;
-      btn.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px)';
-    });
-    btn.addEventListener('mouseleave', ()=>{ btn.style.transform = ''; });
-  });
+  /* カスタムカーソル/マグネットボタン/回転バッジ等の常駐GPU合成レイヤーは、
+     巨大なヒーロー見出しを「重なり合成」で巻き込みRetinaで薄く/ぼやけて描画させる原因になるため撤去。
+     見出しを常にくっきり黒で表示することを最優先する。 */
 })();
 </script>
 </body>

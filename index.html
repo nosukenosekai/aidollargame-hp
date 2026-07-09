@@ -322,22 +322,8 @@
   .nav-cta::before { content:''; position:absolute; inset:0; z-index:-1; background:var(--accent); transform:scaleX(0); transform-origin:left; transition:transform 0.4s var(--ease); }
   .nav-cta:hover::before { transform:scaleX(1); }
 
-  /* ---------- 章ナビ(レール) ---------- */
-  .rail {
-    position:fixed; right:clamp(16px,2.5vw,40px); top:50%; transform:translateY(-50%);
-    z-index:90; display:flex; gap:14px; align-items:stretch;
-  }
-  .rail__line { width:1px; background:var(--line-soft); position:relative; }
-  .rail__progress { position:absolute; top:0; left:0; width:100%; height:100%; background:var(--accent); transform:scaleY(0); transform-origin:top; }
-  .rail__list { display:flex; flex-direction:column; gap:12px; list-style:none; }
-  .rail__link {
-    font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.12em;
-    color:var(--muted); opacity:0.85; text-decoration:none;
-    transition:color 0.3s, opacity 0.3s;
-  }
-  .rail__link:hover { color:var(--ink); opacity:1; }
-  .rail__item.is-active .rail__link { color:var(--accent); opacity:1; }
-  @media(max-width:1439px){ .rail { display:none; } }
+  /* 章ナビ(レール)は撤去: position:fixed+transformの固定レイヤーがスクロール毎に更新され、
+     Retinaでページ全体が合成レイヤー化して文字が薄く/ぼやけて描画される元凶だった */
 
   /* ---------- HERO ---------- */
   #hero {
@@ -621,8 +607,7 @@
   .reveal { opacity:1; transform:none; }
 
   /* ---------- Motion layer (進捗バー/カーソル) ---------- */
-  .scroll-progress { position:fixed; top:0; left:0; right:0; height:2px; z-index:300; pointer-events:none; }
-  .scroll-progress span { display:block; height:100%; background:var(--accent); transform:scaleX(0); transform-origin:left; }
+  /* スクロール進捗バーは撤去(固定要素へのスクロール毎transform更新がRetina合成ぼやけの一因のため) */
   .cur-dot, .cur-ring { position:fixed; top:0; left:0; border-radius:50%; pointer-events:none; z-index:9999; opacity:0; }
   .cur-dot { width:5px; height:5px; background:var(--accent); transition:opacity 0.3s; }
   .cur-ring { width:22px; height:22px; border:1px solid rgba(37,99,235,0.5); transition:width 0.25s, height 0.25s, border-color 0.25s, background 0.25s, opacity 0.3s; }
@@ -688,22 +673,6 @@
 </script>
 </head>
 <body>
-<div class="scroll-progress" aria-hidden="true"><span></span></div>
-
-<!-- 章ナビ(進行レール・デスクトップのみ) -->
-<nav class="rail" aria-label="ページ内チャプター">
-  <div class="rail__line"><span class="rail__progress"></span></div>
-  <ol class="rail__list">
-    <li class="rail__item"><a href="#hero" class="rail__link">00 TOP</a></li>
-    <li class="rail__item"><a href="#products" class="rail__link">01 PRODUCTS</a></li>
-    <li class="rail__item"><a href="#agent-demo" class="rail__link">02 DEMO</a></li>
-    <li class="rail__item"><a href="#about" class="rail__link">03 ABOUT</a></li>
-    <li class="rail__item"><a href="#news" class="rail__link">04 NEWS</a></li>
-    <li class="rail__item"><a href="#articles" class="rail__link">05 ARTICLES</a></li>
-    <li class="rail__item"><a href="#faq" class="rail__link">06 FAQ</a></li>
-    <li class="rail__item"><a href="#contact" class="rail__link">07 CONTACT</a></li>
-  </ol>
-</nav>
 
 <nav>
   <div class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</div>
@@ -1501,36 +1470,9 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   /* スクロール進捗バー + 章レール + ヒーローのスクロールフェード */
-  const bar = document.querySelector('.scroll-progress span');
-  const railProgress = document.querySelector('.rail__progress');
-  const railItems = [...document.querySelectorAll('.rail__item')].map(li => {
-    const a = li.querySelector('.rail__link');
-    const target = a && document.querySelector(a.getAttribute('href'));
-    return target ? { li, target } : null;
-  }).filter(Boolean);
-  /* 注意: ヒーローにopacity/transformを一切かけない。
-     巨大テキストを含む#heroにopacity<1やtransformを付けると、
-     ヒーロー全体が1枚のGPU合成レイヤーになりRetinaで縮小ラスタライズ＝文字がぼやける。
-     そのためスクロール連動のヒーロー演出は行わず、進捗バーと章レールのみ更新する。 */
-  let ticking = false;
-  function onScroll(){
-    if(ticking) return; ticking = true;
-    requestAnimationFrame(()=>{
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      const pct = max > 0 ? Math.min(1, window.scrollY / max) : 0;
-      if(bar) bar.style.transform = 'scaleX(' + pct + ')';
-      if(railProgress) railProgress.style.transform = 'scaleY(' + pct + ')';
-      if(railItems.length){
-        let current = railItems[0];
-        const mark = window.innerHeight * 0.4;
-        railItems.forEach(it => { if(it.target.getBoundingClientRect().top <= mark) current = it; });
-        railItems.forEach(it => it.li.classList.toggle('is-active', it === current));
-      }
-      ticking = false;
-    });
-  }
-  window.addEventListener('scroll', onScroll, {passive:true});
-  onScroll();
+  /* スクロール連動の描画更新(進捗バー/章レール)は一切行わない。
+     position:fixedな要素にスクロール毎のtransform更新をかけると、
+     Retinaでページ全体が合成レイヤー化して文字が薄く/ぼやけて描画される元凶になるため。 */
 
   /* Lenis慣性スクロールは廃止: スクロール中にページ内容が合成レイヤー化され、Retinaで文字が薄く/ぼやけて描画される主因になっていた。
      ネイティブスクロール(CSSのscroll-behavior:smooth)に戻し、常にくっきり表示する。 */

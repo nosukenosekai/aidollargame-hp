@@ -333,8 +333,8 @@
   .rail__progress { position:absolute; top:0; left:0; width:100%; height:100%; background:var(--accent); transform:scaleY(0); transform-origin:top; }
   .rail__list { display:flex; flex-direction:column; gap:12px; list-style:none; }
   .rail__link {
-    font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.16em;
-    color:var(--muted); opacity:0.6; text-decoration:none;
+    font-family:var(--font-mono); font-size:0.74rem; letter-spacing:0.12em;
+    color:var(--muted); opacity:0.85; text-decoration:none;
     transition:color 0.3s, opacity 0.3s;
   }
   .rail__link:hover { color:var(--ink); opacity:1; }
@@ -362,13 +362,11 @@
     font-weight:900; line-height:1.22; letter-spacing:-0.02em;
     margin-bottom:2.4rem; white-space:nowrap; color:var(--ink);
   }
+  /* 巨大な見出しはtransform/filterを動かすとGPU合成でぼやける(モザイク化)ため、一切アニメせず常時くっきり表示する */
   .hero-title .em { color:inherit; }
   .hero-title .em.hl { position:relative; display:inline-block; isolation:isolate; }
-  .hero-title .em.hl::after { content:''; position:absolute; left:0; right:0; bottom:0.13em; height:0.32em; background:linear-gradient(180deg,#ffe45c 0%,#ffd84a 100%); z-index:-1; transform:scaleX(0); transform-origin:left center; }
-  .hero-title.writing .em.hl::after { animation:hlDraw 0.55s cubic-bezier(.4,0,.2,1) 1.6s forwards; }
+  .hero-title .em.hl::after { content:''; position:absolute; left:0; right:0; bottom:0.13em; height:0.32em; background:linear-gradient(180deg,#ffe45c 0%,#ffd84a 100%); z-index:-1; transform:scaleX(0); transform-origin:left center; animation:hlDraw 0.55s cubic-bezier(.4,0,.2,1) 1.15s forwards; }
   @keyframes hlDraw { to { transform:scaleX(1); } }
-  .hero-title .ch { display:inline-block; opacity:0; transform:translateY(8px); filter:blur(4px); }
-  .hero-title.writing .ch { animation:brushWrite 0.5s cubic-bezier(.2,.7,.3,1) forwards; }
   .hero-sub {
     font-size:1.05rem; color:var(--muted); max-width:640px; line-height:2.1;
     margin-bottom:3rem; opacity:0; animation:fadeUp 0.8s 0.7s forwards;
@@ -543,12 +541,11 @@
   .message-body strong { color:var(--ink); font-weight:900; }
   .pull-quote { font-family:'Yuji Syuku','Hiragino Mincho ProN','Yu Mincho',serif; font-size:clamp(2rem,3.4vw,2.8rem); font-weight:400; line-height:1.7; letter-spacing:0.06em; color:var(--ink); }
   .pull-quote ruby rt { font-size:0.45em; letter-spacing:0.05em; }
-  .pull-quote .ch { display:inline-block; opacity:0; transform:translateY(8px); filter:blur(4px); }
-  .pull-quote.writing .ch { animation:brushWrite 0.55s cubic-bezier(.2,.7,.3,1) forwards; }
+  .pull-quote .ch { display:inline-block; opacity:0; transform:translateY(10px); }
+  .pull-quote.writing .ch { animation:brushWrite 0.5s cubic-bezier(.2,.7,.3,1) forwards; }
   @keyframes brushWrite {
-    0% { opacity:0; transform:translateY(8px); filter:blur(4px); }
-    55% { opacity:0.7; transform:translateY(2px); filter:blur(1.5px); }
-    100% { opacity:1; transform:translateY(0); filter:blur(0); }
+    0% { opacity:0; transform:translateY(10px); }
+    100% { opacity:1; transform:translateY(0); }
   }
   .team-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-top:3rem; }
   .team-card { background:var(--surface); border:1px solid var(--line); padding:3rem; border-radius:2px; position:relative; overflow:hidden; }
@@ -639,9 +636,9 @@
   .scroll-progress { position:fixed; top:0; left:0; right:0; height:2px; z-index:300; pointer-events:none; }
   .scroll-progress span { display:block; height:100%; background:var(--accent); transform:scaleX(0); transform-origin:left; }
   .cur-dot, .cur-ring { position:fixed; top:0; left:0; border-radius:50%; pointer-events:none; z-index:9999; opacity:0; }
-  .cur-dot { width:6px; height:6px; background:var(--accent); transition:opacity 0.3s; }
-  .cur-ring { width:34px; height:34px; border:1.5px solid rgba(37,99,235,0.5); transition:width 0.25s, height 0.25s, border-color 0.25s, background 0.25s, opacity 0.3s; }
-  .cur-ring.is-hover { width:54px; height:54px; border-color:rgba(37,99,235,0.9); background:rgba(37,99,235,0.06); }
+  .cur-dot { width:5px; height:5px; background:var(--accent); transition:opacity 0.3s; }
+  .cur-ring { width:22px; height:22px; border:1px solid rgba(37,99,235,0.5); transition:width 0.25s, height 0.25s, border-color 0.25s, background 0.25s, opacity 0.3s; }
+  .cur-ring.is-hover { width:34px; height:34px; border-color:rgba(37,99,235,0.9); background:rgba(37,99,235,0.06); }
   body.has-cursor, body.has-cursor a, body.has-cursor button, body.has-cursor summary { cursor:none; }
   body.has-cursor input, body.has-cursor textarea, body.has-cursor select { cursor:auto; }
 
@@ -743,7 +740,7 @@
 
 <section id="hero">
   <div class="hero-eyebrow">AIで、人と人をつなぐ。</div>
-  <h1 class="hero-title" data-brush data-stagger="0.1">AIで<span class="em">「<ruby>楽<rt>らく</rt></ruby>」</span>ではなく<br><span class="em hl">「<ruby>楽<rt>たの</rt></ruby>しい」</span>を考える</h1>
+  <h1 class="hero-title">AIで<span class="em">「<ruby>楽<rt>らく</rt></ruby>」</span>ではなく<br><span class="em hl">「<ruby>楽<rt>たの</rt></ruby>しい」</span>を考える</h1>
   <p class="hero-sub">仕事を「<ruby>楽<rt>らく</rt></ruby>」にすることが、私たちの目的ではありません。<br>人と人が本気で向き合える「<ruby>楽<rt>たの</rt></ruby>しい」現場を共に創る。<br>AIプロダクト開発と現場のAI活用支援を通じて、そんな舞台を創り上げます。</p>
   <div class="hero-cta">
     <a href="#contact" class="btn-primary">無料相談を予約する</a>
@@ -1524,7 +1521,7 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  /* スクロール進捗バー + 章レール + ヒーローパララックス */
+  /* スクロール進捗バー + 章レール + ヒーローのスクロールフェード */
   const bar = document.querySelector('.scroll-progress span');
   const railProgress = document.querySelector('.rail__progress');
   const railItems = [...document.querySelectorAll('.rail__item')].map(li => {
@@ -1533,7 +1530,6 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
     return target ? { li, target } : null;
   }).filter(Boolean);
   const hero = document.getElementById('hero');
-  const parallaxOn = fine && !reduced;
   let ticking = false;
   function onScroll(){
     if(ticking) return; ticking = true;
@@ -1548,12 +1544,10 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
         railItems.forEach(it => { if(it.target.getBoundingClientRect().top <= mark) current = it; });
         railItems.forEach(it => it.li.classList.toggle('is-active', it === current));
       }
-      if(hero && parallaxOn){
+      /* ヒーローはスクロールで淡くフェードのみ(transformは使わない:巨大文字が合成でぼやけるため) */
+      if(hero){
         const y = window.scrollY, h = window.innerHeight;
-        if(y <= h){
-          hero.style.transform = 'translate3d(0,' + (y * 0.28).toFixed(1) + 'px,0)';
-          hero.style.opacity = Math.max(0.1, 1 - (y / h) * 0.9).toFixed(3);
-        }
+        hero.style.opacity = y <= h ? Math.max(0.1, 1 - (y / h) * 0.9).toFixed(3) : '0.1';
       }
       ticking = false;
     });

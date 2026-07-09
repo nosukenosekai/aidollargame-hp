@@ -1494,7 +1494,7 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
   ]).then(([data, thumbs])=>{
     if (!data || data.status !== 'ok' || !data.items || !data.items.length) return;
     const frag = document.createDocumentFragment();
-    data.items.slice(0,3).forEach(item=>{
+    data.items.slice(0,2).forEach(item=>{
       const desc = esc((item.description||'').replace(/<[^>]+>/g,'').trim()).slice(0,90);
       const img = (thumbs && thumbs[item.link]) || pickStock((item.title||'') + ' ' + (item.description||''));
       const a = document.createElement('a');
@@ -1510,7 +1510,7 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
         </div>`;
       frag.appendChild(a);
     });
-    grid.insertBefore(frag, grid.firstChild);
+    grid.appendChild(frag); /* 自前記事を先頭に見せ、noteの最新は末尾に添える(スマホでnoteが先に来て記事が埋もれるのを防ぐ) */
   }).catch(()=>{ /* 失敗時は自前記事をそのまま表示 */ });
 })();
 </script>

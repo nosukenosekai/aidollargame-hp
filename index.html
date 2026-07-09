@@ -1529,7 +1529,10 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
     const target = a && document.querySelector(a.getAttribute('href'));
     return target ? { li, target } : null;
   }).filter(Boolean);
-  const hero = document.getElementById('hero');
+  /* 注意: ヒーローにopacity/transformを一切かけない。
+     巨大テキストを含む#heroにopacity<1やtransformを付けると、
+     ヒーロー全体が1枚のGPU合成レイヤーになりRetinaで縮小ラスタライズ＝文字がぼやける。
+     そのためスクロール連動のヒーロー演出は行わず、進捗バーと章レールのみ更新する。 */
   let ticking = false;
   function onScroll(){
     if(ticking) return; ticking = true;
@@ -1543,11 +1546,6 @@ document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
         const mark = window.innerHeight * 0.4;
         railItems.forEach(it => { if(it.target.getBoundingClientRect().top <= mark) current = it; });
         railItems.forEach(it => it.li.classList.toggle('is-active', it === current));
-      }
-      /* ヒーローはスクロールで淡くフェードのみ(transformは使わない:巨大文字が合成でぼやけるため) */
-      if(hero){
-        const y = window.scrollY, h = window.innerHeight;
-        hero.style.opacity = y <= h ? Math.max(0.1, 1 - (y / h) * 0.9).toFixed(3) : '0.1';
       }
       ticking = false;
     });

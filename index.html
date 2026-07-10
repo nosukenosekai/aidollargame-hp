@@ -390,7 +390,8 @@
 
   /* ---------- キーワードマーキー帯 (Archivo・塗り/縁取り交互) ---------- */
   .belt { position:relative; z-index:2; overflow:hidden; padding:1.5rem 0; border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); background:var(--surface); }
-  .belt__track { display:flex; width:max-content; }
+  .belt__track { display:flex; width:max-content; animation:beltScroll 36s linear infinite; }
+  .belt:hover .belt__track { animation-play-state:paused; }
   .belt__inner { display:flex; align-items:center; gap:3.2rem; padding-right:3.2rem; white-space:nowrap; }
   .belt__item { font-family:var(--font-display); font-weight:850; font-size:1.15rem; letter-spacing:0.08em; }
   .belt__item--fill { color:var(--ink); }

@@ -35,6 +35,9 @@
 - 不動産の問い合わせ対応を自動化する方法（反響の取りこぼし対策）: https://aidollargame.com/articles/fudosan-inquiry-automation.html
 - LINE AIエージェント導入チェックリスト（無料資料）: https://aidollargame.com/articles/line-ai-agent-checklist.html
 
+## 連載 (Series)
+- 定点観測（中小企業のAI導入を公的調査の一次データで毎月読み解く連載）vol.1: https://aidollargame.com/articles/ai-teiten-2026-07.html
+
 ## 記事 (Articles)
 - 不動産の問い合わせ対応を自動化する方法｜反響を取りこぼさないLINE AIエージェント: https://aidollargame.com/articles/fudosan-inquiry-automation.html
 - 【無料】中小企業のためのLINE AIエージェント導入チェックリスト: https://aidollargame.com/articles/line-ai-agent-checklist.html

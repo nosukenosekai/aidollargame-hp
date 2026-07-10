@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>サウナすき間予報（デモ）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f4f0;
+    --blue: #2563eb;
+    --ink: #1a1a1a;
+    --sub: #6b7280;
+    --line: #e6e4de;
+    --card: #ffffff;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 0 16px 60px; }
+  .demo-badge {
+    display: inline-block;
+    font-size: 11px;
+    color: var(--sub);
+    background: #ececE6;
+    border-radius: 8px;
+    padding: 3px 8px;
+    margin: 14px 0 8px;
+  }
+  header h1 { font-size: 22px; letter-spacing: -0.01em; }
+  header p { font-size: 13px; color: var(--sub); margin-top: 4px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .section-title { font-size: 13px; color: var(--sub); margin: 20px 0 10px; font-weight: 600; }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: border-color .15s;
+  }
+  .card:active { border-color: var(--blue); }
+  .card .name { font-size: 16px; font-weight: 700; }
+  .card .meta { font-size: 12px; color: var(--sub); margin-top: 2px; }
+  .card .now {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .lv-空き { background: #e6f4ea; color: #1a7f37; }
+  .lv-ふつう { background: #fff4e0; color: #b45309; }
+  .lv-混雑 { background: #fde8e8; color: #c0392b; }
+
+  .back {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 13px; color: var(--blue); background: none; border: none;
+    cursor: pointer; margin: 14px 0 4px; padding: 4px 0;
+  }
+  .detail-head { display: flex; justify-content: space-between; align-items: flex-start; }
+  .detail-head h2 { font-size: 20px; }
+  .detail-head .meta { font-size: 12px; color: var(--sub); margin-top: 2px; }
+
+  .chart { margin-top: 6px; }
+  .row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 0; border-bottom: 1px solid #f0efe9;
+  }
+  .row .hr { width: 42px; font-size: 12px; color: var(--sub); flex-shrink: 0; text-align: right; }
+  .row .bar-wrap { flex: 1; background: #f0efe9; border-radius: 6px; height: 18px; overflow: hidden; }
+  .row .bar { height: 100%; border-radius: 6px; }
+  .row .tag { width: 44px; font-size: 11px; text-align: center; flex-shrink: 0; font-weight: 700; }
+  .row.pick { background: #eef4ff; border-radius: 8px; margin: 0 -6px; padding-left: 6px; padding-right: 6px; }
+
+  .hint { font-size: 12px; color: var(--sub); margin: 10px 0 4px; }
+
+  .btn {
+    display: block; width: 100%; text-align: center;
+    background: var(--blue); color: #fff; border: none;
+    font-size: 15px; font-weight: 700; padding: 14px; border-radius: 12px;
+    cursor: pointer; margin-top: 16px;
+  }
+  .btn:disabled { background: #b9c6e8; cursor: default; }
+  .btn.ghost { background: #fff; color: var(--blue); border: 1px solid var(--blue); }
+
+  .alert-item {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .alert-item .t { font-weight: 700; font-size: 15px; }
+  .alert-item .s { font-size: 12px; color: var(--sub); margin-top: 2px; }
+  .alert-item button { background: none; border: none; color: #c0392b; font-size: 12px; cursor: pointer; }
+  .empty { text-align: center; color: var(--sub); font-size: 13px; padding: 30px 0; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+    background: #1a1a1a; color: #fff; font-size: 13px; padding: 10px 18px;
+    border-radius: 999px; opacity: 0; transition: opacity .25s; pointer-events: none;
+    max-width: 90%;
+  }
+  .toast.show { opacity: 1; }
+
+  .tabbar {
+    position: sticky; bottom: 0; display: flex; gap: 8px; background: var(--bg);
+    padding: 10px 0 4px; margin-top: 20px; border-top: 1px solid var(--line);
+  }
+  .tab { flex: 1; text-align: center; font-size: 12px; color: var(--sub); background: none; border: none; cursor: pointer; padding: 6px; }
+  .tab.on { color: var(--blue); font-weight: 700; }
+  .count { display: inline-block; min-width: 16px; padding: 0 4px; font-size: 11px; background: var(--blue); color: #fff; border-radius: 999px; margin-left: 3px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo-badge">デモ（サンプルデータ）</span>
+  <header>
+    <h1>サウナすき間予報</h1>
+    <p>今日の時間帯別の空き具合を予測。空いている時間だけ通知を受け取れます。</p>
+  </header>
+
+  <!-- 一覧 -->
+  <section id="list" class="screen active">
+    <div class="section-title">近くのサウナ・銭湯</div>
+    <div id="shopList"></div>
+  </section>
+
+  <!-- 詳細 -->
+  <section id="detail" class="screen">
+    <button class="back" onclick="showList()">← 一覧にもどる</button>
+    <div class="detail-head">
+      <div>
+        <h2 id="dName"></h2>
+        <div class="meta" id="dMeta"></div>
+      </div>
+      <span id="dNow" class="now"></span>
+    </div>
+    <div class="hint">今日の混雑予報（棒が短いほど空いています）。タップして通知したい時間を選べます。</div>
+    <div class="chart" id="chart"></div>
+    <button id="alertBtn" class="btn" disabled onclick="registerAlert()">時間を選んでください</button>
+  </section>
+
+  <!-- アラート一覧 -->
+  <section id="alerts" class="screen">
+    <div class="section-title">登録した「すき間アラート」</div>
+    <div id="alertList"></div>
+  </section>
+
+  <div class="tabbar">
+    <button class="tab on" id="tabHome" onclick="goTab('home')">予報を見る</button>
+    <button class="tab" id="tabAlert" onclick="goTab('alert')">アラート<span id="tabCount" class="count" style="display:none">0</span></button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ---- サンプルデータ（すべて架空） ----
+const SHOPS = [
+  {
+    id: 1, name: "ときわ湯サウナ", area: "東京・墨田区", price: "入浴＋サウナ 980円",
+    // 10時〜23時の混雑度（0〜100）
+    forecast: [22,18,15,20,35,55,48,40,52,70,85,72,45,30]
+  },
+  {
+    id: 2, name: "サウナ由比ヶ浜", area: "神奈川・鎌倉市", price: "1日券 1,800円",
+    forecast: [45,50,58,40,30,42,55,68,60,50,44,38,55,66]
+  },
+  {
+    id: 3, name: "湯けむり横丁", area: "大阪・西成区", price: "入浴 520円／サウナ +300円",
+    forecast: [30,25,20,28,45,62,70,58,44,52,66,80,60,35]
+  },
+  {
+    id: 4, name: "ロウリュ館みなと", area: "福岡・博多区", price: "平日1,200円／休日1,500円",
+    forecast: [15,12,18,26,38,30,42,60,72,84,90,74,50,28]
+  }
+];
+const HOURS = ["10時","11時","12時","13時","14時","15時","16時","17時","18時","19時","20時","21時","22時","23時"];
+const NOW_INDEX = 9; // 「今」を19時と仮定（デモ用の固定値）
+
+let alerts = [];
+let current = null;   // 選択中の店
+let picked = null;    // 選択中の時間index
+
+function level(v){ return v < 34 ? "空き" : v < 67 ? "ふつう" : "混雑"; }
+function barColor(v){ return v < 34 ? "#1a7f37" : v < 67 ? "#d97706" : "#c0392b"; }
+
+// ---- 一覧描画 ----
+function renderList(){
+  const el = document.getElementById("shopList");
+  el.innerHTML = "";
+  SHOPS.forEach(s => {
+    const now = s.forecast[NOW_INDEX];
+    const lv = level(now);
+    const c = document.createElement("div");
+    c.className = "card";
+    c.onclick = () => openDetail(s.id);
+    c.innerHTML =
+      '<div class="name">'+s.name+'</div>'+
+      '<div class="meta">'+s.area+'　/　'+s.price+'</div>'+
+      '<span class="now lv-'+lv+'">いま：'+lv+'</span>';
+    el.appendChild(c);
+  });
+}
+
+// ---- 詳細描画 ----
+function openDetail(id){
+  current = SHOPS.find(s => s.id === id);
+  picked = null;
+  document.getElementById("dName").textContent = current.name;
+  document.getElementById("dMeta").textContent = current.area + "　/　" + current.price;
+  const now = current.forecast[NOW_INDEX];
+  const nowEl = document.getElementById("dNow");
+  nowEl.textContent = "いま：" + level(now);
+  nowEl.className = "now lv-" + level(now);
+  renderChart();
+  updateAlertBtn();
+  switchScreen("detail");
+}
+
+function renderChart(){
+  const chart = document.getElementById("chart");
+  chart.innerHTML = "";
+  current.forecast.forEach((v, i) => {
+    const lv = level(v);
+    const row = document.createElement("div");
+    row.className = "row" + (picked === i ? " pick" : "");
+    row.onclick = () => pickHour(i);
+    row.innerHTML =
+      '<div class="hr">'+HOURS[i]+'</div>'+
+      '<div class="bar-wrap"><div class="bar" style="width:'+v+'%;background:'+barColor(v)+'"></div></div>'+
+      '<div class="tag" style="color:'+barColor(v)+'">'+lv+'</div>';
+    chart.appendChild(row);
+  });
+}
+
+function pickHour(i){
+  picked = i;
+  renderChart();
+  updateAlertBtn();
+}
+
+function updateAlertBtn(){
+  const btn = document.getElementById("alertBtn");
+  if (picked === null){
+    btn.disabled = true;
+    btn.textContent = "時間を選んでください";
+    return;
+  }
+  btn.disabled = false;
+  const lv = level(current.forecast[picked]);
+  btn.textContent = HOURS[picked] + "に「" + lv + "なら通知」を登録";
+}
+
+function registerAlert(){
+  if (picked === null) return;
+  const v = current.forecast[picked];
+  const dup = alerts.some(a => a.shopId === current.id && a.hour === picked);
+  if (dup){ toast("このアラートは登録済みです"); return; }
+  alerts.unshift({ shopId: current.id, shopName: current.name, hour: picked, lv: level(v) });
+  updateCount();
+  toast("アラートを登録しました");
+  renderAlerts();
+}
+
+// ---- アラート一覧 ----
+function renderAlerts(){
+  const el = document.getElementById("alertList");
+  if (alerts.length === 0){
+    el.innerHTML = '<div class="empty">まだアラートはありません。<br>予報画面で空いている時間を選んで登録してみてください。</div>';
+    return;
+  }
+  el.innerHTML = "";
+  alerts.forEach((a, idx) => {
+    const item = document.createElement("div");
+    item.className = "alert-item";
+    item.innerHTML =
+      '<div><div class="t">'+a.shopName+'</div>'+
+      '<div class="s">'+HOURS[a.hour]+'ごろ・予報「'+a.lv+'」になったら通知</div></div>';
+    const rm = document.createElement("button");
+    rm.textContent = "削除";
+    rm.onclick = () => { alerts.splice(idx,1); updateCount(); renderAlerts(); };
+    item.appendChild(rm);
+    el.appendChild(item);
+  });
+}
+
+function updateCount(){
+  const c = document.getElementById("tabCount");
+  if (alerts.length > 0){ c.style.display = "inline-block"; c.textContent = alerts.length; }
+  else c.style.display = "none";
+}
+
+// ---- 画面遷移 ----
+function switchScreen(id){
+  ["list","detail","alerts"].forEach(s => {
+    document.getElementById(s).classList.toggle("active", s === id);
+  });
+}
+function showList(){ switchScreen("list"); setTab("home"); }
+function goTab(t){
+  setTab(t);
+  if (t === "home") switchScreen(current ? "detail" : "list");
+  else { renderAlerts(); switchScreen("alerts"); }
+}
+function setTab(t){
+  document.getElementById("tabHome").classList.toggle("on", t==="home");
+  document.getElementById("tabAlert").classList.toggle("on", t==="alert");
+}
+
+// ---- トースト ----
+let toastTimer = null;
+function toast(msg){
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), 1800);
+}
+
+// ---- 初期化 ----
+renderList();
+renderAlerts();
+updateCount();
+</script>
+</body>
+</html>

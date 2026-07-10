@@ -388,14 +388,16 @@
   .hero-badge__dot { position:absolute; top:50%; left:50%; width:7px; height:7px; border-radius:50%; background:var(--accent); transform:translate(-50%,-50%); }
   @keyframes spinBadge { to { transform:rotate(360deg); } }
 
-  /* ---------- キーワードマーキー帯 (Archivo・塗り/縁取り交互) ---------- */
-  .belt { position:relative; z-index:2; overflow:hidden; padding:1.5rem 0; border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); background:var(--surface); }
+  /* ---------- キーワードマーキー帯 (全アイテム同一スタイルで統一) ---------- */
+  .belt { position:relative; z-index:2; overflow:hidden; padding:1.35rem 0; border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); background:var(--surface); }
   .belt__track { display:flex; width:max-content; animation:beltScroll 36s linear infinite; }
   .belt:hover .belt__track { animation-play-state:paused; }
   .belt__inner { display:flex; align-items:center; gap:3.2rem; padding-right:3.2rem; white-space:nowrap; }
-  .belt__item { font-family:var(--font-display); font-weight:850; font-size:1.15rem; letter-spacing:0.08em; }
-  .belt__item--fill { color:var(--ink); }
-  .belt__item--outline { color:transparent; -webkit-text-stroke:1px rgba(16,18,24,0.45); }
+  /* フォント・太さ・色・字間をすべて統一(塗り/縁取りの出し分けを廃止) */
+  .belt__item, .belt__item--fill, .belt__item--outline {
+    font-family:var(--font-display); font-weight:700; font-size:1.05rem; letter-spacing:0.14em;
+    color:var(--ink); -webkit-text-stroke:0; -webkit-text-fill-color:currentColor;
+  }
   .belt__dot { width:5px; height:5px; border-radius:50%; background:var(--accent); opacity:0.7; flex:none; }
   @keyframes beltScroll { to { transform:translateX(-50%); } }
 

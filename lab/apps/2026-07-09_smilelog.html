@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スマイルログ - 歯科治療・検診記録プロトタイプ</title>
+    <style>
+        /* 基本定義 */
+        :root {
+            --bg-color: #f5f4f0;
+            --accent-color: #2563eb;
+            --accent-hover: #1d4ed8;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --border-color: #e5e7eb;
+            --radius: 14px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding-bottom: 40px;
+        }
+
+        /* デモヘッダー */
+        .demo-badge {
+            background-color: #f3f4f6;
+            border-bottom: 1px solid var(--border-color);
+            padding: 6px 16px;
+            font-size: 11px;
+            font-weight: bold;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .demo-badge .price {
+            color: var(--accent-color);
+        }
+
+        /* メインヘッダー */
+        header {
+            background-color: var(--card-bg);
+            padding: 20px 16px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .header-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .logo svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--accent-color);
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* メインレイアウト */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 16px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                grid-template-columns: 1fr 1.2fr;
+            }
+        }
+
+        /* カード共通 */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .card-title svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--accent-color);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        /* フォーム要素 */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-muted);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #f9fafb;
+            color: var(--text-main);
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            background-color: #ffffff;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* 写真アップロードエリア */
+        .photo-upload-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            background-color: #f9fafb;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+        .photo-upload-zone:hover {
+            background-color: #f3f4f6;
+        }
+
+        .photo-upload-zone input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .upload-placeholder svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--text-muted);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .photo-preview-container {
+            margin-top: 12px;
+            display: none;
+            position: relative;
+        }
+
+        .photo-preview {
+            width: 100%;
+            max-height: 160px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .remove-photo-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* 位置情報セクション */
+        .location-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f3f4f6;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .location-btn {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .location-btn:hover {
+            background-color: #f9fafb;
+        }
+
+        /* ボタン */
+        .btn-primary {
+            width: 100%;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* 記録一覧 */
+        .records-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 480px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .record-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            background-color: #ffffff;
+        }
+
+        .record-item:hover {
+            background-color: #f9fafb;
+            transform: translateY(-1px);
+        }
+
+        .record-thumb {
+            width: 64px;
+            height: 64px;
+            border-radius: 6px;
+            object-fit: cover;
+            background-color: #e5e7eb;
+            flex-shrink: 0;
+        }
+
+        .record-info {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .record-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .record-title-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .record-excerpt {
+            font-size: 12px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 簡易マップ表示エリア */
+        .map-section {
+            margin-top: 20px;
+        }
+
+        .map-container {
+            height: 180px;
+            background-color: #e5e7eb;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        /* 簡易的な地図の背景をSVGで表現 */
+        .map-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+        }
+
+        .map-pin {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            transform: translate(-50%, -100%);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .map-pin:hover {
+            transform: translate(-50%, -100%) scale(1.3);
+            z-index: 10;
+        }
+
+        .map-pin svg {
+            width: 100%;
+            height: 100%;
+            fill: #ef4444;
+            filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.3));
+        }
+
+        /* モーダル（詳細表示） */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 16px;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-photo {
+            width: 100%;
+            max-height: 240px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 12px;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .modal-label {
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .modal-value {
+            color: var(--text-main);
+        }
+
+        .modal-memo {
+            background-color: #f9fafb;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--text-main);
+            border-left: 3px solid var(--accent-color);
+            white-space: pre-wrap;
+        }
+
+        /* トースト通知 */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background-color: #10b981;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            z-index: 110;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- デモヘッダー -->
+    <div class="demo-badge">
+        <span>デモ（サンプルデータ）- 歯科医院向け管理画面</span>
+        <span class="price">医院導入プラン: 月額0.5万円</span>
+    </div>
+
+    <!-- メインヘッダー -->
+    <header>
+        <div class="header-container">
+            <div>
+                <div class="logo">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.79 13.59l-3.3-3.3 1.41-1.41 1.89 1.89 4.48-4.48 1.41 1.41-5.89 5.89z"/>
+                    </svg>
+                    <span>スマイルログ</span>
+                </div>
+                <div class="subtitle">患者の口腔内変化と位置情報をスマートに記録</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <div class="container">
+        
+        <!-- 左カラム: 記録入力フォーム -->
+        <div class="card">
+            <div class="card-title">
+                <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                <span>新規記録の登録</span>
+            </div>
+            
+            <form id="recordForm">
+                <div class="form-group">
+                    <label for="date">受診日</label>
+                    <input type="date" id="date" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="treatment">治療・検診内容</label>
+                    <input type="text" id="treatment" class="form-control" placeholder="例: 定期検診、虫歯治療、クリーニング" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="doctor">担当医</label>
+                    <input type="text" id="doctor" class="form-control" placeholder="例: 佐藤 医師" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="memo">経過・メモ</label>
+                    <textarea id="memo" class="form-control" placeholder="例: 右下奥歯の経過観察。次回は3ヶ月後。"></textarea>
+                </div>
+
+                <!-- 写真アップロード -->
+                <div class="form-group">
+                    <label>口元写真</label>
+                    <div class="photo-upload-zone">
+                        <input type="file" id="photoInput" accept="image/*">
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                            <span>タップして写真を撮影・選択</span>
+                            <span style="font-size: 10px;">(デモ用のサンプル写真も自動適用可能)</span>
+                        </div>
+                    </div>
+                    <div class="photo-preview-container" id="previewContainer">
+                        <img src="" alt="プレビュー" class="photo-preview" id="photoPreview">
+                        <button type="button" class="remove-photo-btn" id="removePhotoBtn">×</button>
+                    </div>
+                </div>
+
+                <!-- 位置情報 -->
+                <div class="form-group">
+                    <label>位置情報 (受診クリニック位置)</label>
+                    <div class="location-status">
+                        <span id="locationText">未取得 (自動、または手動取得)</span>
+                        <button type="button" class="location-btn" id="getLocationBtn">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+                            取得
+                        </button>
+                    </div>
+                    <input type="hidden" id="latitude">
+                    <input type="hidden" id="longitude">
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <span>記録を保存する</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- 右カラム: 記録一覧 ＆ 簡易マップ -->
+        <div>
+            <!-- 記録一覧カード -->
+            <div class="card">
+                <div class="card-title">
+                    <svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+                    <span>タイムライン・記録一覧</span>
+                </div>
+                
+                <div class="records-list" id="recordsList">
+                    <!-- JSで動的に生成 -->
+                </div>
+
+                <!-- 簡易マップセクション -->
+                <div class="map-section">
+                    <div style="font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); display: flex; align-items: center; gap: 4px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/></svg>
+                        <span>受診クリニックマップ (位置情報履歴)</span>
+                    </div>
+                    <div class="map-container" id="mapContainer">
+                        <!-- 簡易的な地図の背景（SVGグリッド） -->
+                        <svg class="map-bg" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <defs>
+                                <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#e2e8f0" stroke-width="0.5"/>
+                                </pattern>
+                            </defs>
+                            <rect width="100" height="100" fill="#f1f5f9" />
+                            <rect width="100" height="100" fill="url(#grid)" />
+                            <!-- 簡易的な湾岸線や道路を模したパス -->
+                            <path d="M-10,50 Q20,60 40,45 T80,70 T120,50" fill="none" stroke="#cbd5e1" stroke-width="4" />
+                            <path d="M30,-10 Q50,40 45,110" fill="none" stroke="#cbd5e1" stroke-width="2" />
+                        </svg>
+                        <!-- ピンはJSで動的に配置 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 詳細表示モーダル -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">治療記録の詳細</div>
+                <button class="modal-close" id="modalCloseBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <img src="" alt="口元写真" class="modal-photo" id="modalPhoto">
+                <div class="modal-grid">
+                    <div class="modal-label">受診日</div>
+                    <div class="modal-value" id="modalDate"></div>
+
+                    <div class="modal-label">治療内容</div>
+                    <div class="modal-value" style="font-weight: 700;" id="modalTreatment"></div>
+
+                    <div class="modal-label">担当医</div>
+                    <div class="modal-value" id="modalDoctor"></div>
+
+                    <div class="modal-label">位置情報</div>
+                    <div class="modal-value" id="modalLocation"></div>
+                </div>
+                <div style="font-weight: 600; font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">経過・メモ</div>
+                <div class="modal-memo" id="modalMemo"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- トースト通知 -->
+    <div class="toast" id="toast">記録を保存しました</div>
+
+    <script>
+        // サンプル画像（SVGをBase64化したもの、またはプレースホルダー）
+        const sampleToothImage = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='200' viewBox='0 0 300 200' style='background:%23e0f2fe;'><path d='M150,50 C120,50 110,80 110,110 C110,140 120,160 135,160 C145,160 148,150 150,150 C152,150 155,160 165,160 C180,160 190,140 190,110 C190,80 180,50 150,50 Z' fill='%23ffffff' stroke='%2338bdf8' stroke-width='4'/><path d='M130,80 Q140,90 150,80 Q160,90 170,80' fill='none' stroke='%2338bdf8' stroke-width='2'/><text x='150' y='185' font-family='sans-serif' font-size='12' fill='%230369a1' text-anchor='middle'>サンプル口元画像</text></svg>";
+
+        // 初期ダミーデータ
+        const defaultRecords = [
+            {
+                id: "1",
+                date: "2026-07-10",
+                treatment_content: "定期検診とPMTC（クリーニング）",
+                doctor_name: "佐藤 医師",
+                memo: "全体的にプラークコントロールは良好。左下奥歯の歯肉にやや炎症あり、ブラッシング指導を実施。次回は3ヶ月後に定期検診予定。",
+                photo_filename: sampleToothImage,
+                latitude: 35.6812,
+                longitude: 139.7671,
+                location_name: "東京駅前歯科クリニック"
+            },
+            {
+                id: "2",
+                date: "2026-06-05",
+                treatment_content: "右下C1虫歯治療（レジン充填）",
+                doctor_name: "鈴木 医師",
+                memo: "麻酔なしで治療完了。窩洞形成後、コンポジットレジン充填。噛み合わせ調整良好。経過観察とする。",
+                photo_filename: sampleToothImage,
+                latitude: 35.6580,
+                longitude: 139.7016,
+                location_name: "渋谷デンタルオフィス"
+            }
+        ];
+
+        // アプリケーションの状態管理
+        let records = [];
+        let currentPhotoData = "";
+
+        // DOM要素の取得
+        const recordForm = document.getElementById('recordForm');
+        const dateInput = document.getElementById('date');
+        const treatmentInput = document.getElementById('treatment');
+        const doctorInput = document.getElementById('doctor');
+        const memoInput = document.getElementById('memo');
+        const photoInput = document.getElementById('photoInput');
+        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+        const previewContainer = document.getElementById('previewContainer');
+        const photoPreview = document.getElementById('photoPreview');
+        const removePhotoBtn = document.getElementById('removePhotoBtn');
+        const getLocationBtn = document.getElementById('getLocationBtn');
+        const locationText = document.getElementById('locationText');
+        const latitudeInput = document.getElementById('latitude');
+        const longitudeInput = document.getElementById('longitude');
+        const recordsList = document.getElementById('recordsList');
+        const mapContainer = document.getElementById('mapContainer');
+        const toast = document.getElementById('toast');
+
+        // モーダル要素
+        const detailModal = document.getElementById('detailModal');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const modalPhoto = document.getElementById('modalPhoto');
+        const modalDate = document.getElementById('modalDate');
+        const modalTreatment = document.getElementById('modalTreatment');
+        const modalDoctor = document.getElementById('modalDoctor');
+        const modalLocation = document.getElementById('modalLocation');
+        const modalMemo = document.getElementById('modalMemo');
+
+        // 初期化
+        window.addEventListener('DOMContentLoaded', () => {
+            // 本日の日付をデフォルト設定
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+
+            // ローカルストレージから読み込み、なければデフォルト
+            const saved = localStorage.getItem('smile_log_records');
+            if (saved) {
+                records = JSON.parse(saved);
+            } else {
+                records = [...defaultRecords];
+                saveToStorage();
+            }
+
+            renderRecords();
+            renderMapPins();
+            autoFillLocation(); // 起動時に自動で仮の位置情報をセット
+        });
+
+        // ストレージ保存
+        function saveToStorage() {
+            localStorage.setItem('smile_log_records', JSON.stringify(records));
+        }
+
+        // 位置情報の自動・仮設定
+        function autoFillLocation() {
+            // デフォルトは東京駅周辺のランダムな位置
+            const randomOffsetLat = (Math.random() - 0.5) * 0.05;
+            const randomOffsetLng = (Math.random() - 0.5) * 0.05;
+            const lat = 35.6812 + randomOffsetLat;
+            const lng = 139.7671 + randomOffsetLng;
+
+            latitudeInput.value = lat.toFixed(4);
+            longitudeInput.value = lng.toFixed(4);
+            locationText.textContent = `取得済 (${lat.toFixed(2)}, ${lng.toFixed(2)})`;
+        }
+
+        // 位置情報手動取得
+        getLocationBtn.addEventListener('click', () => {
+            locationText.textContent = "取得中...";
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        latitudeInput.value = lat;
+                        longitudeInput.value = lng;
+                        locationText.textContent = `取得済 (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+                        showToast("現在地を取得しました");
+                    },
+                    (error) => {
+                        // エラー時はダミー位置情報を生成
+                        autoFillLocation();
+                        showToast("GPSにアクセスできないため、擬似位置を設定しました");
+                    },
+                    { timeout: 5000 }
+                );
+            } else {
+                autoFillLocation();
+                showToast("ブラウザが位置情報をサポートしていません");
+            }
+        });
+
+        // 写真アップロード処理
+        photoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    currentPhotoData = event.target.result;
+                    photoPreview.src = currentPhotoData;
+                    uploadPlaceholder.style.display = 'none';
+                    previewContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 写真削除
+        removePhotoBtn.addEventListener('click', () => {
+            currentPhotoData = "";
+            photoInput.value = "";
+            uploadPlaceholder.style.display = 'flex';
+            previewContainer.style.display = 'none';
+        });
+
+        // フォーム送信
+        recordForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const newRecord = {
+                id: Date.now().toString(),
+                date: dateInput.value,
+                treatment_content: treatmentInput.value,
+                doctor_name: doctorInput.value,
+                memo: memoInput.value || "特記事項なし",
+                photo_filename: currentPhotoData || sampleToothImage, // 未選択ならサンプル
+                latitude: parseFloat(latitudeInput.value) || 35.6812,
+                longitude: parseFloat(longitudeInput.value) || 139.7671,
+                location_name: "登録クリニック"
+            };
+
+            records.unshift(newRecord);
+            saveToStorage();
+            renderRecords();
+            renderMapPins();
+
+            // フォームリセット
+            recordForm.reset();
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.value = today;
+            currentPhotoData = "";
+            uploadPlaceholder.style.display = 'flex';
+            previewContainer.style.display = 'none';
+            autoFillLocation();
+
+            showToast("記録を登録しました");
+        });
+
+        // 記録一覧の描画
+        function renderRecords() {
+            recordsList.innerHTML = "";
+            if (records.length === 0) {
+                recordsList.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:13px;">記録がありません</div>`;
+                return;
+            }
+
+            records.forEach(record => {
+                const item = document.createElement('div');
+                item.className = 'record-item';
+                item.addEventListener('click', () => openDetail(record.id));
+
+                item.innerHTML = `
+                    <img src="${record.photo_filename}" alt="口元" class="record-thumb">
+                    <div class="record-info">
+                        <div class="record-meta">
+                            <span>${record.date}</span>
+                            <span>${record.doctor_name}</span>
+                        </div>
+                        <div class="record-title-text">${record.treatment_content}</div>
+                        <div class="record-excerpt">${record.memo}</div>
+                    </div>
+                `;
+                recordsList.appendChild(item);
+            });
+        }
+
+        // 簡易マップへのピン配置
+        // 東京近郊の緯度経度範囲を基準にマッピングする
+        // 緯度: 35.50 ~ 35.80, 経度: 139.50 ~ 139.90
+        function renderMapPins() {
+            // 既存のピンを削除（svg背景以外）
+            const pins = mapContainer.querySelectorAll('.map-pin');
+            pins.forEach(pin => pin.remove());
+
+            const minLat = 35.50;
+            const maxLat = 35.80;
+            const minLng = 139.50;
+            const maxLng = 139.90;
+
+            records.forEach(record => {
+                // 範囲内に収まるようにクランプ
+                let lat = Math.max(minLat, Math.min(maxLat, record.latitude));
+                let lng = Math.max(minLng, Math.min(maxLng, record.longitude));
+
+                // 割合を計算 (Y軸は上が北なので100から引く)
+                const xPercent = ((lng - minLng) / (maxLng - minLng)) * 100;
+                const yPercent = 100 - (((lat - minLat) / (maxLat - minLat)) * 100);
+
+                const pin = document.createElement('div');
+                pin.className = 'map-pin';
+                pin.style.left = `${xPercent}%`;
+                pin.style.top = `${yPercent}%`;
+                pin.title = `${record.date}: ${record.treatment_content}`;
+                pin.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openDetail(record.id);
+                });
+
+                pin.innerHTML = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                `;
+
+                mapContainer.appendChild(pin);
+            });
+        }
+
+        // 詳細モーダルを開く
+        function openDetail(id) {
+            const record = records.find(r => r.id === id);
+            if (!record) return;
+
+            modalPhoto.src = record.photo_filename;
+            modalDate.textContent = record.date;
+            modalTreatment.textContent = record.treatment_content;
+            modalDoctor.textContent = record.doctor_name;
+            modalLocation.textContent = `${record.latitude.toFixed(4)}, ${record.longitude.toFixed(4)}`;
+            modalMemo.textContent = record.memo;
+
+            detailModal.style.display = 'flex';
+        }
+
+        // モーダルを閉じる
+        modalCloseBtn.addEventListener('click', () => {
+            detailModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === detailModal) {
+                detailModal.style.display = 'none';
+            }
+        });
+
+        // トースト表示
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -22,7 +22,7 @@
 
 ## サービス (Services)
 - AIコンサルティング・導入支援: AI導入戦略の立案からDX推進まで一貫支援。新規事業企画にも対応。 https://aidollargame.com/ai-consulting.html
-- 社員リスキリング研修: 組織に「使えるAI」を根付かせる実践型研修。
+- AI研修・社員リスキリング: 貴社の実業務を教材にした実践型の生成AI研修。経営層向け・全社員向け・部署別ワーク・定着フォローの4プログラム。 https://aidollargame.com/ai-training.html
 - AI活用度診断: https://aidollargame.com/shindan.html
 - AI用語集（生成AI・LLM・AIエージェント・RAG等をやさしく解説）: https://aidollargame.com/articles/ai-yougo.html
 

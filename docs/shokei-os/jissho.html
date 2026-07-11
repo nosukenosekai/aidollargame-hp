@@ -1,0 +1,180 @@
+<title>最初の5社で何を証明するか（実証計画・1枚）｜aidollargame</title>
+<style>
+  :root{
+    --paper:#ffffff; --ink:#1c1c1c; --muted:#585858; --line:#c9c9c9; --line-soft:#e4e4e4; --band:#f4f4f4; --hi:#eceff1;
+    --font:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","YuGothic","Noto Sans JP",Meiryo,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --paper:#16181a; --ink:#e7e7e7; --muted:#9aa0a6; --line:#3a3d40; --line-soft:#2a2c2e; --band:#1f2224; --hi:#232a30; }
+  }
+  :root[data-theme="light"]{ --paper:#ffffff; --ink:#1c1c1c; --muted:#585858; --line:#c9c9c9; --line-soft:#e4e4e4; --band:#f4f4f4; --hi:#eceff1; }
+  :root[data-theme="dark"]{ --paper:#16181a; --ink:#e7e7e7; --muted:#9aa0a6; --line:#3a3d40; --line-soft:#2a2c2e; --band:#1f2224; --hi:#232a30; }
+  *{box-sizing:border-box;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--font);line-height:1.7;margin:0;-webkit-font-smoothing:antialiased;font-size:15px;}
+  .wrap{max-width:820px;margin:0 auto;padding:36px 26px 70px;}
+  h1{font-size:1.35rem;margin:0 0 2px;font-weight:700;}
+  .sub{color:var(--muted);font-size:.85rem;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:6px;}
+  .oneline{font-weight:700;font-size:1.02rem;border-left:4px solid var(--ink);padding-left:12px;margin:14px 0;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0;}
+  @media(max-width:640px){.grid{grid-template-columns:1fr;}}
+  .box{border:1px solid var(--line);border-radius:5px;padding:14px 15px;}
+  .box .h{font-size:.74rem;letter-spacing:.06em;color:var(--muted);font-weight:700;text-transform:uppercase;margin-bottom:6px;}
+  .box p{margin:0 0 .5em;} .box p:last-child{margin:0;}
+  .box ul{margin:.2em 0 0;padding-left:1.15em;} .box li{margin-bottom:3px;font-size:.92rem;}
+  b.k{font-weight:700;}
+  .rq{color:var(--muted);font-size:.72em;border:1px solid var(--line);border-radius:3px;padding:0 4px;margin-left:2px;white-space:nowrap;vertical-align:.05em;}
+  .funnel{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;margin:8px 0;border:1px solid var(--line);border-radius:5px;overflow:hidden;}
+  .funnel .s{flex:1;min-width:96px;padding:10px 8px;text-align:center;border-right:1px solid var(--line);}
+  .funnel .s:last-child{border-right:0;}
+  .funnel .s .n{font-size:1.35rem;font-weight:700;font-variant-numeric:tabular-nums;}
+  .funnel .s .l{font-size:.72rem;color:var(--muted);margin-top:2px;line-height:1.3;}
+  .funnel .s.hi{background:var(--hi);}
+  table{border-collapse:collapse;width:100%;font-size:.9rem;margin:6px 0;}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top;}
+  thead th{background:var(--band);font-size:.8rem;font-weight:700;}
+  .full{grid-column:1 / -1;}
+  .note{color:var(--muted);font-size:.8rem;margin-top:24px;border-top:1px solid var(--line);padding-top:12px;}
+  ol.order{counter-reset:o;list-style:none;padding:0;margin:6px 0;display:flex;flex-wrap:wrap;gap:8px;}
+  ol.order li{counter-increment:o;background:var(--band);border:1px solid var(--line-soft);border-radius:4px;padding:6px 10px;font-size:.9rem;flex:1;min-width:200px;}
+  ol.order li::before{content:counter(o) "　";font-weight:700;color:var(--muted);}
+</style>
+
+<div class="wrap">
+  <h1>最初の5社で、何を証明するか</h1>
+  <div class="sub">aidollargame ／ 実証計画（1枚）／ 数値は仮置き<span class="rq">要裏取り</span></div>
+
+  <p class="oneline">AIを売るのではない。社長依存を剥がす。AIはそのための道具。</p>
+
+  <div class="box full" style="margin:12px 0;border-width:2px;">
+    <div class="h">★ まず「誰に渡すか（出口・買い手）」を見る ── 一番抜けがち</div>
+    <p style="margin:0 0 .4em;">売り手を磨くだけでは成立しない。<b class="k">受け手が欲しい条件に寄せて磨かなければ、改善が価格や成約に結びつかない</b>。だから受ける前に、渡す相手のあたりを付ける。</p>
+    <ul style="margin:.2em 0 0;padding-left:1.15em;font-size:.92rem;">
+      <li>買い手候補を想定：<b class="k">同業の会社／個人の継ぎ手／小規模ファンド</b></li>
+      <li>買い手が欲しいのは“売上”でなく<b class="k">「社長がいなくても続く利益（再現性）」</b>。そこに合わせて磨く</li>
+      <li>磨いた会社は「継げる度のお墨付き」を付けて<b class="k">TRANBI等の売買の場へ流す</b>（自前で抱え込まない）</li>
+    </ul>
+  </div>
+
+  <div class="grid">
+    <div class="box">
+      <div class="h">① 誰に売るか（受ける会社の条件）</div>
+      <ul>
+        <li>黒字で、社長に売りたい・継がせたい気持ちがある</li>
+        <li>社長依存が<b class="k">職人技・資格でなく“事務・段取り”</b></li>
+        <li>受発注・在庫・数字がデータで取れる</li>
+        <li>3〜6か月で「回る」に近づけられる／払える</li>
+      </ul>
+    </div>
+    <div class="box">
+      <div class="h">② 絶対に受けない会社</div>
+      <ul>
+        <li>決裁の6割超が社長承認なしでは動かない</li>
+        <li>連絡の4割超が電話・口頭（データ化不可）</li>
+        <li>現預金 &lt; 固定費3か月分（体力がない）</li>
+        <li><b class="k">社長が“自分＝会社”と同一視</b>し、見える化を拒む専制型</li>
+      </ul>
+    </div>
+    <div class="box full">
+      <div class="h">③ 3〜6か月で何を変えるか</div>
+      <p>社長がひとりで抱えている事務（見積・受発注・在庫・月次締め・承認）を、AIとマニュアルで肩代わりし、<b class="k">「社長が抜けても回る／後継者が独力で回せる」</b>状態に近づける。</p>
+    </div>
+    <div class="box full">
+      <div class="h">④ どう測るか（社長依存指数 → 継げる度）</div>
+      <table>
+        <thead><tr><th>指標</th><th>計算式（分母分子）</th></tr></thead>
+        <tbody>
+          <tr><td><b class="k">権限移譲率</b></td><td>社長承認なしで完了した決裁・提案件数 ÷ 対象件数</td></tr>
+          <tr><td><b class="k">業務標準化率</b></td><td>手順書またはAI処理に載った定型業務件数 ÷ 対象業務件数</td></tr>
+          <tr><td><b class="k">顧客直結度</b></td><td>社長を介さず現場責任者が顧客対応した件数 ÷ 主要顧客接点件数</td></tr>
+          <tr><td><b class="k">財務即時性</b></td><td>月次粗利・資金残高を把握できるまでの日数（短いほど良い）</td></tr>
+          <tr><td><b class="k">非属人意思決定率</b></td><td>定義済み基準で判断した案件数 ÷ 対象案件数</td></tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:6px;border:0;padding:0;">これらをまとめて「社長依存指数」とし、その改善を「継げる度」の点数にする。点数化ロジック（5指標の重み付け・基準値）は<b class="k" style="color:var(--ink);">別紙の採点表 v0.1</b> で管理。</p>
+    </div>
+    <div class="box">
+      <div class="h">⑤ いくらもらうか（正直に）</div>
+      <ul>
+        <li>初回診断：50万円</li>
+        <li>月額（3〜6か月）：月30万 → 90〜180万</li>
+        <li><b class="k">初期売上：140〜230万円</b></li>
+        <li>＋承継成立時：譲渡額の<b class="k">3〜5%</b>（規模・難易度で変動、低額案件は最低報酬を調整）</li>
+      </ul>
+      <p style="font-size:.86rem;color:var(--muted);margin-top:6px;">LTVは<b class="k">見守り料・仕組み利用料・少数持分</b>で伸ばす（渡して終わりにしない）。</p>
+    </div>
+    <div class="box">
+      <div class="h">⑥ 成功の定義（＋手前の先行指標）</div>
+      <ul>
+        <li>5社目の導入工数が1社目比<b class="k">50%減</b><span class="rq">要裏取り</span></li>
+        <li>点数が半年〜1年後の実績と<b class="k">相関する</b>（⑧）</li>
+      </ul>
+      <p style="font-size:.84rem;color:var(--muted);margin:2px 0 0;"><b class="k" style="color:var(--ink);">承継成立は外部要因が大きい</b>ので、手前の<b class="k" style="color:var(--ink);">先行指標</b>で「どこで詰まったか」を見る。最優先＝<b class="k" style="color:var(--ink);">DD（デューデリ）開始数</b>（実務に入った本気度）と<b class="k" style="color:var(--ink);">主要取引先（キーマン）との直接対話数</b>（買収後の離脱リスク）。＋買い手候補3者と協議／LOI1件。</p>
+    </div>
+  </div>
+
+  <div class="box full" style="margin:12px 0;">
+    <div class="h">⑦ 12か月の数の流れ（1社目〜）</div>
+    <div class="funnel">
+      <div class="s"><div class="n">30</div><div class="l">面談</div></div>
+      <div class="s"><div class="n">10</div><div class="l">条件に合う</div></div>
+      <div class="s"><div class="n">5</div><div class="l">有償診断</div></div>
+      <div class="s"><div class="n">3</div><div class="l">月額導入</div></div>
+      <div class="s hi"><div class="n">1</div><div class="l">承継成立</div></div>
+      <div class="s hi"><div class="n">1</div><div class="l">90日継続</div></div>
+    </div>
+    <p style="font-size:.86rem;color:var(--muted);margin:8px 0 0;"><b class="k" style="color:var(--ink);">この30面談はどこから？</b> 主導線＝<b class="k" style="color:var(--ink);">既存のAI顧客</b>（信頼と経営データが既にある＝一番速い）＋<b class="k" style="color:var(--ink);">TRANBIの売れ残りに逆提案</b>。税理士は主入口にしない。<br>※既存顧客数はまだ実数でなく目標。<b class="k" style="color:var(--ink);">初年度は無理に100を追わず、面談30→条件合致10→有償診断5</b>に絞る。<br>最初の1か月：既存顧客に「社長不在時のキャッシュフロー」可視化レポートを送り、後継者不安の層を抽出して承継インタビュー。</p>
+  </div>
+
+  <div class="grid">
+    <div class="box">
+      <div class="h">⑧ 「継げる度」が本物である条件（正解ラベル）</div>
+      <p style="font-size:.9rem;">合格ラベル＝<b class="k">重要な意思決定が社長抜きで正しく回る状態で、90日間は業務が止まらず、180日時点で次を満たす</b>：</p>
+      <ul>
+        <li><b class="k">運営</b>：重要な意思決定が社長不在で完結（“来ない”でなく“回っている”）</li>
+        <li><b class="k">収益</b>：粗利率 導入前比 −3pt以内</li>
+        <li><b class="k">財務</b>：現預金 固定費3か月以上／月次締め 月末後5営業日以内</li>
+        <li><b class="k">顧客</b>：上位10社の離脱 0〜1社</li>
+        <li><b class="k">情報流通</b>：電話・口頭依存 25%未満（入口の40%から<b class="k">さらに低下</b>）</li>
+      </ul>
+      <p style="font-size:.82rem;color:var(--muted);margin-top:4px;">＝第三者が「引継ぎ後も運営できそう」と判断しやすい状態。90日・180日の二段階で見る。<b class="k">閾値は荒くてよいが、事後に都合よく変えない</b>。</p>
+    </div>
+    <div class="box">
+      <div class="h">⑨ 次へ進む基準（5社終えた時）</div>
+      <ul>
+        <li>変換が<b class="k">繰り返せた</b>（型になった）</li>
+        <li>工数が<b class="k">減っていく</b>手応え</li>
+        <li>点数が実績と<b class="k">相関し始めた</b></li>
+        <li>承継が<b class="k">1件は成立</b>した</li>
+      </ul>
+      <p style="font-size:.86rem;color:var(--muted);margin-top:4px;">満たさなければ、業種か入口サービスを選び直す。</p>
+    </div>
+  </div>
+
+  <div class="box full" style="margin-top:12px;">
+    <div class="h">⑩ 銀行は“初速”ではなく“加速装置”（証明の順番）</div>
+    <ol class="order">
+      <li>この会社を3〜6か月で<b class="k">実際に継ぎやすくできる</b></li>
+      <li>その変化を<b class="k">第三者が見ても分かる形で採点できる</b></li>
+      <li>その採点を<b class="k">金融・支援機関が“補助資料”として使う</b></li>
+    </ol>
+    <p style="font-size:.86rem;color:var(--muted);margin:6px 0 0;">最初の“運命の実験”は①と②。銀行（③）は事例の束が溜まってから（＝5社実証で採点と成果の相関が見えてから、地銀1行に持っていく）。通れば大きく伸び、通らなくても「社長依存を剥がす高収益な事業」として残る。</p>
+    <p style="font-size:.86rem;color:var(--muted);margin:6px 0 0;"><b class="k" style="color:var(--ink);">利益相反に注意：</b>銀行に出す採点の価値は“中立性”。同じ案件で成功報酬・持分を取ると盛るインセンティブが働くので、<b class="k" style="color:var(--ink);">銀行に出す案件は月額のみ／または採点ロジックを公開して第三者検証可能に</b>する<span class="rq">要裏取り</span>。</p>
+  </div>
+
+  <div class="box full" style="margin-top:12px;">
+    <div class="h">⑪ 5社終了後に「何を捨てるか」（撤退・修正条件）</div>
+    <ul style="margin:.2em 0 0;padding-left:1.15em;font-size:.92rem;">
+      <li>工数逓減が出なければ → <b class="k">業種を絞る</b></li>
+      <li>点数と成果が相関しなければ → <b class="k">スコアを作り直す</b></li>
+      <li>承継成立に結びつかなければ → “承継前改善”でなく <b class="k">“社長依存剥がしBPO”として再定義</b></li>
+    </ul>
+  </div>
+
+  <div class="box full" style="margin-top:14px;border-width:2px;">
+    <div class="h">この5社で証明したい“主仮説”</div>
+    <p style="margin:0 0 .4em;font-weight:700;">① 社長依存の剥離が、3〜6か月で実際に起こせること　② その変化が、第三者にも分かる形で測れること。</p>
+    <p style="margin:0;font-size:.9rem;color:var(--muted);">承継成立は重要な成果だが、最初の検証では「成立そのもの」よりも <b class="k" style="color:var(--ink);">「継げる状態を再現可能に作れるか」を主仮説</b> とする（＝売買の偶然性より、変換の再現性が主役）。</p>
+  </div>
+
+  <p class="note">契約設計（改善契約／見守り契約／成功報酬条項／少数持分を持つ場合の条件）は外に書きすぎず、社内で先に整理しておく。数値は仮置き<span class="rq">要裏取り</span>で、5社の実証で確定・調整する。市場：後継者不在率50.1%（帝国データバンク2025）／休廃業・解散の51.1%が黒字（中小企業白書2025）。マッチングは既に厚い（TRANBI 登録20万者超）ため、そこでは戦わず「継げる状態に変える前工程」を取る。</p>
+</div>

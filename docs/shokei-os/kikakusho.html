@@ -1,0 +1,226 @@
+<title>事業企画書｜承継OS（aidollargame）</title>
+<style>
+  :root{
+    --paper:#ffffff; --ink:#1c1c1c; --muted:#585858; --line:#c9c9c9; --line-soft:#e4e4e4; --band:#f4f4f4; --hi:#eceff1;
+    --font:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic","YuGothic","Noto Sans JP",Meiryo,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root{--paper:#16181a;--ink:#e7e7e7;--muted:#9aa0a6;--line:#3a3d40;--line-soft:#2a2c2e;--band:#1f2224;--hi:#232a30;}}
+  :root[data-theme="light"]{--paper:#ffffff;--ink:#1c1c1c;--muted:#585858;--line:#c9c9c9;--line-soft:#e4e4e4;--band:#f4f4f4;--hi:#eceff1;}
+  :root[data-theme="dark"]{--paper:#16181a;--ink:#e7e7e7;--muted:#9aa0a6;--line:#3a3d40;--line-soft:#2a2c2e;--band:#1f2224;--hi:#232a30;}
+  *{box-sizing:border-box;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--font);line-height:1.75;margin:0;-webkit-font-smoothing:antialiased;font-size:15px;}
+  .wrap{max-width:780px;margin:0 auto;padding:40px 28px 80px;}
+  h1{font-size:1.5rem;margin:0 0 4px;font-weight:700;line-height:1.3;}
+  .docmeta{color:var(--muted);font-size:.82rem;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:6px;}
+  .docmeta span{margin-right:16px;}
+  h2{font-size:1.08rem;margin:32px 0 10px;padding-bottom:5px;border-bottom:1px solid var(--line);font-weight:700;}
+  h2 .n{color:var(--muted);font-weight:700;margin-right:8px;font-variant-numeric:tabular-nums;}
+  h3{font-size:.95rem;margin:16px 0 4px;font-weight:700;}
+  p{margin:0 0 .8em;} .measure{max-width:64ch;}
+  ul{margin:.2em 0 .9em;padding-left:1.3em;} li{margin-bottom:5px;}
+  .muted{color:var(--muted);} .src{color:var(--muted);font-size:.78em;}
+  .rq{color:var(--muted);font-size:.72em;border:1px solid var(--line);border-radius:3px;padding:0 4px;margin-left:2px;white-space:nowrap;vertical-align:.05em;}
+  b.k{font-weight:700;}
+  .hero{background:var(--hi);border:1px solid var(--line);border-radius:4px;padding:16px 18px;margin:8px 0;}
+  .hero .d{font-size:1.05rem;font-weight:700;line-height:1.55;}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0;}
+  .two .c{border:1px solid var(--line);border-radius:4px;padding:13px 14px;background:var(--band);}
+  .two .c .t{font-size:.74rem;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:4px;}
+  @media(max-width:600px){.two{grid-template-columns:1fr;}}
+  .flag{border-left:3px solid var(--muted);padding:2px 0 2px 12px;margin:10px 0;color:var(--muted);font-size:.86rem;}
+  .tablewrap{overflow-x:auto;margin:8px 0 4px;}
+  table{border-collapse:collapse;width:100%;font-size:.89rem;min-width:480px;}
+  th,td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top;}
+  thead th{background:var(--band);font-weight:700;font-size:.82rem;}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  tr.hi td{background:var(--hi);font-weight:700;}
+  .funnel{display:flex;flex-wrap:wrap;gap:0;margin:8px 0;border:1px solid var(--line);border-radius:5px;overflow:hidden;}
+  .funnel .s{flex:1;min-width:88px;padding:9px 6px;text-align:center;border-right:1px solid var(--line);}
+  .funnel .s:last-child{border-right:0;} .funnel .s .n{font-size:1.25rem;font-weight:700;font-variant-numeric:tabular-nums;}
+  .funnel .s .l{font-size:.7rem;color:var(--muted);margin-top:2px;} .funnel .s.hi{background:var(--hi);}
+  .appendix{margin-top:12px;background:var(--band);border:1px solid var(--line-soft);border-radius:4px;}
+  .appendix>summary{cursor:pointer;padding:12px 14px;font-weight:700;font-size:.92rem;}
+  .appendix>div{padding:0 16px 12px;}
+  .note{color:var(--muted);font-size:.8rem;margin-top:32px;border-top:1px solid var(--line);padding-top:14px;}
+  .toc{font-size:.85rem;color:var(--muted);margin:6px 0 0;}
+</style>
+
+<div class="wrap">
+
+  <h1>事業企画書：承継OS ── 社長がいなくても回る会社に変え、次の人へ渡す</h1>
+  <div class="docmeta">
+    <span>株式会社aidollargame</span><span>統合版</span><span>数値は仮置き<span class="rq">要裏取り</span></span>
+  </div>
+
+  <h2><span class="n">0.</span>要旨</h2>
+  <div class="hero">
+    <div class="d">後継者がいなくて畳まれる黒字の会社を、社長がいなくても回る（＝売れる・継げる）状態に変え、次の人へ渡す。売るのは“準備”ではなく<span style="text-decoration:underline;">「売れる・継げる会社にすること」</span>。</div>
+  </div>
+  <div class="two" style="margin-top:10px;">
+    <div class="c"><div class="t">表（社会に掲げる旗）</div>良い会社を潰さず残す。就職でも起業でもない「継ぐ」という道をつくる。</div>
+    <div class="c"><div class="t">裏（積み上げる強み）</div>1社やるごとに「継げる度」のデータ・点数・お墨付き・持分が溜まる。ここが後で効く。</div>
+  </div>
+  <p class="measure" style="margin-top:8px;">AIは主役ではない。社長依存を剥がす道具である。最初の現場導入は<b class="k">収益を伴う実証導入</b>であり、同時に<b class="k">「継げる度」のOSを磨くR&D</b>でもある。1社ごとの現場データと手順が、次の導入を軽くする<b class="k">製品資産</b>になる。<b class="k">目標</b>：3年で再現性を証明し初期拡大（売上3〜5億円）、5年は金融接続が通った場合のアップサイド（売上20〜30億円規模）<span class="rq">要裏取り</span>。</p>
+
+  <h2><span class="n">1.</span>課題と市場</h2>
+  <p class="measure">経営者の高齢化で、黒字でも後継者がいないだけで畳まれる会社が大量に発生（10年続く構造問題）。承継の成否は成立“後”でなく、成立“前”の引継ぎ設計・属人化解消で大きく左右される（中小企業庁 中小PMIガイドライン）。ここが主戦場。</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>指標</th><th class="num">数値</th><th>出典</th></tr></thead>
+    <tbody>
+      <tr><td>日本の中小企業数</td><td class="num">約336万者</td><td class="src">2021・中小企業庁</td></tr>
+      <tr><td>後継者不在率</td><td class="num">50.1%</td><td class="src">帝国データバンク2025</td></tr>
+      <tr><td>休廃業・解散のうち黒字</td><td class="num">51.1%</td><td class="src">中小企業白書2025（2024実績）</td></tr>
+      <tr><td>第三者承継 成約（支援センター）</td><td class="num">2,132件</td><td class="src">令和6年度・過去最多（相談 23,540者）</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted" style="font-size:.85rem;">＝「市場があるか」でなく「需要は顕在化、残るは“実行”のボトルネック」という段階。</p>
+
+  <h2><span class="n">2.</span>事業の全体像</h2>
+  <p class="measure">マッチングの“器”は作らない（TRANBI 登録20万者超・BATONZ 等が既に厚い）。代わりに、掲載“前”の「継げる状態に変える」工程を取る。</p>
+  <div class="two">
+    <div class="c"><div class="t">入口</div>主力のAI事務代行で会社に入り、社長依存を剥がして利益を上げる。最初の主訴は承継でなく、利益改善と属人性の解消に置く。</div>
+    <div class="c"><div class="t">本丸</div>“本当の数字”と現場が見える。社長が抜けても回る状態にし、継ぎ手＋融資で承継させる。</div>
+  </div>
+  <p class="measure" style="margin-top:8px;">磨いた会社は「継げる度のお墨付き」を付けてTRANBI等の売買の場に流す（自前で抱え込まない・売買の前段で価値をつくる）。<b class="k">将来</b>は、この「継げる度」の点数を金融の“補助の材料”に接続する（7章）。</p>
+
+  <h2><span class="n">3.</span>最初の勝ち筋（最初の5社）</h2>
+  <p class="measure">最初から業種を決め打ちしない。<b class="k">「最初の客の条件」</b>で選ぶ。</p>
+  <ul>
+    <li>黒字／売りたい・継がせたい気持ちがある</li>
+    <li>社長依存が<b class="k">職人技・資格でなく“事務・段取り”</b>（AIで剥がせる）</li>
+    <li>データが取れる／3〜6か月で「回る」に近づけられる／払える</li>
+  </ul>
+  <p class="measure"><b class="k">売り文句：</b>「今のままだと値段が付かない」「社長が抜けた瞬間に利益が崩れる」「3〜6か月で“売れる会社”に変える」。<b class="k">最初の面談の導線＝既存のAI事業の顧客から派生</b>（信頼と経営データが既にある＝一番速い。次点＝TRANBIの売れ残りに逆提案。税理士は主入口にしない）。</p>
+  <div class="funnel">
+    <div class="s"><div class="n">30</div><div class="l">面談</div></div>
+    <div class="s"><div class="n">10</div><div class="l">条件合致</div></div>
+    <div class="s"><div class="n">5</div><div class="l">有償診断</div></div>
+    <div class="s"><div class="n">3</div><div class="l">月額導入</div></div>
+    <div class="s hi"><div class="n">1</div><div class="l">承継成立</div></div>
+    <div class="s hi"><div class="n">1</div><div class="l">90日継続</div></div>
+  </div>
+  <p class="flag">主仮説：この5社で証明したいのは ①社長依存の剥離が3〜6か月で実際に起こせること ②その変化が第三者にも測れること。承継成立は重要だが、最初は「成立そのもの」より<b class="k">「継げる状態を再現可能に作れるか」</b>が主役。</p>
+
+  <h2><span class="n">4.</span>収益モデル</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>時期</th><th>もらうもの</th><th class="num">目安<span class="rq">要裏取り</span></th></tr></thead>
+    <tbody>
+      <tr><td>初回</td><td>診断（社長依存の度合い・今の値段）</td><td class="num">50万円</td></tr>
+      <tr><td>3〜6か月</td><td>継げる状態に変える月額</td><td class="num">月30万（計90〜180万）</td></tr>
+      <tr><td>承継成立時</td><td>成功報酬</td><td class="num">譲渡額の3〜5%</td></tr>
+      <tr class="hi"><td>渡した後も</td><td>見守り料・仕組み利用料が中心（＝1社ごとに積み上がる）。少数持分は再現性とガバナンス条件が揃った案件のみ</td><td class="num">継続収益</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted" style="font-size:.85rem;">初期売上は1社140〜230万＋成功報酬。<b class="k">渡して終わりにせず</b>、見守り料・仕組み利用料の継続収益でLTVを伸ばす（10億で頭打ちにしない鍵）。少数持分は条件が揃った案件のみの上乗せ。</p>
+
+  <h2><span class="n">5.</span>「継げる度」の測り方（社長依存指数）</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>指標</th><th>計算式（分母分子）</th></tr></thead>
+    <tbody>
+      <tr><td>権限移譲率</td><td>社長承認なしで完了した決裁・提案件数 ÷ 対象件数</td></tr>
+      <tr><td>業務標準化率</td><td>手順書またはAI処理に載った定型業務件数 ÷ 対象業務件数</td></tr>
+      <tr><td>顧客直結度</td><td>社長を介さず現場責任者が顧客対応した件数 ÷ 主要顧客接点件数</td></tr>
+      <tr><td>財務即時性</td><td>月次粗利・資金残高を把握できるまでの日数（短いほど良い）</td></tr>
+      <tr><td>非属人意思決定率</td><td>定義済み基準で判断した案件数 ÷ 対象案件数</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted" style="font-size:.85rem;">これらを「社長依存指数」とし、その改善を「継げる度」の点数に。点数化ロジック（重み付け・基準値）は<b class="k">別紙の採点表 v0.1</b> で管理。</p>
+
+  <h2><span class="n">6.</span>検証（合格・撤退の基準）</h2>
+  <h3>90日判定（止まらないか）</h3>
+  <ul>
+    <li>業務停止なし／重要な意思決定が社長不在でも回る</li>
+    <li>DD（デューデリ）開始・主要取引先（キーマン）との対話が進んでいる</li>
+  </ul>
+  <h3>180日判定（数値が崩れていないか）</h3>
+  <ul>
+    <li>粗利率 導入前比 −3pt以内／現預金 固定費3か月以上／月次締め 月末後5営業日以内</li>
+    <li>上位10社の離脱 0〜1社／電話・口頭依存 25%未満</li>
+  </ul>
+  <p class="muted" style="font-size:.85rem;">承継成立は外部要因が大きいので、手前の<b class="k">先行指標</b>で詰まり所を見る：<b class="k">DD（デューデリ）開始数</b>・<b class="k">主要取引先（キーマン）との直接対話数</b>。</p>
+  <h3>5社終了後に「何を捨てるか」</h3>
+  <ul>
+    <li>工数逓減が出なければ → 業種を絞る</li>
+    <li>点数と成果が相関しなければ → スコアを作り直す</li>
+    <li>承継成立に結びつかなければ → “社長依存剥がしBPO”として再定義</li>
+  </ul>
+
+  <h2><span class="n">7.</span>銀行（“置き換え”でなく“補助の材料”として、段階的に）</h2>
+  <p class="measure">銀行は財務・担保は自前で見られるが「社長がいなくなっても回るか」は見られない。ここは承継後の焦げ付きを一番左右するのに測れない。だから<b class="k">まず“補助の材料”として刺さるか</b>を地銀1行で安く試す（①案件メモに添付→②審査会で参照→③金利・条件に効く→④その銀行で準標準化）。</p>
+  <p class="flag">フル採用を狙わない。<b class="k">5社実証で点数と成果の相関が見えてから</b>、地銀1行へ。通れば大きく伸び、通らなくても「社長依存を剥がす高収益な事業」として残る（逃げ道あり）。</p>
+  <p class="flag"><b class="k">利益相反への手当て（生命線）：</b>磨く・採点する・成功報酬を取る・少数持分を持つ、が同一案件だとスコアを盛るインセンティブになる。銀行に出す“補助の材料”の価値は<b class="k">中立性</b>なので、<b class="k">スコアを銀行に出す案件は月額のみ（成功報酬・持分と併用しない）</b>、または<b class="k">採点ロジックを公開して第三者が検証できる</b>形にする。※成功報酬型のM&A支援はM&A支援機関登録制度・中小M&Aガイドラインの射程、自己勘定での持分取得は開示・制限の論点あり<span class="rq">要裏取り</span>。</p>
+
+  <h2><span class="n">8.</span>目標（いくら目指すか）</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>時期</th><th class="num">目標<span class="rq">要裏取り</span></th><th>意図</th></tr></thead>
+    <tbody>
+      <tr><td>3年後</td><td class="num">再現性を証明し初期拡大（売上 3〜5億円）</td><td>5社→再現性を証明し、承継実績と地銀での実証を積む</td></tr>
+      <tr><td>5年後<br><span class="src">条件付き</span></td><td class="num">金融接続が通った場合のアップサイド（売上 20〜30億円規模）</td><td>「継げる度」が金融の補助の材料として定着した場合</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted" style="font-size:.85rem;">測るのは売上だけでなく <b class="k">①承継成功数 ②スコアに連動した融資額 ③地銀の提携数</b>。通らなくても売上十数億の高収益事業として残る（逃げ道あり）。<b class="k">時価総額目標は内部資料で管理し、対外資料には出さない</b>（結果であって、掲げる目標にしない）。</p>
+
+  <h2><span class="n">9.</span>資金計画</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>ラウンド</th><th>作るもの</th><th class="num">規模<span class="rq">要裏取り</span></th></tr></thead>
+    <tbody>
+      <tr><td>シード</td><td>5社実証・手順書の自動生成・「継げる度」採点の元とデータ・承継1件</td><td class="num">1.5〜3億円</td></tr>
+      <tr><td>シリーズA</td><td>地銀での補助材料の実証・横展開・継ぐ人を集める仕組み</td><td class="num">10億円規模</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted" style="font-size:.85rem;">会社を買う時の資金（1件ごと）は、銀行・公的融資で都度用意。自己勘定での出資（少数持分）は実績が出てから。</p>
+
+  <h2><span class="n">10.</span>継ぐ人の供給</h2>
+  <p class="measure"><b class="k">年齢は問わない</b>。3条件で選ぶ：①現場を回せる ②お金を借りられる ③その地域に根を張る気がある。見極めるだけでなく、<b class="k">この仕組みで会社を回せる人を育てて増やす</b>（就職でも起業でもない「継ぐ」という道を、仕組みとして量産する）。</p>
+
+  <h2><span class="n">11.</span>競合と、空いている場所</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>層</th><th>すでにいる人</th></tr></thead>
+    <tbody>
+      <tr><td>会社を売買する場所</td><td>TRANBI（登録20万者超）・BATONZ（累計会員30万突破）・日本M&Aセンター 等</td></tr>
+      <tr><td>公的な支援</td><td>事業承継・引継ぎ支援センター・日本政策金融公庫</td></tr>
+      <tr><td>売る前の磨き上げ</td><td>船井総研系 等</td></tr>
+      <tr class="hi"><td>空いている場所</td><td>「継げる状態に変える」を<b>仕組み化＋点数化</b>し、将来は金融の“補助の材料”にする層</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2><span class="n">12.</span>この事業の堀（独自の秘密）</h2>
+  <div class="hero"><div class="d">「継げる状態」と「承継後の成果」の相関を、<span style="text-decoration:underline;">実際に剥がして・継がせた“結果”の実務データで、継続的に高められること</span>。</div></div>
+  <ul style="margin-top:10px;">
+    <li>仲介は<b class="k">取引記録</b>だけ、コンサルは<b class="k">助言して去る</b>、公的は<b class="k">相談記録</b>だけ。<b class="k">「剥がした後どうなったか」を持っているのは、実務に入る当社だけ</b>。</li>
+    <li>データが溜まるほど「この会社は継げる／危ない」の<b class="k">予測の精度を上げていける</b> → 金融の補助の材料になり、案件も継ぎ手も集まる（＝1社やるごとに強くなる）。</li>
+  </ul>
+  <p class="measure"><b class="k">守る2手：</b>①この結果データを契約で二次利用OKにして囲う ②一回きりの成功報酬でなく、継続収益・少数持分で<b class="k">P/Lに乗り続ける</b>（剥がれない位置を取る）。</p>
+  <p class="flag">AIは“剥がす道具”であって“人間を消す装置”ではない。旗はあくまで「良い会社を残す・人が継ぐ道をつくる」。</p>
+
+  <h2><span class="n">13.</span>投資家の懸念への回答（調達に向けて）</h2>
+  <p class="measure">狙いは「労働集約の受託」ではなく、<b class="k">現場に入って集めたデータで“継げる度”のOSをつくる</b>こと。想定される懸念と、その埋め方は次の通り。</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>投資家の懸念</th><th>埋め方</th></tr></thead>
+    <tbody>
+      <tr><td>ただのコンサルでは？<br><span class="src">最優先</span></td><td>現場導入は<b class="k">受託収益を伴うプロダクト開発</b>として設計する（収益は取る。その工数がOSを磨くR&Dも兼ねる）。契約・データ権利・成果物帰属を<b class="k">製品化前提で整える</b>。※会計上の資産計上の可否は個別判断で要整理<span class="rq">要裏取り（会計・税務・監査）</span>。</td></tr>
+      <tr><td>現場は誰がやる？</td><td>代表が最初の3〜5社でPMF（型づくり）→以降は<b class="k">承継済み企業・提携パートナーがOSを運用</b>し、当社はOSと品質管理で稼ぐ“胴元モデル”。</td></tr>
+      <tr><td>MIRAと食い合わないか？</td><td>別事業でなく<b class="k">「AIで中小の非効率を解く」単一ビジョン</b>で統合。承継OSが現場データと現金を生み、MIRAが知能化する循環。調達構造（一体／持株会社）は要検討。</td></tr>
+      <tr><td>銀行依存のリスク</td><td>銀行は“補助の材料”に留め（7章）、本当の堀は<b class="k">累積データ量</b>。借入は初期のレバレッジに留め、早期にエクイティへ。</td></tr>
+      <tr><td>特定業種しか回らない？</td><td>深い成功事例を<b class="k">抽象化した業務テンプレート</b>にして横展開。<b class="k">5社目で工数が1社目比50%減</b>する“逓減”が、横展開できる証拠。</td></tr>
+    </tbody>
+  </table></div>
+  <p class="flag">最優先で潰す1つ＝<b class="k">「現場の労働を、受託収益を取りながら“プロダクト化のためのR&D”として設計する」</b>。最初の数社の契約・データ権利・成果物帰属を製品化前提で整える（会計上の扱いは個別に要整理）。狙いは「受託会社」→「データが資産のテック企業」への転換。</p>
+
+  <details class="appendix">
+    <summary>付録：価格・断る会社・データの扱い</summary>
+    <div>
+      <h3 style="font-size:.9rem;">価格</h3>
+      <p class="muted" style="font-size:.88rem;">診断50万／月額30万／人が動く追加作業は時給5万／成功報酬 譲渡額3〜5%（規模で変動、低額は最低報酬を調整）。</p>
+      <h3 style="font-size:.9rem;">最初から断る会社</h3>
+      <p class="muted" style="font-size:.88rem;">決裁の6割超が社長承認なしでは動かない／連絡の4割超が電話・口頭／現預金 &lt; 固定費3か月／チャットを入れても2週間で誰も使わない／社長が“自分＝会社”と同一視し見える化を拒む。</p>
+      <h3 style="font-size:.9rem;">出口（誰に渡すか）</h3>
+      <p class="muted" style="font-size:.88rem;">買い手候補（同業／個人の継ぎ手／小規模ファンド）を先に想定。買い手が欲しいのは“売上”でなく「社長がいなくても続く利益（再現性）」。そこに寄せて磨く。</p>
+      <h3 style="font-size:.9rem;">データの扱い（法務）</h3>
+      <p class="muted" style="font-size:.88rem;">「独占取得」でなく、契約で顧客同意＋匿名化＋二次利用（採点の学習）の許可を明記。契約設計（改善／見守り／成功報酬／少数持分）は社内で先に整理。</p>
+    </div>
+  </details>
+
+  <p class="note">※ <span class="rq">要裏取り</span> は当社の見込み・仮の数字で確定値ではない。市場の数字は帝国データバンク・中小企業庁（中小企業白書／中小PMIガイドライン）・事業承継引継ぎ支援センター・TRANBI等の公表値を目安に記載し、着手前に元データで確認する。銀行連携は「補助の材料として使われるかを試す」仮説であり、決まった提携ではない。目標値は役員会での議論に基づく仮の旗であり、確約ではない。</p>
+
+</div>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>リハ継続ナビ — デモ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+    background: #f5f4f0; color: #1a1a1a; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 16px 14px 60px; }
+  .demo-badge {
+    display: inline-block; font-size: 11px; color: #6b7280;
+    border: 1px solid #d6d3cc; border-radius: 999px; padding: 2px 10px; margin-bottom: 14px;
+  }
+  header h1 { font-size: 20px; letter-spacing: -0.02em; }
+  header p { font-size: 13px; color: #555; margin-top: 4px; }
+  .card {
+    background: #fff; border: 1px solid #eae7e0; border-radius: 14px;
+    padding: 16px; margin-top: 12px;
+  }
+  .row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; padding: 12px 0; border-bottom: 1px solid #f0eee8; cursor: pointer;
+  }
+  .row:last-child { border-bottom: none; }
+  .row:active { opacity: .6; }
+  .pt-name { font-weight: 600; font-size: 15px; }
+  .pt-sub { font-size: 12px; color: #6b7280; margin-top: 2px; }
+  .rate { font-size: 13px; font-weight: 700; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .rate.good { background: #e7f0ff; color: #2563eb; }
+  .rate.mid  { background: #fff4e0; color: #b45309; }
+  .rate.low  { background: #fdeaea; color: #c02626; }
+  .flag { font-size: 11px; color: #c02626; font-weight: 700; margin-left: 6px; }
+  .bar-bg { height: 8px; background: #f0eee8; border-radius: 999px; overflow: hidden; margin-top: 8px; }
+  .bar-fg { height: 100%; background: #2563eb; border-radius: 999px; }
+  .sec-title { font-size: 12px; color: #6b7280; font-weight: 700; margin: 18px 0 6px; letter-spacing: .04em; }
+  .log { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f4f2ec; font-size: 13px; }
+  .log:last-child { border-bottom: none; }
+  .log .d { color: #9ca3af; width: 46px; flex-shrink: 0; }
+  .log .done { color: #2563eb; font-weight: 700; }
+  .log .miss { color: #c02626; font-weight: 700; }
+  .menu-item { font-size: 13px; padding: 6px 0; color: #333; }
+  .menu-item::before { content: "・"; color: #2563eb; }
+  .btn {
+    display: block; width: 100%; text-align: center; background: #2563eb; color: #fff;
+    border: none; border-radius: 12px; padding: 13px; font-size: 15px; font-weight: 700;
+    cursor: pointer; margin-top: 14px;
+  }
+  .btn:active { background: #1d4ed8; }
+  .btn.ghost { background: #fff; color: #2563eb; border: 1px solid #cfd9f3; }
+  .back { font-size: 13px; color: #2563eb; cursor: pointer; margin-bottom: 8px; display: inline-block; }
+  .stat-row { display: flex; gap: 10px; margin-top: 12px; }
+  .stat { flex: 1; background: #faf9f6; border-radius: 12px; padding: 12px; text-align: center; }
+  .stat .n { font-size: 20px; font-weight: 800; letter-spacing: -0.02em; }
+  .stat .l { font-size: 11px; color: #6b7280; margin-top: 2px; }
+  .msg-box {
+    background: #faf9f6; border: 1px solid #eae7e0; border-radius: 12px;
+    padding: 14px; font-size: 14px; margin-top: 10px; white-space: pre-wrap; min-height: 90px;
+  }
+  .hint { font-size: 12px; color: #6b7280; margin-top: 10px; }
+  .copied { color: #2563eb; font-size: 13px; font-weight: 700; text-align: center; margin-top: 8px; height: 18px; }
+  .hidden { display: none; }
+  .kpi { display: flex; gap: 8px; margin-top: 14px; }
+  .kpi .box { flex: 1; background: #fff; border: 1px solid #eae7e0; border-radius: 12px; padding: 12px; text-align: center; }
+  .kpi .box .n { font-size: 18px; font-weight: 800; color: #2563eb; }
+  .kpi .box .l { font-size: 11px; color: #6b7280; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo-badge">デモ（サンプルデータ）</span>
+  <header>
+    <h1>リハ継続ナビ</h1>
+    <p>音声AIが自宅リハビリを毎日チェック。続かない患者を院に知らせて再来院へ。</p>
+  </header>
+
+  <!-- 一覧画面 -->
+  <div id="listView">
+    <div class="kpi">
+      <div class="box"><div class="n">28名</div><div class="l">通院中</div></div>
+      <div class="box"><div class="n">3名</div><div class="l">要フォロー</div></div>
+      <div class="box"><div class="n">71%</div><div class="l">平均実施率</div></div>
+    </div>
+    <div class="sec-title">要フォロー順（今週）</div>
+    <div class="card" id="ptList"></div>
+    <p class="hint">院の画面イメージです。名前をタップすると患者ごとの継続状況が見られます。</p>
+  </div>
+
+  <!-- 詳細画面 -->
+  <div id="detailView" class="hidden">
+    <span class="back" onclick="showList()">← 一覧にもどる</span>
+    <div class="card">
+      <div class="pt-name" id="dName"></div>
+      <div class="pt-sub" id="dSub"></div>
+      <div class="stat-row">
+        <div class="stat"><div class="n" id="dRate"></div><div class="l">今週の実施率</div></div>
+        <div class="stat"><div class="n" id="dDays"></div><div class="l">最終来院から</div></div>
+      </div>
+      <div class="bar-bg"><div class="bar-fg" id="dBar"></div></div>
+
+      <div class="sec-title">自宅メニュー</div>
+      <div id="dMenu"></div>
+
+      <div class="sec-title">音声チェックイン履歴</div>
+      <div id="dLog"></div>
+
+      <button class="btn" onclick="genMessage()">再来院の声かけ文をつくる</button>
+      <div id="msgWrap" class="hidden">
+        <div class="msg-box" id="msgBox"></div>
+        <div class="copied" id="copied"></div>
+        <button class="btn ghost" onclick="copyMsg()">この文をコピー</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const patients = [
+  {
+    name: "田村 かおり（架空）", age: 58, reason: "腰痛・ぎっくり腰後のリハ",
+    rate: 22, days: 11, flag: true,
+    menu: ["骨盤かたむけ運動 10回", "太もも裏ストレッチ 左右30秒", "1日10分の歩行"],
+    log: [
+      {d:"7/12", ok:false, note:"応答なし"},
+      {d:"7/11", ok:false, note:"応答なし"},
+      {d:"7/10", ok:true, note:"「腰が張ってできなかった」"},
+      {d:"7/9", ok:false, note:"応答なし"},
+      {d:"7/8", ok:true, note:"「全部やった。痛み4」"},
+    ]
+  },
+  {
+    name: "北原 たけし（架空）", age: 45, reason: "肩の可動域リハ",
+    rate: 44, days: 6, flag: true,
+    menu: ["振り子体操 20回", "タオル肩上げ 10回", "肩甲骨よせ 15回"],
+    log: [
+      {d:"7/12", ok:true, note:"「肩上げだけやった。痛み3」"},
+      {d:"7/11", ok:false, note:"応答なし"},
+      {d:"7/10", ok:false, note:"応答なし"},
+      {d:"7/9", ok:true, note:"「全部やった。痛み2」"},
+      {d:"7/8", ok:true, note:"「タオルだけ。痛み3」"},
+    ]
+  },
+  {
+    name: "小池 みどり（架空）", age: 63, reason: "ひざ変形・術後リハ",
+    rate: 55, days: 4, flag: true,
+    menu: ["ひざ伸ばし 15回", "太もも上げ 左右10回", "いすスクワット 10回"],
+    log: [
+      {d:"7/12", ok:true, note:"「スクワットだけ。痛み5」"},
+      {d:"7/11", ok:true, note:"「ひざ伸ばしのみ」"},
+      {d:"7/10", ok:false, note:"応答なし"},
+      {d:"7/9", ok:true, note:"「全部やった。痛み4」"},
+      {d:"7/8", ok:false, note:"応答なし"},
+    ]
+  },
+  {
+    name: "遠藤 しんじ（架空）", age: 39, reason: "スポーツ外傷・足首",
+    rate: 88, days: 2, flag: false,
+    menu: ["足首まわし 左右20回", "カーフレイズ 15回", "バランス片足立ち 30秒"],
+    log: [
+      {d:"7/12", ok:true, note:"「全部やった。痛み1」"},
+      {d:"7/11", ok:true, note:"「全部やった。痛み1」"},
+      {d:"7/10", ok:true, note:"「バランスだけ。痛み2」"},
+      {d:"7/9", ok:true, note:"「全部やった。痛み1」"},
+      {d:"7/8", ok:true, note:"「全部やった。痛み2」"},
+    ]
+  },
+  {
+    name: "森 あきこ（架空）", age: 71, reason: "五十肩リハ",
+    rate: 79, days: 3, flag: false,
+    menu: ["振り子体操 20回", "壁つたい上げ 10回", "肩まわし 15回"],
+    log: [
+      {d:"7/12", ok:true, note:"「壁つたいだけ。痛み3」"},
+      {d:"7/11", ok:true, note:"「全部やった。痛み2」"},
+      {d:"7/10", ok:false, note:"応答なし"},
+      {d:"7/9", ok:true, note:"「全部やった。痛み3」"},
+      {d:"7/8", ok:true, note:"「振り子だけ。痛み3」"},
+    ]
+  }
+];
+
+let current = null;
+
+function rateClass(r){ return r < 40 ? "low" : r < 70 ? "mid" : "good"; }
+
+function renderList(){
+  const el = document.getElementById("ptList");
+  el.innerHTML = "";
+  patients.slice().sort((a,b)=>a.rate-b.rate).forEach(p=>{
+    const idx = patients.indexOf(p);
+    const div = document.createElement("div");
+    div.className = "row";
+    div.onclick = ()=>showDetail(idx);
+    div.innerHTML =
+      '<div><div class="pt-name">'+p.name.replace("（架空）","")+
+      (p.flag?'<span class="flag">要フォロー</span>':'')+
+      '</div><div class="pt-sub">'+p.reason+'／最終来院 '+p.days+'日前</div></div>'+
+      '<span class="rate '+rateClass(p.rate)+'">'+p.rate+'%</span>';
+    el.appendChild(div);
+  });
+}
+
+function showDetail(i){
+  current = i;
+  const p = patients[i];
+  document.getElementById("dName").textContent = p.name;
+  document.getElementById("dSub").textContent = p.age+"歳／"+p.reason;
+  document.getElementById("dRate").textContent = p.rate+"%";
+  document.getElementById("dRate").className = "n";
+  document.getElementById("dDays").textContent = p.days+"日";
+  document.getElementById("dBar").style.width = p.rate+"%";
+  document.getElementById("dMenu").innerHTML =
+    p.menu.map(m=>'<div class="menu-item">'+m+'</div>').join("");
+  document.getElementById("dLog").innerHTML = p.log.map(l=>
+    '<div class="log"><span class="d">'+l.d+'</span>'+
+    '<span class="'+(l.ok?'done':'miss')+'">'+(l.ok?'実施':'未実施')+'</span>'+
+    '<span style="color:#555">'+l.note+'</span></div>'
+  ).join("");
+  document.getElementById("msgWrap").className = "hidden";
+  document.getElementById("copied").textContent = "";
+  document.getElementById("listView").className = "hidden";
+  document.getElementById("detailView").className = "";
+  window.scrollTo(0,0);
+}
+
+function showList(){
+  document.getElementById("detailView").className = "hidden";
+  document.getElementById("listView").className = "";
+  window.scrollTo(0,0);
+}
+
+function genMessage(){
+  const p = patients[current];
+  const nm = p.name.replace("（架空）","");
+  let msg;
+  if(p.rate < 40){
+    msg = nm+"さん、こんにちは。○○接骨院です。\n\n最近、自宅リハの音声チェックにお返事がないようで気になっています。無理は禁物なので、痛みが強い日はできる範囲で大丈夫です。\n\n"+p.reason+"は途中でやめると戻りやすいので、一度お顔を見せてもらえると安心です。今週、"+p.days+"日ぶりに10分だけでも寄れる日はありますか？状態に合わせてメニューを調整します。";
+  } else if(p.rate < 70){
+    msg = nm+"さん、こんにちは。○○接骨院です。\n\n自宅リハ、続けていただきありがとうございます。実施率は"+p.rate+"%で、あと少しで習慣化できそうです。\n\n「できた日／できなかった日」の差が出ているので、次回ご来院時にやりやすい形へ組み直しましょう。今週〜来週で通える日を教えてください。";
+  } else {
+    msg = nm+"さん、こんにちは。○○接骨院です。\n\n自宅リハの実施率が"+p.rate+"%と、とても順調です。この調子なら次の段階に進めそうなので、メニューを一段上げるご相談をさせてください。\n\n直近で通えるタイミングがあれば教えてください。";
+  }
+  document.getElementById("msgBox").textContent = msg;
+  document.getElementById("msgWrap").className = "";
+  document.getElementById("copied").textContent = "";
+}
+
+function copyMsg(){
+  const t = document.getElementById("msgBox").textContent;
+  const done = ()=>{ document.getElementById("copied").textContent = "コピーしました"; };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(done).catch(done);
+  } else { done(); }
+}
+
+renderList();
+</script>
+</body>
+</html>

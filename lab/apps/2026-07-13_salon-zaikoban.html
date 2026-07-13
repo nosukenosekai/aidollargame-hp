@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>サロン在庫番 — デモ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    background: #f5f4f0; color: #1a1a1a; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 16px 14px 60px; }
+  .demo-tag {
+    display: inline-block; font-size: 11px; color: #6b7280;
+    background: #e8e7e2; border-radius: 8px; padding: 3px 9px; margin-bottom: 14px;
+  }
+  header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+  header p { font-size: 13px; color: #6b7280; margin-top: 4px; }
+  .store {
+    font-size: 12px; color: #6b7280; margin: 14px 0 8px;
+  }
+  .card {
+    background: #fff; border-radius: 14px; padding: 15px 16px; margin-bottom: 11px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .item-head { display: flex; justify-content: space-between; align-items: flex-start; }
+  .item-name { font-size: 15px; font-weight: 600; }
+  .item-sub { font-size: 12px; color: #6b7280; margin-top: 2px; }
+  .badge {
+    font-size: 11px; font-weight: 600; border-radius: 8px; padding: 3px 8px; white-space: nowrap;
+  }
+  .badge.ok { background: #e6f0ff; color: #2563eb; }
+  .badge.soon { background: #fff1e0; color: #c2620a; }
+  .badge.low { background: #ffe4e4; color: #d12626; }
+  .meter { height: 8px; background: #eceae4; border-radius: 6px; margin: 11px 0 6px; overflow: hidden; }
+  .meter > span { display: block; height: 100%; border-radius: 6px; }
+  .meter-info { display: flex; justify-content: space-between; font-size: 12px; color: #6b7280; }
+  .row-btn {
+    margin-top: 12px; width: 100%; border: none; border-radius: 10px;
+    padding: 11px; font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: inherit;
+  }
+  .row-btn.add { background: #2563eb; color: #fff; }
+  .row-btn.added { background: #e8e7e2; color: #6b7280; }
+  .row-btn.plain { background: #f0efe9; color: #1a1a1a; }
+  .section-title { font-size: 13px; font-weight: 700; color: #444; margin: 22px 0 10px; }
+  .cart-bar {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    background: #fff; border-top: 1px solid #e5e3dc;
+    padding: 12px 14px; display: flex; align-items: center; gap: 12px;
+    max-width: 480px; margin: 0 auto;
+  }
+  .cart-bar .txt { flex: 1; font-size: 13px; }
+  .cart-bar .txt b { font-size: 15px; }
+  .cart-bar button {
+    border: none; background: #2563eb; color: #fff; border-radius: 10px;
+    padding: 11px 18px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+  .cart-bar button:disabled { background: #cfcdc6; color: #fff; cursor: default; }
+  .overlay {
+    position: fixed; inset: 0; background: rgba(20,20,20,0.4);
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  .overlay.show { display: flex; }
+  .sheet {
+    background: #fff; border-radius: 16px; padding: 22px 20px; max-width: 400px; width: 100%;
+  }
+  .sheet h2 { font-size: 18px; margin-bottom: 6px; }
+  .sheet p { font-size: 13px; color: #555; }
+  .sheet .list { margin: 14px 0; }
+  .sheet .list div { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid #f0efe9; }
+  .sheet .total { display: flex; justify-content: space-between; font-size: 15px; font-weight: 700; margin-top: 8px; }
+  .sheet button {
+    margin-top: 16px; width: 100%; border: none; background: #2563eb; color: #fff;
+    border-radius: 10px; padding: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
+  }
+  .done-mark { text-align: center; padding: 8px 0; }
+  .done-mark .big { font-size: 17px; font-weight: 700; color: #2563eb; }
+  .tip { font-size: 12px; color: #6b7280; background:#f0efe9; border-radius:10px; padding:10px 12px; margin-top:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo-tag">デモ（サンプルデータ）</span>
+  <header>
+    <h1>サロン在庫番</h1>
+    <p>カラー剤・薬剤の減りを自動で見張り、切らす前に発注カゴを用意します。</p>
+  </header>
+
+  <div class="store">サンプル店舗：hair studio みなも（架空）／担当：店長</div>
+
+  <div class="tip">使った量から「あと何日で切れそうか」を毎日計算。少なくなった品には自動で発注バッジが付きます。発注忘れゼロが狙いです。</div>
+
+  <div class="section-title">そろそろ発注（自動アラート）</div>
+  <div id="alertList"></div>
+
+  <div class="section-title">在庫は足りています</div>
+  <div id="okList"></div>
+</div>
+
+<div class="cart-bar">
+  <div class="txt">発注カゴ <b id="cartCount">0</b> 点／<b id="cartYen">0</b> 円</div>
+  <button id="checkoutBtn" disabled>発注へ進む</button>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<script>
+  const YEN = n => n.toLocaleString('ja-JP');
+  // サンプル在庫データ（すべて架空）
+  const items = [
+    { id:'a1', name:'カラー剤 6NB ナチュラルブラウン', unit:'80g チューブ', stock:2, per:1.4, price:520, cat:'alert' },
+    { id:'a2', name:'オキシ 6% 過酸化水素水', unit:'1L ボトル', stock:1, per:0.35, price:880, cat:'alert' },
+    { id:'a3', name:'ブリーチパウダー', unit:'500g 缶', stock:1, per:0.2, price:1650, cat:'alert' },
+    { id:'b1', name:'シャンプー 業務用', unit:'2.5L 詰替', stock:4, per:0.3, price:2200, cat:'ok' },
+    { id:'b2', name:'トリートメント 業務用', unit:'2.5L 詰替', stock:5, per:0.28, price:2600, cat:'ok' },
+    { id:'b3', name:'カラー剤 8A アッシュ', unit:'80g チューブ', stock:6, per:0.9, price:540, cat:'ok' },
+  ];
+  const cart = {};
+
+  function daysLeft(it){ return Math.max(0, Math.round(it.stock / it.per)); }
+  function badge(it){
+    const d = daysLeft(it);
+    if(d <= 3) return {cls:'low', txt:'残り約'+d+'日'};
+    if(d <= 7) return {cls:'soon', txt:'残り約'+d+'日'};
+    return {cls:'ok', txt:'残り約'+d+'日'};
+  }
+  function meterColor(it){
+    const d = daysLeft(it);
+    if(d <= 3) return '#d12626';
+    if(d <= 7) return '#e0850a';
+    return '#2563eb';
+  }
+
+  function card(it){
+    const b = badge(it);
+    const pct = Math.min(100, Math.round((daysLeft(it)/14)*100));
+    const inCart = cart[it.id] ? true : false;
+    return `<div class="card">
+      <div class="item-head">
+        <div>
+          <div class="item-name">${it.name}</div>
+          <div class="item-sub">${it.unit}／在庫 ${it.stock} 個・1日約${it.per}個ペース</div>
+        </div>
+        <span class="badge ${b.cls}">${b.txt}</span>
+      </div>
+      <div class="meter"><span style="width:${pct}%;background:${meterColor(it)}"></span></div>
+      <div class="meter-info"><span>${YEN(it.price)}円／個</span><span>あと14日以内の目安</span></div>
+      <button class="row-btn ${inCart?'added':'add'}" onclick="toggle('${it.id}')">
+        ${inCart ? 'カゴに追加済み（外す）' : '発注カゴに入れる'}
+      </button>
+    </div>`;
+  }
+
+  function render(){
+    document.getElementById('alertList').innerHTML =
+      items.filter(i=>daysLeft(i)<=7).map(card).join('') || '<div class="card item-sub">いま発注が必要な品はありません。</div>';
+    document.getElementById('okList').innerHTML =
+      items.filter(i=>daysLeft(i)>7).map(card).join('');
+    const keys = Object.keys(cart);
+    const cnt = keys.length;
+    const yen = keys.reduce((s,k)=> s + items.find(i=>i.id===k).price, 0);
+    document.getElementById('cartCount').textContent = cnt;
+    document.getElementById('cartYen').textContent = YEN(yen);
+    document.getElementById('checkoutBtn').disabled = cnt===0;
+  }
+
+  function toggle(id){
+    if(cart[id]) delete cart[id]; else cart[id]=true;
+    render();
+  }
+
+  document.getElementById('checkoutBtn').onclick = function(){
+    const keys = Object.keys(cart);
+    const rows = keys.map(k=>{ const it=items.find(i=>i.id===k); return `<div><span>${it.name}</span><span>${YEN(it.price)}円</span></div>`; }).join('');
+    const total = keys.reduce((s,k)=> s + items.find(i=>i.id===k).price, 0);
+    document.getElementById('sheet').innerHTML = `
+      <h2>発注内容の確認</h2>
+      <p>仕入れ先「サンプル美容材料（架空）」へ、この内容で発注します。</p>
+      <div class="list">${rows}</div>
+      <div class="total"><span>合計</span><span>${YEN(total)}円</span></div>
+      <button onclick="confirmOrder()">この内容で発注する（デモ）</button>`;
+    document.getElementById('overlay').classList.add('show');
+  };
+
+  function confirmOrder(){
+    document.getElementById('sheet').innerHTML = `
+      <div class="done-mark">
+        <div class="big">発注を受け付けました（デモ）</div>
+        <p style="margin-top:8px">実際の運用では、仕入れ先へそのまま発注メールが飛び、在庫にも自動で加算されます。次に少なくなる品も引き続き見張ります。</p>
+      </div>
+      <button onclick="closeSheet()">閉じる</button>`;
+    for(const k in cart){ const it=items.find(i=>i.id===k); it.stock += 6; delete cart[k]; }
+    render();
+  }
+  function closeSheet(){ document.getElementById('overlay').classList.remove('show'); }
+  document.getElementById('overlay').onclick = function(e){ if(e.target===this) closeSheet(); };
+
+  render();
+</script>
+</body>
+</html>

@@ -32,6 +32,7 @@
 - AI導入の費用: https://aidollargame.com/articles/ai-cost.html
 - AIエージェントとチャットボットの違い: https://aidollargame.com/articles/ai-agent-vs-chatbot.html
 - AI研修は何をする？内容・進め方・選び方: https://aidollargame.com/articles/ai-training-guide-2026.html
+- ChatGPT・Claude・Gemini 会社で使うならどれ？業務別の選び方: https://aidollargame.com/articles/ai-hikaku-2026.html
 - 不動産の問い合わせ対応を自動化する方法（反響の取りこぼし対策）: https://aidollargame.com/articles/fudosan-inquiry-automation.html
 - LINE AIエージェント導入チェックリスト（無料資料）: https://aidollargame.com/articles/line-ai-agent-checklist.html
 

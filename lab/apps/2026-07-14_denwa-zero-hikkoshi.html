@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>電話ゼロ引越し（デモ）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Segoe UI", sans-serif;
+    background: #f5f4f0;
+    color: #1a1a1a;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 0 16px 60px; }
+  .demo-badge {
+    background: #e8e6df; color: #6b6b6b; font-size: 12px;
+    text-align: center; padding: 6px; letter-spacing: 0.04em;
+  }
+  header { padding: 24px 0 8px; }
+  h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; }
+  .sub { font-size: 13px; color: #6b6b6b; margin-top: 6px; }
+  .card {
+    background: #fff; border-radius: 14px; padding: 18px;
+    margin-top: 14px; border: 1px solid #eceae4;
+  }
+  .step-nav { display: flex; gap: 6px; margin: 18px 0 4px; }
+  .dot { flex: 1; height: 4px; border-radius: 2px; background: #e0ded7; }
+  .dot.on { background: #2563eb; }
+  label { display: block; font-size: 13px; font-weight: 700; margin: 14px 0 6px; }
+  input, select {
+    width: 100%; padding: 12px; border: 1px solid #dcdad3; border-radius: 10px;
+    font-size: 15px; background: #fafaf8; font-family: inherit;
+  }
+  .row { display: flex; gap: 10px; }
+  .row > div { flex: 1; }
+  button {
+    width: 100%; padding: 14px; border: none; border-radius: 12px;
+    background: #2563eb; color: #fff; font-size: 15px; font-weight: 700;
+    cursor: pointer; margin-top: 18px; font-family: inherit;
+  }
+  button:disabled { background: #b9c4dc; cursor: default; }
+  button.ghost { background: #fff; color: #2563eb; border: 1.5px solid #2563eb; }
+  .note {
+    font-size: 12px; color: #6b6b6b; background: #f0efe9;
+    border-radius: 10px; padding: 10px 12px; margin-top: 14px;
+  }
+  .quote {
+    border: 1px solid #eceae4; border-radius: 12px; padding: 14px;
+    margin-top: 12px; cursor: pointer; transition: border-color .15s;
+  }
+  .quote:active { border-color: #2563eb; }
+  .quote.sel { border-color: #2563eb; background: #f4f7ff; }
+  .qtop { display: flex; justify-content: space-between; align-items: baseline; }
+  .qname { font-weight: 700; font-size: 15px; }
+  .qprice { font-weight: 800; font-size: 20px; color: #2563eb; }
+  .qmeta { font-size: 12px; color: #6b6b6b; margin-top: 4px; }
+  .qtag {
+    display: inline-block; font-size: 11px; background: #eef2ff; color: #2563eb;
+    border-radius: 6px; padding: 2px 8px; margin-top: 8px; margin-right: 6px;
+  }
+  .anon { font-size: 12px; color: #6b6b6b; }
+  .result-icon {
+    width: 56px; height: 56px; border-radius: 50%; background: #2563eb;
+    margin: 4px auto 0; position: relative;
+  }
+  .result-icon::after {
+    content: ""; position: absolute; left: 20px; top: 15px; width: 12px; height: 22px;
+    border: solid #fff; border-width: 0 4px 4px 0; transform: rotate(45deg);
+  }
+  h2 { font-size: 18px; font-weight: 800; text-align: center; margin-top: 14px; }
+  .declined { font-size: 13px; color: #6b6b6b; }
+  .declined li { margin-left: 18px; margin-top: 4px; }
+  .kv { display: flex; justify-content: space-between; font-size: 14px; padding: 6px 0; border-bottom: 1px dashed #eceae4; }
+  .kv:last-child { border: none; }
+  .foot { font-size: 11px; color: #9a9a9a; text-align: center; margin-top: 26px; }
+</style>
+</head>
+<body>
+<div class="demo-badge">デモ（サンプルデータ・架空の会社です）</div>
+<div class="wrap">
+  <header>
+    <h1>電話ゼロ引越し</h1>
+    <div class="sub">各社が匿名で見積もり。1社を選ぶと電子契約で確定し、残りは自動でお断り。営業電話はゼロ。</div>
+  </header>
+
+  <div class="step-nav">
+    <div class="dot on" id="d0"></div>
+    <div class="dot" id="d1"></div>
+    <div class="dot" id="d2"></div>
+  </div>
+
+  <!-- STEP 0: 条件入力 -->
+  <div class="card" id="step0">
+    <label>引越し元エリア</label>
+    <select id="from">
+      <option>東京都・新宿区</option>
+      <option>神奈川県・横浜市</option>
+      <option>埼玉県・さいたま市</option>
+    </select>
+    <label>引越し先エリア</label>
+    <select id="to">
+      <option>東京都・世田谷区</option>
+      <option>千葉県・船橋市</option>
+      <option>東京都・練馬区</option>
+    </select>
+    <div class="row">
+      <div>
+        <label>希望日</label>
+        <input id="date" value="2026-08-09" />
+      </div>
+      <div>
+        <label>荷物の量</label>
+        <select id="size">
+          <option>単身（少なめ）</option>
+          <option selected>単身（多め）</option>
+          <option>2人暮らし</option>
+          <option>家族（3人以上）</option>
+        </select>
+      </div>
+    </div>
+    <div class="note">電話番号やメールは、あなたが1社を選ぶまで各社に開示されません。だから営業電話が鳴りません。</div>
+    <button onclick="toQuotes()">匿名で見積もりを集める</button>
+  </div>
+
+  <!-- STEP 1: 見積もり一覧 -->
+  <div class="card" id="step1" style="display:none">
+    <div class="anon" id="cond"></div>
+    <div id="quotes"></div>
+    <button id="pickBtn" disabled onclick="toConfirm()">この1社で確定する</button>
+    <div class="note">選んだ1社にだけ連絡先が渡ります。残りの会社には「今回は見送り」を自動送信。あなたから断りの連絡は不要です。</div>
+  </div>
+
+  <!-- STEP 2: 確定 -->
+  <div class="card" id="step2" style="display:none">
+    <div class="result-icon"></div>
+    <h2>電子契約で確定しました</h2>
+    <div style="margin-top:14px">
+      <div class="kv"><span>契約先</span><b id="rname"></b></div>
+      <div class="kv"><span>金額（税込）</span><b id="rprice"></b></div>
+      <div class="kv"><span>希望日</span><b id="rdate"></b></div>
+      <div class="kv"><span>連絡先の開示</span><b>この1社のみ</b></div>
+    </div>
+    <div class="note" style="margin-top:16px">
+      <b>自動でお断りした会社</b>
+      <ul class="declined" id="declined"></ul>
+    </div>
+    <button class="ghost" onclick="reset()">最初からやり直す</button>
+  </div>
+
+  <div class="foot">
+    ※ このデモは仕組みを体験してもらうためのサンプルです。掲載金額・会社名はすべて架空です。<br>
+    収益モデル：成約時のみ引越し会社から成約手数料（例：成約額の3％）。利用者は無料。
+  </div>
+</div>
+
+<script>
+  // 架空の引越し会社と、条件から算出したサンプル見積もり
+  var COMPANIES = [
+    { name: "あおぞら引越サービス（架空）", tags: ["ダンボール無料", "8時-12時 指定可"], base: 4.2 },
+    { name: "さくら運送センター（架空）", tags: ["最短翌日", "エアコン移設対応"], base: 3.8 },
+    { name: "みどり引越しラボ（架空）", tags: ["女性スタッフ指名可", "不用品引取り"], base: 5.1 },
+    { name: "ひまわり便（架空）", tags: ["平日割引", "ピアノ運搬OK"], base: 3.3 }
+  ];
+  var sizeFactor = { "単身（少なめ）": 0.85, "単身（多め）": 1.0, "2人暮らし": 1.35, "家族（3人以上）": 1.9 };
+  var picked = -1;
+  var quotesData = [];
+
+  function toQuotes() {
+    var from = document.getElementById('from').value;
+    var to = document.getElementById('to').value;
+    var date = document.getElementById('date').value;
+    var size = document.getElementById('size').value;
+    var f = sizeFactor[size] || 1;
+
+    quotesData = COMPANIES.map(function (c, i) {
+      // 会社ごとに少し差が出るサンプル金額（万円）
+      var price = Math.round((c.base * f + (i % 2 ? 0.4 : -0.2)) * 10) / 10;
+      if (price < 2.5) price = 2.5;
+      return { name: c.name, tags: c.tags, price: price, days: 2 + i };
+    }).sort(function (a, b) { return a.price - b.price; });
+
+    document.getElementById('cond').textContent =
+      from + " → " + to + " / " + date + " / " + size + "（匿名で" + quotesData.length + "社が回答）";
+
+    var html = "";
+    quotesData.forEach(function (q, i) {
+      html += '<div class="quote" data-i="' + i + '" onclick="selectQuote(' + i + ')">'
+        + '<div class="qtop"><span class="qname">' + q.name + '</span>'
+        + '<span class="qprice">' + q.price.toFixed(1) + '万円</span></div>'
+        + '<div class="qmeta">見積もり回答まで約' + q.days + '時間 ・ 連絡先は非開示</div>'
+        + q.tags.map(function (t) { return '<span class="qtag">' + t + '</span>'; }).join('')
+        + '</div>';
+    });
+    document.getElementById('quotes').innerHTML = html;
+
+    show(1);
+  }
+
+  function selectQuote(i) {
+    picked = i;
+    var nodes = document.querySelectorAll('#quotes .quote');
+    nodes.forEach(function (n) {
+      n.classList.toggle('sel', Number(n.getAttribute('data-i')) === i);
+    });
+    document.getElementById('pickBtn').disabled = false;
+  }
+
+  function toConfirm() {
+    if (picked < 0) return;
+    var q = quotesData[picked];
+    document.getElementById('rname').textContent = q.name;
+    document.getElementById('rprice').textContent = q.price.toFixed(1) + '万円';
+    document.getElementById('rdate').textContent = document.getElementById('date').value;
+
+    var dl = "";
+    quotesData.forEach(function (x, i) {
+      if (i !== picked) dl += '<li>' + x.name + '（自動でお断り済み）</li>';
+    });
+    document.getElementById('declined').innerHTML = dl;
+
+    show(2);
+  }
+
+  function reset() {
+    picked = -1;
+    document.getElementById('pickBtn').disabled = true;
+    show(0);
+  }
+
+  function show(step) {
+    for (var s = 0; s < 3; s++) {
+      document.getElementById('step' + s).style.display = (s === step) ? 'block' : 'none';
+      document.getElementById('d' + s).classList.toggle('on', s <= step);
+    }
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>退去精算AI｜デモ</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --bg: #f5f4f0;
+    --ink: #1a1a1a;
+    --sub: #6b6b66;
+    --blue: #2563eb;
+    --line: #e4e2da;
+    --card: #ffffff;
+    --owner: #0f766e;   /* 貸主負担=経年劣化 */
+    --tenant: #b45309;  /* 借主負担=過失 */
+  }
+  html, body { margin: 0; padding: 0; background: var(--bg); }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 440px; margin: 0 auto; padding: 0 14px 48px; }
+
+  .demoflag {
+    text-align: center; font-size: 11px; color: var(--sub);
+    padding: 6px 0 2px; letter-spacing: .02em;
+  }
+  header.app {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 2px 14px;
+  }
+  .brand { font-weight: 800; font-size: 19px; letter-spacing: -.01em; }
+  .brand span { color: var(--blue); }
+  .tag { font-size: 11px; color: var(--sub); }
+
+  .card {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 16px; margin-bottom: 12px;
+  }
+  .card.tap { cursor: pointer; transition: transform .08s ease, box-shadow .12s ease; }
+  .card.tap:active { transform: scale(.99); }
+
+  .lead { font-size: 13px; color: var(--sub); margin: 0 0 12px; }
+
+  /* 物件一覧 */
+  .prop-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .prop-name { font-weight: 700; font-size: 15px; }
+  .prop-meta { font-size: 12px; color: var(--sub); margin-top: 2px; }
+  .chev { color: var(--blue); font-weight: 700; font-size: 20px; line-height: 1; }
+  .status-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .pill {
+    font-size: 11px; padding: 3px 9px; border-radius: 999px;
+    background: #eef2ff; color: var(--blue); font-weight: 700;
+  }
+  .pill.warn { background: #fff2e0; color: var(--tenant); }
+  .pill.gray { background: #eef0ee; color: var(--sub); }
+
+  /* 詳細ヘッダ */
+  .back {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: none; border: 0; color: var(--blue); font-size: 13px;
+    font-weight: 700; cursor: pointer; padding: 10px 2px; margin-left: -2px;
+  }
+  h2.d-title { font-size: 18px; margin: 0 0 2px; }
+  .d-meta { font-size: 12px; color: var(--sub); margin: 0 0 14px; }
+
+  /* 箇所リスト（写真判定） */
+  .spot {
+    display: flex; gap: 12px; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid var(--line);
+  }
+  .spot:last-child { border-bottom: 0; }
+  .thumb {
+    width: 58px; height: 58px; border-radius: 10px; flex: 0 0 58px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: #fff; text-align: center; font-weight: 700;
+    background: linear-gradient(135deg, #b9c2cf, #8a94a6);
+    letter-spacing: .02em; line-height: 1.25; padding: 4px;
+  }
+  .spot-body { flex: 1; min-width: 0; }
+  .spot-name { font-weight: 700; font-size: 14px; }
+  .spot-note { font-size: 12px; color: var(--sub); margin-top: 1px; }
+  .verdict {
+    font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 8px;
+    white-space: nowrap; align-self: flex-start; margin-top: 2px;
+  }
+  .v-owner { background: #d9f2ee; color: var(--owner); }
+  .v-tenant { background: #fdecd3; color: var(--tenant); }
+
+  /* AI判定の吹き出し（詳細内展開） */
+  .reason {
+    background: #f7f7f4; border: 1px solid var(--line); border-radius: 10px;
+    padding: 10px 12px; font-size: 12px; color: #333; margin-top: 8px;
+    display: none;
+  }
+  .reason.open { display: block; }
+  .reason b { color: var(--ink); }
+  .reason .src { display: block; margin-top: 6px; color: var(--sub); font-size: 11px; }
+  .toggle {
+    background: none; border: 0; color: var(--blue); font-size: 12px;
+    font-weight: 700; cursor: pointer; padding: 4px 0 0; margin-top: 2px;
+  }
+
+  /* 精算サマリ */
+  .sum-line { display: flex; justify-content: space-between; font-size: 13px; padding: 7px 0; border-bottom: 1px dashed var(--line); }
+  .sum-line span:last-child { font-weight: 700; }
+  .sum-total { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0 2px; }
+  .sum-total .lbl { font-size: 13px; color: var(--sub); }
+  .sum-total .val { font-size: 26px; font-weight: 800; color: var(--blue); }
+  .yen { font-size: 14px; font-weight: 700; }
+
+  .cta {
+    display: block; width: 100%; text-align: center; border: 0; cursor: pointer;
+    background: var(--blue); color: #fff; font-weight: 800; font-size: 15px;
+    padding: 14px; border-radius: 12px; margin-top: 6px;
+  }
+  .cta.ghost { background: #fff; color: var(--blue); border: 1px solid var(--blue); }
+  .note-mini { font-size: 11px; color: var(--sub); text-align: center; margin-top: 10px; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%) translateY(20px);
+    background: var(--ink); color: #fff; font-size: 13px; font-weight: 700;
+    padding: 11px 18px; border-radius: 999px; opacity: 0; transition: all .25s ease;
+    pointer-events: none; z-index: 9;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .hidden { display: none; }
+  .foot { text-align: center; font-size: 11px; color: var(--sub); margin-top: 20px; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demoflag">デモ（サンプルデータ）</div>
+  <header class="app">
+    <div class="brand">退去精算<span>AI</span></div>
+    <div class="tag">賃貸管理会社向け</div>
+  </header>
+
+  <!-- ===== 一覧画面 ===== -->
+  <section id="listView">
+    <p class="lead">退去した部屋の写真を撮るだけ。AIが国交省ガイドラインをもとに「貸主負担（経年劣化）」か「借主負担（過失）」かを仕分けし、敷金精算書の下書きまで作ります。</p>
+    <div id="propList"></div>
+    <p class="note-mini">サンプルの退去物件です。カードをタップすると判定結果が見られます。</p>
+  </section>
+
+  <!-- ===== 詳細画面 ===== -->
+  <section id="detailView" class="hidden">
+    <button class="back" onclick="showList()">&#8592; 物件一覧へ</button>
+    <h2 class="d-title" id="dTitle"></h2>
+    <p class="d-meta" id="dMeta"></p>
+
+    <div class="card">
+      <div style="font-weight:700;font-size:14px;margin-bottom:2px;">AIの写真判定（8箇所）</div>
+      <div class="spot-note" style="margin-bottom:6px;">タップで判定の根拠を表示</div>
+      <div id="spotList"></div>
+    </div>
+
+    <div class="card">
+      <div style="font-weight:700;font-size:14px;margin-bottom:8px;">敷金精算サマリ</div>
+      <div id="sumList"></div>
+      <div class="sum-total">
+        <span class="lbl">入居者へ返還</span>
+        <span class="val" id="refund">—</span>
+      </div>
+      <p class="note-mini" id="depNote" style="text-align:left;margin-top:4px;"></p>
+    </div>
+
+    <button class="cta" onclick="toast('精算書PDFを作成しました（デモ）')">精算書の下書きを作成</button>
+    <button class="cta ghost" onclick="toast('入居者へ確認リンクを送信しました（デモ）')">入居者へ確認リンクを送る</button>
+    <p class="note-mini">判定はあくまで下書きです。最終確認は担当者が行います。</p>
+  </section>
+
+  <div class="foot">
+    退去精算AI ／ 出典基準: 国土交通省「原状回復をめぐるトラブルとガイドライン」<br>
+    ※これはデモです。実在の物件・人物とは関係ありません。
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ====== サンプルデータ（架空・デモ用） ======
+// 判定: owner=貸主負担(経年劣化・通常損耗)  tenant=借主負担(故意過失・善管注意義務違反)
+const PROPS = [
+  {
+    id: 'p1',
+    name: 'サンプルハイツ 203号',
+    meta: '1K / 入居2年3か月 / 敷金 8万円',
+    deposit: 8,
+    spots: [
+      { area:'リビング壁クロス', kind:'日焼けによる色あせ', v:'owner',
+        reason:'日照による自然な変色。経年劣化・通常損耗にあたり、貸主負担です。' },
+      { area:'クロス（画びょう跡）', kind:'画びょう穴 数か所', v:'owner',
+        reason:'ポスター等の画びょう・ピン穴は下地ボードの張替えを要しない範囲なら通常使用の範囲。貸主負担です。' },
+      { area:'フローリング', kind:'家具設置のへこみ', v:'owner',
+        reason:'家具の重みによる床のへこみ・設置跡は通常損耗。貸主負担です。' },
+      { area:'洋室 壁（落書き）', kind:'油性ペンの書き込み', v:'tenant',
+        reason:'故意による汚損。善管注意義務を超える損傷で借主負担。該当クロス面の張替え相当。', cost:1.2 },
+      { area:'キッチン床', kind:'油汚れの放置シミ', v:'tenant',
+        reason:'清掃を怠ったことによる汚損（善管注意義務違反）。クリーニングでは落ちず張替え相当で借主負担。', cost:0.9 },
+      { area:'畳（該当なし）', kind:'—', v:'owner',
+        reason:'本物件に畳はありません。' },
+      { area:'建具（ドア）', kind:'開閉のがたつき', v:'owner',
+        reason:'経年による建付けの緩み。通常損耗で貸主負担です。' },
+      { area:'エアコン内部', kind:'通常のホコリ', v:'owner',
+        reason:'通常使用範囲の汚れ。ハウスクリーニング（貸主負担）で対応します。' },
+    ]
+  },
+  {
+    id: 'p2',
+    name: 'サンプルレジデンス 512号',
+    meta: '1LDK / 入居5年0か月 / 敷金 12万円',
+    deposit: 12,
+    spots: [
+      { area:'全室クロス', kind:'経年の黄ばみ', v:'owner',
+        reason:'入居5年、クロスの耐用年数（6年で残存価値1円）をふまえ経年劣化。貸主負担です。' },
+      { area:'フローリング', kind:'通常の擦れ', v:'owner',
+        reason:'歩行による通常の擦れ。通常損耗で貸主負担です。' },
+      { area:'洗面台', kind:'水はねのくすみ', v:'owner',
+        reason:'通常使用範囲。クリーニングで対応（貸主負担）。' },
+      { area:'居室 壁（ペット）', kind:'猫のひっかき傷 多数', v:'tenant',
+        reason:'ペットによる損傷。飼育に伴う損耗は借主負担。ただし入居5年でクロス残存価値は低く、負担は張替え費の一部に按分。', cost:1.0 },
+      { area:'室内（喫煙）', kind:'ヤニ汚れ・臭い', v:'tenant',
+        reason:'喫煙によるヤニ・臭いはクリーニング／張替えを要する汚損で借主負担。経過年数で按分。', cost:1.5 },
+      { area:'網戸', kind:'破れ', v:'tenant',
+        reason:'通常使用を超える破損。張替え費で借主負担。', cost:0.3 },
+      { area:'建具（ドア）', kind:'通常の使用感', v:'owner',
+        reason:'通常損耗の範囲。貸主負担です。' },
+      { area:'ベランダ', kind:'砂ぼこり', v:'owner',
+        reason:'通常清掃の範囲。貸主負担です。' },
+    ]
+  },
+  {
+    id: 'p3',
+    name: 'サンプルコーポ 101号',
+    meta: 'ワンルーム / 入居1年1か月 / 敷金 6万円',
+    deposit: 6,
+    spots: [
+      { area:'クロス', kind:'目立つ汚れなし', v:'owner',
+        reason:'通常使用の範囲で目立つ損傷なし。貸主負担（原状回復不要）。' },
+      { area:'フローリング', kind:'小キズ数点', v:'owner',
+        reason:'通常生活による軽微なキズ。通常損耗で貸主負担です。' },
+      { area:'キッチン', kind:'清掃済み', v:'owner',
+        reason:'退去時清掃で問題なし。' },
+      { area:'ユニットバス', kind:'水あか', v:'owner',
+        reason:'通常使用範囲。ハウスクリーニング（貸主負担）で対応。' },
+      { area:'玄関ドア', kind:'鍵の返却あり', v:'owner',
+        reason:'鍵は全数返却済み。' },
+      { area:'壁（ビス穴）', kind:'棚固定のビス穴', v:'tenant',
+        reason:'下地補修を要するビス穴は借主負担。1か所のみで軽微。', cost:0.2 },
+      { area:'照明', kind:'通常', v:'owner',
+        reason:'問題なし。' },
+      { area:'その他', kind:'—', v:'owner',
+        reason:'特記事項なし。' },
+    ]
+  },
+];
+
+// ====== 描画 ======
+function tenantTotal(p){
+  return p.spots.filter(s=>s.v==='tenant' && s.cost).reduce((a,s)=>a+s.cost,0);
+}
+function ownerCount(p){ return p.spots.filter(s=>s.v==='owner').length; }
+function tenantCount(p){ return p.spots.filter(s=>s.v==='tenant').length; }
+function yen(man){
+  // manは万円。小数第1位まで。0.2万→2,000円のように円でも見せる
+  return man.toFixed(1) + '万円';
+}
+
+function renderList(){
+  const el = document.getElementById('propList');
+  el.innerHTML = PROPS.map(p => {
+    const t = tenantCount(p);
+    const charge = tenantTotal(p);
+    const pill = t === 0
+      ? '<span class="pill">全額返還の見込み</span>'
+      : '<span class="pill warn">借主負担 '+t+'箇所</span>';
+    const chargePill = charge > 0
+      ? '<span class="pill gray">借主負担 約'+yen(charge)+'</span>'
+      : '<span class="pill gray">追加請求なし</span>';
+    return '<div class="card tap" onclick="showDetail(\''+p.id+'\')">'
+      + '<div class="prop-top"><div><div class="prop-name">'+p.name+'</div>'
+      + '<div class="prop-meta">'+p.meta+'</div></div><div class="chev">&#8250;</div></div>'
+      + '<div class="status-row">'+pill+chargePill+'</div></div>';
+  }).join('');
+}
+
+function showDetail(id){
+  const p = PROPS.find(x=>x.id===id);
+  document.getElementById('dTitle').textContent = p.name;
+  document.getElementById('dMeta').textContent = p.meta;
+
+  // 箇所リスト
+  const sl = document.getElementById('spotList');
+  sl.innerHTML = p.spots.map((s,i) => {
+    const vClass = s.v==='owner' ? 'v-owner' : 'v-tenant';
+    const vLabel = s.v==='owner' ? '貸主負担' : '借主負担';
+    const thumbBg = s.v==='tenant'
+      ? 'linear-gradient(135deg,#d9a066,#b45309)'
+      : 'linear-gradient(135deg,#9aa7b5,#6f7c8c)';
+    const costTxt = (s.v==='tenant' && s.cost) ? '<b>請求目安 '+yen(s.cost)+'</b>' : '';
+    return '<div class="spot">'
+      + '<div class="thumb" style="background:'+thumbBg+'">写真<br>'+(i+1)+'</div>'
+      + '<div class="spot-body">'
+      +   '<div class="spot-name">'+s.area+'</div>'
+      +   '<div class="spot-note">'+s.kind+'</div>'
+      +   '<button class="toggle" onclick="toggleReason('+i+')">AI判定の根拠 &#8595;</button>'
+      +   '<div class="reason" id="reason'+i+'">'+s.reason+' '+costTxt
+      +     '<span class="src">基準: 国交省 原状回復ガイドライン</span></div>'
+      + '</div>'
+      + '<div class="verdict '+vClass+'">'+vLabel+'</div>'
+      + '</div>';
+  }).join('');
+
+  // 精算サマリ
+  const charge = tenantTotal(p);
+  const refund = Math.max(0, p.deposit - charge);
+  const chargeItems = p.spots.filter(s=>s.v==='tenant' && s.cost);
+  const sum = document.getElementById('sumList');
+  let rows = '<div class="sum-line"><span>預り敷金</span><span>'+yen(p.deposit)+'</span></div>';
+  if (chargeItems.length){
+    chargeItems.forEach(s=>{
+      rows += '<div class="sum-line"><span>'+s.area+'（借主負担）</span><span>-'+yen(s.cost)+'</span></div>';
+    });
+  } else {
+    rows += '<div class="sum-line"><span>借主負担分</span><span>なし</span></div>';
+  }
+  sum.innerHTML = rows;
+  document.getElementById('refund').innerHTML = yen(refund).replace('万円','<span class="yen">万円</span>');
+  document.getElementById('depNote').textContent =
+    '内訳: 貸主負担（経年劣化・通常損耗）'+ownerCount(p)+'箇所 ／ 借主負担（故意過失）'+tenantCount(p)+'箇所。経過年数で按分済みの目安です。';
+
+  document.getElementById('listView').classList.add('hidden');
+  document.getElementById('detailView').classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+
+function toggleReason(i){
+  document.getElementById('reason'+i).classList.toggle('open');
+}
+function showList(){
+  document.getElementById('detailView').classList.add('hidden');
+  document.getElementById('listView').classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+
+let toastTimer;
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2000);
+}
+
+renderList();
+</script>
+</body>
+</html>

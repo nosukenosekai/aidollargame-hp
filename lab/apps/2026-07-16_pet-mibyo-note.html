@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ペット未病ノート — デモ</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --bg: #f5f4f0;
+    --blue: #2563eb;
+    --ink: #1a1a1a;
+    --sub: #6b7280;
+    --line: #e7e5e0;
+    --card: #ffffff;
+    --good: #16a34a;
+    --watch: #d97706;
+    --alert: #dc2626;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 430px; margin: 0 auto; min-height: 100vh; padding-bottom: 88px; }
+  .demoflag {
+    background: #1a1a1a; color: #fff; font-size: 11px; text-align: center;
+    padding: 5px; letter-spacing: 0.04em;
+  }
+  header {
+    padding: 18px 18px 12px; background: var(--bg);
+    position: sticky; top: 0; z-index: 10;
+  }
+  header .logo { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+  header .logo b { color: var(--blue); }
+  header .tag { font-size: 12px; color: var(--sub); margin-top: 2px; }
+  .screen { padding: 0 18px; display: none; }
+  .screen.active { display: block; }
+  .sect-title { font-size: 13px; font-weight: 700; color: var(--sub); margin: 18px 2px 8px; letter-spacing: 0.02em; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 16px; margin-bottom: 12px;
+  }
+  .petrow { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+  .avatar {
+    width: 46px; height: 46px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; color: #fff;
+  }
+  .petmeta { flex: 1; min-width: 0; }
+  .petmeta .nm { font-weight: 700; font-size: 16px; }
+  .petmeta .dt { font-size: 12px; color: var(--sub); }
+  .badge {
+    font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px;
+    white-space: nowrap;
+  }
+  .b-good { background: #dcfce7; color: var(--good); }
+  .b-watch { background: #fef3c7; color: var(--watch); }
+  .b-alert { background: #fee2e2; color: var(--alert); }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 7px; }
+  .field label span { color: var(--sub); font-weight: 400; }
+  .seg { display: flex; gap: 7px; }
+  .seg button {
+    flex: 1; border: 1px solid var(--line); background: #fff; border-radius: 10px;
+    padding: 9px 0; font-size: 13px; font-weight: 600; color: var(--sub); cursor: pointer;
+    font-family: inherit;
+  }
+  .seg button.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+  .chips button {
+    border: 1px solid var(--line); background: #fff; border-radius: 999px;
+    padding: 7px 13px; font-size: 12px; font-weight: 600; color: var(--sub); cursor: pointer;
+    font-family: inherit;
+  }
+  .chips button.on { background: #eef2ff; color: var(--blue); border-color: var(--blue); }
+  input[type=number] {
+    width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 11px;
+    font-size: 15px; font-family: inherit;
+  }
+  .btn {
+    display: block; width: 100%; background: var(--blue); color: #fff; border: none;
+    border-radius: 12px; padding: 15px; font-size: 15px; font-weight: 700; cursor: pointer;
+    font-family: inherit; margin-top: 4px;
+  }
+  .btn.ghost { background: #fff; color: var(--blue); border: 1px solid var(--blue); }
+  .score-wrap { text-align: center; padding: 8px 0 4px; }
+  .score-num { font-size: 52px; font-weight: 800; line-height: 1; letter-spacing: -0.02em; }
+  .score-lbl { font-size: 13px; color: var(--sub); margin-top: 4px; }
+  .meter { height: 9px; background: #eee; border-radius: 999px; overflow: hidden; margin: 14px 0 4px; }
+  .meter i { display: block; height: 100%; border-radius: 999px; }
+  .finding { display: flex; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+  .finding:last-child { border-bottom: none; }
+  .dot { width: 8px; height: 8px; border-radius: 999px; margin-top: 7px; flex-shrink: 0; }
+  .finding .ft { font-size: 14px; font-weight: 600; }
+  .finding .fs { font-size: 12px; color: var(--sub); }
+  .clinic { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .clinic:last-child { border-bottom: none; }
+  .clinic .ci { flex: 1; }
+  .clinic .cn { font-weight: 700; font-size: 14px; }
+  .clinic .cd { font-size: 12px; color: var(--sub); }
+  .clinic .cg { font-size: 12px; color: var(--blue); font-weight: 700; }
+  .note { font-size: 11px; color: var(--sub); margin: 14px 2px 4px; line-height: 1.5; }
+  .nav {
+    position: fixed; bottom: 0; left: 0; right: 0; max-width: 430px; margin: 0 auto;
+    background: #fff; border-top: 1px solid var(--line); display: flex;
+  }
+  .nav button {
+    flex: 1; border: none; background: none; padding: 11px 0 14px; cursor: pointer;
+    font-family: inherit; font-size: 11px; font-weight: 600; color: var(--sub);
+  }
+  .nav button.on { color: var(--blue); }
+  .nav .ic { display: block; font-size: 17px; line-height: 1; margin-bottom: 4px; font-weight: 700; }
+  .back { font-size: 13px; color: var(--blue); font-weight: 600; cursor: pointer; padding: 14px 2px 2px; display: inline-block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demoflag">デモ（サンプルデータ・架空のペットです）</div>
+  <header>
+    <div class="logo">ペット<b>未病</b>ノート</div>
+    <div class="tag">毎日の様子から、受診の目安をやさしくお知らせ</div>
+  </header>
+
+  <!-- 一覧 -->
+  <section class="screen active" id="s-list">
+    <div class="sect-title">見守り中のこ</div>
+    <div id="petlist"></div>
+    <button class="btn ghost" onclick="alert('デモのため新規登録は省略しています')">＋ 新しいこを登録</button>
+    <p class="note">※ このアプリは病気を診断するものではありません。気になる症状があるときは、かかりつけの動物病院にご相談ください。</p>
+  </section>
+
+  <!-- 記録 -->
+  <section class="screen" id="s-log">
+    <span class="back" onclick="go('list')">← もどる</span>
+    <div class="sect-title" id="log-name">きょうの様子</div>
+
+    <div class="card">
+      <div class="field">
+        <label>ごはんの食べ具合</label>
+        <div class="seg" id="seg-appetite">
+          <button data-v="2" class="on">いつも通り</button>
+          <button data-v="1">少なめ</button>
+          <button data-v="0">ほぼ食べず</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>元気・活動量</label>
+        <div class="seg" id="seg-energy">
+          <button data-v="2" class="on">元気</button>
+          <button data-v="1">おとなしい</button>
+          <button data-v="0">ぐったり</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>体重 <span>(kg・前回との差を見ます)</span></label>
+        <input type="number" id="in-weight" step="0.1" inputmode="decimal">
+      </div>
+      <div class="field">
+        <label>気になること <span>(あてはまるもの)</span></label>
+        <div class="chips" id="chips-sym">
+          <button data-v="嘔吐">吐いた</button>
+          <button data-v="下痢">下痢・軟便</button>
+          <button data-v="多飲">水をよく飲む</button>
+          <button data-v="咳">咳・くしゃみ</button>
+          <button data-v="足">足を引きずる</button>
+          <button data-v="かゆみ">かゆがる</button>
+        </div>
+      </div>
+    </div>
+    <button class="btn" onclick="analyze()">記録して健康チェック</button>
+  </section>
+
+  <!-- レポート -->
+  <section class="screen" id="s-report">
+    <span class="back" onclick="go('list')">← 一覧へ</span>
+    <div class="sect-title" id="rep-name">健康レポート</div>
+
+    <div class="card">
+      <div class="score-wrap">
+        <div class="score-num" id="rep-score">–</div>
+        <div class="score-lbl">きょうの健康スコア（100点満点）</div>
+      </div>
+      <div class="meter"><i id="rep-meter"></i></div>
+      <div style="text-align:center; margin-top:10px">
+        <span class="badge" id="rep-badge">–</span>
+      </div>
+    </div>
+
+    <div class="sect-title">AIが気づいたこと</div>
+    <div class="card" id="rep-findings"></div>
+
+    <div id="rep-clinicwrap">
+      <div class="sect-title">近くの動物病院（受診の目安があるとき）</div>
+      <div class="card" id="rep-clinics"></div>
+    </div>
+
+    <button class="btn ghost" onclick="go('list')">一覧にもどる</button>
+    <p class="note">※ 健康スコアは入力内容から自動計算した目安で、獣医師の診断ではありません。受診費用の目安は一般的な相場感で、実際は病院により異なります。</p>
+  </section>
+
+  <nav class="nav">
+    <button class="on" id="nav-list" onclick="go('list')"><span class="ic">◎</span>見守り</button>
+    <button id="nav-log" onclick="openLog(currentPet)"><span class="ic">＋</span>記録</button>
+    <button id="nav-report" onclick="go('report')"><span class="ic">▤</span>レポート</button>
+  </nav>
+</div>
+
+<script>
+// ---- サンプルデータ（すべて架空） ----
+const pets = [
+  { id:0, name:"マロン", kind:"トイプードル", age:7, color:"#b45309", initial:"マ",
+    lastWeight:3.4, status:"good", statusLabel:"良好" },
+  { id:1, name:"そら", kind:"雑種猫", age:3, color:"#4b5563", initial:"そ",
+    lastWeight:4.1, status:"watch", statusLabel:"様子見" },
+  { id:2, name:"だいふく", kind:"柴犬", age:11, color:"#065f46", initial:"だ",
+    lastWeight:9.8, status:"good", statusLabel:"良好" },
+];
+const clinics = [
+  { name:"みどり動物病院", dist:"徒歩6分", note:"内科・夜間相談可", cost:"初診の目安 0.5〜1万円" },
+  { name:"さくらペットクリニック", dist:"車で9分", note:"皮膚・消化器に強い", cost:"初診の目安 0.4〜0.8万円" },
+];
+
+let currentPet = 0;
+const input = { appetite:2, energy:2, symptoms:[] };
+
+function go(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+name).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('on'));
+  const nav = document.getElementById('nav-'+name);
+  if(nav) nav.classList.add('on');
+  window.scrollTo(0,0);
+}
+
+function renderList(){
+  const el = document.getElementById('petlist');
+  el.innerHTML = pets.map(p=>`
+    <div class="card">
+      <div class="petrow" onclick="openLog(${p.id})">
+        <div class="avatar" style="background:${p.color}">${p.initial}</div>
+        <div class="petmeta">
+          <div class="nm">${p.name}</div>
+          <div class="dt">${p.kind}・${p.age}歳／前回 ${p.lastWeight}kg</div>
+        </div>
+        <span class="badge b-${p.status}">${p.statusLabel}</span>
+      </div>
+    </div>`).join('');
+}
+
+function openLog(id){
+  currentPet = id;
+  const p = pets[id];
+  input.appetite = 2; input.energy = 2; input.symptoms = [];
+  document.getElementById('log-name').textContent = p.name + " のきょうの様子";
+  document.getElementById('in-weight').value = p.lastWeight;
+  document.querySelectorAll('#seg-appetite button').forEach(b=>b.classList.toggle('on', b.dataset.v==="2"));
+  document.querySelectorAll('#seg-energy button').forEach(b=>b.classList.toggle('on', b.dataset.v==="2"));
+  document.querySelectorAll('#chips-sym button').forEach(b=>b.classList.remove('on'));
+  go('log');
+}
+
+// セグメント選択
+document.querySelectorAll('#seg-appetite button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#seg-appetite button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); input.appetite = +b.dataset.v;
+});
+document.querySelectorAll('#seg-energy button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#seg-energy button').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); input.energy = +b.dataset.v;
+});
+document.querySelectorAll('#chips-sym button').forEach(b=>b.onclick=()=>{
+  b.classList.toggle('on');
+  const v = b.dataset.v;
+  const i = input.symptoms.indexOf(v);
+  if(i>=0) input.symptoms.splice(i,1); else input.symptoms.push(v);
+});
+
+// ---- 決定論スコアリング ----
+function analyze(){
+  const p = pets[currentPet];
+  const w = parseFloat(document.getElementById('in-weight').value) || p.lastWeight;
+  const diff = w - p.lastWeight;
+  const pct = p.lastWeight ? (diff / p.lastWeight * 100) : 0;
+
+  let score = 100;
+  const findings = [];
+
+  // 食欲
+  if(input.appetite===1){ score -= 12; findings.push(['watch','食欲がやや落ちています','1日続くようなら注意。水分は摂れているか確認を。']); }
+  if(input.appetite===0){ score -= 30; findings.push(['alert','ほとんど食べていません','丸1日以上続く食欲不振は受診の目安です。']); }
+  // 元気
+  if(input.energy===1){ score -= 8; findings.push(['watch','いつもよりおとなしめ','年齢や気温の影響もあります。あわせて様子見を。']); }
+  if(input.energy===0){ score -= 28; findings.push(['alert','ぐったりしています','元気消失は早めの相談をおすすめします。']); }
+  // 体重
+  if(Math.abs(pct) >= 5){
+    score -= 15;
+    findings.push(['alert', `体重が前回比 ${pct>0?'+':''}${pct.toFixed(1)}%`, '短期間の5%以上の増減は体調のサインのことがあります。']);
+  } else if(Math.abs(pct) >= 2){
+    score -= 5;
+    findings.push(['watch', `体重が前回比 ${pct>0?'+':''}${pct.toFixed(1)}%`, '軽い変動です。記録を続けて推移を見ましょう。']);
+  }
+  // 症状
+  const symWeight = { '嘔吐':16, '下痢':14, '多飲':12, '咳':12, '足':10, 'かゆみ':7 };
+  const symMsg = {
+    '嘔吐':'繰り返す嘔吐は受診の目安です。',
+    '下痢':'水様便や血が混じる場合は早めに相談を。',
+    '多飲':'飲水量の増加は内臓のサインのことがあります。',
+    '咳':'続く咳・くしゃみは呼吸器の相談を。',
+    '足':'足をかばう様子は関節・ケガの相談を。',
+    'かゆみ':'皮膚の赤み・脱毛があれば相談を。',
+  };
+  input.symptoms.forEach(s=>{
+    score -= (symWeight[s]||8);
+    findings.push([ (symWeight[s]>=12?'alert':'watch'), '「'+ ({'嘔吐':'吐いた','下痢':'下痢・軟便','多飲':'水をよく飲む','咳':'咳・くしゃみ','足':'足を引きずる','かゆみ':'かゆがる'}[s]) +'」の記録', symMsg[s] ]);
+  });
+
+  score = Math.max(0, Math.min(100, Math.round(score)));
+
+  let level, label, badgeCls, color;
+  if(score >= 80){ level='good'; label='良好'; badgeCls='b-good'; color='var(--good)'; }
+  else if(score >= 55){ level='watch'; label='様子見'; badgeCls='b-watch'; color='var(--watch)'; }
+  else { level='alert'; label='受診おすすめ'; badgeCls='b-alert'; color='var(--alert)'; }
+
+  if(findings.length===0){
+    findings.push(['good','特に気になる変化はありません','この調子で毎日の記録を続けましょう。']);
+  }
+
+  // 一覧のステータス更新
+  p.status = level==='alert' ? 'alert' : (level==='watch'?'watch':'good');
+  p.statusLabel = label==='受診おすすめ' ? '要相談' : label;
+  p.lastWeight = w;
+  renderList();
+
+  // レポート描画
+  document.getElementById('rep-name').textContent = p.name + " の健康レポート";
+  document.getElementById('rep-score').textContent = score;
+  document.getElementById('rep-score').style.color = color;
+  const m = document.getElementById('rep-meter');
+  m.style.width = score + '%';
+  m.style.background = color;
+  const badge = document.getElementById('rep-badge');
+  badge.textContent = label; badge.className = 'badge ' + badgeCls;
+
+  document.getElementById('rep-findings').innerHTML = findings.map(f=>{
+    const dc = f[0]==='alert'?'var(--alert)':(f[0]==='watch'?'var(--watch)':'var(--good)');
+    return `<div class="finding">
+      <div class="dot" style="background:${dc}"></div>
+      <div><div class="ft">${f[1]}</div><div class="fs">${f[2]}</div></div>
+    </div>`;
+  }).join('');
+
+  // 病院レコメンド（様子見・受診おすすめ時のみ）
+  const cw = document.getElementById('rep-clinicwrap');
+  if(level==='good'){
+    cw.style.display='none';
+  } else {
+    cw.style.display='block';
+    document.getElementById('rep-clinics').innerHTML = clinics.map(c=>`
+      <div class="clinic">
+        <div class="ci">
+          <div class="cn">${c.name}</div>
+          <div class="cd">${c.dist}・${c.note}</div>
+        </div>
+        <div class="cg">${c.cost}</div>
+      </div>`).join('') +
+      `<button class="btn" style="margin-top:12px" onclick="alert('デモのため予約は省略しています')">受診の相談をする</button>`;
+  }
+
+  go('report');
+}
+
+renderList();
+</script>
+</body>
+</html>

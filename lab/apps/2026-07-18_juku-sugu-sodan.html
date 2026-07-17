@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>塾すぐ相談 — デモ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f4f0;
+    --blue: #2563eb;
+    --blue-soft: #eaf0ff;
+    --ink: #1a1a1a;
+    --sub: #6b6b6b;
+    --line: #e7e5df;
+    --warn: #d9480f;
+    --warn-soft: #fdece3;
+    --ok: #2b8a3e;
+    --card: #ffffff;
+    --radius: 14px;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 0 14px 60px; }
+  .demo-flag {
+    text-align: center;
+    font-size: 11px;
+    color: var(--sub);
+    letter-spacing: .04em;
+    padding: 7px 0 4px;
+  }
+  header.app {
+    padding: 6px 2px 12px;
+  }
+  header.app h1 {
+    font-size: 21px;
+    letter-spacing: .01em;
+  }
+  header.app p {
+    font-size: 12.5px;
+    color: var(--sub);
+    margin-top: 3px;
+  }
+  .toggle {
+    display: flex;
+    gap: 6px;
+    background: #eceae4;
+    border-radius: 999px;
+    padding: 4px;
+    margin: 12px 0 16px;
+  }
+  .toggle button {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    border-radius: 999px;
+    padding: 9px 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sub);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .toggle button.on {
+    background: var(--card);
+    color: var(--ink);
+    box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 15px;
+    margin-bottom: 12px;
+  }
+  .school-tag {
+    font-size: 12px;
+    color: var(--sub);
+    margin-bottom: 12px;
+  }
+  .school-tag b { color: var(--ink); font-weight: 600; }
+  .sec-label {
+    font-size: 12px;
+    color: var(--sub);
+    font-weight: 600;
+    margin: 4px 0 9px;
+  }
+  .cats { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cat {
+    border: 1px solid var(--line);
+    background: #fafaf8;
+    border-radius: 999px;
+    padding: 7px 13px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--ink);
+  }
+  .cat.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+  .q-list { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .q-btn {
+    text-align: left;
+    border: 1px solid var(--line);
+    background: #fff;
+    border-radius: 10px;
+    padding: 11px 13px;
+    font-size: 13.5px;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .q-btn:hover { border-color: var(--blue); }
+  .chat { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+  .bubble {
+    max-width: 88%;
+    padding: 11px 13px;
+    border-radius: 13px;
+    font-size: 13.5px;
+    line-height: 1.6;
+  }
+  .bubble.me {
+    align-self: flex-end;
+    background: var(--blue);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .bubble.ai {
+    align-self: flex-start;
+    background: var(--blue-soft);
+    color: var(--ink);
+    border-bottom-left-radius: 4px;
+  }
+  .bubble.ai .src {
+    display: block;
+    margin-top: 8px;
+    font-size: 11.5px;
+    color: #37589e;
+    border-top: 1px dashed #c4d3f2;
+    padding-top: 7px;
+  }
+  .typing { font-size: 12px; color: var(--sub); align-self: flex-start; padding: 2px 4px; }
+  .escalate {
+    margin-top: 14px;
+    border-top: 1px solid var(--line);
+    padding-top: 13px;
+  }
+  .btn {
+    display: block;
+    width: 100%;
+    border: 0;
+    border-radius: 11px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn.primary { background: var(--blue); color: #fff; }
+  .btn.ghost { background: #fff; color: var(--blue); border: 1px solid var(--blue); }
+  .btn + .btn { margin-top: 8px; }
+  .booked {
+    background: #eefaf0;
+    border: 1px solid #cdeccf;
+    border-radius: 11px;
+    padding: 12px 13px;
+    font-size: 13px;
+    color: var(--ok);
+    margin-top: 12px;
+  }
+  .booked b { color: var(--ok); }
+  /* teacher */
+  .stat-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .stat {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 11px 10px;
+    text-align: center;
+  }
+  .stat .n { font-size: 22px; font-weight: 700; }
+  .stat .l { font-size: 11px; color: var(--sub); margin-top: 2px; }
+  .stat.alert .n { color: var(--warn); }
+  .row {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 13px;
+    margin-bottom: 9px;
+  }
+  .row.flag { border-color: #f0c4ad; background: var(--warn-soft); }
+  .row .top { display: flex; justify-content: space-between; align-items: baseline; }
+  .row .who { font-size: 14px; font-weight: 600; }
+  .row .when { font-size: 11px; color: var(--sub); }
+  .row .msg { font-size: 12.5px; color: #444; margin-top: 5px; }
+  .badge {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-top: 8px;
+  }
+  .badge.risk { background: var(--warn); color: #fff; }
+  .badge.auto { background: #e7e5df; color: #555; }
+  .note {
+    font-size: 11.5px;
+    color: var(--sub);
+    text-align: center;
+    margin-top: 18px;
+    line-height: 1.7;
+  }
+  .price {
+    background: var(--blue-soft);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    color: #26418f;
+    margin-top: 14px;
+    line-height: 1.7;
+  }
+  .price b { font-size: 15px; }
+  .hide { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demo-flag">デモ（サンプルデータ）</div>
+  <header class="app">
+    <h1>塾すぐ相談</h1>
+    <p>塾に通わせる保護者の小さな不安に、AIが塾のデータで24時間ひとまず回答。退塾のサインを先生に届けます。</p>
+  </header>
+
+  <div class="toggle">
+    <button id="tabParent" class="on" onclick="showView('parent')">保護者の画面</button>
+    <button id="tabTeacher" onclick="showView('teacher')">先生の画面</button>
+  </div>
+
+  <!-- ===== 保護者ビュー ===== -->
+  <div id="parentView">
+    <div class="card">
+      <div class="school-tag">通塾先：<b>まなび個別スクール 桜通り校</b>（架空）／お子さま：中2・さくらさん</div>
+      <div class="sec-label" id="step1label">1. 気になっていることは？</div>
+      <div class="cats" id="cats"></div>
+      <div class="q-list hide" id="qlist"></div>
+    </div>
+
+    <div class="card hide" id="chatCard">
+      <div class="chat" id="chat"></div>
+      <div class="escalate hide" id="escBox">
+        <button class="btn primary" onclick="book()">先生に個別相談を予約する</button>
+        <button class="btn ghost" onclick="resetParent()">別のことも相談する</button>
+      </div>
+      <div class="booked hide" id="bookedBox"></div>
+    </div>
+
+    <div class="note">
+      AIの回答は塾に登録された方針・進度データにもとづく一次案内です。<br>
+      成績や合否を約束するものではありません。判断が必要な相談は先生におつなぎします。
+    </div>
+  </div>
+
+  <!-- ===== 先生ビュー ===== -->
+  <div id="teacherView" class="hide">
+    <div class="stat-row">
+      <div class="stat"><div class="n">18</div><div class="l">今週の相談</div></div>
+      <div class="stat"><div class="n">15</div><div class="l">AIが一次対応</div></div>
+      <div class="stat alert"><div class="n">3</div><div class="l">退塾サイン</div></div>
+    </div>
+    <div class="sec-label" style="padding:0 2px 4px;">今週の保護者相談（新しい順）</div>
+    <div id="rows"></div>
+    <div class="price">
+      <b>塾1校あたり 月1.5万円</b>（税別）<br>
+      退塾を1人減らせれば、月謝ベースで年20万円以上の取り戻し。保護者対応の電話・LINE返信の手間もAIが肩代わりします。
+    </div>
+    <div class="note">
+      「退塾サイン」は、同じ保護者が短期間に不安を繰り返している・欠席や成績の話題が続いている場合にAIが先生へ通知する仕組みです（デモでは固定表示）。
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== サンプルデータ（すべて架空）=====
+var CATS = ["成績・テスト", "宿題・家庭学習", "進路・受験", "お月謝・手続き", "欠席・振替"];
+
+var QUESTIONS = {
+  "成績・テスト": [
+    {q:"前回のテストから点が下がって心配です。塾では何が原因と見ていますか？",
+     a:"さくらさんの直近の到達度テストは、英語の文法（不定詞・動名詞）の正答率が前回62%→48%に下がっていました。授業の理解度は保てているので、演習量の不足が主因と塾では見ています。今週から英文法の宿題を1日10分ぶん増やす設定に変えています。",
+     src:"根拠：桜通り校 到達度テスト履歴（6/30・7/14）"},
+    {q:"数学だけ苦手なようです。個別で見てもらえますか？",
+     a:"数学は関数の単元で正答率が伸び悩んでいます。桜通り校では、苦手単元は担当講師が15分の個別補習を無料でつけられます。次回7/21(月)の授業前に補習枠が空いていますので、ご希望なら先生におつなぎします。",
+     src:"根拠：カリキュラム進度表／補習枠カレンダー"}
+  ],
+  "宿題・家庭学習": [
+    {q:"家で全然勉強しません。塾からの宿題はちゃんと出ていますか？",
+     a:"直近2週間の宿題提出率は67%（5回中未提出2回）でした。塾では、量より習慣づけを優先し、まず英単語10問だけの「毎日ミニ課題」に切り替えています。ご家庭では、勉強しなさいと言うより「終わったら見せてね」と声かけいただくと提出率が上がりやすい傾向です。",
+     src:"根拠：宿題提出ログ（7/1〜7/14）"}
+  ],
+  "進路・受験": [
+    {q:"今の成績で公立トップ校を目指せますか？",
+     a:"現在の内申・模試のレンジでは、第一志望の合格ラインまであと少しという位置です。合否を約束はできませんが、桜通り校の同レンジの過去生では、中2の夏から英数を固めた場合に届いた例が多くあります。具体的な併願設計は先生との三者面談でご案内します。",
+     src:"根拠：模試偏差値推移／校内の進路データ"}
+  ],
+  "お月謝・手続き": [
+    {q:"来月から兄も入塾します。兄弟割引はありますか？",
+     a:"桜通り校では、ごきょうだい同時通塾で2人目の月謝が10%割引になります。中2・週2コースの場合、月2.4万円→2.16万円が目安です。手続きは受付でのお申し込みのみで、日割り調整も可能です。",
+     src:"根拠：料金規定（2026年度版）"}
+  ],
+  "欠席・振替": [
+    {q:"部活が忙しく授業に間に合わない日があります。振替できますか？",
+     a:"個別指導コースは、前日までのご連絡で無料振替ができます。さくらさんは水曜が部活と重なりがちなので、同じ内容を土曜の午前枠に振り替える生徒さんが多いです。次回から曜日を固定変更することもできます。",
+     src:"根拠：受講規約／振替枠カレンダー"}
+  ]
+};
+
+var TEACHER_ROWS = [
+  {who:"佐藤さん（さくら 保護者）", when:"10分前", msg:"「点が下がって心配」→ 今週で3回目の学習相談。欠席の話題もあり。", flag:true, badge:"risk", badgeText:"退塾サイン：早めの面談を"},
+  {who:"田村さん（ゆうと 保護者）", when:"1時間前", msg:"「兄弟割引はある？」→ AIが料金規定を案内し完結。", flag:false, badge:"auto", badgeText:"AIが一次対応で完了"},
+  {who:"小林さん（あおい 保護者）", when:"3時間前", msg:"「進路が不安」→ 三者面談を希望。7/22(火)で予約済み。", flag:true, badge:"risk", badgeText:"退塾サイン：面談予約あり"},
+  {who:"渡辺さん（はると 保護者）", when:"昨日", msg:"「振替できる？」→ AIが土曜枠を案内し完結。", flag:false, badge:"auto", badgeText:"AIが一次対応で完了"},
+  {who:"中川さん（みなと 保護者）", when:"昨日", msg:"「宿題が出ているか」→ 提出ログを共有し完結。", flag:false, badge:"auto", badgeText:"AIが一次対応で完了"}
+];
+
+// ===== 描画 =====
+var selectedCat = null;
+
+function renderCats() {
+  var el = document.getElementById('cats');
+  el.innerHTML = '';
+  CATS.forEach(function(c){
+    var b = document.createElement('button');
+    b.className = 'cat' + (c === selectedCat ? ' on' : '');
+    b.textContent = c;
+    b.onclick = function(){ pickCat(c); };
+    el.appendChild(b);
+  });
+}
+
+function pickCat(c) {
+  selectedCat = c;
+  renderCats();
+  var ql = document.getElementById('qlist');
+  ql.className = 'q-list';
+  ql.innerHTML = '';
+  document.getElementById('step1label').textContent = '2. 近い質問をえらんでください';
+  (QUESTIONS[c] || []).forEach(function(item){
+    var b = document.createElement('button');
+    b.className = 'q-btn';
+    b.textContent = item.q;
+    b.onclick = function(){ ask(item); };
+    ql.appendChild(b);
+  });
+}
+
+function ask(item) {
+  var card = document.getElementById('chatCard');
+  card.className = 'card';
+  var chat = document.getElementById('chat');
+  var me = document.createElement('div');
+  me.className = 'bubble me';
+  me.textContent = item.q;
+  chat.appendChild(me);
+
+  var typing = document.createElement('div');
+  typing.className = 'typing';
+  typing.textContent = 'AIが塾のデータを確認しています…';
+  chat.appendChild(typing);
+  card.scrollIntoView({behavior:'smooth', block:'end'});
+
+  setTimeout(function(){
+    chat.removeChild(typing);
+    var ai = document.createElement('div');
+    ai.className = 'bubble ai';
+    ai.innerHTML = escapeHtml(item.a) + '<span class="src">' + escapeHtml(item.src) + '</span>';
+    chat.appendChild(ai);
+    document.getElementById('escBox').className = 'escalate';
+    ai.scrollIntoView({behavior:'smooth', block:'end'});
+  }, 750);
+}
+
+function book() {
+  document.getElementById('escBox').className = 'escalate hide';
+  var box = document.getElementById('bookedBox');
+  box.className = 'booked';
+  box.innerHTML = '<b>先生への個別相談を受け付けました。</b><br>7/21(月) 17:30〜、桜通り校の山田先生からご連絡します。塾側には「学習相談・要フォロー」として共有されました。';
+  box.scrollIntoView({behavior:'smooth', block:'end'});
+}
+
+function resetParent() {
+  selectedCat = null;
+  document.getElementById('chat').innerHTML = '';
+  document.getElementById('chatCard').className = 'card hide';
+  document.getElementById('escBox').className = 'escalate hide';
+  document.getElementById('bookedBox').className = 'booked hide';
+  document.getElementById('qlist').className = 'q-list hide';
+  document.getElementById('step1label').textContent = '1. 気になっていることは？';
+  renderCats();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderTeacher() {
+  var el = document.getElementById('rows');
+  el.innerHTML = '';
+  TEACHER_ROWS.forEach(function(r){
+    var d = document.createElement('div');
+    d.className = 'row' + (r.flag ? ' flag' : '');
+    d.innerHTML =
+      '<div class="top"><span class="who">' + escapeHtml(r.who) + '</span>' +
+      '<span class="when">' + escapeHtml(r.when) + '</span></div>' +
+      '<div class="msg">' + escapeHtml(r.msg) + '</div>' +
+      '<span class="badge ' + r.badge + '">' + escapeHtml(r.badgeText) + '</span>';
+    el.appendChild(d);
+  });
+}
+
+function showView(v) {
+  var isP = v === 'parent';
+  document.getElementById('parentView').className = isP ? '' : 'hide';
+  document.getElementById('teacherView').className = isP ? 'hide' : '';
+  document.getElementById('tabParent').className = isP ? 'on' : '';
+  document.getElementById('tabTeacher').className = isP ? '' : 'on';
+  window.scrollTo({top:0});
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];
+  });
+}
+
+renderCats();
+renderTeacher();
+</script>
+</body>
+</html>

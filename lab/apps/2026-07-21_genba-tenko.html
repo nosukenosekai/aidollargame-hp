@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>現場かざして点呼｜建設現場の顔かざし入場点呼（デモ）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f4f0;
+    --blue: #2563eb;
+    --ink: #1a1a1a;
+    --sub: #6b7280;
+    --line: #e6e4de;
+    --ok: #16a34a;
+    --warn: #d97706;
+    --ng: #dc2626;
+    --card: #ffffff;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 0 16px 48px; }
+  .demoTag {
+    text-align: center;
+    font-size: 11px;
+    color: var(--sub);
+    padding: 8px 0 4px;
+    letter-spacing: .04em;
+  }
+  header { padding: 12px 0 6px; }
+  .brand { display: flex; align-items: baseline; gap: 8px; }
+  .brand h1 { font-size: 20px; letter-spacing: .02em; }
+  .brand span { font-size: 11px; color: var(--sub); }
+  .site {
+    margin-top: 10px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .site .name { font-weight: 700; font-size: 14px; }
+  .site .meta { font-size: 11px; color: var(--sub); margin-top: 2px; }
+  .site .count { text-align: right; }
+  .site .count b { font-size: 22px; color: var(--blue); }
+  .site .count small { font-size: 11px; color: var(--sub); display: block; }
+
+  .tabs { display: flex; gap: 6px; margin: 16px 0 12px; }
+  .tabs button {
+    flex: 1;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--sub);
+    padding: 9px 0;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .tabs button.on { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .card h2 { font-size: 14px; margin-bottom: 4px; }
+  .card p.lead { font-size: 12px; color: var(--sub); margin-bottom: 12px; }
+
+  .scanZone {
+    border: 2px dashed #c9d6f5;
+    border-radius: 14px;
+    background: #f0f5ff;
+    text-align: center;
+    padding: 22px 12px;
+    margin-bottom: 12px;
+  }
+  .scanZone .ring {
+    width: 84px; height: 84px; margin: 0 auto 10px;
+    border-radius: 50%;
+    border: 3px solid var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; color: var(--blue); font-weight: 700;
+    background: #fff;
+  }
+  .scanZone .hint { font-size: 12px; color: var(--sub); }
+
+  .worker {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px; border: 1px solid var(--line); border-radius: 12px;
+    margin-bottom: 8px; cursor: pointer; background: #fff;
+  }
+  .worker:active { background: #f7f9ff; }
+  .avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: #eef1f8; color: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; flex: 0 0 auto;
+  }
+  .worker .info { flex: 1; }
+  .worker .info b { font-size: 14px; }
+  .worker .info small { display: block; font-size: 11px; color: var(--sub); }
+  .worker .go { font-size: 12px; color: var(--blue); font-weight: 700; }
+  .badge-in { font-size: 11px; color: var(--ok); font-weight: 700; }
+
+  .checkRow {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 0; border-bottom: 1px solid var(--line);
+  }
+  .checkRow:last-child { border-bottom: none; }
+  .checkRow .box {
+    width: 24px; height: 24px; border-radius: 7px;
+    border: 2px solid #cbd2e0; flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; color: #fff; cursor: pointer;
+  }
+  .checkRow .box.on { background: var(--blue); border-color: var(--blue); position: relative; }
+  .checkRow .box.on::after {
+    content: ""; position: absolute; left: 7px; top: 3px;
+    width: 6px; height: 11px; border: solid #fff;
+    border-width: 0 2px 2px 0; transform: rotate(45deg);
+  }
+  .checkRow .t { flex: 1; font-size: 13px; }
+  .checkRow .t small { display: block; font-size: 11px; color: var(--sub); }
+
+  .alc { margin: 12px 0 4px; }
+  .alc label { font-size: 12px; color: var(--sub); }
+  .alc .val { font-size: 24px; font-weight: 700; margin: 2px 0; }
+  .alc input { width: 100%; }
+  .alc .judge { font-size: 12px; font-weight: 700; }
+
+  .btn {
+    display: block; width: 100%; border: none; cursor: pointer;
+    background: var(--blue); color: #fff;
+    padding: 13px; border-radius: 12px; font-size: 15px; font-weight: 700;
+    margin-top: 6px;
+  }
+  .btn:disabled { background: #b8c2d9; cursor: not-allowed; }
+  .btn.ghost { background: #fff; color: var(--blue); border: 1px solid var(--blue); }
+
+  .log { display: flex; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+  .log:last-child { border-bottom: none; }
+  .log .time { font-size: 12px; color: var(--sub); width: 44px; flex: 0 0 auto; padding-top: 1px; }
+  .log .who b { font-size: 13px; }
+  .log .who small { display: block; font-size: 11px; color: var(--sub); }
+  .pill { font-size: 10px; padding: 2px 7px; border-radius: 999px; font-weight: 700; }
+  .pill.ok { background: #e7f6ec; color: var(--ok); }
+  .pill.ng { background: #fdeaea; color: var(--ng); }
+  .status-line { margin-top: 4px; display: flex; gap: 6px; flex-wrap: wrap; }
+
+  .docRow { display: flex; justify-content: space-between; font-size: 12px; padding: 7px 0; border-bottom: 1px dashed var(--line); }
+  .docRow span:first-child { color: var(--sub); }
+  .note { font-size: 11px; color: var(--sub); margin-top: 10px; line-height: 1.7; }
+  .empty { text-align: center; color: var(--sub); font-size: 12px; padding: 24px 0; }
+  .toast {
+    position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%);
+    background: #1a1a1a; color: #fff; font-size: 13px;
+    padding: 10px 18px; border-radius: 999px; opacity: 0;
+    transition: opacity .25s; pointer-events: none; z-index: 9;
+  }
+  .toast.show { opacity: 1; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demoTag">デモ（サンプルデータ）</div>
+  <header>
+    <div class="brand"><h1>現場かざして点呼</h1><span>建設現場の入場点呼</span></div>
+  </header>
+
+  <div class="site">
+    <div>
+      <div class="name">桜川マンション新築工事</div>
+      <div class="meta" id="siteMeta">2026年7月21日（火）／元請：あおぞら建設（架空）</div>
+    </div>
+    <div class="count"><b id="inCount">0</b><small>／ 5名 入場</small></div>
+  </div>
+
+  <div class="tabs">
+    <button id="tab-scan" class="on" onclick="go('scan')">かざして入場</button>
+    <button id="tab-log" onclick="go('log')">入場一覧</button>
+    <button id="tab-doc" onclick="go('doc')">安全書類</button>
+  </div>
+
+  <!-- ===== かざして入場 ===== -->
+  <section id="view-scan">
+    <div id="scanStep">
+      <div class="scanZone">
+        <div class="ring">かざす</div>
+        <div class="hint">ゲートのタブレットに顔をかざすと本人を特定します<br>（このデモでは職人を選んでください）</div>
+      </div>
+      <div class="card">
+        <h2>本日まだ入場していない職人</h2>
+        <p class="lead">顔認証で本人確認。ICカードや手書き名簿は不要です。</p>
+        <div id="waitList"></div>
+      </div>
+    </div>
+
+    <div id="checkStep" class="hidden">
+      <div class="card">
+        <div class="worker" style="cursor:default;margin-bottom:14px">
+          <div class="avatar" id="cAvatar"></div>
+          <div class="info"><b id="cName"></b><small id="cRole"></small></div>
+          <div class="badge-in">本人確認OK</div>
+        </div>
+        <h2>入場前の安全確認</h2>
+        <p class="lead">忘れがちなKY（危険予知）を、かざした流れで必ず記録します。</p>
+        <div id="kyList"></div>
+
+        <div class="alc">
+          <label>アルコールチェック（呼気）</label>
+          <div class="val"><span id="alcVal">0.00</span> mg/L</div>
+          <input type="range" id="alcRange" min="0" max="30" value="0" oninput="onAlc()">
+          <div class="judge" id="alcJudge" style="color:var(--ok)">基準内（0.15mg/L未満）</div>
+        </div>
+
+        <button class="btn" id="doneBtn" onclick="enter()" disabled>入場を記録する</button>
+        <button class="btn ghost" onclick="backToList()" style="margin-top:8px">戻る</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 入場一覧 ===== -->
+  <section id="view-log" class="hidden">
+    <div class="card">
+      <h2>本日の入場記録</h2>
+      <p class="lead">入場時刻・KY確認・アルコール結果がその場で残ります。</p>
+      <div id="logList"><div class="empty">まだ入場記録がありません。<br>「かざして入場」から記録してください。</div></div>
+    </div>
+  </section>
+
+  <!-- ===== 安全書類 ===== -->
+  <section id="view-doc" class="hidden">
+    <div class="card">
+      <h2>自動生成される安全書類</h2>
+      <p class="lead">入場記録から、元請け提出用の下書きが自動でできます。</p>
+      <div class="docRow"><span>作業員名簿（本日入場）</span><b id="docCount">0 名</b></div>
+      <div class="docRow"><span>KY（危険予知）実施記録</span><b id="docKy">0 件</b></div>
+      <div class="docRow"><span>アルコールチェック記録</span><b id="docAlc">0 件</b></div>
+      <div class="docRow"><span>就労履歴（CCUS連携用）</span><b id="docCcus">0 名分</b></div>
+      <button class="btn" style="margin-top:14px" onclick="toast('下書きPDFを作成しました（デモ）')">下書きを書き出す</button>
+      <p class="note">
+        削減の目安：現場監督が手書き名簿・点呼記録・アルコール台帳の転記に費やす事務は月10時間以上。<br>
+        料金の目安：現場1つあたり月2万円（タブレット1台で運用）。
+      </p>
+    </div>
+    <div class="card">
+      <h2>なぜ今か</h2>
+      <p class="lead" style="margin:0">白ナンバー事業者のアルコールチェックが2023年12月から義務化。建設キャリアアップシステム（CCUS）の就労履歴も広がり、現場の「入場のたびの記録」を人の記憶に頼らず残す必要が高まっています。</p>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ===== サンプルデータ（すべて架空） =====
+  const WORKERS = [
+    { id: 1, name: "山口 健太", role: "鳶工／山口組（架空）", ini: "山" },
+    { id: 2, name: "佐々木 誠", role: "型枠大工／佐々木工業（架空）", ini: "佐" },
+    { id: 3, name: "田村 隆一", role: "鉄筋工／田村鉄筋（架空）", ini: "田" },
+    { id: 4, name: "中村 由美", role: "電気工／中村電設（架空）", ini: "中" },
+    { id: 5, name: "小林 一馬", role: "とび土工／こばやし興業（架空）", ini: "小" },
+  ];
+  const KY_ITEMS = [
+    { t: "高所作業の安全帯フック2丁掛け", s: "3階スラブ端部で作業" },
+    { t: "重機（バックホウ）の旋回範囲に立入らない", s: "北側で掘削中" },
+    { t: "熱中症対策（水分・塩分・休憩）", s: "本日の予想最高33度" },
+  ];
+
+  const clock = ["08:02","08:05","08:11","08:18","08:24","08:31","08:37","08:44"];
+  let entered = [];   // {worker, time, ky, alc}
+  let current = null;
+  let kyState = [];
+
+  function go(v){
+    ["scan","log","doc"].forEach(function(k){
+      document.getElementById("view-"+k).classList.toggle("hidden", k!==v);
+      document.getElementById("tab-"+k).classList.toggle("on", k===v);
+    });
+    if(v==="log") renderLog();
+    if(v==="doc") renderDoc();
+    if(v==="scan"){ backToList(); }
+  }
+
+  function renderWait(){
+    const done = entered.map(function(e){return e.worker.id;});
+    const wait = WORKERS.filter(function(w){return done.indexOf(w.id)<0;});
+    const box = document.getElementById("waitList");
+    if(wait.length===0){ box.innerHTML='<div class="empty">全員の入場が完了しました。</div>'; return; }
+    box.innerHTML = wait.map(function(w){
+      return '<div class="worker" onclick="pick('+w.id+')">'+
+        '<div class="avatar">'+w.ini+'</div>'+
+        '<div class="info"><b>'+w.name+'</b><small>'+w.role+'</small></div>'+
+        '<div class="go">かざす ›</div></div>';
+    }).join("");
+  }
+
+  function pick(id){
+    current = WORKERS.find(function(w){return w.id===id;});
+    kyState = KY_ITEMS.map(function(){return false;});
+    document.getElementById("cAvatar").textContent = current.ini;
+    document.getElementById("cName").textContent = current.name;
+    document.getElementById("cRole").textContent = current.role;
+    document.getElementById("alcRange").value = 0;
+    onAlc();
+    renderKy();
+    document.getElementById("scanStep").classList.add("hidden");
+    document.getElementById("checkStep").classList.remove("hidden");
+    updateDone();
+  }
+
+  function renderKy(){
+    document.getElementById("kyList").innerHTML = KY_ITEMS.map(function(k,i){
+      return '<div class="checkRow">'+
+        '<div class="box'+(kyState[i]?' on':'')+'" onclick="toggleKy('+i+')"></div>'+
+        '<div class="t">'+k.t+'<small>'+k.s+'</small></div></div>';
+    }).join("");
+  }
+  function toggleKy(i){ kyState[i]=!kyState[i]; renderKy(); updateDone(); }
+
+  function onAlc(){
+    const v = document.getElementById("alcRange").value/100;
+    document.getElementById("alcVal").textContent = v.toFixed(2);
+    const j = document.getElementById("alcJudge");
+    if(v>=0.15){ j.textContent="基準超過（0.15mg/L以上）— 入場不可"; j.style.color="var(--ng)"; }
+    else { j.textContent="基準内（0.15mg/L未満）"; j.style.color="var(--ok)"; }
+    updateDone();
+  }
+
+  function updateDone(){
+    const allKy = kyState.every(function(x){return x;});
+    const alcOk = (document.getElementById("alcRange").value/100) < 0.15;
+    document.getElementById("doneBtn").disabled = !(allKy && alcOk);
+    document.getElementById("doneBtn").textContent = allKy ? "入場を記録する" : "KY全項目の確認が必要です";
+  }
+
+  function enter(){
+    const alc = (document.getElementById("alcRange").value/100).toFixed(2);
+    entered.push({
+      worker: current,
+      time: clock[entered.length] || "09:00",
+      ky: true,
+      alc: alc
+    });
+    document.getElementById("inCount").textContent = entered.length;
+    toast(current.name+" さんの入場を記録しました");
+    backToList();
+  }
+
+  function backToList(){
+    current = null;
+    document.getElementById("checkStep").classList.add("hidden");
+    document.getElementById("scanStep").classList.remove("hidden");
+    renderWait();
+  }
+
+  function renderLog(){
+    const box = document.getElementById("logList");
+    if(entered.length===0){ box.innerHTML='<div class="empty">まだ入場記録がありません。<br>「かざして入場」から記録してください。</div>'; return; }
+    box.innerHTML = entered.map(function(e){
+      return '<div class="log">'+
+        '<div class="time">'+e.time+'</div>'+
+        '<div class="who" style="flex:1">'+
+          '<b>'+e.worker.name+'</b><small>'+e.worker.role+'</small>'+
+          '<div class="status-line">'+
+            '<span class="pill ok">KY確認済</span>'+
+            '<span class="pill ok">酒気なし '+e.alc+'</span>'+
+          '</div>'+
+        '</div></div>';
+    }).join("");
+  }
+
+  function renderDoc(){
+    const n = entered.length;
+    document.getElementById("docCount").textContent = n+" 名";
+    document.getElementById("docKy").textContent = n+" 件";
+    document.getElementById("docAlc").textContent = n+" 件";
+    document.getElementById("docCcus").textContent = n+" 名分";
+  }
+
+  let toastT;
+  function toast(m){
+    const t=document.getElementById("toast");
+    t.textContent=m; t.classList.add("show");
+    clearTimeout(toastT);
+    toastT=setTimeout(function(){t.classList.remove("show");},1900);
+  }
+
+  renderWait();
+</script>
+</body>
+</html>

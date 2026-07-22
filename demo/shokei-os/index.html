@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>承継OS | 次の人でも回る会社に変える</title>
+<style>
+:root{
+  --ai:#16324F; --shu:#C0362C; --sumi:#1A1A1A; --washi:#FFFFFF;
+  --pane:#F6F7F9; --line:#E2E5E9; --muted:#6B7280;
+  --chart:#2B6FB3; --chart-soft:#D7E5F2;
+  --ok:#2E7D32; --warn:#B26A00; --bad:#C0362C; --gray:#9CA3AF;
+  --serif:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+  --sans:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--sans);color:var(--sumi);background:var(--washi);font-size:14px;line-height:1.7}
+h1,h2,h3{font-family:var(--serif);font-weight:600}
+button{font-family:var(--sans);cursor:pointer}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* ---- ヘッダー ---- */
+header{border-bottom:1px solid var(--line);background:var(--washi);position:sticky;top:0;z-index:10}
+.hd{display:flex;align-items:center;gap:16px;padding:14px 0;flex-wrap:wrap}
+.logo{font-family:var(--serif);font-size:22px;color:var(--ai);letter-spacing:.1em;font-weight:600}
+.logo small{font-size:11px;color:var(--muted);letter-spacing:0;margin-left:10px;font-family:var(--sans)}
+.badge-demo{background:var(--shu);color:#fff;font-size:11px;padding:3px 10px;border-radius:3px;letter-spacing:.05em}
+.hd .sp{flex:1}
+.co-sel{display:flex;gap:6px}
+.co-sel button{border:1px solid var(--line);background:var(--washi);border-radius:4px;padding:5px 12px;font-size:12px;color:var(--muted)}
+.co-sel button.on{background:var(--ai);color:#fff;border-color:var(--ai)}
+.co-sel button:disabled{opacity:.45;cursor:not-allowed}
+nav{display:flex;gap:2px;overflow-x:auto}
+nav button{border:none;background:none;padding:10px 16px;font-size:13px;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+nav button.on{color:var(--ai);border-bottom-color:var(--shu);font-weight:600}
+
+main{padding:26px 0 60px}
+section.tab{display:none}
+section.tab.on{display:block}
+.sec-title{font-size:19px;color:var(--ai);margin:26px 0 4px}
+.sec-title:first-child{margin-top:0}
+.sec-sub{color:var(--muted);font-size:12px;margin-bottom:12px}
+
+/* ---- カード・グリッド ---- */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:20px}
+.card{background:var(--pane);border:1px solid var(--line);border-radius:8px;padding:16px 18px}
+.card .k{font-size:12px;color:var(--muted)}
+.card .v{font-family:var(--serif);font-size:34px;color:var(--ai);line-height:1.2;margin-top:2px}
+.card .v small{font-size:15px}
+.card .d{font-size:12px;color:var(--muted);margin-top:4px}
+.card.main-kpi{border-left:4px solid var(--shu)}
+.progress{height:8px;background:#E8ECF0;border-radius:4px;margin-top:10px;position:relative;overflow:hidden}
+.progress .fill{height:100%;background:var(--chart);border-radius:4px}
+.progress .goal{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--shu)}
+
+.panel{background:var(--washi);border:1px solid var(--line);border-radius:8px;padding:18px;margin-bottom:20px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:820px){.two-col{grid-template-columns:1fr}}
+
+/* ---- 表 ---- */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-weight:600;text-align:left;color:var(--muted);font-size:12px;border-bottom:1.5px solid var(--line);padding:7px 10px;white-space:nowrap}
+td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:top}
+tr:last-child td{border-bottom:none}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.tbl-scroll{overflow-x:auto}
+
+/* ---- チップ・信号 ---- */
+.chip{display:inline-block;font-size:11px;padding:2px 9px;border-radius:10px;white-space:nowrap}
+.chip.ok{background:#E5F1E6;color:var(--ok)}
+.chip.blue{background:var(--chart-soft);color:#1d4e7e}
+.chip.warn{background:#F6EBD9;color:var(--warn)}
+.chip.bad{background:#F7E2E0;color:var(--bad)}
+.chip.gray{background:#EDEEF0;color:var(--muted)}
+.sig{display:inline-flex;align-items:center;gap:5px;font-size:12px;white-space:nowrap}
+.sig i{width:9px;height:9px;border-radius:50%;display:inline-block}
+.sig.g i{background:var(--ok)}.sig.y i{background:#D89000}.sig.r i{background:var(--bad)}.sig.n i{background:var(--gray)}
+
+/* ---- 5指標バー ---- */
+.ind-row{display:grid;grid-template-columns:150px 1fr 120px;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.ind-row:last-child{border-bottom:none}
+.ind-name{font-size:13px}
+.ind-name small{display:block;color:var(--muted);font-size:11px}
+.ind-bar{height:14px;background:#E8ECF0;border-radius:4px;position:relative}
+.ind-bar .now{position:absolute;left:0;top:0;bottom:0;background:var(--chart);border-radius:4px 4px 4px 4px}
+.ind-bar .start{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--sumi);opacity:.55}
+.ind-val{font-size:12px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.ind-val b{color:var(--sumi);font-size:14px}
+
+/* ---- チャート ---- */
+.chart-box{position:relative}
+.chart-box svg{display:block;width:100%;height:auto}
+.tooltip{position:absolute;pointer-events:none;background:var(--sumi);color:#fff;font-size:11px;padding:5px 9px;border-radius:4px;opacity:0;transition:opacity .1s;white-space:nowrap;z-index:5}
+
+/* ---- フォーム ---- */
+form .frow{display:grid;grid-template-columns:130px 1fr;gap:10px;align-items:center;margin-bottom:10px}
+form label{font-size:12px;color:var(--muted)}
+form input[type=text],form select,form textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:5px;font-size:13px;font-family:var(--sans)}
+form textarea{resize:vertical;min-height:40px}
+.radio-line{display:flex;gap:18px;font-size:13px}
+.radio-line label{color:var(--sumi);display:flex;align-items:center;gap:5px;cursor:pointer}
+.btn{background:var(--ai);color:#fff;border:none;border-radius:5px;padding:9px 22px;font-size:13px}
+.btn.ghost{background:var(--washi);color:var(--ai);border:1px solid var(--ai)}
+.btn.small{padding:5px 12px;font-size:12px}
+.form-note{font-size:11px;color:var(--muted);margin-top:8px}
+.flash{font-size:12px;color:var(--ok);min-height:1.2em;margin-top:6px}
+
+/* ---- 赤信号 ---- */
+.alert-none{background:#E5F1E6;border:1px solid #CBE3CD;color:var(--ok);border-radius:6px;padding:12px 16px;font-size:13px}
+.alert-red{background:#F7E2E0;border:1px solid #EDC7C4;color:var(--bad);border-radius:6px;padding:12px 16px;font-size:13px;margin-bottom:8px}
+
+/* ---- 評価書 ---- */
+.report{background:var(--washi);border:1px solid var(--line);border-radius:8px;padding:36px 40px;position:relative;overflow:hidden;max-width:860px}
+.report .wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.report .wm span{font-family:var(--serif);font-size:60px;color:rgba(192,54,44,.08);transform:rotate(-24deg);white-space:nowrap;letter-spacing:.2em}
+.report h2{font-size:22px;color:var(--ai);text-align:center;letter-spacing:.15em}
+.report .rep-sub{text-align:center;color:var(--muted);font-size:12px;margin:6px 0 22px}
+.report h3{font-size:15px;color:var(--ai);margin:22px 0 8px;border-left:3px solid var(--shu);padding-left:10px}
+.report .kpi-line{background:var(--pane);border:1px solid var(--line);border-radius:6px;padding:12px 16px;font-size:13px;margin:14px 0}
+.report .kpi-line b{font-family:var(--serif);font-size:20px;color:var(--ai)}
+.report ol{padding-left:20px;font-size:13px}
+.report ol li{margin-bottom:5px}
+.rep-foot{font-size:11px;color:var(--muted);margin-top:20px;border-top:1px solid var(--line);padding-top:10px}
+
+footer{border-top:1px solid var(--line);padding:16px 0;color:var(--muted);font-size:11px}
+
+@media print{
+  header,nav,footer,.no-print{display:none !important}
+  main{padding:0}
+  section.tab{display:none !important}
+  section#tab-report{display:block !important}
+  .report{border:none;padding:0}
+  body{font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="hd">
+      <div class="logo">承継OS<small>次の人でも回る会社に変える</small></div>
+      <span class="badge-demo">デモ・全データ架空</span>
+      <div class="sp"></div>
+      <div class="co-sel" id="co-sel"></div>
+      <a href="./kaisha.html" class="btn ghost small no-print" style="text-decoration:none;display:inline-block">企業側画面へ</a>
+      <button class="btn ghost small no-print" onclick="demoReset()">デモを初期化</button>
+    </div>
+    <nav id="nav"></nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ カルテ ============ -->
+  <section class="tab on" id="tab-karte">
+    <div class="cards">
+      <div class="card main-kpi">
+        <div class="k">主KPI 非属人意思決定率(社長に聞かず社員が決めた判断の比率)</div>
+        <div class="v" id="kpi-now">--<small>%</small></div>
+        <div class="progress"><div class="fill" id="kpi-fill" style="width:0%"></div><div class="goal" id="kpi-goal"></div></div>
+        <div class="d" id="kpi-rest">合格ライン40%まで --pt</div>
+      </div>
+      <div class="card">
+        <div class="k">総合承継スコア(5指標の重みづけ合計)</div>
+        <div class="v" id="score-now">--<small>/100</small></div>
+        <div class="d" id="score-diff"></div>
+      </div>
+      <div class="card">
+        <div class="k">判断投入ログ(累計)</div>
+        <div class="v" id="input-now">--<small>件</small></div>
+        <div class="d" id="input-trend"></div>
+      </div>
+      <div class="card">
+        <div class="k">実証の進み</div>
+        <div class="v" id="week-now">--<small>/12週</small></div>
+        <div class="d" id="week-range"></div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <h3 class="sec-title" style="font-size:15px">主KPIの推移(週次)</h3>
+        <div class="sec-sub">合否はこの1本だけで判定。朱線=合格ライン40%(第12週)</div>
+        <div class="chart-box" id="kpi-chart"></div>
+      </div>
+      <div class="panel">
+        <h3 class="sec-title" style="font-size:15px">判断投入ログ件数(累計)</h3>
+        <div class="sec-sub">現場に刺さっているかの第2条件。週次で増え続けているかを見る</div>
+        <div class="chart-box" id="input-chart"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h3 class="sec-title" style="font-size:15px">5指標の内訳(承継カルテ)</h3>
+      <div class="sec-sub">縦線=開始時(第0週)。合否には使わず、主KPIの動きの「なぜ」を読む材料。数字はシステムログの実測のみ(主観アンケート不使用)</div>
+      <div id="ind-list"></div>
+    </div>
+
+    <div class="panel">
+      <h3 class="sec-title" style="font-size:15px">今週の移譲メモ</h3>
+      <div id="memo-list" style="font-size:13px"></div>
+    </div>
+  </section>
+
+  <!-- ============ 判断ログ ============ -->
+  <section class="tab" id="tab-log">
+    <h2 class="sec-title">判断投入ログ</h2>
+    <div class="sec-sub">社員が「過去事例・手順・数字」を引いて自分で決めた判断を1件ずつ記録する台帳。主KPIはこのログから機械的に計算(手で良さそうな値を作らない)</div>
+
+    <div class="two-col">
+      <div class="panel">
+        <h3 style="font-size:15px;margin-bottom:12px">判断を記録する</h3>
+        <form id="log-form" onsubmit="return submitLog(event)">
+          <div class="frow"><label>領域</label>
+            <select id="f-area"><option>製造</option><option>営業</option><option>購買</option><option>品質</option><option>経理</option><option>その他</option></select>
+          </div>
+          <div class="frow"><label>判断の内容</label><input type="text" id="f-decision" placeholder="例: 急ぎ注文の納期を2日短縮で回答" required></div>
+          <div class="frow"><label>決めた人(役職)</label><input type="text" id="f-who" placeholder="例: 製造リーダー" required></div>
+          <div class="frow"><label>引いた材料</label><input type="text" id="f-materials" placeholder="例: 過去事例12件・納期基準手順書"></div>
+          <div class="frow"><label>社長に聞いたか</label>
+            <div class="radio-line">
+              <label><input type="radio" name="asked" value="no" checked>聞かずに決めた</label>
+              <label><input type="radio" name="asked" value="yes">聞いて決めた</label>
+            </div>
+          </div>
+          <button class="btn" type="submit">記録する</button>
+          <div class="form-note">「聞いて決めた」も正直に記録する。分母を都合よく絞らないことが銀行に信用される条件。</div>
+          <div class="flash" id="log-flash"></div>
+        </form>
+      </div>
+      <div class="panel">
+        <h3 style="font-size:15px;margin-bottom:6px">今週の集計(自動)</h3>
+        <div id="log-week-stats" style="font-size:13px"></div>
+      </div>
+    </div>
+
+    <div class="panel tbl-scroll">
+      <h3 style="font-size:15px;margin-bottom:10px">記録(新しい順)</h3>
+      <table id="log-table">
+        <thead><tr><th>日時</th><th>領域</th><th>判断の内容</th><th>決めた人</th><th>引いた材料</th><th>社長</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 手順書 ============ -->
+  <section class="tab" id="tab-sop">
+    <h2 class="sec-title">手順書・ナレッジ台帳</h2>
+    <div class="sec-sub">社長の頭の中を、手順書と判断基準に移した記録。「移譲済」が増えるほど業務標準化率・権限移譲率が上がる。金融取引・与信・採用解雇・値決め・重大クレームは除外領域(最終判断は人。AIは材料提示まで)</div>
+
+    <div class="panel tbl-scroll">
+      <table id="sop-table">
+        <thead><tr><th>業務</th><th>状態</th><th>いまの担当</th><th class="num">参照回数</th><th>メモ</th><th class="no-print"></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="panel" style="max-width:560px">
+      <h3 style="font-size:15px;margin-bottom:12px">業務を追加する</h3>
+      <form onsubmit="return submitSop(event)">
+        <div class="frow"><label>業務名</label><input type="text" id="s-name" placeholder="例: 検査成績書の発行" required></div>
+        <div class="frow"><label>状態</label>
+          <select id="s-status"><option>社長のみ</option><option>手順書のみ</option><option>移譲中</option><option>移譲済</option></select>
+        </div>
+        <div class="frow"><label>いまの担当</label><input type="text" id="s-owner" placeholder="例: 品質担当"></div>
+        <div class="frow"><label>メモ</label><input type="text" id="s-note"></div>
+        <button class="btn" type="submit">追加する</button>
+        <div class="flash" id="sop-flash"></div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ 週次記録 ============ -->
+  <section class="tab" id="tab-week">
+    <h2 class="sec-title">週次記録(第0〜12週)</h2>
+    <div class="sec-sub">1社1枚の台帳。第12週にこの表の実測値だけで機械的に合否を読む(後出しで基準を動かさない)。定義の正は「指標別_抽出クエリ対応表」</div>
+    <div class="panel tbl-scroll">
+      <table id="week-table">
+        <thead><tr><th>週</th><th class="num">主KPI</th><th class="num">全判断</th><th class="num">社長に聞かず</th><th class="num">投入ログ累計</th><th>週メモ</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <h3 style="font-size:15px;margin-bottom:10px">第12週の合否欄(機械判定・現時点の見込み)</h3>
+      <table id="pass-table">
+        <thead><tr><th>判定</th><th>条件</th><th>現時点</th><th>結果</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 5社ボード ============ -->
+  <section class="tab" id="tab-board">
+    <h2 class="sec-title">5社PoC 観測ボード(運用側)</h2>
+    <div class="sec-sub">代表が毎週見るのは「今週の赤信号」だけ。緑は読まなくてよい(例外管理で工数ゼロ)。閾値は第6週中間レビューで1回だけ見直し可</div>
+
+    <div class="panel">
+      <h3 style="font-size:15px;margin-bottom:10px">今週の赤信号</h3>
+      <div id="red-alerts"></div>
+    </div>
+
+    <div class="panel tbl-scroll">
+      <h3 style="font-size:15px;margin-bottom:10px">主KPIボード(合否に直結)</h3>
+      <table id="board-kpi">
+        <thead><tr><th>社</th><th>状態</th><th class="num">起点(第0週)</th><th class="num">現在値</th><th class="num">40%まで</th><th>向き</th><th>信号</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="panel tbl-scroll">
+      <h3 style="font-size:15px;margin-bottom:10px">インプット健全性(判断投入ログが増え続けているか)</h3>
+      <table id="board-input">
+        <thead><tr><th>社</th><th class="num">第1週</th><th class="num">最新週</th><th>単調増加</th><th class="num">直近4週の減少</th><th>信号</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="panel tbl-scroll">
+      <h3 style="font-size:15px;margin-bottom:10px">失敗線ウォッチ(先に決めた撤退条件・走りながら動かさない)</h3>
+      <table>
+        <thead><tr><th>失敗線</th><th>条件</th><th>現況</th></tr></thead>
+        <tbody id="fail-lines"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 評価書 ============ -->
+  <section class="tab" id="tab-report">
+    <div class="no-print" style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+      <h2 class="sec-title" style="margin:0">事業評価書(銀行提出用の出口)</h2>
+      <button class="btn small" onclick="window.print()">印刷・PDF保存</button>
+    </div>
+    <div class="sec-sub no-print">個人保証の解除・事業性評価融資の判断材料になる1枚。デモのため全データ架空・[要裏取り]タグは意図的に残している</div>
+    <div class="report" id="report-body"></div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    承継OS デモUI v0.1(静的デモ版・データはこのブラウザ内のみ保存) | 全データは架空 | 合否は主KPI(非属人意思決定率40%)1本で判定 | 採点と運用代行の報酬は契約分離(中立性) | 株式会社aidollargame
+  </div>
+</footer>
+
+<div class="tooltip" id="tt"></div>
+
+<script>
+'use strict';
+function seedState() {
+  return {
+    meta: {
+      demo: true,
+      version: 'v0.1',
+      note: 'このアプリ内の社名・数値はすべて架空のデモデータ。実在の会社・実測値ではない。',
+      kpiPassLine: 40, // 主KPI合格ライン(%) = 非属人意思決定率(実証計画§2)
+      weights: { 権限移譲率: 30, 業務標準化率: 25, 非属人意思決定率: 20, 財務即時性: 15, 顧客直結度: 10 }
+    },
+    companies: {
+      A: {
+        id: 'A',
+        status: '実証中(デモ)',
+        label: '金属加工の町工場(架空デモ)',
+        industry: '金属加工・静岡(架空)',
+        houjinNo: '0000000000000(デモ)',
+        contractDate: '2026-05-22',
+        fee: '実証フィー 140万(試算・架空)',
+        week0: '2026-05-25',
+        dataSources: { '会計API': true, 'ワークフロー': true, 'ナレッジAI': true, '受発注ログ': false },
+        // 週次台帳: total=全判断件数 / nonOwner=社長に聞かず社員が決めた件数 / input=判断投入ログ件数
+        // 主KPI 非属人意思決定率 = nonOwner / total
+        weeks: [
+          { w: 0, total: 46, nonOwner: 1, input: 0, memo: '契約・過去データ受領・起点計測' },
+          { w: 1, total: 48, nonOwner: 3, input: 18, memo: '意思決定ルールを過去1年の受発注から抽出' },
+          { w: 2, total: 51, nonOwner: 5, input: 31, memo: '初期セット投入(納期回答・見積の判断基準)' },
+          { w: 3, total: 47, nonOwner: 6, input: 44, memo: '起点計測を確定・判断ログの書き方を現場に定着' },
+          { w: 4, total: 50, nonOwner: 8, input: 58, memo: '判断投入ログの現場運用を開始' },
+          { w: 5, total: 49, nonOwner: 10, input: 73, memo: '納期回答を製造リーダーへ移譲' },
+          { w: 6, total: 52, nonOwner: 13, input: 91, memo: '中間レビュー・見積作成の移譲を開始' },
+          { w: 7, total: 50, nonOwner: 14, input: 108, memo: '定型見積を事務リーダーへ移譲' },
+          { w: 8, total: 30, nonOwner: 10, input: 124, memo: '(今週・記入中)' }
+        ],
+        totalWeeks: 12,
+        // 5指標(採点の中身)。start=第0週 now=最新。単位%
+        indicators: {
+          '権限移譲率':      { start: 8,  now: 38, dir: '↑', source: '承認ワークフロー・決裁ログ' },
+          '業務標準化率':    { start: 15, now: 46, dir: '↑', source: 'ナレッジAIの登録・参照ログ' },
+          '非属人意思決定率': { start: 2,  now: null, dir: '↑', source: '判断投入ログ(このアプリの実測)' }, // now=週次台帳から自動算出
+          '財務即時性':      { start: 40, now: 60, dir: '→', source: '会計API連携・現預金の可視化頻度' },
+          '顧客直結度':      { start: 20, now: 25, dir: '→', source: '主要顧客の窓口が社長個人かの分布' }
+        },
+        // 手順書・ナレッジ台帳(業務標準化の中身)
+        sops: [
+          { name: '納期回答',           status: '移譲済',   owner: '製造リーダー', refs: 142, note: '過去事例と納期基準で即答できる状態' },
+          { name: '定型見積の作成',      status: '移譲中',   owner: '事務リーダー', refs: 96,  note: '非定型(特急・特殊材)は社長確認が残る' },
+          { name: '発注・仕入(定型)',    status: '移譲済',   owner: '資材担当',     refs: 88,  note: '仕入基準・過去単価一覧を整備済' },
+          { name: '機械の段取り替え',    status: '手順書のみ', owner: '製造班',     refs: 61,  note: '動画つき手順書あり・移譲はこれから' },
+          { name: '請求・入金確認',      status: '手順書のみ', owner: '経理担当',   refs: 54,  note: '月次の締め手順を文書化済' },
+          { name: 'クレーム一次対応',    status: '移譲中',   owner: '製造リーダー', refs: 23,  note: '重大クレームは除外領域(最終判断は人)' },
+          { name: '外注先の選定',        status: '社長のみ', owner: '(社長)',      refs: 0,   note: '判断基準の言語化から着手予定' },
+          { name: '価格改定・値決め',    status: '除外領域', owner: '(社長)',      refs: 0,   note: '最終判断は人。AIは材料提示まで' },
+          { name: '採用・解雇',          status: '除外領域', owner: '(社長)',      refs: 0,   note: '最終判断は人。AIは材料提示まで' },
+          { name: '資金繰り・金融取引',  status: '除外領域', owner: '(社長)',      refs: 0,   note: '最終判断は人。AIは材料提示まで' }
+        ],
+        // 判断投入ログ(新しい順)。askedOwner=社長に聞いたか
+        logs: [
+          { ts: '2026-07-21 11:05', week: 8, area: '製造',  decision: '急ぎ注文(50個)の納期を2日短縮で回答', who: '製造リーダー', materials: '過去事例12件・納期基準手順書', askedOwner: false },
+          { ts: '2026-07-21 09:40', week: 8, area: '購買',  decision: 'ステンレス材を代替仕入先へ発注',       who: '資材担当',     materials: '仕入基準・過去単価一覧',       askedOwner: false },
+          { ts: '2026-07-20 16:20', week: 8, area: '営業',  decision: '新規客の与信判断を保留し社長へ相談',   who: '事務リーダー', materials: '与信基準(整備中)',             askedOwner: true },
+          { ts: '2026-07-20 14:00', week: 8, area: '営業',  decision: 'リピート品の見積を過去単価で提出',     who: '事務リーダー', materials: '定型見積手順書・受注履歴',     askedOwner: false },
+          { ts: '2026-07-20 10:30', week: 8, area: '製造',  decision: '段取り順を入れ替え特急品を先行',       who: '製造班',       materials: '段取り替え手順書・納期一覧',   askedOwner: false },
+          { ts: '2026-07-19 15:10', week: 8, area: '品質',  decision: '寸法不良2個の再加工を即決',           who: '製造リーダー', materials: 'クレーム一次対応手順・検査基準', askedOwner: false },
+          { ts: '2026-07-18 17:45', week: 8, area: '購買',  decision: '治具の追加購入を社長に確認して発注',   who: '資材担当',     materials: '購買基準(10万以上は要確認)',   askedOwner: true },
+          { ts: '2026-07-18 11:00', week: 8, area: '経理',  decision: '月次試算表の締めを手順書どおり完了',   who: '経理担当',     materials: '月次締め手順書・会計API',      askedOwner: false }
+        ]
+      },
+      B: { id: 'B', status: '未契約(枠)' },
+      C: { id: 'C', status: '未契約(枠)' },
+      D: { id: 'D', status: '未契約(枠)' },
+      E: { id: 'E', status: '未契約(枠)' }
+    }
+  };
+}
+const DEMO_KEY='shokei_demo_state_v2_unyo';
+function loadState(){ try{ const s=JSON.parse(localStorage.getItem(DEMO_KEY)); if(s&&s.companies)return s; }catch(e){} const s=seedState(); try{localStorage.setItem(DEMO_KEY,JSON.stringify(s));}catch(e){} return s; }
+function saveState(){ try{ localStorage.setItem(DEMO_KEY, JSON.stringify(ST)); }catch(e){} }
+function demoNowJst(){ const d=new Date(Date.now()+9*3600*1000); return d.toISOString().slice(0,16).replace('T',' '); }
+function addLog(b){ const co=ST.companies.A; const cur=co.weeks[co.weeks.length-1];
+  const entry={ts:demoNowJst(),week:cur.w,area:String(b.area||'その他').slice(0,20),decision:String(b.decision).slice(0,200),who:String(b.who).slice(0,40),materials:String(b.materials||'(未記入)').slice(0,120),askedOwner:!!b.askedOwner};
+  co.logs.unshift(entry); cur.total+=1; if(!entry.askedOwner)cur.nonOwner+=1; cur.input+=1; saveState(); }
+function sopAdd(b){ ST.companies.A.sops.push({name:String(b.name).slice(0,60),status:String(b.status||'手順書のみ').slice(0,20),owner:String(b.owner||'(未定)').slice(0,40),refs:0,note:String(b.note||'').slice(0,120)}); saveState(); }
+function resetState(){ ST=seedState(); saveState(); }
+</script>
+<script>
+'use strict';
+let ST = null;
+
+const TABS = [
+  ['karte','会社カルテ'],['log','判断ログ'],['sop','手順書・ナレッジ'],
+  ['week','週次記録'],['board','5社ボード'],['report','評価書']
+];
+
+// ---------- 起動(静的デモ: この画面内で完結・データはこのブラウザにのみ保存) ----------
+function boot(){ ST = loadState(); buildNav(); buildCoSel(); renderAll(); }
+boot();
+
+function buildNav(){
+  const nav = document.getElementById('nav'); nav.innerHTML='';
+  TABS.forEach(([id,label],i)=>{
+    const b=document.createElement('button'); b.textContent=label;
+    if(i===0)b.classList.add('on');
+    b.onclick=()=>{ document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+      document.querySelectorAll('section.tab').forEach(s=>s.classList.remove('on'));
+      document.getElementById('tab-'+id).classList.add('on'); };
+    nav.appendChild(b);
+  });
+}
+function buildCoSel(){
+  const box=document.getElementById('co-sel'); box.innerHTML='';
+  ['A','B','C','D','E'].forEach(id=>{
+    const co=ST.companies[id];
+    const b=document.createElement('button'); b.textContent=id+'社';
+    if(id==='A'){ b.classList.add('on'); b.title=co.label; }
+    else { b.disabled=true; b.title='未契約(枠)'; }
+    box.appendChild(b);
+  });
+}
+
+// ---------- 計算 ----------
+const pct = w => w.total ? Math.round(w.nonOwner/w.total*100) : 0;
+function co(){ return ST.companies.A; }
+function curWeek(){ const ws=co().weeks; return ws[ws.length-1]; }
+function kpiNow(){ return pct(curWeek()); }
+function kpiStart(){ return pct(co().weeks[0]); }
+function scoreOf(useStart){
+  const w=ST.meta.weights, ind=co().indicators; let s=0;
+  for(const k in w){
+    let v = useStart ? ind[k].start : (k==='非属人意思決定率' ? kpiNow() : ind[k].now);
+    s += w[k]*v/100;
+  }
+  return Math.round(s);
+}
+function inputMono(){
+  const ws=co().weeks; let dec=0, mono=true;
+  for(let i=2;i<ws.length;i++){ if(ws[i].input<ws[i-1].input){ mono=false; if(i>=ws.length-4)dec++; } }
+  return {mono,dec};
+}
+function kpiSignal(){
+  const ws=co().weeks, cur=kpiNow(), st=kpiStart(), n=ws.length-1;
+  const pace=n?(cur-st)/n:0;
+  const rest=(co().totalWeeks-n)||1;
+  const needed=(ST.meta.kpiPassLine-cur)/rest;
+  if(cur>=ST.meta.kpiPassLine||pace>=needed) return ['g','緑(到達ペース)'];
+  if(pct(ws[n])>pct(ws[n-1])) return ['y','黄(ペース不足)'];
+  return ['r','赤(停滞・低下)'];
+}
+
+// ---------- 描画(全体) ----------
+function renderAll(){
+  renderKarte(); renderLog(); renderSop(); renderWeek(); renderBoard(); renderReport();
+}
+
+function renderKarte(){
+  const c=co(), cur=curWeek(), now=kpiNow(), start=kpiStart(), goal=ST.meta.kpiPassLine;
+  document.getElementById('kpi-now').innerHTML = now+'<small>%</small>';
+  document.getElementById('kpi-fill').style.width = Math.min(100,now/50*100)+'%';
+  document.getElementById('kpi-goal').style.left = (goal/50*100)+'%';
+  document.getElementById('kpi-rest').textContent =
+    now>=goal ? '合格ライン40%を達成(第12週まで維持)' : '合格ライン40%まで あと'+(goal-now)+'pt(起点'+start+'% から +'+(now-start)+'pt)';
+  document.getElementById('score-now').innerHTML = scoreOf(false)+'<small>/100</small>';
+  document.getElementById('score-diff').textContent = '開始時 '+scoreOf(true)+'点 から +'+(scoreOf(false)-scoreOf(true))+'pt';
+  document.getElementById('input-now').innerHTML = cur.input+'<small>件</small>';
+  const im=inputMono();
+  document.getElementById('input-trend').textContent = im.mono?'週次で増加を維持(健全)':'直近4週で減少'+im.dec+'回(要注意)';
+  document.getElementById('week-now').innerHTML = cur.w+'<small>/12週</small>';
+  document.getElementById('week-range').textContent = '第0週 '+c.week0+' 開始 | '+c.label;
+
+  drawKpiChart(); drawInputChart();
+
+  // 5指標
+  const w=ST.meta.weights, box=document.getElementById('ind-list'); box.innerHTML='';
+  for(const k in w){
+    const ind=c.indicators[k];
+    const nowV = k==='非属人意思決定率' ? kpiNow() : ind.now;
+    box.insertAdjacentHTML('beforeend',
+      '<div class="ind-row">'+
+      '<div class="ind-name">'+k+(k==='非属人意思決定率'?' <span class="chip bad" style="font-size:10px">主KPI</span>':'')+'<small>配点'+w[k]+' | '+ind.source+'</small></div>'+
+      '<div class="ind-bar"><div class="now" style="width:'+nowV+'%"></div><div class="start" style="left:'+ind.start+'%"></div></div>'+
+      '<div class="ind-val"><b>'+nowV+'%</b> (開始'+ind.start+'%) '+ind.dir+'</div></div>');
+  }
+
+  // 移譲メモ
+  const memos=c.weeks.slice(-4).reverse().map(x=>'<div style="padding:4px 0;border-bottom:1px solid var(--line)"><span class="chip gray">第'+x.w+'週</span> '+x.memo+'</div>').join('');
+  document.getElementById('memo-list').innerHTML=memos;
+}
+
+// ---------- チャート ----------
+function svgEl(html){ const d=document.createElement('div'); d.innerHTML=html; return d.firstElementChild; }
+const tt=document.getElementById('tt');
+function showTT(x,y,html){ tt.innerHTML=html; tt.style.opacity=1; tt.style.left=(x+12)+'px'; tt.style.top=(y-10)+'px'; }
+function hideTT(){ tt.style.opacity=0; }
+
+function drawKpiChart(){
+  const box=document.getElementById('kpi-chart'); box.innerHTML='';
+  const W=460,H=230,padL=36,padR=16,padT=14,padB=26;
+  const total=co().totalWeeks, goal=ST.meta.kpiPassLine, maxY=50;
+  const xs=w=>padL+(W-padL-padR)*w/total, ys=v=>padT+(H-padT-padB)*(1-v/maxY);
+  const pts=co().weeks.map(w=>({w:w.w,v:pct(w)}));
+  let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="主KPI週次推移">';
+  for(let g=0;g<=maxY;g+=10){
+    s+='<line x1="'+padL+'" y1="'+ys(g)+'" x2="'+(W-padR)+'" y2="'+ys(g)+'" stroke="#EEF0F2" stroke-width="1"/>';
+    s+='<text x="'+(padL-6)+'" y="'+(ys(g)+3.5)+'" font-size="10" fill="#6B7280" text-anchor="end">'+g+'%</text>';
+  }
+  s+='<line x1="'+padL+'" y1="'+ys(goal)+'" x2="'+(W-padR)+'" y2="'+ys(goal)+'" stroke="#C0362C" stroke-width="1.5" stroke-dasharray="5 4"/>';
+  s+='<text x="'+(W-padR)+'" y="'+(ys(goal)-5)+'" font-size="10" fill="#C0362C" text-anchor="end">合格ライン '+goal+'%(第12週)</text>';
+  for(let w=0;w<=total;w+=2) s+='<text x="'+xs(w)+'" y="'+(H-8)+'" font-size="10" fill="#6B7280" text-anchor="middle">'+w+'週</text>';
+  s+='<polyline fill="none" stroke="#2B6FB3" stroke-width="2" stroke-linejoin="round" points="'+pts.map(p=>xs(p.w)+','+ys(p.v)).join(' ')+'"/>';
+  const last=pts[pts.length-1];
+  s+='<circle cx="'+xs(last.w)+'" cy="'+ys(last.v)+'" r="4" fill="#2B6FB3" stroke="#fff" stroke-width="2"/>';
+  s+='<text x="'+xs(last.w)+'" y="'+(ys(last.v)-9)+'" font-size="11" font-weight="600" fill="#2B6FB3" text-anchor="middle">'+last.v+'%</text>';
+  pts.forEach(p=>{ s+='<circle cx="'+xs(p.w)+'" cy="'+ys(p.v)+'" r="10" fill="transparent" data-w="'+p.w+'" data-v="'+p.v+'" class="hit"/>'; });
+  s+='</svg>';
+  const svg=svgEl(s);
+  svg.addEventListener('mousemove',e=>{
+    const t=e.target;
+    if(t.classList&&t.classList.contains('hit')) showTT(e.clientX,e.clientY,'第'+t.dataset.w+'週: <b>'+t.dataset.v+'%</b>');
+    else hideTT();
+  });
+  svg.addEventListener('mouseleave',hideTT);
+  box.appendChild(svg);
+}
+
+function drawInputChart(){
+  const box=document.getElementById('input-chart'); box.innerHTML='';
+  const W=460,H=230,padL=40,padR=16,padT=14,padB=26;
+  const ws=co().weeks, maxV=Math.max(...ws.map(w=>w.input),10);
+  const yMax=Math.ceil(maxV/50)*50;
+  const n=co().totalWeeks+1;
+  const bw=Math.min(22,(W-padL-padR)/n-6);
+  const xs=i=>padL+(W-padL-padR)*(i+0.5)/n, ys=v=>padT+(H-padT-padB)*(1-v/yMax);
+  let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" aria-label="判断投入ログ累計">';
+  for(let g=0;g<=yMax;g+=50){
+    s+='<line x1="'+padL+'" y1="'+ys(g)+'" x2="'+(W-padR)+'" y2="'+ys(g)+'" stroke="#EEF0F2"/>';
+    s+='<text x="'+(padL-6)+'" y="'+(ys(g)+3.5)+'" font-size="10" fill="#6B7280" text-anchor="end">'+g+'</text>';
+  }
+  ws.forEach(w=>{
+    if(w.input===0&&w.w===0)return;
+    const x=xs(w.w)-bw/2, y=ys(w.input), h=H-padB-y;
+    if(h>0) s+='<path d="M'+x+' '+(y+4)+' q0 -4 4 -4 h'+(bw-8)+' q4 0 4 4 v'+(h-4)+' h-'+bw+' Z" fill="#2B6FB3" class="hit" data-w="'+w.w+'" data-v="'+w.input+'"/>';
+  });
+  for(let w=0;w<=co().totalWeeks;w+=2) s+='<text x="'+xs(w)+'" y="'+(H-8)+'" font-size="10" fill="#6B7280" text-anchor="middle">'+w+'週</text>';
+  s+='</svg>';
+  const svg=svgEl(s);
+  svg.addEventListener('mousemove',e=>{
+    const t=e.target;
+    if(t.classList&&t.classList.contains('hit')) showTT(e.clientX,e.clientY,'第'+t.dataset.w+'週: <b>'+t.dataset.v+'件</b>(累計)');
+    else hideTT();
+  });
+  svg.addEventListener('mouseleave',hideTT);
+  box.appendChild(svg);
+}
+
+// ---------- 判断ログ ----------
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function renderLog(){
+  const tb=document.querySelector('#log-table tbody'); tb.innerHTML='';
+  co().logs.forEach(l=>{
+    tb.insertAdjacentHTML('beforeend','<tr><td style="white-space:nowrap">'+esc(l.ts)+'</td><td><span class="chip gray">'+esc(l.area)+'</span></td><td>'+esc(l.decision)+'</td><td>'+esc(l.who)+'</td><td style="color:var(--muted)">'+esc(l.materials)+'</td><td>'+(l.askedOwner?'<span class="chip warn">聞いた</span>':'<span class="chip ok">聞かず</span>')+'</td></tr>');
+  });
+  const cur=curWeek();
+  document.getElementById('log-week-stats').innerHTML =
+    '<table><tbody>'+
+    '<tr><td>今週(第'+cur.w+'週)の全判断</td><td class="num"><b>'+cur.total+'件</b></td></tr>'+
+    '<tr><td>うち社長に聞かず決めた</td><td class="num"><b>'+cur.nonOwner+'件</b></td></tr>'+
+    '<tr><td>今週の主KPI(自動計算)</td><td class="num"><b style="font-size:18px;color:var(--ai)">'+pct(cur)+'%</b></td></tr>'+
+    '<tr><td>判断投入ログ累計</td><td class="num"><b>'+cur.input+'件</b></td></tr>'+
+    '</tbody></table>'+
+    '<div class="form-note">記録するとカルテ・週次記録・評価書に即時反映される。</div>';
+}
+async function submitLog(e){
+  e.preventDefault();
+  const body={
+    area:document.getElementById('f-area').value,
+    decision:document.getElementById('f-decision').value,
+    who:document.getElementById('f-who').value,
+    materials:document.getElementById('f-materials').value,
+    askedOwner:document.querySelector('input[name=asked]:checked').value==='yes'
+  };
+  addLog(body); renderAll();
+  {
+    document.getElementById('log-flash').textContent='記録しました(主KPIに反映済み)';
+    document.getElementById('f-decision').value=''; document.getElementById('f-materials').value='';
+    setTimeout(()=>document.getElementById('log-flash').textContent='',2500);
+  }
+  return false;
+}
+
+// ---------- 手順書 ----------
+const SOP_CHIP={'移譲済':'ok','移譲中':'blue','手順書のみ':'warn','社長のみ':'bad','除外領域':'gray'};
+function renderSop(){
+  const tb=document.querySelector('#sop-table tbody'); tb.innerHTML='';
+  co().sops.forEach((s,i)=>{
+    const sel = s.status==='除外領域' ? '' :
+      '<select onchange="updateSop('+i+',this.value)" style="font-size:11px;padding:3px;border:1px solid var(--line);border-radius:4px">'+
+      ['社長のみ','手順書のみ','移譲中','移譲済'].map(o=>'<option'+(o===s.status?' selected':'')+'>'+o+'</option>').join('')+'</select>';
+    tb.insertAdjacentHTML('beforeend','<tr><td>'+esc(s.name)+'</td><td><span class="chip '+(SOP_CHIP[s.status]||'gray')+'">'+esc(s.status)+'</span></td><td>'+esc(s.owner)+'</td><td class="num">'+(s.refs||0)+'</td><td style="color:var(--muted)">'+esc(s.note||'')+'</td><td class="no-print">'+sel+'</td></tr>');
+  });
+}
+function updateSop(index,status){
+  co().sops[index].status=status; saveState(); renderSop();
+}
+async function submitSop(e){
+  e.preventDefault();
+  const body={name:document.getElementById('s-name').value,status:document.getElementById('s-status').value,owner:document.getElementById('s-owner').value,note:document.getElementById('s-note').value};
+  sopAdd(body); renderSop();
+  {
+    document.getElementById('sop-flash').textContent='追加しました';
+    ['s-name','s-owner','s-note'].forEach(id=>document.getElementById(id).value='');
+    setTimeout(()=>document.getElementById('sop-flash').textContent='',2500);
+  }
+  return false;
+}
+
+// ---------- 週次記録 ----------
+function renderWeek(){
+  const tb=document.querySelector('#week-table tbody'); tb.innerHTML='';
+  const ws=co().weeks;
+  for(let w=0;w<=co().totalWeeks;w++){
+    const row=ws.find(x=>x.w===w);
+    if(row){
+      const isCur=row===curWeek();
+      tb.insertAdjacentHTML('beforeend','<tr'+(isCur?' style="background:var(--pane)"':'')+'><td>第'+w+'週'+(isCur?' <span class="chip blue">今週</span>':'')+'</td><td class="num"><b>'+pct(row)+'%</b></td><td class="num">'+row.total+'</td><td class="num">'+row.nonOwner+'</td><td class="num">'+row.input+'</td><td style="color:var(--muted)">'+esc(row.memo)+'</td></tr>');
+    } else {
+      const memo = w===10?'本運用移行の打診/継続価格の実勢ヒアリング(予定)' : w===11?'継続価格エビデンスを1件取る(予定)' : w===12?'合否判定(予定)' : '';
+      tb.insertAdjacentHTML('beforeend','<tr style="color:var(--gray)"><td>第'+w+'週</td><td class="num">-</td><td class="num">-</td><td class="num">-</td><td class="num">-</td><td>'+memo+'</td></tr>');
+    }
+  }
+  const now=kpiNow(), goal=ST.meta.kpiPassLine, im=inputMono();
+  const pb=document.querySelector('#pass-table tbody');
+  pb.innerHTML=
+    '<tr><td><b>主KPI合否</b></td><td>非属人意思決定率 40%以上(第12週)</td><td class="num">'+now+'%(第'+curWeek().w+'週)</td><td>'+(now>=goal?'<span class="chip ok">達成ペース</span>':'<span class="chip blue">進行中</span>')+'</td></tr>'+
+    '<tr><td>インプット健全性</td><td>判断投入ログが週次で単調増加(スパイク1発は不可)</td><td class="num">'+curWeek().input+'件</td><td>'+(im.mono?'<span class="chip ok">増加を維持</span>':'<span class="chip warn">減少あり</span>')+'</td></tr>'+
+    '<tr><td>本運用移行</td><td>90日後に本運用へ移行したか(5社中3社以上で次フェーズGO)</td><td>第10週に打診予定</td><td><span class="chip gray">未到達</span></td></tr>';
+}
+
+// ---------- 5社ボード ----------
+function renderBoard(){
+  const kb=document.querySelector('#board-kpi tbody'); kb.innerHTML='';
+  const ib=document.querySelector('#board-input tbody'); ib.innerHTML='';
+  const reds=[];
+  ['A','B','C','D','E'].forEach(id=>{
+    const c=ST.companies[id];
+    if(id!=='A'){
+      kb.insertAdjacentHTML('beforeend','<tr style="color:var(--gray)"><td>'+id+'</td><td>未契約(枠)</td><td class="num">-</td><td class="num">-</td><td class="num">-</td><td>-</td><td><span class="sig n"><i></i>未着手</span></td></tr>');
+      ib.insertAdjacentHTML('beforeend','<tr style="color:var(--gray)"><td>'+id+'</td><td class="num">-</td><td class="num">-</td><td>-</td><td class="num">-</td><td><span class="sig n"><i></i>未着手</span></td></tr>');
+      return;
+    }
+    const now=kpiNow(), st=kpiStart(), [cls,label]=kpiSignal();
+    if(cls==='r') reds.push({co:id,board:'主KPI',sym:'停滞または低下',line:'①主KPI未達の予兆'});
+    kb.insertAdjacentHTML('beforeend','<tr><td><b>A</b></td><td>'+esc(c.label)+'</td><td class="num">'+st+'%</td><td class="num"><b>'+now+'%</b></td><td class="num">'+Math.max(0,ST.meta.kpiPassLine-now)+'pt</td><td>↑</td><td><span class="sig '+cls+'"><i></i>'+label+'</span></td></tr>');
+    const ws=c.weeks, im=inputMono();
+    if(!im.mono) reds.push({co:id,board:'インプット',sym:'直近4週で減少'+im.dec+'回',line:'②ログ増えず'});
+    ib.insertAdjacentHTML('beforeend','<tr><td><b>A</b></td><td class="num">'+ws[1].input+'件</td><td class="num">'+ws[ws.length-1].input+'件</td><td>'+(im.mono?'◯':'✕')+'</td><td class="num">'+im.dec+'回</td><td><span class="sig '+(im.mono?'g':'r')+'"><i></i>'+(im.mono?'緑':'赤')+'</span></td></tr>');
+  });
+  const ra=document.getElementById('red-alerts');
+  if(reds.length===0) ra.innerHTML='<div class="alert-none">今週は赤なし。順調(緑・黄は読まなくてよい)。</div>';
+  else ra.innerHTML=reds.map(r=>'<div class="alert-red"><b>'+r.co+'社</b> ['+r.board+'ボード] '+r.sym+' | 該当する失敗線: '+r.line+'</div>').join('');
+  document.getElementById('fail-lines').innerHTML=
+    '<tr><td>① 主KPI未達</td><td>第12週で非属人意思決定率が40%未満</td><td>'+(kpiNow()>=ST.meta.kpiPassLine?'<span class="chip ok">達成圏</span>':'<span class="chip blue">進行中('+kpiNow()+'%)</span>')+'</td></tr>'+
+    '<tr><td>② ログ増えず</td><td>判断投入ログがフラット/減少</td><td>'+(inputMono().mono?'<span class="chip ok">該当なし</span>':'<span class="chip bad">該当</span>')+'</td></tr>'+
+    '<tr><td>③ 移行3社未満</td><td>第12週に5社合算で判定</td><td><span class="chip gray">未到達(A社のみ実証中)</span></td></tr>';
+}
+
+// ---------- 評価書 ----------
+function renderReport(){
+  const c=co(), w=ST.meta.weights, now=kpiNow();
+  let indRows='';
+  for(const k in w){
+    const ind=c.indicators[k];
+    const nv = k==='非属人意思決定率' ? now : ind.now;
+    indRows+='<tr><td>'+(k==='非属人意思決定率'?'<b>'+k+'</b>(本命指標)':k)+'</td><td style="color:var(--muted)">'+ind.source+'</td><td class="num">'+w[k]+'</td><td class="num">'+ind.start+'%</td><td class="num"><b>'+nv+'%</b></td></tr>';
+  }
+  document.getElementById('report-body').innerHTML=
+    '<div class="wm"><span>デモ(架空データ)</span></div>'+
+    '<h2>承継スコア 事業評価書</h2>'+
+    '<div class="rep-sub">採点定義書 v0.1 準拠 | 発行主体: 承継OS採点チーム(運用代行の報酬と契約分離) | デモ版・全データ架空</div>'+
+    '<h3>1. 対象と評価期間</h3>'+
+    '<table><tbody>'+
+    '<tr><td>対象会社</td><td>'+esc(c.label)+' | 法人番号 '+esc(c.houjinNo)+'</td></tr>'+
+    '<tr><td>業種・地域</td><td>'+esc(c.industry)+'</td></tr>'+
+    '<tr><td>評価期間</td><td>90日パイロット(第0週 '+c.week0+' 開始・現在 第'+curWeek().w+'週)</td></tr>'+
+    '<tr><td>データ源</td><td>'+Object.keys(c.dataSources).map(k=>k+(c.dataSources[k]?' ◯':' 未接続')).join(' / ')+'(物理データをAIが直接抽出。社長の主観アンケート不使用)</td></tr>'+
+    '<tr><td>除外事項</td><td>金融取引・与信・採用解雇・値決め・重大クレームは「最終判断は人」(AIは材料提示まで)</td></tr>'+
+    '</tbody></table>'+
+    '<div class="kpi-line">総合承継スコア <b>'+scoreOf(false)+' / 100</b>(開始時 '+scoreOf(true)+' から <b>+'+(scoreOf(false)-scoreOf(true))+'pt</b>) | 本命指標=非属人意思決定率 <b>'+now+'%</b>(起点'+kpiStart()+'%・合格ライン40%)</div>'+
+    '<h3>2. 5指標の内訳(主観排除・ログ実測)</h3>'+
+    '<table><thead><tr><th>指標</th><th>抽出データ</th><th class="num">配点</th><th class="num">開始</th><th class="num">現在</th></tr></thead><tbody>'+indRows+'</tbody></table>'+
+    '<div style="font-size:12px;color:var(--muted);margin-top:6px">非属人意思決定率は「AIが代わりに決めた比率」ではない。判断の材料を社長以外が引ける状態を作り、社員が社長に聞かず決められた比率として上げる。</div>'+
+    '<h3>3. 承継ラベル(閾値は採点定義書で事前固定・後出しで動かさない)</h3>'+
+    '<table><tbody>'+
+    '<tr><td>90日仮ラベル</td><td>総合60点[要裏取り]以上で「◯(承継可能性・改善傾向あり)」</td><td>'+(scoreOf(false)>=60?'◯':'進行中('+scoreOf(false)+'点)')+'</td></tr>'+
+    '<tr><td>180日正ラベル</td><td>総合75点[要裏取り]以上で「◯(承継実務に進める水準)」</td><td>未到達</td></tr>'+
+    '<tr><td>分母の固定</td><td>90日ログの全件数を分母(対象を都合よく絞らない)</td><td>◯ 遵守</td></tr>'+
+    '</tbody></table>'+
+    '<h3>4. 中立性の担保(銀行が採点を信じられる根拠)</h3>'+
+    '<ol>'+
+    '<li>採点(スコア算出)と運用代行の報酬は<b>契約を分離</b>。評価書の発行主体は採点チーム。</li>'+
+    '<li>主観アンケートを一切使わず、<b>物理データからの決定論的算出</b>(同じデータなら誰が回しても同じ点)。</li>'+
+    '<li>算出ロジック・重み・分母は<b>採点定義書として版管理</b>し、評価書に版番号を付す。</li>'+
+    '<li>銀行が採点に関わる案件では譲渡額に連動する報酬モデルを除外。保証解除の中立資料に徹する。</li>'+
+    '</ol>'+
+    '<h3>5. 適時開示のログ(経営者保証ガイドライン「適時適切な情報開示」対応)</h3>'+
+    '<table><thead><tr><th>開示項目</th><th>頻度</th><th>データ源</th></tr></thead><tbody>'+
+    '<tr><td>月次試算表・現預金推移</td><td>月次</td><td>会計API</td></tr>'+
+    '<tr><td>主要5指標の推移</td><td>90日で3回以上</td><td>承継OS採点</td></tr>'+
+    '<tr><td>社長依存の剥がし進捗(何を誰に移譲したか)</td><td>随時</td><td>移譲・ナレッジ化ログ(本書「週次記録」)</td></tr>'+
+    '</tbody></table>'+
+    '<div class="rep-foot">承継スコア事業評価書 v0.1(デモ) | 株式会社aidollargame 承継OS採点チーム | 本書はデモであり、社名・数値はすべて架空。実データでの発行・銀行提出は代表の承認後に行う。閾値・重みの[要裏取り]は採点定義書で確定するまで残す。</div>';
+}
+
+// ---------- デモ初期化 ----------
+async function demoReset(){
+  if(!confirm('デモデータを初期状態に戻します。よろしいですか?'))return;
+  resetState(); renderAll();
+}
+</script>
+</body>
+</html>

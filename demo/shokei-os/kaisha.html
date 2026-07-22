@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>承継OS | 企業側画面(デモ)</title>
+<style>
+:root{
+  --ai:#16324F; --shu:#C0362C; --sumi:#1A1A1A; --washi:#FFFFFF;
+  --pane:#F6F7F9; --line:#E2E5E9; --muted:#6B7280;
+  --ok:#2E7D32; --warn:#B26A00;
+  --serif:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+  --sans:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--sans);color:var(--sumi);background:#EFF1F4;font-size:15px;line-height:1.7}
+.phone{max-width:480px;margin:0 auto;min-height:100vh;background:var(--washi);display:flex;flex-direction:column}
+button{font-family:var(--sans);cursor:pointer}
+
+header{background:var(--ai);color:#fff;padding:14px 18px}
+header .co{font-size:12px;opacity:.75}
+header .t{display:flex;align-items:baseline;gap:10px}
+header .t b{font-family:var(--serif);font-size:19px;letter-spacing:.08em;font-weight:600}
+header .t small{font-size:10px;opacity:.75}
+.badge{background:var(--shu);color:#fff;font-size:10px;padding:2px 8px;border-radius:3px;margin-left:auto}
+
+.mode{display:flex;border-bottom:1px solid var(--line)}
+.mode button{flex:1;border:none;background:var(--pane);padding:12px;font-size:14px;color:var(--muted);border-bottom:2.5px solid transparent}
+.mode button.on{background:var(--washi);color:var(--ai);font-weight:600;border-bottom-color:var(--shu)}
+
+main{flex:1;padding:18px;display:none}
+main.on{display:block}
+.card{background:var(--washi);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
+.card h2{font-family:var(--serif);font-size:16px;color:var(--ai);margin-bottom:8px}
+.hint{font-size:12px;color:var(--muted)}
+
+/* 社員: 聞く */
+.ask-box{background:var(--pane);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px}
+.ask-box .lead{font-family:var(--serif);font-size:17px;color:var(--ai);margin-bottom:10px}
+.ask-row{display:flex;gap:8px}
+.ask-row input{flex:1;padding:12px;border:1px solid var(--line);border-radius:8px;font-size:15px}
+.ask-row button{background:var(--ai);color:#fff;border:none;border-radius:8px;padding:0 18px;font-size:14px;white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chips button{border:1px solid var(--line);background:var(--washi);border-radius:16px;padding:6px 14px;font-size:13px;color:var(--ai)}
+
+.material{border-left:3px solid var(--ai);background:var(--pane);border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:10px}
+.material .tag{font-size:11px;color:var(--muted)}
+.material .body{font-size:14px;margin-top:2px}
+.material ul{padding-left:18px;font-size:13px;margin-top:4px}
+.material .num{font-family:var(--serif);font-size:18px;color:var(--ai)}
+
+.decide{margin-top:14px;border-top:1px dashed var(--line);padding-top:14px}
+.decide .q{font-size:14px;font-weight:600;margin-bottom:10px}
+.decide .who{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font-size:14px;margin-bottom:10px}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-row button{border-radius:8px;padding:13px 8px;font-size:14px;border:none;line-height:1.4}
+.btn-self{background:var(--ai);color:#fff}
+.btn-owner{background:var(--washi);color:var(--sumi);border:1.5px solid var(--line) !important}
+.btn-row small{display:block;font-size:11px;opacity:.75}
+
+.done{background:#E5F1E6;border:1px solid #CBE3CD;border-radius:10px;padding:16px;text-align:center;margin-bottom:14px}
+.done b{color:var(--ok);font-size:16px}
+.done .up{font-family:var(--serif);font-size:26px;color:var(--ai);margin:6px 0 2px}
+.done .hint{margin-top:4px}
+
+.sop-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.sop-item:last-child{border-bottom:none}
+.sop-item .st{margin-left:auto;font-size:11px;padding:2px 9px;border-radius:10px;white-space:nowrap}
+.st.a{background:#E5F1E6;color:var(--ok)}
+.st.b{background:#D7E5F2;color:#1d4e7e}
+.st.c{background:#F6EBD9;color:var(--warn)}
+
+/* 社長 */
+.big-stat{text-align:center;padding:6px 0 10px}
+.big-stat .n{font-family:var(--serif);font-size:44px;color:var(--ai);line-height:1.1}
+.big-stat .n small{font-size:18px}
+.big-stat .l{font-size:13px;color:var(--muted)}
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-row .s{background:var(--pane);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+.stat-row .s .n{font-family:var(--serif);font-size:22px;color:var(--ai)}
+.stat-row .s .l{font-size:11px;color:var(--muted)}
+.log-item{padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.log-item:last-child{border-bottom:none}
+.log-item .meta{font-size:11px;color:var(--muted)}
+.tip{background:#FDF6EC;border:1px solid #F0E2C8;border-radius:8px;padding:10px 12px;font-size:12px;color:var(--warn);margin-top:10px}
+
+footer{padding:14px 18px;font-size:10.5px;color:var(--muted);border-top:1px solid var(--line);text-align:center}
+footer a{color:var(--muted)}
+
+/* ---- パソコン(広い画面)では2カラムに広がる ---- */
+@media(min-width:900px){
+  body{padding:0 20px}
+  .phone{max-width:1060px}
+  header{padding:16px 28px}
+  header .t b{font-size:22px}
+  .mode button{font-size:15px}
+  main{padding:26px 28px}
+
+  /* 社員: 左=聞く+材料 / 右=手順書一覧 */
+  #m-staff.on{display:grid;grid-template-columns:1.15fr .85fr;gap:20px;align-items:start;align-content:start}
+  #m-staff .ask-box{grid-column:1;margin-bottom:0}
+  #m-staff #answer{grid-column:1}
+  #m-staff #done-msg{grid-column:1}
+  #m-staff #sop-card{grid-column:2;grid-row:1/span 3;margin-bottom:0}
+  .ask-box .lead{font-size:19px}
+
+  /* 社長: 上段=数字が横一杯 / 下は2カラム */
+  #m-owner.on{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;align-content:start}
+  #m-owner .card{margin-bottom:0}
+  #m-owner .card:first-child{grid-column:1/-1}
+  #m-owner .card:first-child{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center}
+  #m-owner .big-stat{padding:0}
+  #m-owner .stat-row{margin-bottom:0}
+  .big-stat .n{font-size:52px}
+}
+</style>
+</head>
+<body>
+<div class="phone">
+
+<header>
+  <div class="co" id="co-name">-</div>
+  <div class="t"><b>承継OS</b><small>次の人でも回る会社に変える</small><span class="badge">デモ・架空</span></div>
+</header>
+
+<div class="mode">
+  <button class="on" onclick="setMode(0,this)">社員のみなさん</button>
+  <button onclick="setMode(1,this)">社長</button>
+</div>
+
+<!-- ============ 社員モード ============ -->
+<main class="on" id="m-staff">
+
+  <div class="ask-box">
+    <div class="lead">判断に迷ったら、社長に聞く前にここで聞く</div>
+    <div class="ask-row">
+      <input type="text" id="ask" placeholder="例: 急ぎの注文、納期どうする?">
+      <button onclick="doAsk()">材料を出す</button>
+    </div>
+    <div class="chips">
+      <button onclick="quickAsk('納期')">納期の回答</button>
+      <button onclick="quickAsk('見積')">見積を出す</button>
+      <button onclick="quickAsk('値引き')">値引き</button>
+      <button onclick="quickAsk('与信')">与信・新規客</button>
+      <button onclick="quickAsk('仕入')">仕入・発注</button>
+      <button onclick="quickAsk('不良')">不良・クレーム</button>
+    </div>
+  </div>
+
+  <div id="answer"></div>
+  <div id="done-msg"></div>
+
+  <div class="card" id="sop-card">
+    <h2>この会社の手順書</h2>
+    <div class="hint" style="margin-bottom:8px">社長の頭の中から移した、判断のよりどころ。</div>
+    <div id="sop-list"></div>
+  </div>
+
+</main>
+
+<!-- ============ 社長モード ============ -->
+<main id="m-owner">
+
+  <div class="card">
+    <div class="big-stat">
+      <div class="n" id="o-kpi">-<small>%</small></div>
+      <div class="l">今週、社員があなたに聞かずに決めた判断の割合<br>(目標40% | 上がるほど「継げる会社」に近づく)</div>
+    </div>
+    <div class="stat-row">
+      <div class="s"><div class="n" id="o-self">-</div><div class="l">聞かずに決めた</div></div>
+      <div class="s"><div class="n" id="o-asked">-</div><div class="l">あなたに聞いた</div></div>
+      <div class="s"><div class="n" id="o-sop">-</div><div class="l">移譲済みの業務</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>今週、社員が自分で決めたこと</h2>
+    <div id="o-self-list"></div>
+  </div>
+
+  <div class="card">
+    <h2>あなたに聞きに来たこと</h2>
+    <div id="o-asked-list"></div>
+    <div class="tip">聞かれた答えを手順書にすると、次から聞かれません。次回の訪問時に承継OSチームが一緒に手順書化します。</div>
+  </div>
+
+  <div class="card">
+    <h2>いま社長にしかできないこと</h2>
+    <div id="o-only-list"></div>
+    <div class="hint" style="margin-top:8px">値決め・与信・採用解雇・金融取引・重大クレームは、これからも最終判断は社長(人)。AIは材料を出すまで。</div>
+  </div>
+
+</main>
+
+<footer>
+  デモ版・画面内の社名・数値はすべて架空 | 詳しい分析は承継OS運用チームが週次で確認(赤信号のときだけ連絡) | <a href="./index.html">運用側画面へ</a>
+</footer>
+</div>
+
+<script>
+'use strict';
+function seedState() {
+  return {
+    meta: {
+      demo: true,
+      version: 'v0.1',
+      note: 'このアプリ内の社名・数値はすべて架空のデモデータ。実在の会社・実測値ではない。',
+      kpiPassLine: 40, // 主KPI合格ライン(%) = 非属人意思決定率(実証計画§2)
+      weights: { 権限移譲率: 30, 業務標準化率: 25, 非属人意思決定率: 20, 財務即時性: 15, 顧客直結度: 10 }
+    },
+    companies: {
+      A: {
+        id: 'A',
+        status: '実証中(デモ)',
+        label: '金属加工の町工場(架空デモ)',
+        industry: '金属加工・静岡(架空)',
+        houjinNo: '0000000000000(デモ)',
+        contractDate: '2026-05-22',
+        fee: '実証フィー 140万(試算・架空)',
+        week0: '2026-05-25',
+        dataSources: { '会計API': true, 'ワークフロー': true, 'ナレッジAI': true, '受発注ログ': false },
+        // 週次台帳: total=全判断件数 / nonOwner=社長に聞かず社員が決めた件数 / input=判断投入ログ件数
+        // 主KPI 非属人意思決定率 = nonOwner / total
+        weeks: [
+          { w: 0, total: 46, nonOwner: 1, input: 0, memo: '契約・過去データ受領・起点計測' },
+          { w: 1, total: 48, nonOwner: 3, input: 18, memo: '意思決定ルールを過去1年の受発注から抽出' },
+          { w: 2, total: 51, nonOwner: 5, input: 31, memo: '初期セット投入(納期回答・見積の判断基準)' },
+          { w: 3, total: 47, nonOwner: 6, input: 44, memo: '起点計測を確定・判断ログの書き方を現場に定着' },
+          { w: 4, total: 50, nonOwner: 8, input: 58, memo: '判断投入ログの現場運用を開始' },
+          { w: 5, total: 49, nonOwner: 10, input: 73, memo: '納期回答を製造リーダーへ移譲' },
+          { w: 6, total: 52, nonOwner: 13, input: 91, memo: '中間レビュー・見積作成の移譲を開始' },
+          { w: 7, total: 50, nonOwner: 14, input: 108, memo: '定型見積を事務リーダーへ移譲' },
+          { w: 8, total: 30, nonOwner: 10, input: 124, memo: '(今週・記入中)' }
+        ],
+        totalWeeks: 12,
+        // 5指標(採点の中身)。start=第0週 now=最新。単位%
+        indicators: {
+          '権限移譲率':      { start: 8,  now: 38, dir: '↑', source: '承認ワークフロー・決裁ログ' },
+          '業務標準化率':    { start: 15, now: 46, dir: '↑', source: 'ナレッジAIの登録・参照ログ' },
+          '非属人意思決定率': { start: 2,  now: null, dir: '↑', source: '判断投入ログ(このアプリの実測)' }, // now=週次台帳から自動算出
+          '財務即時性':      { start: 40, now: 60, dir: '→', source: '会計API連携・現預金の可視化頻度' },
+          '顧客直結度':      { start: 20, now: 25, dir: '→', source: '主要顧客の窓口が社長個人かの分布' }
+        },
+        // 手順書・ナレッジ台帳(業務標準化の中身)
+        sops: [
+          { name: '納期回答',           status: '移譲済',   owner: '製造リーダー', refs: 142, note: '過去事例と納期基準で即答できる状態' },
+          { name: '定型見積の作成',      status: '移譲中',   owner: '事務リーダー', refs: 96,  note: '非定型(特急・特殊材)は社長確認が残る' },
+          { name: '発注・仕入(定型)',    status: '移譲済',   owner: '資材担当',     refs: 88,  note: '仕入基準・過去単価一覧を整備済' },
+          { name: '機械の段取り替え',    status: '手順書のみ', owner: '製造班',     refs: 61,  note: '動画つき手順書あり・移譲はこれから' },
+          { name: '請求・入金確認',      status: '手順書のみ', owner: '経理担当',   refs: 54,  note: '月次の締め手順を文書化済' },
+          { name: 'クレーム一次対応',    status: '移譲中',   owner: '製造リーダー', refs: 23,  note: '重大クレームは除外領域(最終判断は人)' },
+          { name: '外注先の選定',        status: '社長のみ', owner: '(社長)',      refs: 0,   note: '判断基準の言語化から着手予定' },
+          { name: '価格改定・値決め',    status: '除外領域', owner: '(社長)',      refs: 0,   note: '最終判断は人。AIは材料提示まで' },
+          { name: '採用・解雇',          status: '除外領域', owner: '(社長)',      refs: 0,   note: '最終判断は人。AIは材料提示まで' },
+          { name: '資金繰り・金融取引',  status: '除外領域', owner: '(社長)',      refs: 0,   note: '最終判断は人。AIは材料提示まで' }
+        ],
+        // 判断投入ログ(新しい順)。askedOwner=社長に聞いたか
+        logs: [
+          { ts: '2026-07-21 11:05', week: 8, area: '製造',  decision: '急ぎ注文(50個)の納期を2日短縮で回答', who: '製造リーダー', materials: '過去事例12件・納期基準手順書', askedOwner: false },
+          { ts: '2026-07-21 09:40', week: 8, area: '購買',  decision: 'ステンレス材を代替仕入先へ発注',       who: '資材担当',     materials: '仕入基準・過去単価一覧',       askedOwner: false },
+          { ts: '2026-07-20 16:20', week: 8, area: '営業',  decision: '新規客の与信判断を保留し社長へ相談',   who: '事務リーダー', materials: '与信基準(整備中)',             askedOwner: true },
+          { ts: '2026-07-20 14:00', week: 8, area: '営業',  decision: 'リピート品の見積を過去単価で提出',     who: '事務リーダー', materials: '定型見積手順書・受注履歴',     askedOwner: false },
+          { ts: '2026-07-20 10:30', week: 8, area: '製造',  decision: '段取り順を入れ替え特急品を先行',       who: '製造班',       materials: '段取り替え手順書・納期一覧',   askedOwner: false },
+          { ts: '2026-07-19 15:10', week: 8, area: '品質',  decision: '寸法不良2個の再加工を即決',           who: '製造リーダー', materials: 'クレーム一次対応手順・検査基準', askedOwner: false },
+          { ts: '2026-07-18 17:45', week: 8, area: '購買',  decision: '治具の追加購入を社長に確認して発注',   who: '資材担当',     materials: '購買基準(10万以上は要確認)',   askedOwner: true },
+          { ts: '2026-07-18 11:00', week: 8, area: '経理',  decision: '月次試算表の締めを手順書どおり完了',   who: '経理担当',     materials: '月次締め手順書・会計API',      askedOwner: false }
+        ]
+      },
+      B: { id: 'B', status: '未契約(枠)' },
+      C: { id: 'C', status: '未契約(枠)' },
+      D: { id: 'D', status: '未契約(枠)' },
+      E: { id: 'E', status: '未契約(枠)' }
+    }
+  };
+}
+const DEMO_KEY='shokei_demo_state_v2_kaisha';
+function loadState(){ try{ const s=JSON.parse(localStorage.getItem(DEMO_KEY)); if(s&&s.companies)return s; }catch(e){} const s=seedState(); try{localStorage.setItem(DEMO_KEY,JSON.stringify(s));}catch(e){} return s; }
+function saveState(){ try{ localStorage.setItem(DEMO_KEY, JSON.stringify(ST)); }catch(e){} }
+function demoNowJst(){ const d=new Date(Date.now()+9*3600*1000); return d.toISOString().slice(0,16).replace('T',' '); }
+function addLog(b){ const co=ST.companies.A; const cur=co.weeks[co.weeks.length-1];
+  const entry={ts:demoNowJst(),week:cur.w,area:String(b.area||'その他').slice(0,20),decision:String(b.decision).slice(0,200),who:String(b.who).slice(0,40),materials:String(b.materials||'(未記入)').slice(0,120),askedOwner:!!b.askedOwner};
+  co.logs.unshift(entry); cur.total+=1; if(!entry.askedOwner)cur.nonOwner+=1; cur.input+=1; saveState(); }
+function sopAdd(b){ ST.companies.A.sops.push({name:String(b.name).slice(0,60),status:String(b.status||'手順書のみ').slice(0,20),owner:String(b.owner||'(未定)').slice(0,40),refs:0,note:String(b.note||'').slice(0,120)}); saveState(); }
+function resetState(){ ST=seedState(); saveState(); }
+</script>
+<script>
+'use strict';
+let ST=null, MODE=0;
+
+// 判断材料のデモ台帳(架空)。実運用ではナレッジAI+過去ログから引く
+const MATERIALS=[
+  {keys:['納期','急ぎ','特急','間に合'], area:'製造', sop:'納期回答 手順書',
+   rule:'標準リードタイム10営業日。特急は「機械の空き」と「材料在庫」の2つが揃えば最短5営業日まで短縮可。両方揃わなければ社長ではなく製造リーダーが調整。',
+   cases:['5/28 同型50個を5営業日で回答→間に合った','6/12 材料欠品のため12営業日で回答→了承された','7/02 特急依頼、機械空きなし→+2日で合意'],
+   nums:[['標準リードタイム','10営業日'],['特急の最短','5営業日']]},
+  {keys:['見積','価格','いくら','単価'], area:'営業', sop:'定型見積 手順書',
+   rule:'リピート品は前回単価を踏襲(材料費が5%以上動いたときだけ再計算)。新規形状は原価表で計算し、粗利30%を下回る場合のみ社長確認。',
+   cases:['6/20 リピート品を前回単価で即日見積→受注','7/08 新規形状、粗利28%のため社長確認→単価調整で受注'],
+   nums:[['粗利の下限(要確認ライン)','30%'],['見積の目標回答','当日中']]},
+  {keys:['値引','値下げ','価格交渉','安く','まけて'], area:'営業', sop:'値決め・値引き 基準(整備中)',
+   rule:'値決め・値引きの最終判断は社長(除外領域=最終判断は人)。ただし見積の端数調整(1%未満)は事務リーダーが決めてよい。相談するときは過去の値引き事例と粗利下限を材料に持って行く。',
+   cases:['6/25 常連から5%値引き要請→社長判断で3%で合意','5/30 新規大口の値引き要請→粗利25%を切るため辞退'],
+   nums:[['粗利の下限','30%'],['端数調整の上限','1%未満']]},
+  {keys:['与信','新規客','掛け','未回収','支払条件','取引開始'], area:'営業', sop:'与信判断 手順書(整備中)',
+   rule:'新規客との取引開始・掛け条件の最終判断は社長(除外領域=最終判断は人)。初回は前金または上限30万円までなら事務リーダーが受けてよい。超える場合は取引実績と支払条件を材料に社長へ。',
+   cases:['7/20 新規客の与信判断を保留し社長へ相談','6/08 初回前金の小口注文は事務リーダーが即受注'],
+   nums:[['社長確認なしで受けられる上限','初回前金 or 30万円まで']]},
+  {keys:['仕入','発注','材料','購買'], area:'購買', sop:'発注・仕入 手順書',
+   rule:'定型材料は在庫が発注点を切ったら承認なしで発注してよい。10万円以上の設備・治具は社長確認。仕入先は仕入基準表の順で当たる。',
+   cases:['7/21 ステンレス材を代替仕入先へ発注(第一候補が欠品)','7/18 治具の追加購入、10万超のため社長確認して発注'],
+   nums:[['承認なしで発注できる上限','10万円未満'],['主要材料の発注点','基準表参照']]},
+  {keys:['不良','クレーム','寸法','やり直し','再加工'], area:'品質', sop:'クレーム一次対応 手順書',
+   rule:'寸法不良は検査基準に照らして再加工を現場で即決してよい。客先流出・安全に関わる重大クレームは即社長へ(除外領域=最終判断は人)。',
+   cases:['7/19 寸法不良2個をその場で再加工判断→当日出荷','6/30 客先での不具合連絡→重大のため社長対応'],
+   nums:[['社内不良の即決','現場でよい'],['重大クレーム','即社長へ']]}
+];
+
+function boot(){
+  ST=loadState();
+  const c=ST.companies.A;
+  document.getElementById('co-name').textContent=c.label;
+  renderSops(); renderOwner();
+}
+boot();
+
+function setMode(m,btn){
+  MODE=m;
+  document.querySelectorAll('.mode button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('m-staff').classList.toggle('on',m===0);
+  document.getElementById('m-owner').classList.toggle('on',m===1);
+  if(m===1) renderOwner();
+}
+
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+// ---------- 社員: 聞く ----------
+function quickAsk(q){ document.getElementById('ask').value=q; doAsk(); }
+function doAsk(){
+  const q=document.getElementById('ask').value.trim();
+  if(!q)return;
+  document.getElementById('done-msg').innerHTML='';
+  const hit=MATERIALS.find(m=>m.keys.some(k=>q.includes(k)));
+  const box=document.getElementById('answer');
+  if(hit){
+    box.innerHTML='<div class="card">'+
+      '<h2>判断の材料(社長に聞かなくても、ここまで分かる)</h2>'+
+      '<div class="material"><div class="tag">手順書 | '+esc(hit.sop)+'</div><div class="body">'+esc(hit.rule)+'</div></div>'+
+      '<div class="material"><div class="tag">過去のおなじ判断</div><ul>'+hit.cases.map(c=>'<li>'+esc(c)+'</li>').join('')+'</ul></div>'+
+      '<div class="material"><div class="tag">数字</div><div class="body">'+hit.nums.map(n=>esc(n[0])+': <span class="num">'+esc(n[1])+'</span>').join(' | ')+'</div></div>'+
+      '<div class="decide"><div class="q">この材料で、決められましたか?</div>'+
+      '<select class="who" id="who"><option>製造リーダー</option><option>事務リーダー</option><option>資材担当</option><option>経理担当</option><option>製造班</option></select>'+
+      '<div class="btn-row">'+
+      '<button class="btn-self" onclick="record(false,\''+esc(hit.area)+'\')">自分で決めた<small>記録して会社の自走率を上げる</small></button>'+
+      '<button class="btn-owner" onclick="record(true,\''+esc(hit.area)+'\')">社長に聞いて決めた<small>正直に記録(それでよい)</small></button>'+
+      '</div></div></div>';
+  } else {
+    box.innerHTML='<div class="card">'+
+      '<h2>この判断の材料は、まだ入っていません</h2>'+
+      '<div class="hint">社長に聞いてかまいません。聞いた答えを記録すると手順書のたねになり、次の人は聞かずに決められるようになります。</div>'+
+      '<div class="decide"><div class="q">どう決めましたか?</div>'+
+      '<select class="who" id="who"><option>製造リーダー</option><option>事務リーダー</option><option>資材担当</option><option>経理担当</option><option>製造班</option></select>'+
+      '<div class="btn-row">'+
+      '<button class="btn-self" onclick="record(false,\'その他\')">自分で決めた<small>記録する</small></button>'+
+      '<button class="btn-owner" onclick="record(true,\'その他\')">社長に聞いて決めた<small>答えを資産にする</small></button>'+
+      '</div></div></div>';
+  }
+}
+
+async function record(asked,area){
+  const q=document.getElementById('ask').value.trim()||'(内容未記入)';
+  const who=document.getElementById('who').value;
+  const hit=MATERIALS.find(m=>m.keys.some(k=>q.includes(k)));
+  addLog({area, decision:q, who, materials: hit?hit.sop+'・過去事例'+hit.cases.length+'件':'(材料なし・新規判断)', askedOwner:asked});
+  const cur=ST.companies.A.weeks[ST.companies.A.weeks.length-1];
+  const kpi=Math.round(cur.nonOwner/cur.total*100);
+  document.getElementById('answer').innerHTML='';
+  document.getElementById('done-msg').innerHTML='<div class="done">'+
+    '<b>記録しました</b>'+
+    '<div class="up">自走率 '+kpi+'%</div>'+
+    '<div class="hint">'+(asked?'社長に聞いた判断も大事な記録。答えを手順書にすれば次から聞かずに決められます。':'社長に聞かずに決められました。この積み重ねが「次の人でも回る会社」を作ります。')+'</div>'+
+    '</div>';
+  document.getElementById('ask').value='';
+  renderOwner();
+}
+
+// ---------- 社員: 手順書一覧 ----------
+function renderSops(){
+  const stMap={'移譲済':'a','移譲中':'b','手順書のみ':'c'};
+  const list=ST.companies.A.sops.filter(s=>s.status!=='除外領域'&&s.status!=='社長のみ');
+  document.getElementById('sop-list').innerHTML=list.map(s=>
+    '<div class="sop-item"><span>'+esc(s.name)+'</span><span style="color:var(--muted);font-size:12px">'+esc(s.owner)+'</span><span class="st '+(stMap[s.status]||'c')+'">'+esc(s.status)+'</span></div>').join('');
+}
+
+// ---------- 社長モード ----------
+function renderOwner(){
+  if(!ST)return;
+  const c=ST.companies.A;
+  const cur=c.weeks[c.weeks.length-1];
+  const kpi=cur.total?Math.round(cur.nonOwner/cur.total*100):0;
+  document.getElementById('o-kpi').innerHTML=kpi+'<small>%</small>';
+  document.getElementById('o-self').textContent=cur.nonOwner+'件';
+  document.getElementById('o-asked').textContent=(cur.total-cur.nonOwner)+'件';
+  document.getElementById('o-sop').textContent=c.sops.filter(s=>s.status==='移譲済').length+'件';
+  const selfLogs=c.logs.filter(l=>!l.askedOwner).slice(0,5);
+  const askedLogs=c.logs.filter(l=>l.askedOwner).slice(0,5);
+  document.getElementById('o-self-list').innerHTML=selfLogs.map(l=>
+    '<div class="log-item">'+esc(l.decision)+'<div class="meta">'+esc(l.who)+' | 引いた材料: '+esc(l.materials)+'</div></div>').join('')||'<div class="hint">今週はまだありません。</div>';
+  document.getElementById('o-asked-list').innerHTML=askedLogs.map(l=>
+    '<div class="log-item">'+esc(l.decision)+'<div class="meta">'+esc(l.who)+'</div></div>').join('')||'<div class="hint">今週はまだありません。</div>';
+  const only=c.sops.filter(s=>s.status==='社長のみ'||s.status==='除外領域');
+  document.getElementById('o-only-list').innerHTML=only.map(s=>
+    '<div class="sop-item"><span>'+esc(s.name)+'</span><span class="st '+(s.status==='社長のみ'?'c':'b')+'" style="margin-left:auto">'+(s.status==='社長のみ'?'これから移す':'ずっと社長')+'</span></div>').join('');
+}
+</script>
+</body>
+</html>

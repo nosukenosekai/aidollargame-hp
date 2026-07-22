@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>クチコミ即レス｜デモ</title>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  :root{
+    --bg:#f5f4f0; --blue:#2563eb; --ink:#1a1a1a; --sub:#6b7280;
+    --line:#e5e3dd; --card:#fff; --green:#0f9d58; --amber:#b45309; --red:#c0392b;
+    --star:#e8a800;
+  }
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:440px; margin:0 auto; min-height:100vh; padding-bottom:70px; }
+  .demoflag{ background:#111; color:#fff; font-size:11px; text-align:center; padding:5px 8px; letter-spacing:.04em; }
+  header.app{ background:var(--card); border-bottom:1px solid var(--line); padding:14px 18px; position:sticky; top:0; z-index:10; }
+  header.app h1{ font-size:18px; font-weight:800; }
+  header.app p{ font-size:12px; color:var(--sub); margin-top:2px; }
+  .store{ display:flex; align-items:center; gap:10px; margin-top:10px; background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:9px 11px; }
+  .store .ico{ width:34px; height:34px; border-radius:9px; background:var(--blue); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; flex:0 0 auto; }
+  .store b{ font-size:13px; }
+  .store span{ font-size:11px; color:var(--sub); display:block; }
+  main{ padding:16px 16px 0; }
+  .kpi{ display:flex; gap:8px; margin-bottom:14px; }
+  .kpi .box{ flex:1; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:11px 8px; text-align:center; }
+  .kpi b{ display:block; font-size:22px; font-weight:900; line-height:1.1; }
+  .kpi span{ font-size:10.5px; color:var(--sub); }
+  .kpi .box.hot b{ color:var(--red); }
+  .kpi .box.ok b{ color:var(--green); }
+  .sec-t{ font-size:12px; color:var(--sub); font-weight:700; margin:2px 0 8px; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:13px; margin-bottom:11px; cursor:pointer; transition:.12s; }
+  .card:active{ transform:scale(.99); }
+  .card.replied{ opacity:.72; cursor:default; }
+  .top{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .who{ font-size:12px; color:var(--sub); }
+  .stars{ color:var(--star); font-size:14px; letter-spacing:1px; }
+  .stars .off{ color:#d8d5ce; }
+  .media{ font-size:10px; background:var(--bg); border:1px solid var(--line); border-radius:999px; padding:2px 8px; color:#374151; }
+  .rvtext{ font-size:13.5px; margin-top:8px; }
+  .badge{ display:inline-block; font-size:10.5px; font-weight:700; border-radius:999px; padding:3px 9px; margin-top:9px; }
+  .b-new{ background:#fdecea; color:var(--red); }
+  .b-done{ background:#e7f3ec; color:var(--green); }
+  .back{ background:none; border:none; color:var(--blue); font-size:14px; font-weight:700; cursor:pointer; padding:4px 0; margin-bottom:6px; font-family:inherit; }
+  .tonerow{ display:flex; gap:6px; margin:12px 0 10px; }
+  .tone{ flex:1; text-align:center; font-size:12px; font-weight:700; padding:8px 4px; border-radius:9px; background:var(--card); border:1px solid var(--line); color:var(--sub); cursor:pointer; }
+  .tone.on{ background:var(--blue); color:#fff; border-color:var(--blue); }
+  .draft{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:13px; font-size:13.5px; white-space:pre-wrap; min-height:96px; }
+  .gen{ color:var(--sub); font-size:12.5px; }
+  .hint{ font-size:11.5px; color:var(--blue); margin-top:8px; }
+  .btn{ display:block; width:100%; text-align:center; background:var(--blue); color:#fff; border:none; border-radius:12px; padding:14px; font-size:15px; font-weight:800; cursor:pointer; margin-top:12px; font-family:inherit; }
+  .btn:active{ opacity:.85; }
+  .btn.ghost{ background:var(--card); color:var(--blue); border:1.5px solid var(--blue); }
+  .empty{ text-align:center; color:var(--sub); font-size:13px; padding:26px 10px; }
+  .toast{ position:fixed; left:50%; bottom:22px; transform:translateX(-50%); background:#111; color:#fff; font-size:13px; padding:11px 18px; border-radius:999px; opacity:0; pointer-events:none; transition:.25s; z-index:50; white-space:nowrap; }
+  .toast.show{ opacity:1; }
+  footer{ text-align:center; font-size:11px; color:var(--sub); padding:22px 16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demoflag">デモ（サンプルデータ）実在の店舗・口コミではありません</div>
+  <header class="app">
+    <h1>クチコミ即レス</h1>
+    <p>口コミへの返信を、AIが店の雰囲気で下書き</p>
+    <div class="store">
+      <div class="ico">とり</div>
+      <div>
+        <b>炭火焼鳥 とり松（架空）</b>
+        <span>返信トーンの初期設定：ていねい・下町の人情</span>
+      </div>
+    </div>
+  </header>
+  <main><div id="view"></div></main>
+  <footer>クチコミ即レス ── AIdollargame 試作デモ</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== サンプルデータ（すべて架空） =====
+const REVIEWS = [
+  {
+    id:1, media:"Google", stars:2, name:"出張よく行く人（架空）", date:"2日前",
+    text:"予約していたのに席が用意できていなくて、15分ほど外で待たされました。料理は美味しかっただけに、その一点が残念でした。",
+    suggest:"owabi",
+    drafts:{
+      teinei:"この度はご予約時のご案内が行き届かず、店頭でお待たせしてしまい誠に申し訳ございませんでした。料理をお気に召していただけたご様子、救われる思いです。予約席の管理を見直し、二度と同じ思いをさせぬよう努めます。またのご来店を心よりお待ちしております。",
+      friendly:"せっかくのご予約なのにお待たせしてしまい、本当にごめんなさい！お料理を気に入っていただけたのがせめてもの救いです。席のご用意、しっかり立て直します。次はスムーズにお迎えしますので、ぜひまた寄ってください。",
+      owabi:"この度はご予約をいただいていたにもかかわらず、店頭で15分もお待たせする事態となり、深くお詫び申し上げます。予約席の準備体制に不備がございました。原因を確認し、受付から着席までの手順を改めます。お料理へのお言葉に甘えず、次回は気持ちよくお迎えできるよう改善してまいります。"
+    }
+  },
+  {
+    id:2, media:"ホットペッパー", stars:4, name:"M・Yさん（架空）", date:"4日前",
+    text:"串の焼き加減はさすがでした。ただ、混んでいた時間だったので提供までが少し待ち遠しかったです。",
+    suggest:"teinei",
+    drafts:{
+      teinei:"ご来店ありがとうございます。焼き加減にご満足いただけたとのこと、炭火場の者も喜んでおります。混雑時のご提供の遅れにつきましては、焼きの段取りを工夫してまいります。次回はより心地よい時間をお過ごしいただけるよう努めます。",
+      friendly:"ありがとうございます！焼き加減、褒めていただけて大将もにやけております。混んでる時間はどうしても遅れがちで…そこは段取りを磨きます。次はもう少しテンポよくお出ししますね。またお待ちしています！",
+      owabi:"この度はご来店ありがとうございました。串をお気に召していただけた一方で、ご提供までお待たせしてしまい申し訳ございませんでした。混雑時間帯の焼き場の回し方を見直し、お待たせを減らせるよう改善いたします。"
+    }
+  },
+  {
+    id:3, media:"食べログ", stars:5, name:"たけし（架空）", date:"6日前",
+    text:"記念日で利用しました。無理を言ってサプライズをお願いしたのに、快く対応してくださって家族も大喜び。大将の人柄も最高です。",
+    suggest:"friendly",
+    drafts:{
+      teinei:"記念日の大切な席にお選びいただき、誠にありがとうございました。サプライズのご様子にご家族が喜ばれたとのこと、私どもも大変うれしく存じます。またご家族の節目に、ぜひお立ち寄りくださいませ。心よりお待ちしております。",
+      friendly:"記念日にとり松を選んでくださって、こちらこそありがとうございます！ご家族が喜んでくれたと聞いて、大将も裏で小躍りしていました。また何かの節目に、ぜひ顔を見せてください。腕によりをかけてお待ちしています！",
+      owabi:"この度は記念日の大切なひとときにご利用いただき、ありがとうございました。至らぬ点がございましたら遠慮なくお聞かせください。次回もご期待に沿えるよう努めてまいります。"
+    }
+  },
+  {
+    id:4, media:"Google", stars:5, name:"ゆか（架空）", date:"先週",
+    text:"カウンターで一人で飲んでいても居心地がよくて、常連さんとの距離感もちょうどいい。ふらっと通いたくなるお店です。",
+    suggest:"friendly", replied:true, tone:"friendly",
+    drafts:{
+      teinei:"あたたかいお言葉をありがとうございます。おひとりでも心地よくお過ごしいただけたとのこと、何よりでございます。またふらりとお立ち寄りいただけますよう、変わらぬ味と居心地でお待ちしております。",
+      friendly:"うれしいお言葉、ありがとうございます！ひとりでもゆっくりできる、あの空気を大事にしています。また気が向いたら、ふらっとカウンターに座りに来てくださいね。お待ちしています！",
+      owabi:"あたたかいお言葉をありがとうございます。今後も居心地の良さを保てるよう努めてまいります。またのお越しをお待ちしております。"
+    }
+  }
+];
+
+const TONES = [
+  { key:"teinei", label:"ていねい" },
+  { key:"friendly", label:"フレンドリー" },
+  { key:"owabi", label:"おわび強め" }
+];
+const MIN_PER_REPLY = 8;
+let current = null, currentTone = null;
+
+function starHTML(n){
+  let s="";
+  for(let i=1;i<=5;i++) s += `<span class="${i<=n?'':'off'}">★</span>`;
+  return `<span class="stars">${s}</span>`;
+}
+
+function list(){
+  const unrep = REVIEWS.filter(r=>!r.replied).length;
+  const rep = REVIEWS.filter(r=>r.replied).length;
+  const saved = rep*MIN_PER_REPLY;
+  let cards = REVIEWS.map(r=>`
+    <div class="card ${r.replied?'replied':''}" ${r.replied?'':`onclick="open_(${r.id})"`}>
+      <div class="top">
+        ${starHTML(r.stars)}
+        <span class="media">${r.media}</span>
+      </div>
+      <div class="who">${r.name}・${r.date}</div>
+      <div class="rvtext">${r.text}</div>
+      <span class="badge ${r.replied?'b-done':'b-new'}">${r.replied?'返信済み':'未返信 ・ タップで下書き'}</span>
+    </div>`).join('');
+  return `
+    <div class="kpi">
+      <div class="box hot"><b>${unrep}</b><span>未返信</span></div>
+      <div class="box ok"><b>${rep}</b><span>返信済み</span></div>
+      <div class="box"><b>${saved}分</b><span>今週の時短</span></div>
+    </div>
+    <div class="sec-t">新着クチコミ（星と内容からトーンを自動提案）</div>
+    ${cards}`;
+}
+
+function open_(id){
+  current = REVIEWS.find(r=>r.id===id);
+  currentTone = current.suggest;
+  const v = document.getElementById('view');
+  v.innerHTML = `
+    <button class="back" onclick="go()">‹ 一覧へ</button>
+    <div class="card" style="cursor:default">
+      <div class="top">${starHTML(current.stars)}<span class="media">${current.media}</span></div>
+      <div class="who">${current.name}・${current.date}</div>
+      <div class="rvtext">${current.text}</div>
+    </div>
+    <div class="sec-t" style="margin-top:6px">AIの下書き（トーンを選ぶと文章が変わります）</div>
+    <div class="tonerow" id="toneRow"></div>
+    <div class="draft" id="draft"><span class="gen">下書きを生成中…</span></div>
+    <div class="hint" id="hint"></div>
+    <button class="btn" onclick="reply()">この文で返信する</button>
+    <button class="btn ghost" onclick="go()">あとで</button>`;
+  renderTones();
+  setTimeout(()=>renderDraft(true), 380);
+}
+
+function renderTones(){
+  document.getElementById('toneRow').innerHTML = TONES.map(t=>
+    `<div class="tone ${t.key===currentTone?'on':''}" onclick="setTone('${t.key}')">${t.label}</div>`
+  ).join('');
+}
+function setTone(k){ currentTone=k; renderTones(); renderDraft(false); }
+
+function renderDraft(first){
+  document.getElementById('draft').textContent = current.drafts[currentTone];
+  const suggested = (currentTone===current.suggest);
+  document.getElementById('hint').textContent = suggested
+    ? `AIのおすすめ：星${current.stars}の内容には「${TONES.find(t=>t.key===currentTone).label}」が向いています`
+    : `別のトーンに切り替えました`;
+}
+
+function reply(){
+  current.replied = true;
+  current.tone = currentTone;
+  toast("返信を送信済みにしました");
+  go();
+}
+
+function go(){ current=null; document.getElementById('view').innerHTML = list(); }
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+go();
+</script>
+</body>
+</html>

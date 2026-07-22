@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>町工場つなぎ｜デモ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root{
+    --bg:#f5f4f0; --blue:#2563eb; --ink:#1a1a1a; --sub:#6b7280;
+    --line:#e5e3dd; --card:#ffffff; --green:#0f9d58; --amber:#b45309;
+  }
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:440px; margin:0 auto; min-height:100vh; padding-bottom:80px; }
+  .demoflag{
+    background:#111; color:#fff; font-size:11px; text-align:center;
+    padding:5px 8px; letter-spacing:.04em;
+  }
+  header.app{
+    background:var(--card); border-bottom:1px solid var(--line);
+    padding:14px 18px; position:sticky; top:0; z-index:10;
+  }
+  header.app h1{ font-size:18px; font-weight:800; letter-spacing:.01em; }
+  header.app p{ font-size:12px; color:var(--sub); margin-top:2px; }
+  .me{
+    display:flex; align-items:center; gap:10px; margin-top:10px;
+    background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:9px 11px;
+  }
+  .me .ico{
+    width:34px; height:34px; border-radius:9px; background:var(--blue); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex:0 0 auto;
+  }
+  .me b{ font-size:13px; }
+  .me span{ font-size:11px; color:var(--sub); display:block; }
+  main{ padding:16px 16px 0; }
+  .tabs{
+    display:flex; gap:6px; margin-bottom:14px;
+  }
+  .tab{
+    flex:1; text-align:center; padding:9px 4px; border-radius:10px; font-size:13px; font-weight:700;
+    background:var(--card); border:1px solid var(--line); color:var(--sub); cursor:pointer;
+  }
+  .tab.on{ background:var(--blue); color:#fff; border-color:var(--blue); }
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:14px; margin-bottom:12px; cursor:pointer; transition:.12s;
+  }
+  .card:active{ transform:scale(.99); }
+  .card .top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+  .card h3{ font-size:15px; font-weight:800; }
+  .card .maker{ font-size:11px; color:var(--sub); margin-top:1px; }
+  .match{
+    flex:0 0 auto; text-align:center; border-radius:10px; padding:5px 9px; min-width:62px;
+  }
+  .match b{ font-size:18px; font-weight:900; display:block; line-height:1.1; }
+  .match span{ font-size:9px; letter-spacing:.02em; }
+  .m-hi{ background:#e7f3ec; color:var(--green); }
+  .m-mid{ background:#fdf3e3; color:var(--amber); }
+  .m-lo{ background:#f0eeea; color:var(--sub); }
+  .meta{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .chip{
+    font-size:11px; background:var(--bg); border:1px solid var(--line);
+    border-radius:999px; padding:3px 9px; color:#374151;
+  }
+  .row{ display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px dashed var(--line); }
+  .row:last-child{ border-bottom:none; }
+  .row .k{ color:var(--sub); }
+  .row .v{ font-weight:700; }
+  .btn{
+    display:block; width:100%; text-align:center; background:var(--blue); color:#fff;
+    border:none; border-radius:12px; padding:14px; font-size:15px; font-weight:800;
+    cursor:pointer; margin-top:14px; font-family:inherit;
+  }
+  .btn:active{ opacity:.85; }
+  .btn.ghost{ background:var(--card); color:var(--blue); border:1.5px solid var(--blue); }
+  .back{
+    background:none; border:none; color:var(--blue); font-size:14px; font-weight:700;
+    cursor:pointer; padding:4px 0; margin-bottom:6px; font-family:inherit;
+  }
+  .why{
+    background:#eef4ff; border:1px solid #d5e2fb; border-radius:12px; padding:11px 12px; margin-top:12px;
+  }
+  .why b{ font-size:12px; color:var(--blue); }
+  .why ul{ margin:6px 0 0 16px; font-size:12.5px; color:#374151; }
+  .why li{ margin-bottom:2px; }
+  .sec-t{ font-size:12px; color:var(--sub); font-weight:700; margin:2px 0 8px; letter-spacing:.02em; }
+  .empty{ text-align:center; color:var(--sub); font-size:13px; padding:26px 10px; }
+  .done{
+    background:#e7f3ec; border:1px solid #bfe3cd; border-radius:14px; padding:16px; text-align:center;
+  }
+  .done .big{ font-size:16px; font-weight:800; color:var(--green); }
+  .done p{ font-size:13px; color:#374151; margin-top:6px; }
+  .toast{
+    position:fixed; left:50%; bottom:22px; transform:translateX(-50%);
+    background:#111; color:#fff; font-size:13px; padding:11px 18px; border-radius:999px;
+    opacity:0; pointer-events:none; transition:.25s; z-index:50; white-space:nowrap;
+  }
+  .toast.show{ opacity:1; }
+  .field-label{ font-size:12px; color:var(--sub); font-weight:700; margin:12px 0 5px; }
+  select,input,textarea{
+    width:100%; font-family:inherit; font-size:14px; padding:11px; border:1px solid var(--line);
+    border-radius:10px; background:var(--card); color:var(--ink);
+  }
+  .price-hint{ font-size:12px; color:var(--green); font-weight:700; margin-top:6px; }
+  footer{ text-align:center; font-size:11px; color:var(--sub); padding:22px 16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demoflag">デモ（サンプルデータ）実在の企業・図面ではありません</div>
+  <header class="app">
+    <h1>町工場つなぎ</h1>
+    <p>近所の工場と、余力と仕事をやりとり</p>
+    <div class="me">
+      <div class="ico">丸</div>
+      <div>
+        <b>マルワ精密（架空）</b>
+        <span>NC旋盤3台・マシニング2台／得意：小径・多品種少量</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="tabs">
+      <div class="tab on" data-tab="uke" onclick="switchTab('uke')">受注する</div>
+      <div class="tab" data-tab="dasu" onclick="switchTab('dasu')">余力を出す</div>
+      <div class="tab" data-tab="done" onclick="switchTab('done')">成約</div>
+    </div>
+    <div id="view"></div>
+  </main>
+  <footer>町工場つなぎ ── AIdollargame 1日1アプリ実験室のデモ</footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== サンプルデータ（すべて架空） =====
+const JOBS = [
+  {
+    id:1, title:"アルミ部品 小径シャフト 200個",
+    maker:"ヤマト工作所（架空）", area:"車で12分",
+    material:"アルミ A5052", process:"NC旋盤", qty:"200個", due:"9日後", unit:"1個 480円",
+    total:"9.6万円",
+    fit:["得意の小径旋盤加工", "手持ちのA5052端材で対応可", "納期に3日の余裕"],
+    risk:null, match:92
+  },
+  {
+    id:2, title:"ステン ブラケット 80個 曲げ+溶接",
+    maker:"みなと鉄工（架空）", area:"車で20分",
+    material:"SUS304", process:"板金・溶接", qty:"80個", due:"5日後", unit:"1個 1,350円",
+    total:"10.8万円",
+    fit:["溶接1名が今週手空き", "図面はシンプルなL曲げ"],
+    risk:"ベンダーの段取り替えに半日", match:64
+  },
+  {
+    id:3, title:"樹脂 治具 5個 マシニング",
+    maker:"さくら製作所（架空）", area:"車で8分",
+    material:"MCナイロン", process:"マシニング", qty:"5個", due:"3日後", unit:"1個 8,000円",
+    total:"4万円",
+    fit:["マシニング2台のうち1台が空き"],
+    risk:"樹脂切削の実績が少なめ・納期がタイト", match:41
+  },
+];
+
+const OFFERS = [
+  { proc:"NC旋盤（1台・今週後半）", note:"小径・多品種少量が得意" },
+  { proc:"マシニング（1台・木金）", note:"金属・樹脂どちらも可" },
+];
+
+let done = [];
+let current = 'uke';
+
+// ===== 描画 =====
+function matchClass(m){ return m>=80?'m-hi':m>=55?'m-mid':'m-lo'; }
+function matchWord(m){ return m>=80?'相性◎':m>=55?'相性○':'要検討'; }
+
+function switchTab(t){
+  current = t;
+  document.querySelectorAll('.tab').forEach(el=>{
+    el.classList.toggle('on', el.dataset.tab===t);
+  });
+  render();
+}
+
+function render(){
+  const v = document.getElementById('view');
+  if(current==='uke') v.innerHTML = listUke();
+  else if(current==='dasu') v.innerHTML = viewDasu();
+  else v.innerHTML = viewDone();
+}
+
+function listUke(){
+  const open = JOBS.filter(j=>!done.find(d=>d.id===j.id));
+  if(open.length===0) return `<div class="empty">近隣の募集案件は今ありません。<br>また覗いてみてください。</div>`;
+  let h = `<div class="sec-t">近隣工場が出した「手が回らない案件」（AIが自社設備との相性を判定）</div>`;
+  open.forEach(j=>{
+    h += `<div class="card" onclick="detail(${j.id})">
+      <div class="top">
+        <div>
+          <h3>${j.title}</h3>
+          <div class="maker">${j.maker}・${j.area}</div>
+        </div>
+        <div class="match ${matchClass(j.match)}">
+          <b>${j.match}</b><span>${matchWord(j.match)}</span>
+        </div>
+      </div>
+      <div class="meta">
+        <span class="chip">${j.process}</span>
+        <span class="chip">${j.material}</span>
+        <span class="chip">${j.qty}</span>
+        <span class="chip">納期 ${j.due}</span>
+      </div>
+    </div>`;
+  });
+  return h;
+}
+
+function detail(id){
+  const j = JOBS.find(x=>x.id===id);
+  const v = document.getElementById('view');
+  let fit = j.fit.map(f=>`<li>${f}</li>`).join('');
+  let riskBlock = j.risk ? `<div class="field-label" style="color:var(--amber)">気をつける点</div><div class="chip" style="background:#fdf3e3;border-color:#f0dcae;color:var(--amber)">${j.risk}</div>` : '';
+  v.innerHTML = `
+    <button class="back" onclick="switchTab('uke')">‹ 一覧へ</button>
+    <div class="card" style="cursor:default">
+      <div class="top">
+        <div><h3>${j.title}</h3><div class="maker">${j.maker}・${j.area}</div></div>
+        <div class="match ${matchClass(j.match)}"><b>${j.match}</b><span>${matchWord(j.match)}</span></div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="row"><span class="k">加工</span><span class="v">${j.process}</span></div>
+        <div class="row"><span class="k">材料</span><span class="v">${j.material}</span></div>
+        <div class="row"><span class="k">数量</span><span class="v">${j.qty}</span></div>
+        <div class="row"><span class="k">納期</span><span class="v">${j.due}</span></div>
+        <div class="row"><span class="k">想定単価</span><span class="v">${j.unit}</span></div>
+        <div class="row"><span class="k">概算</span><span class="v">${j.total}</span></div>
+      </div>
+      <div class="why">
+        <b>AIが相性${j.match}と見た理由</b>
+        <ul>${fit}</ul>
+      </div>
+      ${riskBlock}
+    </div>
+    <button class="btn" onclick="offerJob(${j.id})">この単価で引き受ける</button>
+    <button class="btn ghost" onclick="switchTab('uke')">見送る</button>
+  `;
+}
+
+function offerJob(id){
+  const j = JOBS.find(x=>x.id===id);
+  if(!done.find(d=>d.id===id)) done.unshift(j);
+  toast("引き受けを送信しました");
+  switchTab('done');
+}
+
+function viewDasu(){
+  let list = OFFERS.map(o=>`
+    <div class="card" style="cursor:default">
+      <h3 style="font-size:14px">${o.proc}</h3>
+      <div class="maker" style="margin-top:3px">${o.note}</div>
+      <span class="chip" style="margin-top:9px;background:#e7f3ec;border-color:#bfe3cd;color:var(--green)">公開中・近隣3工場に表示</span>
+    </div>`).join('');
+  return `
+    <div class="sec-t">空いている設備を出すと、近隣の工場から仕事が来ます</div>
+    ${list}
+    <div class="card" style="cursor:default">
+      <div class="field-label">出す設備・空き枠</div>
+      <select id="ofProc">
+        <option>NC旋盤（1台）</option>
+        <option>マシニング（1台）</option>
+        <option>ワイヤーカット（1台）</option>
+        <option>溶接・板金（1名）</option>
+      </select>
+      <div class="field-label">空いている時期</div>
+      <select id="ofWhen">
+        <option>今週後半</option><option>来週いっぱい</option><option>随時</option>
+      </select>
+      <div class="price-hint">近隣で同条件の相場：1台あたり 週 3万〜5万円ぶんの受注が目安</div>
+      <button class="btn" onclick="postOffer()">この余力を出す</button>
+    </div>`;
+}
+
+function postOffer(){
+  const p = document.getElementById('ofProc').value;
+  const w = document.getElementById('ofWhen').value;
+  OFFERS.unshift({ proc:`${p}（${w}）`, note:"公開直後・マッチ待ち" });
+  toast("余力を公開しました");
+  render();
+}
+
+function viewDone(){
+  if(done.length===0) return `<div class="empty">まだ成約はありません。<br>「受注する」から相性の良い案件を引き受けてみてください。</div>`;
+  let total = done.reduce((s,j)=>s + Number(j.total.replace(/[^0-9.]/g,'')), 0);
+  let list = done.map(j=>`
+    <div class="card" style="cursor:default">
+      <div class="top">
+        <div><h3 style="font-size:14px">${j.title}</h3><div class="maker">${j.maker}</div></div>
+        <div class="v" style="font-size:14px">${j.total}</div>
+      </div>
+      <span class="chip" style="margin-top:9px;background:#e7f3ec;border-color:#bfe3cd;color:var(--green)">引き受け済み・${j.due}納期</span>
+    </div>`).join('');
+  return `
+    <div class="done">
+      <div class="big">今月つないだ仕事 ${done.length}件</div>
+      <p>受注額の合計 約${total.toFixed(1)}万円ぶん。<br>手が空いた週が、そのまま売上に変わります。</p>
+    </div>
+    <div class="sec-t" style="margin-top:14px">成約リスト</div>
+    ${list}`;
+}
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+render();
+</script>
+</body>
+</html>

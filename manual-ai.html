@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社内マニュアルAI｜マニュアルを覚えたAIに、聞けば10秒で答えが返る — AIdollargame</title>
+<meta name="description" content="社内マニュアル・業務手順書・研修資料をAIに覚えさせ、スタッフの質問にチャットで即答。新人教育の負担、ベテランへの質問集中、離職によるノウハウ流出に。多店舗・多スタッフの現場向け社内ナレッジAI。">
+<meta name="author" content="株式会社AIdollargame">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://aidollargame.com/manual-ai.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="株式会社AIdollargame">
+<meta property="og:title" content="社内マニュアルAI｜聞けば10秒で答えが返る">
+<meta property="og:description" content="社内マニュアルをAIに覚えさせて、スタッフの質問にチャットで即答。新人教育・ベテランへの質問集中・ノウハウ流出対策に。">
+<meta property="og:url" content="https://aidollargame.com/manual-ai.html">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:locale" content="ja_JP">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"ホーム","item":"https://aidollargame.com/"},
+    {"@type":"ListItem","position":2,"name":"社内マニュアルAI","item":"https://aidollargame.com/manual-ai.html"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"紙のマニュアルやバラバラのExcelしかなくても導入できますか？","acceptedAnswer":{"@type":"Answer","text":"できます。PDF・Word・Excel・スプレッドシートなど形式が混ざっていても、AIが読める形への整理からお手伝いします。マニュアルの整備状況はヒアリングで確認します。"}},
+    {"@type":"Question","name":"AIが間違った答えを返しませんか？","acceptedAnswer":{"@type":"Answer","text":"覚えさせた社内資料の範囲で答える設計にし、資料にないことは「わからない」と答えさせます。導入時にテスト期間を設け、実際の質問で精度を確認してから現場に展開します。"}},
+    {"@type":"Question","name":"料金はいくらですか？","acceptedAnswer":{"@type":"Answer","text":"マニュアルの量・利用人数・サポート範囲によって変わるため、初回の無料相談でご要望を伺ったうえで個別見積もりを提示します。料金の決まり方は料金ページをご覧ください。"}}
+  ]
+}
+</script>
+
+<style>
+  :root { --line:#e5e7eb; --bg-section:#fafbfc; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; background:#fff; }
+  body { background:#fff; color:#000; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; line-height:1.9; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  a { color:inherit; text-decoration:none; }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.1rem 3rem; background:rgba(255,255,255,0.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--line); }
+  .logo { font-size:1.15rem; font-weight:700; color:#000; display:inline-flex; align-items:baseline; }
+  .logo .heart-i { position:relative; display:inline-block; line-height:1; color:#ff5757; }
+  .logo .heart-i::after { content:'\2665'; position:absolute; left:50%; bottom:75%; transform:translateX(-50%); font-size:0.42em; line-height:1; color:#ff5757; pointer-events:none; }
+  nav ul { display:flex; list-style:none; gap:2.2rem; align-items:center; }
+  nav a { color:#000; font-size:0.86rem; font-weight:500; transition:opacity 0.2s; }
+  nav a:hover { opacity:0.6; }
+  .nav-cta { padding:0.6rem 1.3rem; background:#000; color:#fff !important; font-weight:600; font-size:0.84rem; border-radius:6px; }
+  .nav-cta:hover { background:#222; }
+
+  .wrap { max-width:860px; margin:0 auto; padding:9rem 2rem 5rem; }
+  .eyebrow { font-size:0.75rem; letter-spacing:0.25em; font-weight:700; margin-bottom:1.4rem; display:inline-flex; align-items:center; gap:0.7rem; }
+  .eyebrow::before { content:''; display:inline-block; width:22px; height:1px; background:#000; }
+  h1 { font-size:clamp(1.6rem,3.4vw,2.3rem); font-weight:900; line-height:1.5; letter-spacing:-0.01em; margin-bottom:1.2rem; }
+  .lead { font-size:1.05rem; color:#333; margin-bottom:2.4rem; }
+  h2 { font-size:1.25rem; font-weight:900; margin:3.2rem 0 1.1rem; padding-left:0.9rem; border-left:3px solid #000; }
+  p { font-size:1rem; margin-bottom:1.2rem; }
+  ul.plain { list-style:none; display:grid; gap:0.7rem; margin-bottom:1.2rem; }
+  ul.plain li { background:#fff; border:1px solid var(--line); border-radius:10px; padding:1rem 1.3rem; font-size:0.95rem; line-height:1.8; }
+  ul.plain li strong { font-weight:900; }
+  .steps { counter-reset:step; list-style:none; display:grid; gap:0.7rem; margin-bottom:1.2rem; }
+  .steps li { background:var(--bg-section); border:1px solid var(--line); border-radius:10px; padding:1rem 1.3rem 1rem 3.4rem; font-size:0.95rem; position:relative; }
+  .steps li::before { counter-increment:step; content:counter(step); position:absolute; left:1.1rem; top:1.05rem; width:1.6rem; height:1.6rem; border-radius:50%; background:#000; color:#fff; font-weight:900; font-size:0.8rem; display:flex; align-items:center; justify-content:center; }
+  .faq-item { border:1px solid var(--line); border-radius:10px; padding:1.2rem 1.4rem; margin-bottom:0.8rem; }
+  .faq-item h3 { font-size:0.98rem; font-weight:900; margin-bottom:0.5rem; }
+  .faq-item p { font-size:0.93rem; margin-bottom:0; color:#333; }
+  .cta { background:#000; color:#fff; border-radius:12px; padding:2.6rem 2rem; margin-top:3.5rem; text-align:center; }
+  .cta h3 { font-size:1.25rem; font-weight:900; margin-bottom:0.6rem; }
+  .cta p { color:#fff; opacity:0.85; font-size:0.92rem; margin-bottom:1.6rem; }
+  .btn { display:inline-flex; align-items:center; gap:0.5rem; padding:0.95rem 2rem; background:#fff; color:#000; font-weight:700; font-size:0.93rem; border-radius:6px; transition:background 0.2s, transform 0.2s; margin:0 0.4rem 0.6rem; }
+  .btn:hover { background:#eee; transform:translateY(-2px); }
+  .btn.ghost { background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.5); }
+  .btn.ghost:hover { background:rgba(255,255,255,0.12); }
+  .related { display:flex; gap:1.4rem; flex-wrap:wrap; margin-top:2rem; font-size:0.88rem; }
+  .related a { text-decoration:underline; }
+  footer { background:var(--bg-section); border-top:1px solid var(--line); padding:2.6rem 3rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+  .fc { font-size:0.78rem; color:#000; opacity:0.6; }
+  .footer-links { display:flex; gap:1.8rem; flex-wrap:wrap; }
+  .footer-links a { font-size:0.82rem; }
+  @media(max-width:700px) {
+    nav { padding:1rem 1.4rem; } nav ul { gap:1.1rem; } nav ul li:nth-child(-n+2) { display:none; }
+    .wrap { padding:7rem 1.4rem 3.5rem; }
+    footer { padding:2rem 1.4rem; flex-direction:column; align-items:flex-start; }
+  }
+</style>
+<!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Q45D6XVQZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8Q45D6XVQZ');
+</script>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo"><span>A<span class="heart-i">ı</span>dollargame</span></a>
+  <ul>
+    <li><a href="ryokin.html">料金</a></li>
+    <li><a href="donyu-flow.html">導入の流れ</a></li>
+    <li><a href="shindan.html">無料AI診断</a></li>
+    <li><a href="index.html#contact" class="nav-cta">無料相談</a></li>
+  </ul>
+</nav>
+
+<div class="wrap">
+  <div class="eyebrow">KNOWLEDGE AI — 社内マニュアルAI</div>
+  <h1>マニュアルを覚えたAIに、<br>スタッフが「聞けば10秒」で答えが返る。</h1>
+  <p class="lead">社内マニュアル・業務手順書・研修資料をAIに覚えさせて、スタッフの質問にチャットで即答させるサービスです。新しい仕組みを覚える必要はありません。ふだん使っているLINEやチャットに、「マニュアル全部を覚えた先輩」がひとり増えるイメージです。</p>
+
+  <h2>こんな現場のためのサービスです</h2>
+  <ul class="plain">
+    <li><strong>スタッフが多く、同じ質問が何度も飛んでくる。</strong>「この場合どうするんでしたっけ？」への回答で、店長やベテランの時間が削られている</li>
+    <li><strong>入れ替わりが多く、教えてもまた一から。</strong>新人教育のたびに同じ説明を繰り返し、辞めるとノウハウごと消える</li>
+    <li><strong>マニュアルはあるのに、読まれていない。</strong>分厚いファイルや散らばったExcelから答えを探すより、人に聞くほうが早いから</li>
+  </ul>
+  <p>飲食・美容・介護・小売・運送など、多店舗・多スタッフでマニュアルが多い現場で特に効果を発揮します。</p>
+
+  <h2>できること</h2>
+  <ul class="plain">
+    <li><strong>質問に即答:</strong> 「レジの返金処理のやり方は？」「この症状のお客様への対応は？」— スタッフがチャットで聞くと、マニュアルに基づいてAIが答えます</li>
+    <li><strong>根拠を提示:</strong> どのマニュアルのどの部分に基づく回答かを示すので、確認もすぐできます</li>
+    <li><strong>資料にないことは答えない:</strong> 覚えさせた範囲の外は「わからない」と答える設計。勝手な創作で現場を混乱させません</li>
+    <li><strong>社外対応にも同じAIを使える:</strong> 同じ仕組みでお客様からの質問対応（営業時間・料金・予約など）にも広げられます（<a href="line-ai-agent.html" style="text-decoration:underline;">AIチャットエージェント</a>）</li>
+  </ul>
+
+  <h2>導入の流れ</h2>
+  <ol class="steps">
+    <li><strong>無料相談（オンライン可）。</strong>現場の困りごとと、いまあるマニュアルの状況を伺います</li>
+    <li><strong>資料をお預かりして試作。</strong>実際のマニュアルの一部でAIを作り、答えの精度を確かめていただきます</li>
+    <li><strong>テスト運用。</strong>一部のスタッフで実際に使い、回答を調整します</li>
+    <li><strong>本導入・運用。</strong>マニュアルの更新もこちらで反映。現場は「聞くだけ」です</li>
+  </ol>
+  <p>詳しくは<a href="donyu-flow.html" style="text-decoration:underline;">導入の流れ</a>をご覧ください。</p>
+
+  <h2>よくある質問</h2>
+  <div class="faq-item">
+    <h3>紙のマニュアルやバラバラのExcelしかなくても導入できますか？</h3>
+    <p>できます。PDF・Word・Excel・スプレッドシートなど形式が混ざっていても、AIが読める形への整理からお手伝いします。</p>
+  </div>
+  <div class="faq-item">
+    <h3>AIが間違った答えを返しませんか？</h3>
+    <p>覚えさせた社内資料の範囲で答える設計にし、資料にないことは「わからない」と答えさせます。導入時にテスト期間を設け、実際の質問で精度を確認してから現場に展開します。</p>
+  </div>
+  <div class="faq-item">
+    <h3>ITに詳しい担当者がいなくても大丈夫ですか？</h3>
+    <p>大丈夫です。構築も更新もこちらで行うため、貴社側の作業は「マニュアルを渡す」「使ってみて感想を言う」の2つだけです。</p>
+  </div>
+  <div class="faq-item">
+    <h3>料金はいくらですか？</h3>
+    <p>マニュアルの量・利用人数・サポート範囲によって変わるため、初回の無料相談で個別見積もりを提示します。決まり方は<a href="ryokin.html" style="text-decoration:underline;">料金ページ</a>をご覧ください。</p>
+  </div>
+
+  <div class="cta">
+    <h3>まずは、いまのマニュアルの状態から相談できます</h3>
+    <p>「マニュアルが整っていないから無理かも」という段階のご相談こそ歓迎です。初回相談は無料です。</p>
+    <a href="index.html#contact" class="btn">無料で相談する →</a>
+    <a href="shindan.html" class="btn ghost">3分のAI診断を試す</a>
+  </div>
+
+  <div class="related">
+    関連ページ:
+    <a href="ryokin.html">料金の考え方</a>
+    <a href="donyu-flow.html">導入の流れ</a>
+    <a href="line-ai-agent.html">AIチャットエージェント</a>
+    <a href="articles/knowledge-stays-2026.html">記事: 辞めてもノウハウが残る会社へ</a>
+  </div>
+</div>
+
+<footer>
+  <div class="logo">A<span class="heart-i">ı</span>dollargame</div>
+  <div class="footer-links">
+    <a href="index.html">トップ</a>
+    <a href="ryokin.html">料金</a>
+    <a href="donyu-flow.html">導入の流れ</a>
+    <a href="articles/index.html">記事</a>
+    <a href="tokushoho.html">特定商取引法に基づく表記</a>
+    <a href="privacy.html">プライバシーポリシー</a>
+  </div>
+  <div class="fc">© 2026 株式会社AIdollargame</div>
+</footer>
+
+<script defer src="scripts/ga-events.js"></script>
+</body>
+</html>

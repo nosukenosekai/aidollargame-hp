@@ -94,8 +94,10 @@
   .cta { background:#000; color:#fff; border-radius:12px; padding:2.6rem 2rem; margin-top:3.5rem; text-align:center; }
   .cta h3 { font-size:1.25rem; font-weight:900; margin-bottom:0.6rem; }
   .cta p { color:#fff; opacity:0.85; font-size:0.92rem; margin-bottom:1.6rem; }
-  .btn { display:inline-flex; align-items:center; gap:0.5rem; padding:0.95rem 2rem; background:#fff; color:#000; font-weight:700; font-size:0.93rem; border-radius:6px; transition:background 0.2s, transform 0.2s; }
+  .btn { display:inline-flex; align-items:center; gap:0.5rem; padding:0.95rem 2rem; background:#fff; color:#000; font-weight:700; font-size:0.93rem; border-radius:6px; transition:background 0.2s, transform 0.2s; margin:0 0.4rem 0.6rem; }
   .btn:hover { background:#eee; transform:translateY(-2px); }
+  .btn.ghost { background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.5); }
+  .btn.ghost:hover { background:rgba(255,255,255,0.12); }
   footer { background:var(--bg-section); border-top:1px solid var(--line); padding:2.6rem 3rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
   .fc { font-size:0.78rem; color:#000; opacity:0.6; }
   .footer-links { display:flex; gap:1.8rem; }
@@ -161,12 +163,15 @@
     <li><a href="human-clone-ai.html" style="text-decoration:underline;">AIwill（社長クローンAI）</a> — 経営者の思考をデジタル化し、後継者不足に挑む</li>
     <li><a href="aiside.html" style="text-decoration:underline;">AIside（アイサイド）</a> — 一人社長・経営者の付き人AI</li>
     <li><a href="ai-training.html" style="text-decoration:underline;">AI研修・社員リスキリング</a> — 貴社の実業務を教材にした実践型研修</li>
+    <li><a href="manual-ai.html" style="text-decoration:underline;">社内マニュアルAI</a> — マニュアルを覚えたAIがスタッフの質問に即答</li>
   </ul>
+  <p style="font-size:0.9rem;"><a href="ryokin.html" style="text-decoration:underline;">料金の考え方</a>・<a href="donyu-flow.html" style="text-decoration:underline;">導入の流れ</a>も公開しています。</p>
 
   <div class="cta">
     <h3>講演・取材・AI導入のご相談</h3>
-    <p>登壇・メディア取材のご依頼、AI導入・研修のご相談は、こちらからお気軽にどうぞ。</p>
+    <p>登壇・メディア取材のご依頼、AI導入・研修のご相談は、こちらからお気軽にどうぞ。初回相談は無料です。</p>
     <a href="index.html#contact" class="btn">問い合わせる →</a>
+    <a href="shindan.html" class="btn ghost">3分でわかる無料AI診断</a>
   </div>
 </div>
 
@@ -174,6 +179,8 @@
   <div class="logo">A<span class="heart-i">ı</span>dollargame</div>
   <div class="footer-links">
     <a href="index.html">トップ</a>
+    <a href="ryokin.html">料金</a>
+    <a href="donyu-flow.html">導入の流れ</a>
     <a href="articles/index.html">記事</a>
     <a href="tokushoho.html">特定商取引法に基づく表記</a>
     <a href="privacy.html">プライバシーポリシー</a>
@@ -181,5 +188,6 @@
   <div class="fc">© 2026 株式会社AIdollargame</div>
 </footer>
 
+<script defer src="scripts/ga-events.js"></script>
 </body>
 </html>

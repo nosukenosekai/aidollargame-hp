@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI導入の流れ｜相談から運用開始まで5ステップ — AIdollargame</title>
+<meta name="description" content="中小企業のAI導入は何から始まる？無料相談→ヒアリング→見積もり→試作・テスト→運用開始の5ステップを具体的に説明。貴社側の作業は最小限、ITに詳しい担当者がいなくても導入できます。初回相談は無料。">
+<meta name="author" content="株式会社AIdollargame">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://aidollargame.com/donyu-flow.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="株式会社AIdollargame">
+<meta property="og:title" content="AI導入の流れ｜相談から運用開始まで5ステップ">
+<meta property="og:description" content="無料相談→ヒアリング→見積もり→試作・テスト→運用開始。貴社側の作業は最小限です。">
+<meta property="og:url" content="https://aidollargame.com/donyu-flow.html">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:locale" content="ja_JP">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"ホーム","item":"https://aidollargame.com/"},
+    {"@type":"ListItem","position":2,"name":"AI導入の流れ","item":"https://aidollargame.com/donyu-flow.html"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"導入までどのくらいの期間がかかりますか？","acceptedAnswer":{"@type":"Answer","text":"任せる業務の範囲と資料の状態によって変わるため、一律の期間はお約束していません。初回相談の際に、貴社の内容での目安をお伝えします。"}},
+    {"@type":"Question","name":"何を準備すればいいですか？","acceptedAnswer":{"@type":"Answer","text":"特別な準備は不要です。いま困っていることをそのまま話していただければ、必要な資料の洗い出しからこちらで行います。"}},
+    {"@type":"Question","name":"途中でやめられますか？","acceptedAnswer":{"@type":"Answer","text":"試作・テストの段階で「思っていたのと違う」となれば、そこで止めて構いません。合わないまま契約を進めることはしません。"}}
+  ]
+}
+</script>
+
+<style>
+  :root { --line:#e5e7eb; --bg-section:#fafbfc; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; background:#fff; }
+  body { background:#fff; color:#000; font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif; line-height:1.9; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  a { color:inherit; text-decoration:none; }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:1.1rem 3rem; background:rgba(255,255,255,0.92); backdrop-filter:blur(20px); border-bottom:1px solid var(--line); }
+  .logo { font-size:1.15rem; font-weight:700; color:#000; display:inline-flex; align-items:baseline; }
+  .logo .heart-i { position:relative; display:inline-block; line-height:1; color:#ff5757; }
+  .logo .heart-i::after { content:'\2665'; position:absolute; left:50%; bottom:75%; transform:translateX(-50%); font-size:0.42em; line-height:1; color:#ff5757; pointer-events:none; }
+  nav ul { display:flex; list-style:none; gap:2.2rem; align-items:center; }
+  nav a { color:#000; font-size:0.86rem; font-weight:500; transition:opacity 0.2s; }
+  nav a:hover { opacity:0.6; }
+  .nav-cta { padding:0.6rem 1.3rem; background:#000; color:#fff !important; font-weight:600; font-size:0.84rem; border-radius:6px; }
+  .nav-cta:hover { background:#222; }
+
+  .wrap { max-width:860px; margin:0 auto; padding:9rem 2rem 5rem; }
+  .eyebrow { font-size:0.75rem; letter-spacing:0.25em; font-weight:700; margin-bottom:1.4rem; display:inline-flex; align-items:center; gap:0.7rem; }
+  .eyebrow::before { content:''; display:inline-block; width:22px; height:1px; background:#000; }
+  h1 { font-size:clamp(1.6rem,3.4vw,2.3rem); font-weight:900; line-height:1.5; letter-spacing:-0.01em; margin-bottom:1.2rem; }
+  .lead { font-size:1.05rem; color:#333; margin-bottom:2.4rem; }
+  h2 { font-size:1.25rem; font-weight:900; margin:3.2rem 0 1.1rem; padding-left:0.9rem; border-left:3px solid #000; }
+  p { font-size:1rem; margin-bottom:1.2rem; }
+  .step { border:1px solid var(--line); border-radius:12px; padding:1.5rem 1.6rem; margin-bottom:1rem; position:relative; }
+  .step-num { font-size:0.72rem; letter-spacing:0.2em; font-weight:900; color:#888; margin-bottom:0.4rem; }
+  .step h3 { font-size:1.05rem; font-weight:900; margin-bottom:0.5rem; }
+  .step p { font-size:0.95rem; margin-bottom:0.4rem; color:#333; }
+  .step .you { display:inline-block; background:var(--bg-section); border:1px solid var(--line); border-radius:6px; padding:0.15rem 0.7rem; font-size:0.8rem; font-weight:700; margin-top:0.5rem; }
+  .faq-item { border:1px solid var(--line); border-radius:10px; padding:1.2rem 1.4rem; margin-bottom:0.8rem; }
+  .faq-item h3 { font-size:0.98rem; font-weight:900; margin-bottom:0.5rem; }
+  .faq-item p { font-size:0.93rem; margin-bottom:0; color:#333; }
+  .cta { background:#000; color:#fff; border-radius:12px; padding:2.6rem 2rem; margin-top:3.5rem; text-align:center; }
+  .cta h3 { font-size:1.25rem; font-weight:900; margin-bottom:0.6rem; }
+  .cta p { color:#fff; opacity:0.85; font-size:0.92rem; margin-bottom:1.6rem; }
+  .btn { display:inline-flex; align-items:center; gap:0.5rem; padding:0.95rem 2rem; background:#fff; color:#000; font-weight:700; font-size:0.93rem; border-radius:6px; transition:background 0.2s, transform 0.2s; margin:0 0.4rem 0.6rem; }
+  .btn:hover { background:#eee; transform:translateY(-2px); }
+  .btn.ghost { background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.5); }
+  .btn.ghost:hover { background:rgba(255,255,255,0.12); }
+  .related { display:flex; gap:1.4rem; flex-wrap:wrap; margin-top:2rem; font-size:0.88rem; }
+  .related a { text-decoration:underline; }
+  footer { background:var(--bg-section); border-top:1px solid var(--line); padding:2.6rem 3rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+  .fc { font-size:0.78rem; color:#000; opacity:0.6; }
+  .footer-links { display:flex; gap:1.8rem; flex-wrap:wrap; }
+  .footer-links a { font-size:0.82rem; }
+  @media(max-width:700px) {
+    nav { padding:1rem 1.4rem; } nav ul { gap:1.1rem; } nav ul li:nth-child(-n+2) { display:none; }
+    .wrap { padding:7rem 1.4rem 3.5rem; }
+    footer { padding:2rem 1.4rem; flex-direction:column; align-items:flex-start; }
+  }
+</style>
+<!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Q45D6XVQZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8Q45D6XVQZ');
+</script>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo"><span>A<span class="heart-i">ı</span>dollargame</span></a>
+  <ul>
+    <li><a href="manual-ai.html">社内マニュアルAI</a></li>
+    <li><a href="ryokin.html">料金</a></li>
+    <li><a href="shindan.html">無料AI診断</a></li>
+    <li><a href="index.html#contact" class="nav-cta">無料相談</a></li>
+  </ul>
+</nav>
+
+<div class="wrap">
+  <div class="eyebrow">PROCESS — AI導入の流れ</div>
+  <h1>相談から運用開始まで、5ステップ。<br>貴社側の作業は最小限です。</h1>
+  <p class="lead">「AIを入れたいが、何から始まるのか分からない」という方のために、当社にご相談いただいてから運用が始まるまでの流れをそのまま公開します。ITに詳しい担当者がいなくても大丈夫です。</p>
+
+  <h2>導入の5ステップ</h2>
+  <div class="step">
+    <div class="step-num">STEP 1</div>
+    <h3>無料相談（30分〜1時間・オンライン可）</h3>
+    <p>いま困っていることを、そのまま話してください。「AIで何ができるのか分からない」段階で大丈夫です。売り込みはせず、AIで解決できること・できないことを正直にお伝えします。</p>
+    <span class="you">貴社の作業: 話すだけ</span>
+  </div>
+  <div class="step">
+    <div class="step-num">STEP 2</div>
+    <h3>業務ヒアリングと資料の確認</h3>
+    <p>対象の業務内容と、いまあるマニュアル・資料の状態を確認します。必要な資料の洗い出しはこちらで行います。</p>
+    <span class="you">貴社の作業: 資料を渡すだけ</span>
+  </div>
+  <div class="step">
+    <div class="step-num">STEP 3</div>
+    <h3>見積もりのご提示</h3>
+    <p>任せる範囲と金額を明記した見積もりをお出しします。契約前提ではなく、相見積もりの1社としてのご利用も歓迎です。<a href="ryokin.html" style="text-decoration:underline;">費用の決まり方はこちら</a>。</p>
+    <span class="you">貴社の作業: 検討するだけ</span>
+  </div>
+  <div class="step">
+    <div class="step-num">STEP 4</div>
+    <h3>試作 → 実際に触ってテスト</h3>
+    <p>実際の資料の一部でAIを作り、貴社のスタッフに触っていただきます。回答の精度をここで確認・調整します。「思っていたのと違う」となれば、この段階で止めて構いません。</p>
+    <span class="you">貴社の作業: 使って感想を言うだけ</span>
+  </div>
+  <div class="step">
+    <div class="step-num">STEP 5</div>
+    <h3>運用開始 — その後の面倒もこちらで</h3>
+    <p>本導入後の資料更新の反映・回答の改善・不具合対応は、こちらが行います。「導入して終わり」にしないことを標準にしています。</p>
+    <span class="you">貴社の作業: 使うだけ</span>
+  </div>
+
+  <h2>期間はどのくらい？</h2>
+  <p>任せる業務の範囲と資料の状態によって変わるため、このページで一律の期間はお約束しません（実態と違う数字を掲げないためです）。初回相談で内容を伺えば、貴社のケースでの目安をその場でお伝えできます。</p>
+
+  <h2>よくある質問</h2>
+  <div class="faq-item">
+    <h3>何を準備すればいいですか？</h3>
+    <p>特別な準備は不要です。いま困っていることをそのまま話していただければ、必要な資料の洗い出しからこちらで行います。</p>
+  </div>
+  <div class="faq-item">
+    <h3>途中でやめられますか？</h3>
+    <p>試作・テストの段階で合わないと感じたら、そこで止めて構いません。合わないまま契約を進めることはしません。</p>
+  </div>
+  <div class="faq-item">
+    <h3>遠方でも対応できますか？</h3>
+    <p>相談から運用まですべてオンラインで完結できます。全国対応です。</p>
+  </div>
+
+  <div class="cta">
+    <h3>STEP 1は今日から始められます</h3>
+    <p>初回相談は無料・オンライン可。「何から聞けばいいか分からない」状態のままでどうぞ。</p>
+    <a href="index.html#contact" class="btn">無料で相談する →</a>
+    <a href="shindan.html" class="btn ghost">3分のAI診断を試す</a>
+  </div>
+
+  <div class="related">
+    関連ページ:
+    <a href="manual-ai.html">社内マニュアルAI</a>
+    <a href="ryokin.html">料金の考え方</a>
+    <a href="ai-consulting.html">AI導入支援</a>
+    <a href="articles/ai-first-3-steps.html">記事: AI導入 最初の3歩</a>
+  </div>
+</div>
+
+<footer>
+  <div class="logo">A<span class="heart-i">ı</span>dollargame</div>
+  <div class="footer-links">
+    <a href="index.html">トップ</a>
+    <a href="manual-ai.html">社内マニュアルAI</a>
+    <a href="ryokin.html">料金</a>
+    <a href="articles/index.html">記事</a>
+    <a href="tokushoho.html">特定商取引法に基づく表記</a>
+    <a href="privacy.html">プライバシーポリシー</a>
+  </div>
+  <div class="fc">© 2026 株式会社AIdollargame</div>
+</footer>
+
+<script defer src="scripts/ga-events.js"></script>
+</body>
+</html>

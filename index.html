@@ -675,7 +675,7 @@
     .news-item:hover{padding-left:0.8rem;}
     .news-badge{justify-self:start;}
     .ceo-message-block{padding:2.5rem 1.4rem;}
-    .message-body{font-size:1rem !important;max-width:none;}
+    .message-body{font-size:1rem !important;max-width:none;word-break:normal !important;line-break:auto !important;overflow-wrap:break-word;text-align:left;}
     .message-right{margin-top:2.2rem;padding-top:2rem;}
     .pull-quote{font-size:clamp(1.4rem,5vw,1.9rem) !important;}
     .industries{gap:0.5rem;}
@@ -941,8 +941,14 @@
 
   <!-- 活動写真（公式実写。Google/AIへの実体紐付け用に社名+氏名入りaltを維持する） -->
   <div class="reveal" style="margin-top:2.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;">
-    <img src="aidollargame-ceo-sato-norinosuke-interview.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介（対談収録の様子）" loading="lazy" style="width:100%;border-radius:14px;border:1px solid #e5e7eb;object-fit:cover;aspect-ratio:4/3;">
-    <img src="aidollargame-ceo-sato-norinosuke-seminar.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介 セミナー登壇の様子" loading="lazy" style="width:100%;border-radius:14px;border:1px solid #e5e7eb;object-fit:cover;aspect-ratio:4/3;">
+    <figure style="margin:0;">
+      <img src="aidollargame-ceo-sato-norinosuke-interview.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介（対談収録の様子）" loading="lazy" style="width:100%;border-radius:14px;border:1px solid #e5e7eb;object-fit:cover;aspect-ratio:4/3;">
+      <figcaption style="margin-top:0.6rem;font-size:0.8rem;color:var(--muted);text-align:center;">対談収録の様子（代表取締役CEO 佐藤徳之介）</figcaption>
+    </figure>
+    <figure style="margin:0;">
+      <img src="aidollargame-ceo-sato-norinosuke-seminar.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介 セミナー登壇の様子" loading="lazy" style="width:100%;border-radius:14px;border:1px solid #e5e7eb;object-fit:cover;aspect-ratio:4/3;">
+      <figcaption style="margin-top:0.6rem;font-size:0.8rem;color:var(--muted);text-align:center;">セミナー登壇の様子（代表取締役CEO 佐藤徳之介）</figcaption>
+    </figure>
   </div>
 
 </section>

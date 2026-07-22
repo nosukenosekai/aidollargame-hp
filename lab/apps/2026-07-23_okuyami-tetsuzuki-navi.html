@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>おくやみ手続きナビ（デモ）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f4f0;
+    --blue: #2563eb;
+    --ink: #1a1a1a;
+    --sub: #6b7280;
+    --line: #e7e5e0;
+    --ok: #16a34a;
+    --warn: #d97706;
+    --danger: #dc2626;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 0 16px 48px; }
+  .demoflag {
+    text-align: center; font-size: 11px; color: var(--sub);
+    background: #ecebe6; padding: 6px; letter-spacing: .04em;
+  }
+  header { padding: 22px 0 8px; }
+  .brand { font-size: 21px; font-weight: 800; }
+  .brand span { color: var(--blue); }
+  .tagline { font-size: 13px; color: var(--sub); margin-top: 4px; }
+
+  .card {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 14px; padding: 18px; margin-top: 14px;
+  }
+  .lead { font-size: 14px; color: #374151; }
+  .lead b { color: var(--ink); }
+
+  .qnum { font-size: 12px; color: var(--blue); font-weight: 700; letter-spacing: .04em; }
+  .qtext { font-size: 17px; font-weight: 700; margin: 8px 0 16px; }
+  .opt {
+    display: block; width: 100%; text-align: left; cursor: pointer;
+    background: #fff; border: 1.5px solid var(--line); border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 10px; font-size: 15px; font-family: inherit; color: var(--ink);
+    transition: border-color .1s, background .1s;
+  }
+  .opt:hover { border-color: #c7d2fe; }
+  .opt:active { background: #eef2ff; }
+  .opt .sub { display: block; font-size: 12px; color: var(--sub); margin-top: 2px; }
+
+  .prog { display: flex; gap: 6px; margin: 16px 0 0; }
+  .prog i { flex: 1; height: 4px; border-radius: 3px; background: #e2e0da; }
+  .prog i.on { background: var(--blue); }
+
+  .btn {
+    display: block; width: 100%; text-align: center; border: none; cursor: pointer;
+    background: var(--blue); color: #fff; font-weight: 700; font-size: 15px;
+    padding: 15px; border-radius: 14px; margin-top: 16px; font-family: inherit;
+  }
+  .btn.ghost { background: #fff; color: var(--blue); border: 1.5px solid #c7d2fe; }
+  .btn:active { opacity: .9; }
+
+  /* result */
+  .summary {
+    background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 14px;
+    padding: 16px; margin-top: 14px;
+  }
+  .summary .big { font-size: 15px; font-weight: 700; }
+  .summary .barwrap { background: #dbe2fb; border-radius: 999px; height: 9px; margin-top: 10px; overflow: hidden; }
+  .summary .bar { background: var(--blue); height: 100%; border-radius: 999px; width: 0; transition: width .4s; }
+  .summary .cnt { font-size: 12px; color: #3730a3; margin-top: 8px; }
+
+  .sect { font-size: 12px; color: var(--sub); margin: 22px 4px 8px; font-weight: 600; letter-spacing: .03em; }
+
+  .task {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px; margin-bottom: 10px; display: flex; gap: 12px; align-items: flex-start;
+  }
+  .task.done { opacity: .55; }
+  .chk {
+    flex: 0 0 24px; width: 24px; height: 24px; border-radius: 7px;
+    border: 2px solid #cbd5e1; cursor: pointer; margin-top: 2px; position: relative;
+    background: #fff;
+  }
+  .chk.on { background: var(--ok); border-color: var(--ok); }
+  .chk.on::after {
+    content: ""; position: absolute; left: 7px; top: 3px; width: 6px; height: 11px;
+    border: solid #fff; border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
+  }
+  .tbody { flex: 1; min-width: 0; cursor: pointer; }
+  .tname { font-weight: 700; font-size: 15px; }
+  .task.done .tname { text-decoration: line-through; }
+  .tmeta { font-size: 12px; color: var(--sub); margin-top: 2px; }
+  .deadline { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; white-space: nowrap; margin-top: 4px; display: inline-block; }
+  .dl-soon { background: #fee2e2; color: #991b1b; }
+  .dl-mid { background: #fef3c7; color: #92400e; }
+  .dl-loose { background: #e5e7eb; color: #374151; }
+
+  /* detail sheet */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(20,20,20,.4);
+    display: none; align-items: flex-end; justify-content: center; z-index: 20;
+  }
+  .overlay.show { display: flex; }
+  .sheet {
+    background: #fff; width: 100%; max-width: 430px; border-radius: 18px 18px 0 0;
+    padding: 20px 18px calc(20px + env(safe-area-inset-bottom)); max-height: 86vh; overflow-y: auto;
+  }
+  .sheet h3 { font-size: 18px; margin-bottom: 4px; }
+  .sheet .dl2 { margin: 6px 0 14px; }
+  .drow { display: flex; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .drow:last-child { border: none; }
+  .drow .k { flex: 0 0 78px; color: var(--sub); font-size: 13px; }
+  .drow .v { flex: 1; }
+  .hint { background: var(--bg); border-radius: 12px; padding: 12px 14px; font-size: 13px; color: #374151; margin-top: 14px; }
+
+  footer { text-align: center; font-size: 11px; color: var(--sub); margin-top: 26px; line-height: 1.7; }
+  .hide { display: none; }
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    background: #111827; color: #fff; font-size: 13px; padding: 11px 18px;
+    border-radius: 999px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 40; max-width: 90%;
+  }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="demoflag">デモ（サンプルデータ・手続き内容は簡略化した例です）</div>
+<div class="wrap">
+  <header>
+    <div class="brand">おくやみ<span>手続き</span>ナビ</div>
+    <div class="tagline">数問に答えるだけで「あなたがやる手続き一覧」を期限つきで。役所巡りの迷子をなくします。</div>
+  </header>
+
+  <!-- スタート -->
+  <section id="start">
+    <div class="card">
+      <p class="lead">ご家族が亡くなられたあと、必要な手続きは<b>数十種類</b>。人によって「やるもの・やらないもの」が変わります。<br>3つの質問で、あなたに必要な分だけ・期限の近い順に並べます。</p>
+      <button class="btn" onclick="startQ()">3つの質問にこたえる</button>
+    </div>
+    <footer>
+      ※ 一般的な手続きの目安です。正確な要否・期限は市区町村や年金事務所の窓口でご確認ください。<br>デモのため実際の申請・送信は行いません。
+    </footer>
+  </section>
+
+  <!-- 質問 -->
+  <section id="quiz" class="hide">
+    <div class="card">
+      <div class="qnum" id="q-num"></div>
+      <div class="qtext" id="q-text"></div>
+      <div id="q-opts"></div>
+      <div class="prog" id="q-prog"></div>
+    </div>
+  </section>
+
+  <!-- 結果 -->
+  <section id="result" class="hide">
+    <div class="summary">
+      <div class="big" id="r-title"></div>
+      <div class="barwrap"><div class="bar" id="r-bar"></div></div>
+      <div class="cnt" id="r-cnt"></div>
+    </div>
+    <div class="sect">やること一覧（期限の近い順・タップでチェック）</div>
+    <div id="r-tasks"></div>
+    <button class="btn ghost" onclick="restart()">最初からやり直す</button>
+    <footer>
+      チェックした手続きは端末内に記録され、家族で分担しながら進められます（デモでは保存しません）。
+    </footer>
+  </section>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeSheet(event)">
+  <div class="sheet" id="sheet"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== 質問（回答でタスクの要否を分岐） =====
+const questions = [
+  { key:"pension", num:"質問 1 / 3", text:"故人は年金を受け取っていましたか？",
+    opts:[
+      {label:"受け取っていた", sub:"老齢年金・遺族年金など", val:true},
+      {label:"受け取っていない", sub:"現役世代など", val:false},
+    ]},
+  { key:"house", num:"質問 2 / 3", text:"持ち家（不動産）はありますか？",
+    opts:[
+      {label:"ある", sub:"土地・建物の名義変更が必要", val:true},
+      {label:"ない・賃貸だった", sub:"", val:false},
+    ]},
+  { key:"biz", num:"質問 3 / 3", text:"事業（自営・会社）や車の所有はありましたか？",
+    opts:[
+      {label:"あった", sub:"廃業・名義変更などが増えます", val:true},
+      {label:"なかった", sub:"", val:false},
+    ]},
+];
+
+// ===== 手続きマスタ（すべて一般的な例・簡略化） =====
+// cond: この手続きを出す条件（answers を受け取り true なら表示）
+const tasksMaster = [
+  { id:"shibou", name:"死亡届の提出", where:"市区町村役場", who:"親族・同居者",
+    dl:"7日以内", dltype:"soon", need:"死亡診断書、届出人の印鑑",
+    hint:"多くは葬儀社が代行してくれます。まず済んでいるか確認を。", cond:()=>true },
+  { id:"kasou", name:"火葬・埋葬許可", where:"市区町村役場", who:"親族",
+    dl:"葬儀まで", dltype:"soon", need:"死亡届の控え",
+    hint:"死亡届と同時に受け取るのが一般的です。", cond:()=>true },
+  { id:"kenpo", name:"健康保険証の返却・資格喪失", where:"市区町村役場／勤務先", who:"親族",
+    dl:"14日以内", dltype:"soon", need:"保険証、本人確認書類",
+    hint:"国民健康保険は葬祭費(数万円)が支給される場合があります。", cond:()=>true },
+  { id:"nenkin", name:"年金の受給停止・未支給年金の請求", where:"年金事務所", who:"親族",
+    dl:"14日以内", dltype:"soon", need:"年金証書、故人と請求者の関係がわかる書類",
+    hint:"止め忘れると後で返還が必要になります。早めに。", cond:(a)=>a.pension },
+  { id:"koumoku", name:"世帯主の変更届", where:"市区町村役場", who:"新しい世帯主",
+    dl:"14日以内", dltype:"soon", need:"本人確認書類",
+    hint:"残った家族が2人以上のときに必要になることがあります。", cond:()=>true },
+  { id:"koza", name:"銀行口座・公共料金の名義手続き", where:"各金融機関・事業者", who:"相続人",
+    dl:"すみやかに", dltype:"mid", need:"通帳、戸籍、相続人の本人確認書類",
+    hint:"口座は連絡すると凍結されます。引き落としの止め忘れに注意。", cond:()=>true },
+  { id:"kuruma", name:"自動車・事業の名義変更／廃業手続き", where:"運輸支局・税務署ほか", who:"相続人",
+    dl:"すみやかに", dltype:"mid", need:"車検証、事業関係書類、戸籍",
+    hint:"車の相続には遺産分割の話し合いが必要な場合があります。", cond:(a)=>a.biz },
+  { id:"fudosan", name:"不動産の相続登記（名義変更）", where:"法務局", who:"相続人",
+    dl:"3年以内", dltype:"mid", need:"戸籍一式、遺産分割協議書、固定資産評価証明",
+    hint:"2024年から相続登記は義務化。放置すると過料の対象になり得ます。", cond:(a)=>a.house },
+  { id:"souzoku", name:"相続税の申告（必要な場合）", where:"税務署", who:"相続人",
+    dl:"10か月以内", dltype:"loose", need:"財産の一覧、戸籍、評価資料",
+    hint:"基礎控除(3,000万円＋600万円×法定相続人数)を超えるときに申告します。", cond:()=>true },
+];
+
+let answers = {};
+let step = 0;
+let taskState = {}; // id -> done bool
+let activeTasks = [];
+
+function startQ(){
+  answers = {}; step = 0;
+  show("quiz"); renderQ();
+}
+function renderQ(){
+  const q = questions[step];
+  document.getElementById("q-num").textContent = q.num;
+  document.getElementById("q-text").textContent = q.text;
+  document.getElementById("q-opts").innerHTML = q.opts.map((o,i)=>
+    `<button class="opt" onclick="answer('${q.key}', ${o.val})">${o.label}${o.sub?`<span class="sub">${o.sub}</span>`:""}</button>`
+  ).join("");
+  document.getElementById("q-prog").innerHTML =
+    questions.map((_,i)=>`<i class="${i<=step?"on":""}"></i>`).join("");
+}
+function answer(key, val){
+  answers[key] = val;
+  step++;
+  if(step < questions.length){ renderQ(); }
+  else { buildResult(); }
+}
+
+function buildResult(){
+  activeTasks = tasksMaster.filter(t=>t.cond(answers));
+  const order = { soon:0, mid:1, loose:2 };
+  activeTasks.sort((a,b)=>order[a.dltype]-order[b.dltype]);
+  taskState = {};
+  activeTasks.forEach(t=>taskState[t.id]=false);
+  show("result");
+  document.getElementById("r-title").textContent = "あなたに必要な手続きは " + activeTasks.length + " 件です";
+  renderTasks();
+}
+
+const dlCls = { soon:"dl-soon", mid:"dl-mid", loose:"dl-loose" };
+function renderTasks(){
+  const done = activeTasks.filter(t=>taskState[t.id]).length;
+  const pct = Math.round(done / activeTasks.length * 100);
+  document.getElementById("r-bar").style.width = pct + "%";
+  document.getElementById("r-cnt").textContent = `完了 ${done} / ${activeTasks.length} 件（${pct}%）`;
+  document.getElementById("r-tasks").innerHTML = activeTasks.map(t=>{
+    const on = taskState[t.id];
+    return `<div class="task ${on?"done":""}">
+      <div class="chk ${on?"on":""}" onclick="toggle('${t.id}')"></div>
+      <div class="tbody" onclick="openSheet('${t.id}')">
+        <div class="tname">${t.name}</div>
+        <div class="tmeta">${t.where}</div>
+        <span class="deadline ${dlCls[t.dltype]}">期限のめやす：${t.dl}</span>
+      </div>
+    </div>`;
+  }).join("");
+}
+function toggle(id){
+  taskState[id] = !taskState[id];
+  renderTasks();
+  if(activeTasks.every(t=>taskState[t.id])) toast("すべての手続きが完了しました。おつかれさまでした。");
+}
+
+function openSheet(id){
+  const t = tasksMaster.find(x=>x.id===id);
+  document.getElementById("sheet").innerHTML = `
+    <h3>${t.name}</h3>
+    <div class="dl2"><span class="deadline ${dlCls[t.dltype]}">期限のめやす：${t.dl}</span></div>
+    <div class="drow"><div class="k">どこで</div><div class="v">${t.where}</div></div>
+    <div class="drow"><div class="k">だれが</div><div class="v">${t.who}</div></div>
+    <div class="drow"><div class="k">持ち物</div><div class="v">${t.need}</div></div>
+    <div class="hint">${t.hint}</div>
+    <button class="btn" onclick="closeSheet(true)">閉じる</button>
+  `;
+  document.getElementById("overlay").classList.add("show");
+}
+function closeSheet(e){
+  if(e===true || e.target.id==="overlay"){
+    document.getElementById("overlay").classList.remove("show");
+  }
+}
+
+function restart(){ show("start"); }
+
+function show(id){
+  ["start","quiz","result"].forEach(s=>document.getElementById(s).classList.add("hide"));
+  document.getElementById(id).classList.remove("hide");
+  window.scrollTo(0,0);
+}
+function toast(m){
+  const t = document.getElementById("toast");
+  t.textContent = m; t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"), 2600);
+}
+</script>
+</body>
+</html>

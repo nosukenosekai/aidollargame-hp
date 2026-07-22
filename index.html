@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
 
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="AIdollargame">
+<meta property="og:site_name" content="株式会社AIdollargame">
 <meta property="og:title" content="AIdollargame | 楽ではなく、楽しいを考える。">
 <meta property="og:description" content="企業のAI導入支援・コンサルティングと、AIチャットエージェント・AIside・AIwill（社長クローン）などの自社AIプロダクト開発を行う企業。">
 <meta property="og:url" content="https://aidollargame.com/">
@@ -41,9 +41,17 @@
   "url": "https://aidollargame.com/",
   "logo": {
     "@type": "ImageObject",
-    "url": "https://aidollargame.com/og-default.png"
+    "url": "https://aidollargame.com/wordmark-1200.png",
+    "width": 1272,
+    "height": 360
   },
-  "image": "https://aidollargame.com/og-default.png",
+  "image": [
+    "https://aidollargame.com/og-default.png",
+    "https://aidollargame.com/aidollargame-ceo-sato-norinosuke.jpg",
+    "https://aidollargame.com/aidollargame-ceo-sato-norinosuke-interview.jpg",
+    "https://aidollargame.com/aidollargame-ceo-sato-norinosuke-seminar.jpg",
+    "https://aidollargame.com/wordmark-1200.png"
+  ],
   "description": "楽ではなく、楽しいを考える。株式会社AIdollargameは、企業のAI導入支援・コンサルティングと、AIチャットエージェント・AIside（付き人AI）・AIwill（社長クローン）などの自社AIプロダクト開発を行う企業です。",
   "slogan": "楽ではなく、楽しいを考える。",
   "foundingDate": "2025-04-08",
@@ -66,8 +74,20 @@
     "name": "佐藤徳之介",
     "alternateName": ["のすけ", "NORINOSUKE SATO"],
     "jobTitle": "代表取締役 CEO",
-    "url": "https://aidollargame.com/profile-sato.html"
+    "image": "https://aidollargame.com/aidollargame-ceo-sato-norinosuke.jpg",
+    "url": "https://aidollargame.com/profile-sato.html",
+    "worksFor": { "@id": "https://aidollargame.com/#organization" }
   },
+  "member": [
+    { "@id": "https://aidollargame.com/#founder" },
+    {
+      "@type": "Person",
+      "name": "橋本一輝",
+      "alternateName": ["KAZUKI HASHIMOTO"],
+      "jobTitle": "リードエンジニア / CTO",
+      "worksFor": { "@id": "https://aidollargame.com/#organization" }
+    }
+  ],
   "knowsAbout": [
     "AIエージェント", "生成AI導入", "LINE公式アカウントの自動化", "AIコンサルティング", "社員リスキリング研修", "AI秘書", "社長クローンAI", "DX推進"
   ],
@@ -889,7 +909,7 @@
   <div class="team-grid reveal">
     <div class="team-card ceo">
       <div class="team-photo-wrap">
-        <img src="sato.jpg" class="ceo-photo" alt="佐藤徳之介">
+        <img src="aidollargame-ceo-sato-norinosuke.jpg" class="ceo-photo" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介">
       </div>
       <div class="team-role">REPRESENTATIVE DIRECTOR / CEO</div>
       <div class="team-name">佐藤 徳之介</div>
@@ -905,7 +925,7 @@
 
     <div class="team-card">
       <div class="team-photo-wrap">
-        <img src="hashimoto.png" class="ceo-photo" alt="橋本一輝">
+        <img src="aidollargame-cto-hashimoto-kazuki.png" class="ceo-photo" alt="株式会社AIdollargame リードエンジニア/CTO 橋本一輝（アバターイラスト）">
       </div>
       <div class="team-role">LEAD ENGINEER / CTO</div>
       <div class="team-name">橋本 一輝</div>
@@ -919,6 +939,11 @@
     </div>
   </div>
 
+  <!-- 活動写真（公式実写。Google/AIへの実体紐付け用に社名+氏名入りaltを維持する） -->
+  <div class="reveal" style="margin-top:2.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;">
+    <img src="aidollargame-ceo-sato-norinosuke-interview.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介（対談収録の様子）" loading="lazy" style="width:100%;border-radius:14px;border:1px solid #e5e7eb;object-fit:cover;aspect-ratio:4/3;">
+    <img src="aidollargame-ceo-sato-norinosuke-seminar.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介 セミナー登壇の様子" loading="lazy" style="width:100%;border-radius:14px;border:1px solid #e5e7eb;object-fit:cover;aspect-ratio:4/3;">
+  </div>
 
 </section>
 <div class="divider"></div>

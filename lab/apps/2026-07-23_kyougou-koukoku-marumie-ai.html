@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>競合広告まる見えAI（デモ）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f4f0; --blue: #2563eb; --ink: #1a1a1a; --sub: #6b7280;
+    --line: #e7e5e0; --ok: #16a34a; --warn: #d97706;
+    --google: #1a73e8; --meta: #7c3aed;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.7; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 0 16px 48px; }
+  .demoflag {
+    text-align: center; font-size: 11px; color: var(--sub);
+    background: #ecebe6; padding: 6px; letter-spacing: .04em;
+  }
+  header { padding: 20px 0 6px; }
+  .brand { font-size: 21px; font-weight: 800; }
+  .brand span { color: var(--blue); }
+  .tagline { font-size: 13px; color: var(--sub); margin-top: 4px; }
+
+  /* search */
+  .searchbox {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-top: 14px;
+  }
+  .searchbox label { font-size: 12px; color: var(--sub); font-weight: 600; }
+  .searchrow { display: flex; gap: 8px; margin-top: 6px; }
+  .searchrow input {
+    flex: 1; font-family: inherit; font-size: 15px; padding: 12px; border: 1.5px solid var(--line);
+    border-radius: 12px; background: #fcfcfb; min-width: 0;
+  }
+  .searchrow input:focus { outline: none; border-color: #c7d2fe; background: #fff; }
+  .searchrow button {
+    border: none; background: var(--blue); color: #fff; font-weight: 700; padding: 0 16px;
+    border-radius: 12px; cursor: pointer; font-family: inherit; font-size: 14px; white-space: nowrap;
+  }
+  .samples { margin-top: 10px; font-size: 12px; color: var(--sub); }
+  .chip {
+    display: inline-block; background: #eef2ff; color: var(--blue); font-weight: 600; font-size: 12px;
+    padding: 5px 10px; border-radius: 999px; margin: 4px 4px 0 0; cursor: pointer; border: none; font-family: inherit;
+  }
+
+  .filters { display: flex; gap: 8px; margin: 14px 0 4px; }
+  .filters select {
+    flex: 1; font-family: inherit; font-size: 13px; padding: 9px 10px; border: 1.5px solid var(--line);
+    border-radius: 10px; background: #fff; -webkit-appearance: none; appearance: none;
+  }
+  .filters select:focus { outline: none; border-color: #c7d2fe; }
+
+  /* AI panel */
+  .ai {
+    background: linear-gradient(180deg,#f0f7ff,#fff); border: 1px solid #cfe0fb; border-radius: 14px;
+    padding: 15px; margin: 14px 0;
+  }
+  .ai .h { font-size: 12px; font-weight: 800; color: var(--blue); letter-spacing: .03em; }
+  .ai .who { font-size: 15px; font-weight: 800; margin: 4px 0 8px; }
+  .ai ul { list-style: none; }
+  .ai li { font-size: 13px; padding: 5px 0 5px 16px; position: relative; }
+  .ai li::before { content: "•"; color: var(--blue); position: absolute; left: 3px; font-weight: 800; }
+  .ai .lead { font-size: 13px; color: #374151; margin-bottom: 6px; }
+
+  .sect { font-size: 12px; color: var(--sub); margin: 18px 4px 8px; font-weight: 600; letter-spacing: .03em; }
+
+  .adcard {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 10px;
+    cursor: pointer;
+  }
+  .adtop { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .media {
+    font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; color: #fff;
+  }
+  .m-google { background: var(--google); } .m-meta { background: var(--meta); }
+  .fmt { font-size: 11px; color: var(--sub); }
+  .runperiod { font-size: 11px; color: var(--sub); margin-left: auto; white-space: nowrap; }
+  .adhead { font-weight: 700; font-size: 15px; color: #1a4bcc; }
+  .adbody { font-size: 13px; color: #374151; margin-top: 3px; }
+  .adfoot { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  .live { font-size: 11px; font-weight: 700; color: var(--ok); }
+  .live::before { content: "●"; margin-right: 3px; }
+  .ended { font-size: 11px; font-weight: 700; color: var(--sub); }
+  .ended::before { content: "●"; margin-right: 3px; color: #cbd5e1; }
+
+  .empty { text-align: center; color: var(--sub); font-size: 13px; padding: 40px 10px; }
+
+  /* detail sheet */
+  .overlay { position: fixed; inset: 0; background: rgba(20,20,20,.4); display: none; align-items: flex-end; justify-content: center; z-index: 20; }
+  .overlay.show { display: flex; }
+  .sheet { background: #fff; width: 100%; max-width: 430px; border-radius: 18px 18px 0 0; padding: 20px 18px calc(20px + env(safe-area-inset-bottom)); max-height: 86vh; overflow-y: auto; }
+  .sheet h3 { font-size: 17px; margin-bottom: 6px; }
+  .drow { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .drow:last-child { border: none; }
+  .drow .k { flex: 0 0 84px; color: var(--sub); font-size: 13px; }
+  .adpreview { background: var(--bg); border-radius: 12px; padding: 14px; margin: 12px 0; }
+  .adpreview .ph { font-weight: 700; color: #1a4bcc; font-size: 15px; }
+  .adpreview .pb { font-size: 13px; color: #374151; margin-top: 4px; }
+  .adpreview .pu { font-size: 12px; color: var(--ok); margin-top: 6px; }
+  .hint { background: #f0f7ff; border: 1px solid #cfe0fb; border-radius: 12px; padding: 12px 14px; font-size: 13px; margin-top: 12px; }
+
+  .btn {
+    display: block; width: 100%; text-align: center; border: none; cursor: pointer;
+    background: var(--blue); color: #fff; font-weight: 700; font-size: 15px;
+    padding: 14px; border-radius: 14px; margin-top: 12px; font-family: inherit;
+  }
+  .btn.ghost { background: #fff; color: var(--blue); border: 1.5px solid #c7d2fe; }
+  .btn:active { opacity: .9; }
+
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #111827; color: #fff; font-size: 13px; padding: 11px 18px; border-radius: 999px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 40; max-width: 90%; }
+  .toast.show { opacity: 1; }
+  footer { text-align: center; font-size: 11px; color: var(--sub); margin-top: 24px; line-height: 1.7; }
+  .hide { display: none; }
+</style>
+</head>
+<body>
+<div class="demoflag">デモ（サンプルデータ・企業名/広告はすべて架空です）</div>
+<div class="wrap">
+  <header>
+    <div class="brand">競合広告<span>まる見え</span>AI</div>
+    <div class="tagline">会社名を入れるだけで、その競合がGoogle・Metaで今出している広告を横断で一覧。訴求の切り口までAIが要約します。</div>
+  </header>
+
+  <div class="searchbox">
+    <label>競合の会社名・サイト名で検索</label>
+    <div class="searchrow">
+      <input id="q" type="text" placeholder="例）まるみ歯科クリニック" autocomplete="off">
+      <button onclick="doSearch()">調べる</button>
+    </div>
+    <div class="samples">
+      サンプル企業（架空）：
+      <div>
+        <button class="chip" onclick="quick('まるみ歯科クリニック')">まるみ歯科クリニック</button>
+        <button class="chip" onclick="quick('スミレ英会話スクール')">スミレ英会話スクール</button>
+        <button class="chip" onclick="quick('あおぞらリフォーム')">あおぞらリフォーム</button>
+      </div>
+    </div>
+  </div>
+
+  <section id="s-empty">
+    <div class="empty">上の検索から競合を選ぶと、<br>出稿中の広告と訴求の傾向が表示されます。</div>
+    <footer>
+      表示は各社の広告透明性ライブラリ（Google・Meta等）で公開される情報の活用を想定したデモです。<br>掲載本数・期間・文面は公開情報の範囲で、出稿金額など非公開の数値は扱いません。
+    </footer>
+  </section>
+
+  <section id="s-result" class="hide">
+    <div class="filters">
+      <select id="f-media" onchange="renderResult()">
+        <option value="">媒体：すべて</option>
+        <option value="Google">Google</option>
+        <option value="Meta">Meta</option>
+      </select>
+      <select id="f-fmt" onchange="renderResult()">
+        <option value="">形式：すべて</option>
+        <option value="検索">検索</option>
+        <option value="画像">画像</option>
+        <option value="動画">動画</option>
+      </select>
+      <select id="f-status" onchange="renderResult()">
+        <option value="">状態：すべて</option>
+        <option value="live">掲載中</option>
+        <option value="ended">終了</option>
+      </select>
+    </div>
+
+    <div class="ai" id="ai-panel"></div>
+
+    <div class="sect" id="result-count"></div>
+    <div id="ad-list"></div>
+    <footer>掲載本数・期間はサンプルです。実運用では各広告ライブラリの公開データを毎日収集して更新します。</footer>
+  </section>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeSheet(event)"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== サンプル競合データ（すべて架空） =====
+const advertisers = {
+  "まるみ歯科クリニック": {
+    field: "歯科（自由診療）",
+    summary: "自由診療（インプラント・矯正・ホワイトニング）に出稿を集中。『痛みが少ない』『分割OK』『無料相談』の3点で不安と費用のハードルを下げる訴求が中心。ここ2週間で夏向けのホワイトニング動画を新規追加。",
+    points: [
+      "訴求の柱：①痛みへの不安を下げる ②分割・費用の見せ方 ③無料カウンセリング",
+      "出稿ペース：常時8〜10本を維持。夏はホワイトニングを増量",
+      "学べる点：価格より先に『不安の解消』を前面に出している",
+    ],
+    ads: [
+      { media:"Google", fmt:"検索", head:"インプラント 無料相談｜まるみ歯科", body:"痛みに配慮した治療。分割払い対応。土曜も診療。まずは無料カウンセリングへ。", url:"marumi-dc.example/implant", period:"2026/06/01〜掲載中", status:"live" },
+      { media:"Google", fmt:"検索", head:"歯の矯正 目立たない｜駅前3分", body:"見えにくいマウスピース矯正。学生・社会人に人気。初回相談無料。", url:"marumi-dc.example/kyousei", period:"2026/05/10〜掲載中", status:"live" },
+      { media:"Meta", fmt:"動画", head:"夏までに白い歯へ", body:"通院1回から始められるホワイトニング。ビフォーアフターを動画で紹介。", url:"marumi-dc.example/white", period:"2026/07/08〜掲載中", status:"live" },
+      { media:"Meta", fmt:"画像", head:"分割で始めるインプラント", body:"月々の目安が見える料金シミュレーション。無理のない範囲で。", url:"marumi-dc.example/plan", period:"2026/03/01〜2026/06/30", status:"ended" },
+    ],
+  },
+  "スミレ英会話スクール": {
+    field: "英会話・語学",
+    summary: "『大人の学び直し』と『続けられる』を軸に、体験レッスン誘導が中心。春の新生活キャンペーンは終了し、今は夏の短期集中コースへ主役が移行。動画より検索・画像広告が多い。",
+    points: [
+      "訴求の柱：①大人の学び直し ②続けやすさ（少人数・オンライン併用） ③無料体験",
+      "出稿ペース：5〜7本。季節ごとにキャンペーン名を差し替え",
+      "学べる点：ターゲットを『大人・初心者』に明確に絞って言い切っている",
+    ],
+    ads: [
+      { media:"Google", fmt:"検索", head:"大人の英会話やり直し｜スミレ", body:"中学英語からゆっくり。少人数だから安心。まずは無料体験レッスン。", url:"sumire-eng.example/adult", period:"2026/04/01〜掲載中", status:"live" },
+      { media:"Meta", fmt:"画像", head:"夏の短期集中コース 受付中", body:"8週間で『言いたいことが言える』を目標に。オンライン併用OK。", url:"sumire-eng.example/summer", period:"2026/06/20〜掲載中", status:"live" },
+      { media:"Google", fmt:"検索", head:"初心者専門の英会話教室", body:"間違えても大丈夫な雰囲気。続けられる仕組みが評判です。", url:"sumire-eng.example/beginner", period:"2026/02/15〜掲載中", status:"live" },
+      { media:"Meta", fmt:"画像", head:"春の新生活応援キャンペーン", body:"入会金無料。新しい一歩を英語から。", url:"sumire-eng.example/spring", period:"2026/03/01〜2026/05/06", status:"ended" },
+    ],
+  },
+  "あおぞらリフォーム": {
+    field: "住宅リフォーム",
+    summary: "水回り（キッチン・浴室）と外壁塗装の2本柱。『施工事例』と『無料見積もり・現地調査』で信頼を作り、地域名を入れた検索広告で地元客を集める型。夏は外壁・屋根の訴求を強化。",
+    points: [
+      "訴求の柱：①豊富な施工事例 ②無料見積もり・現地調査 ③地域密着（地名入り）",
+      "出稿ペース：6〜9本。地名×工事種別で細かく出し分け",
+      "学べる点：抽象的な『きれいに』でなく地名と事例で具体に語っている",
+    ],
+    ads: [
+      { media:"Google", fmt:"検索", head:"〇〇市 外壁塗装｜無料見積もり", body:"地元施工3,000件。しつこい営業なし。まずは現地調査から。", url:"aozora-reform.example/gaiheki", period:"2026/05/01〜掲載中", status:"live" },
+      { media:"Google", fmt:"検索", head:"キッチンリフォーム 施工事例多数", body:"予算に合わせて提案。事例写真をサイトで公開中。", url:"aozora-reform.example/kitchen", period:"2026/04/10〜掲載中", status:"live" },
+      { media:"Meta", fmt:"動画", head:"お風呂まるごと交換 ビフォーアフター", body:"1日で入れ替え可能なケースも。動画で工程を紹介。", url:"aozora-reform.example/bath", period:"2026/07/01〜掲載中", status:"live" },
+      { media:"Meta", fmt:"画像", head:"屋根の点検 承ります", body:"台風シーズン前に。写真つき報告書をお渡しします。", url:"aozora-reform.example/roof", period:"2026/06/15〜掲載中", status:"live" },
+    ],
+  },
+};
+
+let currentAds = [];
+let currentName = "";
+
+function quick(name){ document.getElementById("q").value = name; doSearch(); }
+
+function doSearch(){
+  const q = document.getElementById("q").value.trim();
+  const data = advertisers[q];
+  if(!data){
+    document.getElementById("s-result").classList.add("hide");
+    document.getElementById("s-empty").classList.remove("hide");
+    document.getElementById("s-empty").querySelector(".empty").innerHTML =
+      `「${q||"（未入力）"}」の広告は見つかりませんでした。<br>デモではサンプル3社（下のボタン）でお試しください。`;
+    return;
+  }
+  currentName = q;
+  document.getElementById("f-media").value = "";
+  document.getElementById("f-fmt").value = "";
+  document.getElementById("f-status").value = "";
+  // AI要約
+  document.getElementById("ai-panel").innerHTML = `
+    <div class="h">AIによる競合の広告まとめ</div>
+    <div class="who">${q}（${data.field}）</div>
+    <div class="lead">${data.summary}</div>
+    <ul>${data.points.map(p=>`<li>${p}</li>`).join("")}</ul>`;
+  document.getElementById("s-empty").classList.add("hide");
+  document.getElementById("s-result").classList.remove("hide");
+  renderResult();
+  window.scrollTo(0,0);
+}
+
+function renderResult(){
+  const data = advertisers[currentName];
+  const media = document.getElementById("f-media").value;
+  const fmt = document.getElementById("f-fmt").value;
+  const status = document.getElementById("f-status").value;
+  currentAds = data.ads.filter(a =>
+    (!media || a.media===media) && (!fmt || a.fmt===fmt) && (!status || a.status===status));
+  const live = data.ads.filter(a=>a.status==="live").length;
+  document.getElementById("result-count").textContent =
+    `広告 ${currentAds.length} 本を表示（掲載中 ${live} 本 / 全 ${data.ads.length} 本）`;
+  const el = document.getElementById("ad-list");
+  if(currentAds.length===0){ el.innerHTML = `<div class="empty">条件に合う広告はありません。</div>`; return; }
+  el.innerHTML = currentAds.map((a,i)=>`
+    <div class="adcard" onclick="openAd(${data.ads.indexOf(a)})">
+      <div class="adtop">
+        <span class="media m-${a.media==='Google'?'google':'meta'}">${a.media}</span>
+        <span class="fmt">${a.fmt}広告</span>
+        <span class="runperiod">${a.period}</span>
+      </div>
+      <div class="adhead">${a.head}</div>
+      <div class="adbody">${a.body}</div>
+      <div class="adfoot">
+        <span class="${a.status==='live'?'live':'ended'}">${a.status==='live'?'掲載中':'掲載終了'}</span>
+      </div>
+    </div>`).join("");
+}
+
+function openAd(idx){
+  const a = advertisers[currentName].ads[idx];
+  document.getElementById("sheet").innerHTML = `
+    <h3>${currentName} の広告</h3>
+    <div class="adpreview">
+      <div class="ph">${a.head}</div>
+      <div class="pb">${a.body}</div>
+      <div class="pu">${a.url}</div>
+    </div>
+    <div class="drow"><div class="k">媒体</div><div>${a.media}</div></div>
+    <div class="drow"><div class="k">形式</div><div>${a.fmt}広告</div></div>
+    <div class="drow"><div class="k">掲載期間</div><div>${a.period}</div></div>
+    <div class="drow"><div class="k">状態</div><div>${a.status==='live'?'掲載中':'掲載終了'}</div></div>
+    <div class="hint">この広告の訴求：${a.body.length>0?'見出しで結論、本文で不安の解消と次の一歩（無料相談・見積もり等）へ誘導する型です。':''}自社の広告に足りない切り口がないか比べてみましょう。</div>
+    <button class="btn" onclick="saveAd()">この広告を参考に保存</button>
+    <button class="btn ghost" onclick="closeSheet(true)">閉じる</button>`;
+  document.getElementById("overlay").classList.add("show");
+}
+function saveAd(){ closeSheet(true); toast("参考広告に保存しました（デモ）"); }
+function closeSheet(e){ if(e===true || e.target.id==="overlay"){ document.getElementById("overlay").classList.remove("show"); } }
+
+function toast(m){
+  const el = document.getElementById("toast");
+  el.textContent = m; el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"), 2400);
+}
+</script>
+</body>
+</html>

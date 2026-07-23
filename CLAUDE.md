@@ -21,12 +21,16 @@
 3. 台帳と差分があれば台帳を更新し、**変わった点だけ**を要点で報告する。
 4. 「最新を集めて」と毎回言わせない。上を既定動作にする。
 
-## note記事のリンクルール（2026-07-11制定）
+## note記事のリンクルール（2026-07-11制定／2026-07-23改訂・本人指示「毎回この仕様に」）
 
 - note下書き（`content/note/`）から自社サイトへ張るリンクには**必ずUTMパラメータを付ける**。
-  形式: `https://aidollargame.com/ページ?utm_source=note&utm_medium=referral&utm_campaign=YYYY-MM-DD`（campaignは記事の日付）。
+  形式: `https://aidollargame.com/ページ?utm_source=note&utm_medium=referral&utm_campaign=YYYY-MM-DD`（campaignは記事の日付）。**「私たちについて」ブロック内のリンクも含めて全リンク対象。**
+- **リンクは「裸のURLを単独の1行」に置く（2026-07-23制定・厳守）。**
+  - NG: `AIside（https://aidollargame.com/aiside.html）：経営者の…` ← noteに貼ると全角カッコ以降の日本語までURLに飲み込まれてリンク切れ(404)になる。7/22記事で実際に発生。
+  - OK: 説明文の行の**次の行**にURLだけを置く（`▼AIside：説明文` ＋ 改行 ＋ URL）。
+- 「私たちについて」定型ブロックの正はこの形式（最新の `content/note/2026-07-23.md` の末尾ブロックをコピーして日付だけ変える）。
 - 理由: GA4で「noteのどの記事が何人連れてきたか」を記事単位で計測するため。UTMなしだと note.com 全体のリファラーとしてしか見えず、効果検証ができない。
-- 公開済みのnote記事のリンクは本人がnote編集画面で差し替える（Claudeは差し替え済みリンク一覧を用意する）。
+- 公開済み記事の差し替え状況（2026-07-23時点）: 7/22・7/15の2本は修正済み。7/8以前の8本は未了（editor.note.com/notes/{id}/edit/ で作業。手順の詳細はメモリのga4-weekly-reportに記録）。
 
 ## 機密の扱い
 

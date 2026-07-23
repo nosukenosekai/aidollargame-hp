@@ -23,6 +23,9 @@
 ## サービス (Services)
 - AIコンサルティング・導入支援: AI導入戦略の立案からDX推進まで一貫支援。新規事業企画にも対応。 https://aidollargame.com/ai-consulting.html
 - AI研修・社員リスキリング: 貴社の実業務を教材にした実践型の生成AI研修。経営層向け・全社員向け・部署別ワーク・定着フォローの4プログラム。 https://aidollargame.com/ai-training.html
+- 社内マニュアルAI（マニュアルを覚えたAIがスタッフの質問に即答。新人教育・属人化対策）: https://aidollargame.com/manual-ai.html
+- 料金の考え方（AI導入支援は20万円〜・費用が決まる3要素と見積もりまでの流れを公開）: https://aidollargame.com/ryokin.html
+- AI導入の流れ（無料相談から運用開始までの5ステップ）: https://aidollargame.com/donyu-flow.html
 - AI活用度診断: https://aidollargame.com/shindan.html
 - AI用語集（生成AI・LLM・AIエージェント・RAG等をやさしく解説）: https://aidollargame.com/articles/ai-yougo.html
 

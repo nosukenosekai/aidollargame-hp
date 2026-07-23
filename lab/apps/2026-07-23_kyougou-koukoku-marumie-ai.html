@@ -89,6 +89,10 @@
   .ended::before { content: "●"; margin-right: 4px; color: #cbd5e1; font-size: 9px; vertical-align: 1px; }
 
   .empty { text-align: center; color: var(--sub); font-size: 13px; padding: 44px 10px; }
+  .guide { background: var(--card); border: 1px dashed #d6d3cc; border-radius: 14px; padding: 18px; max-width: 640px; margin-top: 16px; }
+  .guide-msg { font-size: 14px; color: var(--ink); line-height: 1.7; }
+  .guide-chips { margin-top: 12px; }
+  .guide-note { font-size: 12px; color: var(--sub); margin-top: 14px; line-height: 1.7; border-top: 1px solid var(--line); padding-top: 12px; }
 
   /* detail sheet */
   .overlay { position: fixed; inset: 0; background: rgba(20,20,20,.4); display: none; align-items: center; justify-content: center; z-index: 20; padding: 20px; }
@@ -129,7 +133,7 @@
   <div class="searchbox">
     <label>競合の会社名・サイト名で検索</label>
     <div class="searchrow">
-      <input id="q" type="text" placeholder="例）まるみ歯科クリニック" autocomplete="off">
+      <input id="q" type="text" placeholder="会社名を入力（Enterで検索）" autocomplete="off" onkeydown="onKey(event)">
       <button onclick="doSearch()">調べる</button>
     </div>
     <div class="samples">
@@ -143,7 +147,15 @@
   </div>
 
   <section id="s-empty">
-    <div class="empty">上の検索から競合を選ぶと、出稿中の広告と訴求の傾向が表示されます。</div>
+    <div class="guide">
+      <div class="guide-msg" id="guide-msg">会社名を入れて「調べる」か、下のサンプル企業を選ぶと、その競合が出している広告と訴求の傾向が表示されます。</div>
+      <div class="guide-chips">
+        <button class="chip" onclick="quick('まるみ歯科クリニック')">まるみ歯科クリニック</button>
+        <button class="chip" onclick="quick('スミレ英会話スクール')">スミレ英会話スクール</button>
+        <button class="chip" onclick="quick('あおぞらリフォーム')">あおぞらリフォーム</button>
+      </div>
+      <div class="guide-note">このデモが持つのは上の架空3社のデータだけです。実運用版では、入力したどの会社名でも広告透明性ライブラリを横断して検索します。</div>
+    </div>
     <footer>
       表示は各社の広告透明性ライブラリ（Google・Meta等）で公開される情報の活用を想定したデモです。掲載本数・期間・文面は公開情報の範囲で、出稿金額など非公開の数値は扱いません。
     </footer>
@@ -234,23 +246,50 @@ let currentName = "";
 
 function quick(name){ document.getElementById("q").value = name; doSearch(); }
 
+// Enterで検索（IME変換確定では送信しない）
+function onKey(e){
+  if(e.key === "Enter"){
+    if(e.isComposing || e.keyCode === 229) return;
+    e.preventDefault();
+    doSearch();
+  }
+}
+
+// サンプル3社に対する緩めの一致（部分一致・大小文字無視）
+function matchAdvertiser(q){
+  if(advertisers[q]) return q;
+  const n = q.replace(/\s+/g,"").toLowerCase();
+  if(!n) return null;
+  for(const k of Object.keys(advertisers)){
+    const kn = k.replace(/\s+/g,"").toLowerCase();
+    if(kn.includes(n) || n.includes(kn)) return k;
+  }
+  return null;
+}
+
+function showGuide(msg){
+  document.getElementById("s-result").classList.add("hide");
+  document.getElementById("s-empty").classList.remove("hide");
+  document.getElementById("guide-msg").textContent = msg;
+  window.scrollTo(0,0);
+}
+
 function doSearch(){
-  const q = document.getElementById("q").value.trim();
-  const data = advertisers[q];
-  if(!data){
-    document.getElementById("s-result").classList.add("hide");
-    document.getElementById("s-empty").classList.remove("hide");
-    document.getElementById("s-empty").querySelector(".empty").innerHTML =
-      `「${q||"（未入力）"}」の広告は見つかりませんでした。デモではサンプル3社（上のボタン）でお試しください。`;
+  const raw = document.getElementById("q").value.trim();
+  if(!raw){ showGuide("会社名を入れて「調べる」か、下のサンプル企業を選んでください。"); return; }
+  const key = matchAdvertiser(raw);
+  if(!key){
+    showGuide(`「${raw}」は、このデモが持つサンプルデータには含まれていませんでした。下の架空3社でお試しください（実運用版なら、この会社名でそのまま検索できます）。`);
     return;
   }
-  currentName = q;
+  currentName = key;
   document.getElementById("f-media").value = "";
   document.getElementById("f-fmt").value = "";
   document.getElementById("f-status").value = "";
+  const data = advertisers[key];
   document.getElementById("ai-panel").innerHTML = `
     <div class="h">AIによる競合の広告まとめ</div>
-    <div class="who">${q}（${data.field}）</div>
+    <div class="who">${key}（${data.field}）</div>
     <div class="lead">${data.summary}</div>
     <ul>${data.points.map(p=>`<li>${p}</li>`).join("")}</ul>`;
   document.getElementById("s-empty").classList.add("hide");

@@ -7,118 +7,120 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #f5f4f0; --blue: #2563eb; --ink: #1a1a1a; --sub: #6b7280;
-    --line: #e7e5e0; --ok: #16a34a; --warn: #d97706;
+    --bg: #f5f4f0; --card: #ffffff; --ink: #1a1a1a; --sub: #6b7280;
+    --line: #e7e5e0; --blue: #2563eb; --blue-soft: #eef2ff;
+    --neutral: #f0efea; --neutral-ink: #57534e;
     --google: #1a73e8; --meta: #7c3aed;
+    --good: #15803d; --good-bg: #e7f6ec;
   }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-    background: var(--bg); color: var(--ink); line-height: 1.7; -webkit-font-smoothing: antialiased;
+    background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 430px; margin: 0 auto; padding: 0 16px 48px; }
   .demoflag {
     text-align: center; font-size: 11px; color: var(--sub);
     background: #ecebe6; padding: 6px; letter-spacing: .04em;
   }
-  header { padding: 20px 0 6px; }
-  .brand { font-size: 21px; font-weight: 800; }
+  .page { max-width: 960px; margin: 0 auto; padding: 26px 20px 56px; }
+
+  header { margin-bottom: 16px; }
+  .brand { font-size: 22px; font-weight: 800; }
   .brand span { color: var(--blue); }
-  .tagline { font-size: 13px; color: var(--sub); margin-top: 4px; }
+  .tagline { font-size: 13.5px; color: var(--sub); margin-top: 5px; max-width: 640px; }
 
   /* search */
-  .searchbox {
-    background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-top: 14px;
-  }
+  .searchbox { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; max-width: 640px; }
   .searchbox label { font-size: 12px; color: var(--sub); font-weight: 600; }
   .searchrow { display: flex; gap: 8px; margin-top: 6px; }
   .searchrow input {
     flex: 1; font-family: inherit; font-size: 15px; padding: 12px; border: 1.5px solid var(--line);
-    border-radius: 12px; background: #fcfcfb; min-width: 0;
+    border-radius: 11px; background: #fcfcfb; min-width: 0;
   }
-  .searchrow input:focus { outline: none; border-color: #c7d2fe; background: #fff; }
+  .searchrow input:focus { outline: none; border-color: var(--blue); background: #fff; }
   .searchrow button {
-    border: none; background: var(--blue); color: #fff; font-weight: 700; padding: 0 16px;
-    border-radius: 12px; cursor: pointer; font-family: inherit; font-size: 14px; white-space: nowrap;
+    border: none; background: var(--blue); color: #fff; font-weight: 700; padding: 0 18px;
+    border-radius: 11px; cursor: pointer; font-family: inherit; font-size: 14px; white-space: nowrap;
   }
-  .samples { margin-top: 10px; font-size: 12px; color: var(--sub); }
+  .samples { margin-top: 11px; font-size: 12px; color: var(--sub); }
   .chip {
-    display: inline-block; background: #eef2ff; color: var(--blue); font-weight: 600; font-size: 12px;
-    padding: 5px 10px; border-radius: 999px; margin: 4px 4px 0 0; cursor: pointer; border: none; font-family: inherit;
+    display: inline-block; background: var(--neutral); color: var(--neutral-ink); font-weight: 600; font-size: 12px;
+    padding: 6px 11px; border-radius: 999px; margin: 5px 5px 0 0; cursor: pointer; border: none; font-family: inherit;
   }
+  .chip:hover { background: var(--blue-soft); color: var(--blue); }
 
-  .filters { display: flex; gap: 8px; margin: 14px 0 4px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 4px; }
   .filters select {
-    flex: 1; font-family: inherit; font-size: 13px; padding: 9px 10px; border: 1.5px solid var(--line);
-    border-radius: 10px; background: #fff; -webkit-appearance: none; appearance: none;
+    font-family: inherit; font-size: 13px; padding: 8px 30px 8px 11px; border: 1.5px solid var(--line);
+    border-radius: 10px; background: var(--card); -webkit-appearance: none; appearance: none; cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, var(--sub) 50%), linear-gradient(135deg, var(--sub) 50%, transparent 50%);
+    background-position: right 13px center, right 8px center; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
   }
-  .filters select:focus { outline: none; border-color: #c7d2fe; }
+  .filters select:focus { outline: none; border-color: var(--blue); }
 
   /* AI panel */
-  .ai {
-    background: linear-gradient(180deg,#f0f7ff,#fff); border: 1px solid #cfe0fb; border-radius: 14px;
-    padding: 15px; margin: 14px 0;
-  }
+  .ai { background: var(--blue-soft); border-radius: 14px; padding: 16px 18px; margin: 14px 0 4px; }
   .ai .h { font-size: 12px; font-weight: 800; color: var(--blue); letter-spacing: .03em; }
-  .ai .who { font-size: 15px; font-weight: 800; margin: 4px 0 8px; }
+  .ai .who { font-size: 16px; font-weight: 800; margin: 4px 0 8px; }
+  .ai .lead { font-size: 13.5px; color: #374151; margin-bottom: 8px; line-height: 1.7; }
   .ai ul { list-style: none; }
-  .ai li { font-size: 13px; padding: 5px 0 5px 16px; position: relative; }
+  .ai li { font-size: 13px; padding: 4px 0 4px 16px; position: relative; line-height: 1.6; }
   .ai li::before { content: "•"; color: var(--blue); position: absolute; left: 3px; font-weight: 800; }
-  .ai .lead { font-size: 13px; color: #374151; margin-bottom: 6px; }
 
-  .sect { font-size: 12px; color: var(--sub); margin: 18px 4px 8px; font-weight: 600; letter-spacing: .03em; }
+  .count { font-size: 12.5px; color: var(--sub); margin: 18px 2px 12px; font-weight: 600; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
 
   .adcard {
-    background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 10px;
-    cursor: pointer;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; cursor: pointer;
+    transition: border-color .12s, box-shadow .12s; display: flex; flex-direction: column;
   }
-  .adtop { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .media {
-    font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; color: #fff;
-  }
+  .adcard:hover { border-color: #c7d2fe; box-shadow: 0 4px 16px rgba(37,99,235,.07); }
+  .adtop { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+  .media { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; color: #fff; }
   .m-google { background: var(--google); } .m-meta { background: var(--meta); }
-  .fmt { font-size: 11px; color: var(--sub); }
+  .fmt { font-size: 11.5px; color: var(--sub); }
   .runperiod { font-size: 11px; color: var(--sub); margin-left: auto; white-space: nowrap; }
-  .adhead { font-weight: 700; font-size: 15px; color: #1a4bcc; }
-  .adbody { font-size: 13px; color: #374151; margin-top: 3px; }
-  .adfoot { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
-  .live { font-size: 11px; font-weight: 700; color: var(--ok); }
-  .live::before { content: "●"; margin-right: 3px; }
-  .ended { font-size: 11px; font-weight: 700; color: var(--sub); }
-  .ended::before { content: "●"; margin-right: 3px; color: #cbd5e1; }
+  .adhead { font-weight: 700; font-size: 15px; color: #1a4bcc; line-height: 1.45; }
+  .adbody { font-size: 13px; color: #374151; margin-top: 4px; line-height: 1.6; flex: 1; }
+  .adfoot { margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--line); }
+  .live { font-size: 11.5px; font-weight: 700; color: var(--good); }
+  .live::before { content: "●"; margin-right: 4px; font-size: 9px; vertical-align: 1px; }
+  .ended { font-size: 11.5px; font-weight: 700; color: var(--sub); }
+  .ended::before { content: "●"; margin-right: 4px; color: #cbd5e1; font-size: 9px; vertical-align: 1px; }
 
-  .empty { text-align: center; color: var(--sub); font-size: 13px; padding: 40px 10px; }
+  .empty { text-align: center; color: var(--sub); font-size: 13px; padding: 44px 10px; }
 
   /* detail sheet */
-  .overlay { position: fixed; inset: 0; background: rgba(20,20,20,.4); display: none; align-items: flex-end; justify-content: center; z-index: 20; }
+  .overlay { position: fixed; inset: 0; background: rgba(20,20,20,.4); display: none; align-items: center; justify-content: center; z-index: 20; padding: 20px; }
   .overlay.show { display: flex; }
-  .sheet { background: #fff; width: 100%; max-width: 430px; border-radius: 18px 18px 0 0; padding: 20px 18px calc(20px + env(safe-area-inset-bottom)); max-height: 86vh; overflow-y: auto; }
-  .sheet h3 { font-size: 17px; margin-bottom: 6px; }
+  .sheet { background: var(--card); width: 100%; max-width: 480px; border-radius: 18px; padding: 22px; max-height: 88vh; overflow-y: auto; }
+  .sheet h3 { font-size: 16px; margin-bottom: 8px; }
   .drow { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-  .drow:last-child { border: none; }
+  .drow:last-of-type { border: none; }
   .drow .k { flex: 0 0 84px; color: var(--sub); font-size: 13px; }
-  .adpreview { background: var(--bg); border-radius: 12px; padding: 14px; margin: 12px 0; }
+  .adpreview { background: var(--bg); border-radius: 12px; padding: 15px; margin: 6px 0 14px; }
   .adpreview .ph { font-weight: 700; color: #1a4bcc; font-size: 15px; }
-  .adpreview .pb { font-size: 13px; color: #374151; margin-top: 4px; }
-  .adpreview .pu { font-size: 12px; color: var(--ok); margin-top: 6px; }
-  .hint { background: #f0f7ff; border: 1px solid #cfe0fb; border-radius: 12px; padding: 12px 14px; font-size: 13px; margin-top: 12px; }
+  .adpreview .pb { font-size: 13px; color: #374151; margin-top: 5px; line-height: 1.6; }
+  .adpreview .pu { font-size: 12px; color: var(--good); margin-top: 8px; }
+  .hint { background: var(--blue-soft); border-radius: 12px; padding: 13px 15px; font-size: 13px; margin-top: 14px; line-height: 1.7; }
 
   .btn {
     display: block; width: 100%; text-align: center; border: none; cursor: pointer;
     background: var(--blue); color: #fff; font-weight: 700; font-size: 15px;
-    padding: 14px; border-radius: 14px; margin-top: 12px; font-family: inherit;
+    padding: 13px; border-radius: 12px; margin-top: 10px; font-family: inherit;
   }
-  .btn.ghost { background: #fff; color: var(--blue); border: 1.5px solid #c7d2fe; }
+  .btn.ghost { background: var(--card); color: var(--blue); border: 1.5px solid #c7d2fe; }
   .btn:active { opacity: .9; }
 
   .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: #111827; color: #fff; font-size: 13px; padding: 11px 18px; border-radius: 999px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 40; max-width: 90%; }
   .toast.show { opacity: 1; }
-  footer { text-align: center; font-size: 11px; color: var(--sub); margin-top: 24px; line-height: 1.7; }
+  footer { color: var(--sub); font-size: 11.5px; margin-top: 22px; line-height: 1.7; max-width: 660px; }
   .hide { display: none; }
 </style>
 </head>
 <body>
 <div class="demoflag">デモ（サンプルデータ・企業名/広告はすべて架空です）</div>
-<div class="wrap">
+<div class="page">
   <header>
     <div class="brand">競合広告<span>まる見え</span>AI</div>
     <div class="tagline">会社名を入れるだけで、その競合がGoogle・Metaで今出している広告を横断で一覧。訴求の切り口までAIが要約します。</div>
@@ -141,9 +143,9 @@
   </div>
 
   <section id="s-empty">
-    <div class="empty">上の検索から競合を選ぶと、<br>出稿中の広告と訴求の傾向が表示されます。</div>
+    <div class="empty">上の検索から競合を選ぶと、出稿中の広告と訴求の傾向が表示されます。</div>
     <footer>
-      表示は各社の広告透明性ライブラリ（Google・Meta等）で公開される情報の活用を想定したデモです。<br>掲載本数・期間・文面は公開情報の範囲で、出稿金額など非公開の数値は扱いません。
+      表示は各社の広告透明性ライブラリ（Google・Meta等）で公開される情報の活用を想定したデモです。掲載本数・期間・文面は公開情報の範囲で、出稿金額など非公開の数値は扱いません。
     </footer>
   </section>
 
@@ -168,9 +170,8 @@
     </div>
 
     <div class="ai" id="ai-panel"></div>
-
-    <div class="sect" id="result-count"></div>
-    <div id="ad-list"></div>
+    <div class="count" id="result-count"></div>
+    <div class="grid" id="ad-list"></div>
     <footer>掲載本数・期間はサンプルです。実運用では各広告ライブラリの公開データを毎日収集して更新します。</footer>
   </section>
 </div>
@@ -240,14 +241,13 @@ function doSearch(){
     document.getElementById("s-result").classList.add("hide");
     document.getElementById("s-empty").classList.remove("hide");
     document.getElementById("s-empty").querySelector(".empty").innerHTML =
-      `「${q||"（未入力）"}」の広告は見つかりませんでした。<br>デモではサンプル3社（下のボタン）でお試しください。`;
+      `「${q||"（未入力）"}」の広告は見つかりませんでした。デモではサンプル3社（上のボタン）でお試しください。`;
     return;
   }
   currentName = q;
   document.getElementById("f-media").value = "";
   document.getElementById("f-fmt").value = "";
   document.getElementById("f-status").value = "";
-  // AI要約
   document.getElementById("ai-panel").innerHTML = `
     <div class="h">AIによる競合の広告まとめ</div>
     <div class="who">${q}（${data.field}）</div>
@@ -270,8 +270,8 @@ function renderResult(){
   document.getElementById("result-count").textContent =
     `広告 ${currentAds.length} 本を表示（掲載中 ${live} 本 / 全 ${data.ads.length} 本）`;
   const el = document.getElementById("ad-list");
-  if(currentAds.length===0){ el.innerHTML = `<div class="empty">条件に合う広告はありません。</div>`; return; }
-  el.innerHTML = currentAds.map((a,i)=>`
+  if(currentAds.length===0){ el.innerHTML = `<div class="empty" style="grid-column:1/-1">条件に合う広告はありません。</div>`; return; }
+  el.innerHTML = currentAds.map(a=>`
     <div class="adcard" onclick="openAd(${data.ads.indexOf(a)})">
       <div class="adtop">
         <span class="media m-${a.media==='Google'?'google':'meta'}">${a.media}</span>
@@ -299,7 +299,7 @@ function openAd(idx){
     <div class="drow"><div class="k">形式</div><div>${a.fmt}広告</div></div>
     <div class="drow"><div class="k">掲載期間</div><div>${a.period}</div></div>
     <div class="drow"><div class="k">状態</div><div>${a.status==='live'?'掲載中':'掲載終了'}</div></div>
-    <div class="hint">この広告の訴求：${a.body.length>0?'見出しで結論、本文で不安の解消と次の一歩（無料相談・見積もり等）へ誘導する型です。':''}自社の広告に足りない切り口がないか比べてみましょう。</div>
+    <div class="hint">この広告は、見出しで結論、本文で不安の解消と次の一歩（無料相談・見積もり等）へ誘導する型です。自社の広告に足りない切り口がないか比べてみましょう。</div>
     <button class="btn" onclick="saveAd()">この広告を参考に保存</button>
     <button class="btn ghost" onclick="closeSheet(true)">閉じる</button>`;
   document.getElementById("overlay").classList.add("show");

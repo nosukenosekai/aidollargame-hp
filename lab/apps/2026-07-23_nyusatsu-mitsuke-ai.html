@@ -7,108 +7,130 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #f5f4f0; --blue: #2563eb; --ink: #1a1a1a; --sub: #6b7280;
-    --line: #e7e5e0; --ok: #16a34a; --warn: #d97706; --danger: #dc2626;
+    --bg: #f5f4f0; --card: #ffffff; --ink: #1a1a1a; --sub: #6b7280;
+    --line: #e7e5e0; --blue: #2563eb; --blue-soft: #eef2ff;
+    --neutral: #f0efea; --neutral-ink: #57534e;
+    --good-bg: #e7f6ec; --good: #15803d;
+    --mid-bg: #fbf1e2; --mid: #b45309;
+    --low-bg: #f0efea; --low: #78716c;
+    --urgent: #dc2626;
   }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
-    background: var(--bg); color: var(--ink); line-height: 1.7; -webkit-font-smoothing: antialiased;
+    background: var(--bg); color: var(--ink); line-height: 1.6; -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 430px; margin: 0 auto; padding: 0 16px 48px; }
   .demoflag {
     text-align: center; font-size: 11px; color: var(--sub);
     background: #ecebe6; padding: 6px; letter-spacing: .04em;
   }
-  header { padding: 20px 0 6px; }
-  .brand { font-size: 21px; font-weight: 800; }
-  .brand span { color: var(--blue); }
-  .tagline { font-size: 13px; color: var(--sub); margin-top: 4px; }
+  .page { max-width: 960px; margin: 0 auto; padding: 26px 20px 56px; }
 
-  /* filters */
-  .filters { display: flex; gap: 8px; margin: 16px 0 6px; }
-  .fg { flex: 1; }
-  .fg label { font-size: 11px; color: var(--sub); font-weight: 600; display: block; margin-bottom: 4px; }
+  header { margin-bottom: 18px; }
+  .brand { font-size: 22px; font-weight: 800; letter-spacing: .01em; }
+  .brand span { color: var(--blue); }
+  .tagline { font-size: 13.5px; color: var(--sub); margin-top: 5px; max-width: 640px; }
+
+  /* controls */
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+  .fg { display: flex; flex-direction: column; gap: 5px; }
+  .fg label { font-size: 11px; color: var(--sub); font-weight: 600; }
   select {
-    width: 100%; font-family: inherit; font-size: 14px; padding: 10px 12px;
-    border: 1.5px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink);
-    -webkit-appearance: none; appearance: none;
+    font-family: inherit; font-size: 14px; padding: 9px 34px 9px 12px; min-width: 150px;
+    border: 1.5px solid var(--line); border-radius: 11px; background: var(--card); color: var(--ink);
+    -webkit-appearance: none; appearance: none; cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, var(--sub) 50%), linear-gradient(135deg, var(--sub) 50%, transparent 50%);
+    background-position: right 15px center, right 10px center; background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
   }
-  select:focus { outline: none; border-color: #c7d2fe; }
-  .countbar { font-size: 12px; color: var(--sub); margin: 6px 2px 4px; }
+  select:focus { outline: none; border-color: var(--blue); }
+  .count { font-size: 12.5px; color: var(--sub); margin: 16px 2px 12px; }
+
+  /* grid */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
 
   .card {
-    background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 15px; margin-bottom: 10px;
-    cursor: pointer; transition: transform .06s;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 16px 14px;
+    cursor: pointer; transition: border-color .12s, box-shadow .12s, transform .06s;
+    display: flex; flex-direction: column;
   }
-  .card:active { transform: scale(.99); }
-  .toprow { display: flex; align-items: flex-start; gap: 8px; }
-  .cat {
-    font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; white-space: nowrap;
-    background: #eef2ff; color: var(--blue);
+  .card:hover { border-color: #c7d2fe; box-shadow: 0 4px 16px rgba(37,99,235,.07); }
+  .card:active { transform: scale(.995); }
+
+  .card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .tag {
+    font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 7px;
+    background: var(--neutral); color: var(--neutral-ink); letter-spacing: .02em;
   }
-  .deadline { font-size: 11px; font-weight: 700; margin-left: auto; white-space: nowrap; }
-  .dl-soon { color: var(--danger); } .dl-mid { color: var(--warn); } .dl-far { color: var(--sub); }
-  .ctitle { font-weight: 700; font-size: 15px; margin: 8px 0 2px; }
-  .cmeta { font-size: 12px; color: var(--sub); }
-  .fitrow { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
-  .fitbar { flex: 1; height: 7px; border-radius: 999px; background: #eceae4; overflow: hidden; }
-  .fitbar i { display: block; height: 100%; border-radius: 999px; }
-  .fit-h { background: var(--ok); } .fit-m { background: var(--warn); } .fit-l { background: #cbd5e1; }
-  .fitlabel { font-size: 11px; font-weight: 700; white-space: nowrap; }
-  .fh { color: var(--ok); } .fm { color: var(--warn); } .fl { color: var(--sub); }
+  .score {
+    margin-left: auto; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; white-space: nowrap;
+  }
+  .s-high { background: var(--good-bg); color: var(--good); }
+  .s-mid  { background: var(--mid-bg);  color: var(--mid); }
+  .s-low  { background: var(--low-bg);  color: var(--low); }
+
+  .title { font-size: 15.5px; font-weight: 700; line-height: 1.45; }
+  .meta { font-size: 12.5px; color: var(--sub); margin-top: 5px; }
+
+  .card-foot {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line);
+  }
+  .price { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+  .due { font-size: 12px; color: var(--sub); white-space: nowrap; font-weight: 600; }
+  .due.soon { color: var(--urgent); }
 
   /* detail */
-  .back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--blue); font-weight: 600; padding: 14px 0 4px; cursor: pointer; }
+  .detail-wrap { max-width: 600px; margin: 0 auto; }
+  .back { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--blue); font-weight: 600; padding: 2px 0 12px; cursor: pointer; }
   .back::before { content: "‹"; font-size: 20px; line-height: 1; }
-  .dcard { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
-  .dtitle { font-size: 18px; font-weight: 800; }
-  .dsub { font-size: 12px; color: var(--sub); margin-top: 2px; }
-  .drow { display: flex; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-  .drow:last-child { border: none; }
-  .drow .k { flex: 0 0 96px; color: var(--sub); font-size: 13px; }
+  .dcard { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+  .dtop { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .dtitle { font-size: 19px; font-weight: 800; line-height: 1.4; }
+  .dsub { font-size: 12.5px; color: var(--sub); margin-top: 4px; }
+  .drow { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .drow:last-of-type { border: none; }
+  .drow .k { flex: 0 0 104px; color: var(--sub); font-size: 13px; }
   .drow .v { flex: 1; }
   .amount { font-weight: 800; }
-  .aihint {
-    background: #f0f7ff; border: 1px solid #cfe0fb; border-radius: 12px; padding: 12px 14px; margin-top: 14px; font-size: 13px;
-  }
-  .aihint .h { font-weight: 700; color: var(--blue); font-size: 12px; margin-bottom: 4px; letter-spacing: .03em; }
-  .disc { font-size: 11px; color: var(--sub); margin-top: 12px; }
+  .aihint { background: var(--blue-soft); border-radius: 12px; padding: 13px 15px; margin-top: 16px; font-size: 13.5px; line-height: 1.7; }
+  .aihint .h { font-weight: 800; color: var(--blue); font-size: 12px; margin-bottom: 5px; letter-spacing: .03em; }
+  .disc { font-size: 11px; color: var(--sub); margin-top: 14px; line-height: 1.6; }
 
   .btn {
     display: block; width: 100%; text-align: center; border: none; cursor: pointer;
     background: var(--blue); color: #fff; font-weight: 700; font-size: 15px;
-    padding: 15px; border-radius: 14px; margin-top: 12px; font-family: inherit;
+    padding: 14px; border-radius: 13px; margin-top: 12px; font-family: inherit;
   }
-  .btn.ghost { background: #fff; color: var(--blue); border: 1.5px solid #c7d2fe; }
+  .btn.ghost { background: var(--card); color: var(--blue); border: 1.5px solid #c7d2fe; }
+  .btn.saved { background: var(--good-bg); color: var(--good); }
   .btn:active { opacity: .9; }
-  .btn.saved { background: #eaf7ee; color: var(--ok); border: 1.5px solid #bbe6c8; }
 
-  .empty { text-align: center; color: var(--sub); font-size: 13px; padding: 30px 10px; }
+  .empty { text-align: center; color: var(--sub); font-size: 13px; padding: 44px 10px; grid-column: 1 / -1; }
   .toast {
     position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
     background: #111827; color: #fff; font-size: 13px; padding: 11px 18px;
     border-radius: 999px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 40; max-width: 90%;
   }
   .toast.show { opacity: 1; }
-  footer { text-align: center; font-size: 11px; color: var(--sub); margin-top: 24px; line-height: 1.7; }
+  footer { color: var(--sub); font-size: 11.5px; margin-top: 26px; line-height: 1.7; max-width: 640px; }
   .hide { display: none; }
 </style>
 </head>
 <body>
 <div class="demoflag">デモ（サンプルデータ・自治体名/案件はすべて架空です）</div>
-<div class="wrap">
-  <header>
-    <div class="brand">入札<span>みつけ</span>AI</div>
-    <div class="tagline">全国の官公庁・自治体の入札公告を、あなたの業種とエリアだけに絞って毎朝お届け。取りこぼしをなくします。</div>
-  </header>
+<div class="page">
 
   <!-- 一覧 -->
   <section id="s-list">
-    <div class="filters">
+    <header>
+      <div class="brand">入札<span>みつけ</span>AI</div>
+      <div class="tagline">全国の官公庁・自治体の入札公告を、自社の業種とエリアだけに絞って毎朝お届け。取りこぼしをなくします。</div>
+    </header>
+
+    <div class="controls">
       <div class="fg">
         <label>業種</label>
         <select id="f-cat" onchange="renderList()">
-          <option value="">すべて</option>
+          <option value="">すべての業種</option>
           <option value="建設・土木">建設・土木</option>
           <option value="電気・設備">電気・設備</option>
           <option value="清掃・管理">清掃・管理</option>
@@ -127,8 +149,10 @@
         </select>
       </div>
     </div>
-    <div class="countbar" id="countbar"></div>
-    <div id="list"></div>
+
+    <div class="count" id="countbar"></div>
+    <div class="grid" id="list"></div>
+
     <footer>
       入札公告は各機関が公開する情報をもとにしています（デモは架空データ）。予定価格・落札額の目安はあくまで参考値で、落札や受注を保証するものではありません。
     </footer>
@@ -136,28 +160,34 @@
 
   <!-- 詳細 -->
   <section id="s-detail" class="hide">
-    <div class="back" onclick="go('s-list')">一覧にもどる</div>
-    <div class="dcard">
-      <div class="cat" id="d-cat" style="display:inline-block"></div>
-      <div class="dtitle" id="d-title" style="margin-top:8px"></div>
-      <div class="dsub" id="d-sub"></div>
-      <div style="margin-top:12px">
-        <div class="drow"><div class="k">発注機関</div><div class="v" id="d-org"></div></div>
-        <div class="drow"><div class="k">入札方式</div><div class="v" id="d-method"></div></div>
-        <div class="drow"><div class="k">予定価格の目安</div><div class="v amount" id="d-price"></div></div>
-        <div class="drow"><div class="k">参加資格</div><div class="v" id="d-qual"></div></div>
-        <div class="drow"><div class="k">必要書類</div><div class="v" id="d-docs"></div></div>
-        <div class="drow"><div class="k">申込締切</div><div class="v" id="d-due"></div></div>
+    <div class="detail-wrap">
+      <div class="back" onclick="go('s-list')">一覧にもどる</div>
+      <div class="dcard">
+        <div class="dtop">
+          <span class="tag" id="d-cat"></span>
+          <span class="score" id="d-score"></span>
+        </div>
+        <div class="dtitle" id="d-title"></div>
+        <div class="dsub" id="d-sub"></div>
+        <div style="margin-top:14px">
+          <div class="drow"><div class="k">発注機関</div><div class="v" id="d-org"></div></div>
+          <div class="drow"><div class="k">入札方式</div><div class="v" id="d-method"></div></div>
+          <div class="drow"><div class="k">予定価格の目安</div><div class="v amount" id="d-price"></div></div>
+          <div class="drow"><div class="k">参加資格</div><div class="v" id="d-qual"></div></div>
+          <div class="drow"><div class="k">必要書類</div><div class="v" id="d-docs"></div></div>
+          <div class="drow"><div class="k">申込締切</div><div class="v" id="d-due"></div></div>
+        </div>
+        <div class="aihint">
+          <div class="h">AIメモ（参考）</div>
+          <div id="d-ai"></div>
+        </div>
+        <div class="disc" id="d-disc"></div>
       </div>
-      <div class="aihint">
-        <div class="h">AIメモ（参考）</div>
-        <div id="d-ai"></div>
-      </div>
-      <div class="disc" id="d-disc"></div>
+      <button class="btn" id="save-btn" onclick="toggleSave()"></button>
+      <button class="btn ghost" onclick="notifyReg()">この条件の新着を毎朝通知する</button>
     </div>
-    <button class="btn" id="save-btn" onclick="toggleSave()"></button>
-    <button class="btn ghost" onclick="notifyReg()">この条件の新着を毎朝通知する</button>
   </section>
+
 </div>
 <div class="toast" id="toast"></div>
 
@@ -165,13 +195,13 @@
 // ===== サンプル入札案件（すべて架空の自治体・機関） =====
 const bids = [
   { id:1, cat:"清掃・管理", area:"関東", title:"みなと市 市民体育館ほか2施設 定期清掃業務委託",
-    org:"みなと市 施設管理課", method:"一般競争入札（最低価格）", price:"予定価格 約480万円／年",
+    org:"みなと市 施設管理課", method:"一般競争入札（最低価格）", price:"約480万円／年",
     qual:"みなと市 入札参加資格 建物清掃 A〜C等級", docs:"入札書、資格証明、直近の同種業務実績1件",
     due:"7月28日（月）17時", dueType:"soon",
     ai:"過去2年の同種案件は 約430〜510万円で落札。3社前後の競争が中心で、実績があれば十分に狙える規模です。",
     fit:"high" },
   { id:2, cat:"電気・設備", area:"中部", title:"あおば町 町立小学校 空調更新工事",
-    org:"あおば町 教育総務課", method:"指名競争入札", price:"予定価格 約2,300万円",
+    org:"あおば町 教育総務課", method:"指名競争入札", price:"約2,300万円",
     qual:"電気工事業 特定建設業許可、町内または近隣に営業所", docs:"入札書、建設業許可写し、施工体制の概要",
     due:"8月5日（火）正午", dueType:"mid",
     ai:"金額規模が大きく、特定建設業許可と近隣営業所が条件。要件を満たす会社は限られ、該当すれば受注確度は高めです。",
@@ -183,13 +213,13 @@ const bids = [
     ai:"価格でなく企画提案で決まる方式。デザイン力と観光分野の実績が響きます。価格勝負が苦手でも取りにいけるタイプ。",
     fit:"high" },
   { id:4, cat:"IT・システム", area:"近畿", title:"ひなた市 図書館システム 保守・運用業務",
-    org:"ひなた市 情報政策課", method:"一般競争入札（総合評価）", price:"予定価格 約620万円／年",
+    org:"ひなた市 情報政策課", method:"一般競争入札（総合評価）", price:"約620万円／年",
     qual:"情報処理関連、同種システムの保守実績", docs:"入札書、技術提案書、資格証明、実績2件",
     due:"8月8日（金）17時", dueType:"mid",
     ai:"総合評価方式で価格と技術点の両方を見られます。現行ベンダーが有利になりがちな領域のため、乗り換え提案の工夫が必要です。",
     fit:"low" },
   { id:5, cat:"建設・土木", area:"九州", title:"みどり町 町道01号線 舗装補修工事",
-    org:"みどり町 建設課", method:"一般競争入札（最低価格）", price:"予定価格 約1,800万円",
+    org:"みどり町 建設課", method:"一般競争入札（最低価格）", price:"約1,800万円",
     qual:"土木一式工事 一般建設業許可、町内に本店または支店", docs:"入札書、建設業許可写し、配置技術者の資格",
     due:"7月30日（水）正午", dueType:"soon",
     ai:"地元要件（町内本支店）がある地域限定案件。近隣の同業が数社の競争になりやすく、地元事業者に有利です。",
@@ -202,38 +232,33 @@ const bids = [
     fit:"mid" },
 ];
 
-const dlText = { soon:"締切ちかい", mid:"締切 約2週間", far:"締切 先" };
-const dlCls  = { soon:"dl-soon", mid:"dl-mid", far:"dl-far" };
-const fitText = { high:"狙い目", mid:"検討", low:"難しめ" };
-const fitBarCls = { high:"fit-h", mid:"fit-m", low:"fit-l" };
-const fitLabCls = { high:"fh", mid:"fm", low:"fl" };
-const fitW = { high:"85%", mid:"55%", low:"25%" };
+const scoreText = { high:"狙い目", mid:"検討", low:"難しめ" };
+const scoreCls  = { high:"s-high", mid:"s-mid", low:"s-low" };
+const dueText   = { soon:"締切ちかい", mid:"締切 約2週間", far:"締切 先" };
 
-let saved = new Set();
 let current = null;
 
 function renderList(){
   const cat = document.getElementById("f-cat").value;
   const area = document.getElementById("f-area").value;
   const rows = bids.filter(b => (!cat || b.cat===cat) && (!area || b.area===area));
-  // 締切ちかい順
   const ord = { soon:0, mid:1, far:2 };
   rows.sort((a,b)=>ord[a.dueType]-ord[b.dueType]);
   document.getElementById("countbar").textContent =
-    `該当 ${rows.length} 件${cat||area ? "（絞り込み中）" : "（全国・全業種）"}`;
+    `該当 ${rows.length} 件${cat||area ? "（絞り込み中）" : "（全国・全業種）"}・締切の近い順`;
   const el = document.getElementById("list");
-  if(rows.length===0){ el.innerHTML = `<div class="empty">条件に合う入札はありません。<br>エリアや業種を広げてみてください。</div>`; return; }
+  if(rows.length===0){ el.innerHTML = `<div class="empty">条件に合う入札はありません。エリアや業種を広げてみてください。</div>`; return; }
   el.innerHTML = rows.map(b=>`
     <div class="card" onclick="openDetail(${b.id})">
-      <div class="toprow">
-        <span class="cat">${b.cat}</span>
-        <span class="deadline ${dlCls[b.dueType]}">${dlText[b.dueType]}</span>
+      <div class="card-top">
+        <span class="tag">${b.cat}</span>
+        <span class="score ${scoreCls[b.fit]}">${scoreText[b.fit]}</span>
       </div>
-      <div class="ctitle">${b.title}</div>
-      <div class="cmeta">${b.org}・${b.area}／${b.price}</div>
-      <div class="fitrow">
-        <div class="fitbar"><i class="${fitBarCls[b.fit]}" style="width:${fitW[b.fit]}"></i></div>
-        <span class="fitlabel ${fitLabCls[b.fit]}">AI判定：${fitText[b.fit]}</span>
+      <div class="title">${b.title}</div>
+      <div class="meta">${b.org}・${b.area}</div>
+      <div class="card-foot">
+        <span class="price">予定価格 ${b.price}</span>
+        <span class="due ${b.dueType==='soon'?'soon':''}">${dueText[b.dueType]}</span>
       </div>
     </div>`).join("");
 }
@@ -242,6 +267,8 @@ function openDetail(id){
   const b = bids.find(x=>x.id===id);
   current = b;
   document.getElementById("d-cat").textContent = b.cat;
+  const sc = document.getElementById("d-score");
+  sc.textContent = "AI判定：" + scoreText[b.fit]; sc.className = "score " + scoreCls[b.fit];
   document.getElementById("d-title").textContent = b.title;
   document.getElementById("d-sub").textContent = `${b.area}／申込締切 ${b.due}`;
   document.getElementById("d-org").textContent = b.org;
@@ -256,6 +283,7 @@ function openDetail(id){
   go("s-detail");
 }
 
+let saved = new Set();
 function toggleSave(){
   if(saved.has(current.id)){ saved.delete(current.id); toast("気になるリストから外しました"); }
   else { saved.add(current.id); toast("気になるリストに保存しました（デモ）"); }

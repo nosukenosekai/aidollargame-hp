@@ -580,16 +580,23 @@
   .award-item::before { content:''; flex-shrink:0; width:6px; height:6px; margin-top:0.55rem; border:1px solid var(--accent); transform:rotate(45deg); background:var(--accent-soft); }
 
   /* ---------- NEWS (編集誌のインデックス風) ---------- */
-  .news-list { display:flex; flex-direction:column; margin-top:2rem; border-top:1px solid var(--line); }
+  .news-list { display:flex; flex-direction:column; margin-top:3rem; border-top:1px solid var(--line); }
   .news-item {
-    display:grid; grid-template-columns:104px 84px 1fr auto; align-items:center; gap:1rem;
-    padding:0.85rem 0.8rem; background:transparent; border-bottom:1px solid var(--line);
+    display:grid; grid-template-columns:120px 100px 1fr auto; align-items:center; gap:1.5rem;
+    padding:1.5rem 1rem; background:transparent; border-bottom:1px solid var(--line);
     transition:background 0.3s, padding-left 0.3s var(--ease); text-decoration:none; color:inherit;
   }
-  .news-item:hover { background:var(--surface); padding-left:1.3rem; }
-  .news-date { font-family:var(--font-mono); font-size:0.7rem; color:var(--muted); white-space:nowrap; letter-spacing:0.02em; }
-  .news-badge { font-family:var(--font-mono); font-size:0.56rem; padding:0.22rem 0.5rem; border:1px solid rgba(37,99,235,0.5); color:var(--accent); background:var(--accent-soft); white-space:nowrap; text-align:center; border-radius:2px; font-weight:500; letter-spacing:0.08em; }
-  .news-title { font-size:0.86rem; line-height:1.55; color:var(--ink); }
+  .news-item:hover { background:var(--surface); padding-left:1.6rem; }
+  .news-date { font-family:var(--font-mono); font-size:0.74rem; color:var(--muted); white-space:nowrap; letter-spacing:0.04em; }
+  .news-badge { font-family:var(--font-mono); font-size:0.6rem; padding:0.3rem 0.7rem; border:1px solid rgba(37,99,235,0.5); color:var(--accent); background:var(--accent-soft); white-space:nowrap; text-align:center; border-radius:2px; font-weight:500; letter-spacing:0.1em; }
+  .news-title { font-size:0.95rem; line-height:1.7; color:var(--ink); }
+  .news-list.collapsed .news-item:nth-child(n+6) { display:none; }
+  .news-more-btn {
+    display:block; margin:2.4rem auto 0; font-family:var(--font-mono); font-size:0.78rem; letter-spacing:0.1em;
+    padding:0.85rem 2.4rem; border:1px solid var(--ink); background:transparent; color:var(--ink);
+    cursor:pointer; border-radius:2px; transition:background 0.3s, color 0.3s;
+  }
+  .news-more-btn:hover { background:var(--ink); color:var(--paper); }
   .news-arrow { color:var(--muted); font-size:1rem; transition:color 0.3s, transform 0.3s; }
   .news-item:hover .news-arrow { color:var(--accent); transform:translateX(4px); }
 
@@ -671,7 +678,7 @@
     .product-card{padding:2rem 1.5rem;}
     .product-card .card-actions{flex-direction:column;align-items:stretch;}
     .product-card .btn-cta,.product-card .btn-ghost{width:100%;justify-content:center;}
-    .news-item{grid-template-columns:1fr;gap:0.35rem;padding:0.85rem 0.5rem;}
+    .news-item{grid-template-columns:1fr;gap:0.5rem;padding:1.2rem 0.5rem;}
     .news-item:hover{padding-left:0.8rem;}
     .news-badge{justify-self:start;}
     .ceo-message-block{padding:2.5rem 1.4rem;}
@@ -960,7 +967,7 @@
     <div class="section-tag"><span class="st-num">04</span>LATEST NEWS</div>
     <h2 class="section-title">ニュース</h2>
   </div>
-  <div class="news-list reveal">
+  <div class="news-list collapsed reveal" id="newsList">
     <a class="news-item" href="articles/nbc-kigyojuku-2026-07.html">
       <span class="news-date">2026 / 07 / 16</span>
       <span class="news-badge media">EVENT</span>
@@ -1040,6 +1047,7 @@
       <span class="news-arrow">→</span>
     </a>
   </div>
+  <button class="news-more-btn" id="newsMoreBtn" type="button">もっと見る</button>
 </section>
 <div class="divider"></div>
 
@@ -1474,6 +1482,18 @@ document.querySelectorAll('[data-brush]').forEach(el=>brushObs.observe(el));
 /* Reveal on scroll */
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(r=>obs.observe(r));
+
+/* News: show more / less */
+(function(){
+  const list=document.getElementById('newsList');
+  const btn=document.getElementById('newsMoreBtn');
+  if(!list||!btn)return;
+  btn.addEventListener('click',()=>{
+    const collapsed=list.classList.toggle('collapsed');
+    btn.textContent=collapsed?'もっと見る':'閉じる';
+    if(collapsed)document.getElementById('news').scrollIntoView({behavior:'smooth'});
+  });
+})();
 
 /* LINE-style chat demo — auto-loop */
 (function(){

@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://aidollargame.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url><loc>https://aidollargame.com/</loc><lastmod>2026-07-24</lastmod><changefreq>weekly</changefreq><priority>1.0</priority>
+    <image:image><image:loc>https://aidollargame.com/og-default.png</image:loc></image:image>
+    <image:image><image:loc>https://aidollargame.com/wordmark-1200.png</image:loc></image:image>
+    <image:image><image:loc>https://aidollargame.com/aidollargame-ceo-sato-norinosuke.jpg</image:loc></image:image>
+    <image:image><image:loc>https://aidollargame.com/aidollargame-ceo-sato-norinosuke-interview.jpg</image:loc></image:image>
+    <image:image><image:loc>https://aidollargame.com/aidollargame-ceo-sato-norinosuke-seminar.jpg</image:loc></image:image>
+  </url>
   <url><loc>https://aidollargame.com/ai-consulting.html</loc><lastmod>2026-06-11</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://aidollargame.com/ai-training.html</loc><lastmod>2026-07-11</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://aidollargame.com/profile-sato.html</loc><lastmod>2026-07-14</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://aidollargame.com/profile-sato.html</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority>
+    <image:image><image:loc>https://aidollargame.com/aidollargame-ceo-sato-norinosuke.jpg</image:loc></image:image>
+  </url>
   <url><loc>https://aidollargame.com/aiside.html</loc><lastmod>2026-06-29</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://aidollargame.com/human-clone-ai.html</loc><lastmod>2026-06-10</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://aidollargame.com/line-ai-agent.html</loc><lastmod>2026-06-11</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>

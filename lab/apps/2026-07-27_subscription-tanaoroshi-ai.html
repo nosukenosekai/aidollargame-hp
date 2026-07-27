@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>店のサブスク棚卸しAI（デモ）</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f5f4f0;
+    --blue: #2563eb;
+    --blue-soft: #eaf0fe;
+    --ink: #1c1d21;
+    --sub: #6b6f76;
+    --line: #e7e5df;
+    --warn: #c2410c;
+    --warn-soft: #fdf0e8;
+    --ok: #15803d;
+    --ok-soft: #e9f5ec;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 0 16px 48px; }
+  .demoflag {
+    text-align: center;
+    font-size: 11px;
+    color: var(--sub);
+    letter-spacing: .04em;
+    padding: 7px 0 3px;
+  }
+  header { padding: 8px 0 14px; }
+  .brand { display: flex; align-items: center; gap: 9px; }
+  .logo {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: var(--blue); flex: none;
+    position: relative;
+  }
+  .logo::before, .logo::after {
+    content: ""; position: absolute; background: #fff; border-radius: 2px;
+  }
+  .logo::before { width: 14px; height: 3px; left: 8px; top: 10px; }
+  .logo::after { width: 14px; height: 3px; left: 8px; top: 17px; }
+  h1 { font-size: 18px; font-weight: 800; letter-spacing: -.01em; }
+  .tagline { font-size: 12.5px; color: var(--sub); margin-top: 5px; }
+
+  .summary {
+    background: var(--blue);
+    color: #fff;
+    border-radius: 14px;
+    padding: 16px 16px 14px;
+    margin-top: 6px;
+  }
+  .summary .lead { font-size: 12px; opacity: .85; }
+  .summary .big { font-size: 30px; font-weight: 800; letter-spacing: -.02em; margin-top: 1px; }
+  .summary .big small { font-size: 15px; font-weight: 700; opacity: .9; margin-left: 2px; }
+  .sumrow { display: flex; gap: 10px; margin-top: 13px; }
+  .sumcell {
+    flex: 1; background: rgba(255,255,255,.14);
+    border-radius: 10px; padding: 9px 11px;
+  }
+  .sumcell .k { font-size: 11px; opacity: .85; }
+  .sumcell .v { font-size: 16px; font-weight: 800; margin-top: 1px; }
+  .sumcell.save .v { color: #ffe08a; }
+
+  .tabs { display: flex; gap: 7px; margin: 18px 0 12px; }
+  .tab {
+    flex: 1; text-align: center; font-size: 12.5px; font-weight: 700;
+    padding: 8px 0; border-radius: 999px; border: 1px solid var(--line);
+    background: #fff; color: var(--sub); cursor: pointer;
+  }
+  .tab.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  .card {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 14px; padding: 13px 14px; margin-bottom: 10px;
+    cursor: pointer; transition: transform .06s ease;
+  }
+  .card:active { transform: scale(.99); }
+  .crow { display: flex; align-items: center; gap: 11px; }
+  .cat {
+    width: 38px; height: 38px; border-radius: 10px; flex: none;
+    background: var(--blue-soft); color: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; text-align: center; line-height: 1.1;
+  }
+  .cmain { flex: 1; min-width: 0; }
+  .cname { font-size: 14.5px; font-weight: 700; }
+  .cmeta { font-size: 11.5px; color: var(--sub); margin-top: 1px; }
+  .cprice { text-align: right; flex: none; }
+  .cprice .p { font-size: 14.5px; font-weight: 800; }
+  .cprice .u { font-size: 10.5px; color: var(--sub); }
+  .flag {
+    display: inline-block; font-size: 10.5px; font-weight: 800;
+    padding: 2px 8px; border-radius: 999px; margin-top: 9px;
+  }
+  .flag.warn { background: var(--warn-soft); color: var(--warn); }
+  .flag.ok { background: var(--ok-soft); color: var(--ok); }
+  .flag.done { background: #eef0f3; color: var(--sub); }
+
+  .empty { text-align: center; color: var(--sub); font-size: 13px; padding: 30px 0; }
+
+  .modal-bg {
+    position: fixed; inset: 0; background: rgba(20,21,25,.45);
+    display: none; align-items: flex-end; justify-content: center; z-index: 20;
+  }
+  .modal-bg.on { display: flex; }
+  .modal {
+    background: #fff; width: 100%; max-width: 480px;
+    border-radius: 18px 18px 0 0; padding: 20px 18px 26px;
+    max-height: 88vh; overflow-y: auto;
+    animation: up .22s ease;
+  }
+  @keyframes up { from { transform: translateY(40px); opacity: .4; } to { transform: translateY(0); opacity: 1; } }
+  .mtop { display: flex; align-items: flex-start; gap: 12px; }
+  .mtop .cat { width: 44px; height: 44px; font-size: 12px; }
+  .mtitle { flex: 1; }
+  .mtitle h3 { font-size: 17px; font-weight: 800; }
+  .mtitle .mm { font-size: 12px; color: var(--sub); margin-top: 2px; }
+  .close { font-size: 22px; color: var(--sub); background: none; border: none; cursor: pointer; line-height: 1; }
+  .mgrid { display: flex; gap: 10px; margin: 16px 0; }
+  .mbox { flex: 1; background: var(--bg); border-radius: 11px; padding: 10px 12px; }
+  .mbox .k { font-size: 11px; color: var(--sub); }
+  .mbox .v { font-size: 15px; font-weight: 800; margin-top: 1px; }
+  .verdict {
+    background: var(--warn-soft); border-radius: 12px; padding: 13px 14px;
+    font-size: 13px; margin-bottom: 16px;
+  }
+  .verdict.oktone { background: var(--ok-soft); }
+  .verdict .vh { font-weight: 800; font-size: 12.5px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+  .verdict .vh .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warn); flex: none; }
+  .verdict.oktone .vh .dot { background: var(--ok); }
+  .btn {
+    display: block; width: 100%; text-align: center;
+    padding: 13px; border-radius: 12px; font-size: 14.5px; font-weight: 800;
+    border: none; cursor: pointer; background: var(--blue); color: #fff;
+  }
+  .btn.ghost { background: #fff; color: var(--ink); border: 1.5px solid var(--line); margin-top: 9px; }
+  .btn.marked { background: #eef0f3; color: var(--sub); }
+  .foot { text-align: center; font-size: 11px; color: var(--sub); margin-top: 20px; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demoflag">デモ（サンプルデータ）</div>
+  <header>
+    <div class="brand">
+      <div class="logo"></div>
+      <h1>店のサブスク棚卸しAI</h1>
+    </div>
+    <div class="tagline">カード明細を貼るだけ。会社が払い続けているサブスクを一覧にして、重複・休眠・値上がりをAIが見つけます。</div>
+  </header>
+
+  <div class="summary">
+    <div class="lead">食堂まるみ（架空の飲食店）— 毎月のサブスク合計</div>
+    <div class="big">58,300<small>円/月</small></div>
+    <div class="sumrow">
+      <div class="sumcell"><div class="k">年額換算</div><div class="v">約70万円</div></div>
+      <div class="sumcell save"><div class="k">見直しで浮く見込み</div><div class="v" id="saveNum">約17万円</div></div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" data-f="all">すべて</div>
+    <div class="tab" data-f="warn">見直し候補</div>
+    <div class="tab" data-f="ok">継続でOK</div>
+  </div>
+
+  <div id="list"></div>
+
+  <div class="foot">
+    ※ これは営業デモです。サービス名・店名・金額はすべて架空のサンプルです。<br>
+    株式会社AIdollargame
+  </div>
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+  // ===== サンプルデータ（架空の飲食店が払っているサブスク）=====
+  const SUBS = [
+    { id:1, name:"予約台帳クラウド A", cat:"予約管理", price:11000, since:"2023年4月", last:"3日前", save:0,
+      status:"warn", reason:"dup",
+      verdict:"同じ『予約管理』で2つのサブスクが動いています（もう1つは予約台帳クラウド B）。毎日使われているのはこちらのAです。2つ持ち続ける必要は薄いので、使っていないB側を止める候補にするのがおすすめです（このAは継続想定）。" },
+    { id:2, name:"予約台帳クラウド B", cat:"予約管理", price:6600, since:"2024年9月", last:"2か月前", save:6600,
+      status:"warn", reason:"dormant",
+      verdict:"直近2か月、この台帳からの予約反映がありません。乗り換え時に前のものを止め忘れた『休眠サブスク』の可能性があります。解約しても予約台帳クラウドAでカバーできる見込みで、止めれば月6,600円まるごと減らせます。" },
+    { id:3, name:"グルメサイト掲載プラン", cat:"集客・掲載", price:16500, since:"2022年6月", last:"—", save:3300,
+      status:"warn", reason:"up",
+      verdict:"契約時より月額が3,300円上がっています（値上げ2回）。掲載経由の来店数が増えていなければ、下位プランへの変更で掲載は残したまま月3,300円ほど抑えられる余地があります。まず1か月の掲載経由予約を数えて判断するのがおすすめです。" },
+    { id:4, name:"モバイルPOSレジ", cat:"会計・レジ", price:4400, since:"2022年6月", last:"今日",
+      status:"ok", reason:"",
+      verdict:"毎日使われている中心的なツールです。売上とセットで動いているため継続がおすすめ。年払いに切り替えると月あたりが少し安くなる場合があります。" },
+    { id:5, name:"勤怠・シフトクラウド", cat:"人事・勤怠", price:5500, since:"2023年1月", last:"昨日",
+      status:"ok", reason:"",
+      verdict:"スタッフのシフトと打刻に毎日使われています。人手のかかる作業を肩代わりしているため、費用対効果は良好です。継続でOK。" },
+    { id:6, name:"店内BGM配信", cat:"店舗環境", price:3300, since:"2022年6月", last:"今日",
+      status:"ok", reason:"",
+      verdict:"営業中ずっと使われています。著作権つきで安心して流せる用途のため、継続がおすすめです。" },
+    { id:7, name:"デザイン作成ツール", cat:"販促・制作", price:2500, since:"2024年2月", last:"5か月前", save:2500,
+      status:"warn", reason:"idle",
+      verdict:"直近5か月ログインがありません。POP作りが一段落したまま契約が続いている可能性があります。次に作る予定がなければ一旦止めて、必要な月だけ再契約する使い方に切り替えると月2,500円を抑えられます。" },
+    { id:8, name:"クラウド会計", cat:"会計・レジ", price:3300, since:"2022年6月", last:"6日前",
+      status:"ok", reason:"",
+      verdict:"月次の記帳と申告準備に使われています。税理士との共有にも必要なため継続がおすすめです。" },
+    { id:9, name:"店舗Wi-Fiオプション", cat:"店舗環境", price:5200, since:"2022年6月", last:"—", save:2000,
+      status:"warn", reason:"up",
+      verdict:"回線本体とは別に付いている上位オプションです。来客用Wi-Fiの実利用が少なければ、標準プランへ戻して月2,000円前後を抑えられる余地があります。回線会社に現在の必要性を確認するのがおすすめです。" },
+  ];
+
+  const REASON_TAG = {
+    dup: "重複の疑い", dormant: "休眠中", up: "値上がり", idle: "未使用が続く"
+  };
+
+  let filter = "all";
+
+  function yen(n){ return n.toLocaleString("ja-JP"); }
+
+  function render(){
+    const list = document.getElementById("list");
+    const items = SUBS.filter(s => {
+      if(filter==="all") return true;
+      if(filter==="warn") return s.status==="warn";
+      return s.status==="ok";
+    });
+    if(items.length===0){ list.innerHTML = '<div class="empty">該当するサブスクはありません。</div>'; return; }
+    list.innerHTML = items.map(s => {
+      let flag;
+      if(s.marked) flag = '<span class="flag done">解約候補に印あり</span>';
+      else if(s.status==="warn") flag = '<span class="flag warn">'+ (REASON_TAG[s.reason]||"要チェック") +'</span>';
+      else flag = '<span class="flag ok">継続でOK</span>';
+      return '<div class="card" onclick="openDetail('+s.id+')">'
+        + '<div class="crow">'
+        +   '<div class="cat">'+s.cat+'</div>'
+        +   '<div class="cmain"><div class="cname">'+s.name+'</div>'
+        +     '<div class="cmeta">最終利用: '+s.last+' ／ '+s.since+'〜</div></div>'
+        +   '<div class="cprice"><div class="p">'+yen(s.price)+'</div><div class="u">円/月</div></div>'
+        + '</div>'
+        + flag
+        + '</div>';
+    }).join("");
+  }
+
+  function recalcSave(){
+    // 各項目の現実的な削減額(save)で年間換算。解約でなくダウングレード分は一部のみ。
+    const saved = SUBS.filter(s=>s.status==="warn" && s.marked).reduce((a,s)=>a+(s.save||0),0)*12;
+    const potential = SUBS.filter(s=>s.status==="warn").reduce((a,s)=>a+(s.save||0),0)*12;
+    const el = document.getElementById("saveNum");
+    if(saved>0){
+      el.textContent = "実施 約"+ Math.round(saved/10000) +"万円";
+    } else {
+      el.textContent = "約"+ Math.round(potential/10000) +"万円";
+    }
+  }
+
+  function openDetail(id){
+    const s = SUBS.find(x=>x.id===id);
+    const tone = s.status==="warn" ? "" : "oktone";
+    const vh = s.status==="warn" ? "AIの見立て：見直し候補" : "AIの見立て：継続でOK";
+    const btn = s.status==="warn"
+      ? (s.marked
+          ? '<button class="btn marked" onclick="toggleMark('+id+')">解約候補の印を外す</button>'
+          : '<button class="btn" onclick="toggleMark('+id+')">解約候補に印をつける</button>')
+      : '';
+    document.getElementById("modal").innerHTML =
+        '<div class="mtop">'
+      +   '<div class="cat">'+s.cat+'</div>'
+      +   '<div class="mtitle"><h3>'+s.name+'</h3><div class="mm">'+s.since+'から契約 ／ 最終利用 '+s.last+'</div></div>'
+      +   '<button class="close" onclick="closeDetail()">&times;</button>'
+      + '</div>'
+      + '<div class="mgrid">'
+      +   '<div class="mbox"><div class="k">月額</div><div class="v">'+yen(s.price)+'円</div></div>'
+      +   '<div class="mbox"><div class="k">年額換算</div><div class="v">'+yen(s.price*12)+'円</div></div>'
+      + '</div>'
+      + '<div class="verdict '+tone+'"><div class="vh"><span class="dot"></span>'+vh+'</div>'+s.verdict+'</div>'
+      + btn
+      + '<button class="btn ghost" onclick="closeDetail()">一覧に戻る</button>';
+    document.getElementById("modalBg").classList.add("on");
+  }
+  function closeDetail(){ document.getElementById("modalBg").classList.remove("on"); }
+  function toggleMark(id){
+    const s = SUBS.find(x=>x.id===id);
+    s.marked = !s.marked;
+    recalcSave(); render(); openDetail(id);
+  }
+
+  document.getElementById("modalBg").addEventListener("click", e=>{
+    if(e.target.id==="modalBg") closeDetail();
+  });
+  document.querySelectorAll(".tab").forEach(t=>{
+    t.addEventListener("click", ()=>{
+      document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+      t.classList.add("on");
+      filter = t.dataset.f;
+      render();
+    });
+  });
+
+  render();
+  recalcSave();
+</script>
+</body>
+</html>

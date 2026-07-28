@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お店のクチコミ返信AI（デモ）</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --bg:#f5f4f0; --blue:#2563eb; --blue-soft:#eaf0fe; --ink:#1c1d21; --sub:#6b6f76; --line:#e7e5df; --warn:#c2410c; --warn-soft:#fdf0e8; --ok:#15803d; --ok-soft:#e9f5ec; --gray-soft:#eef0f3; --star:#e0a500; }
+  body{ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:480px; margin:0 auto; padding:0 16px 48px; }
+  .demoflag{ text-align:center; font-size:11px; color:var(--sub); letter-spacing:.04em; padding:7px 0 3px; }
+  header{ padding:8px 0 14px; }
+  .brand{ display:flex; align-items:center; gap:9px; }
+  .logo{ width:30px; height:30px; border-radius:8px; background:var(--blue); flex:none; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px; }
+  h1{ font-size:18px; font-weight:800; letter-spacing:-.01em; }
+  .tagline{ font-size:12.5px; color:var(--sub); margin-top:5px; }
+  .summary{ background:var(--blue); color:#fff; border-radius:14px; padding:15px 16px 14px; margin-top:6px; }
+  .summary .lead{ font-size:12px; opacity:.85; }
+  .sumrow{ display:flex; gap:10px; margin-top:11px; }
+  .sumcell{ flex:1; background:rgba(255,255,255,.14); border-radius:10px; padding:9px 10px; }
+  .sumcell .k{ font-size:11px; opacity:.85; }
+  .sumcell .v{ font-size:19px; font-weight:800; margin-top:1px; }
+  .sumcell .v small{ font-size:12px; font-weight:700; opacity:.9; }
+  .sumcell.wait .v{ color:#ffe08a; }
+  .tabs{ display:flex; gap:7px; margin:18px 0 12px; }
+  .tab{ flex:1; text-align:center; font-size:12.5px; font-weight:700; padding:8px 0; border-radius:999px; border:1px solid var(--line); background:#fff; color:var(--sub); cursor:pointer; }
+  .tab.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:13px 14px; margin-bottom:10px; cursor:pointer; transition:transform .06s ease; }
+  .card:active{ transform:scale(.99); }
+  .crow{ display:flex; align-items:flex-start; gap:11px; }
+  .cmain{ flex:1; min-width:0; } .cname{ font-size:13.5px; font-weight:700; }
+  .stars{ color:var(--star); font-size:13px; letter-spacing:1px; }
+  .stars .off{ color:#d8d5cd; }
+  .ctext{ font-size:12.5px; color:var(--sub); margin-top:3px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .flag{ display:inline-block; font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:999px; margin-top:9px; }
+  .flag.wait{ background:var(--warn-soft); color:var(--warn); } .flag.done{ background:var(--ok-soft); color:var(--ok); }
+  .empty{ text-align:center; color:var(--sub); font-size:13px; padding:30px 0; }
+  .modal-bg{ position:fixed; inset:0; background:rgba(20,21,25,.45); display:none; align-items:flex-end; justify-content:center; z-index:20; } .modal-bg.on{ display:flex; }
+  .modal{ background:#fff; width:100%; max-width:480px; border-radius:18px 18px 0 0; padding:20px 18px 26px; max-height:90vh; overflow-y:auto; animation:up .22s ease; }
+  @keyframes up{ from{ transform:translateY(40px); opacity:.4; } to{ transform:translateY(0); opacity:1; } }
+  .mtop{ display:flex; align-items:flex-start; gap:10px; } .mtitle{ flex:1; } .mtitle h3{ font-size:16px; font-weight:800; } .mtitle .mm{ font-size:12px; color:var(--sub); margin-top:2px; }
+  .close{ font-size:22px; color:var(--sub); background:none; border:none; cursor:pointer; line-height:1; }
+  .sec{ font-size:11.5px; font-weight:800; color:var(--sub); letter-spacing:.04em; margin:16px 0 7px; }
+  .review{ background:var(--bg); border-radius:12px; padding:12px 14px; font-size:13px; }
+  .reply{ background:var(--blue-soft); border-radius:12px; padding:12px 14px; font-size:13px; }
+  .memo{ background:var(--warn-soft); border-radius:12px; padding:12px 14px; font-size:12.5px; margin-top:12px; }
+  .memo .h{ font-size:11px; font-weight:800; color:var(--warn); margin-bottom:4px; }
+  .btn{ display:block; width:100%; text-align:center; padding:13px; border-radius:12px; font-size:14.5px; font-weight:800; border:none; cursor:pointer; background:var(--blue); color:#fff; margin-top:14px; }
+  .btn.ghost{ background:#fff; color:var(--ink); border:1.5px solid var(--line); margin-top:9px; }
+  .btn.done{ background:var(--gray-soft); color:var(--sub); }
+  .foot{ text-align:center; font-size:11px; color:var(--sub); margin-top:20px; line-height:1.7; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demoflag">デモ（サンプルデータ）</div>
+  <header>
+    <div class="brand"><div class="logo">口</div><h1>お店のクチコミ返信AI</h1></div>
+    <div class="tagline">集まったクチコミにAIが返信の下書きを用意。低評価には角の立たない前向きな言葉で、良い評価にはお礼で。改善のヒントも自動でメモにまとめます。</div>
+  </header>
+
+  <div class="summary">
+    <div class="lead">まちの洋品店みなと（架空）— クチコミの状況</div>
+    <div class="sumrow">
+      <div class="sumcell"><div class="k">平均評価</div><div class="v">4.2<small> ★</small></div></div>
+      <div class="sumcell wait"><div class="k">未返信</div><div class="v" id="waitNum">3<small> 件</small></div></div>
+      <div class="sumcell"><div class="k">改善メモ</div><div class="v" id="memoNum">2<small> 件</small></div></div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" data-f="all">すべて</div>
+    <div class="tab" data-f="wait">未返信</div>
+    <div class="tab" data-f="done">返信済</div>
+  </div>
+  <div id="list"></div>
+  <div class="foot">※ 営業デモです。店名・投稿者・本文はすべて架空のサンプルです。返信は下書き表示のみで、実際には投稿しません。<br>株式会社AIdollargame</div>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<script>
+  const REVIEWS = [
+    { id:1, star:5, who:"みかんさん（仮名）", when:"2日前", status:"wait",
+      text:"店員さんが親身に選んでくれて、探していた色のニットがやっと見つかりました。また来ます。",
+      reply:"みかんさま、うれしいお言葉をありがとうございます。ぴったりの一着に出会えたとのこと、こちらも本当に励みになります。次の入荷もぜひ楽しみにいらしてください。",
+      memo:null },
+    { id:2, star:2, who:"とおりすがりさん（仮名）", when:"4日前", status:"wait",
+      text:"品揃えは良いけど、レジがひとつしかなくて会計にすごく並びました。夕方は特に。",
+      reply:"貴重なご意見をありがとうございます。夕方の混み合う時間帯にお待たせしてしまい、申し訳ございませんでした。混雑時のレジ体制を見直してまいります。またお立ち寄りいただけましたら幸いです。",
+      memo:"夕方の会計待ち。ピーク時のレジ増設・応援体制を検討。" },
+    { id:3, star:3, who:"きたかぜさん（仮名）", when:"5日前", status:"wait",
+      text:"服は気に入ったが、試着室が一つで少し待った。接客はていねいでした。",
+      reply:"ご来店ありがとうございます。試着室でお待たせしてしまった点、申し訳ございませんでした。接客をお褒めいただき光栄です。より快適にお選びいただけるよう工夫してまいります。",
+      memo:"試着室の待ち。混雑時間の案内・回転の工夫を検討。" },
+    { id:4, star:5, who:"はれこさん（仮名）", when:"1週間前", status:"done",
+      text:"プレゼントの相談にのってもらえて助かりました。ラッピングもかわいい。",
+      reply:"はれこさま、ありがとうございます。喜んでいただけるものが選べたようで何よりです。ラッピングもお気に召してうれしいです。またお気軽にご相談ください。",
+      memo:null },
+    { id:5, star:4, who:"のんびりさん（仮名）", when:"1週間前", status:"done",
+      text:"落ち着いて見られる雰囲気が好きです。価格も良心的。",
+      reply:"のんびりさま、ありがとうございます。ゆっくりお選びいただける空間づくりを大切にしております。またのご来店をお待ちしております。",
+      memo:null },
+  ];
+  let filter="all";
+  function starHtml(n){ let s=""; for(let i=1;i<=5;i++) s+= i<=n?'★':'<span class="off">★</span>'; return '<span class="stars">'+s+'</span>'; }
+  function recalc(){
+    document.getElementById("waitNum").innerHTML=REVIEWS.filter(r=>r.status==="wait").length+'<small> 件</small>';
+    document.getElementById("memoNum").innerHTML=REVIEWS.filter(r=>r.memo).length+'<small> 件</small>';
+  }
+  function render(){
+    const list=document.getElementById("list");
+    const items=REVIEWS.filter(r=>{ if(filter==="all")return true; return r.status===filter; });
+    if(!items.length){ list.innerHTML='<div class="empty">該当するクチコミはありません。</div>'; return; }
+    list.innerHTML=items.map(r=>{
+      const flag = r.status==="done" ? '<span class="flag done">返信済</span>' : '<span class="flag wait">未返信</span>';
+      return '<div class="card" onclick="openDetail('+r.id+')"><div class="crow"><div class="cmain">'+starHtml(r.star)+'<div class="cname">'+r.who+'<span style="color:var(--sub);font-weight:500;font-size:11.5px;margin-left:6px">'+r.when+'</span></div><div class="ctext">'+r.text+'</div></div></div>'+flag+'</div>';
+    }).join("");
+  }
+  function openDetail(id){
+    const r=REVIEWS.find(x=>x.id===id);
+    const memo = r.memo ? '<div class="memo"><div class="h">AIが抽出した改善メモ</div>'+r.memo+'</div>' : '';
+    const act = r.status==="wait"
+      ? '<button class="btn" onclick="reply('+id+')">この返信を採用する</button>'
+      : '<button class="btn done" disabled>返信済み</button>';
+    document.getElementById("modal").innerHTML=
+      '<div class="mtop"><div class="mtitle"><h3>'+r.who+'</h3><div class="mm">'+r.when+'</div></div><button class="close" onclick="closeDetail()">&times;</button></div>'
+      +'<div class="sec">クチコミ '+starHtml(r.star)+'</div><div class="review">'+r.text+'</div>'
+      +'<div class="sec">AIの返信下書き（前向き・角を立てない）</div><div class="reply">'+r.reply+'</div>'
+      +memo+act+'<button class="btn ghost" onclick="closeDetail()">一覧に戻る</button>';
+    document.getElementById("modalBg").classList.add("on");
+  }
+  function closeDetail(){ document.getElementById("modalBg").classList.remove("on"); }
+  function reply(id){ const r=REVIEWS.find(x=>x.id===id); r.status="done"; recalc(); render(); openDetail(id); }
+  document.getElementById("modalBg").addEventListener("click",e=>{ if(e.target.id==="modalBg") closeDetail(); });
+  document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on")); t.classList.add("on"); filter=t.dataset.f; render(); }));
+  render(); recalc();
+</script>
+</body>
+</html>

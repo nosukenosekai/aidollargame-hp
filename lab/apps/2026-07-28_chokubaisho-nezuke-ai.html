@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直売所の値付け売り切りAI（デモ）</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --bg:#f5f4f0; --blue:#2563eb; --blue-soft:#eaf0fe; --ink:#1c1d21; --sub:#6b6f76; --line:#e7e5df; --warn:#c2410c; --warn-soft:#fdf0e8; --ok:#15803d; --ok-soft:#e9f5ec; --gray-soft:#eef0f3; }
+  body{ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:480px; margin:0 auto; padding:0 16px 48px; }
+  .demoflag{ text-align:center; font-size:11px; color:var(--sub); letter-spacing:.04em; padding:7px 0 3px; }
+  header{ padding:8px 0 14px; }
+  .brand{ display:flex; align-items:center; gap:9px; }
+  .logo{ width:30px; height:30px; border-radius:8px; background:var(--blue); flex:none; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px; }
+  h1{ font-size:18px; font-weight:800; letter-spacing:-.01em; }
+  .tagline{ font-size:12.5px; color:var(--sub); margin-top:5px; }
+  .summary{ background:var(--blue); color:#fff; border-radius:14px; padding:15px 16px 14px; margin-top:6px; }
+  .summary .lead{ font-size:12px; opacity:.85; }
+  .sumrow{ display:flex; gap:10px; margin-top:11px; }
+  .sumcell{ flex:1; background:rgba(255,255,255,.14); border-radius:10px; padding:9px 10px; }
+  .sumcell .k{ font-size:11px; opacity:.85; }
+  .sumcell .v{ font-size:19px; font-weight:800; margin-top:1px; }
+  .sumcell .v small{ font-size:12px; font-weight:700; opacity:.9; }
+  .sumcell.loss .v{ color:#ffe08a; }
+  .tabs{ display:flex; gap:7px; margin:18px 0 12px; }
+  .tab{ flex:1; text-align:center; font-size:12.5px; font-weight:700; padding:8px 0; border-radius:999px; border:1px solid var(--line); background:#fff; color:var(--sub); cursor:pointer; }
+  .tab.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:13px 14px; margin-bottom:10px; cursor:pointer; transition:transform .06s ease; }
+  .card:active{ transform:scale(.99); }
+  .crow{ display:flex; align-items:center; gap:11px; }
+  .cmain{ flex:1; min-width:0; } .cname{ font-size:14.5px; font-weight:700; } .cmeta{ font-size:12px; color:var(--sub); margin-top:2px; }
+  .cprice{ text-align:right; flex:none; } .cprice .p{ font-size:14.5px; font-weight:800; } .cprice .u{ font-size:10.5px; color:var(--sub); }
+  .flag{ display:inline-block; font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:999px; margin-top:9px; }
+  .flag.down{ background:var(--warn-soft); color:var(--warn); } .flag.keep{ background:var(--gray-soft); color:var(--sub); } .flag.set{ background:var(--blue-soft); color:var(--blue); } .flag.done{ background:var(--ok-soft); color:var(--ok); }
+  .empty{ text-align:center; color:var(--sub); font-size:13px; padding:30px 0; }
+  .modal-bg{ position:fixed; inset:0; background:rgba(20,21,25,.45); display:none; align-items:flex-end; justify-content:center; z-index:20; } .modal-bg.on{ display:flex; }
+  .modal{ background:#fff; width:100%; max-width:480px; border-radius:18px 18px 0 0; padding:20px 18px 26px; max-height:90vh; overflow-y:auto; animation:up .22s ease; }
+  @keyframes up{ from{ transform:translateY(40px); opacity:.4; } to{ transform:translateY(0); opacity:1; } }
+  .mtop{ display:flex; align-items:flex-start; gap:10px; } .mtitle{ flex:1; } .mtitle h3{ font-size:17px; font-weight:800; } .mtitle .mm{ font-size:12px; color:var(--sub); margin-top:2px; }
+  .close{ font-size:22px; color:var(--sub); background:none; border:none; cursor:pointer; line-height:1; }
+  .sec{ font-size:11.5px; font-weight:800; color:var(--sub); letter-spacing:.04em; margin:16px 0 7px; }
+  .pricebox{ display:flex; gap:10px; }
+  .pb{ flex:1; background:var(--bg); border-radius:12px; padding:11px 12px; text-align:center; } .pb.ai{ background:var(--blue-soft); }
+  .pb .k{ font-size:11px; color:var(--sub); } .pb .v{ font-size:18px; font-weight:800; margin-top:2px; } .pb.ai .v{ color:var(--blue); }
+  .reasons{ background:var(--bg); border-radius:12px; padding:6px 14px; }
+  .rr{ display:flex; padding:8px 0; border-bottom:1px solid var(--line); font-size:13px; } .rr:last-child{ border-bottom:none; } .rr .k{ width:70px; flex:none; color:var(--sub); } .rr .v{ font-weight:700; }
+  .verdict{ background:var(--warn-soft); border-radius:12px; padding:13px 14px; font-size:13px; margin-top:14px; }
+  .btn{ display:block; width:100%; text-align:center; padding:13px; border-radius:12px; font-size:14.5px; font-weight:800; border:none; cursor:pointer; background:var(--blue); color:#fff; margin-top:14px; }
+  .btn.ghost{ background:#fff; color:var(--ink); border:1.5px solid var(--line); margin-top:9px; }
+  .btn.done{ background:var(--gray-soft); color:var(--sub); }
+  .foot{ text-align:center; font-size:11px; color:var(--sub); margin-top:20px; line-height:1.7; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demoflag">デモ（サンプルデータ）</div>
+  <header>
+    <div class="brand"><div class="logo">菜</div><h1>直売所の値付け売り切りAI</h1></div>
+    <div class="tagline">閉店までの残り時間・天気・曜日・残り数から、AIが『いくらで・どう売れば売り切れるか』を品目ごとに提案。値下げのしすぎも防いで、廃棄ロスを減らします。</div>
+  </header>
+
+  <div class="summary">
+    <div class="lead">みのり直売所（架空）— 本日の出品（残り2時間）</div>
+    <div class="sumrow">
+      <div class="sumcell"><div class="k">出品</div><div class="v">5<small> 品目</small></div></div>
+      <div class="sumcell"><div class="k">売り切り見込み</div><div class="v">80<small>%</small></div></div>
+      <div class="sumcell loss"><div class="k">ロス削減見込み</div><div class="v" id="lossNum">4,600<small>円</small></div></div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" data-f="all">すべて</div>
+    <div class="tab" data-f="act">要対応</div>
+    <div class="tab" data-f="done">対応済</div>
+  </div>
+  <div id="list"></div>
+  <div class="foot">※ 営業デモです。直売所名・品目・数量・金額はすべて架空のサンプルです。売り切り効果は目安で、結果を保証するものではありません。<br>株式会社AIdollargame</div>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<script>
+  const ITEMS = [
+    { id:1, name:"トマト（少し柔らかめ）", now:200, ai:150, left:18, act:"down", loss:2000,
+      reason:[["残り","18パック"],["日持ち","明日まで"],["天気","晴れ・来客多め"]],
+      verdict:"やや傷みが進み、明日は売りづらい品です。200円→150円へ下げると、閉店までに売り切れる見込み。廃棄すると約2,000円分の損失なので、値下げした方が手元に残ります。" },
+    { id:2, name:"きゅうり", now:120, ai:120, left:9, act:"keep", loss:0,
+      reason:[["残り","9袋"],["日持ち","2〜3日"],["天気","晴れ・来客多め"]],
+      verdict:"残り数が少なく、日持ちもします。今の120円のままで閉店までに売り切れる見込み。値下げは不要です。" },
+    { id:3, name:"なす", now:150, ai:150, left:22, act:"set", loss:900,
+      reason:[["残り","22袋"],["日持ち","2日"],["天気","晴れ・来客多め"]],
+      verdict:"数は多いものの日持ちします。値下げより『2袋250円のまとめ売り』が効果的。単価を大きく落とさずに数をさばけ、約900円分のロスを避けられます。" },
+    { id:4, name:"葉物（ほうれん草）", now:180, ai:120, left:14, act:"down", loss:1700,
+      reason:[["残り","14束"],["日持ち","本日中"],["天気","夕方に雨予報"]],
+      verdict:"葉物は本日中が勝負で、夕方の雨で来客も鈍りがちです。180円→120円へ早めに下げて回転を作るのがおすすめ。約1,700円分の廃棄を避けられます。" },
+    { id:5, name:"新じゃがいも", now:250, ai:250, left:6, act:"done", loss:0,
+      reason:[["残り","6袋"],["日持ち","1週間以上"],["天気","晴れ・来客多め"]],
+      verdict:"日持ちする品で残りもわずか。据え置きのまま。翌日に持ち越しても問題ありません。" },
+  ];
+  let filter="all";
+  function recalc(){
+    const done=ITEMS.filter(i=>i.userdone);
+    const doneSum=done.reduce((a,i)=>a+i.loss,0);
+    const potential=ITEMS.filter(i=>i.act!=="keep" && i.act!=="done" && !i.userdone).reduce((a,i)=>a+i.loss,0);
+    document.getElementById("lossNum").innerHTML=(doneSum>0? "実施 "+doneSum.toLocaleString() : potential.toLocaleString())+'<small>円</small>';
+  }
+  function render(){
+    const list=document.getElementById("list");
+    const items=ITEMS.filter(i=>{
+      if(filter==="all")return true;
+      if(filter==="done")return i.userdone || i.act==="done";
+      return (i.act==="down"||i.act==="set") && !i.userdone;
+    });
+    if(!items.length){ list.innerHTML='<div class="empty">該当はありません。</div>'; return; }
+    list.innerHTML=items.map(i=>{
+      let flag;
+      if(i.userdone) flag='<span class="flag done">対応済</span>';
+      else if(i.act==="down") flag='<span class="flag down">値下げ提案 '+(i.ai-i.now)+'円</span>';
+      else if(i.act==="set") flag='<span class="flag set">まとめ売り提案</span>';
+      else if(i.act==="done") flag='<span class="flag keep">据え置き</span>';
+      else flag='<span class="flag keep">据え置きでOK</span>';
+      return '<div class="card" onclick="openDetail('+i.id+')"><div class="crow"><div class="cmain"><div class="cname">'+i.name+'</div><div class="cmeta">残り'+i.left+'／現在 '+i.now+'円</div></div><div class="cprice"><div class="p">'+(i.act==="set"?"2点250円":i.ai+"円")+'</div><div class="u">AI提案</div></div></div>'+flag+'</div>';
+    }).join("");
+  }
+  function openDetail(id){
+    const i=ITEMS.find(x=>x.id===id);
+    const reasons='<div class="reasons">'+i.reason.map(r=>'<div class="rr"><div class="k">'+r[0]+'</div><div class="v">'+r[1]+'</div></div>').join("")+'</div>';
+    const priceBox = i.act==="set"
+      ? '<div class="pricebox"><div class="pb"><div class="k">現在</div><div class="v">'+i.now+'円</div></div><div class="pb ai"><div class="k">AI提案</div><div class="v">2点250円</div></div><div class="pb"><div class="k">ロス回避</div><div class="v">'+i.loss.toLocaleString()+'</div></div></div>'
+      : '<div class="pricebox"><div class="pb"><div class="k">現在</div><div class="v">'+i.now+'円</div></div><div class="pb ai"><div class="k">AI提案</div><div class="v">'+i.ai+'円</div></div><div class="pb"><div class="k">ロス回避</div><div class="v">'+(i.loss>0?i.loss.toLocaleString():'—')+'</div></div></div>';
+    const canAct = (i.act==="down"||i.act==="set") && !i.userdone;
+    const act = i.userdone
+      ? '<button class="btn done" disabled>対応済み</button>'
+      : (canAct ? '<button class="btn" onclick="apply('+id+')">この値付けにする</button>' : '');
+    document.getElementById("modal").innerHTML=
+      '<div class="mtop"><div class="mtitle"><h3>'+i.name+'</h3><div class="mm">残り'+i.left+' ／ 現在 '+i.now+'円</div></div><button class="close" onclick="closeDetail()">&times;</button></div>'
+      +'<div class="sec">現在の値付けとAI提案</div>'+priceBox
+      +'<div class="sec">AIが見た手がかり</div>'+reasons
+      +'<div class="verdict">'+i.verdict+'</div>'
+      +act+'<button class="btn ghost" onclick="closeDetail()">一覧に戻る</button>';
+    document.getElementById("modalBg").classList.add("on");
+  }
+  function closeDetail(){ document.getElementById("modalBg").classList.remove("on"); }
+  function apply(id){ const i=ITEMS.find(x=>x.id===id); i.userdone=true; recalc(); render(); openDetail(id); }
+  document.getElementById("modalBg").addEventListener("click",e=>{ if(e.target.id==="modalBg") closeDetail(); });
+  document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on")); t.classList.add("on"); filter=t.dataset.f; render(); }));
+  render(); recalc();
+</script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ゴルフ当日キャンセル穴埋めAI（デモ）</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --bg:#f5f4f0; --blue:#2563eb; --blue-soft:#eaf0fe; --ink:#1c1d21; --sub:#6b6f76; --line:#e7e5df; --warn:#c2410c; --warn-soft:#fdf0e8; --ok:#15803d; --ok-soft:#e9f5ec; --gray-soft:#eef0f3; }
+  body{ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:480px; margin:0 auto; padding:0 16px 48px; }
+  .demoflag{ text-align:center; font-size:11px; color:var(--sub); letter-spacing:.04em; padding:7px 0 3px; }
+  header{ padding:8px 0 14px; }
+  .brand{ display:flex; align-items:center; gap:9px; }
+  .logo{ width:30px; height:30px; border-radius:8px; background:var(--blue); flex:none; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:14px; }
+  h1{ font-size:18px; font-weight:800; letter-spacing:-.01em; }
+  .tagline{ font-size:12.5px; color:var(--sub); margin-top:5px; }
+  .summary{ background:var(--blue); color:#fff; border-radius:14px; padding:15px 16px 14px; margin-top:6px; }
+  .summary .lead{ font-size:12px; opacity:.85; }
+  .sumrow{ display:flex; gap:10px; margin-top:11px; }
+  .sumcell{ flex:1; background:rgba(255,255,255,.14); border-radius:10px; padding:9px 10px; }
+  .sumcell .k{ font-size:11px; opacity:.85; }
+  .sumcell .v{ font-size:19px; font-weight:800; margin-top:1px; }
+  .sumcell .v small{ font-size:12px; font-weight:700; opacity:.9; }
+  .sumcell.rec .v{ color:#ffe08a; }
+  .tabs{ display:flex; gap:7px; margin:18px 0 12px; }
+  .tab{ flex:1; text-align:center; font-size:12.5px; font-weight:700; padding:8px 0; border-radius:999px; border:1px solid var(--line); background:#fff; color:var(--sub); cursor:pointer; }
+  .tab.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:13px 14px; margin-bottom:10px; cursor:pointer; transition:transform .06s ease; }
+  .card:active{ transform:scale(.99); }
+  .crow{ display:flex; align-items:center; gap:11px; }
+  .time{ width:46px; flex:none; text-align:center; } .time .t{ font-size:15px; font-weight:800; } .time .u{ font-size:10px; color:var(--sub); }
+  .cmain{ flex:1; min-width:0; } .cname{ font-size:14.5px; font-weight:700; } .cmeta{ font-size:12px; color:var(--sub); margin-top:2px; }
+  .flag{ display:inline-block; font-size:10.5px; font-weight:800; padding:3px 9px; border-radius:999px; flex:none; }
+  .flag.open{ background:var(--warn-soft); color:var(--warn); } .flag.filled{ background:var(--ok-soft); color:var(--ok); } .flag.miss{ background:var(--gray-soft); color:var(--sub); }
+  .empty{ text-align:center; color:var(--sub); font-size:13px; padding:30px 0; }
+  .modal-bg{ position:fixed; inset:0; background:rgba(20,21,25,.45); display:none; align-items:flex-end; justify-content:center; z-index:20; }
+  .modal-bg.on{ display:flex; }
+  .modal{ background:#fff; width:100%; max-width:480px; border-radius:18px 18px 0 0; padding:20px 18px 26px; max-height:90vh; overflow-y:auto; animation:up .22s ease; }
+  @keyframes up{ from{ transform:translateY(40px); opacity:.4; } to{ transform:translateY(0); opacity:1; } }
+  .mtop{ display:flex; align-items:flex-start; gap:10px; } .mtitle{ flex:1; } .mtitle h3{ font-size:17px; font-weight:800; } .mtitle .mm{ font-size:12px; color:var(--sub); margin-top:2px; }
+  .close{ font-size:22px; color:var(--sub); background:none; border:none; cursor:pointer; line-height:1; }
+  .sec{ font-size:11.5px; font-weight:800; color:var(--sub); letter-spacing:.04em; margin:16px 0 7px; }
+  .cand{ display:flex; align-items:center; gap:11px; background:var(--bg); border-radius:12px; padding:10px 12px; margin-bottom:8px; }
+  .cand:last-child{ margin-bottom:0; }
+  .ava{ width:34px; height:34px; border-radius:50%; background:var(--blue-soft); color:var(--blue); flex:none; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:13px; }
+  .cinfo{ flex:1; min-width:0; } .cinfo .n{ font-size:13.5px; font-weight:700; } .cinfo .m{ font-size:11.5px; color:var(--sub); }
+  .msg{ background:var(--ok-soft); border-radius:12px; padding:12px 14px; font-size:13px; margin-top:12px; display:none; } .msg.on{ display:block; } .msg .h{ font-size:11px; font-weight:800; color:var(--ok); margin-bottom:5px; }
+  .btn{ display:block; width:100%; text-align:center; padding:13px; border-radius:12px; font-size:14.5px; font-weight:800; border:none; cursor:pointer; background:var(--blue); color:#fff; margin-top:14px; }
+  .btn.ghost{ background:#fff; color:var(--ink); border:1.5px solid var(--line); margin-top:9px; }
+  .btn.small{ padding:8px 14px; font-size:12.5px; width:auto; margin:0; }
+  .btn.done{ background:var(--gray-soft); color:var(--sub); }
+  .foot{ text-align:center; font-size:11px; color:var(--sub); margin-top:20px; line-height:1.7; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demoflag">デモ（サンプルデータ）</div>
+  <header>
+    <div class="brand"><div class="logo">G</div><h1>ゴルフ当日キャンセル穴埋めAI</h1></div>
+    <div class="tagline">当日キャンセルで空いた枠を、AIが近くの空き待ちゴルファーへ自動でオファー。空振りしていた枠を埋めて、当日の売上を取り戻します。</div>
+  </header>
+
+  <div class="summary">
+    <div class="lead">みどり野カントリー（架空）— 本日のキャンセル枠</div>
+    <div class="sumrow">
+      <div class="sumcell"><div class="k">キャンセル枠</div><div class="v" id="totalNum">5<small> 枠</small></div></div>
+      <div class="sumcell"><div class="k">穴埋め成立</div><div class="v" id="fillNum">1<small> 枠</small></div></div>
+      <div class="sumcell rec"><div class="k">回収額</div><div class="v" id="recNum">1.2<small>万円</small></div></div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" data-f="all">すべて</div>
+    <div class="tab" data-f="open">募集中</div>
+    <div class="tab" data-f="filled">成立</div>
+  </div>
+  <div id="list"></div>
+  <div class="foot">※ 営業デモです。コース名・ゴルファー名・金額はすべて架空のサンプルです。オファー送信は下書き表示のみで、実際には送信しません。<br>株式会社AIdollargame</div>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<script>
+  const SLOTS = [
+    { id:1, time:"7:20", ppl:2, fee:12000, status:"open",
+      cands:[ {n:"佐々木さん（仮名）",m:"車で15分・直近3回利用",init:"サ"}, {n:"田口さん（仮名）",m:"車で25分・平日によく利用",init:"タ"} ] },
+    { id:2, time:"8:04", ppl:4, fee:24000, status:"open",
+      cands:[ {n:"グループ・港ゴルフ会（仮名）",m:"4名で空き待ち登録・車20分",init:"港"}, {n:"渡辺さん他3名（仮名）",m:"車30分・週末希望",init:"渡"} ] },
+    { id:3, time:"9:12", ppl:1, fee:6000, status:"open",
+      cands:[ {n:"中村さん（仮名）",m:"車10分・当日枠をよく狙う",init:"中"} ] },
+    { id:4, time:"10:30", ppl:2, fee:12000, status:"filled", by:"林さん（仮名）",
+      cands:[ {n:"林さん（仮名）",m:"車12分・成立済み",init:"林"} ] },
+    { id:5, time:"6:48", ppl:3, fee:0, status:"miss",
+      cands:[] },
+  ];
+  let filter="all";
+  const man = n => (n/10000).toFixed(1);
+  function recalc(){
+    const filled=SLOTS.filter(s=>s.status==="filled");
+    document.getElementById("fillNum").innerHTML=filled.length+'<small> 枠</small>';
+    document.getElementById("recNum").innerHTML=man(filled.reduce((a,s)=>a+s.fee,0))+'<small>万円</small>';
+  }
+  function render(){
+    const list=document.getElementById("list");
+    const items=SLOTS.filter(s=>{ if(filter==="all")return true; return s.status===filter; });
+    if(!items.length){ list.innerHTML='<div class="empty">該当する枠はありません。</div>'; return; }
+    list.innerHTML=items.map(s=>{
+      let flag,meta;
+      if(s.status==="filled"){ flag='<span class="flag filled">成立</span>'; meta=s.by+' が確定／'+s.fee.toLocaleString()+'円'; }
+      else if(s.status==="miss"){ flag='<span class="flag miss">未成立</span>'; meta='早朝で候補が集まらず未成立'; }
+      else { flag='<span class="flag open">募集中</span>'; meta=s.ppl+'名枠・'+s.fee.toLocaleString()+'円／空き待ち'+s.cands.length+'件'; }
+      return '<div class="card" onclick="openDetail('+s.id+')"><div class="crow"><div class="time"><div class="t">'+s.time+'</div><div class="u">スタート</div></div><div class="cmain"><div class="cname">'+s.ppl+'名枠</div><div class="cmeta">'+meta+'</div></div>'+flag+'</div></div>';
+    }).join("");
+  }
+  function openDetail(id){
+    const s=SLOTS.find(x=>x.id===id);
+    let body;
+    if(s.status==="miss"){
+      body='<div class="sec">状況</div><div class="cand" style="display:block">早朝6時台の枠は空き待ちの登録が少なく、今回は候補が集まりませんでした。前日夜のうちに近隣会員へ早朝オファーを送る設定にすると、成立率が上がります。</div>';
+    } else {
+      body='<div class="sec">AIが選んだ空き待ち候補（近い順）</div>'
+        + s.cands.map((c,i)=>'<div class="cand"><div class="ava">'+c.init+'</div><div class="cinfo"><div class="n">'+c.n+'</div><div class="m">'+c.m+'</div></div>'
+          + (s.status==="open" ? '<button class="btn small" onclick="offer('+id+','+i+')">オファー</button>' : '<span class="flag filled">確定</span>')
+          + '</div>').join("");
+      if(s.status==="open"){
+        body+='<div class="msg" id="msg'+id+'"><div class="h">自動オファー文（下書き・送信はしません）</div>【みどり野CC】本日'+s.time+'スタート・'+s.ppl+'名枠に空きが出ました。'+s.fee.toLocaleString()+'円でいかがですか。先着で確定します。ご希望なら「予約」とご返信ください。</div>';
+      }
+    }
+    const foot = s.status==="open"
+      ? '<button class="btn ghost" onclick="toggleMsg('+id+')">オファー文の下書きを見る</button>'
+      : (s.status==="filled" ? '<button class="btn done" disabled>成立済み（'+s.by+'）</button>' : '');
+    document.getElementById("modal").innerHTML=
+      '<div class="mtop"><div class="mtitle"><h3>'+s.time+' スタート／'+s.ppl+'名枠</h3><div class="mm">'+(s.fee?s.fee.toLocaleString()+'円':'—')+'</div></div><button class="close" onclick="closeDetail()">&times;</button></div>'
+      +body+foot+'<button class="btn ghost" onclick="closeDetail()">一覧に戻る</button>';
+    document.getElementById("modalBg").classList.add("on");
+  }
+  function closeDetail(){ document.getElementById("modalBg").classList.remove("on"); }
+  function toggleMsg(id){ const m=document.getElementById("msg"+id); if(m) m.classList.toggle("on"); }
+  function offer(id,i){ const s=SLOTS.find(x=>x.id===id); s.status="filled"; s.by=s.cands[i].n; recalc(); render(); openDetail(id); }
+  document.getElementById("modalBg").addEventListener("click",e=>{ if(e.target.id==="modalBg") closeDetail(); });
+  document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on")); t.classList.add("on"); filter=t.dataset.f; render(); }));
+  render(); recalc();
+</script>
+</body>
+</html>

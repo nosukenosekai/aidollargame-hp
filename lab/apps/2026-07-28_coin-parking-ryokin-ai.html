@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コインパーキング料金メーカーAI（デモ）</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{ --bg:#f5f4f0; --blue:#2563eb; --blue-soft:#eaf0fe; --ink:#1c1d21; --sub:#6b6f76; --line:#e7e5df; --warn:#c2410c; --warn-soft:#fdf0e8; --ok:#15803d; --ok-soft:#e9f5ec; --gray-soft:#eef0f3; }
+  body{ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif; background:var(--bg); color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .wrap{ max-width:480px; margin:0 auto; padding:0 16px 48px; }
+  .demoflag{ text-align:center; font-size:11px; color:var(--sub); letter-spacing:.04em; padding:7px 0 3px; }
+  header{ padding:8px 0 14px; }
+  .brand{ display:flex; align-items:center; gap:9px; }
+  .logo{ width:30px; height:30px; border-radius:8px; background:var(--blue); flex:none; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:15px; }
+  h1{ font-size:18px; font-weight:800; letter-spacing:-.01em; }
+  .tagline{ font-size:12.5px; color:var(--sub); margin-top:5px; }
+  .summary{ background:var(--blue); color:#fff; border-radius:14px; padding:15px 16px 14px; margin-top:6px; }
+  .summary .lead{ font-size:12px; opacity:.85; }
+  .sumrow{ display:flex; gap:10px; margin-top:11px; }
+  .sumcell{ flex:1; background:rgba(255,255,255,.14); border-radius:10px; padding:9px 10px; }
+  .sumcell .k{ font-size:11px; opacity:.85; }
+  .sumcell .v{ font-size:19px; font-weight:800; margin-top:1px; }
+  .sumcell .v small{ font-size:12px; font-weight:700; opacity:.9; }
+  .sumcell.up .v{ color:#ffe08a; }
+  .tabs{ display:flex; gap:7px; margin:18px 0 12px; }
+  .tab{ flex:1; text-align:center; font-size:12.5px; font-weight:700; padding:8px 0; border-radius:999px; border:1px solid var(--line); background:#fff; color:var(--sub); cursor:pointer; }
+  .tab.on{ background:var(--ink); color:#fff; border-color:var(--ink); }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:13px 14px; margin-bottom:10px; cursor:pointer; transition:transform .06s ease; }
+  .card:active{ transform:scale(.99); }
+  .crow{ display:flex; align-items:center; gap:11px; }
+  .cmain{ flex:1; min-width:0; }
+  .cname{ font-size:14.5px; font-weight:700; }
+  .cmeta{ font-size:12px; color:var(--sub); margin-top:2px; }
+  .cprice{ text-align:right; flex:none; }
+  .cprice .p{ font-size:14.5px; font-weight:800; }
+  .cprice .u{ font-size:10.5px; color:var(--sub); }
+  .flag{ display:inline-block; font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:999px; margin-top:9px; }
+  .flag.up{ background:var(--warn-soft); color:var(--warn); }
+  .flag.keep{ background:var(--gray-soft); color:var(--sub); }
+  .flag.down{ background:var(--blue-soft); color:var(--blue); }
+  .flag.done{ background:var(--ok-soft); color:var(--ok); }
+  .empty{ text-align:center; color:var(--sub); font-size:13px; padding:30px 0; }
+  .modal-bg{ position:fixed; inset:0; background:rgba(20,21,25,.45); display:none; align-items:flex-end; justify-content:center; z-index:20; }
+  .modal-bg.on{ display:flex; }
+  .modal{ background:#fff; width:100%; max-width:480px; border-radius:18px 18px 0 0; padding:20px 18px 26px; max-height:90vh; overflow-y:auto; animation:up .22s ease; }
+  @keyframes up{ from{ transform:translateY(40px); opacity:.4; } to{ transform:translateY(0); opacity:1; } }
+  .mtop{ display:flex; align-items:flex-start; gap:10px; }
+  .mtitle{ flex:1; } .mtitle h3{ font-size:17px; font-weight:800; } .mtitle .mm{ font-size:12px; color:var(--sub); margin-top:2px; }
+  .close{ font-size:22px; color:var(--sub); background:none; border:none; cursor:pointer; line-height:1; }
+  .sec{ font-size:11.5px; font-weight:800; color:var(--sub); letter-spacing:.04em; margin:16px 0 7px; }
+  .pricebox{ display:flex; gap:10px; }
+  .pb{ flex:1; background:var(--bg); border-radius:12px; padding:11px 12px; text-align:center; }
+  .pb.now{ } .pb.ai{ background:var(--blue-soft); }
+  .pb .k{ font-size:11px; color:var(--sub); } .pb .v{ font-size:18px; font-weight:800; margin-top:2px; } .pb.ai .v{ color:var(--blue); }
+  .bars{ background:var(--bg); border-radius:12px; padding:12px 14px; }
+  .bar{ display:flex; align-items:center; gap:8px; margin-bottom:7px; font-size:12px; }
+  .bar:last-child{ margin-bottom:0; }
+  .bar .bl{ width:52px; flex:none; color:var(--sub); }
+  .bar .bt{ flex:1; height:8px; background:#e2e0da; border-radius:5px; overflow:hidden; }
+  .bar .bf{ height:100%; background:var(--blue); border-radius:5px; }
+  .bar .bv{ width:36px; flex:none; text-align:right; font-weight:700; }
+  .verdict{ background:var(--warn-soft); border-radius:12px; padding:13px 14px; font-size:13px; margin-top:14px; }
+  .btn{ display:block; width:100%; text-align:center; padding:13px; border-radius:12px; font-size:14.5px; font-weight:800; border:none; cursor:pointer; background:var(--blue); color:#fff; margin-top:14px; }
+  .btn.ghost{ background:#fff; color:var(--ink); border:1.5px solid var(--line); margin-top:9px; }
+  .btn.done{ background:var(--gray-soft); color:var(--sub); }
+  .foot{ text-align:center; font-size:11px; color:var(--sub); margin-top:20px; line-height:1.7; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demoflag">デモ（サンプルデータ）</div>
+  <header>
+    <div class="brand"><div class="logo">P</div><h1>コインパーキング料金メーカーAI</h1></div>
+    <div class="tagline">曜日・時間帯の稼働と周辺相場をAIが読み、駐車場ごとに『いくらに直すと増収か』を提案。勘と放置になりがちな料金設定を数字で見直します。</div>
+  </header>
+
+  <div class="summary">
+    <div class="lead">みなとパーク管理（架空）— 管理中のコインパーキング</div>
+    <div class="sumrow">
+      <div class="sumcell"><div class="k">管理台数</div><div class="v">5<small> か所</small></div></div>
+      <div class="sumcell"><div class="k">平均稼働率</div><div class="v">58<small>%</small></div></div>
+      <div class="sumcell up"><div class="k">増収見込み</div><div class="v" id="sumUp">3.4<small>万円/月</small></div></div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" data-f="all">すべて</div>
+    <div class="tab" data-f="change">見直し提案</div>
+    <div class="tab" data-f="done">採用済</div>
+  </div>
+  <div id="list"></div>
+  <div class="foot">※ 営業デモです。施設名・数値・金額はすべて架空のサンプルです。料金変更の効果は目安で、実際の増収を保証するものではありません。<br>株式会社AIdollargame</div>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<script>
+  const LOTS = [
+    { id:1, name:"みなと第1パーキング", now:200, ai:300, occ:86, gain:14000, act:"up",
+      near:"周辺相場は60分250〜350円。ここは相場より安く、平日夜も満車が続いています。",
+      verdict:"平日夜と土日の稼働がほぼ満車です。60分200円→300円へ引き上げても稼働はさほど落ちない見込みで、月1.4万円の増収が期待できます。",
+      hours:[["平日昼",62],["平日夜",94],["土日",88]] },
+    { id:2, name:"みなと第2パーキング", now:400, ai:300, occ:22, gain:9000, act:"down",
+      near:"周辺相場は60分300円前後。ここは高めで、日中の空きが目立ちます。",
+      verdict:"日中の稼働が2割と低く、料金が相場より高いのが一因とみられます。60分400円→300円で利用が増え、トータルで月0.9万円の増収が見込めます。",
+      hours:[["平日昼",22],["平日夜",30],["土日",18]] },
+    { id:3, name:"駅裏フラットP", now:300, ai:300, occ:61, gain:0, act:"keep",
+      near:"周辺相場ど真ん中。曜日で偏りが少なく安定しています。",
+      verdict:"料金・稼働ともにバランスが取れています。今は据え置きが妥当。次の繁忙期前に再チェックするのがおすすめです。",
+      hours:[["平日昼",58],["平日夜",64],["土日",61]] },
+    { id:4, name:"川沿い月極+時間貸P", now:150, ai:250, occ:79, gain:8000, act:"up",
+      near:"周辺相場は60分250円前後。ここは最安値クラスで回転が速いです。",
+      verdict:"最安のため回転は速いものの、単価が低く取りこぼしています。60分150円→250円でも近隣に代替が少なく、月0.8万円の増収余地があります。",
+      hours:[["平日昼",72],["平日夜",81],["土日",84]] },
+    { id:5, name:"病院前ショートP", now:300, ai:400, occ:68, gain:3000, act:"up",
+      near:"周辺相場は最初30分で高め。短時間需要が中心です。",
+      verdict:"短時間の出入りが多く、最初の30分の単価に余地があります。上限料金は据え置きつつ短時間単価を上げる設計で、月0.3万円ほど増える見込みです。",
+      hours:[["平日昼",74],["平日夜",55],["土日",70]] },
+  ];
+  let filter="all";
+  const man = n => (n/10000).toFixed(1);
+  function recalc(){
+    const potential = LOTS.filter(l=>l.act!=="keep" && !l.done).reduce((a,l)=>a+l.gain,0);
+    const doneSum = LOTS.filter(l=>l.done).reduce((a,l)=>a+l.gain,0);
+    document.getElementById("sumUp").innerHTML = (doneSum>0? "実施 "+man(doneSum) : man(potential)) + '<small>万円/月</small>';
+  }
+  function render(){
+    const list=document.getElementById("list");
+    const items=LOTS.filter(l=>{ if(filter==="all")return true; if(filter==="done")return l.done; return l.act!=="keep"&&!l.done; });
+    if(!items.length){ list.innerHTML='<div class="empty">該当はありません。</div>'; return; }
+    list.innerHTML=items.map(l=>{
+      let flag;
+      if(l.done) flag='<span class="flag done">採用済（'+l.ai+'円）</span>';
+      else if(l.act==="up") flag='<span class="flag up">値上げ提案 +'+(l.ai-l.now)+'円</span>';
+      else if(l.act==="down") flag='<span class="flag down">値下げ提案 '+(l.ai-l.now)+'円</span>';
+      else flag='<span class="flag keep">据え置きでOK</span>';
+      return '<div class="card" onclick="openDetail('+l.id+')"><div class="crow"><div class="cmain"><div class="cname">'+l.name+'</div><div class="cmeta">稼働率 '+l.occ+'%／現在 60分'+l.now+'円</div></div><div class="cprice"><div class="p">'+l.ai+'円</div><div class="u">AI提案/60分</div></div></div>'+flag+'</div>';
+    }).join("");
+  }
+  function openDetail(id){
+    const l=LOTS.find(x=>x.id===id);
+    const bars='<div class="bars">'+l.hours.map(h=>'<div class="bar"><div class="bl">'+h[0]+'</div><div class="bt"><div class="bf" style="width:'+h[1]+'%"></div></div><div class="bv">'+h[1]+'%</div></div>').join("")+'</div>';
+    const act = l.done
+      ? '<button class="btn done" disabled>この料金を採用済み（60分'+l.ai+'円）</button>'
+      : (l.act==="keep" ? '' : '<button class="btn" onclick="adopt('+id+')">この料金を採用する</button>');
+    document.getElementById("modal").innerHTML=
+      '<div class="mtop"><div class="mtitle"><h3>'+l.name+'</h3><div class="mm">現在 60分'+l.now+'円 ／ 平均稼働率 '+l.occ+'%</div></div><button class="close" onclick="closeDetail()">&times;</button></div>'
+      +'<div class="sec">現在の料金とAI提案</div><div class="pricebox"><div class="pb now"><div class="k">現在</div><div class="v">'+l.now+'円</div></div><div class="pb ai"><div class="k">AI提案</div><div class="v">'+l.ai+'円</div></div><div class="pb"><div class="k">増収見込み</div><div class="v">'+(l.gain>0?man(l.gain)+'万':'—')+'</div></div></div>'
+      +'<div class="sec">曜日・時間帯の稼働</div>'+bars
+      +'<div class="sec">周辺相場</div><div class="bars" style="font-size:13px">'+l.near+'</div>'
+      +'<div class="verdict">'+l.verdict+'</div>'
+      +act+'<button class="btn ghost" onclick="closeDetail()">一覧に戻る</button>';
+    document.getElementById("modalBg").classList.add("on");
+  }
+  function closeDetail(){ document.getElementById("modalBg").classList.remove("on"); }
+  function adopt(id){ const l=LOTS.find(x=>x.id===id); l.done=true; l.now=l.ai; recalc(); render(); openDetail(id); }
+  document.getElementById("modalBg").addEventListener("click",e=>{ if(e.target.id==="modalBg") closeDetail(); });
+  document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on")); t.classList.add("on"); filter=t.dataset.f; render(); }));
+  render(); recalc();
+</script>
+</body>
+</html>

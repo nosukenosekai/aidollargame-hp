@@ -35,6 +35,8 @@
 - 料金の考え方（AI導入支援は20万円〜・費用が決まる3要素と見積もりまでの流れを公開）: https://aidollargame.com/ryokin.html
 - AI導入の流れ（無料相談から運用開始までの5ステップ）: https://aidollargame.com/donyu-flow.html
 - AI活用度診断: https://aidollargame.com/shindan.html
+- 無料資料「AI導入はじめの一歩チェックリスト20」（導入前に埋める20項目のPDF）: https://aidollargame.com/shiryo.html
+- 会社概要（法人番号・沿革・実績）: https://aidollargame.com/company.html
 - AI用語集（生成AI・LLM・AIエージェント・RAG等をやさしく解説）: https://aidollargame.com/articles/ai-yougo.html
 
 ## よくある質問 (FAQ)

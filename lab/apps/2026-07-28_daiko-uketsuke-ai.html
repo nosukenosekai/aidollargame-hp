@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>運転代行の受付AI（デモ）</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #f5f4f0;
+    --blue: #2563eb;
+    --blue-soft: #eaf0fe;
+    --ink: #1c1d21;
+    --sub: #6b6f76;
+    --line: #e7e5df;
+    --warn: #c2410c;
+    --warn-soft: #fdf0e8;
+    --ok: #15803d;
+    --ok-soft: #e9f5ec;
+    --gray-soft: #eef0f3;
+  }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 0 16px 48px; }
+  .demoflag { text-align: center; font-size: 11px; color: var(--sub); letter-spacing: .04em; padding: 7px 0 3px; }
+  header { padding: 8px 0 14px; }
+  .brand { display: flex; align-items: center; gap: 9px; }
+  .logo { width: 30px; height: 30px; border-radius: 8px; background: var(--blue); flex: none; position: relative; }
+  .logo::before { content: ""; position: absolute; width: 12px; height: 12px; border: 3px solid #fff; border-radius: 50%; left: 6px; top: 6px; }
+  .logo::after { content: ""; position: absolute; width: 3px; height: 8px; background: #fff; border-radius: 2px; left: 18px; top: 15px; transform: rotate(38deg); }
+  h1 { font-size: 18px; font-weight: 800; letter-spacing: -.01em; }
+  .tagline { font-size: 12.5px; color: var(--sub); margin-top: 5px; }
+
+  .summary { background: var(--blue); color: #fff; border-radius: 14px; padding: 15px 16px 14px; margin-top: 6px; }
+  .summary .lead { font-size: 12px; opacity: .85; }
+  .sumrow { display: flex; gap: 10px; margin-top: 11px; }
+  .sumcell { flex: 1; background: rgba(255,255,255,.14); border-radius: 10px; padding: 9px 10px; }
+  .sumcell .k { font-size: 11px; opacity: .85; }
+  .sumcell .v { font-size: 19px; font-weight: 800; margin-top: 1px; }
+  .sumcell .v small { font-size: 12px; font-weight: 700; opacity: .9; }
+  .sumcell.miss .v { color: #ffe08a; }
+
+  .tabs { display: flex; gap: 7px; margin: 18px 0 12px; }
+  .tab { flex: 1; text-align: center; font-size: 12.5px; font-weight: 700; padding: 8px 0; border-radius: 999px; border: 1px solid var(--line); background: #fff; color: var(--sub); cursor: pointer; }
+  .tab.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 13px 14px; margin-bottom: 10px; cursor: pointer; transition: transform .06s ease; }
+  .card:active { transform: scale(.99); }
+  .crow { display: flex; align-items: center; gap: 11px; }
+  .time { width: 44px; flex: none; text-align: center; }
+  .time .t { font-size: 15px; font-weight: 800; }
+  .time .u { font-size: 10px; color: var(--sub); }
+  .cmain { flex: 1; min-width: 0; }
+  .cname { font-size: 14px; font-weight: 700; }
+  .cname .num { font-size: 11.5px; color: var(--sub); font-weight: 500; margin-left: 6px; }
+  .cmeta { font-size: 12px; color: var(--sub); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .flag { display: inline-block; font-size: 10.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px; flex: none; }
+  .flag.warn { background: var(--warn-soft); color: var(--warn); }
+  .flag.ok { background: var(--ok-soft); color: var(--ok); }
+  .flag.call { background: var(--blue-soft); color: var(--blue); }
+
+  .empty { text-align: center; color: var(--sub); font-size: 13px; padding: 30px 0; }
+
+  .modal-bg { position: fixed; inset: 0; background: rgba(20,21,25,.45); display: none; align-items: flex-end; justify-content: center; z-index: 20; }
+  .modal-bg.on { display: flex; }
+  .modal { background: #fff; width: 100%; max-width: 480px; border-radius: 18px 18px 0 0; padding: 20px 18px 26px; max-height: 90vh; overflow-y: auto; animation: up .22s ease; }
+  @keyframes up { from { transform: translateY(40px); opacity: .4; } to { transform: translateY(0); opacity: 1; } }
+  .mtop { display: flex; align-items: flex-start; gap: 10px; }
+  .mtitle { flex: 1; }
+  .mtitle h3 { font-size: 17px; font-weight: 800; }
+  .mtitle .mm { font-size: 12px; color: var(--sub); margin-top: 2px; }
+  .close { font-size: 22px; color: var(--sub); background: none; border: none; cursor: pointer; line-height: 1; }
+
+  .sec { font-size: 11.5px; font-weight: 800; color: var(--sub); letter-spacing: .04em; margin: 16px 0 7px; }
+  .slip { background: var(--bg); border-radius: 12px; padding: 4px 14px; }
+  .slip .r { display: flex; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+  .slip .r:last-child { border-bottom: none; }
+  .slip .r .k { width: 78px; flex: none; color: var(--sub); }
+  .slip .r .v { font-weight: 700; }
+  .transcript { background: var(--bg); border-radius: 12px; padding: 12px 14px; font-size: 12.5px; }
+  .line { margin-bottom: 7px; }
+  .line:last-child { margin-bottom: 0; }
+  .who { font-weight: 800; font-size: 11px; color: var(--sub); }
+  .who.ai { color: var(--blue); }
+
+  .btn { display: block; width: 100%; text-align: center; padding: 13px; border-radius: 12px; font-size: 14.5px; font-weight: 800; border: none; cursor: pointer; background: var(--blue); color: #fff; margin-top: 14px; }
+  .btn.ghost { background: #fff; color: var(--ink); border: 1.5px solid var(--line); margin-top: 9px; }
+  .btn.done { background: var(--gray-soft); color: var(--sub); }
+  .sms { background: var(--ok-soft); border-radius: 12px; padding: 12px 14px; font-size: 13px; margin-top: 12px; display: none; }
+  .sms.on { display: block; }
+  .sms .h { font-size: 11px; font-weight: 800; color: var(--ok); margin-bottom: 5px; }
+  .foot { text-align: center; font-size: 11px; color: var(--sub); margin-top: 20px; line-height: 1.7; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demoflag">デモ（サンプルデータ）</div>
+  <header>
+    <div class="brand">
+      <div class="logo"></div>
+      <h1>運転代行の受付AI</h1>
+    </div>
+    <div class="tagline">夜間の電話をAIが24時間受けて、迎え場所・人数・行き先を聞き取り、配車票にして担当ドライバーへ。運転中の取りこぼしをゼロに。</div>
+  </header>
+
+  <div class="summary">
+    <div class="lead">みなと代行（架空の運転代行）— 今夜の受付状況</div>
+    <div class="sumrow">
+      <div class="sumcell"><div class="k">AIが受けた電話</div><div class="v" id="totalNum">7<small> 件</small></div></div>
+      <div class="sumcell miss"><div class="k">取りこぼし</div><div class="v" id="missNum">0<small> 件</small></div></div>
+      <div class="sumcell"><div class="k">見込み売上</div><div class="v" id="salesNum">2.0<small>万円</small></div></div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab on" data-f="all">すべて</div>
+    <div class="tab" data-f="warn">要配車</div>
+    <div class="tab" data-f="ok">配車済</div>
+  </div>
+
+  <div id="list"></div>
+
+  <div class="foot">
+    ※ 営業デモです。会社名・お客様・電話番号・金額はすべて架空のサンプルです。実際の音声認識・電話接続は含みません。<br>
+    株式会社AIdollargame
+  </div>
+</div>
+
+<div class="modal-bg" id="modalBg">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+  // ===== サンプルデータ（架空の運転代行が今夜AI受付で受けた電話）=====
+  const CALLS = [
+    { id:1, time:"21:42", num:"090-****-4417", place:"居酒屋やまびこ 北口店", to:"新栄町 3丁目", people:2, when:"今すぐ", fee:3500,
+      status:"warn",
+      talk:[
+        {who:"AI",ai:true,t:"お電話ありがとうございます、みなと代行です。ご乗車のお迎え場所からうかがえますか。"},
+        {who:"お客",ai:false,t:"あー、やまびこの北口店なんだけど。"},
+        {who:"AI",ai:true,t:"やまびこ北口店ですね。行き先とご人数を教えてください。"},
+        {who:"お客",ai:false,t:"新栄町の3丁目まで、2人。今から頼める？"},
+        {who:"AI",ai:true,t:"承知しました。新栄町3丁目まで2名様、ただ今手配します。近くのドライバーが向かいます。"}
+      ] },
+    { id:2, time:"22:10", num:"080-****-2093", place:"スナック花みずき", to:"緑ヶ丘 団地前", people:1, when:"22:40ごろ", fee:2800,
+      status:"warn",
+      talk:[
+        {who:"AI",ai:true,t:"みなと代行です。お迎え場所をどうぞ。"},
+        {who:"お客",ai:false,t:"花みずきってスナック。あと40分後くらいでいい？"},
+        {who:"AI",ai:true,t:"スナック花みずきに22時40分ごろですね。行き先とご人数は。"},
+        {who:"お客",ai:false,t:"緑ヶ丘の団地の前まで、ひとり。"},
+        {who:"AI",ai:true,t:"かしこまりました。時間になりましたらドライバーがお迎えにあがります。"}
+      ] },
+    { id:3, time:"22:33", num:"090-****-7781", place:"焼き鳥 とり源", to:"みなと2丁目 コンビニ横", people:3, when:"今すぐ", fee:3200,
+      status:"warn",
+      talk:[
+        {who:"AI",ai:true,t:"みなと代行です。お迎え場所からうかがいます。"},
+        {who:"お客",ai:false,t:"とり源。3人乗れる？車で来てるんだけど。"},
+        {who:"AI",ai:true,t:"3名様ですね、随伴車でお客様のお車もお送りします。行き先はどちらですか。"},
+        {who:"お客",ai:false,t:"みなと2丁目、コンビニの横まで。"},
+        {who:"AI",ai:true,t:"承知しました。手配いたします。"}
+      ] },
+    { id:4, time:"20:55", num:"070-****-6620", place:"ビストロ ならの木", to:"桜台 5-8", people:2, when:"今すぐ", fee:3800,
+      status:"ok", driver:"車2号（担当ドライバー）",
+      talk:[
+        {who:"AI",ai:true,t:"みなと代行です。お迎え場所をどうぞ。"},
+        {who:"お客",ai:false,t:"ならの木ってお店。桜台まで2人。"},
+        {who:"AI",ai:true,t:"ビストロならの木から桜台まで2名様ですね。ただ今向かわせます。"}
+      ] },
+    { id:5, time:"21:18", num:"090-****-1145", place:"大衆酒場 のみすけ", to:"東港 1丁目", people:4, when:"今すぐ", fee:4200,
+      status:"ok", driver:"車1号（担当ドライバー）",
+      talk:[
+        {who:"AI",ai:true,t:"みなと代行です。お迎え場所は。"},
+        {who:"お客",ai:false,t:"のみすけ。4人いるんだけど2台いける？"},
+        {who:"AI",ai:true,t:"4名様、随伴車と合わせて手配します。行き先を教えてください。"},
+        {who:"お客",ai:false,t:"東港の1丁目。"},
+        {who:"AI",ai:true,t:"承知しました。2台で向かいます。"}
+      ] },
+    { id:6, time:"23:02", num:"080-****-3374", place:"カラオケ ぽけっと", to:"（未確認）", people:2, when:"今すぐ", fee:3000,
+      status:"warn",
+      talk:[
+        {who:"AI",ai:true,t:"みなと代行です。お迎え場所をどうぞ。"},
+        {who:"お客",ai:false,t:"カラオケぽけっと。ふたり。行き先はあとで運転手さんに言う。"},
+        {who:"AI",ai:true,t:"かしこまりました。行き先は当日ドライバーへお伝えください。手配します。"}
+      ] },
+    { id:7, time:"23:20", num:"090-****-9902", place:"（留守電・聞き取り途中）", to:"—", people:0, when:"折り返し", fee:0,
+      status:"call",
+      talk:[
+        {who:"AI",ai:true,t:"みなと代行です。お迎え場所をどうぞ。"},
+        {who:"お客",ai:false,t:"（電波が悪く、店名が聞き取れませんでした）"},
+        {who:"AI",ai:true,t:"申し訳ありません、お店のお名前がうまく聞き取れませんでした。折り返しご連絡してもよろしいですか。番号は表示のものでお間違いないですか。"},
+        {who:"お客",ai:false,t:"うん、その番号で。"}
+      ] }
+  ];
+
+  let filter = "all";
+  const FEE_TXT = f => f>0 ? f.toLocaleString("ja-JP")+"円" : "—";
+
+  function render(){
+    const list = document.getElementById("list");
+    const items = CALLS.filter(c => {
+      if(filter==="all") return true;
+      if(filter==="warn") return c.status==="warn";
+      if(filter==="ok") return c.status==="ok";
+      return false;
+    });
+    if(items.length===0){ list.innerHTML='<div class="empty">この状態の受付はありません。</div>'; return; }
+    list.innerHTML = items.map(c=>{
+      let flag;
+      if(c.status==="ok") flag='<span class="flag ok">配車済</span>';
+      else if(c.status==="call") flag='<span class="flag call">折り返し</span>';
+      else flag='<span class="flag warn">要配車</span>';
+      const meta = c.status==="call"
+        ? "留守電を残しました。折り返しが必要です"
+        : c.place+" → "+c.to+"／"+c.people+"名";
+      return '<div class="card" onclick="openDetail('+c.id+')">'
+        + '<div class="crow">'
+        +   '<div class="time"><div class="t">'+c.time+'</div><div class="u">受電</div></div>'
+        +   '<div class="cmain"><div class="cname">'+(c.status==="call"?"聞き取り途中":c.place)+'<span class="num">'+c.num+'</span></div>'
+        +     '<div class="cmeta">'+meta+'</div></div>'
+        +   flag
+        + '</div>'
+        + '</div>';
+    }).join("");
+  }
+
+  function recalc(){
+    const total = CALLS.filter(c=>c.status!=="call").length + CALLS.filter(c=>c.status==="call").length;
+    // 見込み売上 = 配車済＋要配車（=受けられた案件）の合計。折り返し未確定は含めない。
+    const sales = CALLS.filter(c=>c.status==="ok"||c.status==="warn").reduce((a,c)=>a+c.fee,0);
+    const miss = 0; // AIが全件応答＝取りこぼしゼロ
+    document.getElementById("totalNum").innerHTML = CALLS.length+'<small> 件</small>';
+    document.getElementById("missNum").innerHTML = miss+'<small> 件</small>';
+    document.getElementById("salesNum").innerHTML = (sales/10000).toFixed(1)+'<small>万円</small>';
+  }
+
+  function openDetail(id){
+    const c = CALLS.find(x=>x.id===id);
+    const slip = c.status==="call"
+      ? '<div class="slip"><div class="r"><div class="k">状況</div><div class="v">お店の名前が聞き取れず、留守電で折り返し依頼</div></div>'
+        + '<div class="r"><div class="k">番号</div><div class="v">'+c.num+'</div></div></div>'
+      : '<div class="slip">'
+        + '<div class="r"><div class="k">迎え場所</div><div class="v">'+c.place+'</div></div>'
+        + '<div class="r"><div class="k">行き先</div><div class="v">'+c.to+'</div></div>'
+        + '<div class="r"><div class="k">人数</div><div class="v">'+c.people+'名</div></div>'
+        + '<div class="r"><div class="k">希望時刻</div><div class="v">'+c.when+'</div></div>'
+        + '<div class="r"><div class="k">目安料金</div><div class="v">'+FEE_TXT(c.fee)+'</div></div>'
+        + (c.driver?'<div class="r"><div class="k">担当</div><div class="v">'+c.driver+'</div></div>':'')
+        + '</div>';
+    const talk = '<div class="transcript">'+c.talk.map(l=>'<div class="line"><div class="who '+(l.ai?"ai":"")+'">'+l.who+'</div>'+l.t+'</div>').join("")+'</div>';
+
+    let action = "";
+    if(c.status==="warn"){
+      action = '<button class="btn" onclick="assign('+id+')">ドライバーに割り当てる</button>'
+             + '<button class="btn ghost" onclick="toggleSms('+id+')">確認SMSの下書きを見る</button>'
+             + '<div class="sms" id="sms'+id+'"><div class="h">お客様への確認SMS（下書き・送信はしません）</div>'
+             + 'みなと代行です。'+c.place+'から'+c.to+'まで'+c.people+'名様、'+c.when+'で承りました。ドライバーが向かいます。目安料金は'+FEE_TXT(c.fee)+'です。</div>';
+    } else if(c.status==="ok"){
+      action = '<button class="btn done" disabled>配車済み（'+ (c.driver||"担当あり") +'）</button>';
+    } else {
+      action = '<button class="btn" onclick="assign('+id+')">折り返し完了にする</button>';
+    }
+
+    document.getElementById("modal").innerHTML =
+        '<div class="mtop"><div class="mtitle"><h3>'+(c.status==="call"?"聞き取り途中の着信":c.place)+'</h3>'
+      +   '<div class="mm">'+c.time+' 受電 ／ '+c.num+'</div></div>'
+      +   '<button class="close" onclick="closeDetail()">&times;</button></div>'
+      + '<div class="sec">AIが聞き取った配車票</div>'+slip
+      + '<div class="sec">通話の書き起こし</div>'+talk
+      + action
+      + '<button class="btn ghost" onclick="closeDetail()">一覧に戻る</button>';
+    document.getElementById("modalBg").classList.add("on");
+  }
+  function closeDetail(){ document.getElementById("modalBg").classList.remove("on"); }
+  function toggleSms(id){ document.getElementById("sms"+id).classList.toggle("on"); }
+  function assign(id){
+    const c = CALLS.find(x=>x.id===id);
+    c.status="ok";
+    if(!c.driver) c.driver="手配済み（担当ドライバー）";
+    recalc(); render(); openDetail(id);
+  }
+
+  document.getElementById("modalBg").addEventListener("click", e=>{ if(e.target.id==="modalBg") closeDetail(); });
+  document.querySelectorAll(".tab").forEach(t=>{
+    t.addEventListener("click", ()=>{
+      document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+      t.classList.add("on"); filter=t.dataset.f; render();
+    });
+  });
+
+  render(); recalc();
+</script>
+</body>
+</html>

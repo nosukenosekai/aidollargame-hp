@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>そのあと手続きナビ — デモ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; background: #f5f4f0; color: #1a1a1a; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 16px; min-height: 100vh; }
+  .demo-tag { display: inline-block; font-size: 11px; color: #6b7280; border: 1px solid #d1d5db; border-radius: 6px; padding: 2px 8px; margin-bottom: 12px; }
+  .brand { font-size: 12px; color: #6b7280; margin-bottom: 8px; }
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
+  .card { background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .step-label { font-size: 12px; color: #2563eb; font-weight: 700; margin-bottom: 10px; }
+  .q { font-weight: 600; font-size: 15px; margin-bottom: 10px; }
+  .opts { display: flex; flex-direction: column; gap: 8px; }
+  .opt { border: 1px solid #d1d5db; background: #fff; border-radius: 10px; padding: 12px; font-size: 14px; text-align: left; cursor: pointer; }
+  .opt.sel { border-color: #2563eb; background: #eff6ff; color: #2563eb; font-weight: 600; }
+  .btn { background: #2563eb; color: #fff; border: none; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; }
+  .btn:disabled { background: #cbd5e1; cursor: default; }
+  .btn.ghost { background: #fff; color: #2563eb; border: 1px solid #2563eb; }
+  .task { padding: 12px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+  .task:last-child { border-bottom: none; }
+  .task-head { display: flex; align-items: center; justify-content: space-between; }
+  .task-name { font-weight: 600; font-size: 15px; }
+  .deadline { font-size: 11px; padding: 3px 9px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
+  .deadline.urgent { background: #fef2f2; color: #dc2626; }
+  .deadline.soon { background: #fef3c7; color: #b45309; }
+  .deadline.normal { background: #eff6ff; color: #2563eb; }
+  .task-where { font-size: 12px; color: #6b7280; margin-top: 3px; }
+  .detail-box { background: #f9fafb; border-radius: 10px; padding: 12px; font-size: 14px; margin-top: 8px; }
+  .detail-box h4 { font-size: 12px; color: #2563eb; margin-bottom: 4px; }
+  .detail-box ul { margin: 4px 0 8px 18px; }
+  .hidden { display: none; }
+  .back { font-size: 13px; color: #2563eb; cursor: pointer; margin-bottom: 12px; display: inline-block; }
+  .progress { font-size: 12px; color: #6b7280; margin-bottom: 12px; }
+  .footer { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 20px; padding-bottom: 20px; }
+  .note { font-size: 12px; color: #92400e; background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px; padding: 11px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo-tag">デモ（サンプルデータ）</span>
+  <p class="brand">さくら葬祭（架空）より、ご遺族へ</p>
+  <h1>そのあと手続きナビ</h1>
+  <p class="sub">葬儀のあとに必要な手続きを、期限つきで一覧に</p>
+
+  <!-- 質問 -->
+  <div id="screen-q">
+    <div class="progress" id="prog">質問 1 / 3</div>
+    <div class="card">
+      <div class="step-label">かんたんな質問（3問）</div>
+      <div class="q" id="qText"></div>
+      <div class="opts" id="qOpts"></div>
+    </div>
+    <button class="btn" id="nextBtn" onclick="next()" disabled>次へ</button>
+  </div>
+
+  <!-- 一覧 -->
+  <div id="screen-list" class="hidden">
+    <span class="back" onclick="restart()">← 最初から</span>
+    <div class="note">これは一般的な手続きの目安です。正式には各窓口・専門家にご確認ください。</div>
+    <div class="card">
+      <div class="step-label">あなたに必要な手続き（期限順）</div>
+      <div id="taskList"></div>
+    </div>
+    <button class="btn ghost" onclick="alert('デモのため印刷・送付はしません')">この一覧を印刷して渡す</button>
+  </div>
+
+  <!-- 詳細 -->
+  <div id="screen-detail" class="hidden">
+    <span class="back" onclick="show('screen-list')">← 一覧にもどる</span>
+    <div class="card" id="detailCard"></div>
+  </div>
+
+  <div class="footer">AIdollargame ／ 1日1アプリ実験室<br>これはコンセプト検証用のデモです</div>
+</div>
+
+<script>
+const questions = [
+  { q:"故人に配偶者（夫・妻）はいらっしゃいますか？", opts:["いる","いない"], key:"spouse" },
+  { q:"故人は世帯主でしたか？", opts:["世帯主だった","そうではない"], key:"head" },
+  { q:"公的年金を受け取っていましたか？", opts:["受け取っていた","受け取っていない"], key:"pension" },
+];
+let qi = 0; const ans = {};
+
+const allTasks = [
+  { name:"死亡届の提出", days:"7日以内", level:"urgent", where:"市区町村役場", need:["死亡診断書","届出人の印鑑"], desc:"火葬許可証の交付を受けるために最初に必要です。葬儀社が代行する場合もあります。", cond:()=>true },
+  { name:"世帯主変更届", days:"14日以内", level:"soon", where:"市区町村役場", need:["本人確認書類","印鑑"], desc:"故人が世帯主で、残された世帯員が2人以上のとき必要です。", cond:(a)=>a.head==="世帯主だった" },
+  { name:"年金受給停止の手続き", days:"すみやかに", level:"soon", where:"年金事務所・年金相談センター", need:["年金証書","死亡を明らかにする書類"], desc:"受給停止と、未支給年金の請求を行います。放置すると返還が生じることがあります。", cond:(a)=>a.pension==="受け取っていた" },
+  { name:"健康保険・介護保険の資格喪失", days:"14日以内", level:"soon", where:"市区町村役場・協会けんぽ等", need:["保険証","本人確認書類"], desc:"保険証の返却と、葬祭費・埋葬料の申請ができる場合があります。", cond:()=>true },
+  { name:"遺族年金の請求", days:"5年以内", level:"normal", where:"年金事務所", need:["戸籍謄本","住民票","収入がわかる書類"], desc:"配偶者などが対象になる場合があります。要件の確認が必要です。", cond:(a)=>a.spouse==="いる"&&a.pension==="受け取っていた" },
+  { name:"相続手続き（預貯金・不動産）", days:"順次・相続税は10か月以内", level:"normal", where:"金融機関・法務局・税理士", need:["戸籍一式","遺産の一覧","相続人の同意書"], desc:"名義変更や相続税の申告が必要になる場合があります。早めに全体像を把握しましょう。", cond:()=>true },
+  { name:"公共料金・携帯などの名義変更/解約", days:"すみやかに", level:"normal", where:"各契約先", need:["契約者情報","口座情報"], desc:"電気・ガス・水道・通信・サブスクなど。引き落とし停止のためにも早めに。", cond:()=>true },
+];
+let tasks = [];
+
+function renderQ(){
+  document.getElementById('prog').textContent = "質問 "+(qi+1)+" / "+questions.length;
+  document.getElementById('qText').textContent = questions[qi].q;
+  const el = document.getElementById('qOpts'); el.innerHTML='';
+  questions[qi].opts.forEach(o=>{
+    const b=document.createElement('button'); b.className='opt'; b.textContent=o;
+    if(ans[questions[qi].key]===o) b.classList.add('sel');
+    b.onclick=()=>{ ans[questions[qi].key]=o; renderQ(); document.getElementById('nextBtn').disabled=false; };
+    el.appendChild(b);
+  });
+  document.getElementById('nextBtn').disabled = !ans[questions[qi].key];
+  document.getElementById('nextBtn').textContent = qi===questions.length-1 ? "手続き一覧を見る" : "次へ";
+}
+function next(){
+  if(qi < questions.length-1){ qi++; renderQ(); }
+  else { buildList(); }
+}
+function buildList(){
+  tasks = allTasks.filter(t=>t.cond(ans));
+  const el = document.getElementById('taskList'); el.innerHTML='';
+  tasks.forEach((t, i)=>{
+    const d=document.createElement('div'); d.className='task'; d.onclick=()=>showDetail(i);
+    d.innerHTML='<div class="task-head"><span class="task-name">'+t.name+'</span>'+
+      '<span class="deadline '+t.level+'">'+t.days+'</span></div>'+
+      '<div class="task-where">窓口：'+t.where+' ›</div>';
+    el.appendChild(d);
+  });
+  show('screen-list');
+}
+function showDetail(i){
+  const t = tasks[i];
+  document.getElementById('detailCard').innerHTML =
+    '<div class="step-label">手続きの詳細</div>'+
+    '<div class="q">'+t.name+'</div>'+
+    '<span class="deadline '+t.level+'">'+t.days+'</span>'+
+    '<div class="detail-box"><h4>どんな手続き？</h4>'+t.desc+
+    '<h4 style="margin-top:10px">持ち物・必要書類</h4><ul>'+t.need.map(n=>'<li>'+n+'</li>').join('')+'</ul>'+
+    '<h4>窓口</h4>'+t.where+'</div>';
+  show('screen-detail');
+}
+function restart(){ qi=0; for(const k in ans) delete ans[k]; renderQ(); show('screen-q'); }
+function show(id){
+  ['screen-q','screen-list','screen-detail'].forEach(s=>document.getElementById(s).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+renderQ();
+</script>
+</body>
+</html>

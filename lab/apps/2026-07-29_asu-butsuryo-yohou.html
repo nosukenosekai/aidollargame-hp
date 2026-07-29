@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あすの物量予報 — デモ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; background: #f5f4f0; color: #1a1a1a; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 16px; min-height: 100vh; }
+  .demo-tag { display: inline-block; font-size: 11px; color: #6b7280; border: 1px solid #d1d5db; border-radius: 6px; padding: 2px 8px; margin-bottom: 12px; }
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
+  .card { background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .step-label { font-size: 12px; color: #2563eb; font-weight: 700; margin-bottom: 8px; }
+  .stat { display: flex; gap: 8px; margin-bottom: 12px; }
+  .stat > div { flex: 1; background: #fff; border-radius: 12px; padding: 12px; text-align: center; }
+  .stat .num { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat .lbl { font-size: 11px; color: #6b7280; }
+  .area { padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+  .area:last-child { border-bottom: none; }
+  .area-head { display: flex; align-items: center; justify-content: space-between; }
+  .area-name { font-weight: 600; font-size: 15px; }
+  .area-pkg { font-size: 13px; color: #374151; }
+  .bar { height: 8px; background: #eef2f7; border-radius: 6px; margin-top: 8px; overflow: hidden; }
+  .bar > span { display: block; height: 100%; background: #2563eb; border-radius: 6px; }
+  .factor { font-size: 12px; color: #6b7280; margin-top: 6px; }
+  .factor b { color: #b45309; font-weight: 600; }
+  .btn { background: #2563eb; color: #fff; border: none; border-radius: 10px; padding: 12px 14px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; }
+  .btn.ghost { background: #fff; color: #2563eb; border: 1px solid #2563eb; }
+  .assign-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid #f0f0f0; }
+  .assign-row:last-child { border-bottom: none; }
+  .driver { font-weight: 600; font-size: 14px; }
+  .load { font-size: 12px; color: #6b7280; }
+  .pill { font-size: 11px; padding: 3px 9px; border-radius: 20px; font-weight: 600; }
+  .pill.ok { background: #dcfce7; color: #15803d; }
+  .pill.over { background: #fef2f2; color: #dc2626; }
+  .hidden { display: none; }
+  .back { font-size: 13px; color: #2563eb; cursor: pointer; margin-bottom: 12px; display: inline-block; }
+  .alert { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; border-radius: 10px; padding: 11px; font-size: 13px; margin-bottom: 12px; }
+  .footer { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 20px; padding-bottom: 20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo-tag">デモ（サンプルデータ）</span>
+  <h1>あすの物量予報</h1>
+  <p class="sub">明日の荷物量をエリア別に予測し、必要な配車を先に組む</p>
+
+  <!-- 予測画面 -->
+  <div id="screen-fc">
+    <div class="stat">
+      <div><div class="num">1,240</div><div class="lbl">明日の予測個数</div></div>
+      <div><div class="num">+18%</div><div class="lbl">平常比</div></div>
+      <div><div class="num">7台</div><div class="lbl">推奨台数</div></div>
+    </div>
+    <div class="alert">明日は雨予報＋給料日後。通販の再配達が増える見込みです。</div>
+    <div class="card">
+      <div class="step-label">エリア別の予測個数（明日）</div>
+      <div id="areas"></div>
+      <button class="btn" style="margin-top:14px" onclick="showAssign()">この予測で配車を組む</button>
+    </div>
+  </div>
+
+  <!-- 配車画面 -->
+  <div id="screen-assign" class="hidden">
+    <span class="back" onclick="show('screen-fc')">← 予測にもどる</span>
+    <div class="card">
+      <div class="step-label">自動配車プラン（ドライバー7名）</div>
+      <div id="assignList"></div>
+      <button class="btn ghost" style="margin-top:12px" onclick="alert('デモのため確定はしません')">このプランで確定</button>
+    </div>
+  </div>
+
+  <div class="footer">AIdollargame ／ 1日1アプリ実験室<br>予測は目安です。実際の物量を保証するものではありません</div>
+</div>
+
+<script>
+const areas = [
+  { name:"中央区・北エリア", pkg:420, pct:88, factor:"雨×再配達増" },
+  { name:"港南・臨海エリア", pkg:310, pct:64, factor:"通常" },
+  { name:"西部・住宅エリア", pkg:280, pct:58, factor:"給料日後で通販増" },
+  { name:"東部・工業エリア", pkg:230, pct:48, factor:"企業向け通常" },
+];
+const drivers = [
+  { name:"1号車（軽）", load:"約180個・中央区北", status:"ok" },
+  { name:"2号車（軽）", load:"約175個・中央区北", status:"ok" },
+  { name:"3号車（軽）", load:"約160個・港南", status:"ok" },
+  { name:"4号車（軽）", load:"約210個・西部", status:"over" },
+  { name:"5号車（1t）", load:"約190個・西部", status:"ok" },
+  { name:"6号車（1t）", load:"約145個・東部", status:"ok" },
+  { name:"応援・スポット", load:"約180個・中央区北", status:"ok" },
+];
+
+function renderAreas(){
+  const el = document.getElementById('areas'); el.innerHTML='';
+  areas.forEach(a=>{
+    const d = document.createElement('div'); d.className='area';
+    d.innerHTML = '<div class="area-head"><span class="area-name">'+a.name+'</span>'+
+      '<span class="area-pkg">'+a.pkg+'個</span></div>'+
+      '<div class="bar"><span style="width:'+a.pct+'%"></span></div>'+
+      '<div class="factor">要因：<b>'+a.factor+'</b></div>';
+    el.appendChild(d);
+  });
+}
+function showAssign(){
+  const el = document.getElementById('assignList'); el.innerHTML='';
+  drivers.forEach(dr=>{
+    const r = document.createElement('div'); r.className='assign-row';
+    r.innerHTML = '<div><div class="driver">'+dr.name+'</div><div class="load">'+dr.load+'</div></div>'+
+      '<span class="pill '+(dr.status==='over'?'over':'ok')+'">'+(dr.status==='over'?'積みすぎ注意':'適正')+'</span>';
+    el.appendChild(r);
+  });
+  show('screen-assign');
+}
+function show(id){
+  ['screen-fc','screen-assign'].forEach(s=>document.getElementById(s).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+renderAreas();
+</script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>はなして保育日誌 — デモ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+    background: #f5f4f0; color: #1a1a1a; line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 16px; min-height: 100vh; }
+  .demo-tag {
+    display: inline-block; font-size: 11px; color: #6b7280;
+    border: 1px solid #d1d5db; border-radius: 6px; padding: 2px 8px; margin-bottom: 12px;
+  }
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
+  .card {
+    background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .step-label { font-size: 12px; color: #2563eb; font-weight: 700; margin-bottom: 8px; }
+  .mic {
+    width: 100%; background: #2563eb; color: #fff; border: none; border-radius: 12px;
+    padding: 18px; font-size: 15px; font-weight: 700; cursor: pointer;
+  }
+  .mic.rec { background: #dc2626; }
+  .transcript {
+    background: #f9fafb; border-radius: 10px; padding: 12px; font-size: 14px;
+    margin-top: 12px; min-height: 44px; color: #374151;
+  }
+  .chip {
+    display: inline-block; font-size: 11px; background: #eff6ff; color: #2563eb;
+    border-radius: 6px; padding: 2px 8px; margin: 2px 2px 2px 0;
+  }
+  .btn {
+    background: #2563eb; color: #fff; border: none; border-radius: 10px;
+    padding: 10px 14px; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%;
+  }
+  .btn.ghost { background: #fff; color: #2563eb; border: 1px solid #2563eb; }
+  .kid-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer;
+  }
+  .kid-row:last-child { border-bottom: none; }
+  .kid-name { font-weight: 600; font-size: 15px; }
+  .kid-meta { font-size: 12px; color: #6b7280; }
+  .avatar {
+    width: 36px; height: 36px; border-radius: 50%; background: #e0e7ff; color: #2563eb;
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px;
+    margin-right: 10px; flex-shrink: 0;
+  }
+  .flex { display: flex; align-items: center; }
+  .note-box {
+    background: #f9fafb; border-left: 3px solid #2563eb; border-radius: 8px;
+    padding: 12px; font-size: 14px; margin-top: 8px; white-space: pre-wrap;
+  }
+  .hidden { display: none; }
+  .back { font-size: 13px; color: #2563eb; cursor: pointer; margin-bottom: 12px; display: inline-block; }
+  .footer { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 20px; padding-bottom: 20px; }
+  .stat { display: flex; gap: 8px; margin-bottom: 12px; }
+  .stat > div { flex: 1; background: #fff; border-radius: 12px; padding: 12px; text-align: center; }
+  .stat .num { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat .lbl { font-size: 11px; color: #6b7280; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo-tag">デモ（サンプルデータ）</span>
+  <h1>はなして保育日誌</h1>
+  <p class="sub">話すだけで、連絡帳と保育日誌が同時にできる</p>
+
+  <!-- 画面1: 録音 -->
+  <div id="screen-rec">
+    <div class="stat">
+      <div><div class="num">11</div><div class="lbl">受け持ち</div></div>
+      <div><div class="num">3分</div><div class="lbl">今日の記録</div></div>
+      <div><div class="num">-40分</div><div class="lbl">手書き比</div></div>
+    </div>
+    <div class="card">
+      <div class="step-label">1. その場で話す</div>
+      <button class="mic" id="micBtn" onclick="toggleRec()">押して話す（例を再生）</button>
+      <div class="transcript" id="transcript">ここに話した内容が文字になります</div>
+    </div>
+    <div class="card" id="aiCard" style="display:none">
+      <div class="step-label">2. AIが仕分け</div>
+      <div id="aiTags"></div>
+      <button class="btn" style="margin-top:12px" onclick="showList()">園児ごとの記録を見る</button>
+    </div>
+  </div>
+
+  <!-- 画面2: 園児一覧 -->
+  <div id="screen-list" class="hidden">
+    <span class="back" onclick="show('screen-rec')">← 録音にもどる</span>
+    <div class="card">
+      <div class="step-label">今日の記録（さくら組）</div>
+      <div id="kidList"></div>
+    </div>
+  </div>
+
+  <!-- 画面3: 詳細 -->
+  <div id="screen-detail" class="hidden">
+    <span class="back" onclick="show('screen-list')">← 一覧にもどる</span>
+    <div class="card">
+      <div class="flex" style="margin-bottom:8px">
+        <div class="avatar" id="dAvatar"></div>
+        <div><div class="kid-name" id="dName"></div><div class="kid-meta" id="dAge"></div></div>
+      </div>
+      <div class="step-label" style="margin-top:12px">保護者むけ連絡帳（自動）</div>
+      <div class="note-box" id="dParent"></div>
+      <div class="step-label" style="margin-top:14px">園の保育日誌（自動）</div>
+      <div class="note-box" id="dLog"></div>
+      <button class="btn ghost" style="margin-top:12px" onclick="alert('デモのため送信はしません')">この内容で連絡帳を送る</button>
+    </div>
+  </div>
+
+  <div class="footer">AIdollargame ／ 1日1アプリ実験室<br>これはコンセプト検証用のデモです</div>
+</div>
+
+<script>
+const sampleText = "きょうのさくら組。ゆうとくんは砂場でトンネル作りに夢中。給食は完食。みくちゃんは午前中すこし熱っぽくて検温、37度2分、お昼寝のあとは平熱にもどった。はるきくんは初めて逆上がりができて大喜び。全体で公園までお散歩、交通ルールの話をした。";
+
+const kids = [
+  { name:"ゆうと", age:"4歳・さくら組", parent:"きょうは砂場でトンネル作りに夢中でした。集中して手を動かす姿がたくましかったです。給食は完食でした。", log:"戸外・砂遊びに長時間集中。手指の巧緻性の育ちが見られる。喫食：完食。" },
+  { name:"みく", age:"3歳・さくら組", parent:"午前中すこし熱っぽく検温したところ37.2度でした。お昼寝のあとは平熱にもどり、元気に過ごしています。ご家庭でも様子を見てあげてください。", log:"10:20 検温37.2度、経過観察。午睡後平熱。保護者へ口頭連絡済み。" },
+  { name:"はるき", age:"5歳・さくら組", parent:"はじめて逆上がりができました。何度も挑戦したあとの成功で、とても誇らしそうでした。お家でもぜひ聞いてみてください。", log:"鉄棒・逆上がり初成功。反復による達成体験。自己肯定感の高まり。" },
+];
+
+let recording = false;
+function toggleRec(){
+  const btn = document.getElementById('micBtn');
+  const tr = document.getElementById('transcript');
+  if(!recording){
+    recording = true; btn.textContent = "録音中… もう一度押すと停止"; btn.classList.add('rec');
+    tr.textContent = ""; let i = 0;
+    window._t = setInterval(()=>{
+      tr.textContent = sampleText.slice(0, i); i += 3;
+      if(i > sampleText.length){ clearInterval(window._t); recording=false; btn.textContent="押して話す（例を再生）"; btn.classList.remove('rec'); runAI(); }
+    }, 40);
+  } else {
+    clearInterval(window._t); recording=false; btn.textContent="押して話す（例を再生）"; btn.classList.remove('rec');
+    document.getElementById('transcript').textContent = sampleText; runAI();
+  }
+}
+function runAI(){
+  const c = document.getElementById('aiCard');
+  c.style.display = 'block';
+  document.getElementById('aiTags').innerHTML =
+    '<span class="chip">園児3名を認識</span><span class="chip">体調：みく 検温</span>' +
+    '<span class="chip">給食：完食</span><span class="chip">活動：散歩・鉄棒</span>' +
+    '<span class="chip">連絡帳3件を下書き</span>';
+}
+function showList(){
+  const el = document.getElementById('kidList'); el.innerHTML = '';
+  kids.forEach((k, idx)=>{
+    const row = document.createElement('div'); row.className = 'kid-row';
+    row.onclick = ()=> showDetail(idx);
+    row.innerHTML = '<div class="flex"><div class="avatar">'+k.name[0]+'</div>'+
+      '<div><div class="kid-name">'+k.name+'</div><div class="kid-meta">'+k.age+'</div></div></div>'+
+      '<div class="kid-meta">下書き済 ›</div>';
+    el.appendChild(row);
+  });
+  show('screen-list');
+}
+function showDetail(i){
+  const k = kids[i];
+  document.getElementById('dAvatar').textContent = k.name[0];
+  document.getElementById('dName').textContent = k.name;
+  document.getElementById('dAge').textContent = k.age;
+  document.getElementById('dParent').textContent = k.parent;
+  document.getElementById('dLog').textContent = k.log;
+  show('screen-detail');
+}
+function show(id){
+  ['screen-rec','screen-list','screen-detail'].forEach(s=>document.getElementById(s).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

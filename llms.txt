@@ -37,6 +37,7 @@
 - AI活用度診断: https://aidollargame.com/shindan.html
 - 無料資料「AI導入はじめの一歩チェックリスト20」（導入前に埋める20項目のPDF）: https://aidollargame.com/shiryo.html
 - 会社概要（法人番号・沿革・実績）: https://aidollargame.com/company.html
+- メディア掲載・ニュースリリース（第三者メディアでの掲載実績。PR TIMES配信、ニュースメディアVOIX（https://voix.jp/biz/news/175663/）・財経新聞ほかに掲載、東京NBC起業塾登壇）: https://aidollargame.com/media.html
 - AI用語集（生成AI・LLM・AIエージェント・RAG等をやさしく解説）: https://aidollargame.com/articles/ai-yougo.html
 
 ## よくある質問 (FAQ)

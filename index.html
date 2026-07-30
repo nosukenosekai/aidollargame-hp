@@ -715,6 +715,19 @@
   .check-list a::after{content:"→";margin-left:auto;color:var(--muted);}
   .check-list a:hover,.check-list a:hover::after{color:var(--accent);}
   .card-issue{font-size:0.8rem;font-weight:700;color:var(--accent);letter-spacing:0.02em;margin-bottom:0.55rem;}
+
+  /* ===== 無料資料DL帯（リード獲得導線・2026-07-30追加） ===== */
+  .leadmag{display:grid;grid-template-columns:1.15fr 0.85fr;gap:2.5rem;align-items:center;
+    background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:2.6rem 2.8rem;}
+  .leadmag-eyebrow{font-size:0.72rem;font-weight:700;letter-spacing:0.14em;color:var(--accent);margin-bottom:0.8rem;}
+  .leadmag h3{font-size:clamp(1.3rem,2.6vw,1.75rem);font-weight:900;line-height:1.5;margin-bottom:0.9rem;}
+  .leadmag h3 .hl{background:linear-gradient(transparent 62%, var(--marker) 62%);}
+  .leadmag p{color:var(--muted);font-size:0.94rem;margin-bottom:1.4rem;}
+  .leadmag .btn-primary{font-size:0.92rem;}
+  .leadmag-list{list-style:none;padding:0;margin:0;display:grid;gap:0.7rem;}
+  .leadmag-list li{display:flex;gap:0.7rem;align-items:flex-start;font-size:0.9rem;font-weight:600;}
+  .leadmag-list li::before{content:"☐";color:var(--accent);flex-shrink:0;}
+  @media(max-width:760px){.leadmag{grid-template-columns:1fr;gap:1.6rem;padding:1.8rem 1.4rem;}}
 </style>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
 <!-- Google tag (gtag.js) -->
@@ -746,6 +759,7 @@
     <li><a href="#news">ニュース</a></li>
     <li><a href="./articles/">記事</a></li>
     <li><a href="#faq">FAQ</a></li>
+    <li><a href="shiryo.html">無料資料</a></li>
     <li><a href="#contact" class="nav-cta">無料相談 →</a></li>
   </ul>
 </nav>
@@ -1420,10 +1434,35 @@
 </section>
 <div class="divider"></div>
 
+<!-- 無料資料DL（リード獲得導線・2026-07-30追加） -->
+<section id="shiryo">
+  <div class="reveal">
+    <div class="section-tag"><span class="st-num">07</span>FREE DOWNLOAD</div>
+    <h2 class="section-title">まだ相談は早い、という方へ</h2>
+    <p class="section-desc">「何から手をつけるか」を自分のペースで整理できる無料資料を用意しました。相談の前に、まずこちらだけでも。</p>
+  </div>
+  <div class="leadmag reveal">
+    <div>
+      <div class="leadmag-eyebrow">A4・全16ページ／メールアドレスだけで無料</div>
+      <h3>AI導入はじめの一歩<br><span class="hl">チェックリスト20</span></h3>
+      <p>読む資料ではなく、書き込む資料です。20個の□と記入欄を埋めていくと、読み終わったときには自社のAI導入計画・社内ルール・90日計画が手元に残ります。ツール名は出てきません。</p>
+      <a href="shiryo.html" class="btn-primary">無料でダウンロード →</a>
+    </div>
+    <div>
+      <ul class="leadmag-list">
+        <li>最初にAI化すべき業務が分かる「業務の選び方マップ」</li>
+        <li>そのままコピーして使える「社内AIルールの雛形（全7条）」</li>
+        <li>やめる／続ける／広げるを決める「90日ロードマップ」</li>
+        <li>補助金・助成金で失敗しないための3原則</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <!-- CONTACT -->
 <section id="contact">
   <div class="reveal">
-    <div class="section-tag"><span class="st-num">07</span>GET IN TOUCH</div>
+    <div class="section-tag"><span class="st-num">08</span>GET IN TOUCH</div>
     <h2 class="section-title">お問い合わせ</h2>
     <p class="section-desc">AIの可能性についてのご相談、プロダクトのお問い合わせはこちらからどうぞ。担当者より2営業日以内にご返信いたします。</p>
   </div>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>内見あとフォロー — デモ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; background: #f5f4f0; color: #1a1a1a; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 16px; min-height: 100vh; }
+  .demo-tag { display: inline-block; font-size: 11px; color: #6b7280; border: 1px solid #d1d5db; border-radius: 6px; padding: 2px 8px; margin-bottom: 12px; }
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
+  .card { background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .step-label { font-size: 12px; color: #2563eb; font-weight: 700; margin-bottom: 8px; }
+  .row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid #f0f0f0; cursor:pointer; }
+  .row:last-child { border-bottom:none; }
+  .name { font-weight:600; font-size:15px; }
+  .meta { font-size:12px; color:#6b7280; }
+  .tag { font-size:11px; padding:3px 8px; border-radius:20px; font-weight:600; background:#fef3c7; color:#b45309; white-space:nowrap; }
+  .concern { display:inline-block; font-size:12px; background:#eff6ff; color:#1e40af; border-radius:20px; padding:4px 10px; margin:3px 4px 3px 0; }
+  .prop { border:1px solid #eee; border-radius:12px; padding:12px; margin-bottom:8px; }
+  .prop .name { font-size:14px; }
+  .prop .why { font-size:12px; color:#059669; margin-top:2px; }
+  .draft { background:#f9fafb; border-radius:10px; padding:12px; font-size:14px; white-space:pre-wrap; margin-top:8px; }
+  .btn { display:block; width:100%; background:#2563eb; color:#fff; border:none; border-radius:10px; padding:12px; font-size:14px; font-weight:600; cursor:pointer; margin-top:10px; }
+  .btn.sub2 { background:#fff; color:#2563eb; border:1px solid #2563eb; }
+  .back { font-size:13px; color:#2563eb; cursor:pointer; margin-bottom:10px; display:inline-block; }
+  .note { font-size:12px; color:#6b7280; margin-top:8px; }
+  .hidden { display:none; }
+  .footer { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 20px; padding-bottom: 20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo-tag">デモ（サンプルデータ）</span>
+  <h1>内見あとフォロー</h1>
+  <p class="sub">内見のあと、押し売りせず相手のペースで。気になる点に答え、別候補を静かに提案</p>
+
+  <!-- 一覧 -->
+  <div id="list">
+    <div class="card">
+      <div class="step-label">内見ずみのお客さま（フォロー待ち）</div>
+      <div id="rows"></div>
+      <div class="note">しつこい追客ではなく、相手が挙げた「気になる点」に沿った提案文だけを作ります。</div>
+    </div>
+  </div>
+
+  <!-- 詳細 -->
+  <div id="detail" class="card hidden">
+    <span class="back" onclick="back()">← 一覧にもどる</span>
+    <div class="step-label" id="dName"></div>
+    <div class="meta" id="dSeen"></div>
+    <div style="margin-top:8px;">気になっていた点：</div>
+    <div id="dConcerns"></div>
+    <div class="step-label" style="margin-top:12px;">条件に合う別候補</div>
+    <div id="dProps"></div>
+    <button class="btn" onclick="genDraft()">フォローの下書きを作る</button>
+    <div id="draftWrap" class="hidden">
+      <div class="draft" id="dDraft"></div>
+      <button class="btn sub2" onclick="markDone()">この文でコピー（デモ）</button>
+      <div id="done" class="draft hidden" style="color:#059669;">コピーしました（デモ）。送るかどうかはお客さまの反応を見て判断してください。</div>
+    </div>
+  </div>
+
+  <div class="footer">AIdollargame ／ 1日1アプリ実験室<br>これはコンセプト検証用のデモです</div>
+</div>
+
+<script>
+const clients = [
+  { name:"高橋さま（20代・単身）", seen:"7/28 レジデンス北町 203号を内見",
+    concerns:["家賃をあと5千円下げたい","駅から徒歩7分は少し遠い"],
+    props:[
+      { name:"パークサイド緑町 305号（6.8万）", why:"5千円安く、駅徒歩4分。挙げた2点をどちらも満たします" },
+      { name:"コーポ日和 102号（6.5万）", why:"さらに安いが1階。日当たりは要確認" },
+    ],
+    draft:"高橋さま\n先日はレジデンス北町のご内見ありがとうございました。ご希望に近い2件が出ましたのでご参考まで共有します。急ぎではありませんので、気が向いたときにご覧ください。\n\n・パークサイド緑町 305号（6.8万・駅徒歩4分）\n・コーポ日和 102号（6.5万）\n\nご質問だけでもお気軽にどうぞ。" },
+  { name:"デモ夫妻（30代・2人）", seen:"7/27 サンハイツ東 401号を内見",
+    concerns:["2人だと収納が足りない","ペット可がいい"],
+    props:[
+      { name:"グリーンコート 502号（9.2万）", why:"ウォークインあり・ペット相談可" },
+      { name:"メゾン花みずき 201号（8.8万）", why:"納戸付き。ペットは小型犬まで可" },
+    ],
+    draft:"デモ様\n先日のご内見ありがとうございました。収納とペット可のご希望に合う2件をお持ちしました。\n\n・グリーンコート 502号（9.2万・WIC/ペット相談可）\n・メゾン花みずき 201号（8.8万・納戸付）\n\nお二人でゆっくりご検討ください。日程が合えばいつでもご案内します。" },
+];
+let cur=0;
+
+function renderRows(){
+  const el=document.getElementById('rows'); el.innerHTML='';
+  clients.forEach((c,i)=>{
+    const row=document.createElement('div'); row.className='row'; row.onclick=()=>open(i);
+    row.innerHTML='<div><div class="name">'+c.name+'</div><div class="meta">'+c.seen+'</div></div><span class="tag">フォロー待ち</span>';
+    el.appendChild(row);
+  });
+}
+function open(i){
+  cur=i; const c=clients[i];
+  document.getElementById('list').classList.add('hidden');
+  document.getElementById('detail').classList.remove('hidden');
+  document.getElementById('dName').textContent=c.name;
+  document.getElementById('dSeen').textContent=c.seen;
+  document.getElementById('dConcerns').innerHTML = c.concerns.map(x=>'<span class="concern">'+x+'</span>').join('');
+  document.getElementById('dProps').innerHTML = c.props.map(p=>'<div class="prop"><div class="name">'+p.name+'</div><div class="why">'+p.why+'</div></div>').join('');
+  document.getElementById('draftWrap').classList.add('hidden');
+  document.getElementById('done').classList.add('hidden');
+}
+function genDraft(){
+  document.getElementById('dDraft').textContent=clients[cur].draft;
+  document.getElementById('draftWrap').classList.remove('hidden');
+}
+function markDone(){ document.getElementById('done').classList.remove('hidden'); }
+function back(){
+  document.getElementById('detail').classList.add('hidden');
+  document.getElementById('list').classList.remove('hidden');
+}
+renderRows();
+</script>
+</body>
+</html>

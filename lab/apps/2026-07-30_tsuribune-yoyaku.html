@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>釣り船よやく番 — デモ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; background: #f5f4f0; color: #1a1a1a; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 16px; min-height: 100vh; }
+  .demo-tag { display: inline-block; font-size: 11px; color: #6b7280; border: 1px solid #d1d5db; border-radius: 6px; padding: 2px 8px; margin-bottom: 12px; }
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
+  .card { background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .step-label { font-size: 12px; color: #2563eb; font-weight: 700; margin-bottom: 8px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+  .tabs button { flex:1; padding: 9px; border: 1px solid #d1d5db; background: #fff; border-radius: 10px; font-size: 13px; cursor: pointer; }
+  .tabs button.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+  .chatbox { background: #f9fafb; border-radius: 12px; padding: 12px; height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+  .msg { max-width: 82%; padding: 9px 12px; border-radius: 14px; font-size: 14px; }
+  .msg.bot { background: #fff; border: 1px solid #eee; align-self: flex-start; border-bottom-left-radius: 4px; }
+  .msg.me { background: #2563eb; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .quick { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .quick button { border: 1px solid #2563eb; color: #2563eb; background: #fff; border-radius: 20px; padding: 7px 12px; font-size: 13px; cursor: pointer; }
+  .row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+  .row:last-child { border-bottom: none; }
+  .name { font-weight: 600; font-size: 15px; }
+  .meta { font-size: 12px; color: #6b7280; }
+  .tag { font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
+  .tag.ok { background: #ecfdf5; color: #059669; }
+  .tag.wait { background: #fef3c7; color: #b45309; }
+  .stat { display: flex; gap: 8px; margin-bottom: 12px; }
+  .stat > div { flex: 1; background: #fff; border-radius: 12px; padding: 12px; text-align: center; }
+  .stat .num { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat .lbl { font-size: 11px; color: #6b7280; }
+  .btn { display:block; width:100%; background:#2563eb; color:#fff; border:none; border-radius:10px; padding:12px; font-size:14px; font-weight:600; cursor:pointer; margin-top:8px; }
+  .btn.sub2 { background:#fff; color:#2563eb; border:1px solid #2563eb; }
+  .notice { background:#eff6ff; border-radius:10px; padding:10px 12px; font-size:13px; color:#1e40af; margin-top:10px; }
+  .hidden { display: none; }
+  .footer { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 20px; padding-bottom: 20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo-tag">デモ（サンプルデータ）</span>
+  <h1>釣り船よやく番</h1>
+  <p class="sub">遊漁船の予約をチャットで受付。前日確認と欠航連絡を自動で</p>
+
+  <div class="tabs">
+    <button id="tab-c" class="active" onclick="tab('c')">お客さんの画面</button>
+    <button id="tab-s" onclick="tab('s')">船長の画面</button>
+  </div>
+
+  <!-- お客 -->
+  <div id="view-c">
+    <div class="card">
+      <div class="step-label">まる栄丸（架空）予約チャット</div>
+      <div class="chatbox" id="chat"></div>
+      <div class="quick" id="quick"></div>
+    </div>
+  </div>
+
+  <!-- 船長 -->
+  <div id="view-s" class="hidden">
+    <div class="stat">
+      <div><div class="num" id="cnt">3</div><div class="lbl">明日の予約</div></div>
+      <div><div class="num" id="cntSeat">14</div><div class="lbl">乗船人数</div></div>
+      <div><div class="num" id="cntOk">1</div><div class="lbl">前日確認済</div></div>
+    </div>
+    <div class="card">
+      <div class="step-label">明日 8/1（金）アジ・タイ便の予約</div>
+      <div id="list"></div>
+    </div>
+    <div class="card">
+      <div class="step-label">まとめて連絡</div>
+      <button class="btn" onclick="confirmAll()">前日確認メッセージを一斉送信</button>
+      <button class="btn sub2" onclick="cancelAll()">悪天候で欠航を一斉連絡</button>
+      <div id="broadcast" class="notice hidden"></div>
+    </div>
+  </div>
+
+  <div class="footer">AIdollargame ／ 1日1アプリ実験室<br>これはコンセプト検証用のデモです</div>
+</div>
+
+<script>
+let list = [
+  { name:"田口さま（4名）", seats:4, status:"wait" },
+  { name:"わたなべ釣り会（8名）", seats:8, status:"wait" },
+  { name:"中野さま（2名）", seats:2, status:"ok" },
+];
+
+const chat = document.getElementById('chat');
+let step = 0;
+let picked = { day:"", people:"", name:"" };
+const flow = [
+  { bot:"まる栄丸へようこそ。ご希望の出船日はいつですか？", quick:["明日 8/1(金)","8/2(土)","8/3(日)"] },
+  { bot:"ありがとうございます。何名さまですか？", quick:["1名","2名","4名"] },
+  { bot:"承知しました。お名前（代表者）を選んでください。", quick:["さとう","たなか","デモ太郎"] },
+  { bot:"ご予約を承りました。前日の夕方に、天候と集合時間の確認メッセージをお送りします。無断キャンセルが心配な便のため、確認への返信をお願いします。予約番号 #12 です。", quick:[] },
+];
+
+function addMsg(text, who){
+  const m = document.createElement('div'); m.className='msg '+who; m.textContent=text;
+  chat.appendChild(m); chat.scrollTop = chat.scrollHeight;
+}
+function renderQuick(){
+  const q = document.getElementById('quick'); q.innerHTML='';
+  const opts = flow[step] ? flow[step].quick : [];
+  opts.forEach(o=>{ const b=document.createElement('button'); b.textContent=o; b.onclick=()=>choose(o); q.appendChild(b); });
+}
+function botSay(){
+  if(step < flow.length){ setTimeout(()=>{ addMsg(flow[step].bot,'bot'); renderQuick(); }, 350); }
+}
+function choose(text){
+  addMsg(text,'me');
+  if(step===0) picked.day = text;
+  if(step===1) picked.people = text;
+  if(step===2) picked.name = text;
+  step++;
+  if(step < flow.length){ botSay(); }
+  else { register(); document.getElementById('quick').innerHTML=''; }
+}
+function register(){
+  const n = parseInt(picked.people) || 1;
+  list.unshift({ name: picked.name+"さま（"+n+"名）", seats:n, status:"wait" });
+  renderList();
+}
+function renderList(){
+  const el = document.getElementById('list'); el.innerHTML='';
+  list.forEach(it=>{
+    const row=document.createElement('div'); row.className='row';
+    row.innerHTML = '<div><div class="name">'+it.name+'</div><div class="meta">'+(it.status==='ok'?'前日確認 返信あり':'前日確認 未返信')+'</div></div>'+
+      '<span class="tag '+it.status+'">'+(it.status==='ok'?'確認済':'待ち')+'</span>';
+    el.appendChild(row);
+  });
+  const seats = list.reduce((a,b)=>a+b.seats,0);
+  document.getElementById('cnt').textContent = list.length;
+  document.getElementById('cntSeat').textContent = seats;
+  document.getElementById('cntOk').textContent = list.filter(x=>x.status==='ok').length;
+}
+function confirmAll(){
+  const bc = document.getElementById('broadcast'); bc.classList.remove('hidden');
+  bc.textContent = list.length+"件へ前日確認を送信しました（デモ）。「明日8/1は出船予定です。集合5:30・港東側。ご返信で確定します」";
+  list.forEach(x=>x.status='ok'); renderList();
+}
+function cancelAll(){
+  const bc = document.getElementById('broadcast'); bc.classList.remove('hidden');
+  bc.textContent = list.length+"件へ欠航連絡を送信しました（デモ）。「明日8/1は高波のため欠航します。次回のご予約はチャットからどうぞ。申し訳ありません」";
+}
+function tab(t){
+  document.getElementById('tab-c').classList.toggle('active', t==='c');
+  document.getElementById('tab-s').classList.toggle('active', t==='s');
+  document.getElementById('view-c').classList.toggle('hidden', t!=='c');
+  document.getElementById('view-s').classList.toggle('hidden', t!=='s');
+  if(t==='s') renderList();
+}
+addMsg("（このチャットはデモです。ボタンで進めてください）","bot");
+botSay();
+renderList();
+</script>
+</body>
+</html>

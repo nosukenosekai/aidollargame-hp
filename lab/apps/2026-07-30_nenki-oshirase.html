@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>年忌おしらせ — デモ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; background: #f5f4f0; color: #1a1a1a; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 16px; min-height: 100vh; }
+  .demo-tag { display: inline-block; font-size: 11px; color: #6b7280; border: 1px solid #d1d5db; border-radius: 6px; padding: 2px 8px; margin-bottom: 12px; }
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
+  .card { background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .step-label { font-size: 12px; color: #2563eb; font-weight: 700; margin-bottom: 8px; }
+  .row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f0f0f0; cursor:pointer; }
+  .row:last-child { border-bottom: none; }
+  .name { font-weight: 600; font-size: 15px; }
+  .meta { font-size: 12px; color: #6b7280; }
+  .tag { font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 600; background:#eff6ff; color:#2563eb; white-space:nowrap; }
+  .tag.soon { background:#fef3c7; color:#b45309; }
+  .letter { background:#f9fafb; border-radius:10px; padding:14px; font-size:14px; white-space:pre-wrap; margin-top:10px; }
+  .btn { display:block; width:100%; background:#2563eb; color:#fff; border:none; border-radius:10px; padding:12px; font-size:14px; font-weight:600; cursor:pointer; margin-top:10px; }
+  .btn.sub2 { background:#fff; color:#2563eb; border:1px solid #2563eb; }
+  .back { font-size:13px; color:#2563eb; cursor:pointer; margin-bottom:10px; display:inline-block; }
+  .note { font-size:12px; color:#6b7280; margin-top:8px; }
+  .hidden { display:none; }
+  .footer { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 20px; padding-bottom: 20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo-tag">デモ（サンプルデータ）</span>
+  <h1>年忌おしらせ</h1>
+  <p class="sub">檀家名簿の没年から、次の年忌を自動計算。案内状の下書きまで</p>
+
+  <!-- 一覧 -->
+  <div id="list">
+    <div class="card">
+      <div class="step-label">今年 2026年 に案内すべき年忌（自動計算）</div>
+      <div id="rows"></div>
+      <div class="note">一周忌＝没後1年、三回忌＝没後2年、七回忌＝没後6年…と数え年で自動計算しています。</div>
+    </div>
+  </div>
+
+  <!-- 詳細 -->
+  <div id="detail" class="card hidden">
+    <span class="back" onclick="back()">← 一覧にもどる</span>
+    <div class="step-label" id="dTitle"></div>
+    <div class="meta" id="dMeta"></div>
+    <button class="btn" onclick="genLetter()">案内状の下書きを作る</button>
+    <div id="letterWrap" class="hidden">
+      <div class="letter" id="dLetter"></div>
+      <button class="btn sub2" onclick="markDone()">印刷用にコピー（デモ）</button>
+      <div id="done" class="letter hidden" style="color:#059669;">コピーしました（デモ）。日付や会場を確認してからお使いください。</div>
+    </div>
+  </div>
+
+  <div class="footer">AIdollargame ／ 1日1アプリ実験室<br>これはコンセプト検証用のデモです</div>
+</div>
+
+<script>
+const THIS_YEAR = 2026;
+// 年忌の定義: {回忌名, 没後年数}
+const KINDS = [
+  {name:"一周忌", after:1}, {name:"三回忌", after:2}, {name:"七回忌", after:6},
+  {name:"十三回忌", after:12}, {name:"十七回忌", after:16}, {name:"二十三回忌", after:22},
+  {name:"二十七回忌", after:26}, {name:"三十三回忌", after:32},
+];
+// 架空の檀家名簿（故人名・没年・喪主・電話）
+const people = [
+  { deceased:"山本 とめ", died:2024, family:"山本 まさる 家", month:5 },
+  { deceased:"川口 三郎", died:2020, family:"川口 ひろ子 家", month:11 },
+  { deceased:"デモ 太一", died:2014, family:"デモ 花子 家", month:9 },
+  { deceased:"藤本 きく", died:1994, family:"藤本 けん 家", month:3 },
+];
+// 今年に該当する年忌を抽出
+let events = [];
+people.forEach(p=>{
+  KINDS.forEach(k=>{
+    if(p.died + k.after === THIS_YEAR){
+      events.push({ deceased:p.deceased, family:p.family, kind:k.name, died:p.died, month:p.month });
+    }
+  });
+});
+events.sort((a,b)=>a.month-b.month);
+let cur=0;
+
+function renderRows(){
+  const el = document.getElementById('rows'); el.innerHTML='';
+  if(events.length===0){ el.innerHTML='<div class="meta">今年該当する年忌はありません。</div>'; return; }
+  events.forEach((e,i)=>{
+    const soon = e.month <= 9;
+    const row=document.createElement('div'); row.className='row'; row.onclick=()=>open(i);
+    row.innerHTML = '<div><div class="name">'+e.deceased+' 様　'+e.kind+'</div><div class="meta">'+e.family+'／'+e.month+'月ごろ（'+e.died+'年 ご逝去）</div></div>'+
+      '<span class="tag '+(soon?'soon':'')+'">'+(soon?'早めに':'ご案内')+'</span>';
+    el.appendChild(row);
+  });
+}
+function open(i){
+  cur=i; const e=events[i];
+  document.getElementById('list').classList.add('hidden');
+  document.getElementById('detail').classList.remove('hidden');
+  document.getElementById('dTitle').textContent = e.deceased+' 様　'+e.kind;
+  document.getElementById('dMeta').textContent = e.family+'／'+e.died+'年ご逝去 → 今年が'+e.kind+'にあたります';
+  document.getElementById('letterWrap').classList.add('hidden');
+  document.getElementById('done').classList.add('hidden');
+}
+function genLetter(){
+  const e=events[cur];
+  const txt =
+"拝啓　時下ますますご清祥のこととお慶び申し上げます。\n\n"+
+"さて、亡き "+e.deceased+" 様の "+e.kind+" にあたり、下記のとおり法要を営みたく存じます。ご多用のところ恐縮ですが、ご参列を賜りますようご案内申し上げます。\n\n"+
+"　日時　"+e.month+"月 吉日（別途ご相談）\n"+
+"　場所　当山本堂\n"+
+"　宛　　"+e.family+" 各位\n\n"+
+"　　　　　　　　　　　　　　　　　　敬具\n"+
+"（このデモでは日時・会場は仮です。実際の運用では住職が確定します）";
+  document.getElementById('dLetter').textContent = txt;
+  document.getElementById('letterWrap').classList.remove('hidden');
+}
+function markDone(){ document.getElementById('done').classList.remove('hidden'); }
+function back(){
+  document.getElementById('detail').classList.add('hidden');
+  document.getElementById('list').classList.remove('hidden');
+}
+renderRows();
+</script>
+</body>
+</html>

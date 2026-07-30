@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>巡回みまもり — デモ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; background: #f5f4f0; color: #1a1a1a; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 16px; min-height: 100vh; }
+  .demo-tag { display: inline-block; font-size: 11px; color: #6b7280; border: 1px solid #d1d5db; border-radius: 6px; padding: 2px 8px; margin-bottom: 12px; }
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
+  .card { background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .step-label { font-size: 12px; color: #2563eb; font-weight: 700; margin-bottom: 8px; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 12px; }
+  .tabs button { flex:1; padding: 9px; border: 1px solid #d1d5db; background: #fff; border-radius: 10px; font-size: 13px; cursor: pointer; }
+  .tabs button.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+  .cp { display:flex; align-items:center; justify-content:space-between; padding:12px; border:1px solid #eee; border-radius:12px; margin-bottom:8px; }
+  .cp .name { font-weight:600; font-size:15px; }
+  .cp .meta { font-size:12px; color:#6b7280; }
+  .pass { border:none; background:#2563eb; color:#fff; border-radius:20px; padding:8px 16px; font-size:13px; font-weight:600; cursor:pointer; }
+  .pass.done { background:#ecfdf5; color:#059669; cursor:default; }
+  .bar { height:10px; background:#eee; border-radius:6px; overflow:hidden; margin:8px 0; }
+  .bar > div { height:100%; background:#2563eb; width:0; transition:width .3s; }
+  .stat { display: flex; gap: 8px; margin-bottom: 12px; }
+  .stat > div { flex: 1; background: #fff; border-radius: 12px; padding: 12px; text-align: center; }
+  .stat .num { font-size: 22px; font-weight: 700; color: #2563eb; }
+  .stat .lbl { font-size: 11px; color: #6b7280; }
+  .miss { background:#fef2f2; color:#dc2626; border-radius:10px; padding:10px 12px; font-size:13px; margin-top:6px; }
+  .report { background:#f9fafb; border-radius:10px; padding:12px; font-size:13px; white-space:pre-wrap; margin-top:8px; }
+  .btn { display:block; width:100%; background:#2563eb; color:#fff; border:none; border-radius:10px; padding:12px; font-size:14px; font-weight:600; cursor:pointer; margin-top:8px; }
+  .hidden { display:none; }
+  .footer { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 20px; padding-bottom: 20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo-tag">デモ（サンプルデータ）</span>
+  <h1>巡回みまもり</h1>
+  <p class="sub">警備員はポイントを通過タップ。抜けを自動で見つけ、報告書も自動作成</p>
+
+  <div class="tabs">
+    <button id="tab-g" class="active" onclick="tab('g')">警備員の画面</button>
+    <button id="tab-m" onclick="tab('m')">管理者の画面</button>
+  </div>
+
+  <!-- 警備員 -->
+  <div id="view-g">
+    <div class="card">
+      <div class="step-label">〇〇物流センター（架空）夜間巡回ルート</div>
+      <div class="bar"><div id="barG"></div></div>
+      <div id="cps"></div>
+    </div>
+  </div>
+
+  <!-- 管理者 -->
+  <div id="view-m" class="hidden">
+    <div class="stat">
+      <div><div class="num" id="mDone">0</div><div class="lbl">通過済</div></div>
+      <div><div class="num" id="mTotal">6</div><div class="lbl">ポイント</div></div>
+      <div><div class="num" id="mMiss">0</div><div class="lbl">未通過</div></div>
+    </div>
+    <div class="card">
+      <div class="step-label">進捗と抜けの自動検知</div>
+      <div id="mList"></div>
+      <div id="missBox"></div>
+    </div>
+    <div class="card">
+      <div class="step-label">報告書</div>
+      <button class="btn" onclick="genReport()">巡回報告書を自動作成</button>
+      <div id="report" class="report hidden"></div>
+    </div>
+  </div>
+
+  <div class="footer">AIdollargame ／ 1日1アプリ実験室<br>これはコンセプト検証用のデモです</div>
+</div>
+
+<script>
+let cps = [
+  { name:"正門ゲート", time:"22:00 予定", passed:false, at:"" },
+  { name:"A棟 搬入口", time:"22:15 予定", passed:false, at:"" },
+  { name:"B棟 電気室", time:"22:30 予定", passed:false, at:"" },
+  { name:"屋外 タンクヤード", time:"22:45 予定", passed:false, at:"" },
+  { name:"C棟 事務所", time:"23:00 予定", passed:false, at:"" },
+  { name:"駐車場 south", time:"23:15 予定", passed:false, at:"" },
+];
+const times = ["22:01","22:16","22:33","22:47","23:02","23:18"];
+
+function renderG(){
+  const el = document.getElementById('cps'); el.innerHTML='';
+  cps.forEach((c,i)=>{
+    const d=document.createElement('div'); d.className='cp';
+    d.innerHTML = '<div><div class="name">'+c.name+'</div><div class="meta">'+(c.passed?('通過 '+c.at):c.time)+'</div></div>';
+    const b=document.createElement('button');
+    b.className='pass'+(c.passed?' done':''); b.textContent=c.passed?'通過済':'通過';
+    if(!c.passed) b.onclick=()=>passCp(i);
+    d.appendChild(b); el.appendChild(d);
+  });
+  const done = cps.filter(c=>c.passed).length;
+  document.getElementById('barG').style.width = (done/cps.length*100)+'%';
+}
+function passCp(i){ cps[i].passed=true; cps[i].at=times[i]+"（GPS記録）"; renderG(); }
+
+function renderM(){
+  const el=document.getElementById('mList'); el.innerHTML='';
+  cps.forEach(c=>{
+    const d=document.createElement('div'); d.className='cp';
+    d.innerHTML = '<div><div class="name">'+c.name+'</div><div class="meta">'+(c.passed?('通過 '+c.at):'まだ通過なし')+'</div></div>'+
+      '<span class="pass '+(c.passed?'done':'')+'" style="cursor:default;">'+(c.passed?'OK':'—')+'</span>';
+    el.appendChild(d);
+  });
+  const done = cps.filter(c=>c.passed).length;
+  const miss = cps.filter(c=>!c.passed);
+  document.getElementById('mDone').textContent = done;
+  document.getElementById('mMiss').textContent = miss.length;
+  const mb=document.getElementById('missBox');
+  mb.innerHTML = miss.length ? ('<div class="miss">未通過が'+miss.length+'件あります：'+miss.map(m=>m.name).join('、')+'。巡回員に確認してください。</div>') : '<div class="miss" style="background:#ecfdf5;color:#059669;">全ポイント通過済みです。</div>';
+}
+function genReport(){
+  const done = cps.filter(c=>c.passed);
+  const miss = cps.filter(c=>!c.passed);
+  const txt =
+"巡回報告書（自動作成・デモ）\n"+
+"施設：〇〇物流センター\n"+
+"日付：2026年7月30日 夜間\n"+
+"担当：警備員B（架空）\n"+
+"─────────────\n"+
+"通過："+done.length+"／"+cps.length+" ポイント\n"+
+done.map(c=>"・"+c.name+"　"+c.at).join("\n")+
+(miss.length? ("\n未通過："+miss.map(m=>m.name).join("、")+"（要確認）") : "\n未通過：なし")+
+"\n─────────────\n特記事項：異常なし（デモ）";
+  const r=document.getElementById('report'); r.classList.remove('hidden'); r.textContent=txt;
+}
+function tab(t){
+  document.getElementById('tab-g').classList.toggle('active', t==='g');
+  document.getElementById('tab-m').classList.toggle('active', t==='m');
+  document.getElementById('view-g').classList.toggle('hidden', t!=='g');
+  document.getElementById('view-m').classList.toggle('hidden', t!=='m');
+  if(t==='m') renderM();
+}
+renderG();
+</script>
+</body>
+</html>

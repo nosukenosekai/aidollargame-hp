@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>旅館おもてなし翻訳 — デモ</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; background: #f5f4f0; color: #1a1a1a; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 430px; margin: 0 auto; padding: 16px; min-height: 100vh; }
+  .demo-tag { display: inline-block; font-size: 11px; color: #6b7280; border: 1px solid #d1d5db; border-radius: 6px; padding: 2px 8px; margin-bottom: 12px; }
+  h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
+  .card { background: #fff; border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .step-label { font-size: 12px; color: #2563eb; font-weight: 700; margin-bottom: 8px; }
+  .inbox .item { padding: 12px; border:1px solid #eee; border-radius:12px; margin-bottom:8px; cursor:pointer; }
+  .inbox .item:hover { border-color:#2563eb; }
+  .flag { font-size:11px; font-weight:700; color:#2563eb; }
+  .orig { font-size:14px; margin-top:4px; color:#374151; }
+  .jp { font-size:14px; background:#f9fafb; border-radius:10px; padding:10px 12px; margin-top:6px; }
+  .jp b { color:#111; }
+  .draft { background:#eff6ff; border-radius:10px; padding:12px; margin-top:10px; font-size:14px; white-space:pre-wrap; }
+  .btn { display:block; width:100%; background:#2563eb; color:#fff; border:none; border-radius:10px; padding:12px; font-size:14px; font-weight:600; cursor:pointer; margin-top:10px; }
+  .btn.sub2 { background:#fff; color:#2563eb; border:1px solid #2563eb; }
+  .back { font-size:13px; color:#2563eb; cursor:pointer; margin-bottom:10px; display:inline-block; }
+  .hidden { display:none; }
+  .footer { text-align: center; font-size: 11px; color: #9ca3af; margin-top: 20px; padding-bottom: 20px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo-tag">デモ（サンプルデータ）</span>
+  <h1>旅館おもてなし翻訳</h1>
+  <p class="sub">海外からの問い合わせを日本語で読み、返信を相手の言語で下書き</p>
+
+  <!-- 一覧 -->
+  <div id="list" class="card">
+    <div class="step-label">届いた問い合わせ（未対応 3件）</div>
+    <div class="inbox" id="inbox"></div>
+  </div>
+
+  <!-- 詳細 -->
+  <div id="detail" class="card hidden">
+    <span class="back" onclick="back()">← 一覧にもどる</span>
+    <div class="flag" id="dFlag"></div>
+    <div class="orig" id="dOrig"></div>
+    <div class="jp" id="dJp"></div>
+    <button class="btn" onclick="genDraft()">返信の下書きを作る</button>
+    <div id="dDraft" class="hidden">
+      <div class="draft" id="dDraftText"></div>
+      <button class="btn sub2" onclick="copyDone()">この文でコピー（デモ）</button>
+      <div id="copied" class="jp hidden" style="color:#059669;">コピーしました（デモ）。内容を確認してから送信してください。</div>
+    </div>
+  </div>
+
+  <div class="footer">AIdollargame ／ 1日1アプリ実験室<br>これはコンセプト検証用のデモです</div>
+</div>
+
+<script>
+const mails = [
+  { lang:"英語", flag:"English / 米国のゲスト",
+    orig:"Hi, we're a family of four arriving on Aug 3. Do you have rooms with a private open-air bath? Also, is dinner OK for a child with a shellfish allergy?",
+    jp:"8月3日到着の家族4名です。<b>露天風呂付きの客室</b>はありますか？また、<b>甲殻類アレルギーの子ども</b>がいるので夕食は対応できますか？",
+    reply:"Dear guest,\nThank you for your inquiry. We have two rooms with a private open-air bath available on Aug 3. For your child's shellfish allergy, our kitchen can prepare a separate menu with prior notice. We look forward to welcoming your family." },
+  { lang:"中国語", flag:"中文 / 台湾のゲスト",
+    orig:"你好，請問8月10日還有雙人房嗎？可以幫忙安排車站接送嗎？謝謝。",
+    jp:"こんにちは。<b>8月10日に2名部屋</b>の空きはありますか？<b>駅までの送迎</b>をお願いできますか？",
+    reply:"您好，感謝您的來信。8月10日尚有雙人房。車站接送需事先預約，我們可於當日14:00至17:00安排。期待您的光臨。" },
+  { lang:"韓国語", flag:"한국어 / 韓国のゲスト",
+    orig:"안녕하세요. 8월 5일에 방이 있나요? 체크인을 저녁 7시 이후에 해도 될까요?",
+    jp:"こんにちは。<b>8月5日に空室</b>はありますか？<b>チェックインを夜7時以降</b>にしても大丈夫ですか？",
+    reply:"안녕하세요. 문의 감사합니다. 8월 5일 객실 예약 가능합니다. 저녁 7시 이후 체크인도 괜찮으니 도착 예정 시간을 알려주시면 준비해 두겠습니다." },
+];
+let cur = 0;
+
+function renderInbox(){
+  const el = document.getElementById('inbox'); el.innerHTML='';
+  mails.forEach((m,i)=>{
+    const d=document.createElement('div'); d.className='item'; d.onclick=()=>open(i);
+    d.innerHTML = '<div class="flag">'+m.flag+'</div><div class="orig">'+m.orig.slice(0,46)+'…</div>';
+    el.appendChild(d);
+  });
+}
+function open(i){
+  cur=i; const m=mails[i];
+  document.getElementById('list').classList.add('hidden');
+  document.getElementById('detail').classList.remove('hidden');
+  document.getElementById('dFlag').textContent = m.flag;
+  document.getElementById('dOrig').textContent = m.orig;
+  document.getElementById('dJp').innerHTML = '<b>日本語訳：</b>'+m.jp;
+  document.getElementById('dDraft').classList.add('hidden');
+  document.getElementById('copied').classList.add('hidden');
+}
+function genDraft(){
+  const m=mails[cur];
+  document.getElementById('dDraftText').textContent = m.reply;
+  document.getElementById('dDraft').classList.remove('hidden');
+}
+function copyDone(){ document.getElementById('copied').classList.remove('hidden'); }
+function back(){
+  document.getElementById('detail').classList.add('hidden');
+  document.getElementById('list').classList.remove('hidden');
+}
+renderInbox();
+</script>
+</body>
+</html>

@@ -26,10 +26,43 @@
     }
   });
 
+  /* Formspreeフォームは自前でAJAX送信する。
+     理由: _next(送信後の遷移先)が効かずFormspree既定の完了画面に飛ぶため、
+     サンクスページに到達せず成功件数を数えられない(2026-08-03に実送信で確認)。
+     AJAXなら受理/失敗が戻り値で分かり、遷移も自分で制御できる。 */
   var forms = document.querySelectorAll('form[action*="formspree"]');
   for (var i = 0; i < forms.length; i++) {
     forms[i].addEventListener('submit', function (e) {
-      track('contact_submit_attempt', { form_id: (e.target.getAttribute('action') || '').split('/').pop() });
+      var form = e.target;
+      e.preventDefault();
+
+      /* ハニーポットが埋まっている＝自動投稿。送信もGA4計上もしない。 */
+      var gotcha = form.querySelector('[name="_gotcha"]');
+      if (gotcha && gotcha.value) return;
+
+      var next = form.querySelector('[name="_next"]');
+      var thanksUrl = next ? next.value : '/thanks.html';
+      var btn = form.querySelector('button, input[type="submit"]');
+      var label = btn ? btn.innerHTML : '';
+      if (btn) { btn.disabled = true; btn.innerHTML = '送信中...'; }
+
+      track('contact_submit_attempt', { form_id: (form.getAttribute('action') || '').split('/').pop() });
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      }).then(function (res) {
+        if (res.ok) {
+          location.href = thanksUrl;
+          return;
+        }
+        throw new Error('status ' + res.status);
+      }).catch(function (err) {
+        track('contact_submit_error', { reason: String(err && err.message || err).slice(0, 100) });
+        if (btn) { btn.disabled = false; btn.innerHTML = label; }
+        alert('送信に失敗しました。お手数ですが info@aidollargame.com までご連絡ください。');
+      });
     });
   }
 })();

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>まえにもここに｜自分の点だけでできた地図</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#ddd9d0; --ink:#1a1a1a; --sub:#77736a;
+         --pale:#b8b3a7; --paper:#fbfaf7; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.8; }
+  .wrap{ max-width:460px; margin:0 auto; padding:16px 14px 56px; }
+  h1{ font-size:23px; margin:0 0 4px; letter-spacing:.01em; font-weight:700; }
+  .sub{ color:var(--sub); font-size:14px; margin:0 0 18px; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .map{ background:var(--paper); border:1px solid var(--line); border-radius:14px;
+    overflow:hidden; margin-bottom:12px; position:relative; }
+  .map svg{ display:block; width:100%; height:auto; }
+  .scale{ position:absolute; left:12px; bottom:10px; font-size:11px; color:var(--pale);
+    letter-spacing:.03em; }
+  .scale i{ display:block; height:1px; background:var(--pale); margin-bottom:3px; }
+  .hint{ position:absolute; right:12px; bottom:10px; font-size:11px; color:var(--pale); }
+
+  .panel{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:16px; margin-bottom:12px; }
+  .panel .when{ font-size:13px; color:var(--sub); }
+  .panel .note{ font-size:18px; line-height:1.75; margin-top:4px; }
+  .panel.empty .note{ color:var(--sub); font-size:16px; }
+
+  .again{ background:#fff; border:1px solid var(--line);
+    border-left:4px solid var(--ac); border-radius:14px; padding:16px; margin-bottom:12px; }
+  .again .lead{ font-size:15px; color:var(--ac); font-weight:600; }
+  .again .old{ font-size:17px; margin-top:6px; }
+  .again .old span{ display:block; font-size:13px; color:var(--sub); }
+
+  .add{ display:flex; gap:8px; margin-bottom:12px; }
+  .add input{ flex:1; min-width:0; padding:13px 14px; font-size:16px; font-family:inherit;
+    border:1px solid var(--line); border-radius:12px; background:#fff; color:var(--ink); }
+  .add button{ background:var(--ac); color:#fff; border:0; border-radius:12px;
+    padding:13px 18px; font-size:16px; font-weight:600; white-space:nowrap; }
+  .add button:disabled{ opacity:.4; }
+  .gps{ width:100%; background:#fff; color:var(--ac); border:1.5px solid var(--ac);
+    border-radius:12px; padding:12px; font-size:15px; font-weight:600; margin-bottom:20px; }
+
+  h2{ font-size:15px; color:var(--sub); font-weight:600; margin:24px 0 8px;
+    letter-spacing:.04em; }
+  .list{ background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+  .row{ display:block; width:100%; text-align:left; background:#fff; border:0;
+    border-bottom:1px solid var(--line); padding:13px 16px; font-family:inherit; }
+  .row:last-child{ border-bottom:0; }
+  .row.on{ background:#f4f7fe; }
+  .row .d{ font-size:12px; color:var(--sub); }
+  .row .t{ font-size:16px; line-height:1.6; margin-top:1px; }
+  .row .k{ font-size:12px; color:var(--ac); margin-top:3px; }
+
+  .foot{ font-size:13px; color:var(--sub); margin-top:22px; line-height:1.85; }
+  .toast{ position:fixed; left:50%; bottom:24px; transform:translate(-50%,20px);
+    background:var(--ink); color:#fff; padding:11px 20px; border-radius:999px;
+    font-size:15px; opacity:0; pointer-events:none; transition:opacity .2s, transform .2s;
+    z-index:9; max-width:88vw; text-align:center; }
+  .toast.show{ opacity:1; transform:translate(-50%,0); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>まえにもここに</h1>
+  <p class="sub">道も駅も出てきません。自分が立ち止まった点だけでできた地図です。</p>
+
+  <div class="map">
+    <div id="svg"></div>
+    <div class="scale"><i id="sbar"></i><span id="slabel"></span></div>
+    <div class="hint">地図を押すと点が増えます</div>
+  </div>
+
+  <div id="again"></div>
+  <div class="panel empty" id="panel">
+    <div class="note">点を押すと、そのとき書いた一行が出ます。</div>
+  </div>
+
+  <div class="add">
+    <input id="note" type="text" maxlength="60" placeholder="ここで何があったか、一行だけ">
+    <button id="addbtn" onclick="addHere()">置く</button>
+  </div>
+  <button class="gps" onclick="useGPS()">いまいる場所に置く</button>
+
+  <h2>これまでの点</h2>
+  <div class="list" id="list"></div>
+
+  <p class="foot">
+    この地図はこの端末の中だけにあります。どこにも送られません。共有する機能も、数をかぞえる機能もありません。<br>
+    点と点のあいだの白いところは、記録しなかった時間です。消さずに残しています。
+  </p>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ================= はじめから入っている点（架空のサンプル）=================
+const SEED = [
+  { t:'2022-04-09', la:35.7018, lo:139.6893, n:'引っ越してきた日。段ボールしかない部屋で、買ってきたおにぎりを食べた' },
+  { t:'2022-06-21', la:35.7061, lo:139.6842, n:'雨。傘を忘れて、ひさしの下で二十分ぼんやりしていた' },
+  { t:'2022-11-03', la:35.6975, lo:139.7005, n:'銀杏が落ちきる前。歩道がぜんぶ黄色かった' },
+  { t:'2023-01-15', la:35.7003, lo:139.6871, n:'初詣の帰りに道をまちがえて、知らない路地に出た' },
+  { t:'2023-05-27', la:35.7020, lo:139.6890, n:'同じ道を通ったのに、大きい木が一本なくなっていた' },
+  { t:'2023-08-14', la:35.6942, lo:139.6963, n:'暑くて動けず、日かげのベンチで缶を二本あけた' },
+  { t:'2023-12-24', la:35.7058, lo:139.6845, n:'明かりを見に行くつもりが、寒くて途中で引き返した' },
+  { t:'2024-03-02', la:35.7089, lo:139.6812, n:'新しい道ができていた。前は何があったか思い出せない' },
+  { t:'2024-07-19', la:35.6978, lo:139.7001, n:'ここで電話をとって、そのまま長く立ち話をした' },
+  { t:'2024-10-06', la:35.7035, lo:139.6935, n:'金木犀。どこから匂っているのか最後まで分からなかった' },
+  { t:'2025-02-11', la:35.6910, lo:139.6988, n:'雪。足あとが自分のぶんしかなかった' },
+  { t:'2025-06-30', la:35.7021, lo:139.6888, n:'三度目。どうやらここに来ると必ず立ち止まるらしい' },
+  { t:'2025-09-23', la:35.7092, lo:139.6808, n:'工事が終わっていた。何が建ったのかは分からない' },
+  { t:'2026-05-18', la:35.7037, lo:139.6931, n:'匂う季節でもないのに、また同じ角で立ち止まった' },
+];
+
+const KEY = 'maenimo-pins';
+let P = [];
+try{ const s = localStorage.getItem(KEY); if (s) P = JSON.parse(s); }catch(e){}
+if (!Array.isArray(P) || !P.length) P = SEED.slice();
+const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(P)); }catch(e){} };
+
+let sel = -1, just = null;
+
+// ================= 距離と日付 =================
+function dist(a, b){                       // メートル
+  const R = 6378137, rad = Math.PI / 180;
+  const dla = (b.la - a.la) * rad;
+  const dlo = (b.lo - a.lo) * rad;
+  const m = Math.cos((a.la + b.la) / 2 * rad);
+  return Math.round(R * Math.sqrt(dla * dla + (dlo * m) * (dlo * m)));
+}
+const TODAY = new Date();
+function ymd(t){ const [y,m,d] = t.split('-').map(Number); return { y, m, d }; }
+function jp(t){ const o = ymd(t); return o.y + '年' + o.m + '月' + o.d + '日'; }
+function ago(t){
+  const o = ymd(t);
+  const days = Math.round((TODAY - new Date(o.y, o.m - 1, o.d)) / 86400000);
+  if (days < 1) return 'きょう';
+  if (days < 31) return days + '日まえ';
+  const mo = Math.round(days / 30.4);
+  if (mo < 12) return mo + 'か月まえ';
+  const yr = Math.floor(days / 365);
+  const rest = Math.round((days - yr * 365) / 30.4);
+  return yr + '年' + (rest >= 1 ? rest + 'か月' : '') + 'まえ';
+}
+// 200m以内にある、別の日の点
+function nearOf(i){
+  return P.map((p, j) => ({ j, p, d: dist(P[i], p) }))
+          .filter(x => x.j !== i && x.d <= 200)
+          .sort((a, b) => a.d - b.d);
+}
+
+// ================= 地図 =================
+const W = 420, H = 440, PAD = 34;
+let VIEW = null;
+function view(){
+  const la = P.map(p => p.la), lo = P.map(p => p.lo);
+  let la0 = Math.min(...la), la1 = Math.max(...la);
+  let lo0 = Math.min(...lo), lo1 = Math.max(...lo);
+  const mla = (la1 - la0) * 0.12 || 0.002, mlo = (lo1 - lo0) * 0.12 || 0.002;
+  la0 -= mla; la1 += mla; lo0 -= mlo; lo1 += mlo;
+  const k = Math.cos((la0 + la1) / 2 * Math.PI / 180);
+  // 縦横の比率をそろえる
+  const spanX = (lo1 - lo0) * k, spanY = la1 - la0;
+  const s = Math.min((W - PAD * 2) / spanX, (H - PAD * 2) / spanY);
+  return { la0, la1, lo0, lo1, k, s,
+    ox: (W - spanX * s) / 2, oy: (H - spanY * s) / 2 };
+}
+const toXY = (p, v) => ({
+  x: v.ox + (p.lo - v.lo0) * v.k * v.s,
+  y: H - v.oy - (p.la - v.la0) * v.s,
+});
+const toLL = (x, y, v) => ({
+  lo: v.lo0 + (x - v.ox) / v.s / v.k,
+  la: v.la0 + (H - v.oy - y) / v.s,
+});
+
+function drawMap(){
+  const v = VIEW = view();
+  const newest = Math.max(...P.map(p => +new Date(p.t)));
+  const oldest = Math.min(...P.map(p => +new Date(p.t)));
+  const span = Math.max(1, newest - oldest);
+  let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg">';
+  s += '<rect width="' + W + '" height="' + H + '" fill="#fbfaf7"/>';
+  // うっすらした方眼（地図であることの手がかりだけ）
+  for (let g = 0; g <= W; g += 42) s += '<line x1="' + g + '" y1="0" x2="' + g + '" y2="' + H + '" stroke="#efece5"/>';
+  for (let g = 0; g <= H; g += 42) s += '<line x1="0" y1="' + g + '" x2="' + W + '" y2="' + g + '" stroke="#efece5"/>';
+
+  // かさなっている点どうしを細い線でつなぐ
+  P.forEach((p, i) => {
+    nearOf(i).forEach(x => {
+      if (x.j <= i) return;
+      const a = toXY(p, v), b = toXY(x.p, v);
+      s += '<line x1="' + a.x.toFixed(1) + '" y1="' + a.y.toFixed(1) +
+           '" x2="' + b.x.toFixed(1) + '" y2="' + b.y.toFixed(1) +
+           '" stroke="#2563eb" stroke-opacity=".28" stroke-width="1"/>';
+    });
+  });
+
+  P.forEach((p, i) => {
+    const c = toXY(p, v);
+    const age = (+new Date(p.t) - oldest) / span;      // 0=古い 1=新しい
+    const r = 4 + age * 4.5;
+    const op = 0.34 + age * 0.56;
+    const has = nearOf(i).length > 0;
+    if (i === sel){
+      s += '<circle cx="' + c.x.toFixed(1) + '" cy="' + c.y.toFixed(1) +
+           '" r="' + (r + 8) + '" fill="#2563eb" fill-opacity=".12"/>';
+    }
+    if (has){
+      s += '<circle cx="' + c.x.toFixed(1) + '" cy="' + c.y.toFixed(1) +
+           '" r="' + (r + 4).toFixed(1) + '" fill="none" stroke="#2563eb" stroke-opacity=".4"/>';
+    }
+    s += '<circle cx="' + c.x.toFixed(1) + '" cy="' + c.y.toFixed(1) +
+         '" r="' + r.toFixed(1) + '" fill="' + (i === sel ? '#2563eb' : '#4b4a45') +
+         '" fill-opacity="' + (i === sel ? 1 : op.toFixed(2)) + '" data-i="' + i + '"/>';
+  });
+  s += '</svg>';
+  document.getElementById('svg').innerHTML = s;
+
+  // ものさし
+  const mPerPx = 1 / (v.s / 111000);
+  let nice = [50,100,200,300,500,1000].find(n => n / mPerPx > 40) || 1000;
+  document.getElementById('sbar').style.width = Math.round(nice / mPerPx) + 'px';
+  document.getElementById('slabel').textContent = nice >= 1000 ? '1km' : nice + 'm';
+
+  const svg = document.querySelector('#svg svg');
+  svg.querySelectorAll('circle[data-i]').forEach(c => {
+    c.style.cursor = 'pointer';
+    c.addEventListener('click', e => { e.stopPropagation(); pick(+c.dataset.i); });
+  });
+  svg.addEventListener('click', e => {
+    const r = svg.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width * W;
+    const y = (e.clientY - r.top) / r.height * H;
+    addAt(toLL(x, y, VIEW));
+  });
+}
+
+// ================= 表示 =================
+function drawPanel(){
+  const el = document.getElementById('panel');
+  if (sel < 0){
+    el.className = 'panel empty';
+    el.innerHTML = '<div class="note">点を押すと、そのとき書いた一行が出ます。</div>';
+    return;
+  }
+  const p = P[sel];
+  el.className = 'panel';
+  el.innerHTML = '<div class="when">' + jp(p.t) + '　' + ago(p.t) + '</div>' +
+                 '<div class="note">' + esc(p.n) + '</div>';
+}
+function drawAgain(){
+  const el = document.getElementById('again');
+  if (just === null){ el.innerHTML = ''; return; }
+  const near = nearOf(just);
+  if (!near.length){
+    el.innerHTML = '<div class="again" style="border-left-color:#ddd9d0">' +
+      '<div class="lead" style="color:var(--sub)">ここははじめてです</div>' +
+      '<div class="old" style="font-size:15px; color:var(--sub)">' +
+      'いちばん近い点でも' + (P.length > 1 ? nearestAny(just) + 'はなれています' : 'まだありません') +
+      '</div></div>';
+    return;
+  }
+  const x = near[0];
+  el.innerHTML = '<div class="again">' +
+    '<div class="lead">まえにもここにいます</div>' +
+    '<div class="old">' + esc(x.p.n) +
+    '<span>' + jp(x.p.t) + '　' + ago(x.p.t) + '　ここから' + x.d + 'm' +
+    (near.length > 1 ? '　ほかに' + (near.length - 1) + 'つ近くにあります' : '') +
+    '</span></div></div>';
+}
+function nearestAny(i){
+  const d = P.map((p, j) => j === i ? Infinity : dist(P[i], p));
+  const m = Math.min(...d);
+  return m >= 1000 ? (m / 1000).toFixed(1) + 'km' : m + 'm';
+}
+function drawList(){
+  document.getElementById('list').innerHTML = P
+    .map((p, i) => ({ p, i }))
+    .sort((a, b) => b.p.t.localeCompare(a.p.t))
+    .map(o => {
+      const k = nearOf(o.i);
+      return '<button class="row' + (o.i === sel ? ' on' : '') + '" onclick="pick(' + o.i + ')">' +
+        '<div class="d">' + jp(o.p.t) + '　' + ago(o.p.t) + '</div>' +
+        '<div class="t">' + esc(o.p.n) + '</div>' +
+        (k.length ? '<div class="k">' + ago(k[0].p.t) + 'にも、ここから' + k[0].d + 'm</div>' : '') +
+        '</button>';
+    }).join('');
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function pick(i){ sel = i; just = null; render(); }
+function render(){ drawMap(); drawPanel(); drawAgain(); drawList(); }
+
+// ================= 点を増やす =================
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') +
+         '-' + String(d.getDate()).padStart(2, '0');
+}
+function addAt(ll){
+  const inp = document.getElementById('note');
+  const n = inp.value.trim() || 'ここで立ち止まった';
+  P.push({ t: todayStr(), la: +ll.la.toFixed(6), lo: +ll.lo.toFixed(6), n });
+  inp.value = '';
+  sel = P.length - 1; just = P.length - 1;
+  save(); render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function addHere(){
+  // 押した場所が分からないときは、いちばん新しい点のとなりに置く
+  const last = P[P.length - 1];
+  addAt({ la: last.la + (Math.random() - .5) * 0.002, lo: last.lo + (Math.random() - .5) * 0.002 });
+}
+function useGPS(){
+  if (!navigator.geolocation){ toast('この端末では場所を取れません'); return; }
+  toast('場所を確かめています');
+  navigator.geolocation.getCurrentPosition(
+    pos => addAt({ la: pos.coords.latitude, lo: pos.coords.longitude }),
+    () => toast('場所が取れませんでした。地図を押しても置けます'),
+    { enableHighAccuracy: true, timeout: 8000 }
+  );
+}
+let tt = null;
+function toast(t){
+  const el = document.getElementById('toast');
+  el.textContent = t; el.classList.add('show');
+  clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 1800);
+}
+document.getElementById('note').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.isComposing) addHere();
+});
+
+render();
+</script>
+</body>
+</html>

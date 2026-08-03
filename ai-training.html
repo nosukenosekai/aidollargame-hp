@@ -331,8 +331,8 @@
   .mono-box p { font-size:0.92rem; line-height:1.95; }
   .mono-tags { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1rem; }
   .mono-tags span { font-size:0.8rem; font-weight:700; padding:0.35rem 0.8rem; background:#fff; border:1px solid var(--line); border-radius:999px; }
-  /* ===== ユースケース（2026-08-03追加） ===== */
-  #usecase { background:var(--bg-section); }
+  /* ===== 実績（2026-08-03追加） ===== */
+  #results { background:var(--bg-section); }
   .uc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem; margin-top:3rem; }
   .uc-card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:1.8rem 1.6rem; transition:transform .25s, box-shadow .3s; }
   .uc-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
@@ -571,50 +571,51 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
 </section>
 
-<!-- USE CASES（2026-08-03新設） -->
-<section id="usecase">
+<!-- 実績（2026-08-03新設） -->
+<section id="results">
   <div class="container">
-    <div class="section-tag">ユースケース</div>
-    <h2 class="section-title">研修で、こんな業務が<br><span class="hl">その場でAI化されます</span></h2>
-    <p class="section-sub">教材は貴社の実業務です。下は業種別の一例。どれも「その職務に必要な訓練」として、助成金の対象に位置づけやすいテーマです。</p>
+    <div class="section-tag">実績</div>
+    <h2 class="section-title">研修専門の会社ではありません。<br><span class="hl">AIを作り、自分たちで使っている</span>会社です</h2>
+    <p class="section-sub">私たちの実績は、AIを毎日の業務で使い、プロダクトとして開発し、事業者へ納品してきたことです。研修でお渡しするのは、その実際の手順そのものです。</p>
     <div class="uc-grid">
       <div class="uc-card">
-        <span class="uc-tag">製造・建設</span>
-        <div class="uc-h">見積書と報告書づくりに時間がかかる</div>
-        <div class="uc-row"><span class="k">持ち帰る使い方：</span>過去の見積や写真つき報告から、AIに下書きをさせる型</div>
-        <div class="uc-row"><span class="k">変わること：</span>書類作成が速くなり、現場に出る時間が増える</div>
+        <span class="uc-tag">自社運用</span>
+        <div class="uc-h">会社の実務を、私たち自身がAIで回している</div>
+        <div class="uc-row"><span class="k">やっていること：</span>営業文・経理・記事制作・引き継ぎ資料づくりまで、日常業務をAIで動かしています</div>
+        <div class="uc-row"><span class="k">研修とのつながり：</span>教えるのは、毎日使っているこの手順そのものです</div>
       </div>
       <div class="uc-card">
-        <span class="uc-tag">小売・サービス</span>
-        <div class="uc-h">問い合わせ対応が特定の人に頼りきり</div>
-        <div class="uc-row"><span class="k">持ち帰る使い方：</span>よくある質問への一次回答文をAIで用意する</div>
-        <div class="uc-row"><span class="k">変わること：</span>新人でも対応の質がそろい、聞かれる回数が減る</div>
+        <span class="uc-tag">プロダクト開発</span>
+        <div class="uc-h">AIプロダクトを自社で開発し、運用している</div>
+        <div class="uc-row"><span class="k">やっていること：</span>AIチャットエージェント・AIwill（社長クローン）・AIside（付き人AI）などを開発・提供</div>
+        <div class="uc-row"><span class="k">研修とのつながり：</span>「作れる会社」だから、現場で本当に動く使い方を教えられます</div>
       </div>
       <div class="uc-card">
-        <span class="uc-tag">介護・福祉</span>
-        <div class="uc-h">記録と書類づくりが業務を圧迫している</div>
-        <div class="uc-row"><span class="k">持ち帰る使い方：</span>話した内容を記録の下書きに変える使い方</div>
-        <div class="uc-row"><span class="k">変わること：</span>記録の時間が短くなり、利用者と向き合う時間に回せる</div>
+        <span class="uc-tag">納品実績</span>
+        <div class="uc-h">介護事業者向けに、検索AIを納品・本番稼働</div>
+        <div class="uc-row"><span class="k">やっていること：</span>厚生労働省の公開データ（約8,500件）を扱う特別養護老人ホーム検索AIを開発し、事業者向けに本番運用中です</div>
+        <div class="uc-row"><span class="k">研修とのつながり：</span>公開データ×AIの実装を、納品まで経験しています</div>
       </div>
       <div class="uc-card">
-        <span class="uc-tag">士業・管理部門</span>
-        <div class="uc-h">資料作成と調べ物が属人化している</div>
-        <div class="uc-row"><span class="k">持ち帰る使い方：</span>社内資料をAIに読ませて、要点整理と文書の下書きを出す</div>
-        <div class="uc-row"><span class="k">変わること：</span>調べ物と清書の往復が減る</div>
+        <span class="uc-tag">技術力</span>
+        <div class="uc-h">CTOはApp Storeに自作AIアプリをリリース</div>
+        <div class="uc-row"><span class="k">やっていること：</span>Apple Vision Pro向けのAIアプリを公開し、Apple主催のAI開発ハッカソンで優勝（2025年）</div>
+        <div class="uc-row"><span class="k">研修とのつながり：</span>最新のAI実装を、現場のプロダクトに落とし込めます</div>
       </div>
       <div class="uc-card">
-        <span class="uc-tag">営業</span>
-        <div class="uc-h">提案書やメールの作成が重い</div>
-        <div class="uc-row"><span class="k">持ち帰る使い方：</span>相手先ごとに書き分けた提案文の下書きをAIで作る</div>
-        <div class="uc-row"><span class="k">変わること：</span>準備が速くなり、商談そのものに時間を割ける</div>
+        <span class="uc-tag">公開データ×AI</span>
+        <div class="uc-h">業種向けのAIツールを、次々に内製している</div>
+        <div class="uc-row"><span class="k">やっていること：</span>補助金・労務助成金・相続など、公開データをAI化した業種向けツールを自社で開発しています</div>
+        <div class="uc-row"><span class="k">研修とのつながり：</span>貴社の業種に合わせた使い方の引き出しが多くあります</div>
       </div>
       <div class="uc-card">
-        <span class="uc-tag">経営・企画</span>
-        <div class="uc-h">AIを入れたいが、何から手をつけるか分からない</div>
-        <div class="uc-row"><span class="k">持ち帰る使い方：</span>自社の1業務を、経営者自身がその場でAI化する体験</div>
-        <div class="uc-row"><span class="k">変わること：</span>投資の優先順位と、社員への号令が具体的になる</div>
+        <span class="uc-tag">発信</span>
+        <div class="uc-h">公的データの一次情報を、毎月読み解いて発信</div>
+        <div class="uc-row"><span class="k">やっていること：</span>中小企業のAI活用を公的調査から翻訳する連載「定点観測」を継続しています</div>
+        <div class="uc-row"><span class="k">研修とのつながり：</span>流行ではなく、数字にもとづいて研修を設計します</div>
       </div>
     </div>
+    <p class="src-note">※取引先名は守秘のため業種のみ記載しています。数値・実績はいずれも当社が実際に開発・運用しているものです。</p>
   </div>
 </section>
 

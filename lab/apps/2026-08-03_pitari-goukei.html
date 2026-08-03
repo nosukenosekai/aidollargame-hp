@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ぴたり合計｜1日1問、たて・よこ重ねずに目標額をつくる</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#d6d3cc; --ink:#1a1a1a; --sub:#6b6b6b;
+         --red:#b91c1c; --grn:#15803d; --sel:#2563eb; --dim:#eceae4; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.7; }
+  .wrap{ max-width:460px; margin:0 auto; padding:14px 14px 40px; }
+  h1{ font-size:24px; margin:0 0 2px; letter-spacing:-.01em; }
+  .sub{ color:var(--sub); font-size:14px; margin:0 0 16px; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  /* まだ始めていない画面 */
+  .start{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:26px 20px; text-align:center; }
+  .start .big{ font-size:21px; font-weight:700; margin-bottom:4px; }
+  .start .d{ font-size:15px; color:var(--sub); margin-bottom:18px; }
+  .rule{ text-align:left; background:#faf9f6; border:1px solid var(--line);
+    border-radius:12px; padding:14px 16px; margin:0 0 20px; font-size:15px; }
+  .rule ol{ margin:0; padding-left:20px; }
+  .rule li{ margin:6px 0; }
+  .go{ background:var(--ac); color:#fff; border:0; border-radius:12px;
+    padding:15px 34px; font-size:18px; font-weight:700; }
+  .ghost{ background:#fff; color:var(--ac); border:1.5px solid var(--ac);
+    border-radius:12px; padding:11px 20px; font-size:15px; font-weight:600; }
+
+  /* 目標と現在の合計 */
+  .head{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; margin-bottom:12px; }
+  .hrow{ display:flex; justify-content:space-between; align-items:baseline; }
+  .hrow .lb{ font-size:13px; color:var(--sub); }
+  .hrow .v{ font-size:26px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .gap{ margin-top:8px; padding-top:10px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:baseline; font-size:15px; }
+  .gap b{ font-size:19px; font-variant-numeric:tabular-nums; }
+
+  /* 盤面 */
+  .board{ display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-bottom:12px; }
+  .cell{ background:#fff; border:1.5px solid var(--line); border-radius:12px;
+    padding:14px 2px; font-size:clamp(14px,4.2vw,18px); font-weight:700;
+    font-variant-numeric:tabular-nums; color:var(--ink); text-align:center;
+    transition:background .12s, border-color .12s; }
+  .cell.minus{ color:var(--red); }
+  .cell.dim{ background:var(--dim); color:#a8a49a; border-color:var(--dim); }
+  .cell.dim.minus{ color:#c9a3a3; }
+  .cell.on{ background:var(--sel); border-color:var(--sel); color:#fff; }
+  .cell.on.minus{ color:#ffd9d9; }
+  .cell small{ display:block; font-size:10px; font-weight:500; opacity:.7;
+    margin-top:2px; }
+
+  .tools{ display:flex; gap:8px; margin-bottom:12px; }
+  .tools button{ flex:1; background:#fff; border:1px solid var(--line); border-radius:10px;
+    padding:11px 0; font-size:15px; font-weight:600; color:var(--ink); }
+
+  .alert{ display:none; background:#fdf6ec; border:1px solid #f0dcc0;
+    border-left:4px solid #b45309; border-radius:10px; padding:10px 12px;
+    font-size:14px; margin-bottom:12px; }
+  .alert.show{ display:block; }
+
+  .done{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:22px 18px; text-align:center; margin-bottom:14px; }
+  .done .t{ font-size:22px; font-weight:700; }
+  .done .m{ font-size:16px; color:var(--sub); margin:6px 0 18px; }
+  .share{ background:#faf9f6; border:1px solid var(--line); border-radius:12px;
+    padding:12px; font-size:14px; white-space:pre-wrap; text-align:left;
+    margin-bottom:14px; font-variant-numeric:tabular-nums; }
+
+  .toast{ position:fixed; left:50%; bottom:24px; transform:translate(-50%,20px);
+    background:var(--ink); color:#fff; padding:11px 20px; border-radius:999px;
+    font-size:15px; font-weight:600; opacity:0; pointer-events:none;
+    transition:opacity .2s, transform .2s; z-index:9; max-width:88vw; text-align:center; }
+  .toast.show{ opacity:1; transform:translate(-50%,0); }
+
+  .foot{ font-size:13px; color:var(--sub); margin-top:16px; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>ぴたり合計</h1>
+  <p class="sub" id="today"></p>
+
+  <section id="p0">
+    <div class="start">
+      <div class="big">今日の1問は、まだ始めていません</div>
+      <div class="d" id="lv"></div>
+      <div class="rule">
+        <ol>
+          <li>5かける5のマスから、5つ選びます</li>
+          <li>たて・よこが重ならないように選びます。1つ選ぶと、その行と列は灰色になります</li>
+          <li>選んだ5つの合計が、目標額ぴったりになれば正解です</li>
+          <li>赤い数字は値引きです。引き算になります</li>
+        </ol>
+      </div>
+      <button class="go" onclick="start()">はじめる</button>
+    </div>
+    <p class="foot">答えは必ず1通りだけです。問題は毎日0時に切りかわり、日本中どこで開いても今日は同じ1問です。登録もインストールもいりません。</p>
+  </section>
+
+  <section id="p1" class="hide">
+    <div class="head">
+      <div class="hrow"><span class="lb">目標</span><span class="v" id="target"></span></div>
+      <div class="gap">
+        <span>いま選んでいる合計　<b id="sum">0円</b></span>
+        <span id="diff" style="color:var(--sub)"></span>
+      </div>
+    </div>
+    <div class="alert" id="al"></div>
+    <div class="board" id="bd"></div>
+    <div class="tools">
+      <button onclick="undo()">1つ戻す</button>
+      <button onclick="clearAll()">全部はずす</button>
+      <button onclick="giveHint()">ヒント</button>
+    </div>
+    <p class="foot" id="prog"></p>
+  </section>
+
+  <section id="p2" class="hide">
+    <div class="done">
+      <div class="t">ぴたり</div>
+      <div class="m" id="result"></div>
+      <button class="ghost" onclick="copyShare()">結果をコピー</button>
+    </div>
+    <div class="share" id="sharetext"></div>
+    <div class="board" id="bd2"></div>
+    <p class="foot">次の問題は明日0時に出ます。コピーした文章はそのまま貼って使えます。投稿するかどうかはご自身で決めてください。</p>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ================= 日付 =================
+const now = new Date();
+const Y = now.getFullYear(), M = now.getMonth() + 1, D = now.getDate();
+const DOW = now.getDay();
+const WD = ['日','月','火','水','木','金','土'][DOW];
+const KEY = 'pitari-' + Y + '-' + M + '-' + D;
+// 月曜はやさしく、週末にかけて手ごわく。ニアミス（あと一歩の組み合わせ）の数で効かせる
+const NEAR   = { 1:3, 2:5, 3:8, 4:11, 5:14, 6:18, 0:18 }[DOW];
+const MINUSN = { 1:2, 2:2, 3:3, 4:3, 5:4, 6:4, 0:4 }[DOW];
+const LVNAME = { 1:'やさしい', 2:'やさしい', 3:'ふつう', 4:'ふつう',
+                 5:'すこし手ごわい', 6:'手ごわい', 0:'手ごわい' }[DOW];
+document.getElementById('today').textContent = Y + '年' + M + '月' + D + '日（' + WD + '）の問題';
+document.getElementById('lv').textContent = '今日の手ごたえ　' + LVNAME;
+
+// ================= 日付で固定の乱数 =================
+function mulberry32(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const rng = mulberry32(Y * 10000 + M * 100 + D + 7);
+const ri = (a, b) => a + Math.floor(rng() * (b - a + 1));
+
+// 5列の並べ方 120通りを先に用意する
+const PERMS = (function(){
+  const out = [];
+  (function rec(left, acc){
+    if (!left.length){ out.push(acc.slice()); return; }
+    for (let i = 0; i < left.length; i++){
+      const n = left.slice(); const v = n.splice(i, 1)[0];
+      acc.push(v); rec(n, acc); acc.pop();
+    }
+  })([0,1,2,3,4], []);
+  return out;
+})();
+
+// ================= 問題をつくる =================
+// 目標額に届く並べ方がちょうど1通りだけになるまで作り直す
+let G = [], TARGET = 0, ANSWER = null;
+(function make(){
+  for (let attempt = 0; attempt < 6000; attempt++){
+    const g = [];
+    for (let i = 0; i < 25; i++) g.push(ri(6, 96) * 10);   // 60円〜960円
+    // 値引きマス（重ならない位置に散らす）
+    const spots = [...Array(25).keys()];
+    for (let i = spots.length - 1; i > 0; i--){
+      const j = Math.floor(rng() * (i + 1)); [spots[i], spots[j]] = [spots[j], spots[i]];
+    }
+    for (let k = 0; k < MINUSN; k++) g[spots[k]] = -ri(5, 34) * 10;  // 値引き50〜340円
+
+    // 120通りぶんの合計を出す
+    const sums = PERMS.map(p => p.reduce((a, c, r) => a + g[r * 5 + c], 0));
+    const tally = {};
+    sums.forEach(s => tally[s] = (tally[s] || 0) + 1);
+
+    // 1通りしかない合計を目標にする。ただし「あと一歩」が十分にある問題を選ぶ
+    const singles = [];
+    for (let i = 0; i < sums.length; i++) if (tally[sums[i]] === 1) singles.push(i);
+    for (let i = singles.length - 1; i > 0; i--){
+      const j = Math.floor(rng() * (i + 1)); [singles[i], singles[j]] = [singles[j], singles[i]];
+    }
+    for (const idx of singles){
+      const t = sums[idx];
+      const p = PERMS[idx].join('');
+      if (p === '01234' || p === '43210') continue;  // 答えが対角線だと見た目で気づかれる
+      if (t < 800) continue;                         // 小さすぎる目標は避ける
+      const near = sums.filter(s => s !== t && Math.abs(s - t) <= 150).length;
+      if (near < NEAR) continue;                     // 惜しい組み合わせが少ない=簡単すぎ
+      G = g; TARGET = t; ANSWER = PERMS[idx];
+      return;
+    }
+  }
+  // ここに来ることはまずないが、来たら条件をゆるめて必ず1問返す
+  const g = [];
+  for (let i = 0; i < 25; i++) g.push(ri(6, 96) * 10);
+  const sums = PERMS.map(p => p.reduce((a, c, r) => a + g[r * 5 + c], 0));
+  const tally = {};
+  sums.forEach(s => tally[s] = (tally[s] || 0) + 1);
+  const idx = sums.findIndex(s => tally[s] === 1);
+  G = g; TARGET = sums[idx]; ANSWER = PERMS[idx];
+})();
+
+// ================= 状態 =================
+// pick[行] = 列番号 または -1
+let pick = new Array(5).fill(-1);
+let order = [];          // 選んだ順（1つ戻す用）
+let sec = 0, timer = null, tries = 0, hints = 0, finished = false;
+
+const saved = localStorage.getItem(KEY);
+if (saved){
+  try{
+    const s = JSON.parse(saved);
+    if (s.pick && s.pick.length === 5){
+      pick = s.pick; order = s.order || []; sec = s.sec || 0;
+      tries = s.tries || 0; hints = s.hints || 0;
+    }
+  }catch(e){}
+}
+const save = () => localStorage.setItem(KEY, JSON.stringify({ pick, order, sec, tries, hints }));
+
+const yen = n => (n < 0 ? '-' : '') + Math.abs(n).toLocaleString() + '円';
+const chosen = () => order.length;
+const total = () => pick.reduce((a, c, r) => a + (c < 0 ? 0 : G[r * 5 + c]), 0);
+
+// ================= 表示 =================
+function draw(target){
+  const el = document.getElementById(target || 'bd');
+  const usedCol = new Set(pick.filter(c => c >= 0));
+  let h = '';
+  for (let r = 0; r < 5; r++) for (let c = 0; c < 5; c++){
+    const v = G[r * 5 + c];
+    let cl = 'cell' + (v < 0 ? ' minus' : '');
+    const isOn = pick[r] === c;
+    if (isOn) cl += ' on';
+    else if (!finished && (pick[r] >= 0 || usedCol.has(c))) cl += ' dim';
+    h += '<button class="' + cl + '" data-r="' + r + '" data-c="' + c + '">' +
+         (v < 0 ? '-' + Math.abs(v).toLocaleString() : v.toLocaleString()) +
+         (v < 0 ? '<small>値引き</small>' : '<small>&nbsp;</small>') + '</button>';
+  }
+  el.innerHTML = h;
+  if (target !== 'bd2'){
+    el.querySelectorAll('.cell').forEach(b => {
+      b.onclick = () => tap(+b.dataset.r, +b.dataset.c);
+    });
+    const t = total(), d = TARGET - t;
+    document.getElementById('sum').textContent = yen(t);
+    const dl = document.getElementById('diff');
+    if (chosen() === 0){ dl.textContent = ''; }
+    else if (d === 0 && chosen() === 5){ dl.textContent = 'ぴったり'; dl.style.color = 'var(--grn)'; }
+    else { dl.textContent = (d > 0 ? 'あと ' + yen(d) : yen(-d) + ' 多い'); dl.style.color = 'var(--sub)'; }
+    document.getElementById('prog').textContent =
+      '選んだマス ' + chosen() + ' / 5　　ためした回数 ' + tries + '　　' +
+      ((sec / 60) | 0) + '分' + String(sec % 60).padStart(2, '0') + '秒';
+  }
+}
+
+// ================= 操作 =================
+function tap(r, c){
+  if (finished) return;
+  if (pick[r] === c){                       // 選び直し
+    pick[r] = -1; order = order.filter(x => x !== r);
+    hideAlert(); save(); draw(); return;
+  }
+  if (pick[r] >= 0){ toast('その行はもう選んでいます。押して外してから選び直せます'); return; }
+  if (pick.includes(c)){ toast('その列はもう使っています'); return; }
+  pick[r] = c; order.push(r);
+  hideAlert(); save(); draw();
+  if (chosen() === 5) judge();
+}
+function undo(){
+  if (!order.length) return;
+  pick[order.pop()] = -1; hideAlert(); save(); draw();
+}
+function clearAll(){
+  pick = new Array(5).fill(-1); order = []; hideAlert(); save(); draw();
+}
+function giveHint(){
+  const free = [...Array(5).keys()].filter(r => pick[r] !== ANSWER[r]);
+  if (!free.length){ toast('もう全部そろっています'); return; }
+  const r = free[0];
+  // その行を正解にし、同じ列を使っている別の行は外す
+  const c = ANSWER[r];
+  for (let k = 0; k < 5; k++) if (pick[k] === c && k !== r){ pick[k] = -1; order = order.filter(x => x !== k); }
+  if (pick[r] < 0) order.push(r);
+  pick[r] = c; hints++;
+  hideAlert(); save(); draw();
+  toast((r + 1) + '行目だけ開けました');
+  if (chosen() === 5) judge();
+}
+function judge(){
+  const t = total();
+  if (t === TARGET){ finish(); return; }
+  tries++;
+  const d = TARGET - t;
+  showAlert('5つそろいましたが、' + (d > 0 ? yen(d) + ' 足りません。' : yen(-d) + ' 多いです。') +
+            'どれか1つを選び直してください。');
+  save(); draw();
+}
+function showAlert(t){ const a = document.getElementById('al'); a.textContent = t; a.classList.add('show'); }
+function hideAlert(){ document.getElementById('al').classList.remove('show'); }
+
+let tt = null;
+function toast(t){
+  const el = document.getElementById('toast');
+  el.textContent = t; el.classList.add('show');
+  clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 1700);
+}
+
+// ================= 進行 =================
+const fmt = s => ((s / 60) | 0) + '分' + String(s % 60).padStart(2, '0') + '秒';
+function start(){
+  document.getElementById('p0').classList.add('hide');
+  document.getElementById('p1').classList.remove('hide');
+  document.getElementById('target').textContent = yen(TARGET);
+  draw();
+  clearInterval(timer);
+  timer = setInterval(() => { sec++; if (sec % 5 === 0) save(); draw(); }, 1000);
+}
+function finish(){
+  finished = true; clearInterval(timer);
+  document.getElementById('p1').classList.add('hide');
+  document.getElementById('p2').classList.remove('hide');
+  document.getElementById('result').textContent =
+    fmt(sec) + '　やり直し' + tries + '回' + (hints ? '　ヒント' + hints + '回' : '');
+  document.getElementById('sharetext').textContent =
+    'ぴたり合計 ' + M + '/' + D + '（' + LVNAME + '）\n' +
+    '目標 ' + yen(TARGET) + '\n' +
+    fmt(sec) + '／やり直し' + tries + '回' + (hints ? '／ヒント' + hints + '回' : '') + '\n' +
+    location.href;
+  draw('bd2');
+  save(); window.scrollTo(0, 0);
+}
+function copyShare(){
+  const t = document.getElementById('sharetext').textContent;
+  const done = () => toast('コピーしました');
+  const fallback = () => {
+    const ta = document.createElement('textarea');
+    ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }
+    catch(e){ toast('下の文章を長押しでコピーしてください'); }
+    document.body.removeChild(ta);
+  };
+  if (navigator.clipboard && location.protocol !== 'file:'){
+    navigator.clipboard.writeText(t).then(done, fallback);
+  } else fallback();
+}
+
+// 途中まで進んでいたら開始画面を飛ばす
+if (order.length) start();
+</script>
+</body>
+</html>

@@ -19,6 +19,8 @@
   gtag('js', new Date());
   gtag('config', 'G-8Q45D6XVQZ');
   gtag('event', 'generate_lead', { lead_type: 'contact_form' });
+  /* 送信がFormspreeに受理された時だけこのページに来る。キーイベントはここで数える。 */
+  gtag('event', 'contact_submit', { lead_type: 'contact_form' });
 </script>
 <style>
   :root{--paper:#f5f4f0;--ink:#101218;--muted:#697080;--line:rgba(16,18,24,0.14);--accent:#2563eb;--marker:#ffe45c;}

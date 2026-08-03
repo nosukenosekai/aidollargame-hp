@@ -19,6 +19,8 @@
   gtag('js', new Date());
   gtag('config', 'G-8Q45D6XVQZ');
   gtag('event', 'generate_lead', { lead_type: 'shiryo_download' });
+  /* 資料DLがFormspreeに受理された時だけこのページに来る。キーイベントはここで数える。 */
+  gtag('event', 'shiryo_lead', { lead_type: 'shiryo_download' });
 </script>
 <style>
   :root{--paper:#f5f4f0;--ink:#101218;--muted:#697080;--line:rgba(16,18,24,0.14);--accent:#2563eb;--marker:#ffe45c;}

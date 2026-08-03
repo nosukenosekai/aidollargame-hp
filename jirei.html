@@ -82,10 +82,11 @@
   <div class="case">
     <div class="case-head"><span class="case-no">CASE 01</span><span class="case-tag">介護事業者</span></div>
     <div class="case-title">全国の特別養護老人ホームを、条件で探せる検索AIを納品</div>
-    <div class="case-row"><span class="k">課題</span><span class="v">全国の特養を条件で探すのに、厚生労働省の公開データを担当者が手作業で照合していた。目的の施設を絞り込むだけで時間がかかっていた。</span></div>
-    <div class="case-row"><span class="k">実施したこと</span><span class="v">厚生労働省の公開データ（<strong>約8,500件</strong>）を取り込み、地域や条件で絞り込める検索AIを開発。介護事業者向けに納品し、<strong>本番運用中</strong>です。</span></div>
-    <div class="case-row"><span class="k">変わったこと</span><span class="v">一覧との手作業の照合が不要になり、条件に合う候補をその場で提示できるようになりました。</span></div>
-    <div class="case-row"><span class="k">使った技術</span><span class="v">公開データ×AI（RAG）／外部サービスに依存しない構成</span></div>
+    <div class="case-row"><span class="k">課題</span><span class="v">全国に1万件近い特養があり、ご家族の希望（地域・費用感・入居のしやすさなど）に合う施設を探すのに、担当者が厚生労働省の公開データや複数のサイトを手作業で照合していました。相談のたびに時間がかかり、対応できる件数も、探せる人も限られていました。</span></div>
+    <div class="case-row"><span class="k">実施したこと</span><span class="v">厚生労働省が公開する全国の特養データ（<strong>約8,500件</strong>）を取り込み、地域や条件で絞り込める検索AIを開発。担当者が自然な言葉で相談を入力すると、公開データにもとづいて候補を提示します（RAG）。クラウド上にデプロイし、<strong>合言葉つきで介護事業者が日常的に使える形</strong>で納品。現在も本番運用と保守を継続しています。</span></div>
+    <div class="case-row"><span class="k">こだわった点</span><span class="v">AIが思い込みで施設を勧めないよう、回答は<strong>厚生労働省の公開データを根拠にする設計</strong>にしています。介護という領域だけに、事実にないことを言わせないことを最優先にしました。</span></div>
+    <div class="case-row"><span class="k">変わったこと</span><span class="v">公開データとの手作業の照合が不要になり、条件に合う候補をその場で提示できるように。特定の担当者に頼っていた施設探しを、人が変わっても同じ品質でこなせる形になりました。</span></div>
+    <div class="case-row"><span class="k">使った技術</span><span class="v">厚生労働省の公開データ × 生成AI（RAG）。回答の根拠を公開データに限定する構成。</span></div>
   </div>
 
   <h2>自社での活用・開発</h2>

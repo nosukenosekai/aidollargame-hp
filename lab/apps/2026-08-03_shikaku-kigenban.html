@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>しかく期限番｜資格の切れる日と次の講習日程をまとめて見る</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#e2e0da; --ink:#1a1a1a; --sub:#6b6b6b;
+         --red:#b91c1c; --amb:#b45309; --grn:#15803d; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.7; }
+  .wrap{ max-width:720px; margin:0 auto; padding:14px 14px 60px; }
+  .demo{ font-size:12px; color:var(--sub); letter-spacing:.04em; margin-bottom:10px; }
+  h1{ font-size:26px; margin:0 0 6px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:15px; margin:0 0 18px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px; }
+  .card h2{ font-size:18px; margin:0 0 12px; }
+  .sum{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
+  .sum div{ background:#fff; border:1px solid var(--line); border-radius:12px;
+    padding:10px 6px; text-align:center; }
+  .sum b{ display:block; font-size:24px; line-height:1.3; }
+  .sum span{ font-size:11px; color:var(--sub); }
+  .filters{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+  .chip{ font-size:14px; padding:7px 14px; border-radius:999px; border:1px solid var(--line);
+    background:#fff; cursor:pointer; font-family:inherit; }
+  .chip.on{ background:var(--ac); color:#fff; border-color:var(--ac); }
+  .row{ display:flex; align-items:center; gap:12px; padding:12px; border:1px solid var(--line);
+    border-radius:12px; margin-bottom:8px; background:#fff; width:100%; text-align:left;
+    font:inherit; cursor:pointer; }
+  .row:hover{ border-color:var(--ac); }
+  .dot{ width:10px; height:10px; border-radius:50%; flex:none; }
+  .row .nm{ flex:1; font-size:16px; }
+  .row .nm span{ display:block; font-size:13px; color:var(--sub); }
+  .row .dd{ font-size:13px; white-space:nowrap; font-weight:600; }
+  .detail{ border:1px solid var(--line); border-radius:14px; background:#fff; padding:16px; }
+  .kv{ display:flex; justify-content:space-between; gap:12px; padding:8px 0;
+    border-bottom:1px solid var(--line); font-size:15px; }
+  .kv span:first-child{ color:var(--sub); font-size:14px; }
+  .course{ border:1px solid var(--line); border-radius:12px; padding:12px; margin-top:10px; }
+  .course b{ font-size:15px; }
+  .course .m{ font-size:13px; color:var(--sub); }
+  button.b{ background:var(--ac); color:#fff; border:0; border-radius:10px; padding:12px 18px;
+    font-size:16px; font-weight:600; cursor:pointer; font-family:inherit; }
+  button.g{ background:#fff; color:var(--ac); border:1px solid var(--ac); }
+  .note{ font-size:13px; color:var(--sub); margin-top:10px; }
+  .hide{ display:none; }
+  .warn{ background:#fdf6ec; border:1px solid #f0dcc0; border-radius:12px; padding:12px;
+    font-size:14px; margin-top:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demo">デモ（サンプルデータ）</div>
+  <h1>しかく期限番</h1>
+  <p class="lead">職人ひとりひとりの資格が切れる日をまとめて持ち、切れる前に受けられる講習の日程を出します。現場に出せない人が出てから慌てるのをやめます。</p>
+
+  <section id="p1">
+    <div class="sum">
+      <div><b style="color:var(--red)" id="c1">0</b><span>切れている</span></div>
+      <div><b style="color:var(--amb)" id="c2">0</b><span>3か月以内</span></div>
+      <div><b style="color:var(--grn)" id="c3">0</b><span>余裕あり</span></div>
+    </div>
+    <div class="card">
+      <h2>資格の一覧（丸和建設工業／デモ用の架空会社）</h2>
+      <div class="filters" id="fil"></div>
+      <div id="rows"></div>
+      <p class="note">基準日は2026年8月3日。行を押すと、次に受けられる講習の日程が出ます。</p>
+    </div>
+  </section>
+
+  <section id="p2" class="hide">
+    <div class="card">
+      <h2 id="dt"></h2>
+      <div class="detail">
+        <div class="kv"><span>本人</span><span id="d1"></span></div>
+        <div class="kv"><span>資格</span><span id="d2"></span></div>
+        <div class="kv"><span>切れる日</span><span id="d3"></span></div>
+        <div class="kv"><span>切れたらできなくなる作業</span><span id="d4" style="text-align:right"></span></div>
+      </div>
+      <div class="warn" id="w"></div>
+      <h2 style="margin:18px 0 4px">受けられる講習</h2>
+      <div id="courses"></div>
+      <p class="note">日程と受講料は各実施団体が公開しているものを集めたイメージです。実際の申込みは団体の窓口で行います。</p>
+      <div style="margin-top:14px"><button class="b g" onclick="go(1)">一覧に戻る</button></div>
+    </div>
+  </section>
+</div>
+
+<script>
+// ===== サンプルデータ（すべて架空）=====
+const TODAY = new Date(2026, 7, 3);
+const PEOPLE = [
+  { p:'井上 健三', q:'車両系建設機械（整地等）運転技能講習', end:'2026-07-20',
+    work:'バックホウ・ブルドーザーの運転', kind:'技能講習' },
+  { p:'松永 悟',   q:'足場の組立て等作業主任者 能力向上教育', end:'2026-08-28',
+    work:'足場作業の指揮・点検', kind:'特別教育' },
+  { p:'久保 大輝', q:'玉掛け技能講習（再教育）', end:'2026-09-14',
+    work:'クレーンでの荷のかけ外し', kind:'技能講習' },
+  { p:'井上 健三', q:'職長・安全衛生責任者 再教育', end:'2026-10-30',
+    work:'新規入場者への安全指示', kind:'特別教育' },
+  { p:'斉藤 みのり', q:'酸素欠乏危険作業 特別教育', end:'2026-11-19',
+    work:'ピット・マンホール内の作業', kind:'特別教育' },
+  { p:'松永 悟',   q:'高所作業車運転技能講習（再教育）', end:'2027-02-08',
+    work:'10m以上の高所作業車の運転', kind:'技能講習' },
+  { p:'久保 大輝', q:'フルハーネス型墜落制止用器具 特別教育', end:'2027-04-22',
+    work:'高さ2m以上でのハーネス作業', kind:'特別教育' },
+  { p:'斉藤 みのり', q:'石綿作業主任者 技能講習', end:'2027-06-30',
+    work:'解体時の石綿ばく露防止の指揮', kind:'技能講習' },
+];
+const COURSES = {
+  '技能講習':[
+    { n:'県央労働技能センター', d:'8月19日〜21日（3日間）', f:'受講料 3万2千円', s:'残り4席' },
+    { n:'南部安全教育協会',     d:'9月2日〜4日（3日間）',   f:'受講料 2万9千円', s:'残り11席' },
+    { n:'中央建設技能研修所',   d:'9月24日〜26日（3日間）', f:'受講料 3万5千円', s:'空きあり' },
+  ],
+  '特別教育':[
+    { n:'県央労働技能センター', d:'8月12日（1日）', f:'受講料 1万1千円', s:'残り7席' },
+    { n:'オンライン講座（自社PCで受講）', d:'いつでも開始できます', f:'受講料 8千円', s:'定員なし' },
+    { n:'南部安全教育協会',     d:'9月9日（1日）',  f:'受講料 1万2千円', s:'空きあり' },
+  ],
+};
+
+let filter = 'all', sel = 0;
+
+function days(s){
+  const [y,m,d] = s.split('-').map(Number);
+  return Math.round((new Date(y, m-1, d) - TODAY) / 86400000);
+}
+function stat(s){ const n = days(s); return n < 0 ? 0 : (n <= 92 ? 1 : 2); }
+const COL = ['var(--red)','var(--amb)','var(--grn)'];
+function label(s){
+  const n = days(s);
+  if (n < 0) return (-n) + '日 超過';
+  return 'あと' + n + '日';
+}
+function jp(s){ const [y,m,d] = s.split('-').map(Number); return y + '年' + m + '月' + d + '日'; }
+
+function draw(){
+  const cnt = [0,0,0];
+  PEOPLE.forEach(x => cnt[stat(x.end)]++);
+  document.getElementById('c1').textContent = cnt[0];
+  document.getElementById('c2').textContent = cnt[1];
+  document.getElementById('c3').textContent = cnt[2];
+
+  const names = ['all'].concat([...new Set(PEOPLE.map(x => x.p))]);
+  document.getElementById('fil').innerHTML = names.map(n =>
+    '<button class="chip' + (filter === n ? ' on' : '') + '" onclick="setF(\'' + n + '\')">' +
+    (n === 'all' ? '全員' : n) + '</button>'
+  ).join('');
+
+  const list = PEOPLE
+    .map((x, i) => ({ ...x, i }))
+    .filter(x => filter === 'all' || x.p === filter)
+    .sort((a, b) => days(a.end) - days(b.end));
+
+  document.getElementById('rows').innerHTML = list.map(x =>
+    '<button class="row" onclick="open_(' + x.i + ')">' +
+    '<div class="dot" style="background:' + COL[stat(x.end)] + '"></div>' +
+    '<div class="nm">' + x.q + '<span>' + x.p + '／' + jp(x.end) + 'まで</span></div>' +
+    '<div class="dd" style="color:' + COL[stat(x.end)] + '">' + label(x.end) + '</div></button>'
+  ).join('');
+}
+
+function setF(n){ filter = n; draw(); }
+
+function open_(i){
+  sel = i;
+  const x = PEOPLE[i];
+  document.getElementById('dt').textContent = x.p + ' さん';
+  document.getElementById('d1').textContent = x.p;
+  document.getElementById('d2').textContent = x.q;
+  document.getElementById('d3').textContent = jp(x.end) + '（' + label(x.end) + '）';
+  document.getElementById('d4').textContent = x.work;
+  const st = stat(x.end);
+  document.getElementById('w').textContent = st === 0
+    ? '期限を過ぎています。この作業には今すぐ就かせられません。代わりの有資格者を立てるか、直近の講習をおさえてください。'
+    : st === 1
+      ? '3か月以内に切れます。この時期の講習は満席になりやすいので、今のうちに席をおさえておくと安全です。'
+      : 'まだ余裕があります。次の更新月に合わせて、ほかの人ぶんとまとめて申し込むと移動と休みの調整が1回で済みます。';
+  document.getElementById('courses').innerHTML = COURSES[x.kind].map(c =>
+    '<div class="course"><b>' + c.n + '</b><div class="m">' + c.d + '／' + c.f + '／' + c.s + '</div></div>'
+  ).join('');
+  go(2);
+}
+
+function go(n){
+  document.getElementById('p1').classList.toggle('hide', n !== 1);
+  document.getElementById('p2').classList.toggle('hide', n !== 2);
+  window.scrollTo(0, 0);
+}
+
+draw();
+</script>
+</body>
+</html>

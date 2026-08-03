@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>やめそうアラート｜やめる前の生徒に気づいて声をかける</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#e2e0da; --ink:#1a1a1a; --sub:#6b6b6b;
+         --red:#b91c1c; --amb:#b45309; --grn:#15803d; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.7; }
+  .wrap{ max-width:720px; margin:0 auto; padding:14px 14px 60px; }
+  .demo{ font-size:12px; color:var(--sub); letter-spacing:.04em; margin-bottom:10px; }
+  h1{ font-size:26px; margin:0 0 6px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:15px; margin:0 0 18px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px; }
+  .card h2{ font-size:18px; margin:0 0 12px; }
+  .hero{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px;
+    margin-bottom:14px; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  .hero b{ font-size:30px; color:var(--red); line-height:1.2; }
+  .hero span{ font-size:14px; color:var(--sub); }
+  .row{ display:flex; align-items:center; gap:12px; padding:12px; border:1px solid var(--line);
+    border-radius:12px; margin-bottom:8px; background:#fff; width:100%; text-align:left;
+    font:inherit; cursor:pointer; }
+  .row:hover{ border-color:var(--ac); }
+  .score{ width:46px; height:46px; border-radius:12px; flex:none; display:flex;
+    align-items:center; justify-content:center; font-weight:700; font-size:17px; color:#fff; }
+  .row .nm{ flex:1; font-size:16px; }
+  .row .nm span{ display:block; font-size:13px; color:var(--sub); }
+  .bars{ display:flex; flex-direction:column; gap:8px; margin:6px 0 4px; }
+  .bar{ display:flex; align-items:center; gap:10px; font-size:14px; }
+  .bar .lb{ width:120px; flex:none; color:var(--sub); font-size:13px; }
+  .bar .tr{ flex:1; height:10px; background:#eceae4; border-radius:999px; overflow:hidden; }
+  .bar .tr i{ display:block; height:10px; border-radius:999px; }
+  .bar .vl{ width:52px; text-align:right; font-size:13px; }
+  .why{ background:#faf9f6; border:1px solid var(--line); border-radius:12px;
+    padding:12px; font-size:15px; margin-top:12px; }
+  .why li{ margin:4px 0; }
+  .msg{ background:#f7faff; border:1px solid #d8e4fb; border-radius:12px; padding:14px;
+    font-size:15px; white-space:pre-wrap; margin-top:12px; }
+  .tabs{ display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+  .chip{ font-size:14px; padding:7px 14px; border-radius:999px; border:1px solid var(--line);
+    background:#fff; cursor:pointer; font-family:inherit; }
+  .chip.on{ background:var(--ac); color:#fff; border-color:var(--ac); }
+  button.b{ background:var(--ac); color:#fff; border:0; border-radius:10px; padding:12px 18px;
+    font-size:16px; font-weight:600; cursor:pointer; font-family:inherit; }
+  button.g{ background:#fff; color:var(--ac); border:1px solid var(--ac); }
+  .note{ font-size:13px; color:var(--sub); margin-top:10px; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demo">デモ（サンプルデータ）</div>
+  <h1>やめそうアラート</h1>
+  <p class="lead">出席・宿題・保護者との連絡から「そろそろやめそう」を見つけて、先生が声をかける文まで用意します。やめると言われてからでは遅いので、その前に気づきます。</p>
+
+  <section id="p1">
+    <div class="hero">
+      <b>3人</b>
+      <span>今月やめそうな生徒。月謝2万8千円で計算すると、年でおよそ100万円ぶんにあたります（デモ用の架空数値）</span>
+    </div>
+    <div class="card">
+      <h2>気になる順（個別指導まなび塾／架空）</h2>
+      <div id="rows"></div>
+      <p class="note">生徒を押すと、なぜそう出たかと、声かけの下書きが見られます。点数は目安で、最後に決めるのは先生です。</p>
+    </div>
+  </section>
+
+  <section id="p2" class="hide">
+    <div class="card">
+      <h2 id="nm"></h2>
+      <p class="note" style="margin:0 0 12px" id="mt"></p>
+      <div class="bars" id="bars"></div>
+      <div class="why"><div style="font-size:13px; color:var(--sub); margin-bottom:4px">こう見ています</div><ul style="margin:0; padding-left:20px" id="why"></ul></div>
+
+      <h2 style="margin:20px 0 4px">声かけの下書き</h2>
+      <div class="tabs" id="tabs"></div>
+      <div class="msg" id="msg"></div>
+      <p class="note">送るかどうかと、送る前の書き直しは先生が決めます。このデモから実際に送信されることはありません。</p>
+
+      <div style="margin-top:14px"><button class="b g" onclick="go(1)">一覧に戻る</button></div>
+    </div>
+  </section>
+</div>
+
+<script>
+// ===== サンプルデータ（すべて架空）=====
+const S = [
+  { n:'小林 ゆうと', g:'中2・数学／英語', score:82, since:'通塾1年4か月',
+    f:{ '出席':28, '宿題の提出':22, '小テストの点':45, '保護者との連絡':15 },
+    why:[ '直近4回のうち2回が当日欠席。以前は1年間で欠席1回でした',
+          '宿題の提出が3週続けて途中まで',
+          '6月の面談以降、保護者からの連絡が止まっています' ],
+    msgs:{
+      '保護者へ':'いつもお世話になっております。個別指導まなび塾です。\n\nゆうとくんですが、7月に入ってから宿題が途中までのことが増えてきました。教室では変わらず前向きに取り組んでくれていますが、部活の時間帯が変わって家での時間の取り方が難しくなっているのかもしれません。\n\n曜日か時間帯の組み替えができるかもしれませんので、一度10分ほどお電話でお話しできませんでしょうか。今週でしたら木曜と金曜の18時以降が空いております。',
+      '本人へ':'ゆうとくん、こんにちは。\n\n最近ちょっと宿題が重たそうだったので、次回は量を減らして、そのぶん教室で一緒に解く時間を長めに取ろうと思います。\n\n部活で疲れている日は「今日はきつい」と言ってくれて大丈夫です。やり方のほうを合わせます。',
+      '教室でのひとこと':'次回いちばんに、「部活の時間、変わった？」と聞いてみてください。宿題が減っている原因が家の時間なのか、内容が難しいのかで、打ち手が変わります。'
+    }},
+  { n:'安西 みなみ', g:'小5・算数', score:74, since:'通塾8か月',
+    f:{ '出席':40, '宿題の提出':60, '小テストの点':18, '保護者との連絡':35 },
+    why:[ '小テストが5回続けて下がっています（78点から42点まで）',
+          '出席と宿題はきちんと続いているので、内容が急に難しくなった可能性が高いです',
+          '割合の単元に入った時期と下がり始めた時期が重なります' ],
+    msgs:{
+      '保護者へ':'いつもお世話になっております。個別指導まなび塾です。\n\nみなみさんは毎回きちんと通ってくれていて、宿題も欠かさず出してくれています。そのうえで6月後半から小テストの点が下がっており、割合の単元でつまずいているように見えます。\n\n本人のがんばりの問題ではないので、8月の間に4年生の内容まで一度戻って組み直したいと考えております。追加の費用はかかりません。ご都合のよいときにご連絡いただけますでしょうか。',
+      '本人へ':'みなみさん、いつも宿題ありがとう。\n\n今のテストの点は、みなみさんのせいじゃなくて、割合のところが急に難しくなっているからです。8月はそこを最初から一緒にやり直します。\n\n分からないところで手が止まったら、そのまま置いておいて大丈夫。次の日に一緒に見ます。',
+      '教室でのひとこと':'点数の話から入らないでください。「割合のところ、みんな止まるところだよ」と先に言ってあげると、来週も来てくれます。'
+    }},
+  { n:'寺内 かえで', g:'中3・5教科', score:61, since:'通塾2年1か月',
+    f:{ '出席':55, '宿題の提出':50, '小テストの点':62, '保護者との連絡':22 },
+    why:[ '受験学年に入って振替の申し出が増えています（今月3回）',
+          '他塾の夏期講習の時期と重なっています',
+          '前回の面談から2か月、志望校の話ができていません' ],
+    msgs:{
+      '保護者へ':'いつもお世話になっております。個別指導まなび塾です。\n\nかえでさんは3年生になってから、部活と両立しながらよく通ってくれています。夏以降の進め方について、志望校を前提に組み直したいと考えております。\n\n9月からの時間割を決める前に、一度30分ほど面談のお時間をいただけませんでしょうか。今の学力での見通しと、ここから伸ばせるところを具体的にお伝えします。',
+      '本人へ':'かえでさん、部活と両立しながらよく続けていると思います。\n\n夏からは志望校に合わせて、教科の配分を変えようと思っています。次回、行きたい学校の話を10分だけ聞かせてください。そこから逆算して組み直します。',
+      '教室でのひとこと':'受験学年の振替増加は、他塾を見に行っているサインのことが多いです。まず志望校の話を先にして、うちで通う理由をはっきりさせてください。'
+    }},
+  { n:'長谷 そら', g:'中1・英語', score:24, since:'通塾5か月',
+    f:{ '出席':88, '宿題の提出':82, '小テストの点':76, '保護者との連絡':70 },
+    why:[ '出席・宿題・小テストのどれも安定しています',
+          '4月からの伸びが続いています',
+          '特に手当ては要りません' ],
+    msgs:{
+      '保護者へ':'いつもお世話になっております。個別指導まなび塾です。\n\nそらくんは4月から順調に伸びています。英語が形になってきたので、9月からもう1教科を足すかどうか、一度ご相談させてください。',
+      '本人へ':'そらくん、英語よく伸びています。この調子で続けましょう。',
+      '教室でのひとこと':'順調です。次の面談で教科追加の話を出せます。'
+    }},
+];
+
+let sel = 0, tab = '保護者へ';
+
+function col(v){ return v >= 70 ? 'var(--red)' : (v >= 45 ? 'var(--amb)' : 'var(--grn)'); }
+
+function draw(){
+  document.getElementById('rows').innerHTML = S
+    .map((x, i) => ({ ...x, i }))
+    .sort((a, b) => b.score - a.score)
+    .map(x =>
+      '<button class="row" onclick="open_(' + x.i + ')">' +
+      '<div class="score" style="background:' + col(x.score) + '">' + x.score + '</div>' +
+      '<div class="nm">' + x.n + '<span>' + x.g + '／' + x.since + '</span></div></button>'
+    ).join('');
+}
+
+function open_(i){
+  sel = i; tab = '保護者へ';
+  const x = S[i];
+  document.getElementById('nm').textContent = x.n + ' さん';
+  document.getElementById('mt').textContent = x.g + '／' + x.since + '／やめそう度 ' + x.score;
+  document.getElementById('bars').innerHTML = Object.keys(x.f).map(k => {
+    const v = x.f[k];
+    return '<div class="bar"><div class="lb">' + k + '</div>' +
+      '<div class="tr"><i style="width:' + v + '%; background:' +
+      (v >= 70 ? 'var(--grn)' : v >= 40 ? 'var(--amb)' : 'var(--red)') + '"></i></div>' +
+      '<div class="vl">' + v + '点</div></div>';
+  }).join('');
+  document.getElementById('why').innerHTML = x.why.map(w => '<li>' + w + '</li>').join('');
+  drawMsg();
+  go(2);
+}
+
+function drawMsg(){
+  const x = S[sel];
+  document.getElementById('tabs').innerHTML = Object.keys(x.msgs).map(k =>
+    '<button class="chip' + (k === tab ? ' on' : '') + '" onclick="setTab(\'' + k + '\')">' + k + '</button>'
+  ).join('');
+  document.getElementById('msg').textContent = x.msgs[tab];
+}
+function setTab(k){ tab = k; drawMsg(); }
+
+function go(n){
+  document.getElementById('p1').classList.toggle('hide', n !== 1);
+  document.getElementById('p2').classList.toggle('hide', n !== 2);
+  window.scrollTo(0, 0);
+}
+
+draw();
+</script>
+</body>
+</html>

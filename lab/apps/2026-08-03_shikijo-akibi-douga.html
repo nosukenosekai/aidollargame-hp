@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>式場あき日動画｜空いた日程を告知動画にして埋める</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#e2e0da; --ink:#1a1a1a; --sub:#6b6b6b; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.7; }
+  .wrap{ max-width:720px; margin:0 auto; padding:14px 14px 60px; }
+  .demo{ font-size:12px; color:var(--sub); letter-spacing:.04em; margin-bottom:10px; }
+  h1{ font-size:26px; margin:0 0 6px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:15px; margin:0 0 18px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px; }
+  .card h2{ font-size:18px; margin:0 0 12px; }
+  .step{ display:flex; gap:8px; margin-bottom:16px; }
+  .step div{ flex:1; text-align:center; font-size:12px; color:var(--sub); padding:7px 2px;
+    background:#fff; border:1px solid var(--line); border-radius:10px; }
+  .step div.on{ background:var(--ac); color:#fff; border-color:var(--ac); font-weight:600; }
+  .slot{ display:flex; align-items:center; gap:12px; padding:12px; border:1px solid var(--line);
+    border-radius:12px; margin-bottom:8px; cursor:pointer; background:#fff; width:100%;
+    text-align:left; font:inherit; }
+  .slot:hover{ border-color:var(--ac); }
+  .slot.sel{ border-color:var(--ac); background:#f7faff; }
+  .slot .d{ font-size:19px; font-weight:700; min-width:74px; }
+  .slot .d small{ display:block; font-size:12px; color:var(--sub); font-weight:400; }
+  .slot .i{ flex:1; font-size:14px; }
+  .slot .i span{ color:var(--sub); font-size:13px; display:block; }
+  button.b{ background:var(--ac); color:#fff; border:0; border-radius:10px; padding:12px 18px;
+    font-size:16px; font-weight:600; cursor:pointer; font-family:inherit; }
+  button.b:disabled{ opacity:.4; cursor:default; }
+  button.g{ background:#fff; color:var(--ac); border:1px solid var(--ac); }
+  .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+  .chip{ font-size:14px; padding:8px 14px; border-radius:999px; border:1px solid var(--line);
+    background:#fff; cursor:pointer; font-family:inherit; }
+  .chip.on{ background:var(--ac); color:#fff; border-color:var(--ac); }
+  .phone{ width:230px; margin:0 auto; border:1px solid var(--line); border-radius:18px;
+    overflow:hidden; background:#111; }
+  .screen{ position:relative; height:400px; background:#2b3a4a; }
+  .screen .bgart{ position:absolute; inset:0; }
+  .cap{ position:absolute; left:0; right:0; bottom:0; padding:16px 14px;
+    background:linear-gradient(transparent,rgba(0,0,0,.78)); color:#fff; }
+  .cap .t{ font-size:20px; font-weight:700; line-height:1.35; }
+  .cap .s{ font-size:13px; opacity:.9; margin-top:6px; }
+  .tag{ position:absolute; top:12px; left:12px; background:#fff; color:#111;
+    font-size:11px; padding:3px 9px; border-radius:999px; font-weight:600; }
+  .bar{ height:3px; background:rgba(255,255,255,.3); position:absolute; top:0; left:0; right:0; }
+  .bar i{ display:block; height:3px; background:#fff; width:0; }
+  .note{ font-size:13px; color:var(--sub); margin-top:10px; }
+  .txtbox{ background:#faf9f6; border:1px solid var(--line); border-radius:12px;
+    padding:12px; font-size:14px; white-space:pre-wrap; margin-top:12px; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demo">デモ（サンプルデータ）</div>
+  <h1>式場あき日動画</h1>
+  <p class="lead">直前に空いた挙式日を、そのままSNS用の縦動画と告知文にします。埋まらないまま流れる1日を減らします。</p>
+
+  <div class="step">
+    <div id="s1" class="on">1 あき日をえらぶ</div>
+    <div id="s2">2 見せ方をきめる</div>
+    <div id="s3">3 動画と告知文</div>
+  </div>
+
+  <section id="p1">
+    <div class="card">
+      <h2>今おさえられていない日</h2>
+      <div id="slots"></div>
+      <p class="note">予約台帳の空き枠をそのまま出しています。土曜の仏滅・平日など、埋まりにくい日ほど上に来ます。</p>
+    </div>
+  </section>
+
+  <section id="p2" class="hide">
+    <div class="card">
+      <h2>誰に向けて出しますか</h2>
+      <div class="chips" id="tones"></div>
+      <h2 style="margin-top:18px">推す内容</h2>
+      <div class="chips" id="pushes"></div>
+      <div style="margin-top:6px; display:flex; gap:8px; flex-wrap:wrap">
+        <button class="b" onclick="go(3)">動画をつくる</button>
+        <button class="b g" onclick="go(1)">日程を選び直す</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="p3" class="hide">
+    <div class="card">
+      <h2>できあがり（縦動画・15秒）</h2>
+      <div class="phone">
+        <div class="screen">
+          <div class="bar"><i id="prog"></i></div>
+          <div class="bgart" id="art"></div>
+          <div class="tag">あと1枠</div>
+          <div class="cap"><div class="t" id="vt"></div><div class="s" id="vs"></div></div>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top:12px">
+        <button class="b g" onclick="play()">もう一度再生</button>
+      </div>
+      <div class="txtbox" id="post"></div>
+      <p class="note">この動画と文章をそのままSNSに貼れます。実際の投稿は担当者が中身を見てから行います。</p>
+      <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap">
+        <button class="b g" onclick="go(2)">見せ方を変える</button>
+        <button class="b g" onclick="go(1)">最初から</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+// ===== サンプルデータ（架空の式場「ガーデンハウス青葉台」）=====
+const SLOTS = [
+  { id:0, m:'10月', d:'18', w:'土', note:'仏滅・120名まで', why:'土曜だが六曜で敬遠されがち', price:'通常より25万円ぶんお得' },
+  { id:1, m:'11月', d:'06', w:'木', note:'平日・60名まで', why:'平日の小規模枠', price:'通常より18万円ぶんお得' },
+  { id:2, m:'12月', d:'21', w:'日', note:'年末・90名まで', why:'直前キャンセルの空き', price:'通常より32万円ぶんお得' },
+];
+const TONES = [
+  { k:'少人数', label:'少人数で考えている人', line:'家族と、ごく親しい人だけで。' },
+  { k:'直前', label:'日取りを急いでいる人', line:'今年のうちに、と決めた人へ。' },
+  { k:'費用', label:'費用を抑えたい人', line:'同じ一日を、無理のない額で。' },
+];
+const PUSH = [
+  { k:'garden', label:'ガーデンの景色', art:['#4a6b4f','#7d9c72','#c2cfa8'] },
+  { k:'light',  label:'夕方の光',       art:['#5b4a6b','#a8789c','#e3b78a'] },
+  { k:'food',   label:'料理',           art:['#6b4a3a','#b08256','#ddc39a'] },
+];
+
+let sel = 0, tone = TONES[0], push = PUSH[0], timer = null;
+
+function drawSlots(){
+  document.getElementById('slots').innerHTML = SLOTS.map(s =>
+    '<button class="slot' + (s.id === sel ? ' sel' : '') + '" onclick="setSlot(' + s.id + ')">' +
+    '<div class="d">' + s.d + '<small>' + s.m + '（' + s.w + '）</small></div>' +
+    '<div class="i">' + s.note + '<span>' + s.why + '</span></div></button>'
+  ).join('');
+}
+function setSlot(i){ sel = i; drawSlots(); setTimeout(() => go(2), 120); }
+
+function drawChips(){
+  document.getElementById('tones').innerHTML = TONES.map((t,i) =>
+    '<button class="chip' + (t.k === tone.k ? ' on' : '') + '" onclick="setTone(' + i + ')">' + t.label + '</button>'
+  ).join('');
+  document.getElementById('pushes').innerHTML = PUSH.map((p,i) =>
+    '<button class="chip' + (p.k === push.k ? ' on' : '') + '" onclick="setPush(' + i + ')">' + p.label + '</button>'
+  ).join('');
+}
+function setTone(i){ tone = TONES[i]; drawChips(); }
+function setPush(i){ push = PUSH[i]; drawChips(); }
+
+function artSvg(c){
+  return '<svg viewBox="0 0 230 400" preserveAspectRatio="none" width="100%" height="100%" ' +
+    'xmlns="http://www.w3.org/2000/svg">' +
+    '<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">' +
+    '<stop offset="0%" stop-color="' + c[2] + '"/><stop offset="55%" stop-color="' + c[1] + '"/>' +
+    '<stop offset="100%" stop-color="' + c[0] + '"/></linearGradient></defs>' +
+    '<rect width="230" height="400" fill="url(#g)"/>' +
+    '<circle cx="170" cy="80" r="34" fill="#fff" opacity=".22"/>' +
+    '<path d="M0 300 Q60 250 120 290 T230 270 L230 400 L0 400 Z" fill="' + c[0] + '" opacity=".55"/>' +
+    '<path d="M0 336 Q70 300 140 328 T230 312 L230 400 L0 400 Z" fill="' + c[0] + '" opacity=".8"/>' +
+    '</svg>';
+}
+
+function build(){
+  const s = SLOTS[sel];
+  document.getElementById('art').innerHTML = artSvg(push.art);
+  document.getElementById('vt').textContent = s.m + s.d + '日（' + s.w + '）に、ひと組ぶん空きが出ました';
+  document.getElementById('vs').textContent = tone.line + ' ' + s.note.split('・')[1] + '／' + s.price;
+  document.getElementById('post').textContent =
+    '【' + s.m + s.d + '日（' + s.w + '）に空きが出ました】\n' +
+    tone.line + '\n' +
+    'ガーデンハウス青葉台（デモ用の架空式場）で、' + s.note.split('・')[1] + 'の一日です。\n' +
+    push.label + 'をいちばん気に入っていただける時間にご案内します。\n' +
+    s.price + 'の日程です。見学だけでもどうぞ。\n' +
+    '#結婚式 #' + s.m.replace('月','') + '月挙式 #少人数婚';
+  play();
+}
+
+function play(){
+  const el = document.getElementById('prog');
+  clearInterval(timer);
+  let w = 0;
+  el.style.width = '0%';
+  timer = setInterval(() => {
+    w += 2;
+    el.style.width = w + '%';
+    if (w >= 100) clearInterval(timer);
+  }, 60);
+}
+
+function go(n){
+  [1,2,3].forEach(i => {
+    document.getElementById('p' + i).classList.toggle('hide', i !== n);
+    document.getElementById('s' + i).classList.toggle('on', i === n);
+  });
+  if (n === 3) build(); else clearInterval(timer);
+  window.scrollTo(0, 0);
+}
+
+drawSlots(); drawChips();
+</script>
+</body>
+</html>

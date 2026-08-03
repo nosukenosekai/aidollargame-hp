@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>水あげカウンター｜水揚げ写真から仕切書の下書きまで</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#e2e0da; --ink:#1a1a1a; --sub:#6b6b6b; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.7; }
+  .wrap{ max-width:720px; margin:0 auto; padding:14px 14px 60px; }
+  .demo{ font-size:12px; color:var(--sub); letter-spacing:.04em; margin-bottom:10px; }
+  h1{ font-size:26px; margin:0 0 6px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:15px; margin:0 0 18px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px; }
+  .card h2{ font-size:18px; margin:0 0 12px; }
+  .step{ display:flex; gap:8px; margin-bottom:16px; }
+  .step div{ flex:1; text-align:center; font-size:12px; color:var(--sub); padding:7px 2px;
+    background:#fff; border:1px solid var(--line); border-radius:10px; }
+  .step div.on{ background:var(--ac); color:#fff; border-color:var(--ac); font-weight:600; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
+  .shot{ border:1px solid var(--line); border-radius:12px; overflow:hidden; cursor:pointer;
+    background:#fff; padding:0; text-align:left; font:inherit; width:100%; }
+  .shot:hover{ border-color:var(--ac); }
+  .shot .cap{ padding:8px 10px; font-size:13px; }
+  .shot .cap b{ display:block; font-size:14px; }
+  .shot .cap span{ color:var(--sub); font-size:12px; }
+  svg.ph{ display:block; width:100%; height:96px; background:#eceae4; }
+  button.b{ background:var(--ac); color:#fff; border:0; border-radius:10px; padding:12px 18px;
+    font-size:16px; font-weight:600; cursor:pointer; font-family:inherit; }
+  button.b:disabled{ opacity:.45; cursor:default; }
+  button.g{ background:#fff; color:var(--ac); border:1px solid var(--ac); }
+  table{ width:100%; border-collapse:collapse; font-size:15px; }
+  th,td{ padding:9px 6px; border-bottom:1px solid var(--line); text-align:left; }
+  th{ font-size:12px; color:var(--sub); font-weight:600; }
+  td.n,th.n{ text-align:right; white-space:nowrap; }
+  input.q{ width:62px; padding:6px; font-size:15px; border:1px solid var(--line);
+    border-radius:8px; text-align:right; font-family:inherit; }
+  .tot{ display:flex; justify-content:space-between; align-items:baseline; padding:14px 6px 0; }
+  .tot b{ font-size:24px; color:var(--ac); }
+  .badge{ display:inline-block; font-size:11px; background:#eef3fe; color:var(--ac);
+    padding:2px 8px; border-radius:999px; margin-left:6px; vertical-align:2px; }
+  .note{ font-size:13px; color:var(--sub); margin-top:10px; }
+  .rec{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px;
+    font-size:15px; }
+  .rec .h{ text-align:center; font-size:17px; font-weight:700; margin-bottom:4px; }
+  .rec .m{ text-align:center; color:var(--sub); font-size:12px; margin-bottom:14px; }
+  .row{ display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed var(--line); }
+  .hide{ display:none; }
+  .flag{ color:#b45309; font-size:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demo">デモ（サンプルデータ）</div>
+  <h1>水あげカウンター</h1>
+  <p class="lead">水揚げのケース写真を撮るだけ。魚種と箱数を自動で数えて、その場で仕切書の下書きにします。</p>
+
+  <div class="step">
+    <div id="s1" class="on">1 写真をえらぶ</div>
+    <div id="s2">2 数を確認</div>
+    <div id="s3">3 仕切書</div>
+  </div>
+
+  <!-- 画面1 -->
+  <section id="p1">
+    <div class="card">
+      <h2>今朝の水揚げ写真<span class="badge">みさき浦漁協</span></h2>
+      <div class="grid" id="shots"></div>
+      <p class="note">※デモでは写真の代わりに図で表示しています。実際はスマホで撮った写真をそのまま使います。</p>
+    </div>
+  </section>
+
+  <!-- 画面2 -->
+  <section id="p2" class="hide">
+    <div class="card">
+      <h2>読み取り結果</h2>
+      <p class="note" id="src" style="margin:0 0 10px"></p>
+      <table>
+        <thead><tr><th>魚種</th><th>サイズ</th><th class="n">箱数</th><th class="n">単価</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <p class="note">自信が低いものには「要確認」が付きます。箱数はその場で直せます。</p>
+      <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap">
+        <button class="b" onclick="go(3)">この内容で仕切書をつくる</button>
+        <button class="b g" onclick="go(1)">写真を選び直す</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 画面3 -->
+  <section id="p3" class="hide">
+    <div class="card">
+      <h2>仕切書（下書き）</h2>
+      <div class="rec">
+        <div class="h">水揚仕切書</div>
+        <div class="m">みさき浦漁業協同組合 ／ 2026年8月3日</div>
+        <div id="recrows"></div>
+        <div class="tot"><span>合計（税込）</span><b id="grand">0万円</b></div>
+      </div>
+      <p class="note">この下書きを組合の販売システムに取り込むか、印刷して船主へ渡します。金額は1kgあたりの単価と1箱の平均目方から自動計算しています。</p>
+      <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap">
+        <button class="b g" onclick="go(2)">数を直す</button>
+        <button class="b g" onclick="go(1)">最初から</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+// ===== サンプルデータ（すべて架空）=====
+const SHOTS = [
+  { id:'a', name:'第七あおば丸', time:'5時40分 到着', color:'#7fa9c9',
+    items:[
+      { fish:'マアジ', size:'中', box:14, kg:8, tan:520, sure:true },
+      { fish:'マサバ', size:'大', box:6,  kg:9, tan:430, sure:true },
+      { fish:'イサキ', size:'小', box:3,  kg:6, tan:610, sure:false },
+    ]},
+  { id:'b', name:'第三はまゆう丸', time:'6時05分 到着', color:'#8fbf9a',
+    items:[
+      { fish:'カマス', size:'中', box:11, kg:7, tan:380, sure:true },
+      { fish:'マアジ', size:'小', box:8,  kg:8, tan:340, sure:true },
+    ]},
+  { id:'c', name:'恵比寿丸', time:'6時20分 到着', color:'#c9a87f',
+    items:[
+      { fish:'ヒラメ', size:'大', box:2,  kg:5, tan:2400, sure:false },
+      { fish:'マサバ', size:'中', box:9,  kg:9, tan:290, sure:true },
+      { fish:'カマス', size:'大', box:4,  kg:7, tan:520, sure:true },
+    ]},
+];
+
+let cur = null;
+
+function crate(color){
+  let s = '<svg class="ph" viewBox="0 0 200 96" xmlns="http://www.w3.org/2000/svg">';
+  s += '<rect width="200" height="96" fill="#eceae4"/>';
+  for (let r=0; r<2; r++) for (let c=0; c<3; c++){
+    const x = 12 + c*62, y = 10 + r*42;
+    s += '<rect x="'+x+'" y="'+y+'" width="56" height="34" rx="4" fill="'+color+'" opacity="'+(0.55+r*0.2)+'"/>';
+    s += '<rect x="'+(x+5)+'" y="'+(y+5)+'" width="46" height="10" rx="5" fill="#fff" opacity=".5"/>';
+    s += '<rect x="'+(x+5)+'" y="'+(y+19)+'" width="46" height="10" rx="5" fill="#fff" opacity=".35"/>';
+  }
+  return s + '</svg>';
+}
+
+function drawShots(){
+  document.getElementById('shots').innerHTML = SHOTS.map(s => {
+    const n = s.items.reduce((a,i) => a + i.box, 0);
+    return '<button class="shot" onclick="pick(\'' + s.id + '\')">' + crate(s.color) +
+      '<div class="cap"><b>' + s.name + '</b><span>' + s.time + '／およそ' + n + '箱</span></div></button>';
+  }).join('');
+}
+
+function pick(id){
+  cur = JSON.parse(JSON.stringify(SHOTS.find(s => s.id === id)));
+  document.getElementById('src').textContent = cur.name + '／' + cur.time;
+  drawRows();
+  go(2);
+}
+
+function drawRows(){
+  document.getElementById('rows').innerHTML = cur.items.map((it,i) =>
+    '<tr><td>' + it.fish + (it.sure ? '' : ' <span class="flag">要確認</span>') +
+    '</td><td>' + it.size + '</td>' +
+    '<td class="n"><input class="q" type="number" min="0" value="' + it.box +
+    '" onchange="upd(' + i + ',this.value)"></td>' +
+    '<td class="n">' + it.tan.toLocaleString() + '円/kg</td></tr>'
+  ).join('');
+}
+
+function upd(i, v){ cur.items[i].box = Math.max(0, parseInt(v || 0, 10)); }
+
+function yen(it){ return it.box * it.kg * it.tan; }
+
+function drawRec(){
+  const rows = cur.items.filter(it => it.box > 0);
+  document.getElementById('recrows').innerHTML = rows.map(it =>
+    '<div class="row"><span>' + it.fish + '（' + it.size + '）' + it.box + '箱</span>' +
+    '<span>' + Math.round(yen(it) / 100) / 100 + '万円</span></div>'
+  ).join('');
+  const g = rows.reduce((a, it) => a + yen(it), 0);
+  document.getElementById('grand').textContent = (Math.round(g / 100) / 100) + '万円';
+}
+
+function go(n){
+  [1,2,3].forEach(i => {
+    document.getElementById('p' + i).classList.toggle('hide', i !== n);
+    document.getElementById('s' + i).classList.toggle('on', i === n);
+  });
+  if (n === 3) drawRec();
+  window.scrollTo(0, 0);
+}
+
+drawShots();
+</script>
+</body>
+</html>

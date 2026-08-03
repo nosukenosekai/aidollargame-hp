@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>みっか待つ｜欲しいものは三日おいてから買う</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#ddd9d0; --ink:#1a1a1a; --sub:#77736a;
+         --grn:#15803d; --amb:#b45309; --gold:#c9a227; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:460px; margin:0 auto; padding:16px 14px 56px; }
+  h1{ font-size:23px; margin:0 0 3px; }
+  .sub{ color:var(--sub); font-size:14px; margin:0 0 16px; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  /* 瓶 */
+  .jar{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:18px 16px 14px; margin-bottom:14px; display:flex; gap:16px; align-items:center; }
+  .jar svg{ flex:none; width:96px; height:118px; }
+  .jar .amt{ font-size:34px; font-weight:700; line-height:1.15;
+    font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
+  .jar .lb{ font-size:13px; color:var(--sub); }
+  .jar .conv{ font-size:15px; color:var(--ac); margin-top:6px; font-weight:600; }
+  .jar .cnt{ font-size:13px; color:var(--sub); margin-top:2px; }
+
+  h2{ font-size:14px; color:var(--sub); font-weight:700; margin:26px 0 8px;
+    letter-spacing:.06em; }
+
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; margin-bottom:9px; }
+  .card .nm{ font-size:18px; font-weight:600; }
+  .card .pr{ font-size:15px; color:var(--sub); font-variant-numeric:tabular-nums; }
+  .card .why{ font-size:14px; color:var(--sub); margin-top:2px; }
+
+  /* 待ち */
+  .wait .bar{ height:7px; background:#eceae4; border-radius:999px; overflow:hidden;
+    margin:10px 0 5px; }
+  .wait .bar i{ display:block; height:7px; background:var(--ac); border-radius:999px; }
+  .wait .left{ font-size:14px; color:var(--ac); font-variant-numeric:tabular-nums;
+    font-weight:600; }
+
+  /* 判定 */
+  .ready{ border-color:var(--ac); border-left:4px solid var(--ac); }
+  .ready .q{ font-size:15px; color:var(--ac); font-weight:700; margin-top:8px; }
+  .btns{ display:flex; gap:8px; margin-top:10px; }
+  .btns button{ flex:1; border-radius:11px; padding:12px 0; font-size:16px; font-weight:700; }
+  .b1{ background:#fff; color:var(--ink); border:1.5px solid var(--line); }
+  .b2{ background:var(--ac); color:#fff; border:0; }
+
+  .done{ opacity:.95; }
+  .tag{ display:inline-block; font-size:12px; font-weight:700; padding:2px 9px;
+    border-radius:999px; margin-left:8px; vertical-align:2px; }
+  .tag.no{ background:#e8f3ec; color:var(--grn); }
+  .tag.yes{ background:#f0edE4; color:var(--amb); }
+
+  /* 追加 */
+  .add{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; margin-top:8px; }
+  .add input{ width:100%; padding:12px 13px; font-size:16px; font-family:inherit;
+    border:1px solid var(--line); border-radius:11px; margin-bottom:8px;
+    background:#fbfaf7; color:var(--ink); }
+  .add .go{ width:100%; background:var(--ac); color:#fff; border:0; border-radius:11px;
+    padding:13px; font-size:16px; font-weight:700; }
+  .add .go:disabled{ opacity:.4; }
+
+  .foot{ font-size:13px; color:var(--sub); margin-top:22px; line-height:1.85; }
+  .toast{ position:fixed; left:50%; bottom:24px; transform:translate(-50%,20px);
+    background:var(--ink); color:#fff; padding:12px 22px; border-radius:999px;
+    font-size:16px; font-weight:600; opacity:0; pointer-events:none;
+    transition:opacity .2s, transform .2s; z-index:9; max-width:88vw; text-align:center; }
+  .toast.show{ opacity:1; transform:translate(-50%,0); }
+  .empty{ color:var(--sub); font-size:15px; padding:6px 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>みっか待つ</h1>
+  <p class="sub">欲しいと思ったら、三日おいてから買う。三日後にまだ欲しければ買っていい。</p>
+
+  <div class="jar">
+    <div id="jarsvg"></div>
+    <div>
+      <div class="lb">買わずにすんだ額</div>
+      <div class="amt" id="amt">0円</div>
+      <div class="conv" id="conv"></div>
+      <div class="cnt" id="cnt"></div>
+    </div>
+  </div>
+
+  <div id="readyzone"></div>
+
+  <h2>まっている</h2>
+  <div id="waiting"></div>
+
+  <div class="add">
+    <input id="nm" type="text" maxlength="24" placeholder="欲しいもの（例：ワイヤレスイヤホン）">
+    <input id="pr" type="number" inputmode="numeric" min="1" placeholder="いくら（円）">
+    <button class="go" onclick="add()">三日待つ</button>
+  </div>
+
+  <h2>おわったもの</h2>
+  <div id="hist"></div>
+
+  <p class="foot">
+    買うのは失敗ではありません。三日たってもまだ欲しかったものは、本当に欲しかったものです。<br>
+    このアプリが減らしたいのは、買うことではなく、三日後には忘れている買い物のほうです。<br>
+    記録はこの端末の中だけにあります。どこにも送られません。
+  </p>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const WAIT_MS = 3 * 24 * 60 * 60 * 1000;   // 三日
+const KEY = 'mikkamatsu';
+const H = 60 * 60 * 1000;
+
+// ===== はじめから入っているもの（架空のサンプル）=====
+const now = Date.now();
+const SEED = [
+  { id:1, n:'ワイヤレスイヤホン', p:18800, at: now - WAIT_MS - 2*H,  s:null },
+  { id:2, n:'厚手のコート',       p:32000, at: now - WAIT_MS - 30*H, s:null },
+  { id:3, n:'ゲームの追加課金',   p:3000,  at: now - 26*H, s:null },
+  { id:4, n:'キャンプ用の椅子',   p:9800,  at: now - 61*H, s:null },
+  { id:5, n:'高い方の洗剤',       p:1200,  at: now - 5*H,  s:null },
+  { id:6, n:'ふとん乾燥機',       p:14800, at: now - 9*24*H,  s:'no'  },
+  { id:7, n:'仕事用のかばん',     p:24000, at: now - 12*24*H, s:'yes' },
+  { id:8, n:'四本目のフライパン', p:6400,  at: now - 15*24*H, s:'no'  },
+  { id:9, n:'セール中のスニーカー', p:11800, at: now - 21*24*H, s:'no' },
+  { id:10,n:'電動歯ブラシ',       p:8900,  at: now - 26*24*H, s:'yes' },
+  { id:11,n:'二台目のモニター',   p:27000, at: now - 33*24*H, s:'no'  },
+];
+let L = [];
+try{ const s = localStorage.getItem(KEY); if (s) L = JSON.parse(s); }catch(e){}
+if (!Array.isArray(L) || !L.length) L = SEED.map(x => ({ ...x }));
+const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(L)); }catch(e){} };
+
+// ===== 表示のたすけ =====
+const yen = n => n >= 10000
+  ? (Math.round(n / 100) / 100).toString().replace(/\.0+$/, '') + '万円'
+  : n.toLocaleString() + '円';
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const saved = () => L.filter(x => x.s === 'no').reduce((a, x) => a + x.p, 0);
+
+// 貯まった額を身近なものに置きかえる
+const CONV = [
+  [300000, n => 'ひと月ぶんの家賃くらい'],
+  [150000, n => Math.floor(n / 150000) + '回ぶんの国内旅行くらい'],
+  [80000,  n => 'ひと月ぶんの食費くらい'],
+  [30000,  n => Math.floor(n / 15000) + '回ぶんの外食くらい'],
+  [12000,  n => Math.floor(n / 6000)  + 'か月ぶんの動画サブスクくらい'],
+  [3000,   n => Math.floor(n / 1500)  + '回ぶんの映画くらい'],
+  [500,    n => Math.floor(n / 500)   + '杯ぶんのコーヒーくらい'],
+];
+function convText(n){
+  if (n <= 0) return '';
+  const c = CONV.find(c => n >= c[0]);
+  return c ? c[1](n) : '';
+}
+
+// ===== 瓶の絵 =====
+function jar(ratio){
+  const top = 26, bot = 112, h = bot - top;
+  const fh = Math.max(0, Math.min(1, ratio)) * h;
+  const fy = bot - fh;
+  let s = '<svg viewBox="0 0 96 118" xmlns="http://www.w3.org/2000/svg">';
+  s += '<rect x="30" y="4" width="36" height="9" rx="3" fill="#c8c3b6"/>';
+  s += '<path d="M22 20 h52 a6 6 0 0 1 6 6 v82 a8 8 0 0 1 -8 8 h-48 a8 8 0 0 1 -8 -8 v-82 a6 6 0 0 1 6 -6 z" fill="#f2efe8" stroke="#cfcabd"/>';
+  if (fh > 2){
+    s += '<clipPath id="cl"><path d="M22 20 h52 a6 6 0 0 1 6 6 v82 a8 8 0 0 1 -8 8 h-48 a8 8 0 0 1 -8 -8 v-82 a6 6 0 0 1 6 -6 z"/></clipPath>';
+    s += '<g clip-path="url(#cl)">';
+    // 貯まったぶんをコインの層で
+    const rows = Math.ceil(fh / 9);
+    for (let r = 0; r < rows; r++){
+      const y = bot - 6 - r * 9;
+      if (y < fy) break;
+      for (let c = 0; c < 5; c++){
+        const x = 20 + c * 13 + (r % 2 ? 6 : 0);
+        s += '<ellipse cx="' + x + '" cy="' + y + '" rx="6.4" ry="4" fill="#c9a227" opacity="'
+          + (0.55 + (r % 3) * 0.15).toFixed(2) + '"/>';
+      }
+    }
+    s += '</g>';
+  }
+  s += '<path d="M22 20 h52 a6 6 0 0 1 6 6 v82 a8 8 0 0 1 -8 8 h-48 a8 8 0 0 1 -8 -8 v-82 a6 6 0 0 1 6 -6 z" fill="none" stroke="#cfcabd" stroke-width="1.4"/>';
+  s += '</svg>';
+  return s;
+}
+
+// ===== 描画 =====
+function left(x){
+  const ms = x.at + WAIT_MS - Date.now();
+  if (ms <= 0) return null;
+  const hh = Math.floor(ms / H);
+  const d = Math.floor(hh / 24), h2 = hh % 24;
+  const mm = Math.floor((ms % H) / 60000);
+  if (d > 0) return 'あと' + d + '日' + h2 + '時間';
+  if (hh > 0) return 'あと' + hh + '時間' + mm + '分';
+  return 'あと' + Math.max(1, mm) + '分';
+}
+
+function render(){
+  const total = saved();
+  document.getElementById('amt').textContent = yen(total);
+  document.getElementById('conv').textContent = convText(total);
+  const noN = L.filter(x => x.s === 'no').length, yesN = L.filter(x => x.s === 'yes').length;
+  document.getElementById('cnt').textContent =
+    '買わなかった ' + noN + '件　三日後に買った ' + yesN + '件';
+  // 瓶は10万円で満杯の目安
+  document.getElementById('jarsvg').innerHTML = jar(total / 100000);
+
+  // 三日たって、まだ決めていないもの
+  const ready = L.filter(x => x.s === null && left(x) === null)
+                 .sort((a, b) => a.at - b.at);
+  document.getElementById('readyzone').innerHTML = ready.length
+    ? '<h2>三日たちました</h2>' + ready.map(x =>
+        '<div class="card ready"><div class="nm">' + esc(x.n) + '</div>' +
+        '<div class="pr">' + x.p.toLocaleString() + '円</div>' +
+        '<div class="q">いま見て、まだ欲しいですか</div>' +
+        '<div class="btns">' +
+        '<button class="b1" onclick="decide(' + x.id + ',\'no\')">もういらない</button>' +
+        '<button class="b2" onclick="decide(' + x.id + ',\'yes\')">やっぱり欲しい</button>' +
+        '</div></div>'
+      ).join('')
+    : '';
+
+  // 待っているもの
+  const wait = L.filter(x => x.s === null && left(x) !== null)
+                .sort((a, b) => a.at - b.at);
+  document.getElementById('waiting').innerHTML = wait.length
+    ? wait.map(x => {
+        const prog = Math.min(1, (Date.now() - x.at) / WAIT_MS);
+        return '<div class="card wait"><div class="nm">' + esc(x.n) + '</div>' +
+          '<div class="pr">' + x.p.toLocaleString() + '円</div>' +
+          '<div class="bar"><i style="width:' + (prog * 100).toFixed(1) + '%"></i></div>' +
+          '<div class="left">' + left(x) + '</div></div>';
+      }).join('')
+    : '<div class="empty">いま待っているものはありません。欲しいものができたら下に入れてください。</div>';
+
+  // おわったもの
+  const hist = L.filter(x => x.s).sort((a, b) => b.at - a.at);
+  document.getElementById('hist').innerHTML = hist.length
+    ? hist.map(x =>
+        '<div class="card done"><div class="nm">' + esc(x.n) +
+        '<span class="tag ' + x.s + '">' + (x.s === 'no' ? '買わなかった' : '買った') + '</span></div>' +
+        '<div class="pr">' + x.p.toLocaleString() + '円</div></div>'
+      ).join('')
+    : '<div class="empty">まだありません。</div>';
+}
+
+// ===== 操作 =====
+function decide(id, s){
+  const x = L.find(v => v.id === id);
+  if (!x) return;
+  x.s = s; save(); render();
+  toast(s === 'no'
+    ? x.p.toLocaleString() + '円ぶん、瓶に入りました'
+    : '三日たっても欲しかったものです。いい買い物になりますように');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function add(){
+  const n = document.getElementById('nm').value.trim();
+  const p = parseInt(document.getElementById('pr').value, 10);
+  if (!n){ toast('欲しいものの名前を入れてください'); return; }
+  if (!p || p < 1){ toast('金額を入れてください'); return; }
+  L.push({ id: Date.now(), n, p, at: Date.now(), s: null });
+  document.getElementById('nm').value = '';
+  document.getElementById('pr').value = '';
+  save(); render();
+  toast('三日後に、もう一度たずねます');
+}
+let tt = null;
+function toast(t){
+  const el = document.getElementById('toast');
+  el.textContent = t; el.classList.add('show');
+  clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 2200);
+}
+document.getElementById('pr').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.isComposing) add();
+});
+
+render();
+setInterval(render, 60000);   // 残り時間を進める
+</script>
+</body>
+</html>

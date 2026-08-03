@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>導入事例・活用事例｜AIを作って自社でも使う会社の実例 - 株式会社AIdollargame</title>
-<meta name="description" content="株式会社AIdollargameの導入事例・活用事例。介護事業者向けに厚労省データ約8,500件を扱う検索AIを納品・本番運用、自社の営業・経理・記事制作までAIで運用、AIチャットエージェントやAIwill・AIsideの開発・提供など、実際にAIを作って使っている実例をまとめています。取引先名は守秘のため業種のみ記載。">
+<title>導入事例・活用事例｜対応業種とつくれるもの - 株式会社AIdollargame</title>
+<meta name="description" content="株式会社AIdollargameが取り組んできた業種と、実際につくってきたAIの種類。介護・福祉、不動産、飲食、警備、士業・管理、小売・サービスなど幅広い現場で、検索システム・チャットAI・記録の自動化・反響対応・業務ツールの内製を手がけています。取引先名は守秘のため掲載していません。">
 <link rel="canonical" href="https://aidollargame.com/jirei.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="株式会社AIdollargame">
-<meta property="og:title" content="導入事例・活用事例｜AIを作って自社でも使う会社の実例 - 株式会社AIdollargame">
-<meta property="og:description" content="介護事業者への検索AI納品、自社の業務をAIで運用、AIプロダクトの開発・提供など、実際にAIを作って使っている実例。取引先名は守秘のため業種のみ記載。">
+<meta property="og:title" content="導入事例・活用事例｜対応業種とつくれるもの - 株式会社AIdollargame">
+<meta property="og:description" content="介護・不動産・飲食・警備・士業・小売など幅広い業種で、検索システム・チャットAI・記録の自動化・反響対応・業務ツールをつくってきました。取引先名は守秘のため非掲載。">
 <meta property="og:url" content="https://aidollargame.com/jirei.html">
 <meta property="og:image" content="https://aidollargame.com/og-default.png">
 <meta property="og:locale" content="ja_JP">
@@ -38,94 +38,117 @@
 }
 </script>
 <style>
-  :root{--paper:#f5f4f0;--ink:#101218;--muted:#697080;--line:rgba(16,18,24,0.14);--accent:#2563eb;--marker:#ffe45c;}
+  :root{--paper:#f5f4f0;--ink:#101218;--muted:#697080;--line:rgba(16,18,24,0.14);--accent:#2563eb;--accent-soft:#e7ecfb;--marker:#ffe45c;}
   *{margin:0;padding:0;box-sizing:border-box;}
   body{background:var(--paper);color:var(--ink);font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN",sans-serif;line-height:1.9;}
   nav{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 2rem;background:rgba(245,244,240,0.95);border-bottom:1px solid var(--line);}
   .logo{font-size:1.2rem;font-weight:900;color:var(--ink);text-decoration:none;}
   .back-link{font-size:0.8rem;color:var(--muted);text-decoration:none;letter-spacing:0.08em;}
   .back-link:hover{color:var(--accent);}
-  .wrap{max-width:940px;margin:0 auto;padding:4.5rem 1.5rem 6rem;}
+  .wrap{max-width:960px;margin:0 auto;padding:4.5rem 1.5rem 6rem;}
   .tag{font-size:0.72rem;letter-spacing:0.3em;color:var(--accent);font-weight:700;margin-bottom:1rem;}
   h1{font-size:clamp(1.7rem,5vw,2.5rem);font-weight:900;line-height:1.5;margin-bottom:1.2rem;}
   h1 .hl{background:linear-gradient(transparent 62%, var(--marker) 62%);}
   .lead{color:var(--muted);max-width:720px;margin-bottom:3rem;}
-  h2{font-size:1.1rem;font-weight:900;margin:3.2rem 0 1.4rem;padding-bottom:0.6rem;border-bottom:2px solid var(--ink);}
-  .case{background:#fff;border:1px solid var(--line);border-radius:4px;padding:1.9rem 1.9rem;margin-bottom:1.2rem;}
-  .case-head{display:flex;flex-wrap:wrap;align-items:center;gap:0.7rem;margin-bottom:1.1rem;}
-  .case-no{font-size:0.78rem;font-weight:700;color:var(--accent);letter-spacing:0.1em;}
-  .case-tag{font-size:0.74rem;font-weight:700;color:#fff;background:var(--ink);border-radius:999px;padding:0.2rem 0.8rem;}
-  .case-title{font-size:1.12rem;font-weight:900;line-height:1.5;margin-bottom:1.1rem;}
-  .case-row{display:grid;grid-template-columns:6.5em 1fr;gap:0.4rem 1rem;padding:0.55rem 0;border-top:1px solid rgba(16,18,24,0.08);font-size:0.94rem;}
-  .case-row .k{font-weight:700;color:var(--muted);}
-  .case-row .v strong{color:var(--ink);}
-  .note{font-size:0.82rem;color:var(--muted);margin-top:1.4rem;line-height:1.9;}
-  .cta-band{background:#fff;border:1px solid var(--line);border-radius:4px;padding:2rem 1.9rem;margin-top:2.6rem;}
+  h2{font-size:1.15rem;font-weight:900;margin:3.4rem 0 0.4rem;}
+  .h2-sub{color:var(--muted);font-size:0.9rem;margin-bottom:1.6rem;}
+
+  /* 対応業種グリッド */
+  .ind-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+  .ind{background:#fff;border:1px solid var(--line);border-radius:10px;padding:1.5rem 1.2rem;text-align:center;transition:transform .18s,box-shadow .18s,border-color .18s;}
+  .ind:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(16,24,60,0.08);border-color:var(--accent);}
+  .ind .ic{width:40px;height:40px;margin:0 auto 0.8rem;color:var(--accent);}
+  .ind .nm{font-weight:900;font-size:1.02rem;}
+  .ind .ex{display:block;font-size:0.78rem;color:var(--muted);font-weight:500;margin-top:0.3rem;}
+
+  /* できることカード */
+  .cap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.1rem;}
+  .cap{display:flex;gap:1rem;background:#fff;border:1px solid var(--line);border-radius:10px;padding:1.5rem 1.4rem;}
+  .cap .ic{flex-shrink:0;width:38px;height:38px;color:var(--accent);}
+  .cap .cap-h{font-weight:900;font-size:1.02rem;line-height:1.5;margin-bottom:0.35rem;}
+  .cap .cap-p{font-size:0.88rem;color:var(--muted);line-height:1.8;}
+
+  .note{font-size:0.82rem;color:var(--muted);margin-top:1.8rem;line-height:1.9;}
+  .cta-band{background:#fff;border:1px solid var(--line);border-radius:10px;padding:2rem 1.9rem;margin-top:2.8rem;}
   .cta-band h3{font-size:1.05rem;font-weight:900;margin-bottom:0.5rem;}
   .cta-band p{font-size:0.9rem;color:var(--muted);margin-bottom:1.3rem;}
   .btn-row{display:flex;gap:0.9rem;flex-wrap:wrap;}
   .btn{display:inline-block;background:var(--ink);color:#fff;font-weight:700;font-size:0.9rem;text-decoration:none;padding:0.95rem 1.9rem;letter-spacing:0.05em;}
   .btn-outline{display:inline-block;background:#fff;color:var(--ink);border:1px solid var(--line);font-weight:700;font-size:0.9rem;text-decoration:none;padding:0.95rem 1.9rem;letter-spacing:0.05em;}
   footer{border-top:1px solid var(--line);padding:2rem;text-align:center;font-size:0.75rem;color:var(--muted);}
-  @media(max-width:600px){.case-row{grid-template-columns:1fr;gap:0.15rem;}}
+  @media(max-width:680px){.ind-grid{grid-template-columns:repeat(2,1fr);}.cap-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 <nav><a class="logo" href="/">AIdollargame</a><a class="back-link" href="/">← トップへ戻る</a></nav>
 <div class="wrap">
   <div class="tag">CASE STUDIES</div>
-  <h1>導入事例・活用事例</h1>
-  <p class="lead">私たちは「AIを作って売るだけ」の会社ではありません。事業者へ納品し、自社の業務でも毎日使っています。ここでは実際に手を動かしてきた事例をまとめました。取引先名は守秘のため業種のみ、数値はいずれも当社が実際に開発・運用しているものです。</p>
+  <h1>いろんな現場で、AIを<span class="hl">作って・使って</span>います</h1>
+  <p class="lead">介護から不動産、飲食、警備まで。業種はバラバラでも、やることは同じです。その現場の「人でなくてもいい作業」をAIに渡す。取引先名や細かい数字は守秘のため伏せていますが、これまで取り組んできた業種と、実際に作ってきたものを紹介します。</p>
 
-  <h2>お客様への導入・納品</h2>
-
-  <div class="case">
-    <div class="case-head"><span class="case-no">CASE 01</span><span class="case-tag">介護事業者</span></div>
-    <div class="case-title">公開データを使った、施設情報の検索AIを提供</div>
-    <div class="case-row"><span class="k">課題</span><span class="v">条件に合う施設を探すのに、公開されている情報を担当者が手作業で照合していました。時間がかかり、対応できる人も限られていました。</span></div>
-    <div class="case-row"><span class="k">実施したこと</span><span class="v">公開データを取り込み、地域や条件で絞り込める検索AIを開発。介護事業者向けに提供しました。</span></div>
-    <div class="case-row"><span class="k">変わったこと</span><span class="v">手作業の照合が減り、条件に合う候補をその場で示せるようになりました。</span></div>
-    <div class="case-row"><span class="k">使った技術</span><span class="v">公開データ × 生成AI</span></div>
+  <h2>対応してきた業種</h2>
+  <p class="h2-sub">業種が違っても、属人化・人手不足・問い合わせ対応という悩みはよく似ています。</p>
+  <div class="ind-grid">
+    <div class="ind">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10Z"/><path d="M12 8v5M9.5 10.5h5"/></svg>
+      <div class="nm">介護・福祉<span class="ex">施設・記録・相談</span></div>
+    </div>
+    <div class="ind">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-5h6v5"/><path d="M9 10h.01M15 10h.01M9 13h.01M15 13h.01"/></svg>
+      <div class="nm">不動産<span class="ex">反響・追客・問い合わせ</span></div>
+    </div>
+    <div class="ind">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v8a3 3 0 0 0 6 0V3"/><path d="M9 3v18"/><path d="M17 3c-1.5 1-2 3-2 6s.5 4 2 4v8"/></svg>
+      <div class="nm">飲食<span class="ex">集客・予約・問い合わせ</span></div>
+    </div>
+    <div class="ind">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z"/><path d="M9.5 12l1.8 1.8L15 10"/></svg>
+      <div class="nm">警備<span class="ex">記録・報告・連絡</span></div>
+    </div>
+    <div class="ind">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h9l4 4v16H6z" transform="translate(-1 0)"/><path d="M14 2v5h5"/><path d="M8 13h8M8 17h5"/></svg>
+      <div class="nm">士業・管理部門<span class="ex">書類・調べ物</span></div>
+    </div>
+    <div class="ind">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 12H5L6 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <div class="nm">小売・サービス<span class="ex">接客・社内ナレッジ</span></div>
+    </div>
   </div>
 
-  <h2>自社での活用・開発</h2>
-
-  <div class="case">
-    <div class="case-head"><span class="case-no">CASE 02</span><span class="case-tag">自社運用</span></div>
-    <div class="case-title">会社の実務そのものを、私たち自身がAIで回している</div>
-    <div class="case-row"><span class="k">課題</span><span class="v">少人数で、営業・経理・発信・製品開発までを同時に進める必要があった。</span></div>
-    <div class="case-row"><span class="k">実施したこと</span><span class="v">営業文の下書き、経理の記帳補助、記事・SNSの制作、引き継ぎ資料づくりまで、日常業務をAIで動かしています。</span></div>
-    <div class="case-row"><span class="k">変わったこと</span><span class="v">少人数でも、新規営業・発信・製品開発を並行して進められる体制になりました。研修でお渡しするのは、この毎日使っている手順そのものです。</span></div>
+  <h2>作ってきたもの</h2>
+  <p class="h2-sub">どれも「その現場の作業を、AIに渡す」ためのもの。業種に合わせて形を変えて作っています。</p>
+  <div class="cap-grid">
+    <div class="cap">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <div><div class="cap-h">検索システム</div><div class="cap-p">大量の公開データや社内資料から、条件に合う情報をその場で探せるAI。手作業の照合をなくします。</div></div>
+    </div>
+    <div class="cap">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.5 7.2L4 21l1.8-5.5A8 8 0 1 1 21 12Z"/></svg>
+      <div><div class="cap-h">接客・社内ナレッジのチャットAI</div><div class="cap-p">お客様への問い合わせ対応と、社内の「これどうやるんだっけ」を、ひとつのAIで24時間こなします。</div></div>
+    </div>
+    <div class="cap">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z" transform="translate(-1 0)"/><path d="M13 3v5h5"/><path d="M8 14h8M8 18h6"/></svg>
+      <div><div class="cap-h">記録・書類の自動化</div><div class="cap-p">話した内容や現場の情報を、記録や報告書の下書きに。書類づくりの時間を減らします。</div></div>
+    </div>
+    <div class="cap">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9Z"/><path d="M10.5 21a2 2 0 0 0 3 0"/></svg>
+      <div><div class="cap-h">問い合わせ・反響の一次対応</div><div class="cap-p">入ってきた問い合わせや反響に、まず素早く一次対応。取りこぼしと初動の遅れを防ぎます。</div></div>
+    </div>
+    <div class="cap">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2 2.6-2.6Z"/></svg>
+      <div><div class="cap-h">業務ツールの内製</div><div class="cap-p">自社の困りごとを、ブラウザで動く小さな業務ツールに。大がかりなシステムを入れずに始められます。</div></div>
+    </div>
+    <div class="cap">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h16"/><rect x="7" y="11" width="3" height="5"/><rect x="12" y="8" width="3" height="8"/><rect x="17" y="13" width="3" height="3"/></svg>
+      <div><div class="cap-h">公開データの活用</div><div class="cap-p">国や自治体が公開しているデータをAIで扱える形にして、営業リストづくりや調べ物に生かします。</div></div>
+    </div>
   </div>
 
-  <div class="case">
-    <div class="case-head"><span class="case-no">CASE 03</span><span class="case-tag">プロダクト開発</span></div>
-    <div class="case-title">接客も社内ナレッジも1つでこなすAIを、製品として開発・提供</div>
-    <div class="case-row"><span class="k">課題</span><span class="v">問い合わせ対応も、社内の「これどうやるんだっけ」も、特定の人に頼りきりになりがち。</span></div>
-    <div class="case-row"><span class="k">実施したこと</span><span class="v">自社を覚えたAIをサイト・LINE・社内ツールに置ける「AIチャットエージェント」を開発・提供。あわせてAIwill（社長クローン）・AIside（付き人AI）も自社で開発・運用しています。</span></div>
-    <div class="case-row"><span class="k">変わったこと</span><span class="v">社外の接客と社内のナレッジ参照を、ひとつのAIで24時間こなせる形にしました。</span></div>
-  </div>
-
-  <div class="case">
-    <div class="case-head"><span class="case-no">CASE 04</span><span class="case-tag">公開データ×AI</span></div>
-    <div class="case-title">公開データをAI化した業種向けツールを、次々に内製</div>
-    <div class="case-row"><span class="k">課題</span><span class="v">補助金・助成金・相続など、調べるのに手間がかかり、専門知識が要る領域が多い。</span></div>
-    <div class="case-row"><span class="k">実施したこと</span><span class="v">補助金検索、労務・雇用関係助成金、相続税の概算など、公的な公開データをAI化した業種向けツールを自社で開発しています。</span></div>
-    <div class="case-row"><span class="k">変わったこと</span><span class="v">「公開データ×AI」の実装パターンが社内に蓄積され、貴社の業種に合わせた使い方の引き出しが増えました。</span></div>
-  </div>
-
-  <div class="case">
-    <div class="case-head"><span class="case-no">CASE 05</span><span class="case-tag">技術力</span></div>
-    <div class="case-title">CTOがApp StoreにAIアプリを公開、Apple主催のAI開発ハッカソンで優勝</div>
-    <div class="case-row"><span class="k">実施したこと</span><span class="v">Apple Vision Pro向けのAIアプリを公開し、Apple主催のAI開発ハッカソンで<strong>優勝（2025年）</strong>。開発体制を社内に保有しています。</span></div>
-    <div class="case-row"><span class="k">意味すること</span><span class="v">最新のAI実装を、現場で本当に動くプロダクトに落とし込める技術力があります。</span></div>
-  </div>
-
-  <p class="note">※取引先名は守秘のため業種のみ記載しています。掲載している数値・内容はいずれも当社が実際に開発・運用しているものです。お客様の許可が取れた事例は、確認でき次第このページに追加します。</p>
+  <p class="note">※取引先名・個別の数値や詳細は、守秘のため掲載していません。ご相談の際に、貴社に近い業種の事例をお話しします。</p>
 
   <div class="cta-band">
-    <h3>「うちの場合はどう使える？」を、無料でご相談ください</h3>
-    <p>初回30分は無料です。自社に近い事例をもとに、どこから始めるかを一緒に考えます。社員の準備から始めたい場合は、助成金対象のAI研修もあります。</p>
+    <h3>「うちの業種でも使える？」を、無料でご相談ください</h3>
+    <p>初回30分は無料です。貴社に近い現場の話をもとに、どこから始めるかを一緒に考えます。社員の準備から始めたい場合は、助成金対象のAI研修もあります。</p>
     <div class="btn-row">
       <a class="btn" href="/#contact">無料相談する</a>
       <a class="btn-outline" href="/ai-training.html">AI研修（助成金対象）を見る</a>

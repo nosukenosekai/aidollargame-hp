@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>かくれた一字｜4つの言葉に共通する漢字をあてる</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#d6d3cc; --ink:#1a1a1a; --sub:#6b6b6b;
+         --red:#b91c1c; --grn:#15803d; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.7; }
+  .wrap{ max-width:460px; margin:0 auto; padding:14px 14px 40px; }
+  h1{ font-size:24px; margin:0 0 2px; letter-spacing:-.01em; }
+  .sub{ color:var(--sub); font-size:14px; margin:0 0 16px; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  .start{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:26px 20px; text-align:center; }
+  .start .big{ font-size:21px; font-weight:700; margin-bottom:4px; }
+  .start .d{ font-size:15px; color:var(--sub); margin-bottom:18px; }
+  .rule{ text-align:left; background:#faf9f6; border:1px solid var(--line);
+    border-radius:12px; padding:14px 16px; margin:0 0 18px; font-size:15px; }
+  .demoq{ display:flex; gap:6px; justify-content:center; margin:10px 0 4px; }
+  .demoq div{ background:#fff; border:1px solid var(--line); border-radius:8px;
+    padding:6px 8px; font-size:19px; font-weight:700; }
+  .go{ background:var(--ac); color:#fff; border:0; border-radius:12px;
+    padding:15px 34px; font-size:18px; font-weight:700; }
+  .ghost{ background:#fff; color:var(--ac); border:1.5px solid var(--ac);
+    border-radius:12px; padding:11px 20px; font-size:15px; font-weight:600; }
+
+  .bar{ display:flex; gap:8px; margin-bottom:12px; }
+  .bar div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:12px;
+    padding:8px 4px; text-align:center; }
+  .bar b{ display:block; font-size:20px; line-height:1.3; font-variant-numeric:tabular-nums; }
+  .bar span{ font-size:11px; color:var(--sub); }
+
+  /* 手がかり */
+  .clues{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:16px; }
+  .clue{ background:#fff; border:1.5px solid var(--line); border-radius:14px;
+    padding:16px 4px; text-align:center; font-size:clamp(24px,7.5vw,32px);
+    font-weight:700; letter-spacing:.04em; }
+  .clue .bx{ display:inline-block; min-width:1.05em; color:var(--ac);
+    border-bottom:3px solid var(--ac); }
+  .clue.got{ border-color:var(--grn); }
+  .clue.got .bx{ color:var(--grn); border-bottom-color:transparent; }
+  .clue .rd{ display:block; font-size:12px; font-weight:500; color:var(--sub);
+    letter-spacing:0; margin-top:2px; min-height:1.2em; }
+
+  /* 漢字の選択肢 */
+  .pick{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
+  .pick button{ background:#fff; border:1.5px solid var(--line); border-radius:14px;
+    padding:16px 0; font-size:clamp(24px,7vw,30px); font-weight:700; color:var(--ink); }
+  .pick button.no{ background:#eceae4; color:#b5b1a6; border-color:#eceae4; }
+  .pick button.yes{ background:var(--grn); border-color:var(--grn); color:#fff; }
+  .shake{ animation:sh .3s; }
+  @keyframes sh{ 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)}
+    75%{transform:translateX(6px)} }
+
+  .alert{ display:none; background:#fdf6ec; border:1px solid #f0dcc0;
+    border-left:4px solid #b45309; border-radius:10px; padding:10px 12px;
+    font-size:14px; margin-bottom:12px; }
+  .alert.show{ display:block; }
+
+  .done{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:22px 18px; text-align:center; margin-bottom:14px; }
+  .done .t{ font-size:22px; font-weight:700; }
+  .done .m{ font-size:16px; color:var(--sub); margin:6px 0 18px; }
+  .share{ background:#faf9f6; border:1px solid var(--line); border-radius:12px;
+    padding:12px; font-size:15px; white-space:pre-wrap; text-align:left;
+    margin-bottom:14px; font-variant-numeric:tabular-nums; }
+  .recap{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; font-size:16px; }
+  .recap div{ padding:7px 0; border-bottom:1px solid var(--line); }
+  .recap div:last-child{ border-bottom:0; }
+  .recap b{ font-size:20px; color:var(--ac); margin-right:8px; }
+
+  .toast{ position:fixed; left:50%; bottom:24px; transform:translate(-50%,20px);
+    background:var(--ink); color:#fff; padding:11px 20px; border-radius:999px;
+    font-size:16px; font-weight:600; opacity:0; pointer-events:none;
+    transition:opacity .2s, transform .2s; z-index:9; max-width:88vw; text-align:center; }
+  .toast.show{ opacity:1; transform:translate(-50%,0); }
+
+  .foot{ font-size:13px; color:var(--sub); margin-top:16px; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>かくれた一字</h1>
+  <p class="sub" id="today"></p>
+
+  <section id="p0">
+    <div class="start">
+      <div class="big">今日の5問は、まだ始めていません</div>
+      <div class="d">4つの言葉に共通して入る漢字を1字あてます</div>
+      <div class="rule">
+        <div style="font-size:14px; color:var(--sub)">たとえば、この4つに同じ字を入れると</div>
+        <div class="demoq">
+          <div><span style="color:var(--ac)">□</span>紙</div>
+          <div><span style="color:var(--ac)">□</span>品</div>
+          <div>握<span style="color:var(--ac)">□</span></div>
+          <div>歌<span style="color:var(--ac)">□</span></div>
+        </div>
+        <div style="text-align:center; font-size:14px; color:var(--sub)">
+          答えは「手」。手紙・手品・握手・歌手</div>
+        <div style="margin-top:10px; font-size:14px">
+          四角が前にあるか後ろにあるかも見どころです。9つの中から選んでください。</div>
+      </div>
+      <button class="go" onclick="start()">はじめる</button>
+    </div>
+    <p class="foot">問題は毎日0時に切りかわり、日本中どこで開いても今日は同じ5問です。登録もインストールもいりません。</p>
+  </section>
+
+  <section id="p1" class="hide">
+    <div class="bar">
+      <div><b id="qn">1 / 5</b><span>問目</span></div>
+      <div><b id="ms">0</b><span>まちがい</span></div>
+      <div><b id="tm">0:00</b><span>時間</span></div>
+    </div>
+    <div class="alert" id="al"></div>
+    <div class="clues" id="clues"></div>
+    <div class="pick" id="pick"></div>
+    <p class="foot">4つすべてが言葉になる漢字は、9つのうち1つだけです。</p>
+  </section>
+
+  <section id="p2" class="hide">
+    <div class="done">
+      <div class="t" id="dt">おつかれさまでした</div>
+      <div class="m" id="result"></div>
+      <button class="ghost" onclick="copyShare()">結果をコピー</button>
+    </div>
+    <div class="share" id="sharetext"></div>
+    <div class="recap" id="recap"></div>
+    <p class="foot">次の5問は明日0時に出ます。コピーした文章はそのまま貼って使えます。投稿するかどうかはご自身で決めてください。</p>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ================= 言葉の表 =================
+// k = 答えになる漢字 / w = [相手の字, 0=答えが前(答＋相手) 1=答えが後(相手＋答)]
+const T = [
+ {k:'手', w:[['紙',0],['品',0],['本',0],['当',0],['順',0],['握',1],['歌',1],['選',1],['拍',1],['助',1]]},
+ {k:'心', w:[['配',0],['臓',0],['地',0],['安',1],['中',1],['決',1],['熱',1],['関',1]]},
+ {k:'気', w:[['分',0],['温',0],['候',0],['天',1],['元',1],['人',1],['空',1],['病',1]]},
+ {k:'水', w:[['着',0],['玉',0],['面',0],['道',0],['海',1],['雨',1],['香',1],['防',1]]},
+ {k:'花', w:[['火',0],['見',0],['束',0],['屋',0],['瓶',0],['生',1],['造',1],['開',1]]},
+ {k:'電', w:[['車',0],['話',0],['池',0],['球',0],['停',1],['発',1],['充',1]]},
+ {k:'大', w:[['人',0],['切',0],['声',0],['雨',0],['会',0],['拡',1],['最',1],['重',1]]},
+ {k:'生', w:[['活',0],['物',0],['徒',0],['命',0],['学',1],['先',1],['発',1],['誕',1]]},
+ {k:'目', w:[['薬',0],['印',0],['次',0],['線',0],['標',0],['注',1],['科',1],['種',1],['項',1]]},
+ {k:'口', w:[['調',0],['実',0],['座',0],['入',1],['出',1],['窓',1],['悪',1],['早',1]]},
+ {k:'道', w:[['路',0],['具',0],['徳',0],['鉄',1],['歩',1],['坂',1],['近',1],['報',1]]},
+ {k:'学', w:[['校',0],['習',0],['部',0],['者',0],['科',1],['数',1],['文',1],['見',1]]},
+ {k:'書', w:[['類',0],['店',0],['道',0],['読',1],['辞',1],['図',1],['葉',1],['願',1]]},
+ {k:'時', w:[['間',0],['計',0],['代',0],['当',1],['同',1],['臨',1],['瞬',1]]},
+ {k:'体', w:[['温',0],['力',0],['育',0],['重',0],['身',1],['全',1],['液',1],['団',1]]},
+ {k:'場', w:[['所',0],['面',0],['合',0],['会',1],['広',1],['工',1],['市',1],['職',1]]},
+ {k:'食', w:[['事',0],['堂',0],['欲',0],['卓',0],['朝',1],['夕',1],['和',1],['洋',1],['給',1]]},
+ {k:'用', w:[['意',0],['事',0],['紙',0],['途',0],['使',1],['利',1],['費',1],['信',1],['採',1]]},
+ {k:'空', w:[['港',0],['間',0],['車',0],['席',0],['青',1],['上',1],['夜',1],['航',1]]},
+ {k:'火', w:[['事',0],['山',0],['曜',0],['災',0],['消',1],['点',1],['聖',1],['花',1]]},
+ {k:'金', w:[['魚',0],['曜',0],['額',0],['庫',0],['料',1],['現',1],['貯',1],['税',1],['賃',1]]},
+ {k:'日', w:[['記',0],['常',0],['程',0],['光',0],['毎',1],['休',1],['平',1],['祝',1]]},
+ {k:'年', w:[['賀',0],['末',0],['度',0],['去',1],['来',1],['少',1],['青',1],['定',1]]},
+ {k:'人', w:[['形',0],['類',0],['柄',0],['本',1],['個',1],['主',1],['恋',1],['犯',1]]},
+ {k:'名', w:[['前',0],['刺',0],['物',0],['札',0],['有',1],['氏',1],['署',1],['指',1]]},
+ {k:'出', w:[['発',0],['席',0],['張',0],['番',0],['外',1],['輸',1],['演',1],['提',1]]},
+ {k:'入', w:[['学',0],['院',0],['場',0],['浴',0],['収',1],['記',1],['輸',1],['購',1]]},
+ {k:'上', w:[['着',0],['級',0],['映',0],['以',1],['屋',1],['向',1],['売',1]]},
+ {k:'下', w:[['着',0],['水',0],['品',0],['宿',0],['以',1],['地',1],['靴',1],['廊',1]]},
+ {k:'中', w:[['止',0],['身',0],['庭',0],['腹',0],['集',1],['途',1],['夢',1],['的',1]]},
+ {k:'社', w:[['員',0],['長',0],['交',0],['宅',0],['会',1],['神',1],['本',1],['支',1]]},
+ {k:'安', w:[['全',0],['定',0],['価',0],['易',0],['不',1],['格',1],['治',1],['目',1]]},
+ {k:'親', w:[['子',0],['友',0],['切',0],['指',0],['両',1],['父',1],['母',1],['肉',1]]},
+ {k:'室', w:[['内',0],['温',0],['外',0],['教',1],['和',1],['浴',1],['寝',1],['客',1]]},
+ {k:'店', w:[['員',0],['長',0],['先',0],['商',1],['売',1],['支',1],['開',1],['閉',1]]},
+ {k:'茶', w:[['色',0],['碗',0],['畑',0],['番',1],['紅',1],['麦',1],['喫',1]]},
+ {k:'新', w:[['聞',0],['人',0],['築',0],['型',0],['最',1],['刷',1],['革',1]]},
+ {k:'風', w:[['景',0],['船',0],['車',0],['邪',0],['台',1],['和',1],['洋',1],['家',1]]},
+];
+const WORD = (ans, c) => c[1] === 0 ? ans + c[0] : c[0] + ans;
+
+// ================= 日付 =================
+const now = new Date();
+const Y = now.getFullYear(), M = now.getMonth() + 1, D = now.getDate();
+const WD = ['日','月','火','水','木','金','土'][now.getDay()];
+const KEY = 'ichiji-' + Y + '-' + M + '-' + D;
+document.getElementById('today').textContent = Y + '年' + M + '月' + D + '日（' + WD + '）の5問';
+
+function mulberry32(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+const rng = mulberry32(Y * 10000 + M * 100 + D + 31);
+function shuf(a){
+  a = a.slice();
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(rng() * (i + 1)); [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+// その漢字がその手がかりで言葉になるか
+const fits = (kanji, c) => {
+  const e = T.find(t => t.k === kanji);
+  return !!e && e.w.some(x => x[0] === c[0] && x[1] === c[1]);
+};
+
+// ================= 今日の5問をつくる =================
+const QS = [];
+for (const ent of shuf(T)){
+  if (QS.length >= 5) break;
+  // 前からと後ろからを混ぜて4つ選ぶ
+  const pre = shuf(ent.w.filter(x => x[1] === 0));
+  const post = shuf(ent.w.filter(x => x[1] === 1));
+  if (pre.length < 2 || post.length < 2) continue;
+  const clues = shuf([...pre.slice(0, 2), ...post.slice(0, 2)]);
+  // ほかの漢字が4つ全部に当てはまってしまわないか
+  const rivals = T.filter(t => t.k !== ent.k && clues.every(c => fits(t.k, c)));
+  if (rivals.length) continue;
+  // まぎらわしい選択肢を優先して8つ集める
+  const others = T.filter(t => t.k !== ent.k)
+    .map(t => ({ k: t.k, n: clues.filter(c => fits(t.k, c)).length }));
+  const near = shuf(others.filter(o => o.n > 0)).sort((a, b) => b.n - a.n).slice(0, 5);
+  const rest = shuf(others.filter(o => !near.includes(o))).slice(0, 8 - near.length);
+  const opts = shuf([...near, ...rest].slice(0, 8).map(o => o.k).concat(ent.k));
+  QS.push({ a: ent.k, clues, opts });
+}
+
+// ================= 状態 =================
+let qi = 0, miss = 0, sec = 0, timer = null, solved = [], wrongHere = [];
+const saved = localStorage.getItem(KEY);
+if (saved){
+  try{
+    const s = JSON.parse(saved);
+    qi = s.qi || 0; miss = s.miss || 0; sec = s.sec || 0; solved = s.solved || [];
+  }catch(e){}
+}
+const save = () => localStorage.setItem(KEY, JSON.stringify({ qi, miss, sec, solved }));
+
+// ================= 表示 =================
+function draw(){
+  const q = QS[qi];
+  document.getElementById('qn').textContent = (qi + 1) + ' / 5';
+  document.getElementById('ms').textContent = miss;
+  document.getElementById('clues').innerHTML = q.clues.map(c =>
+    '<div class="clue">' +
+    (c[1] === 0 ? '<span class="bx">□</span>' + c[0] : c[0] + '<span class="bx">□</span>') +
+    '<span class="rd"></span></div>'
+  ).join('');
+  document.getElementById('pick').innerHTML = q.opts.map(k =>
+    '<button data-k="' + k + '"' + (wrongHere.includes(k) ? ' class="no"' : '') + '>' + k + '</button>'
+  ).join('');
+  document.querySelectorAll('#pick button').forEach(b => {
+    b.onclick = () => answer(b.dataset.k, b);
+  });
+}
+
+function answer(k, btn){
+  const q = QS[qi];
+  if (wrongHere.includes(k)) return;
+  if (k !== q.a){
+    miss++; wrongHere.push(k);
+    btn.classList.add('no', 'shake');
+    const n = q.clues.filter(c => fits(k, c)).length;
+    showAlert(n ? '「' + k + '」は ' + n + 'つだけ言葉になります。4つ全部そろう字をさがしてください。'
+                : '「' + k + '」ではどれも言葉になりません。');
+    document.getElementById('ms').textContent = miss;
+    save(); return;
+  }
+  // 正解。4つの言葉を並べて見せる
+  hideAlert();
+  btn.classList.remove('no'); btn.classList.add('yes');
+  document.querySelectorAll('#pick button').forEach(b => {
+    if (b.dataset.k !== k) b.classList.add('no');
+  });
+  document.querySelectorAll('#clues .clue').forEach((el, i) => {
+    const c = q.clues[i];
+    el.classList.add('got');
+    el.querySelector('.bx').textContent = k;
+    el.querySelector('.rd').textContent = WORD(k, c);
+  });
+  solved.push({ a: k, words: q.clues.map(c => WORD(k, c)) });
+  save();
+  toast(qi < 4 ? '正解' : '5問ぜんぶ正解');
+  setTimeout(() => {
+    qi++; wrongHere = [];
+    if (qi >= 5){ finish(); } else { save(); draw(); }
+  }, 1250);
+}
+
+function showAlert(t){ const a = document.getElementById('al'); a.textContent = t; a.classList.add('show'); }
+function hideAlert(){ document.getElementById('al').classList.remove('show'); }
+let tt = null;
+function toast(t){
+  const el = document.getElementById('toast');
+  el.textContent = t; el.classList.add('show');
+  clearTimeout(tt); tt = setTimeout(() => el.classList.remove('show'), 1500);
+}
+
+// ================= 進行 =================
+const fmt = s => ((s / 60) | 0) + '分' + String(s % 60).padStart(2, '0') + '秒';
+function start(){
+  document.getElementById('p0').classList.add('hide');
+  if (qi >= 5){ finish(); return; }
+  document.getElementById('p1').classList.remove('hide');
+  draw();
+  clearInterval(timer);
+  timer = setInterval(() => {
+    sec++;
+    document.getElementById('tm').textContent = ((sec / 60) | 0) + ':' + String(sec % 60).padStart(2, '0');
+    if (sec % 5 === 0) save();
+  }, 1000);
+}
+function finish(){
+  clearInterval(timer);
+  document.getElementById('p1').classList.add('hide');
+  document.getElementById('p0').classList.add('hide');
+  document.getElementById('p2').classList.remove('hide');
+  document.getElementById('result').textContent = fmt(sec) + '　まちがい' + miss + '回';
+  document.getElementById('sharetext').textContent =
+    'かくれた一字 ' + M + '/' + D + '\n' +
+    solved.map(s => s.a).join('　') + '\n' +
+    fmt(sec) + '／まちがい' + miss + '回\n' + location.href;
+  document.getElementById('recap').innerHTML = solved.map(s =>
+    '<div><b>' + s.a + '</b>' + s.words.join('・') + '</div>'
+  ).join('');
+  save(); window.scrollTo(0, 0);
+}
+function copyShare(){
+  const t = document.getElementById('sharetext').textContent;
+  const done = () => toast('コピーしました');
+  const fallback = () => {
+    const ta = document.createElement('textarea');
+    ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); done(); }
+    catch(e){ toast('下の文章を長押しでコピーしてください'); }
+    document.body.removeChild(ta);
+  };
+  if (navigator.clipboard && location.protocol !== 'file:'){
+    navigator.clipboard.writeText(t).then(done, fallback);
+  } else fallback();
+}
+
+if (qi >= 5) finish();
+else if (qi > 0 || sec > 0) start();
+</script>
+</body>
+</html>

@@ -5,116 +5,105 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>棚どり直し｜倉庫で歩く距離を棚の並べかえで減らす</title>
 <style>
-  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#ddd9d0; --ink:#1a1a1a; --sub:#77736a;
-         --grn:#15803d; --amb:#b45309; }
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#e5e1d8; --ink:#1a1a1a; --sub:#6f6b62;
+         --grn:#15803d; --amb:#b45309; --red:#d92d20; }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body{ margin:0; background:var(--bg); color:var(--ink);
+  body{ margin:0; background:#e9e6df; color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
-    font-size:17px; line-height:1.75; }
-  .wrap{ max-width:460px; margin:0 auto; padding:14px 14px 56px; }
-  .demo{ display:inline-block; font-size:12px; color:var(--sub);
-    border:1px solid var(--line); background:#fff; border-radius:999px;
-    padding:2px 10px; margin-bottom:12px; }
-  h1{ font-size:24px; margin:0 0 4px; letter-spacing:-.01em; }
-  .sub{ color:var(--sub); font-size:15px; margin:0 0 18px; line-height:1.6; }
-  h2{ font-size:13px; color:var(--sub); font-weight:700; margin:24px 0 8px;
-    letter-spacing:.08em; }
+    font-size:17px; line-height:1.7; -webkit-font-smoothing:antialiased; }
+  .app{ max-width:430px; margin:0 auto; background:var(--bg); min-height:100vh;
+    padding-bottom:104px; }
   button{ font-family:inherit; cursor:pointer; }
 
-  /* 切替 */
-  .seg{ display:flex; background:#eceae4; border-radius:12px; padding:3px; gap:3px; }
-  .seg button{ flex:1; border:0; background:transparent; color:var(--sub);
-    font-size:15px; font-weight:700; padding:10px 0; border-radius:10px; }
-  .seg button.on{ background:#fff; color:var(--ink); box-shadow:0 1px 3px rgba(0,0,0,.10); }
+  .bar{ position:sticky; top:0; z-index:20; background:var(--ac); color:#fff;
+    display:flex; align-items:center; padding:13px 14px 12px; }
+  .bar .ttl{ flex:1; font-size:17px; font-weight:700; }
+  .bar .dm{ font-size:11px; background:rgba(255,255,255,.22); border-radius:999px;
+    padding:3px 9px; white-space:nowrap; }
 
-  /* 数字カード */
-  .stats{ background:#fff; border:1px solid var(--line); border-radius:14px;
-    padding:16px; margin-top:12px; }
-  .big{ font-size:36px; font-weight:700; line-height:1.15;
-    font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
-  .big span{ font-size:19px; font-weight:600; margin-left:3px; }
-  .lb{ font-size:13px; color:var(--sub); }
-  .delta{ margin-top:10px; padding-top:10px; border-top:1px solid var(--line);
-    font-size:15px; color:var(--grn); font-weight:700; }
-  .delta.zero{ color:var(--sub); }
-  .delta small{ display:block; font-weight:400; color:var(--sub); font-size:13px;
-    margin-top:2px; }
-
-  /* 倉庫図 */
-  .floor{ background:#fff; border:1px solid var(--line); border-radius:14px;
-    padding:14px 12px 12px; margin-top:12px; }
-  .grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:5px; }
-  .cell{ border:1px solid var(--line); border-radius:9px; padding:7px 3px 6px;
-    text-align:center; background:#faf9f6; min-height:60px; }
-  .cell .nm{ font-size:12px; font-weight:600; line-height:1.3;
-    overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
-  .cell .pk{ font-size:11px; color:var(--sub); font-variant-numeric:tabular-nums;
-    margin-top:1px; }
-  .cell.h1{ background:#dbe7fd; border-color:#b9d0fb; }
-  .cell.h2{ background:#e9f0fe; border-color:#cfdefc; }
-  .cell.h3{ background:#f3f6fd; }
-  .cell.sel{ border:2px solid var(--ac); }
-  .cell.mv{ box-shadow:inset 0 0 0 2px var(--amb); }
-  .gate{ display:flex; align-items:center; gap:7px; margin-top:9px;
-    font-size:12px; color:var(--sub); }
-  .gate i{ display:block; width:38px; height:7px; background:var(--ac);
-    border-radius:999px; flex:none; }
-  .legend{ font-size:12px; color:var(--sub); margin-top:7px; line-height:1.6; }
-
-  /* 詳細 */
-  .detail{ background:#fff; border:1px solid var(--line); border-left:4px solid var(--ac);
-    border-radius:14px; padding:14px 16px; margin-top:12px; }
-  .detail .t{ font-size:19px; font-weight:700; }
-  .detail .r{ display:flex; justify-content:space-between; gap:10px;
-    font-size:15px; padding:5px 0; border-bottom:1px solid #f0eee8; }
-  .detail .r:last-of-type{ border-bottom:0; }
-  .detail .r b{ font-variant-numeric:tabular-nums; }
-  .detail .msg{ font-size:15px; color:var(--amb); font-weight:700; margin-top:8px; }
-  .detail .msg.ok{ color:var(--grn); }
-
-  /* 移動リスト */
-  .mvrow{ background:#fff; border:1px solid var(--line); border-radius:14px;
-    padding:12px 15px; margin-bottom:8px; display:flex; align-items:center;
-    justify-content:space-between; gap:10px; }
-  .mvrow .n{ font-size:16px; font-weight:600; }
-  .mvrow .p{ font-size:14px; color:var(--sub); font-variant-numeric:tabular-nums; }
-  .mvrow .g{ font-size:15px; color:var(--grn); font-weight:700; white-space:nowrap;
+  .hero{ background:var(--ac); color:#fff; padding:10px 18px 34px; }
+  .cmp{ display:flex; align-items:center; justify-content:space-between; }
+  .cmp .col{ text-align:center; flex:1; }
+  .cmp .lb{ display:block; font-size:12px; opacity:.8; }
+  .cmp b{ font-size:38px; font-weight:700; line-height:1.1; letter-spacing:-.03em;
     font-variant-numeric:tabular-nums; }
-  .note{ font-size:14px; color:var(--sub); line-height:1.7; margin-top:20px;
-    border-top:1px solid var(--line); padding-top:14px; }
+  .cmp b i{ font-size:16px; font-style:normal; margin-left:1px; font-weight:600; }
+  .cmp .col.dim b{ opacity:.5; } .cmp .col.dim .lb{ opacity:.6; }
+  .cmp .mid{ background:#fff; color:var(--ac); font-size:15px; font-weight:700;
+    border-radius:999px; padding:4px 11px; flex:none; }
+  .hero .cap{ font-size:12.5px; opacity:.85; text-align:center; margin-top:10px; }
+
+  .sheet{ background:var(--bg); border-radius:20px 20px 0 0; margin-top:-18px;
+    position:relative; padding:16px 14px 0; }
+
+  .seg{ display:flex; background:#e6e3db; border-radius:999px; padding:3px; }
+  .seg button{ flex:1; border:0; background:transparent; color:var(--sub);
+    font-size:15px; font-weight:700; padding:10px 0; border-radius:999px; }
+  .seg button.on{ background:#fff; color:var(--ink); box-shadow:0 1px 3px rgba(0,0,0,.12); }
+
+  .sec{ display:flex; align-items:baseline; justify-content:space-between; margin:22px 2px 9px; }
+  .sec h2{ font-size:18px; font-weight:700; margin:0; }
+  .sec span{ font-size:13.5px; color:var(--sub); }
+
+  .card{ background:#fff; border-radius:14px; padding:14px; margin-bottom:10px;
+    box-shadow:0 1px 2px rgba(20,18,14,.06); }
+
+  .grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:5px; }
+  .cell{ border-radius:10px; padding:8px 2px 7px; text-align:center;
+    background:#f3f1ec; border:1.5px solid transparent; min-height:62px; }
+  .cell .nm{ font-size:12px; font-weight:700; line-height:1.25;
+    overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+  .cell .pk{ font-size:11px; color:var(--sub); font-variant-numeric:tabular-nums; }
+  .cell.h1{ background:#c7dbfd; } .cell.h2{ background:#dfeafd; } .cell.h3{ background:#eef3fd; }
+  .cell.sel{ border-color:var(--ac); }
+  .cell.mv{ border-color:var(--amb); border-style:dashed; }
+  .gate{ display:flex; align-items:center; gap:8px; margin-top:10px; font-size:12.5px;
+    color:var(--sub); }
+  .gate i{ width:40px; height:7px; background:var(--ac); border-radius:999px; flex:none; }
+
+  .tag{ display:inline-block; font-size:11px; font-weight:700; border-radius:5px;
+    padding:2px 7px; margin-right:6px; }
+  .tag.new{ background:var(--red); color:#fff; }
+  .tag.out{ border:1px solid var(--line); color:var(--sub); }
+  .tag.ok{ background:#e7f2ea; color:var(--grn); }
+
+  .dt .nm{ font-size:19px; font-weight:700; line-height:1.4; }
+  .dt .rw{ display:flex; justify-content:space-between; font-size:15px; padding:7px 0;
+    border-top:1px solid #f1efe9; }
+  .dt .rw:first-of-type{ border-top:0; }
+  .dt b{ font-variant-numeric:tabular-nums; }
+  .dt .msg{ background:#fdf6ec; color:var(--amb); border-radius:11px; padding:11px 13px;
+    font-size:14.5px; font-weight:700; margin-top:10px; line-height:1.6; }
+  .dt .msg.ok{ background:#e7f2ea; color:var(--grn); }
+
+  .row{ display:flex; align-items:center; gap:12px; }
+  .row .n{ font-size:16.5px; font-weight:700; }
+  .row .p{ font-size:13.5px; color:var(--sub); font-variant-numeric:tabular-nums; }
+  .row .g{ margin-left:auto; font-size:19px; font-weight:700; color:var(--grn);
+    font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .rank{ width:26px; height:26px; border-radius:8px; background:var(--ac); color:#fff;
+    font-size:14px; font-weight:700; display:flex; align-items:center;
+    justify-content:center; flex:none; }
+  .rank.g5{ background:#c3bfb4; }
+
+  .foot{ font-size:13.5px; color:var(--sub); line-height:1.7; padding:14px 2px 4px; }
+
+  .tabs{ position:fixed; left:0; right:0; bottom:0; z-index:30; background:#fff;
+    border-top:1px solid var(--line); display:flex; max-width:430px; margin:0 auto;
+    padding:6px 0 max(8px, env(safe-area-inset-bottom)); }
+  .tabs button{ flex:1; background:none; border:0; color:var(--sub); font-size:11px;
+    font-weight:700; display:flex; flex-direction:column; align-items:center; gap:2px; padding:3px 0; }
+  .tabs button.on{ color:var(--ac); }
+  .tabs svg{ width:23px; height:23px; fill:none; stroke:currentColor; stroke-width:1.9;
+    stroke-linecap:round; stroke-linejoin:round; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="demo">デモ（サンプルデータ）</div>
-  <h1>棚どり直し</h1>
-  <p class="sub">出荷実績から棚の並べかえ案をつくり、ピッキングで歩く距離を減らします。ハマナカ物流センター（架空）の第2倉庫の例です。</p>
-
-  <div class="seg">
-    <button id="bNow" class="on" onclick="setMode('now')">いまの棚</button>
-    <button id="bOpt" onclick="setMode('opt')">並べかえ案</button>
-  </div>
-
-  <div class="stats">
-    <div class="lb">1か月に歩く距離（ピッキングのみ）</div>
-    <div class="big" id="km">—<span>km</span></div>
-    <div class="lb" id="hh">—</div>
-    <div class="delta zero" id="dl">並べかえ案に切り替えると差が出ます</div>
-  </div>
-
-  <h2>倉庫の棚わり</h2>
-  <div class="floor">
-    <div class="grid" id="grid"></div>
-    <div class="gate"><i></i>出荷口（ここを起点に往復します）</div>
-    <div class="legend">濃い青ほど出荷回数が多い棚です。棚を押すと明細が出ます。</div>
-  </div>
-
-  <div id="detail"></div>
-
-  <div id="moves"></div>
-
-  <p class="note">歩行距離は「棚までの通路の数 × 3m × 往復」で計算しています。時間は時速4kmで換算。実際の倉庫では通路幅・台車・重量物の置き場も条件に入ります。</p>
+<div class="app">
+  <div class="bar"><div class="ttl">棚どり直し</div><div class="dm">デモ（サンプルデータ）</div></div>
+  <div id="body"></div>
 </div>
+<div class="tabs" id="tabs"></div>
 
 <script>
 // ===== サンプルデータ（架空の物流センター）=====
@@ -141,140 +130,162 @@ var ITEMS = [
   {id:20, nm:'石油ストーブ用 替芯',         s:'替芯',   pk:9}
 ];
 var COLS = 5, ROWS = 4, STEP_M = 3;
-// いまの棚わり（スロット0..19に商品idを配置）
 var NOW = [7,1,9,2,4, 11,8,3,5,6, 13,10,12,14,15, 20,19,18,16,17];
 
 function byId(id){ for(var i=0;i<ITEMS.length;i++){ if(ITEMS[i].id===id) return ITEMS[i]; } }
-// スロットの通路数（出荷口＝左下）
-function dist(slot){
-  var r = Math.floor(slot/COLS), c = slot%COLS;
-  return c + (ROWS-1-r);
-}
-// 出荷回数の多い順に、近いスロットから割り当てる
+function dist(slot){ var r=Math.floor(slot/COLS), c=slot%COLS; return c + (ROWS-1-r); }
 function optimize(){
-  var slots = [];
-  for(var i=0;i<COLS*ROWS;i++) slots.push(i);
+  var slots=[]; for(var i=0;i<COLS*ROWS;i++) slots.push(i);
   slots.sort(function(a,b){ return dist(a)-dist(b) || a-b; });
-  var items = ITEMS.slice().sort(function(a,b){ return b.pk-a.pk; });
-  var out = new Array(COLS*ROWS);
-  for(var j=0;j<slots.length;j++) out[slots[j]] = items[j].id;
+  var items=ITEMS.slice().sort(function(a,b){ return b.pk-a.pk; });
+  var out=new Array(COLS*ROWS);
+  for(var j=0;j<slots.length;j++) out[slots[j]]=items[j].id;
   return out;
 }
 var OPT = optimize();
-
-function totalSteps(layout){
-  var t = 0;
-  for(var i=0;i<layout.length;i++) t += byId(layout[i]).pk * dist(i);
-  return t;
-}
+function totalSteps(l){ var t=0; for(var i=0;i<l.length;i++) t+=byId(l[i]).pk*dist(i); return t; }
 var stepsNow = totalSteps(NOW), stepsOpt = totalSteps(OPT);
-function km(steps){ return steps * STEP_M * 2 / 1000; }
-function hours(steps){ return km(steps) / 4; }
+function km(s){ return s*STEP_M*2/1000; }
+function hours(s){ return km(s)/4; }
+function slotName(s){ return '棚 ' + 'ABCDE'.charAt(s%COLS) + '-' + (Math.floor(s/COLS)+1); }
+function rank(pk){ var a=ITEMS.slice().sort(function(x,y){return y.pk-x.pk;});
+  for(var i=0;i<a.length;i++){ if(a[i].pk===pk) return i; } return 99; }
 
-var mode = 'now', sel = null;
+var tab = 'floor', mode = 'now', sel = null;
 
-function rank(pk){
-  var sorted = ITEMS.slice().sort(function(a,b){ return b.pk-a.pk; });
-  for(var i=0;i<sorted.length;i++){ if(sorted[i].pk===pk) return i; }
-  return 99;
+function hero(){
+  var cutPct = Math.round((1-stepsOpt/stepsNow)*100);
+  return '<div class="hero"><div class="cmp">' +
+    '<div class="col' + (mode==='opt'?' dim':'') + '"><span class="lb">いまの棚</span>' +
+      '<b>' + km(stepsNow).toFixed(1) + '<i>km</i></b></div>' +
+    '<div class="mid">−' + cutPct + '％</div>' +
+    '<div class="col' + (mode==='now'?' dim':'') + '"><span class="lb">並べかえ後</span>' +
+      '<b>' + km(stepsOpt).toFixed(1) + '<i>km</i></b></div>' +
+    '</div><div class="cap">1か月に歩く距離。月およそ' +
+    (hours(stepsNow)-hours(stepsOpt)).toFixed(1) + '時間ぶん浮きます</div></div>';
 }
-function layout(){ return mode==='now' ? NOW : OPT; }
 
-function render(){
-  var lay = layout();
-  // 数字
-  var s = mode==='now' ? stepsNow : stepsOpt;
-  document.getElementById('km').innerHTML = km(s).toFixed(1) + '<span>km</span>';
-  document.getElementById('hh').textContent = '歩いている時間 およそ ' + hours(s).toFixed(1) + '時間／月';
-  var dl = document.getElementById('dl');
-  if(mode==='now'){
-    dl.className = 'delta zero';
-    dl.innerHTML = '並べかえ案に切り替えると、減る分が出ます';
-  } else {
-    var cutKm = km(stepsNow) - km(stepsOpt);
-    var cutH  = hours(stepsNow) - hours(stepsOpt);
-    var pct   = Math.round((1 - stepsOpt/stepsNow) * 100);
-    dl.className = 'delta';
-    dl.innerHTML = '月 ' + cutKm.toFixed(1) + 'km 短縮（' + pct + '％減）' +
-      '<small>歩く時間が月およそ' + cutH.toFixed(1) + '時間ぶん浮きます</small>';
-  }
-  // 棚
-  var g = document.getElementById('grid');
-  g.innerHTML = '';
+function viewFloor(){
+  var lay = mode==='now' ? NOW : OPT;
+  var h = hero() + '<div class="sheet">' +
+    '<div class="seg">' +
+      '<button class="' + (mode==='now'?'on':'') + '" onclick="setMode(\'now\')">いまの棚</button>' +
+      '<button class="' + (mode==='opt'?'on':'') + '" onclick="setMode(\'opt\')">並べかえ案</button>' +
+    '</div>' +
+    '<div class="sec"><h2>倉庫の棚わり</h2><span>押すと明細</span></div>' +
+    '<div class="card"><div class="grid">';
   for(var i=0;i<lay.length;i++){
     var it = byId(lay[i]), r = rank(it.pk);
-    var cls = 'cell ' + (r<4 ? 'h1' : r<9 ? 'h2' : r<14 ? 'h3' : '');
+    var cls = 'cell ' + (r<4?'h1':r<9?'h2':r<14?'h3':'');
     if(sel===i) cls += ' sel';
     if(mode==='opt' && NOW[i]!==OPT[i]) cls += ' mv';
-    var d = document.createElement('div');
-    d.className = cls;
-    d.innerHTML = '<div class="nm">'+it.s+'</div><div class="pk">'+it.pk+'回</div>';
-    (function(idx){ d.onclick = function(){ sel = (sel===idx? null : idx); render(); }; })(i);
-    g.appendChild(d);
+    h += '<div class="' + cls + '" onclick="pick(' + i + ')">' +
+         '<div class="nm">' + it.s + '</div><div class="pk">' + it.pk + '</div></div>';
   }
-  renderDetail();
-  renderMoves();
+  h += '</div><div class="gate"><i></i>出荷口／数字は月の出荷回数</div></div>';
+  h += detail(lay);
+  h += '<div class="foot">歩く距離は「棚までの通路の数 × 3m × 往復」で計算しています。' +
+       '出荷実績のCSVがあれば動きます。</div></div>';
+  return h;
 }
 
-function renderDetail(){
-  var box = document.getElementById('detail');
-  if(sel===null){ box.innerHTML=''; return; }
-  var lay = layout(), it = byId(lay[sel]);
-  var nowSlot = NOW.indexOf(it.id), optSlot = OPT.indexOf(it.id);
-  var wNow = it.pk * dist(nowSlot) * STEP_M * 2 / 1000;
-  var wOpt = it.pk * dist(optSlot) * STEP_M * 2 / 1000;
-  var msg = (nowSlot===optSlot)
-    ? '<div class="msg ok">この棚は動かさなくて大丈夫です</div>'
-    : '<div class="msg">通路 ' + dist(nowSlot) + ' 本ぶん奥 → ' + dist(optSlot) +
-      ' 本ぶん手前へ／この1品だけで月 ' + (wNow-wOpt).toFixed(1) + 'km 短くなります</div>';
-  box.innerHTML =
-    '<div class="detail">' +
-      '<div class="t">'+it.nm+'</div>' +
-      '<div class="r"><span>月間の出荷回数</span><b>'+it.pk+'回</b></div>' +
-      '<div class="r"><span>いまの位置</span><b>'+slotName(nowSlot)+'（通路'+dist(nowSlot)+'本）</b></div>' +
-      '<div class="r"><span>並べかえ案の位置</span><b>'+slotName(optSlot)+'（通路'+dist(optSlot)+'本）</b></div>' +
-      '<div class="r"><span>この品で歩く距離</span><b>'+wNow.toFixed(1)+'km → '+wOpt.toFixed(1)+'km</b></div>' +
-      msg +
-    '</div>';
-}
-function slotName(slot){
-  var r = Math.floor(slot/COLS), c = slot%COLS;
-  return '棚 ' + 'ABCDE'.charAt(c) + '-' + (r+1);
+function detail(lay){
+  if(sel===null) return '';
+  var it = byId(lay[sel]);
+  var a = NOW.indexOf(it.id), b = OPT.indexOf(it.id);
+  var wa = it.pk*dist(a)*STEP_M*2/1000, wb = it.pk*dist(b)*STEP_M*2/1000;
+  var msg = (a===b) ? '<div class="msg ok">この棚は動かさなくて大丈夫です</div>'
+    : '<div class="msg">' + slotName(a) + ' から ' + slotName(b) + ' へ。' +
+      'この1品だけで月 ' + (wa-wb).toFixed(1) + 'km 短くなります</div>';
+  return '<div class="sec"><h2>えらんだ棚</h2><span>' + slotName(sel) + '</span></div>' +
+    '<div class="card dt">' +
+      '<div>' + (a===b ? '<span class="tag ok">そのまま</span>' : '<span class="tag new">動かす</span>') +
+      '<span class="tag out">月' + it.pk + '回</span></div>' +
+      '<div class="nm">' + it.nm + '</div>' +
+      '<div class="rw"><span>いまの位置</span><b>' + slotName(a) + '（通路' + dist(a) + '本）</b></div>' +
+      '<div class="rw"><span>並べかえ案</span><b>' + slotName(b) + '（通路' + dist(b) + '本）</b></div>' +
+      '<div class="rw"><span>この品で歩く距離</span><b>' + wa.toFixed(1) + ' → ' + wb.toFixed(1) + 'km</b></div>' +
+      msg + '</div>';
 }
 
-function renderMoves(){
-  var box = document.getElementById('moves');
-  if(mode!=='opt'){ box.innerHTML=''; return; }
+function moveRows(){
   var rows = [];
   for(var i=0;i<ITEMS.length;i++){
-    var it = ITEMS[i];
-    var a = NOW.indexOf(it.id), b = OPT.indexOf(it.id);
+    var it = ITEMS[i], a = NOW.indexOf(it.id), b = OPT.indexOf(it.id);
     if(a===b) continue;
-    var gain = it.pk * (dist(a)-dist(b)) * STEP_M * 2 / 1000;
-    if(gain<=0) continue;
-    rows.push({it:it, a:a, b:b, gain:gain});
+    var g = it.pk*(dist(a)-dist(b))*STEP_M*2/1000;
+    if(g<=0) continue;
+    rows.push({it:it,a:a,b:b,g:g});
   }
-  rows.sort(function(x,y){ return y.gain-x.gain; });
-  var moveCount = 0;
-  for(var k=0;k<ITEMS.length;k++){ if(NOW[k]!==OPT[k]) moveCount++; }
-  var html = '<h2>動かす棚（効果の大きい順）</h2>';
-  for(var j=0;j<Math.min(rows.length,6);j++){
-    var x = rows[j];
-    html += '<div class="mvrow"><div><div class="n">'+x.it.s+'</div>' +
-      '<div class="p">'+slotName(x.a)+' → '+slotName(x.b)+'</div></div>' +
-      '<div class="g">−'+x.gain.toFixed(1)+'km</div></div>';
-  }
-  html += '<p class="note" style="margin-top:10px;border:0;padding:0;">' +
-    '入れかえが必要な棚は全部で '+moveCount+' か所。上位6か所だけ動かしても、短縮ぶんの大半が取れます。</p>';
-  box.innerHTML = html;
+  rows.sort(function(x,y){ return y.g-x.g; });
+  return rows;
 }
 
-function setMode(m){
-  mode = m; sel = null;
-  document.getElementById('bNow').className = (m==='now'?'on':'');
-  document.getElementById('bOpt').className = (m==='opt'?'on':'');
-  render();
+function viewMoves(){
+  var rows = moveRows(), top = 0;
+  for(var i=0;i<Math.min(rows.length,6);i++) top += rows[i].g;
+  var all = km(stepsNow)-km(stepsOpt);
+  var h = '<div class="hero"><div class="cmp"><div class="col" style="flex:none;text-align:left">' +
+    '<span class="lb">上の6か所だけ動かせば</span><b>' + Math.round(top/all*100) + '<i>％</i></b></div>' +
+    '<div class="mid">全' + rows.length + 'か所</div></div>' +
+    '<div class="cap">短縮できる距離のうち、上位6か所で取れる割合です</div></div>' +
+    '<div class="sheet"><div class="sec"><h2>動かす棚</h2><span>効果の大きい順</span></div>';
+  for(var j=0;j<rows.length;j++){
+    var x = rows[j];
+    h += '<div class="card"><div class="row">' +
+      '<div class="rank' + (j>=6?' g5':'') + '">' + (j+1) + '</div>' +
+      '<div><div class="n">' + x.it.nm.split(' ')[0] + '</div>' +
+      '<div class="p">' + slotName(x.a) + ' → ' + slotName(x.b) + '</div></div>' +
+      '<div class="g">−' + x.g.toFixed(1) + '<span style="font-size:13px">km</span></div>' +
+    '</div></div>';
+  }
+  h += '<div class="foot">通路のいちばん手前に、出荷回数の多い品を寄せる考え方です。' +
+       '棚の耐荷重や危険物の置き場は別途ご確認ください。</div></div>';
+  return h;
 }
+
+function viewItems(){
+  var a = ITEMS.slice().sort(function(x,y){ return y.pk-x.pk; });
+  var h = '<div class="hero"><div class="cmp"><div class="col" style="flex:none;text-align:left">' +
+    '<span class="lb">登録されている品目</span><b>' + ITEMS.length + '<i>品</i></b></div>' +
+    '<div class="mid">直近30日</div></div>' +
+    '<div class="cap">出荷回数の多い順。上のほうほど出荷口に近づけます</div></div>' +
+    '<div class="sheet"><div class="sec"><h2>品目</h2><span>出荷回数の多い順</span></div>';
+  for(var i=0;i<a.length;i++){
+    var it = a[i], b = OPT.indexOf(it.id), n = NOW.indexOf(it.id);
+    h += '<div class="card"><div class="row">' +
+      '<div class="rank' + (i>=6?' g5':'') + '">' + (i+1) + '</div>' +
+      '<div><div class="n" style="font-size:16px">' + it.nm + '</div>' +
+      '<div class="p">' + slotName(n) + (n===b ? '（そのまま）' : ' → ' + slotName(b)) + '</div></div>' +
+      '<div class="g" style="color:var(--ink)">' + it.pk + '<span style="font-size:13px">回</span></div>' +
+    '</div></div>';
+  }
+  h += '<div class="foot">品目ごとの出荷回数は倉庫システムの出荷実績から取り込みます。' +
+       '手入力は必要ありません。</div></div>';
+  return h;
+}
+
+var TAB = [
+  {id:'floor', nm:'棚わり', d:'M3 9.5 12 4l9 5.5M5 10v10h14V10M9 20v-6h6v6'},
+  {id:'moves', nm:'動かす棚', d:'M4 7h11M4 7l3-3M4 7l3 3M20 17H9M20 17l-3-3M20 17l-3 3'},
+  {id:'items', nm:'品目', d:'M4 6h16M4 12h16M4 18h10'}
+];
+function renderTabs(){
+  var h = '';
+  for(var i=0;i<TAB.length;i++){
+    h += '<button class="' + (tab===TAB[i].id?'on':'') + '" onclick="setTab(\'' + TAB[i].id + '\')">' +
+      '<svg viewBox="0 0 24 24"><path d="' + TAB[i].d + '"/></svg>' + TAB[i].nm + '</button>';
+  }
+  document.getElementById('tabs').innerHTML = h;
+}
+function render(){
+  document.getElementById('body').innerHTML =
+    tab==='floor' ? viewFloor() : tab==='moves' ? viewMoves() : viewItems();
+  renderTabs();
+}
+function setTab(t){ tab = t; sel = null; window.scrollTo(0,0); render(); }
+function setMode(m){ mode = m; sel = null; render(); }
+function pick(i){ sel = (sel===i ? null : i); render(); }
 render();
 </script>
 </body>

@@ -5,75 +5,110 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>リコールもどり予報｜検診に戻ってこない人を先に見つける</title>
 <style>
-  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#ddd9d0; --ink:#1a1a1a; --sub:#77736a;
-         --grn:#15803d; --amb:#b45309; --red:#b91c1c; }
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#e5e1d8; --ink:#1a1a1a; --sub:#6f6b62;
+         --grn:#15803d; --amb:#b45309; --red:#d92d20; }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body{ margin:0; background:var(--bg); color:var(--ink);
+  body{ margin:0; background:#e9e6df; color:var(--ink);
     font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
-    font-size:17px; line-height:1.75; }
-  .wrap{ max-width:460px; margin:0 auto; padding:14px 14px 56px; }
-  .demo{ display:inline-block; font-size:12px; color:var(--sub);
-    border:1px solid var(--line); background:#fff; border-radius:999px;
-    padding:2px 10px; margin-bottom:12px; }
-  h1{ font-size:24px; margin:0 0 4px; letter-spacing:-.01em; }
-  .sub{ color:var(--sub); font-size:15px; margin:0 0 18px; line-height:1.6; }
-  h2{ font-size:13px; color:var(--sub); font-weight:700; margin:24px 0 8px;
-    letter-spacing:.08em; }
+    font-size:17px; line-height:1.7; -webkit-font-smoothing:antialiased; }
+  .app{ max-width:430px; margin:0 auto; background:var(--bg); min-height:100vh;
+    padding-bottom:120px; }
   button{ font-family:inherit; cursor:pointer; }
-  a.back{ display:inline-block; font-size:15px; color:var(--ac); text-decoration:none;
-    margin-bottom:12px; cursor:pointer; }
 
-  .top{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; }
-  .top .lb{ font-size:13px; color:var(--sub); }
-  .top .big{ font-size:37px; font-weight:700; line-height:1.15;
-    font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
-  .top .big span{ font-size:19px; margin-left:2px; }
-  .top .two{ display:flex; gap:12px; margin-top:12px; padding-top:12px;
-    border-top:1px solid var(--line); }
-  .top .two div{ flex:1; }
-  .top .two b{ display:block; font-size:22px; font-variant-numeric:tabular-nums;
-    line-height:1.3; }
+  .bar{ position:sticky; top:0; z-index:20; background:var(--ac); color:#fff;
+    display:flex; align-items:center; padding:13px 14px 12px; gap:6px; }
+  .bar .ttl{ flex:1; font-size:17px; font-weight:700; }
+  .bar .ttl.mid{ text-align:center; }
+  .bar .dm{ font-size:11px; background:rgba(255,255,255,.22); border-radius:999px;
+    padding:3px 9px; white-space:nowrap; }
+  .bar .bk{ background:none; border:0; color:#fff; padding:0; width:26px; height:26px; }
+  .bar .bk svg{ width:24px; height:24px; fill:none; stroke:#fff; stroke-width:2.2;
+    stroke-linecap:round; stroke-linejoin:round; }
 
-  .card{ background:#fff; border:1px solid var(--line); border-radius:14px;
-    padding:13px 15px; margin-bottom:9px; cursor:pointer; }
-  .card.done{ opacity:.55; }
-  .card .hd{ display:flex; justify-content:space-between; align-items:baseline; gap:10px; }
-  .card .nm{ font-size:18px; font-weight:600; }
-  .card .ag{ font-size:13px; color:var(--sub); }
-  .card .tx{ font-size:14px; color:var(--sub); margin-top:1px; }
-  .bar{ height:8px; background:#eceae4; border-radius:999px; overflow:hidden;
-    margin:9px 0 4px; }
-  .bar i{ display:block; height:8px; border-radius:999px; }
-  .bl{ display:flex; justify-content:space-between; font-size:13px; color:var(--sub);
+  .hero{ background:var(--ac); color:#fff; padding:8px 18px 32px; }
+  .hero .lb{ font-size:12.5px; opacity:.85; }
+  .hero .big{ font-size:46px; font-weight:700; line-height:1.1; letter-spacing:-.03em;
     font-variant-numeric:tabular-nums; }
-  .bl b{ font-weight:700; }
+  .hero .big i{ font-size:18px; font-style:normal; font-weight:600; margin-left:2px; }
+  .hero .two{ display:flex; gap:10px; margin-top:12px; }
+  .hero .two div{ flex:1; background:rgba(255,255,255,.15); border-radius:11px;
+    padding:8px 11px; font-size:12px; }
+  .hero .two b{ display:block; font-size:19px; font-weight:700; line-height:1.4;
+    font-variant-numeric:tabular-nums; }
+
+  .sheet{ background:var(--bg); border-radius:20px 20px 0 0; margin-top:-18px;
+    position:relative; padding:16px 14px 0; }
+  .sec{ display:flex; align-items:baseline; justify-content:space-between; margin:20px 2px 9px; }
+  .sec h2{ font-size:18px; font-weight:700; margin:0; }
+  .sec span{ font-size:13.5px; color:var(--sub); }
+
+  .card{ background:#fff; border-radius:14px; padding:14px; margin-bottom:10px;
+    box-shadow:0 1px 2px rgba(20,18,14,.06); }
+  .pt{ display:flex; align-items:center; gap:12px; cursor:pointer; }
+  .pt .av{ width:44px; height:44px; border-radius:14px; flex:none; display:flex;
+    align-items:center; justify-content:center; font-size:17px; font-weight:700; color:#fff; }
+  .pt .nm{ font-size:18px; font-weight:700; line-height:1.35; }
+  .pt .tx{ font-size:13.5px; color:var(--sub); line-height:1.45; }
+  .pt .rt{ margin-left:auto; text-align:right; flex:none; }
+  .pt .rt b{ font-size:24px; font-weight:700; letter-spacing:-.02em; line-height:1.15;
+    font-variant-numeric:tabular-nums; }
+  .pt .rt b i{ font-size:13px; font-style:normal; }
+  .pt .rt span{ display:block; font-size:12px; color:var(--sub); }
+  .card.done{ opacity:.6; }
   .hi{ color:var(--red); } .md{ color:var(--amb); } .lo{ color:var(--grn); }
+  .bgh{ background:var(--red); } .bgm{ background:var(--amb); } .bgl{ background:var(--grn); }
 
-  .panel{ background:#fff; border:1px solid var(--line); border-radius:14px;
-    padding:14px 16px; margin-bottom:12px; }
-  .panel.acc{ border-left:4px solid var(--ac); }
-  .r{ display:flex; justify-content:space-between; gap:12px; font-size:15px;
-    padding:6px 0; border-bottom:1px solid #f0eee8; }
-  .r:last-child{ border-bottom:0; }
-  .r b{ font-variant-numeric:tabular-nums; white-space:nowrap; }
-  .why{ font-size:15px; padding:6px 0 6px 16px; position:relative; line-height:1.6; }
-  .why:before{ content:''; position:absolute; left:2px; top:15px; width:6px; height:6px;
-    border-radius:50%; background:var(--amb); }
-  .why.neg:before{ background:var(--grn); }
-  .quote{ background:#faf9f6; border:1px solid var(--line); border-radius:11px;
-    padding:13px 14px; font-size:16px; line-height:1.8; margin-top:8px; }
+  .tag{ display:inline-block; font-size:11px; font-weight:700; border-radius:5px;
+    padding:2px 7px; margin-right:6px; }
+  .tag.new{ background:var(--red); color:#fff; }
+  .tag.out{ border:1px solid var(--line); color:var(--sub); }
+  .tag.ok{ background:#e7f2ea; color:var(--grn); }
+  .tag.wa{ background:#fdf1e3; color:var(--amb); }
 
-  .go{ display:block; width:100%; border:0; background:var(--ac); color:#fff;
-    font-size:17px; font-weight:700; border-radius:12px; padding:15px 0; margin-top:10px; }
-  .go.gh{ background:#fff; color:var(--ac); border:1.5px solid var(--ac); }
-  .ok{ background:#e7f2ea; border-radius:12px; padding:13px 15px; margin-top:12px;
+  .why{ display:flex; align-items:center; gap:10px; font-size:15.5px; padding:10px 0;
+    border-top:1px solid #f1efe9; }
+  .why:first-child{ border-top:0; }
+  .why b{ margin-left:auto; font-variant-numeric:tabular-nums; }
+  .why .dot{ width:8px; height:8px; border-radius:50%; background:var(--amb); flex:none; }
+  .why.neg .dot{ background:var(--grn); }
+  .why.neg b{ color:var(--grn); }
+  .why.sum{ border-top:1.5px solid var(--line); font-weight:700; }
+
+  .seg{ display:flex; background:#e6e3db; border-radius:999px; padding:3px; margin-bottom:9px; }
+  .seg button{ flex:1; border:0; background:transparent; color:var(--sub);
+    font-size:14.5px; font-weight:700; padding:9px 0; border-radius:999px; }
+  .seg button.on{ background:#fff; color:var(--ink); box-shadow:0 1px 3px rgba(0,0,0,.12); }
+  .quote{ font-size:16px; line-height:1.85; }
+
+  .okbox{ background:#e7f2ea; border-radius:14px; padding:14px 15px; margin-top:12px;
     font-size:15px; color:var(--grn); font-weight:700; line-height:1.7; }
-  .note{ font-size:14px; color:var(--sub); line-height:1.7; margin-top:22px;
-    border-top:1px solid var(--line); padding-top:14px; }
+  .okbox.wa{ background:#fdf1e3; color:var(--amb); }
+  .foot{ font-size:13.5px; color:var(--sub); line-height:1.7; padding:16px 2px 4px; }
+  .empty{ text-align:center; color:var(--sub); font-size:15px; padding:40px 20px; }
+
+  .dock{ position:fixed; left:0; right:0; bottom:0; z-index:30; background:#fff;
+    border-top:1px solid var(--line); max-width:430px; margin:0 auto; }
+  .tabs{ display:flex; padding:6px 0 max(8px, env(safe-area-inset-bottom)); }
+  .tabs button{ flex:1; background:none; border:0; color:var(--sub); font-size:11px;
+    font-weight:700; display:flex; flex-direction:column; align-items:center; gap:2px;
+    padding:3px 0; position:relative; }
+  .tabs button.on{ color:var(--ac); }
+  .tabs svg{ width:23px; height:23px; fill:none; stroke:currentColor; stroke-width:1.9;
+    stroke-linecap:round; stroke-linejoin:round; }
+  .tabs .bdg{ position:absolute; top:0; left:50%; margin-left:6px; background:var(--red);
+    color:#fff; font-size:10px; border-radius:999px; padding:0 5px; line-height:16px; }
+  .cta{ padding:10px 14px max(12px, env(safe-area-inset-bottom)); display:flex; gap:9px; }
+  .pill{ flex:1; border:0; border-radius:999px; background:var(--ac); color:#fff;
+    font-size:16.5px; font-weight:700; padding:14px 0; line-height:1.3;
+    box-shadow:0 3px 10px rgba(37,99,235,.3); }
+  .pill small{ display:block; font-size:11.5px; font-weight:400; opacity:.92; }
+  .pill.gh{ flex:none; width:38%; background:#fff; color:var(--sub);
+    border:1.5px solid var(--line); box-shadow:none; }
 </style>
 </head>
 <body>
-<div class="wrap" id="app"></div>
+<div class="app"><div id="top"></div><div id="body"></div></div>
+<div class="dock" id="dock"></div>
 
 <script>
 // ===== サンプルデータ（架空の歯科医院・架空の患者）=====
@@ -96,148 +131,176 @@ var P = [
    chukan:true, noshow:true, cancels:1, years:1, val:4.5}
 ];
 var LINE = {
-  clean:   '歯石は3か月ほどでまた付きはじめます',
-  perio:   '治療が途中のままですので、進み具合を一度みせてください',
-  denture: '入れ歯は少しずつ合わなくなります。噛みにくさはありませんか',
-  kid:     '生えかわりの時期なので、半年に一度みせてください',
-  white:   '白さは半年ほどでゆっくり戻っていきます',
-  implant: 'ねじのゆるみは、痛みが出る前なら短い処置で済みます',
-  checkup: '半年ごとの検診の時期になりました',
-  wisdom:  '抜いたあとの穴の治り具合を、一度みせてください'
+  clean:'歯石は3か月ほどでまた付きはじめます',
+  perio:'治療が途中のままですので、進み具合を一度みせてください',
+  denture:'入れ歯は少しずつ合わなくなります。噛みにくさはありませんか',
+  kid:'生えかわりの時期なので、半年に一度みせてください',
+  white:'白さは半年ほどでゆっくり戻っていきます',
+  implant:'ねじのゆるみは、痛みが出る前なら短い処置で済みます',
+  checkup:'半年ごとの検診の時期になりました',
+  wisdom:'抜いたあとの穴の治り具合を、一度みせてください'
 };
-var SLOTS_START = 9;   // 今週まだ空いている枠
-var status = {};       // id -> 'booked' | 'later'
+var SLOTS = 9;
+var contactState = {};
 
-// もどらない確率（加点を積み上げるだけの単純な式・根拠を全部見せる）
 function reasons(p){
-  var out = [];
-  out.push({t:'最後の来院から ' + p.m + 'か月', v: Math.max(0, p.m-6)*6});
-  if(p.cancels) out.push({t:'これまでのキャンセル ' + p.cancels + '回', v:p.cancels*9});
-  if(p.noshow)  out.push({t:'連絡なしのキャンセルあり', v:15});
-  if(p.chukan)  out.push({t:'治療が途中で止まっている', v:20});
-  out.push({t:'通ってくれている年数 ' + p.years + '年', v: -p.years*3});
-  return out;
+  var o = [];
+  o.push({t:'最後の来院から ' + p.m + 'か月', v:Math.max(0,p.m-6)*6});
+  if(p.cancels) o.push({t:'これまでのキャンセル ' + p.cancels + '回', v:p.cancels*9});
+  if(p.noshow)  o.push({t:'連絡なしのキャンセルあり', v:15});
+  if(p.chukan)  o.push({t:'治療が途中で止まっている', v:20});
+  o.push({t:'通ってくれている年数 ' + p.years + '年', v:-p.years*3});
+  return o;
 }
 function risk(p){
   var r = 15, rs = reasons(p);
   for(var i=0;i<rs.length;i++) r += rs[i].v;
   return Math.max(5, Math.min(95, r));
 }
-function level(r){ return r>=60 ? 'hi' : r>=40 ? 'md' : 'lo'; }
-function barColor(r){ return r>=60 ? 'var(--red)' : r>=40 ? 'var(--amb)' : 'var(--grn)'; }
-function called(p){ return !!status[p.id]; }
-
+function lv(r){ return r>=60?'hi':r>=40?'md':'lo'; }
+function bg(r){ return r>=60?'bgh':r>=40?'bgm':'bgl'; }
+function find(id){ for(var i=0;i<P.length;i++){ if(P[i].id===id) return P[i]; } }
 function targets(){
-  var t = P.filter(function(p){ return risk(p) >= 40; });
-  t.sort(function(a,b){ return (risk(b)*b.val) - (risk(a)*a.val); });
+  var t = P.filter(function(p){ return risk(p)>=40; });
+  t.sort(function(a,b){ return risk(b)*b.val - risk(a)*a.val; });
   return t;
 }
+function todo(){ return targets().filter(function(p){ return !contactState[p.id]; }); }
+function booked(){ return P.filter(function(p){ return contactState[p.id]==='booked'; }); }
 
-var view = {name:'list'};
+var tab = 'today', view = null, mode = 'tel';
+
 function render(){
-  var el = document.getElementById('app');
-  el.innerHTML = view.name==='list' ? viewList() : viewDetail(view.id);
+  var t = document.getElementById('top'), b = document.getElementById('body');
+  if(view){
+    t.innerHTML = '<div class="bar"><button class="bk" onclick="back()">' +
+      '<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>' +
+      '<div class="ttl mid">患者さんの詳細</div><div style="width:26px"></div></div>';
+    b.innerHTML = viewDetail(view);
+  } else {
+    t.innerHTML = '<div class="bar"><div class="ttl">リコールもどり予報</div>' +
+      '<div class="dm">デモ（サンプルデータ）</div></div>';
+    b.innerHTML = tab==='today' ? viewToday() : tab==='done' ? viewDone() : viewAll();
+  }
+  renderDock();
   window.scrollTo(0,0);
 }
 
-function viewList(){
-  var t = targets();
-  var remain = 0, got = 0, booked = 0;
-  for(var i=0;i<t.length;i++){
-    if(status[t[i].id]==='booked'){ got += t[i].val; booked++; }
-    else if(!status[t[i].id]) remain += t[i].val;
-  }
-  var todo = t.filter(function(p){ return !called(p); }).length;
+function ptCard(p, showVal){
+  var r = risk(p), s = contactState[p.id];
+  var right = s==='booked' ? '<span class="tag ok">予約が入った</span>'
+            : s==='later'  ? '<span class="tag wa">また今度</span>'
+            : '<b class="' + lv(r) + '">' + r + '<i>％</i></b><span>年 ' + p.val.toFixed(1) + '万円</span>';
+  return '<div class="card' + (s?' done':'') + '"><div class="pt" onclick="open_(' + p.id + ')">' +
+    '<div class="av ' + bg(r) + '">' + p.nm.charAt(0) + '</div>' +
+    '<div><div class="nm">' + p.nm + '</div><div class="tx">' + p.tx + '</div></div>' +
+    '<div class="rt">' + right + '</div></div></div>';
+}
 
-  var h = '<div class="demo">デモ（サンプルデータ）</div>' +
-    '<h1>リコールもどり予報</h1>' +
-    '<p class="sub">検診に戻ってこなくなりそうな方を先に見つけて、今週かける順番と声のかけ方を出します。ひまわり歯科（架空）の例です。</p>' +
-    '<div class="top">' +
-      '<div class="lb">まだ声をかけていない方の年間見込み</div>' +
-      '<div class="big">' + remain.toFixed(1) + '<span>万円</span></div>' +
-      '<div class="two">' +
-        '<div><span class="lb">今週かける人</span><b>' + todo + '人</b></div>' +
-        '<div><span class="lb">今週の空き枠</span><b>' + (SLOTS_START - booked) + '枠</b></div>' +
-        '<div><span class="lb">予約が入った分</span><b style="color:var(--grn)">' + got.toFixed(1) + '万円</b></div>' +
-      '</div>' +
-    '</div>' +
-    '<h2>かける順（もどらなさ × 見込み額）</h2>';
-
-  for(var j=0;j<t.length;j++){
-    var p = t[j], r = risk(p), s = status[p.id];
-    h += '<div class="card' + (s ? ' done' : '') + '" onclick="go(\'detail\',' + p.id + ')">' +
-      '<div class="hd"><div><div class="nm">' + p.nm + '</div>' +
-      '<div class="tx">' + p.tx + '</div></div>' +
-      '<div class="ag">' + p.age + '歳</div></div>' +
-      '<div class="bar"><i style="width:' + r + '%;background:' + barColor(r) + '"></i></div>' +
-      '<div class="bl"><span>もどらない見込み <b class="' + level(r) + '">' + r + '％</b></span>' +
-      '<span>' + (s==='booked' ? '予約が入りました' : s==='later' ? 'また今度' : '年 ' + p.val.toFixed(1) + '万円') + '</span></div>' +
-    '</div>';
-  }
-
-  var safe = P.filter(function(p){ return risk(p) < 40; });
-  h += '<h2>いまは声をかけなくていい方（' + safe.length + '人）</h2>';
-  for(var k=0;k<safe.length;k++){
-    h += '<div class="card" onclick="go(\'detail\',' + safe[k].id + ')">' +
-      '<div class="hd"><div><div class="nm">' + safe[k].nm + '</div>' +
-      '<div class="tx">' + safe[k].tx + '</div></div>' +
-      '<div class="ag lo">' + risk(safe[k]) + '％</div></div></div>';
-  }
-  h += '<p class="note">確率は来院間隔・キャンセル歴・治療の中断・通院年数から出した目安で、診断ではありません。数字は根拠を全部ひらいて見せるので、受付の方が納得してから電話をかけられます。</p>';
+function viewToday(){
+  var td = todo(), bk = booked(), remain = 0, got = 0;
+  for(var i=0;i<td.length;i++) remain += td[i].val;
+  for(var j=0;j<bk.length;j++) got += bk[j].val;
+  var h = '<div class="hero"><div class="lb">今週かける人</div>' +
+    '<div class="big">' + td.length + '<i>人</i></div>' +
+    '<div class="two"><div>まだの見込み<b>' + remain.toFixed(1) + '万円</b></div>' +
+    '<div>空き枠<b>' + (SLOTS-bk.length) + '枠</b></div>' +
+    '<div>取り戻し<b>' + got.toFixed(1) + '万円</b></div></div></div>' +
+    '<div class="sheet"><div class="sec"><h2>かける順</h2><span>もどらなさ × 見込み額</span></div>';
+  if(!td.length) h += '<div class="empty">今週かける人はいません。<br>おつかれさまでした。</div>';
+  for(var k=0;k<td.length;k++) h += ptCard(td[k], true);
+  h += '<div class="foot">確率は来院間隔・キャンセル歴・治療の中断・通院年数から出した目安で、' +
+       '診断ではありません。根拠は1人ずつ全部ひらいて見られます。</div></div>';
+  return h;
+}
+function viewDone(){
+  var d = P.filter(function(p){ return contactState[p.id]; });
+  var got = 0, bk = booked();
+  for(var i=0;i<bk.length;i++) got += bk[i].val;
+  var h = '<div class="hero"><div class="lb">予約が入った分</div>' +
+    '<div class="big">' + got.toFixed(1) + '<i>万円</i></div>' +
+    '<div class="two"><div>予約が入った<b>' + bk.length + '人</b></div>' +
+    '<div>また今度<b>' + (d.length-bk.length) + '人</b></div></div></div>' +
+    '<div class="sheet"><div class="sec"><h2>連絡ずみ</h2><span>' + d.length + '人</span></div>';
+  if(!d.length) h += '<div class="empty">まだ連絡ずみの方はいません。<br>「今日かける」から1人開いてみてください。</div>';
+  for(var j=0;j<d.length;j++) h += ptCard(d[j]);
+  h += '</div>';
+  return h;
+}
+function viewAll(){
+  var a = P.slice().sort(function(x,y){ return risk(y)-risk(x); });
+  var h = '<div class="hero"><div class="lb">登録されている患者さん</div>' +
+    '<div class="big">' + P.length + '<i>人</i></div>' +
+    '<div class="two"><div>要連絡<b>' + targets().length + '人</b></div>' +
+    '<div>ようすみ<b>' + (P.length-targets().length) + '人</b></div></div></div>' +
+    '<div class="sheet"><div class="sec"><h2>みんな</h2><span>もどらなさの高い順</span></div>';
+  for(var i=0;i<a.length;i++) h += ptCard(a[i]);
+  h += '<div class="foot">来院履歴はレセコンから取り込みます。手入力は必要ありません。</div></div>';
   return h;
 }
 
 function viewDetail(id){
-  var p = null;
-  for(var i=0;i<P.length;i++){ if(P[i].id===id) p = P[i]; }
-  var r = risk(p), rs = reasons(p), s = status[p.id];
+  var p = find(id), r = risk(p), rs = reasons(p), s = contactState[p.id];
   var sei = p.nm.split(' ')[0];
+  var h = '<div class="hero"><div class="lb">' + p.nm + '（' + p.age + '歳）・' + p.tx + '</div>' +
+    '<div class="big">' + r + '<i>％</i></div>' +
+    '<div class="lb">このまま何もしないと戻ってこない見込み</div>' +
+    '<div class="two"><div>戻れば年間<b>' + p.val.toFixed(1) + '万円</b></div>' +
+    '<div>最後の来院<b>' + p.m + 'か月前</b></div></div></div>' +
+    '<div class="sheet"><div class="sec"><h2>この数字の内訳</h2><span>全部ひらいています</span></div>' +
+    '<div class="card"><div class="why"><span class="dot"></span>もともとの見込み<b>15</b></div>';
+  for(var i=0;i<rs.length;i++)
+    h += '<div class="why' + (rs[i].v<0?' neg':'') + '"><span class="dot"></span>' + rs[i].t +
+         '<b>' + (rs[i].v>=0?'＋':'−') + Math.abs(rs[i].v) + '</b></div>';
+  h += '<div class="why sum"><span class="dot" style="background:var(--ac)"></span>合計<b class="' + lv(r) + '">' + r + '％</b></div></div>';
 
-  var h = '<a class="back" onclick="go(\'list\')">← 一覧にもどる</a>' +
-    '<div class="demo">デモ（サンプルデータ）</div>' +
-    '<h1 style="font-size:22px">' + p.nm + ' <span style="font-size:15px;color:var(--sub);font-weight:400">' + p.age + '歳</span></h1>' +
-    '<p class="sub">' + p.tx + '／通院 ' + p.years + '年目</p>' +
-    '<div class="panel acc">' +
-      '<div class="lb" style="font-size:13px;color:var(--sub)">もどらない見込み</div>' +
-      '<div style="font-size:40px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums" class="' + level(r) + '">' + r + '％</div>' +
-      '<div class="bar"><i style="width:' + r + '%;background:' + barColor(r) + '"></i></div>' +
-      '<div class="r" style="margin-top:6px"><span>戻ってくれた場合の年間見込み</span><b>' + p.val.toFixed(1) + '万円</b></div>' +
-    '</div>' +
-    '<h2>この数字の内訳</h2><div class="panel">' +
-      '<div class="r"><span>もともとの見込み</span><b>15</b></div>';
-  for(var j=0;j<rs.length;j++){
-    h += '<div class="why' + (rs[j].v<0?' neg':'') + '">' + rs[j].t +
-         '<b style="float:right;font-variant-numeric:tabular-nums">' +
-         (rs[j].v>=0?'＋':'−') + Math.abs(rs[j].v) + '</b></div>';
-  }
-  h += '<div class="r" style="border-top:1px solid var(--line);margin-top:6px;padding-top:9px;font-weight:700">' +
-       '<span>合計</span><b>' + r + '％</b></div></div>';
+  h += '<div class="sec"><h2>声のかけ方</h2><span>そのまま使えます</span></div>' +
+    '<div class="card"><div class="seg">' +
+    '<button class="' + (mode==='tel'?'on':'') + '" onclick="setMode(\'tel\')">電話</button>' +
+    '<button class="' + (mode==='sms'?'on':'') + '" onclick="setMode(\'sms\')">ショートメール</button>' +
+    '</div><div class="quote">' +
+    (mode==='tel'
+      ? sei + 'さま、ひまわり歯科です。' + p.m + 'か月ほどあいてしまいましたが、お変わりありませんか。' + LINE[p.key] + '。'
+      : sei + 'さま こんにちは。ひまわり歯科です。<br>前回のご来院から' + p.m + 'か月がたちました。' +
+        LINE[p.key] + '。<br>今週は木曜と金曜の午後に空きがあります。ご都合よい時間をお返事ください。')
+    + '</div></div>';
 
-  h += '<h2>電話でのひとこと</h2>' +
-    '<div class="quote">' + sei + 'さま、ひまわり歯科です。' + p.m + 'か月ほどあいてしまいましたが、' +
-    'お変わりありませんか。' + LINE[p.key] + '。</div>' +
-    '<h2>ショートメールで送る文</h2>' +
-    '<div class="quote">' + sei + 'さま こんにちは。ひまわり歯科です。<br>' +
-    '前回のご来院から' + p.m + 'か月がたちました。' + LINE[p.key] + '。<br>' +
-    '今週は木曜と金曜の午後に空きがあります。ご都合よい時間をお返事ください。</div>';
-
-  if(s === 'booked'){
-    h += '<div class="ok">予約が入りました。今週の空き枠がひとつ埋まり、年間の見込み ' + p.val.toFixed(1) + '万円が戻ります。</div>' +
-         '<button class="go gh" onclick="undo(' + p.id + ')">やり直す</button>';
-  } else if(s === 'later'){
-    h += '<div class="ok" style="background:#f2ece2;color:var(--amb)">「また今度」で記録しました。3か月後にもう一度この一覧に出ます。</div>' +
-         '<button class="go gh" onclick="undo(' + p.id + ')">やり直す</button>';
-  } else {
-    h += '<button class="go" onclick="mark(' + p.id + ',\'booked\')">連絡した（予約が入った）</button>' +
-         '<button class="go gh" onclick="mark(' + p.id + ',\'later\')">連絡した（また今度）</button>';
-  }
-  h += '<p class="note">文面はそのまま送れる形で出しますが、送信ボタンは受付の方の手元にあります。返事の有無も次の予報に入ります。</p>';
+  if(s==='booked') h += '<div class="okbox">予約が入りました。空き枠がひとつ埋まり、年間の見込み ' + p.val.toFixed(1) + '万円が戻ります。</div>';
+  if(s==='later')  h += '<div class="okbox wa">「また今度」で記録しました。3か月後にもう一度この一覧に出ます。</div>';
+  h += '<div class="foot">文面はそのまま送れる形で出しますが、送信ボタンは受付の方の手元にあります。' +
+       '返事の有無も次の予報に入ります。</div></div>';
   return h;
 }
 
-function mark(id,v){ status[id] = v; go('list'); }
-function undo(id){ delete status[id]; render(); }
-function go(name,id){ view = {name:name, id:id}; render(); }
+var TAB = [
+  {id:'today', nm:'今日かける', d:'M6 3h3l2 5-2 1a12 12 0 0 0 6 6l1-2 5 2v3a2 2 0 0 1-2 2A17 17 0 0 1 4 5a2 2 0 0 1 2-2'},
+  {id:'done',  nm:'連絡ずみ',   d:'M5 13l4 4L19 7'},
+  {id:'all',   nm:'みんな',     d:'M8 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M2 20c0-3.3 2.7-5 6-5s6 1.7 6 5M17 20c0-2.6-1-4.2-2.5-5M16 5a3 3 0 0 1 0 6'}
+];
+function renderDock(){
+  var d = document.getElementById('dock');
+  if(view){
+    var p = find(view), s = contactState[view];
+    d.innerHTML = '<div class="cta">' + (s
+      ? '<button class="pill" onclick="undo(' + view + ')">記録をやり直す</button>'
+      : '<button class="pill" onclick="mark(' + view + ',\'booked\')">予約が入った' +
+        '<small>＼年 ' + p.val.toFixed(1) + '万円が戻ります／</small></button>' +
+        '<button class="pill gh" onclick="mark(' + view + ',\'later\')">また今度</button>') + '</div>';
+    return;
+  }
+  var n = todo().length, h = '<div class="tabs">';
+  for(var i=0;i<TAB.length;i++)
+    h += '<button class="' + (tab===TAB[i].id?'on':'') + '" onclick="setTab(\'' + TAB[i].id + '\')">' +
+      (TAB[i].id==='today' && n ? '<span class="bdg">' + n + '</span>' : '') +
+      '<svg viewBox="0 0 24 24"><path d="' + TAB[i].d + '"/></svg>' + TAB[i].nm + '</button>';
+  d.innerHTML = h + '</div>';
+}
+function setTab(t){ tab = t; view = null; render(); }
+function open_(id){ view = id; render(); }
+function back(){ view = null; render(); }
+function setMode(m){ mode = m; render(); }
+function mark(id,v){ contactState[id] = v; render(); }
+function undo(id){ delete contactState[id]; render(); }
 render();
 </script>
 </body>

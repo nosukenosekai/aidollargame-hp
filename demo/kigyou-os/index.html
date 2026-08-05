@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企業継続OS — 承継台帳 3者ビュー検証デモ</title>
+<style>
+  :root{
+    --blue:#2563eb; --blue-dark:#1d4ed8; --blue-soft:#eff4ff;
+    --bg:#f4f5f7; --card:#ffffff;
+    --ink:#1f2733; --sub:#6b7280; --faint:#9aa3af;
+    --line:#e5e7eb; --line-soft:#f1f3f5;
+    --red:#dc2626; --red-bg:#fef2f2; --amber:#b45309; --amber-bg:#fffbeb; --green:#15803d; --green-bg:#f0fdf4;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-size:17px;line-height:1.7;
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased}
+
+  /* ===== アプリバー(白・実SaaS型) ===== */
+  .appbar{background:var(--card);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:14px;padding:0 20px;height:60px;position:sticky;top:0;z-index:10}
+  .logo{display:flex;align-items:center;gap:10px;min-width:0}
+  .logo .mark{width:32px;height:32px;border-radius:8px;background:var(--blue);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex:none}
+  .logo .name{font-size:17px;font-weight:700;white-space:nowrap}
+  .logo .env{font-size:12px;color:var(--sub);border:1px solid var(--line);border-radius:6px;padding:1px 8px;white-space:nowrap}
+  .appbar .sp{flex:1}
+  .demo-pill{font-size:13px;font-weight:600;color:var(--amber);background:var(--amber-bg);
+    border:1px solid #fde9c0;border-radius:999px;padding:3px 12px;white-space:nowrap}
+  .avatar{width:32px;height:32px;border-radius:50%;background:#dbe4f4;color:#3b5486;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex:none}
+
+  /* ===== ロール切替(セグメンテッドコントロール) ===== */
+  .seg{display:inline-flex;background:var(--line-soft);border-radius:10px;padding:3px;gap:2px}
+  .seg button{font-size:14px;font-weight:600;padding:7px 16px;border:none;background:transparent;
+    border-radius:8px;cursor:pointer;color:var(--sub);font-family:inherit;white-space:nowrap}
+  .seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(15,23,42,.12)}
+  .rolenote{max-width:1360px;margin:14px auto 0;padding:0 20px}
+  .rolenote .in{background:var(--blue-soft);border:1px solid #dbe7fd;color:#31456e;
+    font-size:14px;line-height:1.6;border-radius:10px;padding:9px 14px}
+
+  /* ===== レイアウト ===== */
+  .wrap{display:grid;grid-template-columns:320px minmax(0,1fr);gap:18px;
+    padding:16px 20px 40px;max-width:1360px;margin:0 auto}
+  @media(max-width:900px){.wrap{grid-template-columns:1fr}}
+
+  /* ===== 左: 企業リスト ===== */
+  .list{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;align-self:start}
+  .list .head{padding:12px 16px;border-bottom:1px solid var(--line);
+    font-size:14px;font-weight:700;color:var(--sub);display:flex;justify-content:space-between;align-items:center}
+  .list .head .n{font-size:12px;font-weight:600;background:var(--line-soft);border-radius:999px;padding:1px 9px}
+  .co{display:flex;gap:12px;align-items:center;padding:13px 16px;cursor:pointer;
+    border-bottom:1px solid var(--line-soft);border-left:3px solid transparent}
+  .co:last-child{border-bottom:none}
+  .co:hover{background:#fafbfc}
+  .co.on{background:var(--blue-soft);border-left-color:var(--blue)}
+  .co .av{width:38px;height:38px;border-radius:9px;flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+  .co .bd{min-width:0;flex:1}
+  .co .nm{font-size:15px;font-weight:700;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .co .meta{font-size:12.5px;color:var(--sub);line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* ===== ステータスチップ(ドット付き) ===== */
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;
+    padding:2px 10px;border-radius:999px;white-space:nowrap;flex:none}
+  .chip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+  .chip.red{background:var(--red-bg);color:var(--red)}
+  .chip.yel{background:var(--amber-bg);color:var(--amber)}
+  .chip.ok{background:var(--green-bg);color:var(--green)}
+
+  /* ===== 右: 詳細パネル ===== */
+  .panel{min-width:0}
+  .pagehead{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:18px 22px;margin-bottom:14px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .pagehead .av{width:48px;height:48px;border-radius:11px;flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:800}
+  .pagehead h1{font-size:21px;margin:0;line-height:1.4}
+  .pagehead .meta{font-size:13.5px;color:var(--sub)}
+  .pagehead .succ{font-size:13.5px;color:var(--ink);background:var(--line-soft);border-radius:8px;padding:2px 10px;margin-top:4px;display:inline-block}
+  .pagehead .score{margin-left:auto;text-align:right}
+  .pagehead .score .v{font-size:32px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.2}
+  .pagehead .score .k{font-size:12px;color:var(--sub)}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:14px;overflow:hidden}
+  .card .chead{display:flex;align-items:center;gap:10px;padding:13px 20px;border-bottom:1px solid var(--line-soft)}
+  .card .chead h3{margin:0;font-size:15.5px;font-weight:700;flex:1}
+  .acc{font-size:12px;font-weight:600;color:var(--sub);background:var(--line-soft);border-radius:6px;padding:2px 9px;white-space:nowrap}
+  .cbody{padding:16px 20px 18px}
+
+  .big{font-size:32px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.2}
+
+  /* ===== テーブル(行区切りのみ・実SaaS型) ===== */
+  table{border-collapse:collapse;width:100%;font-size:14.5px;font-variant-numeric:tabular-nums}
+  th{font-size:12.5px;font-weight:600;color:var(--sub);text-align:left;
+    padding:7px 12px;border-bottom:1px solid var(--line);background:none;white-space:nowrap}
+  td{padding:9px 12px;border-bottom:1px solid var(--line-soft);text-align:left;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.r,th.r{text-align:right}
+  .sev-high{color:var(--red);font-weight:700}.sev-mid{color:var(--amber);font-weight:700}.sev-low{color:var(--faint)}
+
+  /* ===== 更新ログ(タイムライン) ===== */
+  .log{margin:0;padding:0;list-style:none}
+  .log li{position:relative;padding:0 0 14px 24px;font-size:14px;color:var(--sub);line-height:1.6}
+  .log li::before{content:"";position:absolute;left:5px;top:9px;width:8px;height:8px;border-radius:50%;
+    background:var(--card);border:2px solid var(--faint)}
+  .log li:first-child::before{background:var(--blue);border-color:var(--blue)}
+  .log li::after{content:"";position:absolute;left:10px;top:22px;bottom:-2px;width:1px;background:var(--line)}
+  .log li:last-child{padding-bottom:0}
+  .log li:last-child::after{display:none}
+  .log li b{color:var(--ink);font-weight:600}
+  .log li .org{font-size:12px;font-weight:600;color:var(--sub);background:var(--line-soft);border-radius:5px;padding:0 7px;margin:0 4px}
+  .log li .new{color:var(--red);font-weight:700;font-size:11.5px;margin-left:6px}
+
+  /* ===== KPIタイル ===== */
+  .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+  .kv > div{border:1px solid var(--line-soft);background:#fafbfc;border-radius:10px;padding:10px 14px}
+  .kv .k{font-size:12.5px;color:var(--sub)}
+  .kv .v{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+  .flag{font-size:13.5px;font-weight:600;color:var(--green);background:var(--green-bg);
+    border-radius:8px;padding:5px 12px;display:inline-block}
+
+  /* ===== 属人性バー ===== */
+  .bar{height:6px;background:var(--line-soft);border-radius:3px;overflow:hidden;margin-top:4px}
+  .bar i{display:block;height:100%;background:var(--blue);border-radius:3px}
+
+  /* ===== フォーム部品 ===== */
+  select,input[type="month"]{font-size:14.5px;font-family:inherit;color:var(--ink);
+    padding:7px 10px;border:1px solid #d4d9e0;border-radius:8px;background:var(--card)}
+  select:focus,input:focus{outline:2px solid var(--blue-soft);border-color:var(--blue)}
+  .btn{font-size:14.5px;font-weight:700;font-family:inherit;padding:8px 20px;
+    background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer}
+  .btn:hover{background:var(--blue-dark)}
+  .fine{font-size:13px;color:var(--sub);line-height:1.6}
+
+  footer{padding:6px 20px 44px;font-size:13px;color:var(--sub);max-width:1360px;margin:0 auto}
+  .card.locked{border-style:dashed;background:#fafbfc}
+  .card.locked .chead h3{color:var(--faint);font-weight:600}
+  .card.locked .acc{color:var(--amber);background:var(--amber-bg)}
+  .hiddenrow{padding:11px 16px;font-size:13px;color:var(--faint);background:#fafbfc;border-top:1px dashed var(--line)}
+  .filters{padding:10px 12px;border-bottom:1px solid var(--line-soft);display:flex;flex-direction:column;gap:8px}
+  .filters input[type=search]{width:100%;font-size:13.5px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-family:inherit}
+  .fchips{display:flex;gap:6px}
+  .fchip{font-size:12.5px;font-weight:600;padding:4px 12px;border-radius:999px;border:1px solid var(--line);
+    background:var(--card);color:var(--sub);cursor:pointer;font-family:inherit}
+  .fchip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .pagehead .delta{font-size:12.5px;font-weight:700;border-radius:999px;padding:1px 9px;display:inline-block;margin-top:3px}
+  .pagehead .delta.up{color:var(--red);background:var(--red-bg)}
+  .pagehead .delta.down{color:var(--green);background:var(--green-bg)}
+  .co:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+  .cbody{overflow-x:auto}
+  .mbar{height:4px;background:var(--line-soft);border-radius:2px;margin-top:4px;min-width:52px}
+  .mbar i{display:block;height:100%;background:var(--red);border-radius:2px}
+  .pagehead .delta.note{color:var(--sub);background:var(--line-soft)}
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#111827;color:#fff;
+    font-size:14px;padding:10px 18px;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.25);z-index:60;
+    opacity:0;pointer-events:none;transition:opacity .2s}
+  .toast.show{opacity:1}
+  .timer.idle{color:var(--sub);background:var(--line-soft)}
+  #coDrop{display:none;width:100%;margin-bottom:12px}
+  @media(max-width:900px){
+    .list{display:none}
+    #coDrop{display:block}
+    .wrap{grid-template-columns:1fr}
+    .appbar{flex-wrap:wrap;height:auto;padding:10px 14px;row-gap:8px}
+    .seg{overflow-x:auto;max-width:100%}
+  }
+  @media print{
+    .appbar,.rolenote,.list,#coDrop,.modebtn,.btn,footer,.filters{display:none !important}
+    body{background:#fff;font-size:13px}
+    .wrap{display:block;padding:0;max-width:none}
+    .card{break-inside:avoid;border:1px solid #999;border-radius:0;margin-bottom:10px}
+    .cbody select,.cbody input,.cbody button{display:none !important}
+  }
+  .modebtn{font-size:13.5px;padding:7px 14px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:700;font-family:inherit;white-space:nowrap}
+  .cform{max-width:1280px;margin:0 auto;padding:16px 20px}
+  .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+  .cbox{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .cbox h4{margin:0 0 8px;font-size:15px;color:var(--blue)}
+  .cbox label{display:block;font-size:13.5px;color:var(--sub);margin:7px 0 2px}
+  .cbox input[type=text],.cbox input[type=number],.cbox select,.cbox textarea{width:100%;font-size:15px;padding:7px;border:1px solid var(--line);border-radius:6px;font-family:inherit;box-sizing:border-box}
+  .cbox input[type=range]{width:100%}
+  .timer{font-size:15px;font-weight:700;color:var(--red);background:var(--red-bg);border-radius:8px;padding:6px 14px;display:inline-block}
+  .scorelive{font-size:26px;font-weight:800}
+  .savebtn{font-size:16px;font-weight:700;padding:10px 26px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:inherit}
+</style>
+</head>
+<body>
+
+<div class="appbar">
+  <div class="logo">
+    <div class="mark">継</div>
+    <div class="name">企業継続OS</div>
+    <div class="env">承継台帳 β</div>
+  </div>
+  <div class="sp"></div>
+  <div class="seg" id="roles"></div>
+  <button class="modebtn" id="modeBtn" onclick="toggleMode()">台帳を作る(計測)</button>
+  <span class="demo-pill">デモ環境 — 5社すべて架空データ</span>
+  <div class="avatar">RM</div>
+</div>
+
+
+<div id="createView" style="display:none">
+  <div class="cform">
+    <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:12px">
+      <span class="timer idle" id="timerBox">計測待機中 — 最初の入力で開始</span>
+      <span>承継スコア(自動計算): <span class="scorelive" id="liveScore">—</span></span>
+      <span style="font-size:12.5px;color:var(--sub)">入力はサーバーに送信されません。保存でJSONがダウンロードされ、社名・スコア・作成時間の計測ログのみこのブラウザ内(localStorage)に残ります(下の消去ボタンで削除可)。</span>
+    </div>
+    <div class="cgrid">
+      <div class="cbox"><h4>基本</h4>
+        <label>社名(仮名可)</label><input type="text" id="f_name" placeholder="例: A社(製造)">
+        <label>業種</label><input type="text" id="f_ind">
+        <label>代表者年齢</label><input type="number" id="f_age" value="65">
+        <label>従業員数</label><input type="number" id="f_emp">
+      </div>
+      <div class="cbox"><h4>承継</h4>
+        <label>後継者状況</label>
+        <select id="f_succ"><option value="absent">不在</option><option value="undecided" selected>未定</option><option value="candidate">候補あり</option><option value="confirmed">確定</option></select>
+        <label>意向</label>
+        <select id="f_intent"><option>未定</option><option>親族承継</option><option>内部昇格</option><option>M&amp;A</option><option>廃業も視野</option></select>
+        <label>メモ(後継者まわり)</label><input type="text" id="f_succmemo">
+      </div>
+      <div class="cbox"><h4>株式・保証</h4>
+        <label>代表の持株比率(%)</label><input type="number" id="f_ratio" value="100">
+        <label><input type="checkbox" id="f_nominee"> 名義株・所在不明株主あり</label>
+        <label>80歳以上の株主</label>
+        <select id="f_elder"><option value="none">いない</option><option value="minor">いる(持株20%未満)</option><option value="major">いる(持株20%以上)</option></select>
+        <label>保証解除3要件の充足</label>
+        <label><input type="checkbox" id="f_g1"> ①法人と個人の分離</label>
+        <label><input type="checkbox" id="f_g2"> ②法人単独の返済力</label>
+        <label><input type="checkbox" id="f_g3"> ③情報開示</label>
+      </div>
+      <div class="cbox"><h4>財務(万円)</h4>
+        <label>売上(直近期)</label><input type="number" id="f_sales">
+        <label>営業利益 前々期</label><input type="number" id="f_op1">
+        <label>営業利益 前期</label><input type="number" id="f_op2">
+        <label>営業利益 直近期</label><input type="number" id="f_op3">
+        <label>現預金</label><input type="number" id="f_cash">
+        <label>純資産</label><input type="number" id="f_net">
+      </div>
+      <div class="cbox"><h4>属人性5指標(高いほど非属人=良い)</h4>
+        <label>権限移譲率 <span id="v_d1">50</span></label><input type="range" id="f_d1" value="50">
+        <label>業務標準化率 <span id="v_d2">50</span></label><input type="range" id="f_d2" value="50">
+        <label>非属人意思決定率 <span id="v_d3">50</span></label><input type="range" id="f_d3" value="50">
+        <label>財務即時性 <span id="v_d4">50</span></label><input type="range" id="f_d4" value="50">
+        <label>顧客直結度 <span id="v_d5">50</span></label><input type="range" id="f_d5" value="50">
+      </div>
+      <div class="cbox"><h4>人材・論点</h4>
+        <label>キーマンと年齢・抜けると止まるもの</label><textarea id="f_key" rows="3"></textarea>
+        <label>論点(1行1件: 内容/期限/主担当)</label><textarea id="f_issues" rows="4"></textarea>
+      </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+      <button class="savebtn" onclick="saveDaicho()">保存して計測終了(JSON出力)</button>
+      <button onclick="resetForm()" style="font-size:14px;padding:9px 16px;border:1px solid var(--line);background:var(--card);border-radius:8px;cursor:pointer;font-family:inherit">次の1社へ(フォームを白紙に)</button>
+    </div>
+    <div class="cbox" style="margin-top:16px"><h4>この端末での作成ログ(90日KPI: 台帳作成時間の実測)</h4>
+      <div id="logBox" style="font-size:14px">まだありません</div>
+    </div>
+  </div>
+</div>
+
+<div class="rolenote"><div class="in" id="rolenote"></div></div>
+
+<div class="wrap">
+  <div class="list">
+    <div class="head">企業台帳 <span class="n" id="conum"></span></div>
+    <div class="filters">
+      <input type="search" placeholder="社名・業種・地域で検索" oninput="setQ(this.value)" aria-label="企業検索">
+      <div class="fchips">
+        <button id="fRed" class="fchip" onclick="setFilt('red')">赤のみ</button>
+        <button id="fSen" class="fchip" onclick="setFilt('senior')">代表70歳以上</button>
+      </div>
+    </div>
+    <div id="colist" role="listbox" aria-label="企業一覧"></div>
+  </div>
+  <select id="coDrop" onchange="setSel(this.value)" aria-label="企業を選択"></select>
+  <div class="panel" id="panel"></div>
+</div>
+
+<footer>
+  承継スコアは台帳の生データから決定論で算出(スコア定義v1.1・2026-08-05確定・面談開始後は凍結・内訳を常時開示)。赤=60点以上(2年以内に着手必須)/黄=40-59/青=40未満。
+  アクセス権はブロック単位(企業本人の同意範囲のみ表示)。株式会社AIdollargame
+</footer>
+
+<script>
+"use strict";
+// ================= 架空サンプル台帳(スキーマv1準拠の要約形) =================
+const DAICHO = [
+ {id:"D-000101", name:"三島電設工業(架空)", industry:"電気工事", pref:"静岡", ceo:"代表 71歳", ceoAge:71,
+  emp:18, sales:[["2023",28000],["2024",30100],["2025",31200]], op:[1400,1650,1710], cash:5200, netAssets:9800, snp:true, consent:{bank:true,acc:true,ma:false}, kana:"みしまでんせつこうぎょう", history:[{at:"2026-07-02",score:88,ver:"v1"},{at:"2026-07-30",score:91,ver:"v1"}],
+  succ:{status:"undecided", label:"後継者未定(長男は県外就職・専務67歳)", stage:"considering"},
+  equity:{ratio:"代表55% 弟20% 亡父名義15% 他10%", ceoRatio:55, nominee:true, valuationYear:null},
+  loans:[{bank:"地銀A", bal:4500, pg:true},{bank:"信金B", bal:1800, pg:true}],
+  gReq:{sep:false, repay:true, disc:false},
+  dep:{delegation:35, standardization:40, nonPersonal:25, finImm:30, customer:20},
+  people:"積算は代表と専務(67歳)のみ。現場代理人4名は40代",
+  issues:[
+   {t:"亡父名義株15%の整理(相続人3名)", sev:"high", owner:"会計事務所", due:"2026-12"},
+   {t:"経営者保証の解除(3要件のうち①③未充足)", sev:"high", owner:"銀行", due:"2027-03"},
+   {t:"積算ノウハウの台帳化(専務引退前)", sev:"mid", owner:"OS", due:"2027-06"}],
+  pipeline:{state:"diagnosed", track:"未定(内部昇格orM&A)"},
+  events:[
+   {at:"2026-07-30", org:"信金B", what:"承継ヒアリング実施。長男の承継意思なしを確認→台帳B更新"},
+   {at:"2026-07-18", org:"会計事務所", what:"亡父名義株の相続人3名を特定。論点I-1に登録"},
+   {at:"2026-07-02", org:"OS", what:"属人性5指標の初回採点完了(30点)"}]},
+
+ {id:"D-000102", name:"川崎精密金属(架空)", industry:"金属加工", pref:"東京(大田区)", ceo:"代表 66歳", ceoAge:66,
+  emp:31, sales:[["2023",52000],["2024",54800],["2025",56000]], op:[3900,4300,4480], cash:12000, netAssets:26000, snp:true, consent:{bank:true,acc:true,ma:false}, kana:"かわさきせいみつきんぞく", history:[{at:"2026-07-10",score:52,ver:"v1"},{at:"2026-08-01",score:48,ver:"v1"}],
+  succ:{status:"candidate", label:"工場長(48歳)が内部候補。本人は前向き・株の買取資金が論点", stage:"executing"},
+  equity:{ratio:"代表80% 妻20%", ceoRatio:80, nominee:false, valuationYear:2025},
+  loans:[{bank:"地銀C", bal:8000, pg:true}],
+  gReq:{sep:true, repay:true, disc:true},
+  dep:{delegation:65, standardization:55, nonPersonal:60, finImm:70, customer:55},
+  people:"検査工程は代表依存が残る。工場長へ移管中",
+  issues:[
+   {t:"自社株の承継スキーム(持株会社or融資)", sev:"high", owner:"銀行", due:"2026-11"},
+   {t:"種類株(拒否権)の設計", sev:"mid", owner:"会計事務所", due:"2026-12"}],
+  pipeline:{state:"executing", track:"内部昇格"},
+  events:[
+   {at:"2026-08-01", org:"地銀C", what:"株式買取資金の融資検討開始(承継ローン)。台帳D更新"},
+   {at:"2026-07-25", org:"会計事務所", what:"2025年株価算定を台帳Cに登録"},
+   {at:"2026-07-10", org:"OS", what:"5指標再採点 52→61点(権限移譲が改善)"}]},
+
+ {id:"D-000103", name:"越後フーズ流通(架空)", industry:"食品卸", pref:"新潟", ceo:"代表 74歳", ceoAge:74,
+  emp:44, sales:[["2023",98000],["2024",95500],["2025",93000]], op:[2100,1500,900], cash:6800, netAssets:15000, snp:true, consent:{bank:true,acc:true,ma:true}, kana:"えちごふーずりゅうつう", history:[{at:"2026-07-15",score:75,ver:"v1"},{at:"2026-08-02",score:78,ver:"v1"}],
+  succ:{status:"absent", label:"後継者不在。代表はM&Aに抵抗感→最近軟化", stage:"considering"},
+  equity:{ratio:"代表60% 妹30% 従業員持株会10%", ceoRatio:60, nominee:false, valuationYear:2022},
+  loans:[{bank:"地銀D", bal:12000, pg:true},{bank:"信金E", bal:4000, pg:true}],
+  gReq:{sep:false, repay:false, disc:true},
+  dep:{delegation:45, standardization:35, nonPersonal:40, finImm:25, customer:30},
+  people:"主要3スーパーとの取引は代表個人の関係。営業部長は63歳",
+  issues:[
+   {t:"営業利益3期連続減。磨き上げ(粗利改善)が先かM&Aが先か", sev:"high", owner:"M&A仲介", due:"2026-10"},
+   {t:"主要顧客の窓口を会社付けに(代表個人依存の解消)", sev:"high", owner:"OS", due:"2027-01"},
+   {t:"株価算定が2022年で古い", sev:"low", owner:"会計事務所", due:"2026-12"}],
+  pipeline:{state:"diagnosed", track:"M&A(検討)"},
+  events:[
+   {at:"2026-08-02", org:"M&A仲介", what:"初回面談。2027年度中の譲渡に含み。台帳B・J更新"},
+   {at:"2026-07-15", org:"地銀D", what:"決算取込。営業利益900万(3期連続減)を台帳H反映"}]},
+
+ {id:"D-000104", name:"博多みなと薬局(架空)", industry:"調剤薬局(3店舗)", pref:"福岡", ceo:"代表 58歳", ceoAge:58,
+  emp:14, sales:[["2023",21000],["2024",21800],["2025",22400]], op:[1600,1680,1750], cash:8900, netAssets:13500, snp:true, consent:{bank:true,acc:true,ma:false}, kana:"はかたみなとやっきょく", history:[{at:"2026-07-05",score:12,ver:"v1"}],
+  succ:{status:"confirmed", label:"長女(薬剤師・34歳)が承継確定。2028年交代予定", stage:"executing"},
+  equity:{ratio:"代表100%", ceoRatio:100, nominee:false, valuationYear:2025},
+  loans:[{bank:"信金F", bal:2500, pg:false}],
+  gReq:{sep:true, repay:true, disc:true},
+  dep:{delegation:70, standardization:75, nonPersonal:65, finImm:80, customer:70},
+  people:"管理薬剤師3名体制。運営は標準化済み",
+  issues:[
+   {t:"贈与税の暦年vs事業承継税制の選択", sev:"mid", owner:"会計事務所", due:"2027-03"},
+   {t:"交代時の生命保険見直し(退職金原資)", sev:"low", owner:"保険", due:"2027-12"}],
+  pipeline:{state:"executing", track:"親族承継"},
+  events:[
+   {at:"2026-07-28", org:"会計事務所", what:"事業承継税制の適用可否を検討開始。台帳I更新"},
+   {at:"2026-07-05", org:"信金F", what:"保証なし融資へ切替済みを台帳D反映"}]},
+
+ {id:"D-000105", name:"北関東ロジスティクス(架空)", industry:"運送", pref:"群馬", ceo:"代表 69歳", ceoAge:69,
+  emp:52, sales:[["2023",68000],["2024",71000],["2025",73500]], op:[2800,3100,3300], cash:4100, netAssets:8200, snp:true, consent:{bank:true,acc:true,ma:false}, kana:"きたかんとうろじすてぃくす", history:[{at:"2026-06-20",score:55,ver:"v1"},{at:"2026-07-31",score:55,ver:"v1"}],
+  succ:{status:"undecided", label:"次男(41歳・他社勤務)に打診中。返事待ち1年経過", stage:"none"},
+  equity:{ratio:"代表70% 前会長(父・94歳)30%", ceoRatio:70, nominee:false, elder:{age:94, ratio:30, who:"前会長(父)"}, valuationYear:null},
+  loans:[{bank:"地銀G", bal:15000, pg:true}],
+  gReq:{sep:false, repay:true, disc:false},
+  dep:{delegation:40, standardization:50, nonPersonal:35, finImm:40, customer:45},
+  people:"配車は運行管理者2名(58歳・61歳)に依存。ドライバー平均52歳",
+  issues:[
+   {t:"前会長(94歳)保有株30%の生前整理", sev:"high", owner:"会計事務所", due:"2026-09"},
+   {t:"次男の意思確認の期限を切る(1年塩漬け)", sev:"high", owner:"銀行", due:"2026-10"},
+   {t:"配車ノウハウの標準化(運行管理者の高齢化)", sev:"mid", owner:"OS", due:"2027-03"}],
+  pipeline:{state:"none", track:"未定"},
+  events:[
+   {at:"2026-07-31", org:"地銀G", what:"RM定例訪問。次男の返事が1年保留と判明→論点I-2起票"},
+   {at:"2026-06-20", org:"OS", what:"初回台帳作成・5指標採点(42点)"}]}
+];
+
+// ================= 決定論スコア(内訳開示・シェアードロジック) =================
+const SCORE_VER = "v1.2"; // 2026-08-05確定。面談開始後は凍結・変更時はv2として全台帳再採点
+function depScore(d){ // 属人性5指標 0-100(高いほど非属人=良い)
+  return Math.round(d.delegation*0.30 + d.standardization*0.25 + d.nonPersonal*0.20 + d.finImm*0.15 + d.customer*0.10);
+}
+function trendPts(c){
+  if (c.trendPts !== undefined) return c.trendPts;
+  const [a,b2,d] = c.op;
+  if (d < b2 && b2 < a) return 10;
+  if (d < a) return 6;
+  if (d <= a * 1.02) return 2;
+  return 0;
+}
+// 配点: 年齢22/後継者30/属人性18/株式12/保証8/業績10
+function riskBreakdown(c){
+  const age = c.ceoAge>=75?22 : c.ceoAge>=70?19 : c.ceoAge>=65?15 : c.ceoAge>=60?10 : c.ceoAge>=55?5 : 2;
+  const succ = {absent:30, undecided:26, candidate:18, confirmed:0}[c.succ.status];
+  const dep = Math.round((100-depScore(c.dep))*0.18);
+  const el = c.equity.elder;
+  const eq = Math.max(
+    c.equity.nominee ? 12 : 0,
+    (el && el.age>=80 && el.ratio>=20) ? 10 : 0,
+    c.equity.ceoRatio < 200/3 ? 6 : 0);
+  const g = [c.gReq.sep,c.gReq.repay,c.gReq.disc].filter(Boolean).length;
+  const guar = g<=1?8 : g===2?4 : 0;
+  const trend = trendPts(c);
+  return {age, succ, dep, eq, guar, trend, total: age+succ+dep+eq+guar+trend};
+}
+function riskChip(total){
+  if(total>=60) return ['red','赤 '+total];
+  if(total>=40) return ['yel','黄 '+total];
+  return ['ok','青 '+total];
+}
+function avColor(total){
+  if(total>=60) return ['#fde8e8','#b91c1c'];
+  if(total>=40) return ['#fdf3d7','#92600a'];
+  return ['#e2edf9','#1d4e89'];
+}
+const fmt = n => n.toLocaleString("ja-JP");
+const todayStr = () => new Date().toLocaleDateString("sv-SE");
+function toast(msg){
+  let t = document.getElementById("toast");
+  if(!t){ t = document.createElement("div"); t.id="toast"; t.className="toast"; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove("show"), 2400);
+}
+function norm(t){
+  return (t||"").normalize("NFKC").toLowerCase()
+    .replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0)-0x60));
+}
+
+// ================= 案件起票(デモ・メモリ内のみ) =================
+const DEALS = {
+ "D-000101": [],
+ "D-000102": [{kind:"融資(株式買取資金)", org:"地銀C", due:"2026-11", fee:"成功報酬", state:"実行中"}],
+ "D-000103": [{kind:"M&A(第三者承継)", org:"M&A仲介", due:"2027-03", fee:"成功報酬", state:"診断"}],
+ "D-000104": [],
+ "D-000105": []
+};
+function kihyoCard(c){
+  const list = DEALS[c.id] || [];
+  const rows = list.map(d=>
+   `<tr><td>${d.kind}</td><td>${d.org}</td><td>${d.due}</td><td>${d.fee}</td><td>${d.state}</td></tr>`).join("")
+   || '<tr><td colspan="5" style="color:var(--faint)">案件なし — 下のフォームから起票して流す</td></tr>';
+  return card("案件起票 — 台帳から案件を流す", "銀行のみ・デモ",
+   `<table><tr><th>種別</th><th>流す先</th><th>期限</th><th>報酬形態</th><th>状態</th></tr>${rows}</table>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center">
+      <select id="dKind">
+        <option>承継(親族・内部)</option><option>M&A(第三者承継)</option><option>融資(承継・買取資金)</option>
+        <option>人材配置・経営代行</option><option>保険・退職金設計</option></select>
+      <select id="dOrg">
+        <option>会計事務所</option><option>M&A仲介</option><option>自行(融資部門)</option><option>保険会社</option><option>OS(AIdollargame)</option></select>
+      <input id="dDue" type="month" value="2026-12">
+      <select id="dFee">
+        <option>成功報酬</option><option>固定</option><option>月額</option></select>
+      <button class="btn" onclick="kihyo('${c.id}')">起票</button>
+    </div>
+    <div class="fine" style="margin-top:8px">起票すると更新ログに記録される(デモではメモリ内のみ・リロードで消える)。実装版では流す先の機関のビューに同じ案件が載り、期限超過は自動で督促される。</div>`);
+}
+function kihyo(id){
+  const kind = document.getElementById("dKind").value;
+  const org = document.getElementById("dOrg").value;
+  const due = document.getElementById("dDue").value;
+  const fee = document.getElementById("dFee").value;
+  (DEALS[id] = DEALS[id] || []).push({kind, org, due, fee, state:"起票"});
+  const c = DAICHO.find(x=>x.id===id);
+  c.events.unshift({at: todayStr(), org:"銀行RM(あなた)", what:`案件起票: ${kind} → 主担当 ${org} / 期限 ${due} / ${fee}`});
+  toast("起票しました — 更新ログに記録");
+  render();
+}
+
+// ================= ロールとビュー定義(見えるブロックはここから自動生成) =================
+const ROLES = [
+ {id:"bank", label:"銀行・信金本部"},
+ {id:"acc", label:"会計事務所"},
+ {id:"ma", label:"M&A仲介・ファンド"}
+];
+let role = "bank", selId = "D-000101";
+const filt = { q:"", red:false, senior:false };
+function visibleList(){
+  return DAICHO.filter(c => role!=="ma" || (c.consent && c.consent.ma))
+    .filter(c => !filt.red || riskBreakdown(c).total>=60)
+    .filter(c => !filt.senior || c.ceoAge>=70)
+    .filter(c => !filt.q || norm(c.name+(c.kana||"")+c.industry+c.pref).includes(norm(filt.q)));
+}
+
+// ================= カード部品 =================
+function card(title, acc, body){
+  return `<div class="card"><div class="chead"><h3>${title}</h3><span class="acc">${acc}</span></div><div class="cbody">${body}</div></div>`;
+}
+function scoreCard(c){
+  const b = riskBreakdown(c);
+  const cell = (v,mx)=>`<td class="r">${v}/${mx}<div class="mbar"><i style="width:${Math.round(v/mx*100)}%"></i></div></td>`;
+  return card("承継スコアの内訳 — 各因子は危険度(バーが伸びるほど悪い)", "全機関共有",
+   `<table><tr><th class="r">代表年齢</th><th class="r">後継者</th><th class="r">属人性</th><th class="r">株式</th><th class="r">保証</th><th class="r">業績</th></tr>
+    <tr>${cell(b.age,22)}${cell(b.succ,30)}${cell(b.dep,18)}${cell(b.eq,12)}${cell(b.guar,8)}${cell(b.trend,10)}</tr></table>
+    <div class="fine" style="margin-top:8px">後継者: 不在30/未定26/候補18/確定0。株式: 名義株12/80歳以上の株主が20%以上保有10/代表持分2/3未満6。業績: 3期連続減益10/減益6/横ばい2/増益0。スコア定義${SCORE_VER}(面談開始後は凍結)。</div>`);
+}
+function lockedCard(title){
+  return `<div class="card locked"><div class="chead"><h3><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="vertical-align:-1px;margin-right:6px"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>${title}</h3><span class="acc">この機関には非表示</span></div><div class="cbody fine">企業の同意範囲外のため、このブロックは閲覧できません。開示するには企業本人の同意が必要です。</div></div>`;
+}
+function logCard(c){
+  const items = c.events.map((e,i)=>
+    `<li><b>${e.at}</b><span class="org">${e.org}</span>${e.what}${i===0?'<span class="new">最新更新</span>':''}</li>`).join("");
+  return card("更新ログ(追記型・全機関の動きが見える)", "全機関共有", `<ul class="log">${items}</ul>`);
+}
+function issueRows(c, filter){
+  return c.issues.filter(i=>!filter || filter.includes(i.owner)).map(i=>
+   `<tr><td class="sev-${i.sev}">${{high:"高",mid:"中",low:"低"}[i.sev]}</td><td>${i.t}</td><td>${i.owner}</td><td>${i.due}</td></tr>`).join("");
+}
+function spark(vals, color){
+  const w=92,h=26,p=3;
+  const mn=Math.min(...vals), mx=Math.max(...vals), rg=(mx-mn)||1;
+  const pts=vals.map((v,i)=>`${p+i*(w-2*p)/(vals.length-1)},${h-p-(v-mn)/rg*(h-2*p)}`).join(" ");
+  const col = color || (vals[vals.length-1] < vals[0] ? "var(--red)" : "var(--green)");
+  return `<svg width="${w}" height="${h}" style="display:block;margin-top:3px"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" stroke-linecap="round"/></svg>`;
+}
+function finCard(c){
+  const last = c.sales.length-1;
+  return card("財務サマリ", "同意範囲",
+   `<div class="kv">
+     <div><div class="k">売上(2025)</div><div class="v">${fmt(c.sales[last][1])}万円</div></div>
+     <div><div class="k">営業利益(3期)</div><div class="v">${c.op.map(fmt).join(" → ")}万円</div>${spark(c.op)}</div>
+     <div><div class="k">現預金</div><div class="v">${fmt(c.cash)}万円</div></div>
+     <div><div class="k">純資産</div><div class="v">${fmt(c.netAssets)}万円</div></div>
+    </div>
+    ${c.snp?'<div class="flag" style="margin-top:12px">資産超過かつ黒字 — 健全なまま消滅しうる層(全国15.2% <a href="https://www.tdb.co.jp/report/industry/20260109-kyuhaigyo25y/" target="_blank" rel="noopener" style="color:inherit">TDB2025 出典</a>)</div>':''}`);
+}
+function depCard(c){
+  const sc = depScore(c.dep);
+  const row = (k,v,w)=>`<div style="margin-bottom:8px"><span style="font-size:13.5px;color:var(--sub)">${k} <b style="color:var(--ink)">${v}</b>/100 (重み${w}%)</span><div class="bar"><i style="width:${v}%"></i></div></div>`;
+  return card("属人性5指標(磨き上げ・保証解除の物差し)", "同意範囲",
+   `<div class="big" style="font-size:26px;margin-bottom:10px">${sc}<span style="font-size:14px;font-weight:600;color:var(--sub)">/100(高いほど非属人)</span></div>
+    ${row("権限移譲率",c.dep.delegation,30)}${row("業務標準化率",c.dep.standardization,25)}${row("非属人意思決定率",c.dep.nonPersonal,20)}${row("財務即時性",c.dep.finImm,15)}${row("顧客直結度",c.dep.customer,10)}`);
+}
+function guarCard(c){
+  const g = c.gReq, gc = [g.sep,g.repay,g.disc].filter(Boolean).length;
+  const loans = c.loans.map(l=>`<tr><td>${l.bank}</td><td class="r">${fmt(l.bal)}万円</td><td>${l.pg?'<span class="sev-high">個人保証あり</span>':'<span style="color:var(--green);font-weight:700">保証なし</span>'}</td></tr>`).join("");
+  return card("借入・経営者保証", "銀行のみ",
+   `<table><tr><th>金融機関</th><th class="r">残高</th><th>保証</th></tr>${loans}</table>
+    <div style="margin-top:12px;font-size:14.5px">保証解除3要件: <b>${gc}/3 充足</b>
+    (①法人個人の分離 ${g.sep?"○":"×"} / ②法人単独の返済力 ${g.repay?"○":"×"} / ③情報開示 ${g.disc?"○":"×"})</div>`);
+}
+function actionCard(c){
+  return card("案件機会とRM次アクション", "銀行のみ",
+   `<table><tr><th>深刻度</th><th>論点</th><th>主担当</th><th>期限</th></tr>${issueRows(c,["銀行","OS"])}</table>
+    <div style="margin-top:12px;font-size:14.5px">案件状態: <b>${c.pipeline.state}</b> / 想定トラック: <b>${c.pipeline.track}</b></div>
+    <div style="margin-top:12px"><button class="btn" style="font-size:13.5px;padding:7px 16px" onclick="ringiCopy('${c.id}')">稟議メモをコピー</button> <span class="fine">スコア内訳・保証状況・論点を稟議用テキストで書き出し</span></div>`);
+}
+function equityCard(c){
+  const el = c.equity.elder;
+  return card("株式・資本(税務論点の入口)", "会計事務所のみ",
+   `<div class="kv">
+     <div><div class="k">株主構成</div><div class="v" style="font-size:14.5px">${c.equity.ratio}</div></div>
+     <div><div class="k">名義株・所在不明</div><div class="v">${c.equity.nominee?'<span class="sev-high">あり</span>':"なし"}</div></div>
+     <div><div class="k">80歳以上の株主</div><div class="v">${el?`<span class="sev-high">${el.who} ${el.ratio}%(${el.age}歳)</span>`:"なし"}</div></div>
+     <div><div class="k">株価算定</div><div class="v">${c.equity.valuationYear?c.equity.valuationYear+"年 実施":'<span class="sev-mid">未実施</span>'}</div></div>
+    </div>`);
+}
+function agendaCard(c){
+  return card("論点リストと次回面談アジェンダ", "会計事務所のみ",
+   `<table><tr><th>深刻度</th><th>論点</th><th>主担当</th><th>期限</th></tr>${issueRows(c,null)}</table>
+    <div style="margin-top:12px;font-size:14.5px">承継状況: ${c.succ.label}</div>`);
+}
+function sourcingCard(c){
+  const last = c.sales.length-1;
+  const dd = [c.equity.valuationYear, c.gReq.disc, c.sales.length>=3, c.events.length>=2].filter(Boolean).length;
+  return card("ソーシング適性(財務・意向)", "仲介のみ・同意範囲",
+   `<div class="kv">
+     <div><div class="k">売上規模</div><div class="v">${fmt(c.sales[last][1])}万円</div></div>
+     <div><div class="k">営業利益(3期)</div><div class="v">${fmt(c.op[2])}万円</div>${spark(c.op)}</div>
+     <div><div class="k">オーナー意向</div><div class="v" style="font-size:14.5px">${c.succ.label}</div></div>
+     <div><div class="k">DD予備情報の充足</div><div class="v">${dd}/4</div></div>
+    </div>`);
+}
+function polishCard(c){
+  return card("磨き上げ論点(譲渡前に価値を上げる)", "仲介のみ",
+   `<table><tr><th>深刻度</th><th>論点</th><th>主担当</th><th>期限</th></tr>${issueRows(c,["M&A仲介","OS"])}</table>`);
+}
+
+// 各ロールのビュー = カードの配列。青バーの「見えるブロック」はここから自動生成される(手書き禁止)
+const VIEW_DEFS = {
+ bank: { use:"取引先の承継リスク把握・案件化・保証/融資判断の前工程・RM活動の優先順位づけ",
+   cards: c => [
+     ["スコア内訳", scoreCard(c)],
+     ["借入・経営者保証", guarCard(c)],
+     ["財務サマリ", finCard(c)],
+     ["属人性5指標", depCard(c)],
+     ["案件機会・次アクション", actionCard(c)],
+     ["案件起票", kihyoCard(c)],
+     [null, lockedCard("株式・資本(会計事務所の担当領域)")],
+     ["更新ログ", logCard(c)]] },
+ acc: { use:"顧問先の承継診断・株式/税務論点の整理・次回面談のアジェンダ",
+   cards: c => [
+     ["スコア内訳", scoreCard(c)],
+     ["株式・資本", equityCard(c)],
+     ["財務サマリ", finCard(c)],
+     ["論点・面談アジェンダ", agendaCard(c)],
+     [null, lockedCard("借入・経営者保証(銀行の担当領域)")],
+     [null, lockedCard("案件起票・パイプライン(銀行の担当領域)")],
+     ["更新ログ", logCard(c)]] },
+ ma: { use:"案件ソーシング・事前スクリーニング・磨き上げ度・DD予備情報",
+   cards: c => [
+     ["スコア内訳", scoreCard(c)],
+     ["ソーシング適性", sourcingCard(c)],
+     ["属人性5指標", depCard(c)],
+     ["磨き上げ論点", polishCard(c)],
+     [null, lockedCard("借入・経営者保証(銀行の担当領域)")],
+     [null, lockedCard("株式・資本(会計事務所の担当領域)")],
+     ["更新ログ", logCard(c)]] }
+};
+
+function ringiCopy(id){
+  const c = DAICHO.find(x=>x.id===id);
+  const b = riskBreakdown(c);
+  const g = c.gReq, gc=[g.sep,g.repay,g.disc].filter(Boolean).length;
+  const lastH = c.history[c.history.length-1];
+  const memo = [
+    `【承継リスク稟議メモ】${c.name} (${c.id})`,
+    `作成: 企業継続OS 承継台帳 / スコア定義${SCORE_VER} / ${todayStr()}`,
+    ``,
+    `■ 基本: ${c.industry} / ${c.pref} / ${c.ceo} / 従業員${c.emp}名`,
+    `■ 承継スコア: ${b.total}/100 (前回 ${lastH.score} [定義${lastH.ver}・${lastH.at}])`,
+    `  内訳: 代表年齢${b.age}/22 後継者${b.succ}/30 属人性${b.dep}/18 株式${b.eq}/12 保証${b.guar}/8 業績${b.trend}/10`,
+    `■ 後継者: ${c.succ.label}`,
+    `■ 借入: ${c.loans.map(l=>`${l.bank} ${fmt(l.bal)}万円${l.pg?"(個人保証あり)":""}`).join(" / ")}`,
+    `■ 保証解除3要件: ${gc}/3 (分離${g.sep?"○":"×"} 返済力${g.repay?"○":"×"} 開示${g.disc?"○":"×"})`,
+    `■ 論点:`,
+    ...c.issues.map(i=>`  ・[${{high:"高",mid:"中",low:"低"}[i.sev]}] ${i.t} (主担当:${i.owner} 期限:${i.due})`),
+    ``,
+    `※ 架空データのデモ出力です`,
+  ].join("\n");
+  const done = ()=>toast("稟議メモをコピーしました");
+  const fail = ()=>{
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = memo; document.body.appendChild(ta); ta.select();
+      const ok = document.execCommand("copy"); document.body.removeChild(ta);
+      ok ? done() : toast("コピーできませんでした(ブラウザ設定を確認)");
+    } catch(e){ toast("コピーできませんでした(ブラウザ設定を確認)"); }
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(memo).then(done).catch(fail);
+  } else fail();
+}
+
+function pageHead(c){
+  const b = riskBreakdown(c);
+  const [cls, txt] = riskChip(b.total);
+  const [bg, fg] = avColor(b.total);
+  const hist = c.history || [];
+  const lastH = hist[hist.length-1];
+  let delta = "";
+  if (lastH) {
+    delta = lastH.ver !== SCORE_VER
+      ? `<div class="delta note">定義改定 ${lastH.ver}→${SCORE_VER} — 旧定義の前回: ${lastH.score}点</div>`
+      : (()=>{ const d=b.total-lastH.score; return `<div class="delta ${d>=0?'up':'down'}">前回比 ${d>=0?"+":""}${d}</div>`; })();
+  }
+  const sline = hist.length ? spark([...hist.map(h=>h.score), b.total], "var(--blue)") : "";
+  return `<div class="pagehead">
+    <div class="av" style="background:${bg};color:${fg}">${c.name.charAt(0)}</div>
+    <div style="min-width:0">
+      <h1>${c.name} <span class="chip ${cls}" style="vertical-align:2px">${txt}</span></h1>
+      <div class="meta">${c.id} ・ ${c.industry} ・ ${c.pref} ・ ${c.ceo} ・ 従業員${c.emp}名</div>
+      <div class="succ">${c.succ.label}</div>
+    </div>
+    <div class="score">
+      <div class="v">${b.total}<span style="font-size:15px;color:var(--sub)">/100</span></div>
+      <div class="k">承継スコア(高いほど危険)</div>
+      ${delta}
+      <div style="display:flex;justify-content:flex-end">${sline}</div>
+      <div class="k">スコア推移(${hist.length ? hist[0].at.slice(5).replace("-","/")+"〜" : ""}今回)</div>
+    </div>
+  </div>`;
+}
+
+function roleKey(e){
+  if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+  e.preventDefault();
+  const ids = ROLES.map(r=>r.id);
+  let i = ids.indexOf(role);
+  i = (i + (e.key==="ArrowRight" ? 1 : ids.length-1)) % ids.length;
+  setRole(ids[i]);
+  requestAnimationFrame(()=>{ const btn=document.querySelector('#roles button[aria-selected="true"]'); btn && btn.focus(); });
+}
+
+function render(){
+  document.getElementById("roles").innerHTML = ROLES.map(r=>
+   `<button role="tab" aria-selected="${r.id===role}" tabindex="${r.id===role?0:-1}" class="${r.id===role?'on':''}"
+     onclick="setRole('${r.id}')" onkeydown="roleKey(event)">${r.label}</button>`).join("");
+  document.getElementById("roles").setAttribute("role","tablist");
+  const vis = visibleList();
+  if (!vis.find(c=>c.id===selId)) selId = vis.length ? vis[0].id : null;
+  const consented = DAICHO.filter(c => role!=="ma" || c.consent.ma).length;
+  document.getElementById("conum").textContent = role==="ma" ? `${consented}社(同意済み)` : DAICHO.length + "社";
+  document.getElementById("colist").innerHTML = vis.map(c=>{
+    const b = riskBreakdown(c); const [cls,txt] = riskChip(b.total);
+    const [bg, fg] = avColor(b.total);
+    return `<div class="co ${c.id===selId?'on':''}" tabindex="0" role="option" aria-selected="${c.id===selId}"
+      onclick="setSel('${c.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setSel('${c.id}')}">
+      <div class="av" style="background:${bg};color:${fg}">${c.name.charAt(0)}</div>
+      <div class="bd">
+        <div class="nm">${c.name}</div>
+        <div class="meta">${c.industry} ・ ${c.pref} ・ ${c.ceo}</div>
+        <div class="meta">${c.succ.label}</div>
+      </div>
+      <span class="chip ${cls}">${txt}</span></div>`;
+  }).join("")
+  + (vis.length===0 ? '<div style="padding:14px 16px" class="fine">条件に合う企業がありません</div>' : '')
+  + (role==="ma" ? `<div class="hiddenrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="vertical-align:-1px;margin-right:5px"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>表示できるのは企業本人が同意した先のみです</div>` : '');
+  const dd = document.getElementById("coDrop");
+  dd.innerHTML = vis.map(c=>`<option value="${c.id}" ${c.id===selId?"selected":""}>${c.name} (${riskBreakdown(c).total})</option>`).join("");
+  const c = DAICHO.find(x=>x.id===selId);
+  const note = document.getElementById("rolenote");
+  if (!c){
+    document.getElementById("panel").innerHTML = '<div class="card"><div class="cbody fine">表示できる企業がありません(同意範囲外)</div></div>';
+    note.textContent = "表示できる企業がありません — 開示には企業本人の同意が必要です";
+    return;
+  }
+  const def = VIEW_DEFS[role];
+  const cards = def.cards(c);
+  note.textContent = "見えるブロック: 基本情報 / " + cards.filter(x=>x[0]).map(x=>x[0]).join(" / ") + " — 使いみち: " + def.use;
+  document.getElementById("panel").innerHTML = pageHead(c) + cards.map(x=>x[1]).join("");
+}
+function setRole(r){ role=r; render(); }
+function setSel(id){ selId=id; render(); }
+function setFilt(k){ filt[k]=!filt[k]; render(); syncFiltUI(); }
+function setQ(v){ filt.q=v.trim(); render(); }
+function syncFiltUI(){
+  document.getElementById("fRed").classList.toggle("on", filt.red);
+  document.getElementById("fSen").classList.toggle("on", filt.senior);
+}
+render();
+</script>
+
+<script>
+"use strict";
+// ===== 台帳作成モード(作成時間の計測つき) =====
+let createMode = false, t0 = null, timerIv = null;
+function toggleMode(){
+  createMode = !createMode;
+  document.getElementById("createView").style.display = createMode ? "block" : "none";
+  document.getElementById("roles").style.display = createMode ? "none" : "flex";
+  document.getElementById("rolenote").style.display = createMode ? "none" : "block";
+  document.querySelector(".wrap").style.display = createMode ? "none" : "grid";
+  document.getElementById("modeBtn").textContent = createMode ? "3者ビューに戻る" : "台帳を作る(計測)";
+  if (createMode){ renderLog(); liveScore(); }
+}
+function fmtSec(ms){ const s = Math.floor(ms/1000); return `${Math.floor(s/60)}分${String(s%60).padStart(2,"0")}秒`; }
+function startTimer(){
+  if (t0) return;
+  t0 = Date.now();
+  document.getElementById("timerBox").classList.remove("idle");
+  timerIv = setInterval(()=>{ document.getElementById("timerBox").textContent = "計測中 " + fmtSec(Date.now()-t0); }, 1000);
+}
+function formObj(){
+  const g = id => document.getElementById(id);
+  const dep = {
+    delegation:+g("f_d1").value, standardization:+g("f_d2").value, nonPersonal:+g("f_d3").value,
+    finImm:+g("f_d4").value, customer:+g("f_d5").value };
+  const o1=parseFloat(g("f_op1").value), o2=parseFloat(g("f_op2").value), o3=parseFloat(g("f_op3").value);
+  let tp = 2; // 3期そろわないうちは「横ばい」扱い
+  if(!isNaN(o1)&&!isNaN(o2)&&!isNaN(o3)){
+    tp = (o3<o2&&o2<o1)?10 : (o3<o1)?6 : (o3<=o1*1.02)?2 : 0;
+  }
+  const elderSel = g("f_elder").value;
+  return {
+    ceoAge:+g("f_age").value || 60,
+    succ:{status:g("f_succ").value},
+    equity:{nominee:g("f_nominee").checked, ceoRatio:+g("f_ratio").value || 100,
+      elder: elderSel==="major" ? {age:85, ratio:25} : null},
+    gReq:{sep:g("f_g1").checked, repay:g("f_g2").checked, disc:g("f_g3").checked},
+    trendPts: tp,
+    dep };
+}
+function liveScore(){
+  const b = riskBreakdown(formObj());
+  const el = document.getElementById("liveScore");
+  el.textContent = b.total + "点";
+  el.style.color = b.total>=60 ? "var(--red)" : b.total>=40 ? "var(--amber)" : "var(--green)";
+}
+document.addEventListener("input", e => {
+  if (!createMode) return;
+  if (!e.target.closest || !e.target.closest("#createView")) return;
+  startTimer(); liveScore();
+  if (e.target.id && e.target.id.startsWith("f_d")) {
+    const v = document.getElementById(e.target.id.replace("f_","v_"));
+    if (v) v.textContent = e.target.value;
+  }
+});
+function getLog(){ try { return JSON.parse(localStorage.getItem("poc_daicho_log")||"[]"); } catch(e){ return []; } }
+function renderLog(){
+  const log = getLog();
+  document.getElementById("logBox").innerHTML = (!log.length ? "まだありません" :
+    "<table><tr><th>#</th><th>社名</th><th>スコア</th><th>作成時間</th><th>日時</th></tr>" +
+    log.map((r,i)=>`<tr><td>${i+1}</td><td>${r.name}</td><td>${r.score}</td><td>${r.min}</td><td>${r.at}</td></tr>`).join("") +
+    `</table><div style="margin-top:6px">平均作成時間: ${avgMin(log)}</div>`)
+    + `<div style="margin-top:10px"><button class="fchip" onclick="clearLog()">計測ログを消去</button></div>`;
+}
+function clearLog(){
+  if (!confirm("この端末に保存された計測ログを消去しますか?")) return;
+  localStorage.removeItem("poc_daicho_log");
+  renderLog();
+  toast("計測ログを消去しました");
+}
+function avgMin(log){
+  const t = log.reduce((a,r)=>a+r.ms,0)/log.length;
+  return fmtSec(t);
+}
+function saveDaicho(skipDownload){
+  const g = id => document.getElementById(id);
+  if (!t0){ toast("まだ入力がありません"); return; }
+  if (!g("f_name").value.trim()){ toast("社名(仮名可)を入力してください — 無名の台帳が計測ログに混ざるのを防ぐため"); return; }
+  clearInterval(timerIv);
+  const ms = Date.now()-t0;
+  const o = formObj();
+  const b = riskBreakdown(o);
+  const rec = {
+    schemaVersion:"1.0-lite", createdMs:ms,
+    basic:{name:g("f_name").value||"(無名)", industry:g("f_ind").value, ceoAge:o.ceoAge, employees:+g("f_emp").value||null},
+    succession:{status:o.succ.status, intent:g("f_intent").value, memo:g("f_succmemo").value},
+    equity:o.equity, guarantee:o.gReq,
+    financials:{sales:+g("f_sales").value||null, op3:[g("f_op1").value,g("f_op2").value,g("f_op3").value].map(v=>v===""?null:+v), cash:+g("f_cash").value||null, netAssets:+g("f_net").value||null, unit:"万円"},
+    personDependency:o.dep, keyPersons:g("f_key").value,
+    issues:g("f_issues").value.split("\n").filter(x=>x.trim()),
+    score:b };
+  if (!skipDownload){
+    const blob = new Blob([JSON.stringify(rec,null,2)], {type:"application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `daicho_${(rec.basic.name||"noname").replace(/\s/g,"")}.json`;
+    a.click();
+  }
+  const log = getLog();
+  log.push({name:rec.basic.name, score:b.total, min:fmtSec(ms), ms, at:new Date().toLocaleString("ja-JP")});
+  localStorage.setItem("poc_daicho_log", JSON.stringify(log));
+  const tb = document.getElementById("timerBox");
+  tb.textContent = "計測終了 " + fmtSec(ms) + " — 次の1社でリセット";
+  tb.classList.add("idle");
+  t0 = null;
+  toast("保存しました(" + fmtSec(ms) + ")");
+  renderLog();
+  return rec;
+}
+function resetForm(){
+  document.querySelectorAll("#createView input[type=text], #createView input[type=number], #createView textarea").forEach(x=>x.value="");
+  document.querySelectorAll("#createView input[type=checkbox]").forEach(x=>x.checked=false);
+  document.querySelectorAll("#createView input[type=range]").forEach(x=>{x.value=50; const v=document.getElementById(x.id.replace("f_","v_")); if(v)v.textContent="50";});
+  document.getElementById("f_age").value = 65; document.getElementById("f_ratio").value = 100;
+  document.getElementById("f_succ").value = "undecided"; document.getElementById("f_elder").value = "none";
+  clearInterval(timerIv); t0 = null;
+  const tb = document.getElementById("timerBox");
+  tb.textContent = "計測待機中 — 最初の入力で開始"; tb.classList.add("idle");
+  liveScore();
+}
+</script>
+
+</html>

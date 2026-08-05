@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>おるすばん中継｜預かり中のようすを、飼い主に届ける</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#ddd9d0; --ink:#1a1a1a; --sub:#77736a;
+         --grn:#15803d; --amb:#b45309; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:460px; margin:0 auto; padding:16px 14px 56px; }
+  .demo{ font-size:12px; color:var(--sub); letter-spacing:.04em; margin:0 0 10px; }
+  h1{ font-size:23px; margin:0 0 3px; }
+  .sub{ color:var(--sub); font-size:14px; margin:0 0 18px; }
+  h2{ font-size:14px; color:var(--sub); font-weight:700; margin:24px 0 8px; letter-spacing:.06em; }
+  button{ font-family:inherit; cursor:pointer; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; margin-bottom:10px; }
+
+  /* 一覧 */
+  .row{ display:flex; gap:13px; align-items:center; width:100%; text-align:left;
+    background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:13px 14px; margin-bottom:10px; color:inherit; font-size:17px; }
+  .row:active{ background:#fbfaf7; }
+  .av{ flex:none; width:52px; height:52px; border-radius:50%; background:#eceae4;
+    display:flex; align-items:center; justify-content:center; }
+  .av svg{ width:32px; height:32px; }
+  .row .nm{ font-weight:600; }
+  .row .mt{ font-size:13px; color:var(--sub); line-height:1.5; }
+  .row .go{ margin-left:auto; color:var(--sub); font-size:22px; flex:none; }
+  .badge{ display:inline-block; font-size:11px; font-weight:700; padding:1px 8px;
+    border-radius:999px; background:#e8eefc; color:var(--ac); margin-left:6px; vertical-align:2px; }
+  .badge.off{ background:#eceae4; color:var(--sub); }
+
+  /* 中継 */
+  .live{ position:relative; background:#2a2723; border-radius:14px; overflow:hidden;
+    height:196px; margin-bottom:12px; }
+  .live svg{ position:absolute; inset:0; width:100%; height:100%; }
+  .live .dot{ position:absolute; top:10px; left:11px; font-size:12px; font-weight:700;
+    color:#fff; background:rgba(0,0,0,.42); padding:3px 10px 3px 8px; border-radius:999px;
+    display:flex; align-items:center; gap:6px; }
+  .live .dot i{ width:7px; height:7px; border-radius:50%; background:#e5484d; display:block;
+    animation:bl 1.4s infinite; }
+  @keyframes bl{ 0%,100%{opacity:1} 50%{opacity:.25} }
+  .live .tm{ position:absolute; bottom:9px; right:11px; font-size:12px; color:#fff;
+    background:rgba(0,0,0,.42); padding:2px 9px; border-radius:999px;
+    font-variant-numeric:tabular-nums; }
+  @keyframes sway{ 0%,100%{transform:translateX(0)} 50%{transform:translateX(9px)} }
+  .pet{ animation:sway 4.5s ease-in-out infinite; transform-origin:center; }
+  @keyframes tail{ 0%,100%{transform:rotate(-13deg)} 50%{transform:rotate(13deg)} }
+  .tl{ animation:tail .5s ease-in-out infinite; transform-origin:0 0; }
+
+  /* できごと */
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{ border:1.5px solid var(--line); background:#fff; color:var(--ink);
+    border-radius:999px; padding:8px 14px; font-size:15px; }
+  .chip.on{ border-color:var(--ac); background:#eef3fd; color:var(--ac); font-weight:600; }
+
+  .prev{ border-left:4px solid var(--ac); }
+  .prev .lb{ font-size:12px; color:var(--ac); font-weight:700; letter-spacing:.04em; }
+  .prev .tx{ margin-top:6px; white-space:pre-wrap; }
+
+  .big{ width:100%; border:0; background:var(--ac); color:#fff; border-radius:12px;
+    padding:14px 0; font-size:17px; font-weight:700; margin-top:4px; }
+  .big[disabled]{ background:#c9c5bc; }
+  .ghost{ width:100%; background:#fff; color:var(--ink); border:1.5px solid var(--line);
+    border-radius:12px; padding:12px 0; font-size:16px; font-weight:600; margin-top:9px; }
+
+  .sent{ background:#e8f3ec; border-color:#bcdcc8; }
+  .sent .lb{ color:var(--grn); }
+
+  /* 売上 */
+  .kpi{ display:flex; gap:10px; }
+  .kpi>div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:12px 13px; }
+  .kpi .n{ font-size:25px; font-weight:700; font-variant-numeric:tabular-nums;
+    letter-spacing:-.02em; line-height:1.25; }
+  .kpi .l{ font-size:12px; color:var(--sub); }
+  .note{ font-size:13px; color:var(--sub); margin-top:10px; }
+  .hide{ display:none; }
+  .back{ background:none; border:0; color:var(--ac); font-size:15px; padding:0; margin-bottom:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="demo">デモ（サンプルデータ）</p>
+
+  <!-- ===== 一覧 ===== -->
+  <section id="v1">
+    <h1>おるすばん中継</h1>
+    <p class="sub">ペットホテル ひなたぼっこ（架空の店）／2026年8月5日</p>
+
+    <h2>いま預かっている子</h2>
+    <div id="list"></div>
+
+    <h2>この機能でついた売上</h2>
+    <div class="kpi">
+      <div><div class="n">4.2<span style="font-size:15px">万円</span></div><div class="l">今月の上乗せ</div></div>
+      <div><div class="n">62<span style="font-size:15px">%</span></div><div class="l">中継を付けた割合</div></div>
+    </div>
+    <p class="note">1泊500円のオプション。カメラは店のスマホ1台で足ります。飼い主から「ようすが分かって安心」と言われる分が、そのまま単価になります。</p>
+  </section>
+
+  <!-- ===== 詳細 ===== -->
+  <section id="v2" class="hide">
+    <button class="back" onclick="toList()">← 預かり中の一覧</button>
+    <h1 id="dNm"></h1>
+    <p class="sub" id="dMt"></p>
+
+    <div class="live">
+      <svg viewBox="0 0 400 196" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="400" height="196" fill="#3b3630"/>
+        <rect y="120" width="400" height="76" fill="#4a443c"/>
+        <rect x="24" y="128" width="150" height="58" rx="10" fill="#5b544a"/>
+        <rect x="34" y="136" width="130" height="42" rx="7" fill="#6b6357"/>
+        <g class="pet" id="petG"></g>
+        <circle cx="330" cy="150" r="17" fill="#5b544a"/>
+        <rect x="313" y="150" width="34" height="9" fill="#4a443c"/>
+      </svg>
+      <div class="dot"><i></i>ライブ</div>
+      <div class="tm" id="clock">14:32</div>
+    </div>
+
+    <h2>今日のできごと（押すと選べます）</h2>
+    <div class="chips" id="chips"></div>
+
+    <div class="card prev" id="prev" style="margin-top:14px">
+      <div class="lb">飼い主さんに届く ひとこと</div>
+      <div class="tx" id="prevTx">できごとを選ぶと、送る文章がここに出ます。</div>
+    </div>
+
+    <button class="big" id="send" disabled onclick="send()">この内容で飼い主さんに送る</button>
+    <button class="ghost" onclick="toList()">あとにする</button>
+  </section>
+</div>
+
+<script>
+const PETS = [
+  { id:1, nm:"モモ", kind:"トイプードル・6歳", owner:"佐々木さま（架空）", stay:"8/4〜8/7（3泊）", opt:true,
+    body:'<ellipse cx="205" cy="150" rx="40" ry="26" fill="#c9a06a"/><circle cx="247" cy="130" r="23" fill="#d7ae76"/><circle cx="255" cy="126" r="3.4" fill="#2a2723"/><ellipse cx="266" cy="133" rx="6" ry="4.5" fill="#2a2723"/><ellipse cx="238" cy="126" rx="9" ry="13" fill="#b98d58"/><g class="tl" transform="translate(167,141)"><ellipse cx="-11" cy="0" rx="12" ry="6" fill="#c9a06a"/></g><rect x="188" y="170" width="9" height="14" rx="4" fill="#b98d58"/><rect x="222" y="170" width="9" height="14" rx="4" fill="#b98d58"/>' },
+  { id:2, nm:"大福", kind:"柴犬・3歳", owner:"井上さま（架空）", stay:"8/5〜8/6（1泊）", opt:true,
+    body:'<ellipse cx="205" cy="150" rx="43" ry="27" fill="#d9b483"/><circle cx="250" cy="128" r="24" fill="#e2c091"/><circle cx="258" cy="124" r="3.4" fill="#2a2723"/><ellipse cx="269" cy="131" rx="6" ry="4.5" fill="#2a2723"/><path d="M238 110 l6 16 l-15 -4 z" fill="#c79f6d"/><path d="M262 108 l2 17 l-14 -8 z" fill="#c79f6d"/><g class="tl" transform="translate(164,140)"><ellipse cx="-10" cy="-6" rx="13" ry="8" fill="#d9b483"/></g><rect x="186" y="171" width="10" height="14" rx="4" fill="#c79f6d"/><rect x="221" y="171" width="10" height="14" rx="4" fill="#c79f6d"/>' },
+  { id:3, nm:"レオ", kind:"猫・キジトラ・5歳", owner:"高橋さま（架空）", stay:"8/3〜8/9（6泊）", opt:false,
+    body:'<ellipse cx="208" cy="152" rx="42" ry="24" fill="#8e8578"/><circle cx="250" cy="132" r="21" fill="#9c9384"/><circle cx="257" cy="128" r="3.2" fill="#2a2723"/><circle cx="243" cy="128" r="3.2" fill="#2a2723"/><path d="M236 114 l3 14 l-13 -6 z" fill="#8e8578"/><path d="M263 113 l0 15 l-13 -6 z" fill="#8e8578"/><g class="tl" transform="translate(168,146)"><rect x="-26" y="-4" width="27" height="8" rx="4" fill="#8e8578"/></g><rect x="192" y="170" width="9" height="12" rx="4" fill="#7d7568"/><rect x="224" y="170" width="9" height="12" rx="4" fill="#7d7568"/>' }
+];
+const EVENTS = [
+  { k:"ごはん完食", t:"ごはんは残さず食べてくれました。" },
+  { k:"よく寝た", t:"お昼はぐっすり眠っていました。" },
+  { k:"おさんぽ15分", t:"夕方に15分ほどおさんぽへ行きました。" },
+  { k:"ほかの子と遊んだ", t:"ほかのわんちゃんと少し遊べました。" },
+  { k:"はじめは緊張", t:"来たばかりの頃は少し緊張していましたが、今は落ち着いています。" },
+  { k:"よく水を飲んだ", t:"暑いので、お水はこまめに飲めています。" }
+];
+
+let cur = null, sel = [], sentIds = [];
+
+function render(){
+  document.getElementById('list').innerHTML = PETS.map(p=>`
+    <button class="row" onclick="open_(${p.id})">
+      <span class="av">${paw()}</span>
+      <span>
+        <span class="nm">${p.nm}<span class="badge ${p.opt?'':'off'}">${p.opt?'中継あり':'中継なし'}</span></span>
+        <span class="mt">${p.kind}／${p.owner}<br>${p.stay}${sentIds.includes(p.id)?'・今日のひとこと送信済み':''}</span>
+      </span>
+      <span class="go">›</span>
+    </button>`).join('');
+}
+function paw(){
+  return '<svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="16" cy="21" rx="9" ry="7.5" fill="#a8a094"/><circle cx="8" cy="12" r="3.6" fill="#a8a094"/><circle cx="14" cy="8.5" r="3.6" fill="#a8a094"/><circle cx="21" cy="9.5" r="3.6" fill="#a8a094"/><circle cx="26" cy="14.5" r="3.4" fill="#a8a094"/></svg>';
+}
+function open_(id){
+  cur = PETS.find(p=>p.id===id); sel = [];
+  document.getElementById('dNm').textContent = cur.nm;
+  document.getElementById('dMt').textContent = cur.kind + '／' + cur.owner + '／' + cur.stay;
+  document.getElementById('petG').innerHTML = cur.body;
+  document.getElementById('chips').innerHTML = EVENTS.map((e,i)=>
+    `<button class="chip" id="c${i}" onclick="pick(${i})">${e.k}</button>`).join('');
+  const pv = document.getElementById('prev');
+  pv.className = 'card prev';
+  pv.querySelector('.lb').textContent = '飼い主さんに届く ひとこと';
+  document.getElementById('prevTx').textContent = 'できごとを選ぶと、送る文章がここに出ます。';
+  document.getElementById('send').disabled = true;
+  document.getElementById('send').textContent = 'この内容で飼い主さんに送る';
+  document.getElementById('v1').classList.add('hide');
+  document.getElementById('v2').classList.remove('hide');
+  window.scrollTo(0,0);
+}
+function toList(){
+  render();
+  document.getElementById('v2').classList.add('hide');
+  document.getElementById('v1').classList.remove('hide');
+  window.scrollTo(0,0);
+}
+function pick(i){
+  const at = sel.indexOf(i);
+  if(at>=0) sel.splice(at,1); else sel.push(i);
+  document.getElementById('c'+i).className = 'chip' + (at>=0?'':' on');
+  build();
+}
+function build(){
+  const tx = document.getElementById('prevTx'), btn = document.getElementById('send');
+  if(!sel.length){
+    tx.textContent = 'できごとを選ぶと、送る文章がここに出ます。';
+    btn.disabled = true; return;
+  }
+  const lines = sel.map(i=>EVENTS[i].t);
+  tx.textContent = `${cur.owner.replace('（架空）','')}\n\n${cur.nm}ちゃんの今日のようすです。\n`
+    + lines.map(l=>'・'+l).join('\n')
+    + `\n\n変わったところはありません。明日もこの調子で預かります。\n\nペットホテル ひなたぼっこ`;
+  btn.disabled = false;
+}
+function send(){
+  const pv = document.getElementById('prev');
+  pv.className = 'card prev sent';
+  pv.querySelector('.lb').textContent = '送信しました（デモなので実際には送られません）';
+  const btn = document.getElementById('send');
+  btn.disabled = true; btn.textContent = '送信ずみ';
+  if(!sentIds.includes(cur.id)) sentIds.push(cur.id);
+}
+setInterval(()=>{
+  const el = document.getElementById('clock');
+  if(!el) return;
+  const m = 32 + Math.floor((Date.now()/1000)%28);
+  el.textContent = '14:' + String(m).padStart(2,'0');
+}, 1000);
+render();
+</script>
+</body>
+</html>

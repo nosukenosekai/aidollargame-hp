@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>となり音ノート｜入居者どうしの揉めごとを、経緯ごと引き継ぐ</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#ddd9d0; --ink:#1a1a1a; --sub:#77736a;
+         --grn:#15803d; --amb:#b45309; --red:#b3261e; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:460px; margin:0 auto; padding:16px 14px 56px; }
+  .demo{ font-size:12px; color:var(--sub); letter-spacing:.04em; margin:0 0 10px; }
+  h1{ font-size:23px; margin:0 0 3px; }
+  .sub{ color:var(--sub); font-size:14px; margin:0 0 18px; }
+  h2{ font-size:14px; color:var(--sub); font-weight:700; margin:24px 0 8px; letter-spacing:.06em; }
+  button{ font-family:inherit; cursor:pointer; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; margin-bottom:10px; }
+
+  .row{ display:block; width:100%; text-align:left; background:#fff;
+    border:1px solid var(--line); border-radius:14px; padding:13px 15px;
+    margin-bottom:10px; color:inherit; font-size:17px; }
+  .row:active{ background:#fbfaf7; }
+  .row .top{ display:flex; align-items:baseline; gap:8px; }
+  .row .nm{ font-weight:600; }
+  .row .go{ margin-left:auto; color:var(--sub); font-size:22px; }
+  .row .mt{ font-size:13px; color:var(--sub); }
+  .tag{ font-size:11px; font-weight:700; padding:1px 9px; border-radius:999px; flex:none; }
+  .t1{ background:#e8f3ec; color:var(--grn); }
+  .t2{ background:#fdf1e2; color:var(--amb); }
+  .t3{ background:#fbe9e7; color:var(--red); }
+
+  /* チャット */
+  .chat{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px 13px; margin-bottom:10px; }
+  .msg{ max-width:84%; padding:10px 13px; border-radius:14px; margin-bottom:9px;
+    font-size:16px; line-height:1.7; white-space:pre-wrap; }
+  .me{ background:#eef3fd; color:var(--ink); margin-left:auto; border-bottom-right-radius:4px; }
+  .bot{ background:#f2f0eb; border-bottom-left-radius:4px; }
+  .opts{ display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+  .opt{ border:1.5px solid var(--ac); background:#fff; color:var(--ac);
+    border-radius:999px; padding:8px 14px; font-size:15px; font-weight:600; }
+
+  /* 経緯 */
+  .tl{ position:relative; padding-left:20px; }
+  .tl:before{ content:""; position:absolute; left:5px; top:6px; bottom:6px;
+    width:2px; background:var(--line); }
+  .ev{ position:relative; margin-bottom:14px; }
+  .ev:before{ content:""; position:absolute; left:-19px; top:8px; width:10px; height:10px;
+    border-radius:50%; background:#fff; border:2px solid var(--ac); }
+  .ev .d{ font-size:12px; color:var(--sub); font-variant-numeric:tabular-nums; }
+  .ev .b{ font-size:16px; }
+  .ev .who{ font-size:12px; color:var(--sub); }
+
+  .letter{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:16px; white-space:pre-wrap; font-size:16px; line-height:1.9;
+    border-left:4px solid var(--ac); }
+  .seg{ display:flex; border:1.5px solid var(--line); border-radius:11px;
+    overflow:hidden; background:#fff; margin-bottom:10px; }
+  .seg button{ flex:1; border:0; background:#fff; color:var(--sub); padding:11px 2px;
+    font-size:14px; font-weight:600; }
+  .seg button.on{ background:var(--ac); color:#fff; }
+
+  .big{ width:100%; border:0; background:var(--ac); color:#fff; border-radius:12px;
+    padding:14px 0; font-size:17px; font-weight:700; margin-top:4px; }
+  .ghost{ width:100%; background:#fff; color:var(--ink); border:1.5px solid var(--line);
+    border-radius:12px; padding:12px 0; font-size:16px; font-weight:600; margin-top:9px; }
+  .note{ font-size:13px; color:var(--sub); margin-top:10px; }
+  .hide{ display:none; }
+  .back{ background:none; border:0; color:var(--ac); font-size:15px; padding:0; margin-bottom:12px; }
+  .kpi{ display:flex; gap:10px; margin-bottom:4px; }
+  .kpi>div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:12px 13px; }
+  .kpi .n{ font-size:25px; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.25; }
+  .kpi .n span{ font-size:14px; }
+  .kpi .l{ font-size:12px; color:var(--sub); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="demo">デモ（サンプルデータ）</p>
+
+  <!-- ===== 一覧 ===== -->
+  <section id="v1">
+    <h1>となり音ノート</h1>
+    <p class="sub">みどり不動産管理（架空の管理会社）／担当が替わっても経緯が残る</p>
+
+    <div class="kpi">
+      <div><div class="n">14<span>件</span></div><div class="l">対応中の揉めごと</div></div>
+      <div><div class="n">3<span>件</span></div><div class="l">今週の再発</div></div>
+    </div>
+
+    <h2>案件</h2>
+    <div id="list"></div>
+
+    <button class="big" onclick="startNew()">新しい申し出を受ける</button>
+    <p class="note">入居者から電話を受けた人がそのまま聞き取れば、案件の1枚ができます。次に電話を取る人が、前回どう伝えたかを読んでから話せます。</p>
+  </section>
+
+  <!-- ===== 聞き取り ===== -->
+  <section id="v2" class="hide">
+    <button class="back" onclick="toList()">← 案件の一覧</button>
+    <h1>申し出を受ける</h1>
+    <p class="sub">押していくだけで、案件の1枚ができます</p>
+    <div class="chat" id="chat"></div>
+    <div class="opts" id="opts"></div>
+  </section>
+
+  <!-- ===== 詳細 ===== -->
+  <section id="v3" class="hide">
+    <button class="back" onclick="toList()">← 案件の一覧</button>
+    <h1 id="dNm"></h1>
+    <p class="sub" id="dMt"></p>
+
+    <div class="card">
+      <div style="font-size:13px;color:var(--sub)">いまの状況</div>
+      <div id="dSt" style="font-size:16px"></div>
+    </div>
+
+    <h2>これまでの経緯</h2>
+    <div class="card"><div class="tl" id="tl"></div></div>
+
+    <h2>相手のお宅への伝え方</h2>
+    <div class="seg" id="seg">
+      <button class="on" onclick="setTone(0)">やんわり</button>
+      <button onclick="setTone(1)">はっきり</button>
+      <button onclick="setTone(2)">書面で</button>
+    </div>
+    <div class="letter" id="letter"></div>
+    <button class="ghost" onclick="markSent()" id="sendBtn">これで伝えた、と記録する</button>
+    <p class="note">どちらが悪いかは書きません。困っている事実と、いつ・どうしてほしいかだけを伝えます。名指しは避け、部屋番号も出しません。</p>
+  </section>
+</div>
+
+<script>
+const CASES = [
+  { id:1, nm:"301号室 洗濯機の音", mt:"みどり荘／申し出 202号室（架空）", lv:3,
+    st:"3回目の申し出。前回の伝達から11日で再発しています。",
+    tl:[
+      {d:"6/18 20:40", b:"202号室より、夜10時以降に上階から洗濯機らしい音がすると申し出", w:"受付・田中"},
+      {d:"6/19 11:05", b:"301号室へ投函（時間帯のお願い・名指しなし）", w:"担当・小林"},
+      {d:"7/02 21:15", b:"202号室より、改善したが週末だけ戻ると連絡", w:"受付・田中"},
+      {d:"7/25 22:30", b:"202号室より3回目の申し出。管理会社の対応にも不満", w:"受付・佐野"}
+    ],
+    type:"音" },
+  { id:2, nm:"ゴミ出しの曜日ちがい", mt:"さくらハイツ／申し出 大家さん（架空）", lv:2,
+    st:"掲示のみで2週間ようすを見ています。次は各戸へ投函の段階です。",
+    tl:[
+      {d:"7/20 09:10", b:"大家より、収集日以外にゴミが出ていると連絡。写真あり", w:"担当・小林"},
+      {d:"7/21 10:00", b:"ゴミ置き場に掲示（多言語の表を追加）", w:"担当・小林"},
+      {d:"8/03 08:50", b:"件数は減ったが2回発生", w:"巡回・佐野"}
+    ],
+    type:"ゴミ" },
+  { id:3, nm:"駐輪場に置きっぱなしの自転車", mt:"みどり荘／申し出 105号室（架空）", lv:1,
+    st:"札を付けて1か月待ちの途中。期限は8/28です。",
+    tl:[
+      {d:"7/28 15:30", b:"105号室より、空きがなく停められないと申し出", w:"受付・佐野"},
+      {d:"7/29 14:00", b:"長期放置とみられる3台に確認札を取り付け（期限8/28）", w:"巡回・佐野"}
+    ],
+    type:"駐輪" }
+];
+const LV = [null,{t:"ようす見",c:"t1"},{t:"対応中",c:"t2"},{t:"再発あり",c:"t3"}];
+
+const FLOW = [
+  { q:"どちらの物件のことでしょうか。", o:["みどり荘","さくらハイツ","かえで台マンション"] },
+  { q:"どんなことでお困りですか。", o:["音のこと","ゴミのこと","駐輪・駐車のこと","においのこと"] },
+  { q:"だいたいどの時間帯でしょうか。", o:["朝","昼","夜（20時〜）","深夜（0時〜）"] },
+  { q:"どのくらい続いていますか。", o:["今日はじめて","1週間ほど","1か月以上"] },
+  { q:"お名前を相手に伝えてもよいですか。", o:["伝えないでほしい","伝えてもよい"] }
+];
+let ans=[], step=0, cur=null, tone=0;
+
+function render(){
+  document.getElementById('list').innerHTML = CASES.map(c=>`
+    <button class="row" onclick="open_(${c.id})">
+      <span class="top">
+        <span class="nm">${c.nm}</span>
+        <span class="tag ${LV[c.lv].c}">${LV[c.lv].t}</span>
+        <span class="go">›</span>
+      </span>
+      <span class="mt">${c.mt}／記録 ${c.tl.length}件・最終 ${c.tl[c.tl.length-1].d}</span>
+    </button>`).join('');
+}
+function open_(id){
+  cur = CASES.find(c=>c.id===id); tone=0;
+  document.getElementById('dNm').textContent = cur.nm;
+  document.getElementById('dMt').textContent = cur.mt;
+  document.getElementById('dSt').textContent = cur.st;
+  document.getElementById('tl').innerHTML = cur.tl.map(e=>
+    `<div class="ev"><div class="d">${e.d}</div><div class="b">${e.b}</div><div class="who">${e.w}</div></div>`).join('');
+  [...document.querySelectorAll('#seg button')].forEach((b,i)=>b.className = i===0?'on':'');
+  document.getElementById('sendBtn').textContent = 'これで伝えた、と記録する';
+  letter();
+  show('v3');
+}
+function setTone(t){
+  tone=t;
+  [...document.querySelectorAll('#seg button')].forEach((b,i)=>b.className = i===t?'on':'');
+  letter();
+}
+function letter(){
+  const T = {
+    "音":{
+      0:`入居者のみなさまへ
+
+いつも建物をきれいにお使いいただき、ありがとうございます。
+
+このところ、夜10時以降の生活音についてお困りの声が届いております。
+洗濯機や掃除機など、床に振動が伝わるものは、夜10時までにお使いいただけますと助かります。
+
+どなたかを指してのお願いではございません。造りの上で音が伝わりやすい建物のため、みなさまにお願いしております。
+
+みどり不動産管理`,
+      1:`入居者のみなさまへ
+
+夜間の生活音について、複数回にわたりお困りの声が届いております。
+
+夜10時以降の洗濯機・掃除機のご使用はお控えください。
+お困りの声が続く場合、恐れ入りますが個別にご相談にうかがいます。
+
+ご事情がある方は、あらかじめ管理会社までご連絡ください。
+
+みどり不動産管理`,
+      2:`301号室 ご入居者さま
+
+生活音に関するお願い（3回目）
+
+管理物件の運営につき、ご協力をお願い申し上げます。
+本件は本年6月18日以降、複数回にわたりお困りの声が寄せられております。
+
+　お願いする内容　夜22時以降の洗濯機・掃除機のご使用をお控えいただくこと
+　期限　　　　　　本状到着後すみやかに
+
+ご事情がある場合は、8月20日までに下記までご連絡ください。
+ご連絡をいただければ、時間帯や設置方法のご相談に応じます。
+
+みどり不動産管理　TEL 000-000-0000`
+    },
+    "ゴミ":{
+      0:`入居者のみなさまへ
+
+ゴミ出しについてのお願いです。
+
+収集日の前日夜から当日朝8時までに出していただけますようお願いします。
+それ以外の日に出されますと、次の収集まで置かれたままになってしまいます。
+
+置き場に曜日の表を貼っております。ご確認いただけますと助かります。
+
+みどり不動産管理`,
+      1:`入居者のみなさまへ
+
+収集日以外のゴミ出しが続いております。
+
+収集日の当日朝8時までに出してください。
+夏場はにおいと虫の原因になり、他のみなさまのご迷惑になります。
+
+分別や曜日が分かりにくい場合は、管理会社までお問い合わせください。
+
+みどり不動産管理`,
+      2:`入居者のみなさまへ
+
+ゴミ出しに関するお願い（2回目）
+
+7月21日の掲示以降も、収集日以外の排出が確認されております。
+
+　お願いする内容　収集日当日の朝8時までに、分別のうえ排出いただくこと
+　該当の置き場　　さくらハイツ 敷地北側
+
+改善が見られない場合、置き場の施錠と時間帯の管理を検討いたします。
+ご不明な点は下記までご連絡ください。
+
+みどり不動産管理　TEL 000-000-0000`
+    },
+    "駐輪":{
+      0:`入居者のみなさまへ
+
+駐輪場の整理についてのお願いです。
+
+長く動いていない自転車に、確認の札を付けさせていただきました。
+お使いの自転車に札が付いていましたら、お手数ですが札を外してください。
+
+停めたい方が停められない状態になっております。ご協力をお願いします。
+
+みどり不動産管理`,
+      1:`入居者のみなさまへ
+
+駐輪場に空きがない状態が続いております。
+
+確認札の付いた自転車は、8月28日を過ぎましたら敷地内の別の場所へ移動します。
+お使いのものは、それまでに札を外してください。
+
+台数が足りない場合は、増設を検討しますのでご連絡ください。
+
+みどり不動産管理`,
+      2:`入居者のみなさまへ
+
+駐輪場のご利用に関するお願い
+
+7月29日付で、長期間動きのない自転車に確認札を取り付けております。
+
+　期限　　2026年8月28日
+　期限後　敷地内の指定場所へ移動のうえ、一定期間保管します
+
+お使いのものは期限までに札を外してください。
+ご不明な点は下記までご連絡ください。
+
+みどり不動産管理　TEL 000-000-0000`
+    }
+  };
+  document.getElementById('letter').textContent = T[cur.type][tone];
+}
+function markSent(){
+  const b = document.getElementById('sendBtn');
+  b.textContent = '記録しました（デモなので保存はされません）';
+  const d = ['やんわり','はっきり','書面で'][tone];
+  document.getElementById('tl').insertAdjacentHTML('beforeend',
+    `<div class="ev"><div class="d">8/05 10:00</div><div class="b">${d}の文面で伝達</div><div class="who">担当・あなた</div></div>`);
+}
+function startNew(){ ans=[]; step=0; draw(); show('v2'); }
+function draw(){
+  const c = document.getElementById('chat'), o = document.getElementById('opts');
+  let h = '';
+  for(let i=0;i<step;i++){
+    h += `<div class="msg bot">${FLOW[i].q}</div><div class="msg me">${ans[i]}</div>`;
+  }
+  if(step < FLOW.length){
+    h += `<div class="msg bot">${FLOW[step].q}</div>`;
+    o.innerHTML = FLOW[step].o.map(t=>`<button class="opt" onclick="ansIt('${t}')">${t}</button>`).join('');
+  } else {
+    h += `<div class="msg bot">ありがとうございました。次の1枚にまとめました。担当が替わっても、この内容から読み始められます。</div>`;
+    h += `<div class="msg bot" style="max-width:100%;background:#eef3fd">`
+      + `物件　${ans[0]}\n内容　${ans[1]}\n時間帯　${ans[2]}\n続いている期間　${ans[3]}\n名前の扱い　${ans[4]}\n\n`
+      + `次にやること\n・${ans[3]==='今日はじめて'?'まず掲示で様子を見る（7日）':'各戸へ投函し、2週間後に再確認'}\n`
+      + `・${ans[4]==='伝えないでほしい'?'相手方には名指しをせず、全戸あて文面にする':'相手方に申し出者を伝えてよい'}</div>`;
+    o.innerHTML = `<button class="opt" onclick="toList()">案件の一覧に戻る</button>`;
+  }
+  c.innerHTML = h;
+  c.scrollTop = c.scrollHeight;
+}
+function ansIt(t){ ans[step]=t; step++; draw(); }
+function show(id){
+  ['v1','v2','v3'].forEach(v=>document.getElementById(v).classList.add('hide'));
+  document.getElementById(id).classList.remove('hide');
+  window.scrollTo(0,0);
+}
+function toList(){ render(); show('v1'); }
+render();
+</script>
+</body>
+</html>

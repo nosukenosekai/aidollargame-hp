@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>こげつき見張り｜荷主の危ない兆しを、公開情報から先に見つける</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#ddd9d0; --ink:#1a1a1a; --sub:#77736a;
+         --grn:#15803d; --amb:#b45309; --red:#b3261e; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:460px; margin:0 auto; padding:16px 14px 56px; }
+  .demo{ font-size:12px; color:var(--sub); letter-spacing:.04em; margin:0 0 10px; }
+  h1{ font-size:23px; margin:0 0 3px; }
+  .sub{ color:var(--sub); font-size:14px; margin:0 0 18px; }
+  h2{ font-size:14px; color:var(--sub); font-weight:700; margin:24px 0 8px; letter-spacing:.06em; }
+  button{ font-family:inherit; cursor:pointer; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; margin-bottom:10px; }
+
+  .row{ display:block; width:100%; text-align:left; background:#fff;
+    border:1px solid var(--line); border-radius:14px; padding:13px 15px;
+    margin-bottom:10px; color:inherit; font-size:17px; }
+  .row:active{ background:#fbfaf7; }
+  .row .top{ display:flex; align-items:center; gap:9px; }
+  .row .nm{ font-weight:600; }
+  .row .go{ margin-left:auto; color:var(--sub); font-size:22px; }
+  .row .mt{ font-size:13px; color:var(--sub); }
+  .row .amt{ font-size:15px; font-variant-numeric:tabular-nums; margin-top:3px; }
+  .sig{ width:12px; height:12px; border-radius:50%; flex:none; }
+  .s3{ background:var(--red); } .s2{ background:var(--amb); } .s1{ background:var(--grn); }
+  .tag{ font-size:11px; font-weight:700; padding:1px 9px; border-radius:999px; }
+  .g3{ background:#fbe9e7; color:var(--red); }
+  .g2{ background:#fdf1e2; color:var(--amb); }
+  .g1{ background:#e8f3ec; color:var(--grn); }
+
+  .kpi{ display:flex; gap:10px; margin-bottom:6px; }
+  .kpi>div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:12px 13px; }
+  .kpi .n{ font-size:24px; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.25; }
+  .kpi .n span{ font-size:14px; }
+  .kpi .l{ font-size:12px; color:var(--sub); }
+
+  .tl{ position:relative; padding-left:20px; }
+  .tl:before{ content:""; position:absolute; left:5px; top:6px; bottom:6px;
+    width:2px; background:var(--line); }
+  .ev{ position:relative; margin-bottom:15px; }
+  .ev:before{ content:""; position:absolute; left:-19px; top:8px; width:10px; height:10px;
+    border-radius:50%; background:#fff; border:2px solid var(--line); }
+  .ev.hot:before{ border-color:var(--red); background:#fbe9e7; }
+  .ev .d{ font-size:12px; color:var(--sub); font-variant-numeric:tabular-nums; }
+  .ev .b{ font-size:16px; }
+  .ev .src{ font-size:12px; color:var(--sub); margin-top:2px; }
+
+  .act{ background:#fff; border:1px solid var(--line); border-left:4px solid var(--ac);
+    border-radius:14px; padding:13px 15px; margin-bottom:9px; }
+  .act .h{ font-weight:600; }
+  .act .p{ font-size:15px; color:var(--sub); margin-top:3px; }
+  .act .p b{ color:var(--ink); font-weight:600; }
+
+  .warn{ background:#faf7ef; border:1px solid #e6dcc4; border-radius:14px;
+    padding:12px 14px; font-size:13px; color:#6b6250; line-height:1.7; margin-top:16px; }
+  .note{ font-size:13px; color:var(--sub); margin-top:10px; }
+  .hide{ display:none; }
+  .back{ background:none; border:0; color:var(--ac); font-size:15px; padding:0; margin-bottom:12px; }
+  .bar{ height:8px; background:#eceae4; border-radius:999px; overflow:hidden; margin:8px 0 4px; }
+  .bar i{ display:block; height:8px; border-radius:999px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="demo">デモ（サンプルデータ）</p>
+
+  <!-- ===== 一覧 ===== -->
+  <section id="v1">
+    <h1>こげつき見張り</h1>
+    <p class="sub">丸中運送株式会社（架空の運送会社）／2026年8月5日の見張り結果</p>
+
+    <div class="kpi">
+      <div><div class="n">3,240<span>万円</span></div><div class="l">いまの売掛残の合計</div></div>
+      <div><div class="n">1<span>社</span></div><div class="l">今週あがった兆し</div></div>
+    </div>
+
+    <h2>荷主（危ないほうから）</h2>
+    <div id="list"></div>
+
+    <div class="warn">この画面が見ているのは、官報の公告・登記の変更・行政処分の公表・求人の出し方といった、誰でも見られる情報の並びだけです。倒れると決めつけるものではなく、電話をかける順番を決めるためのものです。取引をやめる判断は、必ず人がしてください。</div>
+  </section>
+
+  <!-- ===== 詳細 ===== -->
+  <section id="v2" class="hide">
+    <button class="back" onclick="toList()">← 荷主の一覧</button>
+    <h1 id="dNm"></h1>
+    <p class="sub" id="dMt"></p>
+
+    <div class="card">
+      <div style="display:flex; align-items:baseline; gap:9px">
+        <div style="font-size:13px;color:var(--sub)">気をつける度合い</div>
+        <div id="dLv" style="margin-left:auto"></div>
+      </div>
+      <div class="bar"><i id="dBar"></i></div>
+      <div style="font-size:15px" id="dSum"></div>
+    </div>
+
+    <h2>拾った兆し</h2>
+    <div class="card"><div class="tl" id="tl"></div></div>
+
+    <h2>いまやること</h2>
+    <div id="acts"></div>
+    <p class="note">兆しが1つだけなら様子見で足ります。困るのは、支払いの遅れと外から見える変化が重なったときです。この画面は重なりの数で順番を作ります。</p>
+  </section>
+</div>
+
+<script>
+const CO = [
+  { id:1, nm:"株式会社ひばり物産（架空）", biz:"食品卸／取引6年", ar:1180, lv:3, score:82,
+    sum:"支払いの遅れが2回続いたところに、外から見える変化が3つ重なりました。今週いちばん先に電話する先です。",
+    tl:[
+      {d:"2026/5/12", b:"求人の掲載がすべて取り下げられた", s:"公開求人サイトの掲載状況", hot:false},
+      {d:"2026/6/03", b:"支払いが約定より9日遅れ", s:"自社の入金記録", hot:false},
+      {d:"2026/6/28", b:"本店所在地の変更登記（自社ビルから賃貸へ）", s:"登記情報", hot:true},
+      {d:"2026/7/15", b:"支払いが約定より17日遅れ。分割の申し出あり", s:"自社の入金記録", hot:true},
+      {d:"2026/7/30", b:"取締役2名の退任登記", s:"登記情報", hot:true}
+    ],
+    acts:[
+      {h:"与信枠を下げる", p:"いまの売掛残 <b>1,180万円</b>。新規の受注は、残が800万円を切るまで止めるのが安全側です。"},
+      {h:"支払い条件を変える", p:"次の見積から<b>前払い、または現金決済</b>を条件にします。断られた場合、その反応そのものが情報になります。"},
+      {h:"担当ではなく経理に聞く", p:"「来月の支払日はいつになりますか」と<b>事務的に</b>確認します。答えが濁るかどうかを見ます。"},
+      {h:"他の運送会社に当たっていないか見る", p:"同じ荷を別の会社に振り始めていたら、支払いを飛ばす準備の場合があります。"}
+    ] },
+  { id:2, nm:"北星建材株式会社（架空）", biz:"建材／取引11年", ar:1420, lv:2, score:48,
+    sum:"支払いは遅れていません。ただ主要な工事の取引先が減っており、売上の先細りが見えます。",
+    tl:[
+      {d:"2026/4/20", b:"公共工事の落札が前年より大きく減少", s:"自治体の入札結果の公表", hot:false},
+      {d:"2026/6/10", b:"求人の募集職種がドライバーのみに絞られた", s:"公開求人サイトの掲載状況", hot:false},
+      {d:"2026/7/22", b:"支払いは約定どおり", s:"自社の入金記録", hot:false}
+    ],
+    acts:[
+      {h:"いまは枠を維持でよい", p:"支払いに乱れがありません。<b>3か月ごとの見直し</b>にとどめます。"},
+      {h:"仕事の先を分けて見る", p:"公共の仕事が減った分を民間で戻せているか、次の商談で<b>受注残</b>を聞いておきます。"}
+    ] },
+  { id:3, nm:"有限会社みやこ紙業（架空）", biz:"紙・包装／取引3年", ar:640, lv:1, score:14,
+    sum:"気になる動きはありません。支払いも早く、事業も広がっています。",
+    tl:[
+      {d:"2026/5/08", b:"倉庫を1棟増やす登記（不動産の取得）", s:"登記情報", hot:false},
+      {d:"2026/7/01", b:"支払いが約定より3日早い", s:"自社の入金記録", hot:false}
+    ],
+    acts:[
+      {h:"枠を広げてよい先", p:"支払いが安定しています。<b>運賃の改定を相談する先</b>としては、いちばん通りやすい相手です。"}
+    ] }
+];
+const LV = [null,{t:"落ち着いている",c:"g1",b:"#15803d"},{t:"見ておく",c:"g2",b:"#b45309"},{t:"先に電話",c:"g3",b:"#b3261e"}];
+
+function render(){
+  document.getElementById('list').innerHTML = CO.map(c=>`
+    <button class="row" onclick="open_(${c.id})">
+      <span class="top">
+        <span class="sig s${c.lv}"></span>
+        <span class="nm">${c.nm}</span>
+        <span class="go">›</span>
+      </span>
+      <span class="mt">${c.biz}　<span class="tag ${LV[c.lv].c}">${LV[c.lv].t}</span></span>
+      <span class="amt">売掛残 ${(c.ar/1).toLocaleString()}万円／兆し ${c.tl.filter(e=>e.hot).length}件</span>
+    </button>`).join('');
+}
+function open_(id){
+  const c = CO.find(x=>x.id===id);
+  document.getElementById('dNm').textContent = c.nm;
+  document.getElementById('dMt').textContent = c.biz + '／売掛残 ' + c.ar.toLocaleString() + '万円';
+  document.getElementById('dLv').innerHTML = `<span class="tag ${LV[c.lv].c}">${LV[c.lv].t}</span>`;
+  const bar = document.getElementById('dBar');
+  bar.style.width = c.score + '%';
+  bar.style.background = LV[c.lv].b;
+  document.getElementById('dSum').textContent = c.sum;
+  document.getElementById('tl').innerHTML = c.tl.map(e=>
+    `<div class="ev${e.hot?' hot':''}"><div class="d">${e.d}</div><div class="b">${e.b}</div>
+     <div class="src">もとにした情報：${e.s}</div></div>`).join('');
+  document.getElementById('acts').innerHTML = c.acts.map(a=>
+    `<div class="act"><div class="h">${a.h}</div><div class="p">${a.p}</div></div>`).join('');
+  document.getElementById('v1').classList.add('hide');
+  document.getElementById('v2').classList.remove('hide');
+  window.scrollTo(0,0);
+}
+function toList(){
+  document.getElementById('v2').classList.add('hide');
+  document.getElementById('v1').classList.remove('hide');
+  window.scrollTo(0,0);
+}
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>値上げの手紙｜言い出しにくい価格改定を、通る文面にする</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#ddd9d0; --ink:#1a1a1a; --sub:#77736a;
+         --grn:#15803d; --amb:#b45309; --red:#b3261e; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:460px; margin:0 auto; padding:16px 14px 56px; }
+  .demo{ font-size:12px; color:var(--sub); letter-spacing:.04em; margin:0 0 10px; }
+  h1{ font-size:23px; margin:0 0 3px; }
+  .sub{ color:var(--sub); font-size:14px; margin:0 0 18px; }
+  h2{ font-size:14px; color:var(--sub); font-weight:700; margin:24px 0 8px; letter-spacing:.06em; }
+  button{ font-family:inherit; cursor:pointer; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; margin-bottom:10px; }
+
+  .row{ display:block; width:100%; text-align:left; background:#fff;
+    border:1px solid var(--line); border-radius:14px; padding:13px 15px;
+    margin-bottom:10px; color:inherit; font-size:17px; }
+  .row:active{ background:#fbfaf7; }
+  .row .top{ display:flex; align-items:baseline; gap:8px; }
+  .row .nm{ font-weight:600; }
+  .row .go{ margin-left:auto; color:var(--sub); font-size:22px; }
+  .row .mt{ font-size:13px; color:var(--sub); }
+  .row .amt{ font-size:15px; font-variant-numeric:tabular-nums; margin-top:4px; }
+  .row .amt b{ color:var(--ac); font-size:19px; }
+  .tag{ font-size:11px; font-weight:700; padding:1px 9px; border-radius:999px; }
+  .t1{ background:#e8f3ec; color:var(--grn); }
+  .t2{ background:#fdf1e2; color:var(--amb); }
+  .t3{ background:#fbe9e7; color:var(--red); }
+
+  .kpi{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:15px 16px; margin-bottom:12px; }
+  .kpi .n{ font-size:31px; font-weight:700; font-variant-numeric:tabular-nums;
+    letter-spacing:-.02em; line-height:1.2; }
+  .kpi .n span{ font-size:16px; font-weight:600; }
+  .kpi .l{ font-size:13px; color:var(--sub); }
+
+  .fld{ margin-bottom:13px; }
+  .fld label{ display:block; font-size:13px; color:var(--sub); margin-bottom:5px; }
+  .fld input[type=number]{ width:100%; font-family:inherit; font-size:17px;
+    padding:11px 12px; border:1.5px solid var(--line); border-radius:11px; background:#fff;
+    color:var(--ink); }
+  input[type=range]{ width:100%; accent-color:var(--ac); }
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{ border:1.5px solid var(--line); background:#fff; color:var(--ink);
+    border-radius:999px; padding:8px 13px; font-size:15px; }
+  .chip.on{ border-color:var(--ac); background:#eef3fd; color:var(--ac); font-weight:600; }
+
+  .seg{ display:flex; gap:0; border:1.5px solid var(--line); border-radius:11px;
+    overflow:hidden; background:#fff; }
+  .seg button{ flex:1; border:0; background:#fff; color:var(--sub); padding:11px 0;
+    font-size:15px; font-weight:600; }
+  .seg button.on{ background:var(--ac); color:#fff; }
+
+  .letter{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:18px 17px; white-space:pre-wrap; font-size:16px; line-height:1.95;
+    border-left:4px solid var(--ac); }
+  .qa{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:13px 15px; margin-bottom:9px; }
+  .qa .q{ font-weight:600; }
+  .qa .a{ font-size:15px; color:var(--sub); margin-top:5px; }
+  .qa .a b{ color:var(--ink); font-weight:600; }
+
+  .ghost{ width:100%; background:#fff; color:var(--ink); border:1.5px solid var(--line);
+    border-radius:12px; padding:12px 0; font-size:16px; font-weight:600; margin-top:10px; }
+  .note{ font-size:13px; color:var(--sub); margin-top:10px; }
+  .hide{ display:none; }
+  .back{ background:none; border:0; color:var(--ac); font-size:15px; padding:0; margin-bottom:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="demo">デモ（サンプルデータ）</p>
+
+  <!-- ===== 一覧 ===== -->
+  <section id="v1">
+    <h1>値上げの手紙</h1>
+    <p class="sub">有限会社みなと精機（架空の町工場）／2026年8月</p>
+
+    <div class="kpi">
+      <div class="n">312<span>万円</span></div>
+      <div class="l">全先に通った場合の年間の増加額</div>
+    </div>
+
+    <h2>取引先を選ぶ</h2>
+    <div id="list"></div>
+    <p class="note">言いにくさは、相手との付き合いの長さ・売上比率・前回いつ改定したかで変わります。低い先から出して、通った実績を持って本命に行く順番にしています。</p>
+  </section>
+
+  <!-- ===== 詳細 ===== -->
+  <section id="v2" class="hide">
+    <button class="back" onclick="toList()">← 取引先の一覧</button>
+    <h1 id="dNm"></h1>
+    <p class="sub" id="dMt"></p>
+
+    <div class="card">
+      <div class="fld">
+        <label>現在の単価（円・主力品）</label>
+        <input type="number" id="unit" oninput="calc()">
+      </div>
+      <div class="fld" style="margin-bottom:6px">
+        <label>お願いする改定率　<b id="rateL" style="color:var(--ac)">8%</b></label>
+        <input type="range" id="rate" min="2" max="20" step="1" value="8" oninput="calc()">
+      </div>
+      <div style="font-size:15px; font-variant-numeric:tabular-nums">
+        新単価 <b id="newUnit"></b>円　／　年間 <b id="yearUp" style="color:var(--ac)"></b>万円の増加
+      </div>
+    </div>
+
+    <h2>値上げの理由（押すと選べます）</h2>
+    <div class="chips" id="chips"></div>
+
+    <h2>言い方の強さ</h2>
+    <div class="seg" id="seg">
+      <button class="on" onclick="setTone(0)">相談する</button>
+      <button onclick="setTone(1)">お願いする</button>
+      <button onclick="setTone(2)">はっきり伝える</button>
+    </div>
+
+    <h2>そのまま出せる手紙</h2>
+    <div class="letter" id="letter"></div>
+    <button class="ghost" onclick="copyIt()" id="cpBtn">文面をコピーする</button>
+
+    <h2>返ってきそうな言葉と、こちらの答え</h2>
+    <div id="qa"></div>
+    <p class="note">相手を責める書き方はしません。こちらの事情を数字で出して、いつから・いくら・なぜ、の三つだけを外さない形にしています。</p>
+  </section>
+</div>
+
+<script>
+const CLIENTS = [
+  { id:1, nm:"株式会社あかね工業（架空）", mt:"付き合い22年／売上比率34%／前回の改定 2023年4月",
+    unit:1280, qty:9800, hard:3 },
+  { id:2, nm:"北陸テクノ株式会社（架空）", mt:"付き合い7年／売上比率18%／前回の改定 2025年10月",
+    unit:2450, qty:3200, hard:2 },
+  { id:3, nm:"有限会社さくら製作所（架空）", mt:"付き合い3年／売上比率9%／前回の改定 なし",
+    unit:860, qty:6100, hard:1 }
+];
+const HARD = [null,
+  {t:"言いやすい", c:"t1"},
+  {t:"ふつう", c:"t2"},
+  {t:"言いにくい", c:"t3"}];
+
+const REASONS = [
+  { k:"材料費の上昇", s:"鋼材の仕入れ値が2年で2割ほど上がっており" },
+  { k:"電気代の上昇", s:"工場の電気代が前年より3割ほど増えており" },
+  { k:"最低賃金の改定", s:"賃金の見直しが必要になっており" },
+  { k:"運賃の上昇", s:"配送費が上がっており" },
+  { k:"検査工程の追加", s:"ご要望をいただいた検査の手間が増えており" }
+];
+
+let cur=null, sel=[0], tone=0;
+
+function render(){
+  document.getElementById('list').innerHTML = CLIENTS.map(c=>`
+    <button class="row" onclick="open_(${c.id})">
+      <span class="top">
+        <span class="nm">${c.nm}</span>
+        <span class="go">›</span>
+      </span>
+      <span class="mt">${c.mt}</span>
+      <span class="amt">現在 ${c.unit.toLocaleString()}円 ×年${c.qty.toLocaleString()}個
+        　<span class="tag ${HARD[c.hard].c}">${HARD[c.hard].t}</span></span>
+    </button>`).join('');
+}
+function open_(id){
+  cur = CLIENTS.find(c=>c.id===id); sel=[0]; tone=0;
+  document.getElementById('dNm').textContent = cur.nm;
+  document.getElementById('dMt').textContent = cur.mt;
+  document.getElementById('unit').value = cur.unit;
+  document.getElementById('rate').value = 8;
+  document.getElementById('chips').innerHTML = REASONS.map((r,i)=>
+    `<button class="chip${i===0?' on':''}" id="r${i}" onclick="pick(${i})">${r.k}</button>`).join('');
+  [...document.querySelectorAll('#seg button')].forEach((b,i)=>b.className = i===0?'on':'');
+  document.getElementById('cpBtn').textContent='文面をコピーする';
+  calc();
+  document.getElementById('v1').classList.add('hide');
+  document.getElementById('v2').classList.remove('hide');
+  window.scrollTo(0,0);
+}
+function toList(){
+  document.getElementById('v2').classList.add('hide');
+  document.getElementById('v1').classList.remove('hide');
+  window.scrollTo(0,0);
+}
+function pick(i){
+  const at = sel.indexOf(i);
+  if(at>=0){ if(sel.length===1) return; sel.splice(at,1); } else sel.push(i);
+  document.getElementById('r'+i).className = 'chip' + (at>=0?'':' on');
+  calc();
+}
+function setTone(t){
+  tone = t;
+  [...document.querySelectorAll('#seg button')].forEach((b,i)=>b.className = i===t?'on':'');
+  calc();
+}
+function calc(){
+  const u = Number(document.getElementById('unit').value)||0;
+  const r = Number(document.getElementById('rate').value);
+  document.getElementById('rateL').textContent = r + '%';
+  const nu = Math.round(u * (1 + r/100));
+  document.getElementById('newUnit').textContent = nu.toLocaleString();
+  const up = (nu - u) * cur.qty / 10000;
+  document.getElementById('yearUp').textContent = up.toFixed(1);
+  letter(u, nu, r);
+}
+function letter(u, nu, r){
+  const rs = sel.map(i=>REASONS[i].s);
+  let why;
+  if(rs.length===1) why = rs[0];
+  else why = rs.slice(0,-1).join('、') + '、また' + rs[rs.length-1];
+
+  const head = {
+    0:'いつも大変お世話になっております。\n\n本日は、部品単価のご相談でご連絡いたしました。',
+    1:'いつも大変お世話になっております。\n\n本日は、部品単価の改定をお願いしたくご連絡いたしました。',
+    2:'いつも大変お世話になっております。\n\n本日は、部品単価の改定についてご連絡いたします。'
+  }[tone];
+  const body = {
+    0:`${why}、現在の単価のままでは今の品質と納期を保つことが難しくなってまいりました。\nつきましては、下記の内容でご相談させていただけないでしょうか。`,
+    1:`${why}、現在の単価を維持することが難しい状況です。\nつきましては、下記のとおり改定をお願い申し上げます。`,
+    2:`${why}、現在の単価では継続が難しい状況です。\nつきましては、下記のとおり改定させていただきます。`
+  }[tone];
+  const tail = {
+    0:'ご事情もあるかと存じますので、時期や数量の条件を含めて、一度お話しさせていただければ幸いです。\nご都合のよい日をお知らせください。',
+    1:'貴社のご事情もあるかと存じます。時期のご相談は承りますので、ご一報いただけますでしょうか。\n引き続きご用命いただけますよう、品質と納期は必ず守ってまいります。',
+    2:'ご不明な点がございましたら、ご連絡ください。\n引き続き、品質と納期を守ってまいります。'
+  }[tone];
+
+  document.getElementById('letter').textContent =
+`${cur.nm.replace('（架空）','')}
+ご担当者さま
+
+${head}
+
+${body}
+
+　対象　　主力部品
+　現行　　${u.toLocaleString()}円
+　改定後　${nu.toLocaleString()}円（${r}%）
+　適用　　2026年10月ご発注分より
+
+${tail}
+
+有限会社みなと精機
+代表　港（架空）`;
+
+  const gap = ((nu-u)*cur.qty/10000).toFixed(1);
+  document.getElementById('qa').innerHTML = [
+    { q:'「他社はもっと安い」と言われたら',
+      a:'値段だけを並べず、<b>不良率と納期の実績</b>を出します。「直近1年の不良ゼロ、短納期対応は年'+Math.round(cur.qty/900)+'回お受けしました」のように、こちらが引き受けてきた分を数字にします。' },
+    { q:'「もう少し下げてほしい」と言われたら',
+      a:'率を削るのではなく<b>時期をずらす</b>案を先に出します。10月から'+r+'%が難しければ、12月から同率で。年間'+gap+'万円のうち、いくら残せるかで考えます。' },
+    { q:'「今回は見送りたい」と言われたら',
+      a:'その場で引かず、<b>次に話す日を決めて</b>終わります。「では年明けにもう一度」まで取れれば、断りではなく先送りになります。' },
+    { q:'返事が来ないとき',
+      a:'2週間で一度、同じ用件を短くして送ります。催促の形にせず、<b>適用日の確認</b>という用件に変えるのがこつです。' }
+  ].map(x=>`<div class="qa"><div class="q">${x.q}</div><div class="a">${x.a}</div></div>`).join('');
+}
+function copyIt(){
+  const t = document.getElementById('letter').textContent;
+  const b = document.getElementById('cpBtn');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(()=>{ b.textContent='コピーしました'; },()=>{ b.textContent='コピーできませんでした'; });
+  } else { b.textContent='長押しで選択してコピーしてください'; }
+}
+render();
+</script>
+</body>
+</html>

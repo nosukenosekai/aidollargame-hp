@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>仕込みよみ｜明日の来場から、仕込む数をきめる</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#ddd9d0; --ink:#1a1a1a; --sub:#77736a;
+         --grn:#15803d; --amb:#b45309; --red:#b3261e; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:460px; margin:0 auto; padding:16px 14px 56px; }
+  .demo{ font-size:12px; color:var(--sub); letter-spacing:.04em; margin:0 0 10px; }
+  h1{ font-size:23px; margin:0 0 3px; }
+  .sub{ color:var(--sub); font-size:14px; margin:0 0 18px; }
+  h2{ font-size:14px; color:var(--sub); font-weight:700; margin:24px 0 8px; letter-spacing:.06em; }
+  button{ font-family:inherit; cursor:pointer; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:14px 16px; margin-bottom:10px; }
+
+  /* 明日の条件 */
+  .cond{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:15px 16px; margin-bottom:12px; }
+  .cond .d{ font-size:13px; color:var(--sub); }
+  .cond .n{ font-size:32px; font-weight:700; font-variant-numeric:tabular-nums;
+    letter-spacing:-.02em; line-height:1.2; }
+  .cond .n span{ font-size:16px; font-weight:600; }
+  .facts{ display:flex; gap:8px; flex-wrap:wrap; margin-top:9px; }
+  .fact{ background:#f2f0eb; border-radius:999px; padding:4px 12px; font-size:13px; color:var(--sub); }
+
+  /* 仕込み表 */
+  .item{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:13px 15px; margin-bottom:9px; }
+  .item .top{ display:flex; align-items:baseline; gap:8px; }
+  .item .nm{ font-weight:600; }
+  .item .qty{ margin-left:auto; font-size:26px; font-weight:700;
+    font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
+  .item .qty span{ font-size:14px; font-weight:600; color:var(--sub); }
+  .item .mt{ font-size:13px; color:var(--sub); }
+  .diff{ font-size:13px; font-weight:700; padding:1px 9px; border-radius:999px; }
+  .up{ background:#e8f3ec; color:var(--grn); }
+  .dn{ background:#fdf1e2; color:var(--amb); }
+  .kp{ background:#f2f0eb; color:var(--sub); }
+
+  /* 実績入力 */
+  .in{ display:flex; align-items:center; gap:9px; margin-top:11px;
+    border-top:1px dashed var(--line); padding-top:11px; }
+  .in label{ font-size:14px; color:var(--sub); flex:none; }
+  .in input{ width:88px; font-family:inherit; font-size:17px; padding:9px 10px;
+    border:1.5px solid var(--line); border-radius:10px; background:#fff; color:var(--ink);
+    text-align:right; font-variant-numeric:tabular-nums; }
+  .in .u{ font-size:15px; color:var(--sub); }
+
+  .big{ width:100%; border:0; background:var(--ac); color:#fff; border-radius:12px;
+    padding:14px 0; font-size:17px; font-weight:700; margin-top:6px; }
+  .big[disabled]{ background:#c9c5bc; }
+  .ghost{ width:100%; background:#fff; color:var(--ink); border:1.5px solid var(--line);
+    border-radius:12px; padding:12px 0; font-size:16px; font-weight:600; margin-top:9px; }
+
+  .res{ background:#fff; border:1px solid var(--line); border-left:4px solid var(--ac);
+    border-radius:14px; padding:14px 16px; margin-bottom:10px; }
+  .res .h{ font-weight:600; color:var(--ac); font-size:15px; }
+  .res .b{ font-size:16px; margin-top:5px; }
+
+  .kpi{ display:flex; gap:10px; }
+  .kpi>div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:12px 13px; }
+  .kpi .n{ font-size:25px; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.25; }
+  .kpi .n span{ font-size:14px; }
+  .kpi .l{ font-size:12px; color:var(--sub); }
+  .note{ font-size:13px; color:var(--sub); margin-top:10px; }
+  .hide{ display:none; }
+  .back{ background:none; border:0; color:var(--ac); font-size:15px; padding:0; margin-bottom:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="demo">デモ（サンプルデータ）</p>
+
+  <!-- ===== 明日の仕込み ===== -->
+  <section id="v1">
+    <h1>仕込みよみ</h1>
+    <p class="sub">みどりの丘カントリークラブ（架空のゴルフ場）／レストラン</p>
+
+    <div class="cond">
+      <div class="d">明日 8月6日（木）の見込み来場</div>
+      <div class="n">218<span>名（56組）</span></div>
+      <div class="facts">
+        <span class="fact">予約 54組</span>
+        <span class="fact">晴れ 34度</span>
+        <span class="fact">当日キャンセル 見込み4組</span>
+        <span class="fact">昼食つき 41組</span>
+      </div>
+    </div>
+
+    <h2>作る数</h2>
+    <div id="items"></div>
+
+    <button class="big" onclick="show('v2')">きのうの実績を入れる</button>
+    <p class="note">暑い日はカレーと冷たい麺に寄り、寒い日と雨の日は温かい麺に戻ります。組数だけで決めると、毎回どちらかが余ります。</p>
+  </section>
+
+  <!-- ===== 実績入力 ===== -->
+  <section id="v2" class="hide">
+    <button class="back" onclick="show('v1')">← 明日の仕込み</button>
+    <h1>きのうの実績</h1>
+    <p class="sub">8月4日（火）／来場 196名・晴れ 33度</p>
+
+    <div id="acts"></div>
+    <button class="big" id="calcBtn" onclick="applyIt()">明日の数に反映する</button>
+    <p class="note">出た数と残った数を入れるだけです。翌日の仕込み表がその場で直ります。</p>
+  </section>
+
+  <!-- ===== 反映結果 ===== -->
+  <section id="v3" class="hide">
+    <button class="back" onclick="show('v1')">← 明日の仕込み</button>
+    <h1>直しました</h1>
+    <p class="sub">きのうの残りを見て、明日の数を入れ替えています</p>
+
+    <div id="res"></div>
+
+    <h2>今月ここまで</h2>
+    <div class="kpi">
+      <div><div class="n">18.6<span>万円</span></div><div class="l">減らせた食材ロス</div></div>
+      <div><div class="n">2<span>回</span></div><div class="l">品切れ</div></div>
+    </div>
+    <p class="note">ロスを詰めすぎると品切れが増えます。人気の2品だけは少し多めに残すようにしています。</p>
+    <button class="ghost" onclick="show('v1')">明日の仕込み表を見る</button>
+  </section>
+</div>
+
+<script>
+const MENU = [
+  { id:1, nm:"カレーライス",   base:62, act:58, left:9,  price:1200, mt:"暑い日に伸びる。前年の同じ気温で1.2倍" },
+  { id:2, nm:"冷やしそば",     base:41, act:44, left:0,  price:1100, mt:"34度以上の日は出る。きのうは昼前に品切れ" },
+  { id:3, nm:"かつ丼",         base:28, act:19, left:11, price:1400, mt:"暑い日は落ちる。9食残った" },
+  { id:4, nm:"日替わり定食",   base:34, act:32, left:3,  price:1300, mt:"組数にそのまま比例する" },
+  { id:5, nm:"生ビール（樽）", base:5,  act:6,  left:0,  price:800,  mt:"暑さと日照でほぼ決まる。単位は樽" }
+];
+let adjusted = null;
+
+function calcAdj(){
+  return MENU.map(m=>{
+    const inp = document.getElementById('a'+m.id);
+    const lf = inp ? Number(inp.value) : m.left;
+    let q = m.base;
+    if(lf >= 8) q = Math.round(m.base - lf * 0.7);
+    else if(lf === 0) q = Math.round(m.base * 1.12);
+    else q = m.base;
+    return { ...m, left:lf, next:Math.max(0,q) };
+  });
+}
+function renderItems(){
+  const list = adjusted || MENU.map(m=>({...m, next:m.base}));
+  document.getElementById('items').innerHTML = list.map(m=>{
+    const d = m.next - m.base;
+    const cls = d>0?'up':(d<0?'dn':'kp');
+    const tx = d>0?('+'+d):(d<0?String(d):'そのまま');
+    return `<div class="item">
+      <div class="top"><span class="nm">${m.nm}</span>
+        ${adjusted?`<span class="diff ${cls}">${tx}</span>`:''}
+        <span class="qty">${m.next}<span>食</span></span></div>
+      <div class="mt">${m.mt}</div>
+    </div>`;
+  }).join('');
+}
+function renderActs(){
+  document.getElementById('acts').innerHTML = MENU.map(m=>`
+    <div class="item">
+      <div class="top"><span class="nm">${m.nm}</span>
+        <span class="qty" style="font-size:18px">${m.base}<span>食 作った</span></span></div>
+      <div class="in">
+        <label>残った数</label>
+        <input type="number" id="a${m.id}" value="${m.left}" min="0" max="99">
+        <span class="u">食</span>
+      </div>
+    </div>`).join('');
+}
+function applyIt(){
+  adjusted = calcAdj();
+  const rows = adjusted.filter(m=>m.next !== m.base);
+  const lossBefore = MENU.reduce((s,m)=>s + m.left * m.price * 0.35, 0);
+  const saved = adjusted.reduce((s,m)=>{
+    const cut = Math.max(0, m.base - m.next);
+    return s + cut * m.price * 0.35;
+  }, 0);
+  document.getElementById('res').innerHTML =
+    (rows.length ? rows.map(m=>{
+      const d = m.next - m.base;
+      return `<div class="res"><div class="h">${m.nm}</div>
+        <div class="b">${m.base}食 → <b>${m.next}食</b>（${d>0?'+'+d:d}）<br>
+        ${d<0?`きのう${m.left}食残ったので減らしました。`:'きのう残らなかったので少し増やしました。'}</div></div>`;
+    }).join('') : '<div class="res"><div class="b">直すところはありませんでした。</div></div>')
+    + `<div class="res"><div class="h">きのうの食材ロス</div>
+       <div class="b">およそ <b>${(lossBefore/10000).toFixed(1)}万円</b>ぶん。
+       明日の数に直したことで、同じ天気なら <b>${(saved/10000).toFixed(1)}万円</b>ぶんが減ります。</div></div>`;
+  renderItems();
+  show('v3');
+}
+function show(id){
+  ['v1','v2','v3'].forEach(v=>document.getElementById(v).classList.add('hide'));
+  document.getElementById(id).classList.remove('hide');
+  window.scrollTo(0,0);
+}
+renderItems();
+renderActs();
+</script>
+</body>
+</html>

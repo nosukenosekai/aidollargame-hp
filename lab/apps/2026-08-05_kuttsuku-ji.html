@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>くっつく字｜木と木をくっつけると、林になる</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#ddd9d0; --ink:#1a1a1a; --sub:#77736a;
+         --grn:#15803d; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.75; -webkit-user-select:none; user-select:none; }
+  .wrap{ max-width:460px; margin:0 auto; padding:16px 14px 60px; }
+  .demo{ font-size:12px; color:var(--sub); letter-spacing:.04em; margin:0 0 10px; }
+  h1{ font-size:23px; margin:0 0 3px; }
+  .sub{ color:var(--sub); font-size:14px; margin:0 0 16px; }
+  h2{ font-size:14px; color:var(--sub); font-weight:700; margin:22px 0 9px; letter-spacing:.06em;
+    display:flex; align-items:baseline; }
+  h2 span{ margin-left:auto; font-weight:600; color:var(--ac); font-variant-numeric:tabular-nums; }
+  button{ font-family:inherit; cursor:pointer; }
+  .mincho{ font-family:"Hiragino Mincho ProN","Yu Mincho",YuMincho,"MS PMincho",serif; }
+
+  /* 合成台 */
+  .bench{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:16px 14px 14px; margin-bottom:12px; }
+  .slots{ display:flex; align-items:center; justify-content:center; gap:10px; }
+  .slot{ width:78px; height:78px; border-radius:14px; border:2px dashed var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:44px; line-height:1;
+    background:#fbfaf7; color:var(--ink); }
+  .slot.full{ border:2px solid var(--ac); background:#fff; }
+  .op{ font-size:26px; color:var(--sub); font-weight:300; }
+  .out{ width:78px; height:78px; border-radius:14px; display:flex; align-items:center;
+    justify-content:center; font-size:46px; line-height:1; background:#eef3fd;
+    border:2px solid var(--ac); color:var(--ac); }
+  .out.empty{ background:#f2f0eb; border:2px dashed var(--line); color:var(--sub); font-size:30px; }
+  .bench .msg{ text-align:center; font-size:15px; color:var(--sub); margin-top:12px;
+    min-height:26px; line-height:1.6; }
+  .bench .msg b{ color:var(--ink); }
+  .bench .msg .ok{ color:var(--grn); font-weight:700; }
+
+  @keyframes shake{ 0%,100%{transform:translateX(0)} 20%{transform:translateX(-7px)}
+    40%{transform:translateX(7px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
+  .shake{ animation:shake .4s; }
+  @keyframes pop{ 0%{transform:scale(.4); opacity:0} 60%{transform:scale(1.18)} 100%{transform:scale(1)} }
+  .pop{ animation:pop .42s cubic-bezier(.2,1.4,.4,1); }
+  @keyframes glow{ 0%{box-shadow:0 0 0 0 rgba(37,99,235,.5)} 100%{box-shadow:0 0 0 16px rgba(37,99,235,0)} }
+  .glow{ animation:glow .7s ease-out; }
+
+  /* タイル */
+  .grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+  .t{ aspect-ratio:1; background:#fff; border:1.5px solid var(--line); border-radius:14px;
+    display:flex; align-items:center; justify-content:center; font-size:31px; line-height:1;
+    color:var(--ink); padding:0; transition:transform .12s, border-color .12s; }
+  .t:active{ transform:scale(.93); }
+  .t.on{ border-color:var(--ac); border-width:2.5px; background:#eef3fd; }
+  .t.made{ border-color:#c8d6f5; }
+
+  .none{ font-size:15px; color:var(--sub); background:#fff; border:1px dashed var(--line);
+    border-radius:14px; padding:16px; text-align:center; }
+
+  .bar{ display:flex; gap:9px; margin-top:16px; }
+  .bar button{ flex:1; background:#fff; color:var(--ink); border:1.5px solid var(--line);
+    border-radius:12px; padding:12px 0; font-size:15px; font-weight:600; }
+  .bar button.p{ background:var(--ac); color:#fff; border:0; }
+
+  .done{ background:#e8f3ec; border:1px solid #bcdcc8; border-radius:14px;
+    padding:15px 16px; margin-top:14px; font-size:16px; color:#12602f; }
+  .note{ font-size:13px; color:var(--sub); margin-top:14px; line-height:1.8; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="demo">デモ（サンプルデータ）</p>
+  <h1>くっつく字</h1>
+  <p class="sub">部品を2つえらぶと、くっつきます。木と木で、林。</p>
+
+  <div class="bench" id="bench">
+    <div class="slots">
+      <div class="slot mincho" id="s1"></div>
+      <div class="op">＋</div>
+      <div class="slot mincho" id="s2"></div>
+      <div class="op">＝</div>
+      <div class="out empty mincho" id="s3">？</div>
+    </div>
+    <div class="msg" id="msg">下の部品をタップしてください。</div>
+  </div>
+
+  <h2>部品<span id="c1"></span></h2>
+  <div class="grid" id="base"></div>
+
+  <h2>つくった字<span id="c2"></span></h2>
+  <div id="madeWrap"></div>
+
+  <div class="bar">
+    <button onclick="hint()">ヒント</button>
+    <button class="p" onclick="reset()">はじめから</button>
+  </div>
+
+  <div id="fin"></div>
+
+  <p class="note">つくった字も、そのまま部品として使えます。林にもう1本の木をくっつけると、森になります。<br>
+  かたちを合わせる遊びなので、成り立ち（語源）どおりとはかぎりません。</p>
+</div>
+
+<script>
+const BASE = ["木","火","月","口","山","土","日","女","子","人","言","田","力","心","目","石"];
+
+// [部品, 部品, できる字, 読み]
+const REC = [
+  ["木","木","林","はやし"],
+  ["林","木","森","もり"],
+  ["火","火","炎","ほのお"],
+  ["月","月","朋","とも"],
+  ["口","口","呂","ろ"],
+  ["山","山","出","でる"],
+  ["土","土","圭","けい"],
+  ["日","月","明","あかるい"],
+  ["女","子","好","すき"],
+  ["人","木","休","やすむ"],
+  ["人","山","仙","せん"],
+  ["人","言","信","しんじる"],
+  ["田","力","男","おとこ"],
+  ["田","土","里","さと"],
+  ["田","心","思","おもう"],
+  ["火","田","畑","はたけ"],
+  ["口","木","呆","ほうける"],
+  ["木","子","李","すもも"],
+  ["木","土","杜","もり"],
+  ["木","目","相","あい"],
+  ["相","心","想","おもう"],
+  ["圭","木","桂","かつら"],
+  ["山","石","岩","いわ"]
+];
+const MAP = {};
+REC.forEach(r => { MAP[[r[0],r[1]].sort().join('')] = { ch:r[2], yomi:r[3] }; });
+const TOTAL = REC.length;
+
+let made = [], pick = [], busy = false;
+
+function have(){ return BASE.concat(made); }
+
+function draw(){
+  document.getElementById('c1').textContent = BASE.length + '個';
+  document.getElementById('c2').textContent = made.length + ' / ' + TOTAL + '字';
+
+  document.getElementById('base').innerHTML = BASE.map(ch =>
+    `<button class="t mincho${pick.includes(ch)?' on':''}" onclick="tap('${ch}')">${ch}</button>`).join('');
+
+  const w = document.getElementById('madeWrap');
+  if(!made.length){
+    w.innerHTML = '<div class="none">まだ1つもありません。<br>まずは同じ部品を2つ、くっつけてみてください。</div>';
+  } else {
+    w.innerHTML = '<div class="grid">' + made.map(ch =>
+      `<button class="t made mincho${pick.includes(ch)?' on':''}" id="m${ch}" onclick="tap('${ch}')">${ch}</button>`).join('') + '</div>';
+  }
+
+  const s1 = document.getElementById('s1'), s2 = document.getElementById('s2');
+  s1.textContent = pick[0] || ''; s1.className = 'slot mincho' + (pick[0]?' full':'');
+  s2.textContent = pick[1] || ''; s2.className = 'slot mincho' + (pick[1]?' full':'');
+
+  document.getElementById('fin').innerHTML = (made.length === TOTAL)
+    ? `<div class="done">${TOTAL}字ぜんぶ見つけました。おつかれさまでした。</div>` : '';
+}
+
+function tap(ch){
+  if(busy) return;
+  if(pick.length >= 2) pick = [];
+  pick.push(ch);
+  draw();
+  if(pick.length === 2){
+    busy = true;
+    setTimeout(fuse, 260);
+  } else {
+    say('もう1つえらんでください。');
+  }
+}
+
+function fuse(){
+  const key = [pick[0], pick[1]].sort().join('');
+  const hit = MAP[key];
+  const out = document.getElementById('s3');
+  if(hit && !made.includes(hit.ch)){
+    made.push(hit.ch);
+    out.className = 'out mincho pop';
+    out.textContent = hit.ch;
+    say(`<span class="ok">${pick[0]}＋${pick[1]}＝${hit.ch}</span>　<b>${hit.yomi}</b>`);
+    pick = []; draw();
+    const el = document.getElementById('m' + hit.ch);
+    if(el) el.classList.add('pop','glow');
+  } else if(hit){
+    out.className = 'out mincho'; out.textContent = hit.ch;
+    say(`${hit.ch} はもう持っています。`);
+    pick = []; draw();
+  } else {
+    out.className = 'out empty mincho'; out.textContent = '？';
+    document.getElementById('bench').classList.add('shake');
+    setTimeout(()=>document.getElementById('bench').classList.remove('shake'), 420);
+    say('この2つは、くっつきません。');
+    pick = []; draw();
+  }
+  busy = false;
+}
+
+function say(h){ document.getElementById('msg').innerHTML = h; }
+
+function hint(){
+  const h = have();
+  const rest = REC.filter(r => !made.includes(r[2]) && h.includes(r[0]) && h.includes(r[1]));
+  if(!rest.length){
+    say(made.length === TOTAL ? 'もう全部そろっています。' : 'いまの持ち物では、これ以上つくれません。');
+    return;
+  }
+  const r = rest[0];
+  say(`<b>${r[0]}</b> と <b>${r[1]}</b> は、くっつきます。`);
+}
+
+function reset(){
+  made = []; pick = []; busy = false;
+  const out = document.getElementById('s3');
+  out.className = 'out empty mincho'; out.textContent = '？';
+  say('下の部品をタップしてください。');
+  draw();
+}
+
+draw();
+</script>
+</body>
+</html>

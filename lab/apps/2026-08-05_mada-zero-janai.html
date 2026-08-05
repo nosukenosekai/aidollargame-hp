@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>まだゼロじゃない｜1日飲んでも、通算は減らない</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#ddd9d0; --ink:#1a1a1a; --sub:#77736a;
+         --grn:#15803d; --amb:#b45309; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.75; -webkit-user-select:none; user-select:none; }
+  .wrap{ max-width:460px; margin:0 auto; padding:16px 14px 60px; }
+  .demo{ font-size:12px; color:var(--sub); letter-spacing:.04em; margin:0 0 10px; }
+  h1{ font-size:23px; margin:0 0 3px; }
+  .sub{ color:var(--sub); font-size:14px; margin:0 0 16px; }
+  h2{ font-size:14px; color:var(--sub); font-weight:700; margin:24px 0 9px; letter-spacing:.06em;
+    display:flex; align-items:baseline; }
+  h2 span{ margin-left:auto; font-weight:600; color:var(--sub); font-variant-numeric:tabular-nums; }
+  button{ font-family:inherit; cursor:pointer; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:15px 16px; margin-bottom:10px; }
+
+  /* 通算 */
+  .main{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:20px 18px 17px; margin-bottom:10px; text-align:center; }
+  .main .l{ font-size:13px; color:var(--sub); }
+  .main .n{ font-size:64px; font-weight:700; font-variant-numeric:tabular-nums;
+    letter-spacing:-.04em; line-height:1.05; margin:2px 0; }
+  .main .n span{ font-size:22px; font-weight:600; }
+  .main .yen{ font-size:16px; color:var(--ac); font-weight:600;
+    font-variant-numeric:tabular-nums; }
+  .sub2{ display:flex; gap:10px; margin-bottom:10px; }
+  .sub2>div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:12px 13px; text-align:center; }
+  .sub2 .n{ font-size:27px; font-weight:700; font-variant-numeric:tabular-nums;
+    letter-spacing:-.02em; line-height:1.25; }
+  .sub2 .n span{ font-size:14px; }
+  .sub2 .l{ font-size:12px; color:var(--sub); }
+
+  /* 今日 */
+  .today{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:15px 16px; margin-bottom:10px; }
+  .today .q{ font-size:17px; font-weight:600; text-align:center; margin-bottom:12px; }
+  .btns{ display:flex; gap:9px; }
+  .btns button{ flex:1; border-radius:12px; padding:14px 0; font-size:16px; font-weight:700;
+    border:1.5px solid var(--line); background:#fff; color:var(--ink); }
+  .btns .yes{ background:var(--ac); color:#fff; border:0; }
+  .msg{ font-size:15px; line-height:1.7; margin-top:12px; text-align:center; }
+  .msg.keep{ color:var(--grn); font-weight:600; }
+  .msg.slip{ color:var(--ink); }
+  .msg.slip b{ color:var(--ac); }
+  .again{ background:none; border:0; color:var(--ac); font-size:14px; padding:6px 0 0;
+    width:100%; }
+
+  /* カレンダー */
+  .cal{ display:grid; grid-template-columns:repeat(13,1fr); gap:4px; }
+  .d{ aspect-ratio:1; border-radius:3px; background:#e4e1d9; }
+  .d.dry{ background:#2563eb; }
+  .d.wet{ background:#e0c9a6; }
+  .d.today{ box-shadow:0 0 0 2px #1a1a1a; }
+  .legend{ display:flex; gap:14px; font-size:12px; color:var(--sub); margin-top:9px;
+    flex-wrap:wrap; }
+  .legend i{ display:inline-block; width:11px; height:11px; border-radius:3px;
+    vertical-align:-1px; margin-right:5px; }
+
+  /* 棚 */
+  .shelf{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:12px 14px; margin-bottom:8px; display:flex; align-items:center; gap:12px; }
+  .shelf .amt{ font-size:13px; color:var(--sub); font-variant-numeric:tabular-nums;
+    flex:none; width:72px; }
+  .shelf .nm{ font-size:16px; }
+  .shelf .st{ margin-left:auto; font-size:12px; font-weight:700; padding:2px 10px;
+    border-radius:999px; flex:none; }
+  .shelf.got{ border-left:4px solid var(--ac); }
+  .shelf.got .st{ background:#e8eefc; color:var(--ac); }
+  .shelf.got .nm{ font-weight:600; }
+  .shelf.next{ border-left:4px solid var(--amb); }
+  .shelf.next .st{ background:#fdf1e2; color:var(--amb); }
+  .shelf.yet{ opacity:.5; }
+  .shelf.yet .st{ background:#f2f0eb; color:var(--sub); }
+
+  /* 単価 */
+  .price{ display:flex; align-items:center; gap:10px; font-size:14px; color:var(--sub); }
+  .price input{ width:96px; font-family:inherit; font-size:17px; padding:9px 10px;
+    border:1.5px solid var(--line); border-radius:10px; background:#fff; color:var(--ink);
+    text-align:right; font-variant-numeric:tabular-nums; }
+
+  /* 広告枠 */
+  .ad{ border:1.5px dashed #c9c4b8; border-radius:14px; background:#efece5;
+    padding:20px 14px; text-align:center; color:#8c867a; font-size:13px;
+    line-height:1.7; margin:16px 0; }
+  .ad b{ display:block; font-size:12px; letter-spacing:.1em; color:#a49d8f; }
+
+  .note{ font-size:13px; color:var(--sub); margin-top:14px; line-height:1.8; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="demo">デモ（サンプルデータ）</p>
+  <h1>まだゼロじゃない</h1>
+  <p class="sub">1日飲んでも、通算は減りません</p>
+
+  <div class="main">
+    <div class="l">飲まなかった日 通算</div>
+    <div class="n" id="total">0<span>日</span></div>
+    <div class="yen" id="yen"></div>
+  </div>
+
+  <div class="sub2">
+    <div><div class="n" id="streak">0<span>日</span></div><div class="l">いまの連続</div></div>
+    <div><div class="n" id="best">0<span>日</span></div><div class="l">最長の連続</div></div>
+  </div>
+
+  <div class="today">
+    <div class="q" id="q">今日はどうでしたか</div>
+    <div class="btns" id="btns">
+      <button class="yes" onclick="mark(true)">飲まなかった</button>
+      <button onclick="mark(false)">飲んだ</button>
+    </div>
+    <div class="msg" id="msg"></div>
+    <button class="again hide" id="again" onclick="undo()">やっぱり選び直す</button>
+  </div>
+
+  <div class="ad">
+    <b>広告</b>
+    ここに広告が入ります<br>（デモなので枠だけです）
+  </div>
+
+  <h2>記録<span id="calN"></span></h2>
+  <div class="cal" id="cal"></div>
+  <div class="legend">
+    <span><i style="background:#2563eb"></i>飲まなかった</span>
+    <span><i style="background:#e0c9a6"></i>飲んだ</span>
+    <span><i style="background:#e4e1d9"></i>まだ</span>
+  </div>
+
+  <h2>浮いたお金でとどいたもの</h2>
+  <div class="card">
+    <div class="price">
+      <span>1日に飲んでいた額</span>
+      <input type="number" id="unit" value="700" min="0" max="9999" oninput="draw()">
+      <span>円</span>
+    </div>
+  </div>
+  <div id="shelf"></div>
+
+  <p class="note">連続の日数は切れます。でも通算は一度も減りません。ここが他の禁酒アプリと違うところです。<br>
+  1日飲んだだけで数字がゼロに戻ると、たいていの人はアプリを消します。消える理由をなくしました。<br>
+  金額はどれも目安です。</p>
+</div>
+
+<script>
+// 91日ぶんのサンプル。数字は「何日前に飲んだか」
+const SLIPS = [78, 59, 32, 24];
+const DAYS = 91;                 // 0 = 今日
+let today = null;                // null=未入力, true=飲まなかった, false=飲んだ
+
+const GOODS = [
+  { y:2500,   nm:"回らないお寿司 1回" },
+  { y:5000,   nm:"ちょっといい焼肉" },
+  { y:10000,  nm:"よく眠れる枕" },
+  { y:15000,  nm:"電動歯ブラシ" },
+  { y:30000,  nm:"ワイヤレスイヤホン" },
+  { y:50000,  nm:"クロスバイク" },
+  { y:100000, nm:"国内旅行 2泊" },
+  { y:200000, nm:"ノートパソコン" },
+  { y:500000, nm:"中古の軽自動車" }
+];
+
+function state(i){                       // i日前の状態
+  if(i === 0) return today;
+  return !SLIPS.includes(i);
+}
+
+function draw(){
+  const unit = Number(document.getElementById('unit').value) || 0;
+
+  // 通算・連続
+  let total = 0, streak = 0, best = 0, run = 0;
+  for(let i = DAYS - 1; i >= 0; i--){     // 古い日から今日へ
+    const s = state(i);
+    if(s === null) continue;              // 今日が未入力
+    if(s){ total++; run++; if(run > best) best = run; }
+    else { run = 0; }
+  }
+  streak = run;
+
+  document.getElementById('total').innerHTML = total + '<span>日</span>';
+  document.getElementById('streak').innerHTML = streak + '<span>日</span>';
+  document.getElementById('best').innerHTML = best + '<span>日</span>';
+  const saved = total * unit;
+  document.getElementById('yen').textContent = '浮いたお金 ' + saved.toLocaleString() + '円';
+
+  // カレンダー（古い順）
+  let cells = '';
+  for(let i = DAYS - 1; i >= 0; i--){
+    const s = state(i);
+    const c = (s === null) ? '' : (s ? ' dry' : ' wet');
+    cells += `<div class="d${c}${i===0?' today':''}"></div>`;
+  }
+  document.getElementById('cal').innerHTML = cells;
+  document.getElementById('calN').textContent = DAYS + '日ぶん';
+
+  // 棚
+  let nextShown = false;
+  document.getElementById('shelf').innerHTML = GOODS.map(g => {
+    if(saved >= g.y){
+      return `<div class="shelf got"><span class="amt">${g.y.toLocaleString()}円</span>
+        <span class="nm">${g.nm}</span><span class="st">とどいた</span></div>`;
+    }
+    if(!nextShown){
+      nextShown = true;
+      const need = Math.ceil((g.y - saved) / (unit || 1));
+      return `<div class="shelf next"><span class="amt">${g.y.toLocaleString()}円</span>
+        <span class="nm">${g.nm}</span><span class="st">あと${need}日</span></div>`;
+    }
+    return `<div class="shelf yet"><span class="amt">${g.y.toLocaleString()}円</span>
+      <span class="nm">${g.nm}</span><span class="st">まだ</span></div>`;
+  }).join('');
+}
+
+function mark(dry){
+  const before = countTotal();
+  today = dry;
+  draw();
+  const after = countTotal();
+  const m = document.getElementById('msg');
+  document.getElementById('q').textContent = '今日は記録しました';
+  document.getElementById('btns').style.display = 'none';
+  document.getElementById('again').classList.remove('hide');
+
+  if(dry){
+    m.className = 'msg keep';
+    m.textContent = '今日も1日ぶん積みました。通算 ' + after + '日。';
+  } else {
+    m.className = 'msg slip';
+    m.innerHTML = '連続はここで切れました。<br>でも通算は <b>' + after + '日</b> のままです。'
+      + '<br>いままで積んだ分は、なくなりません。';
+  }
+}
+function countTotal(){
+  let t = 0;
+  for(let i = DAYS - 1; i >= 0; i--){
+    const s = state(i);
+    if(s === true) t++;
+  }
+  return t;
+}
+function undo(){
+  today = null;
+  document.getElementById('q').textContent = '今日はどうでしたか';
+  document.getElementById('btns').style.display = '';
+  document.getElementById('again').classList.add('hide');
+  document.getElementById('msg').textContent = '';
+  draw();
+}
+document.getElementById('again').classList.add('hide');
+draw();
+</script>
+<style>.hide{ display:none; }</style>
+</body>
+</html>

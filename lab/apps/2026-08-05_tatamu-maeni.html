@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>畳むまえに｜取引先は倒産より先に、黒字のまま消えていく</title>
+<style>
+  :root{ --bg:#f5f4f0; --ac:#2563eb; --line:#ddd9d0; --ink:#1a1a1a; --sub:#77736a;
+         --grn:#15803d; --amb:#b45309; --red:#b3261e; }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:460px; margin:0 auto; padding:16px 14px 56px; }
+  .demo{ font-size:12px; color:var(--sub); letter-spacing:.04em; margin:0 0 10px; }
+  h1{ font-size:24px; margin:0 0 4px; line-height:1.4; }
+  .sub{ color:var(--sub); font-size:14px; margin:0 0 18px; }
+  h2{ font-size:14px; color:var(--sub); font-weight:700; margin:26px 0 8px; letter-spacing:.06em; }
+  button{ font-family:inherit; cursor:pointer; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:15px 16px; margin-bottom:10px; }
+
+  /* 掴み */
+  .hero{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:17px 16px; margin-bottom:10px; }
+  .hero .l{ font-size:13px; color:var(--sub); }
+  .hero .n{ font-size:40px; font-weight:700; font-variant-numeric:tabular-nums;
+    letter-spacing:-.03em; line-height:1.15; }
+  .hero .n span{ font-size:17px; font-weight:600; }
+  .cmp{ margin-top:13px; }
+  .cmp .r{ margin-bottom:9px; }
+  .cmp .t{ display:flex; font-size:13px; color:var(--sub); }
+  .cmp .t b{ margin-left:auto; color:var(--ink); font-variant-numeric:tabular-nums; }
+  .cmp .b{ height:13px; border-radius:999px; background:#eceae4; overflow:hidden; margin-top:3px; }
+  .cmp .b i{ display:block; height:13px; border-radius:999px; }
+
+  .facts{ display:flex; gap:10px; }
+  .facts>div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:12px 13px; }
+  .facts .n{ font-size:26px; font-weight:700; font-variant-numeric:tabular-nums;
+    letter-spacing:-.02em; line-height:1.25; }
+  .facts .n span{ font-size:14px; }
+  .facts .l{ font-size:12px; color:var(--sub); line-height:1.5; }
+
+  .src{ font-size:12px; color:var(--sub); line-height:1.75; margin-top:12px; }
+  .src a{ color:var(--ac); }
+
+  /* 操作盤 */
+  .panel{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:15px 16px; margin-bottom:12px; position:sticky; top:0; z-index:5; }
+  .panel .yr{ display:flex; align-items:baseline; gap:8px; }
+  .panel .yr .n{ font-size:34px; font-weight:700; font-variant-numeric:tabular-nums;
+    letter-spacing:-.02em; line-height:1.2; }
+  .panel .yr .a{ font-size:14px; color:var(--sub); }
+  .panel .yr .lost{ margin-left:auto; text-align:right; }
+  .panel .yr .lost b{ font-size:24px; font-variant-numeric:tabular-nums; color:var(--red);
+    letter-spacing:-.02em; }
+  .panel .yr .lost span{ display:block; font-size:12px; color:var(--sub); line-height:1.4; }
+  input[type=range]{ width:100%; accent-color:var(--ac); margin:6px 0 0; }
+  .thr{ display:flex; align-items:center; gap:9px; margin-top:11px;
+    border-top:1px dashed var(--line); padding-top:11px; font-size:13px; color:var(--sub); }
+  .thr input{ flex:1; accent-color:var(--sub); }
+  .thr b{ color:var(--ink); font-variant-numeric:tabular-nums; }
+
+  /* タイル */
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+  .co{ background:#fff; border:1px solid var(--line); border-radius:14px;
+    padding:11px 12px; transition:opacity .25s; min-height:104px; }
+  .co .nm{ font-size:15px; font-weight:600; line-height:1.45; }
+  .co .bz{ font-size:12px; color:var(--sub); }
+  .co .ag{ font-size:13px; font-variant-numeric:tabular-nums; margin-top:5px; }
+  .co .am{ font-size:13px; color:var(--sub); font-variant-numeric:tabular-nums; }
+  .co .st{ display:inline-block; font-size:11px; font-weight:700; padding:1px 8px;
+    border-radius:999px; margin-top:5px; }
+  .ok{ border-left:4px solid var(--ac); }
+  .ok .st{ background:#e8eefc; color:var(--ac); }
+  .warn{ border-left:4px solid var(--amb); }
+  .warn .st{ background:#fdf1e2; color:var(--amb); }
+  .now{ border-left:4px solid var(--red); background:#fff6f5; }
+  .now .st{ background:#fbe9e7; color:var(--red); }
+  .gone{ background:transparent; border:1.5px dashed #cfcabf; color:#a8a294;
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    font-size:13px; line-height:1.5; }
+
+  .act{ background:#fff; border:1px solid var(--line); border-left:4px solid var(--ac);
+    border-radius:14px; padding:14px 15px; margin-bottom:9px; }
+  .act .h{ font-weight:600; }
+  .act .p{ font-size:15px; color:var(--sub); margin-top:4px; }
+  .act .p b{ color:var(--ink); font-weight:600; }
+
+  .warnbox{ background:#faf7ef; border:1px solid #e6dcc4; border-radius:14px;
+    padding:13px 14px; font-size:13px; color:#6b6250; line-height:1.75; margin-top:16px; }
+  .note{ font-size:13px; color:var(--sub); margin-top:10px; }
+  .hide{ display:none; }
+  .big{ width:100%; border:0; background:var(--ac); color:#fff; border-radius:12px;
+    padding:14px 0; font-size:17px; font-weight:700; margin-top:6px; }
+  .ghost{ width:100%; background:#fff; color:var(--ink); border:1.5px solid var(--line);
+    border-radius:12px; padding:12px 0; font-size:16px; font-weight:600; margin-top:9px; }
+  .back{ background:none; border:0; color:var(--ac); font-size:15px; padding:0; margin-bottom:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="demo">デモ（取引先はサンプル。全国の統計は実データ）</p>
+
+  <!-- ===== 事実 ===== -->
+  <section id="v1">
+    <h1>取引先は倒産より先に、<br>黒字のまま消えていく</h1>
+    <p class="sub">2025年に市場から消えた会社の内訳</p>
+
+    <div class="hero">
+      <div class="l">2025年の休廃業・解散</div>
+      <div class="n">67,210<span>件</span></div>
+      <div class="cmp">
+        <div class="r">
+          <div class="t">休廃業・解散<b>67,210件</b></div>
+          <div class="b"><i style="width:100%;background:#b3261e"></i></div>
+        </div>
+        <div class="r">
+          <div class="t">倒産<b>およそ1万件</b></div>
+          <div class="b"><i style="width:15%;background:#77736a"></i></div>
+        </div>
+      </div>
+      <p class="note" style="margin-top:11px">与信管理はふつう倒産を見ます。でも取引が消える回数は、その<b>およそ6.7倍</b>が「畳んだ」ほうです。</p>
+    </div>
+
+    <div class="facts">
+      <div><div class="n">52.8<span>%</span></div><div class="l">畳んだ会社のうち黒字だった割合</div></div>
+      <div><div class="n">76<span>歳</span></div><div class="l">畳んだ会社の代表者の年齢の中央値</div></div>
+    </div>
+
+    <div class="card" style="margin-top:10px">
+      <div style="font-size:16px">つまり、決算書を何年ぶん見ても当たりません。黒字なので数字はきれいなままです。</div>
+      <div style="font-size:16px;margin-top:9px">当たるのは<b>社長の年齢</b>だけです。</div>
+    </div>
+
+    <button class="big" onclick="show('v2')">自分の取引先で動かしてみる</button>
+
+    <div class="src">
+      出典（いずれも一次発表）<br>
+      ・休廃業・解散 67,210件／黒字52.8%／代表者の平均74.9歳・中央値76歳・80代以上34.0%：東京商工リサーチ「2025年『休廃業・解散企業』動向調査」（2026年1月9日発表）<br>
+      ・倒産はおよそ1万件（休廃業と合わせた市場退出が7.7万件台）：同調査<br>
+      ・後継者不在率50.1%／後継者候補の非同族41.0%／就任経緯の内部昇格36.1%・同族承継32.3%：帝国データバンク「全国『後継者不在率』動向調査（2025年）」（2025年11月21日発表、約27万社が対象）
+    </div>
+  </section>
+
+  <!-- ===== 動かす ===== -->
+  <section id="v2" class="hide">
+    <button class="back" onclick="show('v1')">← 全国の数字にもどる</button>
+    <h1 style="font-size:23px">10年後に残る取引先</h1>
+    <p class="sub">丸中運送株式会社（架空）の取引先10社／年間取引 1億9,030万円</p>
+
+    <div class="panel">
+      <div class="yr">
+        <div>
+          <div class="n" id="yr">2026</div>
+          <div class="a" id="yrA">いま</div>
+        </div>
+        <div class="lost">
+          <b id="lost">0</b>
+          <span>万円が消えた<br>（<span id="lostN">0</span>社・うち黒字<span id="lostK">0</span>社）</span>
+        </div>
+      </div>
+      <input type="range" id="year" min="2026" max="2040" step="1" value="2026" oninput="draw()">
+      <div class="thr">
+        <span>何歳で畳むとみなすか</span>
+        <input type="range" id="thr" min="70" max="85" step="1" value="76" oninput="draw()">
+        <b id="thrL">76歳</b>
+      </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="warnbox" id="verdict"></div>
+
+    <button class="big" onclick="show('v3')">では、どうするか</button>
+  </section>
+
+  <!-- ===== 打ち手 ===== -->
+  <section id="v3" class="hide">
+    <button class="back" onclick="show('v2')">← 取引先にもどる</button>
+    <h1 style="font-size:23px">継ぐのは、もう身内じゃない</h1>
+    <p class="sub">実データが示す、いちばん意外なところ</p>
+
+    <div class="facts" style="margin-bottom:10px">
+      <div><div class="n">36.1<span>%</span></div><div class="l">内部昇格（社員が継いだ）</div></div>
+      <div><div class="n">32.3<span>%</span></div><div class="l">同族承継（身内が継いだ）</div></div>
+    </div>
+    <div class="card">
+      <div style="font-size:16px">社長の座は、すでに<b>身内より他人に渡るほうが多い</b>。後継者候補でいちばん多いのも「非同族」の41.0%で、初めて4割を超えました。</div>
+      <div style="font-size:16px;margin-top:9px">他人が会社を継ぐのは、もう特別なことではありません。</div>
+    </div>
+
+    <h2>いまやること</h2>
+    <div class="act">
+      <div class="h">取引先の名簿に、年齢の列を1本足す</div>
+      <div class="p">決算書より効きます。<b>社長の年齢と、継ぐ人がいるかどうか</b>。この2列だけで、上の画面が自分の会社ぶん作れます。</div>
+    </div>
+    <div class="act">
+      <div class="h">黒字で継ぐ人がいない先から順に会いに行く</div>
+      <div class="p">畳む前に相談されるかどうかは、順番と回数で決まります。畳むと決めてから声をかけても<b>もう遅い</b>。</div>
+    </div>
+    <div class="act">
+      <div class="h">「買う」を選択肢に置く</div>
+      <div class="p">黒字で、客がいて、継ぐ人だけがいない会社です。仕入先が消えるのを見ているより、<b>引き取ったほうが安いことがある</b>。</div>
+    </div>
+
+    <div class="warnbox">この画面は、消える会社を当てるものではありません。全国の統計から分かるのは「畳んだ会社の代表者は中央値76歳だった」ということまでで、76歳の社長の会社が畳むという意味ではありません。年齢の並びを見て、会いに行く順番を決めるために使ってください。</div>
+    <button class="ghost" onclick="show('v1')">最初にもどる</button>
+  </section>
+</div>
+
+<script>
+// 取引先はすべて架空。年間取引額は万円
+const CO = [
+  { nm:"丸信製作所",     bz:"金属加工",   age:72, kuro:true,  succ:null,        amt:2400 },
+  { nm:"東邦紙器",       bz:"紙加工",     age:68, kuro:true,  succ:"非同族",    amt:1850 },
+  { nm:"あさひ電機工業", bz:"電機部品",   age:79, kuro:true,  succ:null,        amt:3100 },
+  { nm:"山下建材",       bz:"建材卸",     age:74, kuro:false, succ:null,        amt:960  },
+  { nm:"中央メッキ",     bz:"表面処理",   age:81, kuro:true,  succ:null,        amt:1420 },
+  { nm:"こまつ運輸",     bz:"運送",       age:63, kuro:true,  succ:"子",        amt:2750 },
+  { nm:"北野精密",       bz:"精密加工",   age:77, kuro:true,  succ:null,        amt:680  },
+  { nm:"さつき塗装",     bz:"塗装",       age:70, kuro:false, succ:null,        amt:540  },
+  { nm:"みなみ工業",     bz:"樹脂成形",   age:58, kuro:true,  succ:"内部昇格",  amt:4200 },
+  { nm:"大和バネ",       bz:"ばね製造",   age:84, kuro:true,  succ:null,        amt:1130 }
+];
+const TOTAL = CO.reduce((s,c)=>s+c.amt,0);
+
+function draw(){
+  const year = Number(document.getElementById('year').value);
+  const thr  = Number(document.getElementById('thr').value);
+  const t = year - 2026;
+
+  document.getElementById('yr').textContent = year;
+  document.getElementById('yrA').textContent = t===0 ? 'いま' : (t + '年後');
+  document.getElementById('thrL').textContent = thr + '歳';
+
+  let lost=0, lostN=0, lostK=0;
+
+  document.getElementById('grid').innerHTML = CO.map(c=>{
+    const age = c.age + t;
+    if(c.succ){
+      return `<div class="co ok">
+        <div class="nm">${c.nm}</div><div class="bz">${c.bz}</div>
+        <div class="ag">社長 ${age}歳</div>
+        <div class="am">年 ${c.amt.toLocaleString()}万円</div>
+        <span class="st">継ぐ人あり・${c.succ}</span></div>`;
+    }
+    const quit = 2026 + Math.max(0, thr - c.age);   // 基準年齢に達する年
+    if(year > quit){
+      lost += c.amt; lostN++; if(c.kuro) lostK++;
+      return `<div class="co gone">${c.nm}<br>${quit}年に畳んだ<br>${c.kuro?'（黒字のまま）':'（赤字）'}</div>`;
+    }
+    const cls = (year === quit) ? 'now' : (age >= thr - 4 ? 'warn' : 'ok');
+    const st  = (year === quit) ? '今年が山' : (age >= thr - 4 ? 'あと'+(quit-year)+'年' : '継ぐ人なし');
+    return `<div class="co ${cls}">
+      <div class="nm">${c.nm}</div><div class="bz">${c.bz}${c.kuro?'・黒字':'・赤字'}</div>
+      <div class="ag">社長 ${age}歳</div>
+      <div class="am">年 ${c.amt.toLocaleString()}万円</div>
+      <span class="st">${st}</span></div>`;
+  }).join('');
+
+  document.getElementById('lost').textContent = lost.toLocaleString();
+  document.getElementById('lostN').textContent = lostN;
+  document.getElementById('lostK').textContent = lostK;
+
+  const pct = Math.round(lost / TOTAL * 100);
+  const v = document.getElementById('verdict');
+  if(lostN === 0){
+    v.innerHTML = '基準の年齢に達した先はまだありません。スライダーを右に動かしてください。';
+  } else {
+    v.innerHTML = `${t}年で、年間取引の<b>${pct}%</b>にあたる<b>${lost.toLocaleString()}万円</b>が消えました。`
+      + `消えた${lostN}社のうち<b>${lostK}社は黒字</b>です。`
+      + `倒産していれば予兆が出ますが、この${lostK}社の決算書は最後まできれいなままです。`;
+  }
+}
+function show(id){
+  ['v1','v2','v3'].forEach(v=>document.getElementById(v).classList.add('hide'));
+  document.getElementById(id).classList.remove('hide');
+  window.scrollTo(0,0);
+}
+draw();
+</script>
+</body>
+</html>

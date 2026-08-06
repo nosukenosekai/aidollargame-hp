@@ -6,188 +6,206 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="中古トラックの公開在庫を横断検索するチャットデモ（株式会社AIdollargame）">
 <link rel="icon" href="/favicon.svg">
-<title>トラック在庫チャット | AIdollargame</title>
+<title>トラック在庫 検索アシスタント | AIdollargame</title>
 <style>
   :root {
-    --paper:#f5f4f0; --card:#ffffff; --ink:#16181d; --sub:#5b6270;
-    --line:#e3e0d8; --blue:#2563eb; --blue-soft:#eaf0fe; --thumb:#edebe4;
-    --shadow:0 1px 2px rgba(20,24,35,.05), 0 8px 24px rgba(20,24,35,.06);
+    --head:#2f3a45;      /* ヘッダー・見出しの濃色 */
+    --headGrad:#46545f;
+    --accent:#e8760c;    /* アクセント（ボタン・強調） */
+    --accentDark:#c56104;
+    --bg:#f7f5f1;
+    --line:#e4dfd6;
+    --ink:#3d4550;
+    --muted:#7c8794;
+    --faint:#a6afb9;
+    --panel:#ffffff;
+    --soft:#f1ede7;
+    --good:#1f7a4d;
+    --ts:1;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --paper:#13161c; --card:#1c2028; --ink:#edeff3; --sub:#9ba4b2;
-      --line:#2b313c; --blue:#7aa2ff; --blue-soft:#1c2534; --thumb:#242a34;
-      --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
-    }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif; background:var(--bg); color:var(--ink); }
+
+  header {
+    background:var(--head); color:#fff; padding:15px 22px;
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
   }
-  :root[data-theme="dark"] {
-    --paper:#13161c; --card:#1c2028; --ink:#edeff3; --sub:#9ba4b2;
-    --line:#2b313c; --blue:#7aa2ff; --blue-soft:#1c2534; --thumb:#242a34;
-    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  header .logo { font-weight:800; font-size:19px; letter-spacing:.02em; display:flex; align-items:center; gap:9px; }
+  header .logo svg { width:26px; height:26px; }
+  header h1 { font-size:16px; font-weight:700; margin:0; }
+  header h1 span { font-weight:400; opacity:.6; }
+  header .fontbtn {
+    margin-left:auto; background:rgba(255,255,255,.14); color:#fff; border:1px solid rgba(255,255,255,.3);
+    border-radius:8px; padding:7px 13px; font-size:12.5px; font-weight:700; cursor:pointer;
   }
-  :root[data-theme="light"] {
-    --paper:#f5f4f0; --card:#ffffff; --ink:#16181d; --sub:#5b6270;
-    --line:#e3e0d8; --blue:#2563eb; --blue-soft:#eaf0fe; --thumb:#edebe4;
-    --shadow:0 1px 2px rgba(20,24,35,.05), 0 8px 24px rgba(20,24,35,.06);
+  header .fontbtn:hover { background:rgba(255,255,255,.26); }
+  header .fontbtn.active { background:var(--accent); border-color:var(--accent); }
+  header .badge {
+    background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25);
+    border-radius:999px; padding:5px 13px; font-size:12.5px; white-space:nowrap;
   }
+  header .badge b { font-weight:800; }
 
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html, body { height:100%; }
-  body {
-    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium",system-ui,sans-serif;
-    background:var(--paper); color:var(--ink); font-size:17px; line-height:1.7;
-    -webkit-font-smoothing:antialiased;
+  .wrap { display:grid; grid-template-columns:264px 1fr; gap:16px; padding:16px 22px 28px; align-items:start; max-width:1280px; margin:0 auto; }
+  @media (max-width:900px) { .wrap { grid-template-columns:1fr; padding:12px 14px 22px; } }
+
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px; }
+  .filter-side h3 { font-size:13.5px; margin:0 0 12px; color:var(--head); font-weight:800; }
+  label { display:block; font-size:12px; margin:12px 0 4px; color:var(--muted); font-weight:600; }
+  select, .filter-side input {
+    width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:9px;
+    font-size:13.5px; background:#fff; color:var(--ink); font-family:inherit;
   }
-  .shell { width:100%; max-width:1080px; margin-inline:auto; padding-inline:clamp(18px, 4vw, 44px); }
+  select:focus, input:focus, textarea:focus { outline:2px solid var(--accent); outline-offset:-1px; }
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  button { cursor:pointer; border:none; border-radius:9px; font-size:14px; font-weight:700; font-family:inherit; }
+  .btn-primary { background:var(--accent); color:#fff; padding:11px; width:100%; margin-top:16px; }
+  .btn-primary:hover { background:var(--accentDark); }
+  .btn-clear { background:#fff; color:var(--muted); border:1px solid var(--line); padding:8px; width:100%; margin-top:8px; font-size:12.5px; }
+  .btn-clear:hover { background:var(--soft); }
 
-  #app { display:flex; flex-direction:column; height:100dvh; }
+  .chat { display:flex; flex-direction:column; min-height:calc(100dvh - 130px); }
+  .chat-head { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+  .chat-head h2 { font-size:14.5px; margin:0; color:var(--head); font-weight:800; }
+  .newchat { margin-left:auto; background:#fff; color:var(--head); border:1px solid var(--line); border-radius:8px; padding:7px 12px; font-size:12.5px; }
+  .newchat:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
 
-  header { border-bottom:1px solid var(--line); background:var(--card); flex:none; }
-  header .shell { display:flex; align-items:center; gap:14px; padding-block:16px; }
-  .brand { display:flex; align-items:center; gap:11px; min-width:0; }
-  .brand .mark { width:30px; height:30px; flex:none; color:var(--blue); }
-  .brand h1 { font-size:20px; font-weight:800; letter-spacing:.01em; white-space:nowrap; }
-  .brand .tag { font-size:13.5px; color:var(--sub); white-space:nowrap; }
-  @media (max-width:640px) { .brand .tag { display:none; } }
-  .count { margin-left:auto; font-size:13.5px; color:var(--sub); white-space:nowrap; }
-  .count b { font-size:19px; font-weight:800; color:var(--ink); font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
+  .chat-log { flex:1; overflow-y:auto; padding:4px 2px 10px; }
+  .msg { display:flex; margin:10px 0; }
+  .msg.user { justify-content:flex-end; }
+  .bubble { max-width:80%; padding:11px 15px; border-radius:14px; font-size:calc(14.5px * var(--ts)); line-height:1.75; }
+  .msg.user .bubble { background:var(--accent); color:#fff; border-bottom-right-radius:4px; font-weight:600; }
+  .msg.ai .bubble { background:var(--soft); color:var(--ink); border-bottom-left-radius:4px; }
+  .bubble b { color:var(--head); font-weight:800; }
 
-  #log { flex:1; overflow-y:auto; overscroll-behavior:contain; }
-  #log .shell { display:flex; flex-direction:column; gap:12px; padding-block:26px 8px; }
-
-  .bubble { max-width:min(660px, 100%); padding:14px 19px; border-radius:16px; font-size:16.5px; }
-  .bubble.me { align-self:flex-end; background:var(--blue); color:#fff; border-bottom-right-radius:5px; font-weight:600; }
-  .bubble.bot { align-self:flex-start; background:var(--card); border:1px solid var(--line); border-bottom-left-radius:5px; box-shadow:var(--shadow); }
-  .bubble.bot b { font-weight:800; }
-
-  .results { display:grid; grid-template-columns:repeat(auto-fill, minmax(430px, 1fr)); gap:12px; margin:2px 0 14px; }
-  @media (max-width:900px) { .results { grid-template-columns:1fr; } }
-
-  .car {
-    display:grid; grid-template-columns:124px 1fr; gap:16px; align-items:center;
-    background:var(--card); border:1px solid var(--line); border-radius:14px;
-    padding:14px 18px 14px 14px; text-decoration:none; color:inherit; box-shadow:var(--shadow);
-    transition:border-color .15s ease, transform .15s ease;
+  /* 車両カード（カルーセル） */
+  .cards { display:flex; gap:12px; overflow-x:auto; padding:6px 2px 12px; scroll-snap-type:x mandatory; }
+  .cards::-webkit-scrollbar { height:8px; }
+  .cards::-webkit-scrollbar-thumb { background:#d5cdc2; border-radius:4px; }
+  .tcard {
+    flex:0 0 250px; scroll-snap-align:start; background:#fff; border:1px solid var(--line);
+    border-radius:14px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 2px 8px rgba(47,58,69,.07);
   }
-  .car:hover, .car:focus-visible { border-color:var(--blue); transform:translateY(-1px); }
-  .car:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
-  @media (max-width:420px) { .car { grid-template-columns:88px 1fr; gap:12px; } }
-
-  .thumb { background:var(--thumb); border-radius:10px; aspect-ratio:16/10; display:grid; place-items:center; }
-  .thumb svg { width:88%; height:auto; color:var(--sub); }
-  @media (max-width:420px) { .thumb svg { width:94%; } }
-
-  .info { min-width:0; }
-  .info .top { display:flex; align-items:baseline; gap:10px; }
-  .info .name { font-size:17.5px; font-weight:800; line-height:1.35; flex:1; min-width:0; }
-  .info .price { font-size:23px; font-weight:800; letter-spacing:-.02em; white-space:nowrap; font-variant-numeric:tabular-nums; }
-  .info .price small { font-size:14px; font-weight:700; margin-left:1px; }
-  .info .ask { font-size:15px; font-weight:700; color:var(--sub); white-space:nowrap; }
-  .spec { display:flex; flex-wrap:wrap; gap:4px 12px; font-size:14px; color:var(--sub); margin-top:5px; line-height:1.5; }
-  .spec .n { font-variant-numeric:tabular-nums; }
-  .badges { display:flex; flex-wrap:wrap; gap:6px; margin-top:9px; }
-  .pill { font-size:12.5px; font-weight:700; padding:2px 10px; border-radius:99px; background:var(--blue-soft); color:var(--blue); }
-  .pill.plain { background:transparent; color:var(--sub); border:1px solid var(--line); font-weight:600; }
-
-  .dock { flex:none; border-top:1px solid var(--line); background:var(--card); }
-  .dock .shell { padding-block:14px 16px; }
-  .chips { display:flex; gap:9px; flex-wrap:wrap; margin-bottom:11px; }
-  .chip {
-    font-size:14.5px; font-weight:600; padding:8px 15px; border:1px solid var(--line);
-    border-radius:99px; background:var(--paper); cursor:pointer; color:var(--ink); font-family:inherit;
+  .tcard-top { background:linear-gradient(135deg, var(--head), var(--headGrad)); color:#fff; padding:9px 13px; }
+  .tcard-badge { display:inline-block; background:var(--accent); color:#fff; font-size:10px; font-weight:800; padding:2px 9px; border-radius:999px; margin-bottom:6px; }
+  .tcard-name { font-size:calc(14px * var(--ts)); font-weight:800; line-height:1.4; }
+  .tcard-art { background:var(--soft); display:grid; place-items:center; padding:8px 0 4px; }
+  .tcard-art svg { width:86%; height:auto; color:#8b95a1; }
+  .tcard-price { padding:9px 13px 4px; display:flex; align-items:baseline; gap:7px; }
+  .tcard-price .v { font-size:calc(24px * var(--ts)); font-weight:800; color:var(--head); font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
+  .tcard-price .u { font-size:calc(12px * var(--ts)); font-weight:700; color:var(--muted); }
+  .tcard-price .ask { font-size:calc(15px * var(--ts)); font-weight:800; color:var(--muted); }
+  .souba { margin:0 13px 6px; font-size:calc(11.5px * var(--ts)); font-weight:700; }
+  .souba.cheap { color:var(--good); }
+  .souba.high { color:var(--faint); }
+  .tcard-body { padding:2px 13px 10px; font-size:calc(12.5px * var(--ts)); color:var(--muted); flex:1; }
+  .line { display:flex; gap:8px; margin:4px 0; align-items:baseline; }
+  .lbl { flex:0 0 46px; color:var(--faint); font-size:calc(11px * var(--ts)); }
+  .line b { color:var(--head); font-weight:700; font-variant-numeric:tabular-nums; }
+  .tcard-btns { padding:0 12px 11px; display:flex; flex-direction:column; gap:6px; }
+  .tcard-btns a {
+    text-align:center; text-decoration:none; font-size:calc(12.5px * var(--ts)); font-weight:800;
+    padding:8px 6px; border-radius:9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
-  .chip:hover { border-color:var(--blue); color:var(--blue); }
-  .chip:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
-  .inputrow { display:flex; gap:10px; }
-  .inputrow textarea {
-    flex:1; padding:14px 17px; font-size:17px; font-family:inherit; line-height:1.5;
-    border:1px solid var(--line); border-radius:13px; resize:none; height:54px;
-    background:var(--paper); color:var(--ink);
-  }
-  .inputrow textarea::placeholder { color:var(--sub); opacity:.85; }
-  .inputrow textarea:focus { outline:2px solid var(--blue); outline-offset:-1px; border-color:var(--blue); }
-  .inputrow button {
-    flex:none; width:58px; display:grid; place-items:center;
-    background:var(--blue); color:#fff; border:none; border-radius:13px; cursor:pointer;
-  }
-  .inputrow button:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
-  .inputrow button svg { width:21px; height:21px; }
-  .note { font-size:12.5px; color:var(--sub); line-height:1.65; margin-top:11px; }
+  .tcard-btns .primary { background:var(--accent); color:#fff; }
+  .tcard-btns .primary:hover { background:var(--accentDark); }
+  .tcard-btns .ghost { background:var(--soft); color:var(--head); }
+  .tcard-btns .ghost:hover { background:#e7e0d6; }
+  .more-btn { display:block; margin:2px auto 12px; background:#fff; border:1px solid var(--accent); color:var(--accent); font-weight:800; font-size:13px; padding:8px 20px; border-radius:9px; }
+  .more-btn:hover { background:var(--accent); color:#fff; }
 
-  /* 狭い画面 */
-  @media (max-width:640px) {
-    body { font-size:16px; }
-    header .shell { padding-block:13px; gap:10px; }
-    .brand h1 { font-size:17px; }
-    .brand .mark { width:26px; height:26px; }
-    .count { font-size:12px; padding-left:6px; }
-    .count b { font-size:16px; }
-    #log .shell { padding-block:18px 6px; }
-    .bubble { font-size:15.5px; padding:12px 16px; }
-    .car { grid-template-columns:78px 1fr; gap:12px; padding:12px 14px; align-items:start; }
-    .info .top { flex-wrap:wrap; gap:2px 10px; }
-    .info .name { flex:1 1 100%; font-size:16.5px; }
-    .info .price { font-size:21px; }
-    .spec { font-size:13px; gap:2px 10px; }
-    .chips { flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; margin-inline:calc(clamp(18px, 4vw, 44px) * -1); padding-inline:clamp(18px, 4vw, 44px); }
-    .chips::-webkit-scrollbar { display:none; }
-    .chip { flex:none; font-size:14px; }
-    .inputrow textarea { font-size:16px; padding:13px 15px; }
-    .inputrow button { width:52px; }
-    .note { font-size:11.5px; margin-top:9px; }
+  .chat-input { display:flex; gap:9px; align-items:flex-end; border-top:1px solid var(--line); padding-top:12px; }
+  .chat-input textarea {
+    flex:1; padding:11px 14px; border:1px solid var(--line); border-radius:11px; resize:none;
+    font-size:15px; font-family:inherit; line-height:1.6; max-height:120px; color:var(--ink); background:#fff;
   }
-
-  @media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+  #sendBtn { background:var(--accent); color:#fff; padding:11px 20px; }
+  #sendBtn:hover { background:var(--accentDark); }
+  .hint { font-size:11.5px; color:var(--faint); margin:8px 0 0; line-height:1.7; }
+  .quick { display:flex; gap:7px; flex-wrap:wrap; margin:0 0 10px; }
+  .quick button { background:#fff; border:1px solid var(--line); color:var(--ink); font-size:12.5px; font-weight:600; padding:6px 12px; border-radius:999px; }
+  .quick button:hover { border-color:var(--accent); color:var(--accent); }
 </style>
 </head>
 <body>
 
-<div id="app">
-  <header>
-    <div class="shell">
-      <div class="brand">
-        <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M1 6h13v10H1z"/><path d="M14 9h4l3 3v4h-7z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>
-        </svg>
-        <h1>トラック在庫チャット</h1>
-        <span class="tag">公開在庫を横断サーチ</span>
-      </div>
-      <div class="count"><b id="stN">—</b> 台</div>
-    </div>
-  </header>
+<header>
+  <span class="logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M1 6h13v10H1z"/><path d="M14 9h4l3 3v4h-7z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>
+    </svg>
+    トラック在庫
+  </span>
+  <h1>検索アシスタント <span>｜ 仕入れ担当者用</span></h1>
+  <button class="fontbtn" id="fontToggle">文字を大きく</button>
+  <span class="badge" id="badge">読み込み中…</span>
+</header>
 
-  <div id="log"><div class="shell" id="logInner"></div></div>
-
-  <div class="dock">
-    <div class="shell">
-      <div class="chips">
-        <button class="chip" data-q="大阪府のダンプ 300万以下">大阪府のダンプ 300万以下</button>
-        <button class="chip" data-q="日野の大型ウイング 2018年以降">日野の大型ウイング 2018年以降</button>
-        <button class="chip" data-q="クレーン 低走行">クレーン 低走行</button>
-        <button class="chip" data-q="トラクタ 走行80万km以下">トラクタ 走行80万km以下</button>
-        <button class="chip" data-q="冷凍バン 中型 400万以下">冷凍バン 中型 400万以下</button>
-      </div>
-      <div class="inputrow">
-        <textarea id="q" placeholder="例: 大型ウイング 700万以下" aria-label="探している車両の条件"></textarea>
-        <button id="sendBtn" aria-label="検索する">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></svg>
-        </button>
-      </div>
-      <p class="note" id="note">在庫データを読み込んでいます…</p>
+<div class="wrap">
+  <aside class="card filter-side">
+    <h3>条件でしぼり込む</h3>
+    <label for="fPref">所在地（都道府県）</label>
+    <select id="fPref"><option value="">すべて</option></select>
+    <label for="fMaker">メーカー</label>
+    <select id="fMaker"><option value="">すべて</option></select>
+    <label for="fBody">ボディ形状</label>
+    <select id="fBody"><option value="">すべて</option></select>
+    <label for="fCls">クラス</label>
+    <select id="fCls"><option value="">すべて</option><option>小型</option><option>中型</option><option>増トン</option><option>大型</option></select>
+    <label>予算（万円）</label>
+    <div class="two">
+      <input id="fPmin" type="number" min="0" placeholder="下限">
+      <input id="fPmax" type="number" min="0" placeholder="上限">
     </div>
+    <label>年式（西暦）</label>
+    <div class="two">
+      <input id="fYmin" type="number" min="1980" max="2027" placeholder="以降">
+      <input id="fYmax" type="number" min="1980" max="2027" placeholder="以前">
+    </div>
+    <label for="fMil">走行距離の上限（万km）</label>
+    <input id="fMil" type="number" min="0" placeholder="例: 50">
+    <label for="fSite">掲載サイト</label>
+    <select id="fSite"><option value="">すべて</option></select>
+    <label for="fKw">キーワード（車名）</label>
+    <input id="fKw" placeholder="例: プロフィア">
+    <button class="btn-primary" id="doFilter">この条件で検索する</button>
+    <button class="btn-clear" id="clearFilter">条件をクリア</button>
+  </aside>
+
+  <div class="card chat">
+    <div class="chat-head">
+      <h2>AIに話しかけて在庫をさがす</h2>
+      <button class="newchat" id="newChat" title="会話をリセットします">＋ 新しい相談をはじめる</button>
+    </div>
+
+    <div class="chat-log" id="log"></div>
+
+    <div class="quick" id="quick">
+      <button data-q="大阪府のダンプ 300万以下">大阪府のダンプ 300万以下</button>
+      <button data-q="日野の大型ウイング 2018年以降">日野の大型ウイング 2018年以降</button>
+      <button data-q="冷凍バン 中型 400万以下">冷凍バン 中型 400万以下</button>
+      <button data-q="トラクタ 走行80万km以下">トラクタ 走行80万km以下</button>
+      <button data-q="クレーン 低走行">クレーン 低走行</button>
+    </div>
+
+    <div class="chat-input">
+      <textarea id="chatInput" rows="1" placeholder="メッセージを入力…（改行は Shift + Enter）"></textarea>
+      <button id="sendBtn">送信</button>
+    </div>
+    <p class="hint">Enterで送信・Shift+Enterで改行。地域・メーカー・ボディ・クラス・年式・予算・走行距離を日本語のまま書けば読み取ります。</p>
+    <p class="hint" id="srcNote">在庫データを読み込んでいます…</p>
   </div>
 </div>
 
 <script>
-/* ---------- トラック図版（ボディ形状別・線画） ---------- */
+/* ---------- ボディ形状の線画 ---------- */
 const W = 'stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"';
 const WH = '<circle cx="24" cy="50" r="6.5"/><circle cx="100" cy="50" r="6.5"/>';
 const WH3 = '<circle cx="24" cy="50" r="6.5"/><circle cx="92" cy="50" r="6.5"/><circle cx="110" cy="50" r="6.5"/>';
 const CAB = '<path d="M9 44V31l8-11h14v24z"/><path d="M18 24h10v7H14z"/>';
 const BOX = '<path d="M33 16h87v28H33z"/>';
 const DECK = '<path d="M33 34h87v10H33z"/>';
-function svg(inner) { return '<svg viewBox="0 0 128 64" ' + W + ' aria-hidden="true">' + inner + '</svg>'; }
-
+const svg = inner => '<svg viewBox="0 0 128 64" ' + W + ' aria-hidden="true">' + inner + '</svg>';
 const ART = {
   'ウイング':        svg(CAB + BOX + '<path d="M33 24h87"/><path d="M76 24v20"/>' + WH),
   '冷凍ウイング':    svg(CAB + BOX + '<path d="M33 24h87"/><path d="M76 24v20"/><path d="M37 16v-6h16v6"/>' + WH),
@@ -212,7 +230,7 @@ const ART = {
   '幌':              svg(CAB + '<path d="M33 44V26c0-5 6-9 14-9h58c8 0 15 4 15 9v18z"/><path d="M55 17v27M84 17v27"/>' + WH),
   'その他':          svg(CAB + '<path d="M33 18h87v26H33z"/>' + WH),
 };
-function artFor(body) { return ART[body] || ART['その他']; }
+const artFor = b => ART[b] || ART['その他'];
 
 /* ---------- データ ---------- */
 let RAW = null, L = [], MODELS = [];
@@ -224,19 +242,27 @@ const PREFS = '北海道 青森県 岩手県 宮城県 秋田県 山形県 福�
 
 async function loadData() {
   RAW = await (await fetch('data.json')).json();
+  const cleanModel = m => (/^[ー－—–\-─\s]*$/.test(m || '') ? '' : (m || '').trim());
   L = RAW.rows.map(r => ({
-    site: RAW.sites[r[0]], url: RAW.prefix[r[0]] + r[1], maker: r[2], model: r[3],
+    site: RAW.sites[r[0]], url: RAW.prefix[r[0]] + r[1], maker: r[2], model: cleanModel(r[3]),
     body: r[4], cls: r[5], year: r[6], mileage_man: r[7], load_kg: r[8], pref: r[9], price_man: r[10],
     alts: (r[11] || []).map(a => ({ site: RAW.sites[a[0]], url: RAW.prefix[a[0]] + a[1] })),
   }));
   MODELS = [...new Set(L.map(x => x.model).filter(m => m && m.length >= 2 && !/^[A-Z0-9-]+$/.test(m)))];
-  document.getElementById('stN').textContent = L.length.toLocaleString();
-  document.getElementById('note').textContent =
-    '在庫データ: ' + RAW.meta.sources.map(s => s.name + ' ' + s.n.toLocaleString() + '台').join(' / ') +
-    '（2026年8月5〜6日取得・クロールを許可しているサイトのみ）。価格と在庫状況は取得時点のものです。図はボディ形状のイラストで、実車の外観とは異なります。';
+  document.getElementById('badge').innerHTML = '<b>' + L.length.toLocaleString() + '</b> 台を横断検索';
+  document.getElementById('srcNote').textContent =
+    '出典: ' + RAW.meta.sources.map(s => s.name + '（' + s.n.toLocaleString() + '台）').join(' ／ ') +
+    '。2026年8月5〜6日にクロールを許可しているサイトから取得した公開情報です。価格・在庫状況は取得時点のもので、最新は各掲載ページでご確認ください。図はボディ形状のイラストで実車の外観とは異なります。';
+
+  const opt = (sel, arr) => { const e = document.getElementById(sel); arr.forEach(v => { const o = document.createElement('option'); o.textContent = v; e.appendChild(o); }); };
+  const count = (key) => { const m = {}; L.forEach(x => { if (x[key]) m[x[key]] = (m[x[key]] || 0) + 1; }); return Object.entries(m).sort((a, b) => b[1] - a[1]).map(e => e[0]); };
+  opt('fPref', PREFS.filter(p => L.some(x => x.pref === p)));
+  opt('fMaker', count('maker'));
+  opt('fBody', count('body'));
+  opt('fSite', count('site'));
 }
 
-/* ---------- 条件の読み取り ---------- */
+/* ---------- 条件 ---------- */
 function parse(text) {
   const t = (text || '').replace(/　/g, ' ');
   const c = {};
@@ -257,7 +283,6 @@ function parse(text) {
   if ((mm = t.match(/(\d+)\s*万円?\s*以上/))) c.priceMin = +mm[1];
   if ((mm = t.match(/走行\s*(\d+)\s*万\s*km?\s*以下|(\d+)\s*万\s*km\s*以下/i))) c.milMax = +(mm[1] || mm[2]);
   if (/低走行/.test(t)) c.milMax = c.milMax || 30;
-  if (/価格あり|応談以外|値段あり/.test(t)) c.hasPrice = true;
   return c;
 }
 function run(c) {
@@ -266,12 +291,13 @@ function run(c) {
     if (c.maker && x.maker !== c.maker) return false;
     if (c.body && x.body !== c.body) return false;
     if (c.cls && x.cls !== c.cls) return false;
+    if (c.site && x.site !== c.site) return false;
     if (c.model && x.model !== c.model) return false;
+    if (c.kw && !((x.model || '') + (x.maker || '')).includes(c.kw)) return false;
     if (c.yearMin && !(x.year && x.year >= c.yearMin)) return false;
     if (c.yearMax && !(x.year && x.year <= c.yearMax)) return false;
     if (c.priceMax && !(x.price_man && x.price_man <= c.priceMax)) return false;
     if (c.priceMin && !(x.price_man && x.price_man >= c.priceMin)) return false;
-    if (c.hasPrice && !x.price_man) return false;
     if (c.milMax && !(x.mileage_man != null && x.mileage_man <= c.milMax)) return false;
     return true;
   });
@@ -283,103 +309,168 @@ function condLabel(c) {
   if (c.pref) p.push(c.pref);
   if (c.maker) p.push(c.maker);
   if (c.model) p.push(c.model);
+  if (c.kw) p.push('「' + c.kw + '」');
   if (c.body) p.push(c.body);
   if (c.cls) p.push(c.cls);
+  if (c.site) p.push(c.site + '掲載');
   if (c.yearMin && c.yearMax) p.push(c.yearMin + '〜' + c.yearMax + '年式');
   else if (c.yearMin) p.push(c.yearMin + '年式以降');
   else if (c.yearMax) p.push(c.yearMax + '年式以前');
-  if (c.priceMax) p.push(c.priceMax + '万円以下');
-  if (c.priceMin) p.push(c.priceMin + '万円以上');
+  if (c.priceMin && c.priceMax) p.push(c.priceMin + '〜' + c.priceMax + '万円');
+  else if (c.priceMax) p.push(c.priceMax + '万円以下');
+  else if (c.priceMin) p.push(c.priceMin + '万円以上');
   if (c.milMax) p.push('走行' + c.milMax + '万km以下');
   return p.length ? p.join('・') : '全在庫';
 }
 
+/* 相場感: 同じ形状・クラス・年式±2年の中央値と比べる */
+function soubaFor(r) {
+  if (!r.price_man || !r.year) return null;
+  const peers = L.filter(x =>
+    x.price_man && x.year && x !== r &&
+    x.body === r.body && x.cls === r.cls &&
+    Math.abs(x.year - r.year) <= 2 &&
+    // 積載量が近いものだけを比較対象にする（軽と3tを同列にしない）
+    (r.load_kg && x.load_kg ? Math.abs(x.load_kg - r.load_kg) <= r.load_kg * 0.3 : !r.load_kg && !x.load_kg)
+  ).map(x => x.price_man);
+  if (peers.length < 8) return null;
+  peers.sort((a, b) => a - b);
+  const med = peers[Math.floor(peers.length / 2)];
+  const diff = Math.round(r.price_man - med);
+  if (Math.abs(diff) < med * 0.05) return { text: '同型の相場どおり（中央値 ' + med + '万円）', cls: 'high' };
+  return diff < 0
+    ? { text: '同型の相場より ' + Math.abs(diff) + '万円 安い（中央値 ' + med + '万円）', cls: 'cheap' }
+    : { text: '同型の相場より ' + diff + '万円 高い（中央値 ' + med + '万円）', cls: 'high' };
+}
+
 /* ---------- 表示 ---------- */
-const logInner = document.getElementById('logInner');
-const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
-function push(html) { logInner.insertAdjacentHTML('beforeend', html); document.getElementById('log').scrollTop = 1e9; }
-function addMe(t) { push('<div class="bubble me">' + esc(t) + '</div>'); }
-function addBot(t) { push('<div class="bubble bot">' + t + '</div>'); }
+const logEl = document.getElementById('log');
+const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+function push(html) { logEl.insertAdjacentHTML('beforeend', html); logEl.scrollTop = logEl.scrollHeight; }
+const addUser = t => push('<div class="msg user"><div class="bubble">' + esc(t) + '</div></div>');
+const addAi = t => push('<div class="msg ai"><div class="bubble">' + t + '</div></div>');
 
 function cardHTML(r) {
-  const spec = [];
-  if (r.cls) spec.push('<span>' + esc(r.cls) + '</span>');
-  if (r.year) spec.push('<span><span class="n">' + r.year + '</span>年式</span>');
-  if (r.mileage_man != null) spec.push('<span>走行<span class="n">' + r.mileage_man + '</span>万km</span>');
-  if (r.load_kg) spec.push('<span>積載<span class="n">' + r.load_kg.toLocaleString() + '</span>kg</span>');
-  if (r.pref) spec.push('<span>' + esc(r.pref) + '</span>');
-  const badges = ['<span class="pill">' + esc(r.site) + '</span>', '<span class="pill plain">' + esc(r.body) + '</span>'];
-  if (r.alts && r.alts.length) badges.push('<span class="pill plain">他掲載 ' + r.alts.map(a => esc(a.site)).join('・') + '</span>');
-  const price = r.price_man
-    ? '<span class="price"><span class="n">' + r.price_man + '</span><small>万円</small></span>'
-    : '<span class="ask">価格応談</span>';
-  return '<a class="car" href="' + r.url + '" target="_blank" rel="noopener">' +
-    '<span class="thumb">' + artFor(r.body) + '</span>' +
-    '<span class="info"><span class="top"><span class="name">' + esc((r.maker + ' ' + (r.model || '')).trim()) + '</span>' + price + '</span>' +
-    '<span class="spec">' + spec.join('') + '</span>' +
-    '<span class="badges">' + badges.join('') + '</span></span></a>';
-}
-function addResults(rows) {
-  if (!rows.length) return;
-  push('<div class="results">' + rows.map(cardHTML).join('') + '</div>');
+  const line = (l, v) => v ? '<div class="line"><span class="lbl">' + l + '</span><span><b>' + v + '</b></span></div>' : '';
+  const s = soubaFor(r);
+  const alts = r.alts && r.alts.length
+    ? '<div class="line"><span class="lbl">他掲載</span><span>' + r.alts.map(a => esc(a.site)).join('・') + '</span></div>' : '';
+  return '<div class="tcard">' +
+    '<div class="tcard-top"><span class="tcard-badge">' + esc(r.site) + '</span>' +
+    '<div class="tcard-name">' + esc((r.maker + ' ' + (r.model || '')).trim()) + '</div></div>' +
+    '<div class="tcard-art">' + artFor(r.body) + '</div>' +
+    '<div class="tcard-price">' + (r.price_man
+      ? '<span class="v">' + r.price_man + '</span><span class="u">万円</span>'
+      : '<span class="ask">価格応談</span>') + '</div>' +
+    (s ? '<div class="souba ' + s.cls + '">' + s.text + '</div>' : '') +
+    '<div class="tcard-body">' +
+      line('形状', esc(r.body)) +
+      line('クラス', esc(r.cls)) +
+      line('年式', r.year ? r.year + '年' : '') +
+      line('走行', r.mileage_man != null ? r.mileage_man + '万km' : '') +
+      line('積載', r.load_kg ? r.load_kg.toLocaleString() + 'kg' : '') +
+      line('所在地', esc(r.pref)) +
+      line('掲載元', esc(r.site)) +
+      alts +
+    '</div>' +
+    '<div class="tcard-btns"><a class="primary" href="' + esc(r.url) + '" target="_blank" rel="noopener">掲載ページを見る</a>' +
+    (r.alts && r.alts.length ? '<a class="ghost" href="' + esc(r.alts[0].url) + '" target="_blank" rel="noopener">' + esc(r.alts[0].site) + 'の掲載</a>' : '') +
+    '</div></div>';
 }
 
-async function ask(text) {
-  addMe(text);
-  if (!L.length) {
-    const wait = document.createElement('div');
-    wait.className = 'bubble bot';
-    wait.textContent = '在庫データを読み込んでいます…';
-    logInner.appendChild(wait);
-    try { await dataReady; } catch (e) {
-      wait.textContent = '在庫データを読み込めませんでした。ページを再読み込みしてください。';
-      return;
-    }
-    wait.remove();
+let lastRows = [], shown = 0;
+function renderCards(reset) {
+  if (reset) shown = 0;
+  const next = lastRows.slice(shown, shown + 10);
+  shown += next.length;
+  const id = 'cards' + Date.now() + Math.floor(shown);
+  push('<div class="cards" id="' + id + '">' + next.map(cardHTML).join('') + '</div>');
+  if (shown < lastRows.length) {
+    push('<button class="more-btn" id="more">さらに10台を見る（残り ' + (lastRows.length - shown).toLocaleString() + '台）</button>');
+    document.getElementById('more').addEventListener('click', e => { e.target.remove(); renderCards(false); });
   }
-  const cond = parse(text);
+}
+
+function answer(cond, label) {
   const rows = run(cond);
-  const label = esc(condLabel(cond));
-  if (!Object.keys(cond).length) {
-    addBot('条件を読み取れませんでした。「大阪府のダンプ 300万以下」「日野の大型ウイング 2018年以降」のように、地域・メーカー・ボディ・クラス・年式・予算・走行距離を書いてください。');
-    return;
-  }
+  lastRows = rows;
   if (!rows.length) {
-    addBot('<b>' + label + '</b> に合う在庫は見つかりませんでした。条件を1つ外すか、予算や年式を広げてみてください。');
+    addAi('<b>' + esc(label) + '</b> に合う在庫は見つかりませんでした。条件を1つ外すか、予算や年式を広げてみてください。');
     return;
   }
   const priced = rows.filter(r => r.price_man);
   const askN = rows.length - priced.length;
-  let msg = '<b>' + label + '</b> の在庫は <b>' + rows.length.toLocaleString() + '台</b>。';
+  const bySite = {};
+  rows.forEach(r => { bySite[r.site] = (bySite[r.site] || 0) + 1; });
+  let msg = '<b>' + esc(label) + '</b> の在庫は <b>' + rows.length.toLocaleString() + '台</b>あります。';
   if (priced.length) {
-    const ps = priced.map(r => r.price_man);
-    msg += '価格が出ている' + priced.length.toLocaleString() + '台は ' + Math.min(...ps) + '〜' + Math.max(...ps) + '万円です。';
+    const ps = priced.map(r => r.price_man).sort((a, b) => a - b);
+    msg += '価格が出ている' + priced.length.toLocaleString() + '台は ' + ps[0] + '〜' + ps[ps.length - 1] +
+      '万円、中央値は ' + ps[Math.floor(ps.length / 2)] + '万円です。';
   }
-  if (askN) msg += '価格応談が' + askN.toLocaleString() + '台あります。';
-  msg += rows.length > 8 ? '安い順に上位8台を表示します。' : '安い順に表示します。';
-  addBot(msg);
-  addResults(rows.slice(0, 8));
+  if (askN) msg += '価格応談が' + askN.toLocaleString() + '台。';
+  msg += '掲載元の内訳は ' + Object.entries(bySite).sort((a, b) => b[1] - a[1])
+    .map(e => esc(e[0]) + ' ' + e[1].toLocaleString() + '台').join('、') + '。安い順に表示します。';
+  addAi(msg);
+  renderCards(true);
 }
 
-/* ---------- 起動 ---------- */
-const qEl = document.getElementById('q');
-function send() {
-  const text = qEl.value.trim();
-  if (!text) return;
-  qEl.value = '';
-  ask(text);
+/* ---------- 操作 ---------- */
+let dataReady;
+async function ask(text) {
+  addUser(text);
+  if (!L.length) { addAi('在庫データを読み込んでいます…'); try { await dataReady; } catch (e) { addAi('読み込みに失敗しました。ページを再読み込みしてください。'); return; } }
+  const cond = parse(text);
+  if (!Object.keys(cond).length) {
+    addAi('条件を読み取れませんでした。「大阪府のダンプ 300万以下」「日野の大型ウイング 2018年以降」のように、地域・メーカー・ボディ・クラス・年式・予算・走行距離を書いてください。左の絞り込みからも探せます。');
+    return;
+  }
+  answer(cond, condLabel(cond));
 }
+
+const input = document.getElementById('chatInput');
+function send() { const t = input.value.trim(); if (!t) return; input.value = ''; input.style.height = 'auto'; ask(t); }
 document.getElementById('sendBtn').addEventListener('click', send);
-qEl.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); send(); }
-});
-document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => ask(b.dataset.q)));
+input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); send(); } });
+input.addEventListener('input', () => { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 120) + 'px'; });
+document.querySelectorAll('.quick button').forEach(b => b.addEventListener('click', () => ask(b.dataset.q)));
 
-addBot('探している車両の条件を教えてください。地域・メーカー・ボディ・クラス・年式・予算・走行距離を、日本語のまま書けば読み取ります。');
-const dataReady = loadData();
-dataReady.catch(() => {
-  document.getElementById('note').textContent = '在庫データを読み込めませんでした。ページを再読み込みしてください。';
+document.getElementById('doFilter').addEventListener('click', async () => {
+  if (!L.length) { try { await dataReady; } catch (e) { return; } }
+  const v = id => document.getElementById(id).value.trim();
+  const c = {};
+  if (v('fPref')) c.pref = v('fPref');
+  if (v('fMaker')) c.maker = v('fMaker');
+  if (v('fBody')) c.body = v('fBody');
+  if (v('fCls')) c.cls = v('fCls');
+  if (v('fSite')) c.site = v('fSite');
+  if (v('fKw')) c.kw = v('fKw');
+  if (v('fPmin')) c.priceMin = +v('fPmin');
+  if (v('fPmax')) c.priceMax = +v('fPmax');
+  if (v('fYmin')) c.yearMin = +v('fYmin');
+  if (v('fYmax')) c.yearMax = +v('fYmax');
+  if (v('fMil')) c.milMax = +v('fMil');
+  const label = condLabel(c);
+  addUser('（絞り込み）' + label);
+  answer(c, label);
 });
+document.getElementById('clearFilter').addEventListener('click', () => {
+  ['fPref','fMaker','fBody','fCls','fSite','fKw','fPmin','fPmax','fYmin','fYmax','fMil'].forEach(id => document.getElementById(id).value = '');
+});
+document.getElementById('newChat').addEventListener('click', () => {
+  logEl.innerHTML = '';
+  addAi('在庫さがしのお手伝いをします。「大阪府のダンプ 300万以下」のように、探している条件を話しかけてください。');
+});
+document.getElementById('fontToggle').addEventListener('click', e => {
+  const big = document.documentElement.style.getPropertyValue('--ts') === '1.15';
+  document.documentElement.style.setProperty('--ts', big ? '1' : '1.15');
+  e.target.classList.toggle('active', !big);
+  e.target.textContent = big ? '文字を大きく' : '文字をもとに戻す';
+});
+
+addAi('在庫さがしのお手伝いをします。「大阪府のダンプ 300万以下」のように、探している条件を話しかけてください。左の絞り込みからも探せます。');
+dataReady = loadData();
+dataReady.catch(() => { document.getElementById('badge').textContent = '読み込み失敗'; });
 </script>
 </body>
 </html>

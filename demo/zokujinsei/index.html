@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社長ぬきで回るか診断 — 20問・15分</title>
+<style>
+  :root{
+    --blue:#2563eb; --blue-dark:#1d4ed8; --blue-soft:#eff4ff;
+    --bg:#f4f5f7; --card:#fff;
+    --ink:#1f2733; --sub:#6b7280; --faint:#9aa3af;
+    --line:#e5e7eb; --line-soft:#f1f3f5;
+    --red:#dc2626; --red-bg:#fef2f2; --amber:#b45309; --amber-bg:#fffbeb; --green:#15803d; --green-bg:#f0fdf4;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-size:17px;line-height:1.7;
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic",sans-serif;
+    -webkit-font-smoothing:antialiased}
+
+  .appbar{background:var(--card);border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:12px;padding:10px 20px;flex-wrap:wrap;position:sticky;top:0;z-index:10}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo .mark{width:32px;height:32px;border-radius:8px;background:var(--blue);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex:none}
+  .logo .name{font-size:17px;font-weight:700;white-space:nowrap}
+  .appbar .sp{flex:1}
+  .timer{font-size:14px;font-weight:700;color:var(--blue);background:var(--blue-soft);
+    border-radius:999px;padding:3px 14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+  .wrap{max-width:820px;margin:0 auto;padding:18px 20px 60px}
+  .fine{font-size:13.5px;color:var(--sub);line-height:1.65}
+
+  /* ===== 表紙 ===== */
+  .lead{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+  .lead h1{font-size:26px;margin:0 0 10px;line-height:1.45}
+  .lead p{margin:0 0 4px;font-size:16px;color:var(--sub)}
+  .lead .who{margin-top:14px;font-size:15px;background:var(--line-soft);border-radius:9px;padding:11px 14px}
+  .idf{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+  .idf label{flex:1;min-width:200px;font-size:14px;color:var(--sub)}
+  .idf input{display:block;width:100%;font-size:17px;font-family:inherit;color:var(--ink);
+    margin-top:4px;padding:11px 13px;border:1px solid #d4d9e0;border-radius:9px;background:var(--card)}
+  .idf input:focus{outline:2px solid var(--blue-soft);border-color:var(--blue)}
+  .resume{background:var(--amber-bg);border:1px solid #fde9c0;border-radius:10px;padding:13px 16px;margin-bottom:16px}
+  .resume b{color:var(--amber)}
+
+  /* ===== 1問ずつ ===== */
+  #quiz{display:none}
+  .qtop{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .qtop .cat{font-size:13.5px;font-weight:700;color:var(--blue);background:var(--blue-soft);
+    border-radius:999px;padding:3px 14px}
+  .qtop .cnt{font-size:14px;color:var(--sub);font-variant-numeric:tabular-nums;margin-left:auto}
+  .pbar{height:8px;background:#e2e6ec;border-radius:4px;overflow:hidden;margin-bottom:22px}
+  .pbar i{display:block;height:100%;background:var(--blue);border-radius:4px;transition:width .25s}
+  .qbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 24px 22px}
+  .qbox .qt{font-size:23px;font-weight:700;line-height:1.55;margin-bottom:18px}
+  @media(max-width:520px){ .qbox{padding:18px 16px} .qbox .qt{font-size:20px;margin-bottom:14px} }
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opts button{display:flex;align-items:center;gap:12px;width:100%;
+    font-size:17px;font-weight:700;font-family:inherit;padding:13px 16px;
+    border:2px solid var(--line);border-radius:11px;background:#fbfcfd;color:var(--ink);cursor:pointer;text-align:left;line-height:1.4}
+  .opts button .num{flex:none;width:26px;height:26px;border-radius:7px;background:var(--line-soft);color:var(--sub);
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+  .opts button:hover{border-color:#b9c6db;background:#f7f9fc}
+  .opts button:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+  .opts button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .opts button.on .num{background:rgba(255,255,255,.28);color:#fff}
+  @media(max-width:520px){ .opts button{font-size:16px;padding:12px 14px} }
+  .qnav{display:flex;gap:12px;align-items:center;margin-top:20px;flex-wrap:wrap}
+  .qhint{font-size:14px;color:var(--sub)}
+
+  .btn{font-size:17px;font-weight:700;font-family:inherit;padding:13px 30px;
+    background:var(--blue);color:#fff;border:none;border-radius:10px;cursor:pointer}
+  .btn:hover{background:var(--blue-dark)}
+  .btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line);font-weight:600;font-size:15px;padding:10px 20px}
+  .btn.sm{font-size:15px;padding:10px 20px}
+
+  /* ===== 結果 ===== */
+  #result{display:none}
+  .total{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:14px;
+    display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+  .total .big{font-size:60px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+  .total .big span{font-size:20px;color:var(--sub);font-weight:700}
+  .total .band{font-size:16px;font-weight:700;border-radius:999px;padding:5px 18px;display:inline-block}
+  .total .msg{flex:1;min-width:250px;font-size:16px}
+  .band.red{background:var(--red-bg);color:var(--red)}
+  .band.yel{background:var(--amber-bg);color:var(--amber)}
+  .band.ok{background:var(--green-bg);color:var(--green)}
+  .delta{font-size:14px;font-weight:700;border-radius:999px;padding:3px 12px;display:inline-block}
+  .delta.up{color:var(--green);background:var(--green-bg)}
+  .delta.down{color:var(--red);background:var(--red-bg)}
+  .delta.flat{color:var(--sub);background:var(--line-soft)}
+
+  .rcard{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+  .rcard h3{margin:0;font-size:16px;padding:14px 22px;border-bottom:1px solid var(--line-soft)}
+  .rbody{padding:18px 22px 20px}
+  .ind{margin-bottom:16px}
+  .ind:last-child{margin-bottom:0}
+  .ind .l{display:flex;justify-content:space-between;align-items:baseline;font-size:15.5px;gap:10px;flex-wrap:wrap}
+  .ind .l b{font-size:21px;font-variant-numeric:tabular-nums}
+  .ind .l .w{font-size:12.5px;color:var(--sub)}
+  .ind .bar{height:10px;background:var(--line-soft);border-radius:5px;overflow:hidden;margin-top:6px}
+  .ind .bar i{display:block;height:100%;border-radius:5px}
+  .ind.worst{background:var(--red-bg);border-radius:10px;padding:12px 14px;margin-left:-14px;margin-right:-14px}
+  .ind .tagworst{font-size:12.5px;font-weight:700;color:var(--red);background:#fff;
+    border-radius:5px;padding:1px 8px;margin-left:8px;white-space:nowrap}
+
+  .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:420px}
+  th{font-size:12.5px;font-weight:600;color:var(--sub);text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+  td{padding:10px 12px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .ok-mark{color:var(--green);font-weight:700}.ng-mark{color:var(--red);font-weight:700}.mid-mark{color:var(--amber);font-weight:700}
+  .a100{color:var(--green);font-weight:700}.a50{color:var(--amber);font-weight:700}.a0{color:var(--red);font-weight:700}
+
+  .todo{border:1px solid var(--line);border-radius:11px;padding:16px 18px;margin-bottom:11px;background:#fbfcfd}
+  .todo .h{font-size:17px;font-weight:700;margin-bottom:6px}
+  .todo .h .tag{font-size:13px;font-weight:700;color:#fff;background:var(--blue);border-radius:6px;padding:1px 9px;margin-right:9px;vertical-align:2px}
+  .todo ul{margin:8px 0 0;padding-left:21px;font-size:15px;color:var(--sub)}
+  .todo li{margin-bottom:4px}
+
+  details.ansdump > summary{cursor:pointer;font-size:15px;font-weight:600;color:var(--blue);padding:4px 0}
+  details.ansdump table{min-width:380px}
+
+  .actions{display:flex;gap:11px;flex-wrap:wrap;align-items:center;margin-top:18px}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+    background:#1f2733;color:#fff;font-size:15px;font-weight:600;padding:11px 24px;border-radius:999px;
+    opacity:0;pointer-events:none;transition:.22s;z-index:50}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .logbox{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-top:18px}
+  .logbox h3{margin:0 0 10px;font-size:16px}
+  .privacy{font-size:14px;color:var(--sub);background:var(--amber-bg);border:1px solid #fde9c0;
+    border-radius:10px;padding:12px 16px;margin-top:16px;line-height:1.65}
+  footer{max-width:820px;margin:0 auto;padding:0 20px 44px;font-size:13px;color:var(--sub);line-height:1.7}
+
+  @media print{
+    .appbar,.actions,#quiz,#lead,.logbox,.privacy,footer .noprint,.btn{display:none !important}
+    body{background:#fff;font-size:13px}
+    .wrap{max-width:none;padding:0}
+    .rcard,.total{break-inside:avoid;border:1px solid #999;border-radius:0}
+    details.ansdump[open] > summary{display:none}
+    details.ansdump > *{display:revert}
+    .tablewrap{overflow:visible}
+    table{min-width:0 !important}
+  }
+</style>
+</head>
+<body>
+
+<div class="appbar">
+  <div class="logo">
+    <div class="mark">継</div>
+    <div class="name">社長ぬきで回るか診断</div>
+  </div>
+  <div class="sp"></div>
+  <span class="timer" id="timer">未開始</span>
+</div>
+
+<div class="wrap">
+
+  <!-- 表紙 -->
+  <div id="lead">
+    <div id="resumeBox"></div>
+    <div class="lead">
+      <h1>この会社は、社長がいなくても回りますか</h1>
+      <p>20問に答えるだけで、5つの数字が出ます。1問ずつ出るので、そのまま読み上げて答えてもらえます。</p>
+      <p>所要はだいたい15分。答えるのは社長より、毎日の現場を分かっている方(管理者・工場長・施設長)が向いています。</p>
+      <div class="who">
+        何に使うか<br>
+        ①銀行に「経営者保証を外したい」と言うときの材料 ②引き継ぎの準備を、どこから手をつけるかの順番づけ ③人が辞めても止まらない現場かどうかの点検
+      </div>
+      <div class="idf">
+        <label>事業所名・拠点名<input type="text" id="fName" placeholder="例: ロイヤル介護 ○○事業所" autocomplete="off"></label>
+        <label>答える方(役職)<input type="text" id="fWho" placeholder="例: 管理者" autocomplete="off"></label>
+      </div>
+      <div class="fine" style="margin-top:8px">同じ事業所名で2回目以降に測ると、前回からどう動いたかが結果に出ます。</div>
+      <div class="actions"><button class="btn" onclick="startQuiz()">はじめる(20問)</button></div>
+    </div>
+    <div class="privacy">
+      答えはこの端末の中だけで計算します。サーバーには送りません。答えている途中もこの端末に自動保存するので、閉じても続きから再開できます。保存した結果を消したいときは、結果画面の下にある「この端末の記録を消す」を押してください。
+    </div>
+  </div>
+
+  <!-- 1問ずつ -->
+  <div id="quiz">
+    <div class="qtop">
+      <span class="cat" id="qCat"></span>
+      <span class="cnt" id="qCnt"></span>
+    </div>
+    <div class="pbar"><i id="pBar" style="width:0%"></i></div>
+    <div class="qbox">
+      <div class="qt" id="qText"></div>
+      <div class="opts" id="qOpts"></div>
+    </div>
+    <div class="qnav">
+      <button class="btn ghost" id="backBtn" onclick="go(-1)">← 前の問い</button>
+      <button class="btn sm" id="nextBtn" onclick="go(1)" style="display:none">次の問い →</button>
+      <span class="qhint" id="qHint"></span>
+      <span style="flex:1"></span>
+      <button class="btn ghost" onclick="quitQuiz()">中断する</button>
+    </div>
+  </div>
+
+  <!-- 結果 -->
+  <div id="result">
+    <div class="total">
+      <div>
+        <div class="big" id="rTotal">—<span>/100</span></div>
+        <div class="fine" style="margin-top:3px">高いほど、社長がいなくても回る</div>
+        <div id="rDelta" style="margin-top:8px"></div>
+      </div>
+      <div class="msg">
+        <div id="rSubject" class="fine" style="margin-bottom:6px"></div>
+        <div><span class="band" id="rBand">—</span></div>
+        <div id="rMsg" style="margin-top:9px"></div>
+      </div>
+    </div>
+
+    <div class="rcard">
+      <h3>5つの数字(低いところから手をつける)</h3>
+      <div class="rbody" id="rInds"></div>
+    </div>
+
+    <div class="rcard">
+      <h3>先にやること(点数の低い順に3つ)</h3>
+      <div class="rbody" id="rTodo"></div>
+    </div>
+
+    <div class="rcard">
+      <h3>銀行に「経営者保証を外したい」と言うときの3つの条件</h3>
+      <div class="rbody">
+        <div class="tablewrap"><table id="rGuar"></table></div>
+        <div class="fine" style="margin-top:11px">3つの条件は「①会社のお金と社長個人のお金が分かれている」「②社長の保証がなくても会社だけで返せる」「③銀行にきちんと数字を出している」。この診断は条件を満たしたかどうかを判定するものではなく、いま説明できる材料があるかを見るものです。決めるのは銀行です。</div>
+      </div>
+    </div>
+
+    <div class="rcard">
+      <h3>点数の元になった20問の答え</h3>
+      <div class="rbody">
+        <details class="ansdump">
+          <summary>ひらいて確認する(「なぜこの点数か」と聞かれたらここを見せる)</summary>
+          <div class="tablewrap" style="margin-top:10px"><table id="rAns"></table></div>
+        </details>
+      </div>
+    </div>
+
+    <div class="rcard">
+      <h3>点数の出し方(いつでも開示・あとから重みを変えません)</h3>
+      <div class="rbody">
+        <div class="fine">各問は5つの選択肢が上から 100点 / 75点 / 50点 / 25点 / 0点。選択肢の言葉は問いごとに実際の状態で書いてあるので(例: 先月の数字が「10日までに出る」なら75点)、あとから「なぜこの点か」を説明できます。5つの数字それぞれで4問の平均を出し、まかせられているか30% ・やり方が書いてあるか25% ・その人でなくても判断できるか20% ・数字がすぐ出るか15% ・取引先が会社についているか10% で足し合わせたものが総合点です。定義v1(2026-08-05確定)。同じ答えなら、誰がやっても同じ点数になります。</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" onclick="copyResult()">結果をテキストでコピー</button>
+      <button class="btn ghost" onclick="window.print()">印刷 / PDFで保存</button>
+      <button class="btn ghost" onclick="saveRecord()">この端末に記録する</button>
+      <button class="btn ghost" onclick="reviewAnswers()">答えを見直す</button>
+      <button class="btn ghost" onclick="resetAll()">最初からやり直す</button>
+    </div>
+
+    <div class="logbox">
+      <h3>この端末の記録(1回あたり何分で終わるかの実測)</h3>
+      <div id="logBox" class="fine">まだありません</div>
+      <div style="margin-top:14px"><button class="btn ghost" onclick="clearLog()">この端末の記録を消す</button></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="noprint">社長ぬきで回るか診断 v1 — 株式会社AIdollargame。点数はご本人の申告にもとづく目安で、銀行の審査結果や会社の評価を保証するものではありません。</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+// ================= 設問(5つの数字 × 4問) =================
+// 選択肢は5段階。ただし「どちらかといえば」ではなく、問いごとに実際の状態の言葉にする。
+// 理由: 「どちらかといえば はい」では銀行にも社長にも説明できない。「10日までに出る」なら説明できる。
+const INDS = [
+ {key:"deleg", name:"まかせられているか", formal:"権限移譲率", w:30,
+  todo:{title:"誰がどこまで決めていいかを、紙に書く",
+    steps:["いくらまで・どこまでを誰が決めていいかを一覧にする","社長がいない日を月に1日つくって、止まった判断を書き留める","止まった判断を、その一覧に足していく"]},
+  qs:[
+   {q:"社長(施設長・工場長)が丸一日いなくても、その日の現場は止まらずに回りますか",
+    o:[["何日いなくても回る",100],["1日なら問題なく回る",75],["半日くらいなら回る",50],["数時間で判断待ちが出る",25],["すぐ止まる",0]]},
+   {q:"5万円くらいの買い物を、社長に聞かずに決められる人はいますか",
+    o:[["何人もいる",100],["2〜3人いる",75],["1人だけいる",50],["金額や中身によっては",25],["社長だけ",0]]},
+   {q:"新しい問い合わせや見積もりに、社長以外が最初の返事をできますか",
+    o:[["いつも社長以外が返している",100],["だいたい社長以外",75],["半々",50],["たまに社長以外",25],["いつも社長",0]]},
+   {q:"シフトや人の配置を、社長以外が最後に決めていますか",
+    o:[["完全にまかせている",100],["ほぼまかせて報告だけ受ける",75],["案は作るが最後は社長",50],["相談しながら社長が決める",25],["社長が全部決める",0]]}]},
+
+ {key:"std", name:"やり方が書いてあるか", formal:"業務標準化率", w:25,
+  todo:{title:"やり方を書いて、その場で引けるようにする",
+    steps:["主な仕事に、やり方を書いたものがあるかを洗い出す(無いものから先に)","古くなったものを、いまの現場に合わせて直す","探し回らなくても、聞けばすぐ出てくる形にする"]},
+  qs:[
+   {q:"主な仕事に、やり方を書いたものがありますか",
+    o:[["ほぼ全部にある",100],["半分以上にある",75],["一部だけある",50],["ほとんどない",25],["まったくない",0]]},
+   {q:"新しい人に教える中身は、教える人が変わっても同じですか",
+    o:[["決まった手順で全員同じ",100],["だいたい同じ",75],["人によって少し違う",50],["人によってかなり違う",25],["教える人まかせ",0]]},
+   {q:"その書いたものを、この1年のあいだに直しましたか",
+    o:[["3か月以内に直した",100],["半年以内に直した",75],["1年以内に直した",50],["2年以上そのまま",25],["直したことがない・そもそも無い",0]]},
+   {q:"現場の人が、必要なときにその場で引き出して見られますか",
+    o:[["スマホなどですぐ見られる",100],["事務所のパソコンで見られる",75],["紙のファイルを探せばある",50],["どこにあるか人に聞く",25],["見られない",0]]}]},
+
+ {key:"decide", name:"その人でなくても判断できるか", formal:"非属人意思決定率", w:20,
+  todo:{title:"判断のしかたを決めて、記録を残す",
+    steps:["苦情・事故・急な欠員のときの判断のしかたを1枚にまとめる","「この人にしか聞けない」仕事を書き出して、名前をつける","何をどう決めたかを記録に残し、後から誰でも辿れるようにする"]},
+  qs:[
+   {q:"苦情が来たときの判断のしかたが、文書で決まっていますか",
+    o:[["手順も判断の基準も文書にある",100],["手順はあるが基準は口伝え",75],["おおまかな決まりだけある",50],["経験のある人の判断まかせ",25],["毎回その場で決める",0]]},
+   {q:"急な欠員や事故など、いつもと違うことが起きたときの手順は決まっていますか",
+    o:[["主なことは全部決まっている",100],["よくあることは決まっている",75],["一部だけ決まっている",50],["いま決めようとしている",25],["決まっていない",0]]},
+   {q:"どの仕事も、その人がいなくなったら誰かが代われますか",
+    o:[["全部代われる",100],["ほぼ代われる",75],["代われない仕事が1つ2つある",50],["代われない仕事がいくつもある",25],["その人でないと回らない仕事が多い",0]]},
+   {q:"何をどう決めたかの記録が残っていて、後から誰でも辿れますか",
+    o:[["記録があり誰でも見られる",100],["記録はあるが探すのに手間がかかる",75],["主なものだけ残している",50],["担当者の手元にはある",25],["残っていない",0]]}]},
+
+ {key:"fin", name:"数字がすぐ出るか", formal:"財務即時性", w:15,
+  todo:{title:"先月の数字が、翌月10日までに出るようにする",
+    steps:["月の締めの手順と、担当と、期限を決める","拠点ごと・部門ごとに分けて見えるようにする","社長以外の1人が、毎月その数字を見る場をつくる"]},
+  qs:[
+   {q:"先月の売上と費用が、今月の10日までに出ますか",
+    o:[["5日までに出る",100],["10日までに出る",75],["20日までに出る",50],["翌月の末ごろ",25],["いつ出るか決まっていない",0]]},
+   {q:"拠点ごと・部門ごとに、どこが儲かっているか分かりますか",
+    o:[["毎月きちんと分かる",100],["だいたい分かる",75],["売上だけは分かる",50],["ざっくり感覚で",25],["会社全体しか分からない",0]]},
+   {q:"社長以外にも、毎月その数字を見ている人がいますか",
+    o:[["幹部が全員見ている",100],["2〜3人が見ている",75],["経理の担当だけ見ている",50],["頼まれたときだけ見せている",25],["社長だけ",0]]},
+   {q:"お金の出入りの見通し表を、更新していますか",
+    o:[["毎月更新している",100],["数か月に一度は見直す",75],["年に1回くらい",50],["作ったが更新していない",25],["作っていない",0]]}]},
+
+ {key:"cust", name:"取引先が会社についているか", formal:"顧客直結度", w:10,
+  todo:{title:"取引先を、社長個人から会社に付け替える",
+    steps:["主な取引先の窓口が誰なのかを一覧にする","社長個人の携帯や手帳の中にある情報を、みんなで見られる形に移す","担当が代わるときの引き継ぎの手順を決める"]},
+  qs:[
+   {q:"主な取引先の窓口は、社長個人ではなく会社になっていますか",
+    o:[["全部が会社の窓口",100],["ほとんど会社の窓口",75],["半々",50],["主な取引先は社長個人",25],["ほぼ全部が社長個人",0]]},
+   {q:"お客さんの情報は、個人の携帯や手帳ではなく、みんなで見られる形になっていますか",
+    o:[["全部が共有されている",100],["ほとんど共有されている",75],["半分くらい",50],["一部だけ",25],["それぞれが個人で持っている",0]]},
+   {q:"担当が代わっても、それまでの経緯を引き継げますか",
+    o:[["記録を見れば引き継げる",100],["だいたい引き継げる",75],["口で伝えて引き継ぐ",50],["抜けが出る",25],["引き継げない",0]]},
+   {q:"紹介してくれた先や、受注のきっかけが記録に残っていますか",
+    o:[["全部残っている",100],["ほとんど残っている",75],["主なものだけ",50],["覚えている範囲で",25],["残していない",0]]}]}
+];
+
+// 20問を1本の配列にならす
+const FLAT = [];
+INDS.forEach(ind => ind.qs.forEach((qo,i)=> FLAT.push({key:ind.key, cat:ind.name, i, q:qo.q, o:qo.o})));
+const TOTALQ = FLAT.length;
+const labelOf = (f, v) => (f.o.find(x=>x[1]===v)||["—"])[0];
+
+// ================= 状態 =================
+let ans = {};
+let cur = 0;
+let baseMs = 0, tStart = null, iv = null, elapsedMs = null;
+
+// ================= 途中保存 =================
+const DKEY = "zokujinsei_draft_v1";
+function saveDraft(){
+  localStorage.setItem(DKEY, JSON.stringify({
+    name: document.getElementById("fName").value, who: document.getElementById("fWho").value,
+    ans, cur, ms: accMs() }));
+}
+function loadDraft(){ try { return JSON.parse(localStorage.getItem(DKEY)||"null"); } catch(e){ return null; } }
+function clearDraft(){ localStorage.removeItem(DKEY); }
+
+function showResumeBanner(){
+  const d = loadDraft();
+  const n = d && d.ans ? Object.keys(d.ans).length : 0;
+  if (!n) return;
+  document.getElementById("resumeBox").innerHTML = `<div class="resume">
+    <b>途中まで答えた分が残っています</b>(${d.name || "名前未入力"} ・ ${n}/${TOTALQ}問)
+    <div class="actions" style="margin-top:10px">
+      <button class="btn sm" onclick="resumeDraft()">続きから再開する</button>
+      <button class="btn ghost" onclick="discardDraft()">捨てて最初から</button>
+    </div></div>`;
+}
+function resumeDraft(){
+  const d = loadDraft(); if (!d) return;
+  ans = d.ans || {}; baseMs = d.ms || 0;
+  document.getElementById("fName").value = d.name || "";
+  document.getElementById("fWho").value = d.who || "";
+  cur = typeof d.cur === "number" ? d.cur : 0;
+  enterQuiz();
+}
+function discardDraft(){
+  if (!confirm("途中まで答えた分を捨てて、最初からやり直します。よろしいですか。")) return;
+  clearDraft(); ans = {}; baseMs = 0; cur = 0;
+  document.getElementById("resumeBox").innerHTML = "";
+  toast("捨てました");
+}
+
+// ================= 計測 =================
+function accMs(){ return baseMs + (tStart ? Date.now()-tStart : 0); }
+function fmtSec(ms){ const s=Math.floor(ms/1000); return `${Math.floor(s/60)}分${String(s%60).padStart(2,"0")}秒`; }
+function runTimer(){
+  if (iv) return;
+  tStart = Date.now();
+  iv = setInterval(()=>{ document.getElementById("timer").textContent = "計測中 " + fmtSec(accMs()); }, 1000);
+  document.getElementById("timer").textContent = "計測中 " + fmtSec(accMs());
+}
+function pauseTimer(){
+  if (iv){ clearInterval(iv); iv = null; }
+  if (tStart){ baseMs += Date.now()-tStart; tStart = null; }
+}
+
+// ================= 出題(1問ずつ) =================
+function startQuiz(){ cur = 0; enterQuiz(); }
+// 出題中は下の注記を隠す。1問が必ず1画面に収まるようにするため(問いによっては数十px溢れる)
+function showFooter(on){ document.querySelector("footer").style.display = on ? "block" : "none"; }
+function enterQuiz(){
+  document.getElementById("lead").style.display = "none";
+  document.getElementById("result").style.display = "none";
+  document.getElementById("quiz").style.display = "block";
+  showFooter(false);
+  runTimer();
+  renderQ();
+}
+function quitQuiz(){
+  pauseTimer(); saveDraft();
+  document.getElementById("quiz").style.display = "none";
+  document.getElementById("lead").style.display = "block";
+  showFooter(true);
+  document.getElementById("resumeBox").innerHTML = "";
+  showResumeBanner();
+  document.getElementById("timer").textContent = "中断中 " + fmtSec(accMs());
+  window.scrollTo({top:0});
+  toast("ここまでを保存しました。続きから再開できます");
+}
+function renderQ(){
+  const q = FLAT[cur];
+  document.getElementById("qCat").textContent = q.cat;
+  document.getElementById("qCnt").textContent = `${cur+1} / ${TOTALQ} 問`;
+  document.getElementById("pBar").style.width = (Object.keys(ans).length/TOTALQ*100)+"%";
+  document.getElementById("qText").textContent = q.q;
+  const id = `${q.key}-${q.i}`;
+  document.getElementById("qOpts").innerHTML = q.o.map(([lab,val],n)=>
+    `<button type="button" class="${ans[id]===val?'on':''}" onclick="answer(${val})"><span class="num">${n+1}</span>${lab}</button>`).join("");
+  document.getElementById("backBtn").style.visibility = cur===0 ? "hidden" : "visible";
+  const answeredAll = Object.keys(ans).length === TOTALQ;
+  document.getElementById("nextBtn").style.display = (ans[id]!==undefined && cur < TOTALQ-1) ? "inline-block" : "none";
+  document.getElementById("qHint").textContent = answeredAll
+    ? "全問そろっています。前に戻って直すこともできます"
+    : (ans[id]!==undefined ? "答え直すこともできます" : "");
+  window.scrollTo({top:0});
+}
+function answer(val){
+  const q = FLAT[cur];
+  ans[`${q.key}-${q.i}`] = val;
+  saveDraft();
+  document.querySelectorAll("#qOpts button").forEach((b,bi)=>b.classList.toggle("on", q.o[bi][1]===val));
+  document.getElementById("pBar").style.width = (Object.keys(ans).length/TOTALQ*100)+"%";
+  setTimeout(()=>{
+    if (cur < TOTALQ-1) { cur++; renderQ(); }
+    else if (Object.keys(ans).length === TOTALQ) finish();
+    else { cur = FLAT.findIndex(f=>ans[`${f.key}-${f.i}`]===undefined); renderQ(); toast("答えていない問いに戻りました"); }
+  }, 200);
+}
+function go(d){
+  const n = cur + d;
+  if (n < 0 || n >= TOTALQ) return;
+  cur = n; renderQ();
+}
+document.addEventListener("keydown", e=>{
+  if (document.getElementById("quiz").style.display !== "block") return;
+  if (e.key === "ArrowLeft") go(-1);
+  if (e.key === "ArrowRight") go(1);
+  const n = +e.key;
+  if (n >= 1 && n <= FLAT[cur].o.length) answer(FLAT[cur].o[n-1][1]);
+});
+
+// ================= 採点 =================
+function indScore(key){
+  const ind = INDS.find(x=>x.key===key);
+  const vals = ind.qs.map((_,i)=>ans[`${key}-${i}`]).filter(v=>v!==undefined);
+  if (!vals.length) return null;
+  return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+}
+function totalScore(){ return Math.round(INDS.reduce((a,ind)=>a + (indScore(ind.key)||0)*ind.w/100, 0)); }
+function band(t){
+  if (t>=65) return ["ok","青 — 社長がいなくても回る側","引き継ぎと保証の話を、いま進められる状態です。低いところを1つ埋めれば、銀行に説明できる材料になります。"];
+  if (t>=40) return ["yel","黄 — 半分は社長に乗っている","止まる場所がはっきりしています。下の一番低いところから手をつければ、半年で色が変わります。"];
+  return ["red","赤 — 社長が抜けたら止まる","いま社長が倒れると事業が止まります。引き継ぎや保証を外す話の前に、まず現場が回る形を作るのが先です。"];
+}
+
+// ================= 結果 =================
+function today(){
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function finish(){
+  pauseTimer();
+  elapsedMs = accMs();
+  document.getElementById("timer").textContent = "所要 " + fmtSec(elapsedMs);
+  const t = totalScore();
+  const [cls, label, msg] = band(t);
+  document.getElementById("rTotal").innerHTML = t + '<span>/100</span>';
+  const bd = document.getElementById("rBand");
+  bd.className = "band " + cls; bd.textContent = label;
+  document.getElementById("rMsg").textContent = msg;
+
+  const who = [subjectName(), document.getElementById("fWho").value.trim()].filter(Boolean).join(" / ");
+  document.getElementById("rSubject").textContent = `${today()}  ${who || "(名前未入力)"}`;
+
+  const prev = lastRecordFor(subjectName());
+  const dEl = document.getElementById("rDelta");
+  if (prev) {
+    const d = t - prev.total;
+    dEl.innerHTML = `<span class="delta ${d>0?"up":d<0?"down":"flat"}">前回比 ${d>0?"+":""}${d}</span>
+      <span class="fine">(前回 ${prev.total}点 ・ ${prev.at})</span>`;
+  } else {
+    dEl.innerHTML = `<span class="fine">初回です。同じ事業所名でもう一度測ると、ここに前回比が出ます。</span>`;
+  }
+
+  const scored = INDS.map(i=>({...i, s:indScore(i.key)}));
+  const sorted = [...scored].sort((a,b)=>a.s-b.s);
+  const minS = sorted[0].s;
+  const worstKeys = scored.filter(i=>i.s===minS).map(i=>i.key);
+  const tie = worstKeys.length > 1;
+  document.getElementById("rInds").innerHTML = scored.map(ind=>{
+    const s = ind.s, isW = worstKeys.includes(ind.key);
+    const col = s>=60?"var(--green)":s>=40?"var(--amber)":"var(--red)";
+    const pi = prev && prev.inds && typeof prev.inds[ind.key]==="number" ? s - prev.inds[ind.key] : null;
+    const pt = pi===null ? "" : ` <span class="w">(前回比 ${pi>0?"+":""}${pi})</span>`;
+    return `<div class="ind ${isW?'worst':''}">
+      <div class="l"><span>${ind.name}${isW?`<span class="tagworst">${tie?"一番低い(同点)":"一番低い"}</span>`:''}</span>
+        <span><b style="color:${col}">${s}</b><span class="w">/100 ・重み${ind.w}%</span>${pt}</span></div>
+      <div class="bar"><i style="width:${s}%;background:${col}"></i></div></div>`;
+  }).join("");
+
+  document.getElementById("rTodo").innerHTML = sorted.slice(0,3).map((ind,i)=>`
+    <div class="todo">
+      <div class="h"><span class="tag">${i+1}</span>${ind.todo.title}<span class="fine" style="font-weight:400"> — ${ind.name} ${ind.s}点</span></div>
+      <ul>${ind.todo.steps.map(s=>`<li>${s}</li>`).join("")}</ul>
+    </div>`).join("")
+    + `<div class="fine" style="margin-top:14px">このうち「やり方を書いて、その場で引けるようにする」と「判断のしかたを決めて、記録を残す」は、社内向けのAIチャット(聞けば手順が出てくる仕組み)で形にできます。作って終わりではなく、中身の更新まで代わりにやります。</div>`;
+
+  const g = guarMap();
+  document.getElementById("rGuar").innerHTML =
+    `<tr><th>条件</th><th>関係する数字</th><th>いまの点</th><th>説明できるか</th></tr>` +
+    g.map(r=>`<tr><td>${r.req}</td><td>${r.from}</td><td>${r.score}/100</td><td class="${r.cls}">${r.judge}</td></tr>`).join("");
+
+  document.getElementById("rAns").innerHTML =
+    `<tr><th>数字</th><th>問い</th><th>答え</th><th class="r">点</th></tr>` +
+    FLAT.map(f=>{
+      const v = ans[`${f.key}-${f.i}`];
+      return `<tr><td>${f.cat}</td><td>${f.q}</td><td class="a${v}">${labelOf(f,v)}</td><td class="r">${v}</td></tr>`;
+    }).join("");
+
+  document.getElementById("quiz").style.display = "none";
+  document.getElementById("lead").style.display = "none";
+  document.getElementById("result").style.display = "block";
+  showFooter(true);
+  renderLog();
+  window.scrollTo({top:0});
+}
+function guarMap(){
+  const d=indScore("deleg"), s=indScore("std"), f=indScore("fin"), c=indScore("cust");
+  const j = v => v>=65 ? ["ok-mark","説明できる"] : v>=40 ? ["mid-mark","材料が足りない"] : ["ng-mark","いまは難しい"];
+  const rows = [
+    {req:"①会社と社長個人のお金が分かれている", from:"取引先が会社についているか・まかせられているか", score:Math.round((c+d)/2)},
+    {req:"②保証がなくても会社だけで返せる", from:"数字がすぐ出るか", score:f},
+    {req:"③銀行にきちんと数字を出している", from:"数字がすぐ出るか・やり方が書いてあるか", score:Math.round((f+s)/2)}
+  ];
+  return rows.map(r=>{ const [cls,judge]=j(r.score); return {...r, cls, judge}; });
+}
+function reviewAnswers(){
+  document.getElementById("result").style.display = "none";
+  document.getElementById("quiz").style.display = "block";
+  showFooter(false);
+  cur = 0; renderQ();
+  toast("矢印キーか下のボタンで行き来できます");
+}
+function resetAll(){
+  if (Object.keys(ans).length && !confirm(`答えた${Object.keys(ans).length}問を消して、最初からやり直します。よろしいですか。`)) return;
+  ans = {}; cur = 0; baseMs = 0; elapsedMs = null;
+  pauseTimer(); clearDraft();
+  document.getElementById("timer").textContent = "未開始";
+  document.getElementById("fName").value = ""; document.getElementById("fWho").value = "";
+  document.getElementById("result").style.display = "none";
+  document.getElementById("quiz").style.display = "none";
+  document.getElementById("lead").style.display = "block";
+  showFooter(true);
+  document.getElementById("resumeBox").innerHTML = "";
+  window.scrollTo({top:0});
+  toast("最初からやり直せます");
+}
+
+// ================= 書き出し =================
+function resultText(){
+  const t = totalScore();
+  const [,label] = band(t);
+  const sorted = INDS.map(i=>({...i, s:indScore(i.key)})).sort((a,b)=>a.s-b.s);
+  const prev = lastRecordFor(subjectName());
+  const who = [subjectName(), document.getElementById("fWho").value.trim()].filter(Boolean).join(" / ");
+  return [
+    `【社長ぬきで回るか診断 結果】${today()}`,
+    `対象: ${who || "(名前未入力)"}`,
+    `総合 ${t}/100 (${label}) — 高いほど社長がいなくても回る`
+      + (prev ? ` / 前回比 ${t-prev.total>=0?"+":""}${t-prev.total} (前回${prev.total}点・${prev.at})` : " / 初回"),
+    `所要時間: ${elapsedMs===null?"—":fmtSec(elapsedMs)}`,
+    ``,
+    `■ 5つの数字`,
+    ...INDS.map(i=>{
+      const s = indScore(i.key);
+      const d = prev && prev.inds && typeof prev.inds[i.key]==="number" ? ` (前回比 ${s-prev.inds[i.key]>=0?"+":""}${s-prev.inds[i.key]})` : "";
+      return `  ${i.name}(${i.formal}・重み${i.w}%) ${s}/100${d}`;
+    }),
+    ``,
+    `■ 経営者保証を外す3条件との対応`,
+    ...guarMap().map(r=>`  ${r.req}: ${r.score}/100 → ${r.judge}`),
+    ``,
+    `■ 先にやること(低い順に3つ)`,
+    ...sorted.slice(0,3).map((i,n)=>`  ${n+1}. ${i.todo.title} (${i.name} ${i.s}点)\n     ${i.todo.steps.join(" / ")}`),
+    ``,
+    `■ 点数の元になった20問の答え`,
+    ...FLAT.map(f=>{
+      const v = ans[`${f.key}-${f.i}`];
+      return `  ${f.q}\n    → ${labelOf(f,v)} (${v}点)`;
+    }),
+    ``,
+    `点数の出し方: 各問 はい100/どちらとも50/いいえ0。5つの数字ごとに4問の平均を出し、重みをかけて合計。定義v1(2026-08-05確定)。`,
+    `ご本人の申告にもとづく目安であり、銀行の審査結果を保証するものではありません。`,
+    `株式会社AIdollargame`
+  ].join("\n");
+}
+function copyResult(){
+  const txt = resultText();
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(txt).then(()=>toast("結果をコピーしました")).catch(()=>fallbackCopy(txt));
+  } else fallbackCopy(txt);
+}
+function fallbackCopy(txt){
+  const ta = document.createElement("textarea");
+  ta.value = txt; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  let done = false;
+  try { done = document.execCommand("copy"); } catch(e){}
+  document.body.removeChild(ta);
+  toast(done ? "結果をコピーしました" : "コピーできませんでした。印刷/PDFをお使いください");
+}
+let toastIv = null;
+function toast(msg){
+  const el = document.getElementById("toast");
+  el.textContent = msg; el.classList.add("on");
+  clearTimeout(toastIv);
+  toastIv = setTimeout(()=>el.classList.remove("on"), 2400);
+}
+
+// ================= 端末内の記録 =================
+const LSKEY = "zokujinsei_log_v1";
+function getLog(){ try { return JSON.parse(localStorage.getItem(LSKEY)||"[]"); } catch(e){ return []; } }
+function subjectName(){ return document.getElementById("fName").value.trim(); }
+function lastRecordFor(name){
+  if (!name) return null;
+  const same = getLog().filter(r=>r.name===name);
+  return same.length ? same[same.length-1] : null;
+}
+function saveRecord(){
+  const name = subjectName();
+  if (!name){
+    toast("先に事業所名を入れてください(前回比の突き合わせに使います)");
+    document.getElementById("result").style.display = "none";
+    document.getElementById("lead").style.display = "block";
+    const el = document.getElementById("fName");
+    el.scrollIntoView({block:"center"}); el.focus();
+    return;
+  }
+  const log = getLog();
+  log.push({ name, who: document.getElementById("fWho").value.trim(), total: totalScore(),
+    inds: Object.fromEntries(INDS.map(i=>[i.key, indScore(i.key)])),
+    ms: elapsedMs, min: elapsedMs===null?"—":fmtSec(elapsedMs), at: new Date().toLocaleString("ja-JP") });
+  localStorage.setItem(LSKEY, JSON.stringify(log));
+  clearDraft();
+  renderLog();
+  toast("この端末に記録しました");
+}
+function renderLog(){
+  const log = getLog();
+  const box = document.getElementById("logBox");
+  if (!log.length){ box.textContent = "まだありません"; return; }
+  const withMs = log.filter(r=>typeof r.ms === "number");
+  const avg = withMs.length ? fmtSec(withMs.reduce((a,r)=>a+r.ms,0)/withMs.length) : "—";
+  box.innerHTML = `<div class="tablewrap"><table>
+    <tr><th>#</th><th>事業所</th><th>答えた方</th><th>総合</th><th>前回比</th><th>所要</th><th>日時</th></tr>
+    ${log.map((r,i)=>{
+      const before = log.slice(0,i).filter(x=>x.name===r.name).pop();
+      const d = before ? r.total - before.total : null;
+      const dtxt = d===null ? "—" : `<span class="${d>0?'a100':d<0?'a0':''}">${d>0?"+":""}${d}</span>`;
+      return `<tr><td>${i+1}</td><td>${r.name}</td><td>${r.who||"—"}</td><td>${r.total}</td><td>${dtxt}</td><td>${r.min}</td><td>${r.at}</td></tr>`;
+    }).join("")}
+  </table></div><div style="margin-top:10px">平均所要時間: <b>${avg}</b>(${withMs.length}件)</div>`;
+}
+function clearLog(){
+  if (!getLog().length){ toast("消す記録がありません"); return; }
+  if (!confirm("この端末に保存した診断の記録をすべて消します。よろしいですか。")) return;
+  localStorage.removeItem(LSKEY);
+  renderLog();
+  toast("この端末の記録を消しました");
+}
+
+// ================= 起動 =================
+function syncBarHeight(){
+  const h = Math.ceil(document.querySelector(".appbar").getBoundingClientRect().height);
+  document.documentElement.style.setProperty("--abH", h + "px");
+}
+window.addEventListener("resize", syncBarHeight);
+window.addEventListener("beforeunload", ()=>{ if (Object.keys(ans).length) { pauseTimer(); saveDraft(); } });
+
+syncBarHeight();
+renderLog();
+showResumeBanner();
+</script>
+</body>
+</html>

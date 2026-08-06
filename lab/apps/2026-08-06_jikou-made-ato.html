@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>時効まであと｜取りっぱぐれた売掛金が、消える日</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:27px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.hero{background:#fff;border-radius:14px;padding:18px 16px;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.big{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1;color:#b4443a}
+.big small{font-size:19px;font-weight:700;margin-left:3px}
+.big.safe{color:#2f7a55}
+.label{font-size:13px;color:#6b6558;font-weight:700}
+.it{border-top:1px solid #efece4;padding:14px 0 12px;cursor:pointer}
+.it:first-of-type{border-top:0;padding-top:2px}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.nm{font-size:16px;font-weight:700;line-height:1.5}
+.nm span{display:block;font-size:12px;color:#847e70;font-weight:400;margin-top:2px}
+.amt{white-space:nowrap;font-size:18px;font-weight:800}
+.days{font-size:14px;font-weight:700;margin-top:8px}
+.days.d0{color:#b4443a}.days.d1{color:#a4761b}.days.d2{color:#6b6558}
+.bar{height:8px;border-radius:99px;background:#eeece5;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:#c0483c}
+.bar i.d1{background:#d9a13a}
+.bar i.d2{background:#2563eb}
+.det{background:#f7f6f1;border-radius:12px;padding:14px;margin-top:12px}
+.opt{background:#fff;border:1px solid #e2ded4;border-radius:12px;padding:13px;margin-top:10px}
+.opt b{font-size:16px}
+.opt p{margin:6px 0 0;font-size:14px;line-height:1.75;color:#5c574c}
+.opt .eff{font-size:14px;font-weight:700;color:#2563eb;margin-top:8px}
+.btn{background:#2563eb;color:#fff;border:0;border-radius:11px;padding:11px 14px;
+ font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px;width:100%}
+.btn.ghost{background:#fff;color:#2563eb;border:1px solid #d6d2c8}
+.done{background:#e6f2ea;color:#2f7a55;border-radius:11px;padding:11px;font-size:15px;font-weight:700;margin-top:10px;text-align:center}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（サンプルデータ）</div>
+  <h1>時効まであと</h1>
+  <p class="lead">売掛金は、放っておくと5年で消えます。回収をあきらめた瞬間ではなく、法律が決めた日に、帳簿から権利ごとなくなります。今年中に消えるぶんを先に出しました。</p>
+
+  <div class="hero">
+    <div class="label">2026年中に時効で消える売掛金</div>
+    <div class="big" id="sum"></div>
+    <div class="note" id="sumn" style="margin-top:8px"></div>
+  </div>
+
+  <div class="card">
+    <div class="label" style="margin-bottom:4px">未回収 8件（消える日が近い順）</div>
+    <div id="list"></div>
+  </div>
+
+  <div class="note">金額・取引先はすべて架空のサンプルです。基準日は2026年8月6日。売掛金の消滅時効は民法166条1項により、権利を行使できることを知った時から5年です（2020年4月1日より前に生じた債権は改正前の規定によります）。実際の起算日や手続きは弁護士・司法書士にご確認ください。</div>
+</div>
+<script>
+const TODAY = new Date(2026,7,6); // 2026-08-06
+const DAY = 86400000;
+const ITEMS = [
+ {c:"新宿ペイント工業",w:"外壁塗装の下請分",a:4.8,  d:"2021-08-20"},
+ {c:"有限会社 みどり配送",w:"車両整備 3台分",a:42,   d:"2021-09-12"},
+ {c:"大久保製作所",w:"部品加工 8月分",a:8.5,        d:"2021-10-03"},
+ {c:"つばめ工業",w:"設備更新 一次分",a:128,          d:"2021-11-20"},
+ {c:"北新宿ロジスティクス",w:"倉庫内作業 12月分",a:15.4,d:"2021-12-28"},
+ {c:"みなと屋（居酒屋）",w:"厨房機器の修理",a:6.2,    d:"2022-02-14"},
+ {c:"さくら野ケアホーム",w:"備品納入 3月分",a:33,     d:"2022-04-01"},
+ {c:"山手テック",w:"システム保守 上期分",a:210,       d:"2022-06-30"},
+].map((x,i)=>{
+  const [y,m,dd]=x.d.split('-').map(Number);
+  return {...x, id:i, start:new Date(y,m-1,dd), plus:0, fixed:false};
+});
+let open=null;
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const jp=dt=>`${dt.getFullYear()}年${dt.getMonth()+1}月${dt.getDate()}日`;
+function limit(it){
+  const d=new Date(it.start); d.setFullYear(d.getFullYear()+5);
+  d.setDate(d.getDate()+it.plus); return d;
+}
+const left=it=>Math.round((limit(it)-TODAY)/DAY);
+const lv=n=>n<=60?0:(n<=180?1:2);
+
+function draw(){
+  const rows=[...ITEMS].sort((a,b)=>left(a)-left(b));
+  document.getElementById('list').innerHTML = rows.map(it=>{
+    const n=left(it), l=lv(n), pct=Math.max(3,Math.min(100,Math.round(n/1825*100)));
+    return `<div class="it" onclick="open=${open===it.id?'null':it.id};draw()">
+      <div class="top">
+        <div class="nm">${esc(it.c)}<span>${esc(it.w)}／${jp(it.start)}に発生</span></div>
+        <div class="amt">${it.a}万円</div>
+      </div>
+      <div class="bar"><i class="${l===1?'d1':(l===2?'d2':'')}" style="width:${pct}%"></i></div>
+      <div class="days d${l}">${it.fixed?'時効を更新しました。':'あと'+n+'日で消えます'}　<span style="font-weight:400;color:#847e70">${jp(limit(it))}</span></div>
+      ${open===it.id?detHTML(it):''}
+    </div>`;
+  }).join('');
+  const gone = ITEMS.filter(it=>limit(it) <= new Date(2026,11,31));
+  const total = gone.reduce((s,x)=>s+x.a,0);
+  const el=document.getElementById('sum');
+  el.className = 'big'+(total===0?' safe':'');
+  el.innerHTML = (Math.round(total*10)/10)+'<small>万円</small>';
+  document.getElementById('sumn').textContent = total===0
+    ? '年内に消えるものはなくなりました。'
+    : `${gone.length}件。いちばん近いものは、あと${Math.min(...gone.map(left))}日です。`;
+}
+function detHTML(it){
+  if(it.fixed) return `<div class="det"><div class="done">承認をとりました。時効は${jp(limit(it))}まで新しく5年です。</div>
+    <div class="note" style="margin-top:8px">残高確認書に押印をもらう、一部でも入金してもらう、支払猶予を申し入れてもらう。どれも「認めた」ことになり、時効はそこから数えなおしになります（民法152条）。</div></div>`;
+  return `<div class="det">
+    <div class="label">止める手は3つあります</div>
+    <div class="opt">
+      <b>内容証明で催促する</b>
+      <p>相手に届いた日から6か月、時効の完成が先送りになります（民法150条）。ただし猶予されるだけで、その間に次の手を打たなければ完成します。二度目の催告で延ばすことはできません。</p>
+      <div class="eff">効果：${jp(limit(it))} → ${jp(new Date(limit(it).getTime()+182*DAY))}</div>
+      <button class="btn ghost" onclick="event.stopPropagation();ITEMS[${it.id}].plus+=182;draw()">この手を打つ</button>
+    </div>
+    <div class="opt">
+      <b>相手に認めてもらう</b>
+      <p>残高確認書に押印をもらう、1万円でも入金してもらう、支払いを待ってほしいと言ってもらう。相手が債務を認めれば、時効はそこから数えなおしで5年になります（民法152条）。いちばん安く、いちばん効きます。</p>
+      <div class="eff">効果：今日から5年、${jp(new Date(2031,7,6))}まで</div>
+      <button class="btn" onclick="event.stopPropagation();ITEMS[${it.id}].fixed=true;ITEMS[${it.id}].start=new Date(2026,7,6);ITEMS[${it.id}].plus=0;draw()">この手を打つ</button>
+    </div>
+    <div class="opt">
+      <b>支払督促・訴訟を起こす</b>
+      <p>裁判上の請求をすると、手続きが終わるまで時効は完成しません。確定判決を得れば、そこから10年になります。${it.a>=100?'この金額なら、費用をかけても取りに行く価値があります。':'この金額だと、手間と費用のほうが上回ることがあります。'}</p>
+      <div class="eff">効果：確定すれば10年</div>
+    </div>
+  </div>`;
+}
+draw();
+</script>
+</body>
+</html>

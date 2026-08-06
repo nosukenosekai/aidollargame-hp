@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>いくらで取った｜その入札、誰がいくらで落としているか</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:27px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.tab{background:#fff;border:1px solid #e2ded4;border-radius:12px;padding:11px 8px;
+ font-size:14px;font-weight:600;color:#5c574c;cursor:pointer;font-family:inherit;line-height:1.4}
+.tab.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.label{font-size:13px;color:#6b6558;font-weight:700}
+.yotei{font-size:15px;color:#5c574c;margin-top:6px}
+.yotei b{font-size:22px}
+.line{position:relative;height:136px;margin:16px 0 4px}
+.rail{position:absolute;left:0;right:0;top:86px;height:6px;background:#eeece5;border-radius:99px}
+.dot{position:absolute;top:78px;width:22px;height:22px;border-radius:99px;background:#b9b3a4;
+ transform:translateX(-11px);border:3px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.dot.same{background:#c0483c}
+.dot.me{background:#2563eb;width:26px;height:26px;top:76px;transform:translateX(-13px);z-index:2}
+.dlab{position:absolute;font-size:11px;color:#847e70;transform:translateX(-50%);white-space:nowrap}
+.dlab.me{color:#2563eb;font-weight:700;font-size:12px;top:108px}
+.tick{position:absolute;top:70px;width:1px;height:30px;background:#ded9cd}
+.ends{display:flex;justify-content:space-between;font-size:11px;color:#a8a294}
+input[type=range]{width:100%;accent-color:#2563eb;height:32px}
+.v{font-size:28px;font-weight:800;letter-spacing:-.02em}
+.res{font-size:17px;font-weight:700;line-height:1.7;margin-top:4px}
+.res.win{color:#2f7a55}.res.lose{color:#b4443a}
+.gross{font-size:17px;line-height:1.8;margin-top:10px;padding-top:12px;border-top:1px solid #efece4}
+.gross b{font-size:22px}
+.gross.bad b{color:#b4443a}
+.gross.good b{color:#2f7a55}
+.read{border-radius:12px;padding:14px;font-size:16px;line-height:1.8;margin-top:12px}
+.read.stop{background:#fdeeec;border:1px solid #f0cdc7;color:#8e372e}
+.read.go{background:#e8f4ec;border:1px solid #c6e2d1;color:#2b6647}
+.read.warn{background:#fbf6e8;border:1px solid #eddfba;color:#6a5a30}
+.hist{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid #efece4;font-size:15px}
+.hist:first-child{border-top:0}
+.hist span:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（サンプルデータ）</div>
+  <h1>いくらで取った</h1>
+  <p class="lead">入札の結果は公開されています。それでも多くの会社は、自分が落ちたことしか知りません。誰がいくらで取ってきたかを3年ぶん並べると、入るべき案件と、入っても無駄な案件が分かれます。</p>
+  <div class="tabs" id="tabs"></div>
+  <div id="view"></div>
+  <div class="note">自治体名・社名・金額はすべて架空のサンプルです。実際の入札結果は各自治体が公表しています。落札率は予定価格に対する落札額の割合です。</div>
+</div>
+<script>
+const CASES=[
+ {k:"kyushoku", n:"学校給食の配送業務", city:"みなと市（架空）", yotei:1240,
+  h:[{y:2023,c:"みなと運輸",a:1016},{y:2024,c:"みなと運輸",a:1010},{y:2025,c:"みなと運輸",a:1004}],
+  bidders:[3,3,2],
+  read:"stop",
+  msg:"3年つづけて同じ会社が、ほぼ同じ率で取っています。応札も減っています。ここは価格ではなく、既にできあがっている案件です。札を下げて取りに行くより、来年の仕様書の説明会に出て、条件のほうを動かせるか見たほうが早いです。"},
+ {k:"seisou", n:"庁舎の清掃業務", city:"みなと市（架空）", yotei:860,
+  h:[{y:2023,c:"さくら美装",a:731},{y:2024,c:"北新宿ビルサービス",a:688},{y:2025,c:"つばめクリーン",a:645}],
+  bidders:[4,6,8],
+  read:"warn",
+  msg:"毎年ちがう会社が取っていますが、落札率は85%から75%まで落ち続けています。応札者も倍になりました。取れる案件ではありますが、取ったところで何が残るかを先に計算してください。"},
+ {k:"sentei", n:"公園の樹木剪定業務", city:"さくら野町（架空）", yotei:480,
+  h:[{y:2023,c:"緑山造園",a:456},{y:2024,c:"緑山造園",a:465},{y:2025,c:"緑山造園",a:460}],
+  bidders:[2,1,1],
+  read:"go",
+  msg:"2年つづけて1者しか入っていません。落札率は96%前後の高止まり。誰も見ていない案件です。相見積のない場所は、値を下げずに取れます。まず参加資格の登録が要るかだけ調べてください。"},
+ {k:"keibi", n:"公共施設の警備業務", city:"北新宿市（架空）", yotei:2150,
+  h:[{y:2023,c:"山手警備",a:1720},{y:2024,c:"大久保セキュリティ",a:1655},{y:2025,c:"山手警備",a:1634}],
+  bidders:[5,6,7],
+  read:"warn",
+  msg:"入る会社が毎年ふえ、率は80%から76%へ。金額が大きいので狙われています。76%を割る札でないと勝負にならず、そこは人件費で決まる世界です。人を抱えている会社だけが残ります。"},
+];
+const S={k:"kyushoku", bid:82, cost:78};
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const cur=()=>CASES.find(c=>c.k===S.k);
+const yen=n=>Math.round(n).toLocaleString('ja-JP');
+let LO=70, HI=100;
+const pos=r=>Math.max(2,Math.min(98,(r-LO)/(HI-LO)*100));
+
+function drawTabs(){
+  document.getElementById('tabs').innerHTML = CASES.map(c=>
+    `<button class="tab ${c.k===S.k?'on':''}" onclick="S.k='${c.k}';render()">${esc(c.n)}</button>`).join('');
+}
+function render(){
+  drawTabs();
+  const c=cur();
+  const rates=c.h.map(x=>x.a/c.yotei*100);
+  const mine=c.yotei*S.bid/100;
+  const wins=rates.filter(r=>S.bid < r).length;
+  const same=new Set(c.h.map(x=>x.c)).size===1;
+  const gross=mine - c.yotei*S.cost/100;
+  const gpct=gross/mine*100;
+  const all=rates.concat([S.bid]);
+  const pad=Math.max(1.2,(Math.max(...all)-Math.min(...all))*0.18);
+  LO=Math.min(...all)-pad; HI=Math.max(...all)+pad;
+
+  document.getElementById('view').innerHTML=`
+  <div class="card">
+    <div class="label">${esc(c.city)}</div>
+    <div class="yotei">予定価格 <b>${yen(c.yotei)}万円</b></div>
+    <div class="line">
+      <div class="rail"></div>
+      ${c.h.map((x,i)=>{const r=rates[i];return `
+        <div class="tick" style="left:${pos(r)}%"></div>
+        <div class="dot ${same?'same':''}" style="left:${pos(r)}%"></div>
+        <div class="dlab" style="left:${pos(r)}%;top:${8+i*22}px">${x.y}年 ${r.toFixed(1)}%</div>`}).join('')}
+      <div class="dot me" style="left:${pos(S.bid)}%"></div>
+      <div class="dlab me" style="left:${pos(S.bid)}%">あなた ${S.bid.toFixed(1)}%</div>
+    </div>
+    <div class="ends"><span>${LO.toFixed(1)}%</span><span>安い　←　落札率　→　高い</span><span>${HI.toFixed(1)}%</span></div>
+  </div>
+
+  <div class="card">
+    <div class="label">あなたの札（予定価格に対して）</div>
+    <div class="v">${S.bid.toFixed(1)}<span style="font-size:16px">%</span>　<span style="font-size:20px;color:#5c574c">${yen(mine)}万円</span></div>
+    <input type="range" min="70" max="100" step="0.5" value="${S.bid}" oninput="S.bid=+this.value;render()">
+    <div class="res ${wins===3?'win':(wins===0?'lose':'')}">過去3回に同じ札で入っていれば ${wins}勝${3-wins}敗。</div>
+
+    <div class="label" style="margin-top:16px">この仕事にかかる原価（予定価格に対して）</div>
+    <input type="range" min="60" max="95" step="1" value="${S.cost}" oninput="S.cost=+this.value;render()">
+    <div class="gross ${gross<=0?'bad':(gpct>=10?'good':'')}">
+      原価率 ${S.cost}% なら、粗利は <b>${gross>0?'+':''}${Math.round(gross*10)/10}万円</b>
+      <span style="font-size:15px;color:#5c574c">（${gpct.toFixed(1)}%）</span>
+      ${gross<=0?'<div style="font-size:15px;font-weight:400;margin-top:4px">この札で取ると、取った瞬間に赤字です。</div>':''}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label" style="margin-bottom:6px">過去の落札</div>
+    ${c.h.map((x,i)=>`<div class="hist"><span>${x.y}年　${esc(x.c)}<br>
+      <span class="note">応札 ${c.bidders[i]}者</span></span>
+      <span>${yen(x.a)}万円<br><span class="note">${rates[i].toFixed(1)}%</span></span></div>`).join('')}
+    <div class="read ${c.read}">${esc(c.msg)}</div>
+  </div>`;
+}
+render();
+</script>
+</body>
+</html>

@@ -88,10 +88,7 @@
 <script>
 let RAW = null, L = [];
 async function loadData() {
-  const b64 = (await (await fetch('data.txt')).text()).replace(/\s/g, '');
-  const bin = Uint8Array.from(atob(b64), ch => ch.charCodeAt(0));
-  const stream = new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'));
-  RAW = JSON.parse(await new Response(stream).text());
+  RAW = await (await fetch('data.json')).json();
   L = RAW.rows.map(r => ({ site: RAW.sites[r[0]], url: RAW.prefix[r[0]] + r[1], maker: r[2], model: r[3], body: r[4], cls: r[5], year: r[6], mileage_man: r[7], load_kg: r[8], pref: r[9], price_man: r[10], alts: (r[11]||[]).map(a => ({ site: RAW.sites[a[0]], url: RAW.prefix[a[0]] + a[1] })) }));
   MODELS = [...new Set(L.map(x => x.model).filter(m => m && m.length >= 2 && !/^[A-Z0-9-]+$/.test(m)))];
 }

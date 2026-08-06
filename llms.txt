@@ -86,6 +86,16 @@
 - AI時代の椅子取りゲームは、もう始まっている: https://aidollargame.com/articles/ai-musical-chairs.html
 - マイクロソフトCEOの問い：AIに「仕事」は渡せても、学びは渡せない: https://aidollargame.com/articles/token-capital.html
 
+- AI導入が「利益・コスト・時間」に効いた実例10選: https://aidollargame.com/articles/ai-roi-cases-2026.html
+- AIは「使うほど勝手に賢くなる」わけではない: https://aidollargame.com/articles/ai-not-auto-learn-2026.html
+- AI、結局どの仕事から始める？最初に任せる「1業務」の選び方【5つの物差し】: https://aidollargame.com/articles/first-task-ai-2026.html
+- 問い合わせ対応に追われて本業が進まない会社へ: https://aidollargame.com/articles/inquiry-time-back-2026.html
+- 「あの人しか分からない」が会社を止める前に: https://aidollargame.com/articles/zokujinka-2026.html
+- 東京NBC起業塾で「事業承継 × AI」を発表——社長の頭の中を会社の資産に変える『承継OS』: https://aidollargame.com/articles/nbc-kigyojuku-2026-07.html
+- 東京NBC公式番組にAIdollargame代表・佐藤徳之介が出演 — メンバー紹介インタビュー: https://aidollargame.com/articles/nbc-2026-07.html
+- 定点観測 vol.2: https://aidollargame.com/articles/ai-teiten-2026-08.html
+- AIで研修すると人は育つのか: https://aidollargame.com/articles/ai-training-evidence-2026.html
+
 ## 連絡先 (Contact)
 - メール: nosuke@aidollargame.com
 - 問い合わせフォーム: https://aidollargame.com/#contact

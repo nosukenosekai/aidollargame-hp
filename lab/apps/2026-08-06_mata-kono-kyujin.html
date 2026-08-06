@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>またこの求人｜同じ求人を何回出し直したかで、その会社が見える</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:27px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.co{border-top:1px solid #efece4;padding:14px 0 12px;cursor:pointer}
+.co:first-of-type{border-top:0;padding-top:2px}
+.conm{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.conm b{font-size:17px;font-weight:700}
+.conm .job{font-size:13px;color:#847e70;font-weight:400;display:block;margin-top:2px}
+.cnt{white-space:nowrap;font-size:15px;font-weight:800}
+.cnt.hot{color:#b4443a}
+.cnt.mid{color:#a4761b}
+.cnt.ok{color:#2f7a55}
+.track{display:flex;gap:2px;margin-top:9px}
+.m{flex:1;height:22px;border-radius:3px;background:#eeece5}
+.m.on{background:#2563eb}
+.m.on.hot{background:#c0483c}
+.axis{display:flex;justify-content:space-between;font-size:11px;color:#a8a294;margin-top:4px}
+.det{background:#f7f6f1;border-radius:12px;padding:14px;margin-top:12px;font-size:15px;line-height:1.8}
+.det .row{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #e8e5db}
+.det .row:first-child{border-top:0}
+.punch{font-size:18px;font-weight:700;line-height:1.6;margin-top:10px;color:#b4443a}
+.punch.good{color:#2f7a55}
+.label{font-size:13px;color:#6b6558;font-weight:700}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+input[type=number]{font-size:20px;padding:11px 12px;border:1px solid #d6d2c8;border-radius:12px;
+ width:110px;font-family:inherit;background:#fff}
+.res{font-size:19px;font-weight:700;line-height:1.6;margin-top:12px}
+.big{font-size:38px;font-weight:800;letter-spacing:-.02em;color:#2563eb}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（サンプルデータ）</div>
+  <h1>またこの求人</h1>
+  <p class="lead">求人票に書いてあることは、その会社が言いたいこと。何回出し直したかは、言いたくないこと。同じ職種の求人が何か月おきに出ているかを24か月ぶん並べました。</p>
+
+  <div class="card">
+    <div class="label" style="margin-bottom:6px">直近24か月、同じ職種の求人が出た月</div>
+    <div id="list"></div>
+    <div class="axis" style="margin-top:10px"><span>2024年9月</span><span>2026年8月</span></div>
+  </div>
+
+  <div class="card">
+    <div class="label">自社は何回でしたか</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+      <input type="number" id="mine" min="0" max="24" value="6"><span class="note">回／24か月</span>
+    </div>
+    <div class="res" id="res"></div>
+  </div>
+
+  <div class="note">社名・数値はすべて架空のサンプルです。実物はハローワークや求人媒体で公開されている求人の掲載履歴から同じことができます。求人を出し直す理由は退職だけではなく、増員や欠員補充も含まれます。</div>
+</div>
+<script>
+const N=24;
+const CO=[
+ {n:"つばめコールサービス",j:"コールセンター オペレーター",
+  m:[0,1,2,4,5,7,8,10,11,13,14,16,17,19,21],
+  wage:"時給1,180円のまま15回",
+  punch:"15回出して、時給は一度も上げていません。",
+  memo:"募集人数は毎回1〜2名。増員ではなく、同じ席が空き続けているように見えます。"},
+ {n:"みなと屋（居酒屋2店舗）",j:"ホールスタッフ",
+  m:[0,2,3,5,7,8,11,13,15,17,20,22],
+  wage:"時給1,120円→1,150円（1回だけ）",
+  punch:"平均2か月おきに、同じ席を募集しています。",
+  memo:"12回のうち11回が同じ文面。写真も同じものが使われています。"},
+ {n:"さくら野ケアホーム",j:"介護職員（常勤）",
+  m:[0,2,5,7,10,13,16,19,22],
+  wage:"月給22.5万円のまま9回",
+  punch:"9回出して、給与欄は一度も動いていません。",
+  memo:"常勤の募集が2〜3か月おき。夜勤ありの条件も変わっていません。"},
+ {n:"北新宿ロジスティクス",j:"4tドライバー",
+  m:[1,4,8,11,15,19,23],
+  wage:"月給28万円→31万円（2回引き上げ）",
+  punch:"7回のうち2回、条件を上げてから出し直しています。",
+  memo:"上げた直後は間隔が空いています。効いた可能性があります。"},
+ {n:"大久保製作所",j:"機械オペレーター",
+  m:[3,16],
+  wage:"月給26万円→28.5万円",
+  punch:"24か月で2回。人が動いていません。",
+  good:true,
+  memo:"2回とも増員の記載あり。定着している会社の見え方はこうなります。"},
+];
+let open=null;
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const gap=m=>{if(m.length<2)return null;let g=[];for(let i=1;i<m.length;i++)g.push(m[i]-m[i-1]);
+  return (g.reduce((a,b)=>a+b,0)/g.length);};
+
+function draw(){
+  document.getElementById('list').innerHTML = CO.map((c,i)=>{
+    const n=c.m.length, hot=n>=9, mid=n>=5;
+    return `<div class="co" onclick="open=${open===i?'null':i};draw()">
+      <div class="conm">
+        <div><b>${esc(c.n)}</b><span class="job">${esc(c.j)}</span></div>
+        <div class="cnt ${hot?'hot':(mid?'mid':'ok')}">${n}回</div>
+      </div>
+      <div class="track">${Array.from({length:N},(_,k)=>
+        `<div class="m ${c.m.includes(k)?'on':''} ${hot?'hot':''}"></div>`).join('')}</div>
+      ${open===i?`<div class="det">
+        <div class="row"><span>出し直した回数</span><b>${n}回</b></div>
+        <div class="row"><span>平均の間隔</span><b>${gap(c.m).toFixed(1)}か月</b></div>
+        <div class="row"><span>そのあいだの条件</span><b style="font-size:14px;text-align:right">${esc(c.wage)}</b></div>
+        <div class="punch ${c.good?'good':''}">${esc(c.punch)}</div>
+        <div class="note" style="margin-top:8px">${esc(c.memo)}</div>
+      </div>`:''}
+    </div>`;
+  }).join('');
+}
+function judge(){
+  const v = Math.max(0, Math.min(24, +document.getElementById('mine').value||0));
+  const all = CO.map(c=>c.m.length).concat([v]).sort((a,b)=>b-a);
+  const rank = all.indexOf(v)+1;
+  const avgGap = v>1 ? (24/(v-1)) : null;
+  let msg;
+  if(v<=2) msg = `この6社のなかで、いちばん人が動いていない側です。求人票より、この数字を採用ページに出したほうが効きます。`;
+  else if(v<=5) msg = `おおむね平均です。ただし同じ職種で年に2回以上なら、辞めた人の理由を1件ずつ聞けているかを先に確認してください。`;
+  else if(v<=9) msg = `${avgGap.toFixed(1)}か月に1回、同じ席を募集している計算です。採用にかける費用より、辞める理由に手を入れたほうが安く済みます。`;
+  else msg = `${avgGap.toFixed(1)}か月に1回。応募者は掲載履歴を見ています。出し直すたびに、条件ではなく回数が伝わっています。`;
+  document.getElementById('res').innerHTML =
+    `<div class="big">${rank}<span style="font-size:17px;color:#1b1a17">位／${all.length}社中</span></div>
+     <div style="font-weight:400;font-size:16px;line-height:1.8;margin-top:6px">${msg}</div>`;
+}
+document.getElementById('mine').addEventListener('input',judge);
+draw(); judge();
+</script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>断っていい｜そのクレーム、どこまで応じる義務があるか</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 80px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:27px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.tabs{display:flex;gap:8px;margin:14px 0 4px}
+.tab{flex:1;background:#fff;border:1px solid #e2ded4;border-radius:12px;padding:11px 4px;
+ font-size:15px;font-weight:600;color:#5c574c;cursor:pointer}
+.tab.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.q{background:#fff;border:0;border-radius:14px;padding:15px 16px;margin:10px 0;width:100%;
+ text-align:left;font-size:17px;line-height:1.6;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.05);
+ font-family:inherit;color:#1b1a17;display:block}
+.q .sit{font-size:13px;color:#8d8778;margin-top:6px}
+.lv{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px}
+.lv.a{background:#e6f2ea;color:#2f7a55}
+.lv.b{background:#e7edfb;color:#2563eb}
+.lv.c{background:#fbf1d9;color:#8a6f2a}
+.lv.d{background:#fbe0dc;color:#9b3f34}
+.verdict{font-size:24px;font-weight:800;line-height:1.4;margin:10px 0 6px}
+.verdict.a{color:#2f7a55}.verdict.b{color:#2563eb}.verdict.c{color:#8a6f2a}.verdict.d{color:#b4443a}
+.said{font-size:19px;line-height:1.6;font-weight:700}
+.why{font-size:15px;line-height:1.8;color:#5c574c;margin-top:10px}
+.script{background:#f7f6f1;border-left:3px solid #2563eb;border-radius:0 10px 10px 0;
+ padding:13px 14px;font-size:16px;line-height:1.8;margin-top:12px}
+.label{font-size:13px;color:#6b6558;font-weight:700;letter-spacing:.02em}
+.btn{background:#2563eb;color:#fff;border:0;border-radius:12px;padding:14px 16px;
+ font-size:16px;font-weight:600;width:100%;cursor:pointer;margin-top:12px;font-family:inherit}
+.btn.ghost{background:#fff;color:#2563eb;border:1px solid #d6d2c8}
+.btn.done{background:#e6f2ea;color:#2f7a55}
+.back{background:none;border:0;color:#2563eb;font-size:15px;padding:6px 0;cursor:pointer;font-family:inherit}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+.rec{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid #efece4;font-size:15px}
+.big{font-size:34px;font-weight:800;letter-spacing:-.02em}
+.warnbox{background:#fdeeec;border:1px solid #f0cdc7;color:#8e372e;border-radius:12px;padding:13px;font-size:15px;line-height:1.7;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（サンプルデータ）</div>
+  <h1>断っていい</h1>
+  <p class="lead">2026年10月1日から、カスタマーハラスメント対策は事業主の義務になります。現場が困るのは「どこまでが正当な要望で、どこからが断っていいのか」の線が引かれていないこと。言われた言葉を選ぶと、線を引きます。</p>
+  <div id="view"></div>
+</div>
+<script>
+const BIZ = [
+  {k:"kaigo", n:"介護"},
+  {k:"insyoku", n:"飲食"},
+  {k:"kouri", n:"小売"},
+];
+// lv: a=応じる b=線を引く c=断っていい d=警察・通報
+const CASES = [
+ {b:"kaigo",s:"面会のとき、ロビーで",t:"担当を今すぐ替えろ。あの職員は二度と部屋に入れるな",lv:"b",
+  v:"半分は聞く。半分は断る。",
+  w:"担当の見直しを求めること自体は、正当な要望の範囲です。ただし特定の職員を名指しで排除させる要求に、施設が応じる義務はありません。人員配置は事業者が決めることです。",
+  sc:"ご不安はうかがいました。担当の組み方は、いただいたお話をふまえて事業所で検討いたします。特定の職員を外すお約束は、こちらではいたしかねます。"},
+ {b:"kaigo",s:"深夜0時すぎ、施設の代表電話に",t:"夜中でも電話に出ろ。出ないなら本社に言うぞ",lv:"c",
+  v:"応じなくて構いません。",
+  w:"契約で定めた時間外の対応は、提供する業務の範囲外です。時間外に何度もかけ続ける行為は、指針が言う「社会通念上許容される範囲」を超える言動にあたりえます。",
+  sc:"夜間はご用件を承れません。緊急のご容体については夜間窓口の番号をご案内します。ご相談は明日9時以降にお願いいたします。"},
+ {b:"kaigo",s:"事務室で、職員を立たせたまま",t:"誠意を見せろ。土下座しろ",lv:"d",
+  v:"ここから先は警察です。",
+  w:"義務のないことを人にさせようと迫る行為は、強要にあたりえます。その場で謝らせて終わらせず、日時と言葉をそのまま記録に残してください。",
+  sc:"そのご要望にはお応えできません。これ以上お続けになる場合は、警察へご相談させていただきます。"},
+ {b:"kaigo",s:"苦情の電話が1時間を超えたところで",t:"納得いくまで説明しろ。何時間かかってもだ",lv:"c",
+  v:"切って構いません。",
+  w:"説明を尽くす義務はあっても、時間の上限なく拘束される義務はありません。あらかじめ「1回30分まで」と決めておくと、現場が自分の判断で切れるようになります。",
+  sc:"ご説明の時間は30分をめどとさせていただいております。続きは改めてお時間をいただき、書面でご回答いたします。"},
+
+ {b:"insyoku",s:"提供から5分後、席で",t:"髪の毛が入っていた。作り直してほしい",lv:"a",
+  v:"これは応じてください。",
+  w:"提供したものに問題があったときの作り直しや返金は、正当な申し出です。カスハラの線引きを持つ目的は、正当な苦情を断ることではありません。ここを混ぜると現場が壊れます。",
+  sc:"申し訳ございません。すぐにお作り直しいたします。お代はいただきません。"},
+ {b:"insyoku",s:"作り直しに応じたあと",t:"全額返せ。それと今日の飲み代も出せ",lv:"b",
+  v:"料理代は返す。それ以外は断る。",
+  w:"問題があった品の返金は応じるべきですが、そこを越えた補償の要求まで受ける義務はありません。応じるところと応じないところを、その場で分けて言い切ることが線引きです。",
+  sc:"お料理のお代はお返しいたします。それ以外のお代につきましては、お受けいたしかねます。"},
+ {b:"insyoku",s:"閉店後、店内で1時間",t:"店長が出てくるまで、俺はここを動かない",lv:"d",
+  v:"警察を呼んで構いません。",
+  w:"帰ってほしいと伝えたあとも居座り続ける行為は、不退去にあたりえます。呼ぶと決めたら、迷っている時間のほうが現場を消耗させます。",
+  sc:"閉店のお時間です。ご退店をお願いいたします。応じていただけない場合は、警察へ通報いたします。"},
+ {b:"insyoku",s:"レジ前、他のお客の前で",t:"SNSに晒すぞ。潰してやる",lv:"d",
+  v:"記録して、警察です。",
+  w:"評判を人質にとって要求を通そうとする言動は、脅迫や威力業務妨害にあたりえます。書き込まれてから動くのではなく、言われた時点で日時と言葉を残してください。",
+  sc:"そのようなお話であれば、こちらでは対応いたしかねます。記録のうえ、警察へ相談いたします。"},
+
+ {b:"kouri",s:"レジで、購入から3週間後",t:"レシートはないが、返品しろ",lv:"c",
+  v:"断って構いません。",
+  w:"返品の条件は店が定めた規約によります。規約の範囲を超えた要求に応じる義務はありません。応じるかどうかを店員に迷わせないよう、条件を掲示しておくことが先です。",
+  sc:"レシートのないご返品は、お受けしておりません。ご了承ください。"},
+ {b:"kouri",s:"値札と会計金額が違ったとき",t:"そっちの付け間違いだろうが。この値段で売れ",lv:"b",
+  v:"謝る。ただし売る義務はない。",
+  w:"表示の誤りをわびるのは当然ですが、誤った価格で売ることまでを求められる筋合いはありません。わびることと、要求をのむことは別です。",
+  sc:"表示に誤りがあり、失礼いたしました。正しい価格は◯◯円です。表示の価格での販売はいたしかねます。"},
+ {b:"kouri",s:"接客の途中で",t:"名前をフルネームで名乗れ。名札の下の名前も見せろ",lv:"c",
+  v:"名乗る必要はありません。",
+  w:"従業員が個人を特定される情報を明かす義務はありません。指針でも、働く人のプライバシー保護は事業主が講じる措置に含まれます。個人でなく店として受けると言い切ってください。",
+  sc:"お問い合わせは店として承ります。担当者の氏名につきましては、お答えしておりません。"},
+ {b:"kouri",s:"電話で、40分が経過",t:"お前じゃ話にならん。上を出せ、今すぐだ",lv:"b",
+  v:"つなぐ。ただし条件つきで。",
+  w:"責任者につなぐこと自体はふつうの対応です。ただし「今すぐ」「何度でも」に応じ続ける必要はありません。折り返しの時間を先に決めて、こちらから区切ります。",
+  sc:"責任者へ引き継ぎます。本日中に折り返しご連絡いたします。お時間は改めてこちらからご案内いたします。"},
+];
+const LVNAME = {a:"応じる",b:"線を引く",c:"断っていい",d:"警察・通報"};
+const S = {biz:"kaigo", open:null, rec:[]};
+const esc = s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const render=()=>{document.getElementById('view').innerHTML = S.open===null?listHTML():caseHTML();};
+
+function listHTML(){
+  const list = CASES.filter(c=>c.b===S.biz);
+  return `<div class="tabs">${BIZ.map(b=>
+    `<button class="tab ${b.k===S.biz?'on':''}" onclick="S.biz='${b.k}';render()">${b.n}</button>`).join('')}</div>
+  <div class="note" style="margin:10px 2px">言われた言葉をえらんでください。</div>
+  ${list.map(c=>{const i=CASES.indexOf(c);return `
+    <button class="q" onclick="S.open=${i};render();scrollTo(0,0)">
+      <span class="lv ${c.lv}">${LVNAME[c.lv]}</span>
+      <div style="margin-top:8px">「${esc(c.t)}」</div>
+      <div class="sit">${esc(c.s)}</div>
+    </button>`}).join('')}
+  ${S.rec.length?`<div class="card"><div class="label">今月の記録</div>
+    <div class="big" style="margin:4px 0">${S.rec.length}<span style="font-size:16px">件</span></div>
+    ${S.rec.map(r=>`<div class="rec"><span>${esc(r.t.slice(0,14))}…</span><span class="lv ${r.lv}">${LVNAME[r.lv]}</span></div>`).join('')}
+    <div class="note" style="margin-top:10px">義務化されるのは、断ることではなく体制をつくることです。相談窓口と記録が中身になります。</div>
+  </div>`:''}
+  <div class="note" style="margin-top:16px">本デモの事例は架空です。線引きは状況によって変わります。実際の対応や規程づくりは、社会保険労務士・弁護士にご相談ください。</div>`;
+}
+
+function caseHTML(){
+  const c = CASES[S.open];
+  const done = S.rec.some(r=>r.t===c.t);
+  return `<button class="back" onclick="S.open=null;render()">もどる</button>
+  <div class="card">
+    <div class="note">${esc(c.s)}</div>
+    <div class="said" style="margin-top:6px">「${esc(c.t)}」</div>
+  </div>
+  <div class="card">
+    <span class="lv ${c.lv}">${LVNAME[c.lv]}</span>
+    <div class="verdict ${c.lv}">${esc(c.v)}</div>
+    <div class="why">${esc(c.w)}</div>
+    ${c.lv==='d'?`<div class="warnbox">その場で収めようとしないでください。日時・場所・言われた言葉をそのまま残すことが、あとで会社が職員を守れるかどうかを決めます。</div>`:''}
+  </div>
+  <div class="card">
+    <div class="label">そのまま読める一文</div>
+    <div class="script">${esc(c.sc)}</div>
+  </div>
+  <button class="btn ${done?'done':''}" ${done?'disabled':''}
+    onclick="S.rec.push({t:CASES[${S.open}].t,lv:'${c.lv}'});render()">
+    ${done?'記録しました':'この一件を記録に残す'}</button>
+  <button class="btn ghost" onclick="S.open=null;render()">一覧にもどる</button>`;
+}
+render();
+</script>
+</body>
+</html>

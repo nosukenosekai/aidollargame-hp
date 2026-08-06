@@ -88,7 +88,7 @@
 <script>
 let RAW = null, L = [];
 async function loadData() {
-  const b64 = (await (await fetch('data.b64')).text()).replace(/\s/g, '');
+  const b64 = (await (await fetch('data.txt')).text()).replace(/\s/g, '');
   const bin = Uint8Array.from(atob(b64), ch => ch.charCodeAt(0));
   const stream = new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'));
   RAW = JSON.parse(await new Response(stream).text());

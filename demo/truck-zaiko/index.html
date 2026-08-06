@@ -6,106 +6,244 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="中古トラックの公開在庫を横断検索するチャットデモ（株式会社AIdollargame）">
 <link rel="icon" href="/favicon.svg">
-<title>トラック在庫チャット</title>
+<title>トラック在庫チャット | AIdollargame</title>
 <style>
-  :root { --blue:#2563eb; --ink:#1e293b; --sub:#64748b; --line:#e2e8f0; --bg:#f6f8fb; --card:#ffffff; --chipbg:#eff6ff; }
-  @media (prefers-color-scheme: dark) {
-    :root { --blue:#5b8def; --ink:#e6ebf3; --sub:#94a3b8; --line:#2c3646; --bg:#12161d; --card:#1a2029; --chipbg:#1e293b; }
+  :root {
+    --paper:#f5f4f0; --card:#ffffff; --ink:#16181d; --sub:#5b6270;
+    --line:#e3e0d8; --blue:#2563eb; --blue-soft:#eaf0fe; --thumb:#edebe4;
+    --shadow:0 1px 2px rgba(20,24,35,.05), 0 8px 24px rgba(20,24,35,.06);
   }
-  :root[data-theme="dark"] { --blue:#5b8def; --ink:#e6ebf3; --sub:#94a3b8; --line:#2c3646; --bg:#12161d; --card:#1a2029; --chipbg:#1e293b; }
-  :root[data-theme="light"] { --blue:#2563eb; --ink:#1e293b; --sub:#64748b; --line:#e2e8f0; --bg:#f6f8fb; --card:#ffffff; --chipbg:#eff6ff; }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper:#13161c; --card:#1c2028; --ink:#edeff3; --sub:#9ba4b2;
+      --line:#2b313c; --blue:#7aa2ff; --blue-soft:#1c2534; --thumb:#242a34;
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:#13161c; --card:#1c2028; --ink:#edeff3; --sub:#9ba4b2;
+    --line:#2b313c; --blue:#7aa2ff; --blue-soft:#1c2534; --thumb:#242a34;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  }
+  :root[data-theme="light"] {
+    --paper:#f5f4f0; --card:#ffffff; --ink:#16181d; --sub:#5b6270;
+    --line:#e3e0d8; --blue:#2563eb; --blue-soft:#eaf0fe; --thumb:#edebe4;
+    --shadow:0 1px 2px rgba(20,24,35,.05), 0 8px 24px rgba(20,24,35,.06);
+  }
+
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:"Hiragino Sans","Yu Gothic",sans-serif; background:var(--bg); color:var(--ink); font-size:17px; line-height:1.65; }
-  .icon { width:20px; height:20px; stroke:currentColor; stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; vertical-align:-4px; }
-  #gate { max-width:420px; margin:80px auto; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:36px; text-align:center; }
-  #gate h1 { font-size:22px; margin-bottom:6px; }
-  #gate p { color:var(--sub); font-size:15px; margin-bottom:20px; }
-  #gate input { width:100%; padding:12px 14px; font-size:17px; border:1px solid var(--line); border-radius:8px; margin-bottom:12px; background:var(--card); color:var(--ink); }
-  #gate button { width:100%; padding:12px; font-size:17px; background:var(--blue); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:700; }
-  #gateErr { color:#dc2626; font-size:14px; margin-top:10px; display:none; }
-  #app { display:none; flex-direction:column; height:100dvh; max-width:860px; margin:0 auto; }
-  header { background:var(--card); border-bottom:1px solid var(--line); padding:14px 20px; display:flex; align-items:center; gap:12px; }
-  .brand { display:flex; align-items:center; gap:10px; font-weight:700; font-size:18px; }
-  .brand svg { color:var(--blue); width:24px; height:24px; }
-  .brand small { font-weight:400; color:var(--sub); font-size:13px; }
-  #stock { margin-left:auto; font-size:13px; color:var(--sub); white-space:nowrap; }
-  #stock b { color:var(--blue); font-size:16px; }
-  #log { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:14px; }
-  .msg { max-width:92%; padding:13px 17px; border-radius:14px; font-size:16px; }
-  .me { align-self:flex-end; background:var(--blue); color:#fff; border-bottom-right-radius:4px; }
-  .bot { align-self:flex-start; background:var(--card); border:1px solid var(--line); border-bottom-left-radius:4px; }
-  .cars { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
-  .car { display:block; text-decoration:none; color:var(--ink); border:1px solid var(--line); border-radius:10px; padding:11px 14px; background:var(--bg); }
-  .car:hover { border-color:var(--blue); }
-  .car .row1 { display:flex; gap:8px; align-items:baseline; }
-  .car .name { font-weight:700; font-size:15.5px; flex:1; }
-  .car .price { color:var(--blue); font-weight:800; font-size:18px; white-space:nowrap; font-variant-numeric:tabular-nums; }
-  .car .row2 { display:flex; gap:10px; font-size:13px; color:var(--sub); margin-top:3px; flex-wrap:wrap; align-items:center; }
-  .site { font-size:12px; padding:1px 8px; border-radius:99px; background:var(--chipbg); color:var(--blue); }
-  .chips { display:flex; gap:8px; flex-wrap:wrap; padding:0 20px 10px; }
-  .chip { font-size:13.5px; padding:7px 13px; border:1px solid var(--line); border-radius:99px; background:var(--card); cursor:pointer; color:var(--ink); }
+  html, body { height:100%; }
+  body {
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic Medium",system-ui,sans-serif;
+    background:var(--paper); color:var(--ink); font-size:17px; line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .shell { width:100%; max-width:1080px; margin-inline:auto; padding-inline:clamp(18px, 4vw, 44px); }
+
+  #app { display:flex; flex-direction:column; height:100dvh; }
+
+  header { border-bottom:1px solid var(--line); background:var(--card); flex:none; }
+  header .shell { display:flex; align-items:center; gap:14px; padding-block:16px; }
+  .brand { display:flex; align-items:center; gap:11px; min-width:0; }
+  .brand .mark { width:30px; height:30px; flex:none; color:var(--blue); }
+  .brand h1 { font-size:20px; font-weight:800; letter-spacing:.01em; white-space:nowrap; }
+  .brand .tag { font-size:13.5px; color:var(--sub); white-space:nowrap; }
+  @media (max-width:640px) { .brand .tag { display:none; } }
+  .count { margin-left:auto; font-size:13.5px; color:var(--sub); white-space:nowrap; }
+  .count b { font-size:19px; font-weight:800; color:var(--ink); font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
+
+  #log { flex:1; overflow-y:auto; overscroll-behavior:contain; }
+  #log .shell { display:flex; flex-direction:column; gap:12px; padding-block:26px 8px; }
+
+  .bubble { max-width:min(660px, 100%); padding:14px 19px; border-radius:16px; font-size:16.5px; }
+  .bubble.me { align-self:flex-end; background:var(--blue); color:#fff; border-bottom-right-radius:5px; font-weight:600; }
+  .bubble.bot { align-self:flex-start; background:var(--card); border:1px solid var(--line); border-bottom-left-radius:5px; box-shadow:var(--shadow); }
+  .bubble.bot b { font-weight:800; }
+
+  .results { display:grid; grid-template-columns:repeat(auto-fill, minmax(430px, 1fr)); gap:12px; margin:2px 0 14px; }
+  @media (max-width:900px) { .results { grid-template-columns:1fr; } }
+
+  .car {
+    display:grid; grid-template-columns:124px 1fr; gap:16px; align-items:center;
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:14px 18px 14px 14px; text-decoration:none; color:inherit; box-shadow:var(--shadow);
+    transition:border-color .15s ease, transform .15s ease;
+  }
+  .car:hover, .car:focus-visible { border-color:var(--blue); transform:translateY(-1px); }
+  .car:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+  @media (max-width:420px) { .car { grid-template-columns:88px 1fr; gap:12px; } }
+
+  .thumb { background:var(--thumb); border-radius:10px; aspect-ratio:16/10; display:grid; place-items:center; }
+  .thumb svg { width:88%; height:auto; color:var(--sub); }
+  @media (max-width:420px) { .thumb svg { width:94%; } }
+
+  .info { min-width:0; }
+  .info .top { display:flex; align-items:baseline; gap:10px; }
+  .info .name { font-size:17.5px; font-weight:800; line-height:1.35; flex:1; min-width:0; }
+  .info .price { font-size:23px; font-weight:800; letter-spacing:-.02em; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .info .price small { font-size:14px; font-weight:700; margin-left:1px; }
+  .info .ask { font-size:15px; font-weight:700; color:var(--sub); white-space:nowrap; }
+  .spec { display:flex; flex-wrap:wrap; gap:4px 12px; font-size:14px; color:var(--sub); margin-top:5px; line-height:1.5; }
+  .spec .n { font-variant-numeric:tabular-nums; }
+  .badges { display:flex; flex-wrap:wrap; gap:6px; margin-top:9px; }
+  .pill { font-size:12.5px; font-weight:700; padding:2px 10px; border-radius:99px; background:var(--blue-soft); color:var(--blue); }
+  .pill.plain { background:transparent; color:var(--sub); border:1px solid var(--line); font-weight:600; }
+
+  .dock { flex:none; border-top:1px solid var(--line); background:var(--card); }
+  .dock .shell { padding-block:14px 16px; }
+  .chips { display:flex; gap:9px; flex-wrap:wrap; margin-bottom:11px; }
+  .chip {
+    font-size:14.5px; font-weight:600; padding:8px 15px; border:1px solid var(--line);
+    border-radius:99px; background:var(--paper); cursor:pointer; color:var(--ink); font-family:inherit;
+  }
   .chip:hover { border-color:var(--blue); color:var(--blue); }
-  #inputbar { display:flex; gap:10px; padding:0 20px 16px; }
-  #inputbar textarea { flex:1; padding:13px 16px; font-size:17px; border:1px solid var(--line); border-radius:12px; resize:none; font-family:inherit; height:52px; background:var(--card); color:var(--ink); }
-  #inputbar textarea:focus { outline:2px solid var(--blue); border-color:var(--blue); }
-  #inputbar button { padding:0 22px; background:var(--blue); color:#fff; border:none; border-radius:12px; cursor:pointer; }
-  footer { text-align:center; font-size:12px; color:var(--sub); padding:0 20px 12px; }
+  .chip:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+  .inputrow { display:flex; gap:10px; }
+  .inputrow textarea {
+    flex:1; padding:14px 17px; font-size:17px; font-family:inherit; line-height:1.5;
+    border:1px solid var(--line); border-radius:13px; resize:none; height:54px;
+    background:var(--paper); color:var(--ink);
+  }
+  .inputrow textarea::placeholder { color:var(--sub); opacity:.85; }
+  .inputrow textarea:focus { outline:2px solid var(--blue); outline-offset:-1px; border-color:var(--blue); }
+  .inputrow button {
+    flex:none; width:58px; display:grid; place-items:center;
+    background:var(--blue); color:#fff; border:none; border-radius:13px; cursor:pointer;
+  }
+  .inputrow button:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+  .inputrow button svg { width:21px; height:21px; }
+  .note { font-size:12.5px; color:var(--sub); line-height:1.65; margin-top:11px; }
+
+  /* 狭い画面 */
+  @media (max-width:640px) {
+    body { font-size:16px; }
+    header .shell { padding-block:13px; gap:10px; }
+    .brand h1 { font-size:17px; }
+    .brand .mark { width:26px; height:26px; }
+    .count { font-size:12px; padding-left:6px; }
+    .count b { font-size:16px; }
+    #log .shell { padding-block:18px 6px; }
+    .bubble { font-size:15.5px; padding:12px 16px; }
+    .car { grid-template-columns:78px 1fr; gap:12px; padding:12px 14px; align-items:start; }
+    .info .top { flex-wrap:wrap; gap:2px 10px; }
+    .info .name { flex:1 1 100%; font-size:16.5px; }
+    .info .price { font-size:21px; }
+    .spec { font-size:13px; gap:2px 10px; }
+    .chips { flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; margin-inline:calc(clamp(18px, 4vw, 44px) * -1); padding-inline:clamp(18px, 4vw, 44px); }
+    .chips::-webkit-scrollbar { display:none; }
+    .chip { flex:none; font-size:14px; }
+    .inputrow textarea { font-size:16px; padding:13px 15px; }
+    .inputrow button { width:52px; }
+    .note { font-size:11.5px; margin-top:9px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
 </style>
 </head>
 <body>
 
-<div id="gate">
-  <h1>トラック在庫チャット</h1>
-  <p>合言葉を入力してください</p>
-  <input type="password" id="pw" placeholder="合言葉">
-  <button onclick="login()">ひらく</button>
-  <div id="gateErr">合言葉が違います</div>
-</div>
 <div id="app">
-<header>
-  <div class="brand">
-    <svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-    トラック在庫チャット <small>公開在庫を横断サーチ</small>
+  <header>
+    <div class="shell">
+      <div class="brand">
+        <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M1 6h13v10H1z"/><path d="M14 9h4l3 3v4h-7z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>
+        </svg>
+        <h1>トラック在庫チャット</h1>
+        <span class="tag">公開在庫を横断サーチ</span>
+      </div>
+      <div class="count"><b id="stN">—</b> 台</div>
+    </div>
+  </header>
+
+  <div id="log"><div class="shell" id="logInner"></div></div>
+
+  <div class="dock">
+    <div class="shell">
+      <div class="chips">
+        <button class="chip" data-q="大阪府のダンプ 300万以下">大阪府のダンプ 300万以下</button>
+        <button class="chip" data-q="日野の大型ウイング 2018年以降">日野の大型ウイング 2018年以降</button>
+        <button class="chip" data-q="クレーン 低走行">クレーン 低走行</button>
+        <button class="chip" data-q="トラクタ 走行80万km以下">トラクタ 走行80万km以下</button>
+        <button class="chip" data-q="冷凍バン 中型 400万以下">冷凍バン 中型 400万以下</button>
+      </div>
+      <div class="inputrow">
+        <textarea id="q" placeholder="例: 大型ウイング 700万以下" aria-label="探している車両の条件"></textarea>
+        <button id="sendBtn" aria-label="検索する">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></svg>
+        </button>
+      </div>
+      <p class="note" id="note">在庫データを読み込んでいます…</p>
+    </div>
   </div>
-  <div id="stock"><b id="stN">-</b>台を横断検索</div>
-</header>
-<div id="log"></div>
-<div class="chips">
-  <button class="chip" onclick="ask('大阪府のダンプ 300万以下')">大阪府のダンプ 300万以下</button>
-  <button class="chip" onclick="ask('日野の大型ウイング 2018年以降')">日野の大型ウイング 2018年以降</button>
-  <button class="chip" onclick="ask('クレーン 低走行')">クレーン 低走行</button>
-  <button class="chip" onclick="ask('トラクタ 走行80万km以下')">トラクタ 走行80万km以下</button>
-</div>
-<div id="inputbar">
-  <textarea id="q" placeholder="例: ふそうの大型ウイング 2019年以降 700万以下"></textarea>
-  <button onclick="send()" aria-label="送信">
-    <svg class="icon" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/></svg>
-  </button>
-</div>
-<footer id="src"></footer>
 </div>
 
 <script>
-let RAW = null, L = [];
-async function loadData() {
-  RAW = await (await fetch('data.json')).json();
-  L = RAW.rows.map(r => ({ site: RAW.sites[r[0]], url: RAW.prefix[r[0]] + r[1], maker: r[2], model: r[3], body: r[4], cls: r[5], year: r[6], mileage_man: r[7], load_kg: r[8], pref: r[9], price_man: r[10], alts: (r[11]||[]).map(a => ({ site: RAW.sites[a[0]], url: RAW.prefix[a[0]] + a[1] })) }));
-  MODELS = [...new Set(L.map(x => x.model).filter(m => m && m.length >= 2 && !/^[A-Z0-9-]+$/.test(m)))];
-}
-const dataReady = loadData();
+/* ---------- トラック図版（ボディ形状別・線画） ---------- */
+const W = 'stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"';
+const WH = '<circle cx="24" cy="50" r="6.5"/><circle cx="100" cy="50" r="6.5"/>';
+const WH3 = '<circle cx="24" cy="50" r="6.5"/><circle cx="92" cy="50" r="6.5"/><circle cx="110" cy="50" r="6.5"/>';
+const CAB = '<path d="M9 44V31l8-11h14v24z"/><path d="M18 24h10v7H14z"/>';
+const BOX = '<path d="M33 16h87v28H33z"/>';
+const DECK = '<path d="M33 34h87v10H33z"/>';
+function svg(inner) { return '<svg viewBox="0 0 128 64" ' + W + ' aria-hidden="true">' + inner + '</svg>'; }
 
-const PW = 'truck2026';
+const ART = {
+  'ウイング':        svg(CAB + BOX + '<path d="M33 24h87"/><path d="M76 24v20"/>' + WH),
+  '冷凍ウイング':    svg(CAB + BOX + '<path d="M33 24h87"/><path d="M76 24v20"/><path d="M37 16v-6h16v6"/>' + WH),
+  '冷凍バン':        svg(CAB + BOX + '<path d="M37 16v-6h16v6"/><path d="M108 20v24"/>' + WH),
+  'バン':            svg(CAB + BOX + '<path d="M108 20v24"/>' + WH),
+  '平ボディ':        svg(CAB + '<path d="M33 32h87v12H33z"/><path d="M60 32v12M88 32v12"/>' + WH),
+  'ダンプ':          svg(CAB + '<path d="M37 42 42 22l78-8 3 26z"/><path d="M42 22 120 14"/><path d="M45 42 36 33"/>' + WH),
+  'クレーン':        svg(CAB + DECK + '<path d="M40 34V22h12v12"/><path d="M46 22 25 12"/><path d="M25 12v8"/>' + WH),
+  'トラクタ':        svg(CAB + '<path d="M33 34h48v10H33z"/><path d="M58 34v-5h14v5"/><path d="M31 20v-9"/><circle cx="24" cy="50" r="6.5"/><circle cx="68" cy="50" r="6.5"/>'),
+  'トレーラー':      svg(CAB + '<path d="M33 38h18v6H33z"/><path d="M51 18h69v26H51z"/><circle cx="24" cy="50" r="6.5"/><circle cx="92" cy="50" r="6.5"/><circle cx="110" cy="50" r="6.5"/>'),
+  'タンクローリー':  svg(CAB + '<rect x="33" y="19" width="87" height="25" rx="12.5"/><path d="M60 19v25M86 19v25"/>' + WH),
+  'ミキサー':        svg(CAB + '<path d="M38 44 46 24h50l16 10-6 10z"/><path d="M58 24 64 44M80 24 86 44"/>' + WH),
+  '高所作業車':      svg(CAB + DECK + '<path d="M44 34 94 15"/><path d="M90 8h18v9H90z"/>' + WH),
+  'パッカー':        svg(CAB + '<path d="M33 18h72l15 12v14H33z"/><path d="M105 18v12h15"/>' + WH),
+  'アームロール':    svg(CAB + '<path d="M33 36h87v8H33z"/><path d="M48 18h64v18H48z"/><path d="M44 36 38 16h-6"/>' + WH),
+  'コンテナ車':      svg(CAB + '<path d="M33 38h87v6H33z"/><path d="M40 16h76v22H40z"/><path d="M56 16v22M80 16v22M100 16v22"/>' + WH3),
+  'キャリアカー・積載車': svg(CAB + '<path d="M33 36h87v8H33z"/><path d="M40 36V22h58l20 8"/><path d="M40 30h56"/>' + WH),
+  '散水車':          svg(CAB + '<rect x="33" y="21" width="82" height="23" rx="11"/><path d="M115 40h8"/>' + WH),
+  '清掃・バキューム': svg(CAB + '<rect x="33" y="21" width="80" height="23" rx="11"/><path d="M111 26 122 16"/>' + WH),
+  'バス':            svg('<path d="M9 44V18a6 6 0 0 1 6-6h98a6 6 0 0 1 6 6v26z"/><path d="M9 25h110"/><path d="M38 12v13M66 12v13M94 12v13"/>' + WH),
+  'シャシ':          svg(CAB + '<path d="M33 36h87v8H33z"/><path d="M40 36v8M100 36v8"/>' + WH),
+  '幌':              svg(CAB + '<path d="M33 44V26c0-5 6-9 14-9h58c8 0 15 4 15 9v18z"/><path d="M55 17v27M84 17v27"/>' + WH),
+  'その他':          svg(CAB + '<path d="M33 18h87v26H33z"/>' + WH),
+};
+function artFor(body) { return ART[body] || ART['その他']; }
+
+/* ---------- データ ---------- */
+let RAW = null, L = [], MODELS = [];
 const MAKERS = ['日野','いすゞ','三菱ふそう','UDトラックス','トヨタ','日産','マツダ','ダイハツ','スズキ'];
 const MAKER_ALIAS = { 'ふそう':'三菱ふそう','三菱':'三菱ふそう','UD':'UDトラックス','日産ディーゼル':'UDトラックス','いすず':'いすゞ','イスズ':'いすゞ' };
 const BODIES = [[/冷凍ウイング/,'冷凍ウイング'],[/冷凍|冷蔵|保冷/,'冷凍バン'],[/ウイング|ウィング/,'ウイング'],[/平ボディ|平ボデー|平車/,'平ボディ'],[/ダンプ/,'ダンプ'],[/クレーン|ユニック/,'クレーン'],[/トラクタ|トレーラーヘッド|ヘッド/,'トラクタ'],[/トレーラ/,'トレーラー'],[/高所作業/,'高所作業車'],[/コンテナ/,'コンテナ車'],[/清掃|バキューム/,'清掃・バキューム'],[/シャシ/,'シャシ'],[/ミキサー/,'ミキサー'],[/タンクローリー|ローリー|タンク車/,'タンクローリー'],[/パッカー|塵芥|ゴミ収集/,'パッカー'],[/アームロール|フックロール|脱着/,'アームロール'],[/キャリアカー|積載車|車載車|セルフローダー|ローダー/,'キャリアカー・積載車'],[/散水/,'散水車'],[/幌/,'幌'],[/アルミバン|ドライバン|箱車|バン/,'バン']];
 const CLASSES = [[/大型/,'大型'],[/増トン|増t/,'増トン'],[/中型|4t/,'中型'],[/小型|2t|3t/,'小型']];
 const PREFS = '北海道 青森県 岩手県 宮城県 秋田県 山形県 福島県 茨城県 栃木県 群馬県 埼玉県 千葉県 東京都 神奈川県 新潟県 富山県 石川県 福井県 山梨県 長野県 岐阜県 静岡県 愛知県 三重県 滋賀県 京都府 大阪府 兵庫県 奈良県 和歌山県 鳥取県 島根県 岡山県 広島県 山口県 徳島県 香川県 愛媛県 高知県 福岡県 佐賀県 長崎県 熊本県 大分県 宮崎県 鹿児島県 沖縄県'.split(' ');
-let MODELS = [];
 
+async function loadData() {
+  RAW = await (await fetch('data.json')).json();
+  L = RAW.rows.map(r => ({
+    site: RAW.sites[r[0]], url: RAW.prefix[r[0]] + r[1], maker: r[2], model: r[3],
+    body: r[4], cls: r[5], year: r[6], mileage_man: r[7], load_kg: r[8], pref: r[9], price_man: r[10],
+    alts: (r[11] || []).map(a => ({ site: RAW.sites[a[0]], url: RAW.prefix[a[0]] + a[1] })),
+  }));
+  MODELS = [...new Set(L.map(x => x.model).filter(m => m && m.length >= 2 && !/^[A-Z0-9-]+$/.test(m)))];
+  document.getElementById('stN').textContent = L.length.toLocaleString();
+  document.getElementById('note').textContent =
+    '在庫データ: ' + RAW.meta.sources.map(s => s.name + ' ' + s.n.toLocaleString() + '台').join(' / ') +
+    '（2026年8月5〜6日取得・クロールを許可しているサイトのみ）。価格と在庫状況は取得時点のものです。図はボディ形状のイラストで、実車の外観とは異なります。';
+}
+
+/* ---------- 条件の読み取り ---------- */
 function parse(text) {
-  let t = (text || '').replace(/\u3000/g, ' ');
+  const t = (text || '').replace(/　/g, ' ');
   const c = {};
-  for (const p of PREFS) { const short = p.replace(/[都府県]$/, ''); if (t.includes(p) || new RegExp(short + '(の|で|に|\\s|$)').test(t)) { c.pref = p; break; } }
+  for (const p of PREFS) {
+    const short = p.replace(/[都府県]$/, '');
+    if (t.includes(p) || new RegExp(short + '(の|で|に|\\s|$)').test(t)) { c.pref = p; break; }
+  }
   for (const [alias, m] of Object.entries(MAKER_ALIAS)) if (t.includes(alias)) c.maker = m;
   for (const m of MAKERS) if (t.includes(m)) c.maker = m;
   for (const [re, b] of BODIES) if (re.test(t)) { c.body = b; break; }
@@ -123,7 +261,7 @@ function parse(text) {
   return c;
 }
 function run(c) {
-  let rows = L.filter(x => {
+  const rows = L.filter(x => {
     if (c.pref && x.pref !== c.pref) return false;
     if (c.maker && x.maker !== c.maker) return false;
     if (c.body && x.body !== c.body) return false;
@@ -141,77 +279,107 @@ function run(c) {
   return rows;
 }
 function condLabel(c) {
-  const parts = [];
-  if (c.pref) parts.push(c.pref); if (c.maker) parts.push(c.maker); if (c.model) parts.push(c.model);
-  if (c.body) parts.push(c.body); if (c.cls) parts.push(c.cls);
-  if (c.yearMin && c.yearMax) parts.push(c.yearMin + '〜' + c.yearMax + '年式');
-  else if (c.yearMin) parts.push(c.yearMin + '年式以降');
-  else if (c.yearMax) parts.push(c.yearMax + '年式以前');
-  if (c.priceMax) parts.push(c.priceMax + '万円以下');
-  if (c.priceMin) parts.push(c.priceMin + '万円以上');
-  if (c.milMax) parts.push('走行' + c.milMax + '万km以下');
-  return parts.length ? parts.join('・') : '全在庫';
+  const p = [];
+  if (c.pref) p.push(c.pref);
+  if (c.maker) p.push(c.maker);
+  if (c.model) p.push(c.model);
+  if (c.body) p.push(c.body);
+  if (c.cls) p.push(c.cls);
+  if (c.yearMin && c.yearMax) p.push(c.yearMin + '〜' + c.yearMax + '年式');
+  else if (c.yearMin) p.push(c.yearMin + '年式以降');
+  else if (c.yearMax) p.push(c.yearMax + '年式以前');
+  if (c.priceMax) p.push(c.priceMax + '万円以下');
+  if (c.priceMin) p.push(c.priceMin + '万円以上');
+  if (c.milMax) p.push('走行' + c.milMax + '万km以下');
+  return p.length ? p.join('・') : '全在庫';
 }
-async function login() {
-  if (document.getElementById('pw').value === PW) { await dataReady; showApp(); }
-  else document.getElementById('gateErr').style.display = 'block';
+
+/* ---------- 表示 ---------- */
+const logInner = document.getElementById('logInner');
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+function push(html) { logInner.insertAdjacentHTML('beforeend', html); document.getElementById('log').scrollTop = 1e9; }
+function addMe(t) { push('<div class="bubble me">' + esc(t) + '</div>'); }
+function addBot(t) { push('<div class="bubble bot">' + t + '</div>'); }
+
+function cardHTML(r) {
+  const spec = [];
+  if (r.cls) spec.push('<span>' + esc(r.cls) + '</span>');
+  if (r.year) spec.push('<span><span class="n">' + r.year + '</span>年式</span>');
+  if (r.mileage_man != null) spec.push('<span>走行<span class="n">' + r.mileage_man + '</span>万km</span>');
+  if (r.load_kg) spec.push('<span>積載<span class="n">' + r.load_kg.toLocaleString() + '</span>kg</span>');
+  if (r.pref) spec.push('<span>' + esc(r.pref) + '</span>');
+  const badges = ['<span class="pill">' + esc(r.site) + '</span>', '<span class="pill plain">' + esc(r.body) + '</span>'];
+  if (r.alts && r.alts.length) badges.push('<span class="pill plain">他掲載 ' + r.alts.map(a => esc(a.site)).join('・') + '</span>');
+  const price = r.price_man
+    ? '<span class="price"><span class="n">' + r.price_man + '</span><small>万円</small></span>'
+    : '<span class="ask">価格応談</span>';
+  return '<a class="car" href="' + r.url + '" target="_blank" rel="noopener">' +
+    '<span class="thumb">' + artFor(r.body) + '</span>' +
+    '<span class="info"><span class="top"><span class="name">' + esc((r.maker + ' ' + (r.model || '')).trim()) + '</span>' + price + '</span>' +
+    '<span class="spec">' + spec.join('') + '</span>' +
+    '<span class="badges">' + badges.join('') + '</span></span></a>';
 }
-function showApp() {
-  document.getElementById('gate').style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-  document.getElementById('stN').textContent = L.length.toLocaleString();
-  document.getElementById('src').textContent = '在庫データ: ' + RAW.meta.sources.map(s => s.name + ' ' + s.n.toLocaleString() + '台').join(' / ') + '(2026-08-05〜06取得・クロール許可サイトのみ)。価格・在庫状況は取得時点のもの。';
-  addBot('こんにちは。探している車両の条件を教えてください。地域・メーカー・ボディ・クラス・年式・予算・走行距離を日本語のまま書けばOKです。', null);
+function addResults(rows) {
+  if (!rows.length) return;
+  push('<div class="results">' + rows.map(cardHTML).join('') + '</div>');
 }
-function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
-function addMe(t) { addRaw('<div class="msg me">' + esc(t) + '</div>'); }
-function addBot(t, rows) {
-  let html = '<div class="msg bot">' + esc(t);
-  if (rows && rows.length) {
-    html += '<div class="cars">' + rows.map(r =>
-      '<a class="car" href="' + r.url + '" target="_blank" rel="noopener">' +
-      '<div class="row1"><span class="name">' + esc((r.maker + ' ' + (r.model || '')).trim()) + '</span><span class="price">' + (r.price_man ? r.price_man + '万円' : '応談') + '</span></div>' +
-      '<div class="row2"><span class="site">' + esc(r.site) + '</span><span>' + esc(r.body + (r.cls ? ' / ' + r.cls : '')) + '</span>' +
-      (r.year ? '<span>' + r.year + '年式</span>' : '') +
-      (r.mileage_man != null ? '<span>走行' + r.mileage_man + '万km</span>' : '') +
-      (r.load_kg ? '<span>積載' + r.load_kg.toLocaleString() + 'kg</span>' : '') +
-      (r.pref ? '<span>' + esc(r.pref) + '</span>' : '') +
-      (r.alts && r.alts.length ? '<span class="site">他掲載: ' + r.alts.map(a => esc(a.site)).join('・') + '</span>' : '') +
-      '</div></a>').join('') + '</div>';
-  }
-  html += '</div>';
-  addRaw(html);
-}
-function addRaw(h) { const log = document.getElementById('log'); log.insertAdjacentHTML('beforeend', h); log.scrollTop = log.scrollHeight; }
-function ask(t) { document.getElementById('q').value = t; send(); }
-function send() {
-  const q = document.getElementById('q');
-  const text = q.value.trim();
-  if (!text) return;
-  q.value = '';
+
+async function ask(text) {
   addMe(text);
+  if (!L.length) {
+    const wait = document.createElement('div');
+    wait.className = 'bubble bot';
+    wait.textContent = '在庫データを読み込んでいます…';
+    logInner.appendChild(wait);
+    try { await dataReady; } catch (e) {
+      wait.textContent = '在庫データを読み込めませんでした。ページを再読み込みしてください。';
+      return;
+    }
+    wait.remove();
+  }
   const cond = parse(text);
   const rows = run(cond);
-  const label = condLabel(cond);
-  let reply;
+  const label = esc(condLabel(cond));
   if (!Object.keys(cond).length) {
-    reply = '条件を読み取れませんでした。「大阪府のダンプ 300万以下」「日野の大型ウイング 2018年以降」のように書いてください。';
-  } else if (!rows.length) {
-    reply = label + ' に合う在庫は見つかりませんでした。条件を1つ外すか、予算や年式を広げてみてください。';
-  } else {
-    const priced = rows.filter(r => r.price_man);
-    const askN = rows.length - priced.length;
-    reply = label + ' の在庫は ' + rows.length + '台';
-    if (priced.length) { const ps = priced.map(r => r.price_man); reply += '。価格表示のある' + priced.length + '台は ' + Math.min(...ps) + '〜' + Math.max(...ps) + '万円'; }
-    if (askN) reply += '(価格応談' + askN + '台を含む)';
-    reply += '。安い順に表示します。';
-    if (rows.length > 8) reply += '(上位8台を表示)';
+    addBot('条件を読み取れませんでした。「大阪府のダンプ 300万以下」「日野の大型ウイング 2018年以降」のように、地域・メーカー・ボディ・クラス・年式・予算・走行距離を書いてください。');
+    return;
   }
-  addBot(reply, rows.slice(0, 8));
+  if (!rows.length) {
+    addBot('<b>' + label + '</b> に合う在庫は見つかりませんでした。条件を1つ外すか、予算や年式を広げてみてください。');
+    return;
+  }
+  const priced = rows.filter(r => r.price_man);
+  const askN = rows.length - priced.length;
+  let msg = '<b>' + label + '</b> の在庫は <b>' + rows.length.toLocaleString() + '台</b>。';
+  if (priced.length) {
+    const ps = priced.map(r => r.price_man);
+    msg += '価格が出ている' + priced.length.toLocaleString() + '台は ' + Math.min(...ps) + '〜' + Math.max(...ps) + '万円です。';
+  }
+  if (askN) msg += '価格応談が' + askN.toLocaleString() + '台あります。';
+  msg += rows.length > 8 ? '安い順に上位8台を表示します。' : '安い順に表示します。';
+  addBot(msg);
+  addResults(rows.slice(0, 8));
 }
-document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) login(); });
-document.getElementById('q').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); send(); } });
-</script>
 
+/* ---------- 起動 ---------- */
+const qEl = document.getElementById('q');
+function send() {
+  const text = qEl.value.trim();
+  if (!text) return;
+  qEl.value = '';
+  ask(text);
+}
+document.getElementById('sendBtn').addEventListener('click', send);
+qEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && e.keyCode !== 229) { e.preventDefault(); send(); }
+});
+document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => ask(b.dataset.q)));
+
+addBot('探している車両の条件を教えてください。地域・メーカー・ボディ・クラス・年式・予算・走行距離を、日本語のまま書けば読み取ります。');
+const dataReady = loadData();
+dataReady.catch(() => {
+  document.getElementById('note').textContent = '在庫データを読み込めませんでした。ページを再読み込みしてください。';
+});
+</script>
 </body>
 </html>

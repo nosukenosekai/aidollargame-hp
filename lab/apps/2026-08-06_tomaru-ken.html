@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>止まる県｜信号のない横断歩道で、あなたの県は何位か</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+select{width:100%;font-size:17px;padding:13px;border:1px solid #ddd9cf;border-radius:11px;background:#fff;color:#1b1a17}
+input[type=range]{width:100%;accent-color:#2563eb;height:30px}
+.guess{font-size:40px;font-weight:800;color:#2563eb;line-height:1}
+.btn{background:#2563eb;color:#fff;border:0;border-radius:12px;padding:14px 16px;
+ font-size:16px;font-weight:600;width:100%;cursor:pointer}
+.btn-ghost{background:#fff;color:#2563eb;border:1px solid #d6d2c8}
+.res{font-size:15px;line-height:1.85;color:#4a453c}
+.res b{font-size:21px;color:#1b1a17}
+.hit{font-size:19px;font-weight:700;margin:4px 0 10px}
+.scale{display:flex;align-items:center;gap:8px;font-size:12px;color:#8d8778;margin:6px 0 12px}
+.scale .grad{flex:1;height:10px;border-radius:5px;
+ background:linear-gradient(90deg,#f1eee6,#9fb8ee,#2563eb)}
+.reg{font-size:13px;color:#847e70;margin:14px 0 6px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.pref{border:0;border-radius:9px;padding:9px 2px;font-size:12px;cursor:pointer;
+ color:#1b1a17;line-height:1.35;text-align:center}
+.pref span{display:block;font-size:11px;opacity:.85;margin-top:2px}
+.pref.me{outline:2px solid #1b1a17;outline-offset:1px}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+.rank{display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid #efece4;font-size:15px}
+.rank:first-child{border-top:0}
+.rank i{font-style:normal;color:#847e70;font-size:13px;width:34px;display:inline-block}
+.src{font-size:12px;color:#8d8778;line-height:1.7;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（サンプルデータ・数字は実データ）</div>
+  <h1>止まる県</h1>
+  <p class="lead">信号のない横断歩道で人が渡ろうとしているとき、止まる車は全国で56.7％。止まるかどうかは、運転者の性格よりも、どの県かで決まっているように見えます。</p>
+
+  <div class="card" id="ask">
+    <div class="label">あなたの県は</div>
+    <select id="sel"></select>
+    <div class="label" style="margin-top:20px">止まる車は何％だと思いますか</div>
+    <div style="text-align:center;margin-bottom:2px"><span class="guess" id="gv">50</span><span style="font-size:20px;font-weight:700">％</span></div>
+    <input type="range" id="g" min="0" max="100" step="1" value="50">
+    <button class="btn" style="margin-top:14px" onclick="reveal()">答えを見る</button>
+  </div>
+
+  <div id="out"></div>
+</div>
+
+<script>
+// 日本自動車連盟(JAF)「信号機のない横断歩道での歩行者横断時における車の一時停止状況全国調査」2025年調査結果
+// 調査期間 2025年8月6日〜28日／全国94か所・6,226台／全国平均 56.7%
+const D = [
+["北海道","北海道・東北",38.1],["青森県","北海道・東北",50.4],["岩手県","北海道・東北",67.2],
+["宮城県","北海道・東北",62.1],["秋田県","北海道・東北",55.1],["山形県","北海道・東北",55.8],
+["福島県","北海道・東北",74.5],
+["茨城県","関東",44.2],["栃木県","関東",67.8],["群馬県","関東",59.8],["埼玉県","関東",47.9],
+["千葉県","関東",48.4],["東京都","関東",44.2],["神奈川県","関東",62.8],
+["新潟県","中部",57.0],["富山県","中部",60.9],["石川県","中部",70.3],["福井県","中部",35.8],
+["山梨県","中部",65.3],["長野県","中部",88.2],["岐阜県","中部",78.0],["静岡県","中部",67.2],
+["愛知県","中部",48.9],
+["三重県","近畿",66.4],["滋賀県","近畿",72.9],["京都府","近畿",53.6],["大阪府","近畿",35.5],
+["兵庫県","近畿",67.9],["奈良県","近畿",64.3],["和歌山県","近畿",41.5],
+["鳥取県","中国・四国",62.6],["島根県","中国・四国",58.9],["岡山県","中国・四国",66.9],
+["広島県","中国・四国",61.6],["山口県","中国・四国",34.3],["徳島県","中国・四国",46.1],
+["香川県","中国・四国",46.0],["愛媛県","中国・四国",66.7],["高知県","中国・四国",54.8],
+["福岡県","九州・沖縄",77.7],["佐賀県","九州・沖縄",50.6],["長崎県","九州・沖縄",50.6],
+["熊本県","九州・沖縄",77.4],["大分県","九州・沖縄",38.6],["宮崎県","九州・沖縄",76.5],
+["鹿児島県","九州・沖縄",53.2],["沖縄県","九州・沖縄",36.9]
+];
+const AVG = 56.7;
+const REGIONS = ["北海道・東北","関東","中部","近畿","中国・四国","九州・沖縄"];
+const sorted = D.slice().sort((a,b)=>b[2]-a[2]);
+const rankOf = n => sorted.findIndex(x=>x[0]===n)+1;
+
+const sel=document.getElementById('sel');
+sel.innerHTML = D.map(p=>`<option value="${p[0]}">${p[0]}</option>`).join('');
+sel.value="東京都";
+const gEl=document.getElementById('g');
+gEl.addEventListener('input',()=>document.getElementById('gv').textContent=gEl.value);
+
+function color(v){
+  // 34.3 → 88.2 を淡色→青にのばす
+  const t = Math.max(0, Math.min(1, (v-34)/(89-34)));
+  const c1=[241,238,230], c2=[37,99,235];
+  const c = c1.map((x,i)=>Math.round(x+(c2[i]-x)*t));
+  return `rgb(${c.join(',')})`;
+}
+function textColor(v){ return (v-34)/(89-34) > .55 ? '#fff' : '#1b1a17'; }
+
+function reveal(){
+  const name=sel.value, guess=+gEl.value;
+  const row=D.find(p=>p[0]===name), v=row[2], r=rankOf(name);
+  const diff=Math.abs(guess-v);
+  let verdict;
+  if(diff<=3) verdict='ほぼ当たりです。';
+  else if(diff<=10) verdict='だいたい合っています。';
+  else if(guess>v) verdict='思っているより、止まっていません。';
+  else verdict='思っているより、止まっています。';
+
+  document.getElementById('out').innerHTML = `
+  <div class="card">
+    <div class="hit">${verdict}</div>
+    <div class="res">
+      ${name}で止まった車は <b>${v.toFixed(1)}％</b><br>
+      全国 <b>${r}位</b> ／ 47県中<br>
+      全国平均56.7％との差 <b>${(v-AVG>=0?'+':'')}${(v-AVG).toFixed(1)}</b> ポイント<br>
+      あなたの予想は ${guess}％（ズレ ${diff.toFixed(0)} ポイント）
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">47都道府県、濃いほど止まる</div>
+    <div class="scale"><span>34％</span><div class="grad"></div><span>89％</span></div>
+    ${REGIONS.map(rg=>`
+      <div class="reg">${rg}</div>
+      <div class="grid">
+        ${D.filter(p=>p[1]===rg).map(p=>`
+          <button class="pref${p[0]===name?' me':''}" style="background:${color(p[2])};color:${textColor(p[2])}"
+            onclick="pick('${p[0]}')">${p[0].replace(/[都府県]$/,'')}<span>${p[2].toFixed(1)}</span></button>`).join('')}
+      </div>`).join('')}
+    <div class="note" style="margin-top:14px">押すと、その県で予想し直せます。</div>
+  </div>
+
+  <div class="card">
+    <div class="label">上と下、それぞれ5県</div>
+    ${sorted.slice(0,5).map((p,i)=>`<div class="rank"><span><i>${i+1}位</i>${p[0]}</span><span>${p[2].toFixed(1)}％</span></div>`).join('')}
+    <div class="rank" style="color:#a8a294"><span><i></i>…</span><span></span></div>
+    ${sorted.slice(-5).map((p,i)=>`<div class="rank"><span><i>${43+i}位</i>${p[0]}</span><span>${p[2].toFixed(1)}％</span></div>`).join('')}
+    <div class="note" style="margin-top:12px">1位の長野88.2％と最下位の山口34.3％で、53.9ポイントの開き。同じ道路交通法の下で、同じ場面の話です。</div>
+  </div>
+
+  <div class="card">
+    <div class="label">なぜ自治体が払うのか</div>
+    <div class="note">交通安全の啓発は、県警と自治体が毎年予算を持っている領域です。「危ないから止まりましょう」より、自分の県の順位を見せたほうが刺さる。横並びを気にする心理は、この一枚だけで動きます。啓発チラシ、免許更新の講習、企業の安全運転研修に、そのまま置ける形にしています。</div>
+  </div>
+
+  <button class="btn btn-ghost" onclick="again()">別の県でためす</button>
+
+  <p class="src">
+    出典：日本自動車連盟（JAF）「信号機のない横断歩道での歩行者横断時における車の一時停止状況全国調査」2025年調査結果。調査期間2025年8月6日〜28日の平日10時〜16時、各都道府県2か所ずつ計94か所、対象6,226台。全国の一時停止率56.7％（前年比3.7ポイント増）。<br>
+    https://jaf.or.jp/common/safety-drive/library/survey-report/2025-crosswalk
+  </p>`;
+  document.getElementById('ask').style.display='none';
+  window.scrollTo(0,0);
+}
+function pick(n){ sel.value=n; again(); }
+function again(){
+  document.getElementById('out').innerHTML='';
+  document.getElementById('ask').style.display='';
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

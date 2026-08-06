@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>十秒とめる｜あなたの1秒は、何秒か</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased;-webkit-user-select:none;user-select:none}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:18px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.pad{height:220px;border-radius:16px;background:#1b1a17;color:#fff;display:flex;
+ align-items:center;justify-content:center;flex-direction:column;gap:8px;
+ font-size:20px;font-weight:700;cursor:pointer;touch-action:none;transition:background .15s}
+.pad.hold{background:#2563eb}
+.pad small{font-size:13px;font-weight:400;opacity:.75}
+.steps{display:flex;gap:7px;justify-content:center;margin:14px 0 0}
+.steps i{width:11px;height:11px;border-radius:50%;background:#dcd8cd;display:block}
+.steps i.on{background:#2563eb}
+.btn{background:#2563eb;color:#fff;border:0;border-radius:12px;padding:14px 16px;
+ font-size:16px;font-weight:600;width:100%;cursor:pointer}
+.btn-ghost{background:#fff;color:#2563eb;border:1px solid #d6d2c8}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+.big{font-size:46px;font-weight:800;color:#2563eb;line-height:1.1;letter-spacing:-.02em}
+.mid{font-size:19px;font-weight:700;line-height:1.6}
+.bars{margin-top:6px}
+.brow{display:flex;align-items:center;gap:10px;padding:7px 0}
+.brow span{font-size:13px;color:#847e70;width:46px;flex:none;white-space:nowrap}
+.track{flex:1;height:26px;background:#f1eee6;border-radius:7px;position:relative;overflow:hidden}
+.track b{position:absolute;left:0;top:0;bottom:0;background:#9fb8ee;border-radius:7px}
+.track u{position:absolute;top:0;bottom:0;width:2px;background:#1b1a17}
+.track em{position:absolute;right:7px;top:5px;font-style:normal;font-size:13px;font-weight:700}
+.seg{display:flex;gap:8px;margin-top:10px}
+.seg button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#4a453c;border-radius:11px;
+ padding:11px 0;font-size:15px;cursor:pointer}
+.seg button.on{background:#2563eb;border-color:#2563eb;color:#fff;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（体験版）</div>
+  <h1>十秒とめる</h1>
+  <p class="lead">画面を押したまま、心のなかで数えて、ちょうど十秒だと思ったところで指を離してください。数字は出ません。三回終わるまで、結果も出しません。</p>
+
+  <div id="view"></div>
+</div>
+
+<script>
+const S = {target:10, taps:[], holding:false, t0:0};
+
+function el(id){ return document.getElementById(id); }
+function render(){
+  el('view').innerHTML = S.taps.length < 3 ? padHTML() : resHTML();
+  if(S.taps.length < 3) bind();
+}
+
+function padHTML(){
+  return `<div class="card">
+    <div class="seg" id="seg">
+      <button data-v="10" class="${S.target===10?'on':''}">10秒</button>
+      <button data-v="30" class="${S.target===30?'on':''}">30秒</button>
+    </div>
+    <div class="note" style="margin:12px 0 12px">できれば目をつぶって。時計も、数字の出るものも見ないでください。</div>
+    <div class="pad" id="pad">
+      <div id="padtxt">長押しして、${S.target}秒で離す</div>
+      <small>${S.taps.length+1}回目 ／ 3回</small>
+    </div>
+    <div class="steps">
+      <i class="${S.taps.length>0?'on':''}"></i><i class="${S.taps.length>1?'on':''}"></i><i class="${S.taps.length>2?'on':''}"></i>
+    </div>
+  </div>`;
+}
+
+function bind(){
+  const pad=el('pad');
+  const down=e=>{ e.preventDefault(); if(S.holding) return;
+    S.holding=true; S.t0=performance.now();
+    pad.classList.add('hold'); el('padtxt').textContent='はかっています'; };
+  const up=e=>{ e.preventDefault(); if(!S.holding) return;
+    S.holding=false;
+    const d=(performance.now()-S.t0)/1000;
+    pad.classList.remove('hold');
+    if(d<0.4) { el('padtxt').textContent=`長押しして、${S.target}秒で離す`; return; }
+    S.taps.push(d); render(); };
+  pad.addEventListener('pointerdown',down);
+  pad.addEventListener('pointerup',up);
+  pad.addEventListener('pointerleave',up);
+  pad.addEventListener('pointercancel',up);
+
+  const seg=el('seg');
+  if(seg) seg.addEventListener('click', e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    S.target=+b.dataset.v; S.taps=[]; render();
+  });
+}
+
+function fmt(sec){
+  if(sec>=3600){
+    const h=Math.floor(sec/3600), m=Math.round((sec%3600)/60);
+    return m>0 ? `${h}時間${m}分` : `${h}時間`;
+  }
+  const m=Math.floor(sec/60), s=Math.round(sec%60);
+  return m>0 ? `${m}分${String(s).padStart(2,'0')}秒` : `${s}秒`;
+}
+
+function resHTML(){
+  const t=S.target;
+  const avg = S.taps.reduce((a,b)=>a+b,0)/S.taps.length;
+  const ratio = avg/t;                       // 体感1秒あたりの実時間
+  const max=Math.max(...S.taps), min=Math.min(...S.taps);
+  const spread = max-min;
+  const scale = Math.max(max, t)*1.25;
+  const hour = 3600*ratio;
+
+  let kuse;
+  if(ratio < 0.9) kuse = `あなたの数え方は、実際の時計より<b>速い</b>。`;
+  else if(ratio > 1.1) kuse = `あなたの数え方は、実際の時計より<b>ゆっくり</b>。`;
+  else kuse = `あなたの数え方は、実際の時計と<b>ほぼ同じ</b>。`;
+
+  return `<div class="card">
+    <div class="note">${t}秒だと思って離したのは、平均で</div>
+    <div class="big">${avg.toFixed(1)}<span style="font-size:22px">秒</span></div>
+    <div class="mid" style="margin-top:10px">${kuse}</div>
+    <div class="bars">
+      ${S.taps.map((d,i)=>`
+        <div class="brow">
+          <span>${i+1}回目</span>
+          <div class="track">
+            <b style="width:${Math.min(100,d/scale*100)}%"></b>
+            <u style="left:${t/scale*100}%"></u>
+            <em>${d.toFixed(1)}秒</em>
+          </div>
+        </div>`).join('')}
+      <div class="note" style="margin-top:4px">縦の線が、本物の${t}秒です。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="note">あなたの1秒は</div>
+    <div class="big">${ratio.toFixed(2)}<span style="font-size:22px">秒</span></div>
+    <div class="note" style="margin-top:10px">この時計のまま「1時間たった」と感じたとき、実際に過ぎているのは <b style="color:#1b1a17;font-size:16px">${fmt(hour)}</b>。1日ぶんだと ${fmt(hour*24)} です。</div>
+  </div>
+
+  <div class="card">
+    <div class="note">3回のブレ幅</div>
+    <div class="mid" style="margin-top:4px">${spread.toFixed(1)}秒（${min.toFixed(1)}〜${max.toFixed(1)}秒）</div>
+    <div class="note" style="margin-top:10px">ズレの大きさより、ブレの小ささのほうが、その日ごとに変わります。朝と、仕事が終わったあとで、同じ数字が出るかどうか。</div>
+  </div>
+
+  <button class="btn" onclick="again()">もう一度はかる</button>
+  <button class="btn btn-ghost" style="margin-top:10px" onclick="switchTarget()">${t===10?'30秒でためす':'10秒でためす'}</button>
+  <p class="note" style="margin-top:16px">計測はこの端末のなかだけで完結します。どこにも送りません。体調や健康を判定するものではありません。</p>`;
+}
+
+function again(){ S.taps=[]; render(); }
+function switchTarget(){ S.target = S.target===10?30:10; S.taps=[]; render(); }
+render();
+</script>
+</body>
+</html>

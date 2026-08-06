@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>きいたまま｜くり返す昔話から、その人の芯を残す</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px;letter-spacing:-.01em}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.btn{background:#2563eb;color:#fff;border:0;border-radius:12px;padding:14px 16px;
+ font-size:16px;font-weight:600;width:100%;cursor:pointer}
+.btn:disabled{background:#c9c6bd;cursor:default}
+.btn-ghost{background:#fff;color:#2563eb;border:1px solid #d6d2c8}
+.row{display:flex;align-items:center;gap:12px}
+.name{font-size:19px;font-weight:700}
+.sub{font-size:13px;color:#847e70;margin-top:3px}
+.badge{margin-left:auto;background:#eef3ff;color:#2563eb;border-radius:999px;
+ padding:5px 11px;font-size:13px;font-weight:700;white-space:nowrap}
+.person{cursor:pointer;border:1px solid transparent}
+.person:active{border-color:#2563eb}
+.back{background:none;border:0;color:#2563eb;font-size:15px;padding:6px 0;cursor:pointer}
+.mic{width:100%;border:0;border-radius:14px;background:#1b1a17;color:#fff;
+ padding:18px;font-size:16px;font-weight:600;cursor:pointer}
+.mic.rec{background:#2563eb}
+.wave{display:flex;gap:4px;justify-content:center;align-items:flex-end;height:26px;margin-top:10px}
+.wave i{width:4px;background:#fff;border-radius:2px;animation:w .9s infinite ease-in-out}
+@keyframes w{0%,100%{height:6px}50%{height:24px}}
+.line{border-top:1px solid #ede9e0;padding:12px 0}
+.line:first-child{border-top:0}
+.quote{font-size:17px;line-height:1.65}
+.meta{font-size:12px;color:#8d8778;margin-top:5px}
+.chip{display:inline-block;background:#f1efe8;border-radius:999px;padding:3px 9px;
+ font-size:12px;color:#6b6558;margin-right:6px}
+.chip.core{background:#2563eb;color:#fff}
+.topic{display:flex;align-items:center;gap:10px;padding:9px 0}
+.bar{flex:1;height:8px;background:#efece4;border-radius:5px;overflow:hidden}
+.bar b{display:block;height:100%;background:#2563eb;border-radius:5px;transition:width .5s}
+.cnt{font-size:13px;color:#847e70;width:44px;text-align:right}
+.sheet{background:#fffdf7;border:1px solid #e6e0d2;border-radius:14px;padding:20px}
+.sheet h2{font-size:21px;margin:0 0 2px}
+.sheet .core-q{font-size:17px;line-height:1.7;margin:14px 0 0;padding-left:12px;border-left:3px solid #2563eb}
+.note{font-size:13px;color:#847e70;line-height:1.7}
+.hint{background:#fbf7ea;border:1px solid #eee0bd;border-radius:12px;padding:12px;
+ font-size:14px;line-height:1.7;color:#6a6250}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（サンプルデータ）</div>
+  <h1>きいたまま</h1>
+  <p class="lead">同じ話を何度もするのは、忘れているからではなく、その話が残っているから。くり返された回数だけを数えて、その人の芯を三つ見つけます。</p>
+
+  <div id="view"></div>
+</div>
+
+<script>
+const DATA = {
+  home: "さくら野ケアホーム（架空）",
+  people: [
+    {
+      id:"p1", name:"田中 ハル", age:88, room:"201",
+      heard:[
+        {t:"学校まで山をふたつ越えてね、朝は暗いうちに出たの", topic:"通った山道", by:"入浴介助のとき", d:"7月18日"},
+        {t:"父さんがね、町に出た日に飴をひとつだけ買ってくれた", topic:"父の飴", by:"おやつのとき", d:"7月22日"},
+        {t:"雪の日はね、下駄が埋まって歩けないの。山をふたつよ", topic:"通った山道", by:"廊下で", d:"7月29日"},
+        {t:"三味線を教えてくれたのは、隣のばあさんだった", topic:"三味線", by:"レク中", d:"8月1日"},
+        {t:"飴はね、なめないで持って帰った。妹にやりたくて", topic:"父の飴", by:"食後", d:"8月3日"},
+      ],
+      queue:[
+        {t:"山をふたつ、それでも学校は好きだったのよ", topic:"通った山道", by:"朝の検温", d:"8月6日"},
+        {t:"あの飴の紙、まだどこかにあると思うのよね", topic:"父の飴", by:"面会のあと", d:"8月6日"},
+        {t:"三味線はね、指が覚えてるの。頭じゃなくて", topic:"三味線", by:"夕食前", d:"8月6日"},
+        {t:"三味線の音がすると、今でも背筋が伸びるの", topic:"三味線", by:"就寝前", d:"8月6日"},
+      ]
+    },
+    {
+      id:"p2", name:"山口 テル", age:91, room:"205",
+      heard:[
+        {t:"うちの店はね、鰺の干物が一番よく出たの", topic:"店の干物", by:"昼食のとき", d:"7月20日"},
+        {t:"孫が生まれた日、店を半日だけ閉めたわ", topic:"店の干物", by:"面会のあと", d:"7月30日"},
+      ],
+      queue:[
+        {t:"干物は朝の四時から並べるの。それが仕事", topic:"店の干物", by:"起床時", d:"8月6日"},
+      ]
+    },
+    {
+      id:"p3", name:"佐野 一郎", age:85, room:"310",
+      heard:[
+        {t:"旋盤はな、音でわかるんだ。目をつぶってても", topic:"工場の音", by:"作業レク", d:"7月25日"},
+        {t:"弁当は毎日おなじ、梅干しひとつ", topic:"毎日の弁当", by:"昼食のとき", d:"8月2日"},
+      ],
+      queue:[
+        {t:"あの機械の音がすると、体が勝手に動いたもんだ", topic:"工場の音", by:"リハビリ中", d:"8月6日"},
+      ]
+    }
+  ]
+};
+
+const STATE = {view:"list", pid:null, log:{}, qi:{}, rec:false};
+DATA.people.forEach(p=>{ STATE.log[p.id]=p.heard.slice(); STATE.qi[p.id]=0; });
+
+function counts(pid){
+  const m={};
+  STATE.log[pid].forEach(h=>{ m[h.topic]=(m[h.topic]||0)+1; });
+  return m;
+}
+function cores(pid){
+  const m=counts(pid);
+  return Object.keys(m).filter(k=>m[k]>=3);
+}
+const esc = s => s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function render(){
+  const v=document.getElementById('view');
+  if(STATE.view==='list') v.innerHTML = listHTML();
+  else if(STATE.view==='person') v.innerHTML = personHTML();
+  else v.innerHTML = sheetHTML();
+  window.scrollTo(0,0);
+}
+
+function listHTML(){
+  return `<div class="card"><div class="sub">${DATA.home}</div>
+    <div class="note" style="margin-top:8px">職員が耳にした一言を、そのまま短く置いていくだけ。三回くり返された話題が「芯」になります。</div></div>`
+   + DATA.people.map(p=>{
+      const c=cores(p.id).length;
+      return `<div class="card person" onclick="openPerson('${p.id}')">
+        <div class="row">
+          <div>
+            <div class="name">${p.name} <span class="sub" style="display:inline">（${p.age}）</span></div>
+            <div class="sub">${p.room}号室・一言 ${STATE.log[p.id].length}件</div>
+          </div>
+          <div class="badge">芯 ${c}</div>
+        </div></div>`;
+    }).join('');
+}
+
+function personHTML(){
+  const p=DATA.people.find(x=>x.id===STATE.pid);
+  const m=counts(p.id), cs=cores(p.id);
+  const topics=Object.keys(m).sort((a,b)=>m[b]-m[a]);
+  const done = STATE.qi[p.id] >= p.queue.length;
+  return `<button class="back" onclick="go('list')">一覧にもどる</button>
+  <div class="card">
+    <div class="name">${p.name}</div>
+    <div class="sub">${p.age}歳・${p.room}号室</div>
+    <div style="margin-top:14px">
+      <button class="mic ${STATE.rec?'rec':''}" id="mic" onclick="speak()">
+        ${STATE.rec?'聞きとり中…':(done?'今日の一言はここまで':'聞いた一言を話す')}
+      </button>
+      ${STATE.rec?'<div class="wave"><i style="animation-delay:0s"></i><i style="animation-delay:.1s"></i><i style="animation-delay:.2s"></i><i style="animation-delay:.3s"></i><i style="animation-delay:.15s"></i><i style="animation-delay:.05s"></i></div>':''}
+      <div class="note" style="margin-top:10px">職員が話しかけると文字になります。書く手間はゼロ、話題の仕分けは自動。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="sub" style="margin-bottom:6px">くり返された数</div>
+    ${topics.map(t=>{
+      const n=m[t], core=n>=3;
+      return `<div class="topic">
+        <div style="width:88px;font-size:14px;${core?'font-weight:700':''}">${esc(t)}</div>
+        <div class="bar"><b style="width:${Math.min(100,n/4*100)}%;${core?'':'background:#b9c8ee'}"></b></div>
+        <div class="cnt">${n}回${core?'　芯':''}</div>
+      </div>`;
+    }).join('')}
+    <div class="note" style="margin-top:8px">三回で芯にあがります。芯が三つそろうと、ご家族にわたす一枚ができます。</div>
+  </div>
+
+  <div class="card">
+    <div class="sub" style="margin-bottom:4px">聞いた一言（新しい順）</div>
+    ${STATE.log[p.id].slice().reverse().map(h=>`
+      <div class="line">
+        <div class="quote">「${esc(h.t)}」</div>
+        <div class="meta">${h.d}・${h.by}</div>
+        <div style="margin-top:7px"><span class="chip ${m[h.topic]>=3?'core':''}">${esc(h.topic)}</span></div>
+      </div>`).join('')}
+  </div>
+
+  <button class="btn" ${cs.length>=3?'':'disabled'} onclick="go('sheet')">
+    ${cs.length>=3?'ご家族にわたす一枚をつくる':`芯があと${3-cs.length}つで一枚になります`}
+  </button>`;
+}
+
+function sheetHTML(){
+  const p=DATA.people.find(x=>x.id===STATE.pid);
+  const m=counts(p.id), cs=cores(p.id);
+  return `<button class="back" onclick="go('person')">もどる</button>
+  <div class="sheet">
+    <div class="tag">${DATA.home}</div>
+    <h2>${p.name} さんが、なんども話したこと</h2>
+    <div class="note">${new Date().getFullYear()}年8月6日時点／聞いた一言 ${STATE.log[p.id].length}件から</div>
+    ${cs.map(t=>{
+      const qs=STATE.log[p.id].filter(h=>h.topic===t);
+      return `<div style="margin-top:20px">
+        <div style="font-size:15px;font-weight:700">${esc(t)}<span class="note" style="font-weight:400">　${m[t]}回</span></div>
+        ${qs.map(q=>`<p class="core-q">「${esc(q.t)}」<br><span class="note">${q.d}・${q.by}</span></p>`).join('')}
+      </div>`;
+    }).join('')}
+    <div class="note" style="margin-top:22px;border-top:1px solid #e6e0d2;padding-top:12px">
+      くり返しの回数だけで選んでいます。職員の解釈や要約は入れていません。
+    </div>
+  </div>
+  <div class="hint" style="margin-top:14px">
+    使いどころ：面会のとき、担当が替わるとき、看取りのあと。同じ話に何度もつきあった時間が、そのまま形で残ります。
+  </div>
+  <button class="btn btn-ghost" style="margin-top:12px" onclick="go('list')">一覧にもどる</button>`;
+}
+
+function openPerson(id){ STATE.pid=id; STATE.view='person'; render(); }
+function go(v){ STATE.view=v; render(); }
+function speak(){
+  const p=DATA.people.find(x=>x.id===STATE.pid);
+  if(STATE.rec || STATE.qi[p.id]>=p.queue.length) return;
+  STATE.rec=true; render();
+  setTimeout(()=>{
+    const q=p.queue[STATE.qi[p.id]++];
+    STATE.log[p.id].push(q);
+    STATE.rec=false; render();
+  },1200);
+}
+render();
+</script>
+</body>
+</html>

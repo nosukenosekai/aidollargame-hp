@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="中古トラックの相場を無料でお調べします（株式会社AIdollargame）">
+<link rel="icon" href="/favicon.svg">
+<title>トラック相場チェック | 売却前に今の価値がわかる</title>
+<style>
+  :root {
+    --head:#16263c; --headGrad:#2c4460; --accent:#2563eb; --accentDark:#1d4ed8;
+    --bg:#f3f6fa; --line:#dde3ec; --ink:#1f2937; --muted:#556070; --faint:#8b96a6;
+    --panel:#fff; --soft:#eaf0f8; --good:#0f766e;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif; background:var(--bg); color:var(--ink); font-size:17px; line-height:1.7; }
+
+  header { background:var(--head); color:#fff; padding:15px 22px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+  header .logo { font-weight:800; font-size:19px; display:flex; align-items:center; gap:9px; }
+  header .logo svg { width:26px; height:26px; }
+  header h1 { font-size:15.5px; font-weight:700; margin:0; }
+  header h1 span { font-weight:400; opacity:.6; }
+  header .badge { margin-left:auto; background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25); border-radius:999px; padding:5px 13px; font-size:12.5px; white-space:nowrap; }
+
+  .hero { background:linear-gradient(180deg,#e9f0fc,var(--bg)); padding:40px 22px 30px; text-align:center; }
+  .hero h2 { font-size:34px; margin:0; line-height:1.4; letter-spacing:.01em; }
+  .hero h2 b { color:var(--accent); }
+  .hero p { font-size:17px; color:var(--muted); margin:12px 0 0; }
+  @media (max-width:640px) { .hero h2 { font-size:25px; } .hero { padding:28px 16px 22px; } }
+
+  .wrap { max-width:900px; margin:0 auto; padding:0 22px 40px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:24px; margin-top:-14px; box-shadow:0 6px 24px rgba(22,38,60,.08); }
+  .card h3 { font-size:17px; margin:0 0 16px; color:var(--head); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:14px; }
+  label { display:block; font-size:12.5px; color:var(--muted); font-weight:700; margin-bottom:5px; }
+  select, input { width:100%; padding:12px 13px; font-size:16px; border:1px solid var(--line); border-radius:10px; background:#fff; color:var(--ink); font-family:inherit; }
+  select:focus, input:focus { outline:2px solid var(--accent); outline-offset:-1px; }
+  .go { width:100%; margin-top:18px; padding:16px; font-size:18px; font-weight:800; background:var(--accent); color:#fff; border:none; border-radius:11px; cursor:pointer; font-family:inherit; }
+  .go:hover { background:var(--accentDark); }
+
+  #result { display:none; margin-top:22px; border-top:1px solid var(--line); padding-top:22px; }
+  .range { display:flex; align-items:baseline; justify-content:center; gap:20px; flex-wrap:wrap; }
+  .range .side { font-size:19px; color:var(--muted); font-variant-numeric:tabular-nums; }
+  .range .mid { font-size:56px; font-weight:800; color:var(--accent); letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+  .range .mid small { font-size:21px; font-weight:700; }
+  .basis { text-align:center; color:var(--muted); font-size:14px; margin-top:8px; }
+  .samples { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:10px; margin-top:18px; }
+  .s { border:1px solid var(--line); border-radius:11px; padding:11px 14px; background:var(--soft); font-size:14px; display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
+  .s b { color:var(--head); font-size:17px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .note { margin-top:16px; font-size:13.5px; color:var(--muted); background:var(--soft); border-radius:11px; padding:13px 15px; line-height:1.8; }
+  .cta { display:block; margin-top:18px; text-align:center; text-decoration:none; background:var(--accent); color:#fff; font-size:18px; font-weight:800; padding:17px; border-radius:11px; }
+  .cta:hover { background:var(--accentDark); }
+  .ctasub { text-align:center; font-size:13px; color:var(--faint); margin-top:9px; }
+
+  .how { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; margin-top:34px; }
+  .step { background:var(--panel); border:1px solid var(--line); border-radius:13px; padding:20px; }
+  .step .n { display:inline-grid; place-items:center; width:27px; height:27px; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-size:14px; margin-bottom:9px; }
+  .step h4 { margin:0 0 6px; font-size:15.5px; color:var(--head); }
+  .step p { margin:0; font-size:14px; color:var(--muted); line-height:1.75; }
+
+  footer { border-top:1px solid var(--line); margin-top:34px; padding:22px 22px 40px; color:var(--faint); font-size:12.5px; line-height:1.9; text-align:center; }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M1 6h13v10H1z"/><path d="M14 9h4l3 3v4h-7z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>
+    </svg>
+    トラック相場チェック
+  </span>
+  <h1>売却前に今の価値がわかる <span>｜ 無料</span></h1>
+  <span class="badge" id="badge">読み込み中…</span>
+</header>
+
+<div class="hero">
+  <h2>そのトラック、いま<b>いくら</b>か<br>先に知ってから売る。</h2>
+  <p>実際に売りに出ている車両の価格から相場をお調べします。入力は30秒、費用はかかりません。</p>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <h3>車両の条件を入れてください</h3>
+    <div class="grid">
+      <div>
+        <label for="fBody">ボディ形状</label>
+        <select id="fBody"><option value="">選んでください</option></select>
+      </div>
+      <div>
+        <label for="fCls">大きさ</label>
+        <select id="fCls">
+          <option value="">選んでください</option>
+          <option>小型</option><option>中型</option><option>増トン</option><option>大型</option>
+        </select>
+      </div>
+      <div>
+        <label for="fYear">年式（西暦）</label>
+        <input id="fYear" type="number" min="1985" max="2027" placeholder="例: 2016">
+      </div>
+      <div>
+        <label for="fMil">走行距離（万km）</label>
+        <input id="fMil" type="number" min="0" step="0.1" placeholder="例: 45">
+      </div>
+      <div>
+        <label for="fMaker">メーカー（任意）</label>
+        <select id="fMaker"><option value="">指定なし</option></select>
+      </div>
+      <div>
+        <label for="fLoad">最大積載量（kg・任意）</label>
+        <input id="fLoad" type="number" min="0" placeholder="例: 3000">
+      </div>
+    </div>
+    <button class="go" id="go">相場を調べる</button>
+
+    <div id="result">
+      <div class="range">
+        <div class="side" id="rMin">-</div>
+        <div class="mid"><span id="rMid">-</span><small> 万円</small></div>
+        <div class="side" id="rMax">-</div>
+      </div>
+      <div class="basis" id="rBasis"></div>
+      <div class="samples" id="rSamples"></div>
+      <div class="note" id="rNote"></div>
+      <a class="cta" id="rCta" href="#">この車両の買取査定を依頼する（無料）</a>
+      <div class="ctasub">買取をご希望の場合、条件に合う買取店をお探ししてお繋ぎします。しつこい営業はしません。</div>
+    </div>
+  </div>
+
+  <div class="how">
+    <div class="step"><span class="n">1</span><h4>相場を確認</h4><p>条件を入れると、いま売りに出ている同型車の価格帯と中央値が出ます。</p></div>
+    <div class="step"><span class="n">2</span><h4>査定を依頼</h4><p>売却をお考えなら、そのまま無料査定へ。車両の状態を伺います。</p></div>
+    <div class="step"><span class="n">3</span><h4>買取店をお繋ぎ</h4><p>その車種を得意とする買取店をお探しし、金額を出してもらいます。</p></div>
+    <div class="step"><span class="n">4</span><h4>ご納得なら成約</h4><p>金額にご納得いただけた場合のみお進みください。断っても費用はかかりません。</p></div>
+  </div>
+</div>
+
+<footer id="src">読み込み中…</footer>
+
+<script>
+let ROWS = [], META = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+async function load() {
+  const j = await (await fetch('souba.json')).json();
+  META = j.meta;
+  ROWS = j.rows.map(r => ({ body: r[0], cls: r[1], year: r[2], mil: r[3], load: r[4], price: r[5], maker: r[6] }));
+  $('badge').textContent = ROWS.length.toLocaleString() + '台の実売価格から算出';
+  $('src').textContent =
+    '相場は、' + META.sources.join('・') + 'に掲載されている中古トラック' + META.rows_note +
+    ROWS.length.toLocaleString() + '台の売り出し価格（' + META.collected + '取得）をもとに算出しています。' +
+    'これは販売店が売る際の価格帯であり、買取時のご提示額は整備・販売にかかる費用を差し引いた金額になります。' +
+    '実際の金額は車両の状態により変わりますので、無料査定でご確認ください。／ 株式会社AIdollargame（東京都新宿区北新宿1-7-20）';
+  const opt = (id, arr) => arr.forEach(v => { const o = document.createElement('option'); o.textContent = v; $(id).appendChild(o); });
+  const cnt = key => { const m = {}; ROWS.forEach(x => { if (x[key] && x[key] !== 'その他' && x[key] !== '不明') m[x[key]] = (m[x[key]] || 0) + 1; });
+    return Object.entries(m).sort((a, b) => b[1] - a[1]).map(e => e[0]); };
+  opt('fBody', cnt('body'));
+  opt('fMaker', cnt('maker'));
+}
+
+function median(a) { const s = a.slice().sort((x, y) => x - y); return s[Math.floor(s.length / 2)]; }
+
+function estimate(q) {
+  // 条件を段階的にゆるめて、8台以上そろう母集団を探す
+  const tiers = [
+    { label: '同じ形状・大きさ・年式±2年・積載±30%', f: x => x.body === q.body && x.cls === q.cls && Math.abs(x.year - q.year) <= 2 && (q.load && x.load ? Math.abs(x.load - q.load) <= q.load * 0.3 : true) },
+    { label: '同じ形状・大きさ・年式±3年', f: x => x.body === q.body && x.cls === q.cls && Math.abs(x.year - q.year) <= 3 },
+    { label: '同じ形状・大きさ・年式±5年', f: x => x.body === q.body && x.cls === q.cls && Math.abs(x.year - q.year) <= 5 },
+    { label: '同じ形状・大きさ', f: x => x.body === q.body && x.cls === q.cls },
+    { label: '同じ形状', f: x => x.body === q.body },
+  ];
+  for (const t of tiers) {
+    const m = ROWS.filter(x => x.year && t.f(x));
+    if (m.length < 8) continue;
+    let use = m, label = t.label;
+    if (q.mil != null) {
+      const mm = m.filter(x => x.mil != null && Math.abs(x.mil - q.mil) <= 20);
+      if (mm.length >= 8) { use = mm; label += '・走行±20万km'; }
+    }
+    const ps = use.map(x => x.price);
+    const ex = use.slice().sort((a, b) => {
+      const d = x => Math.abs((x.year || q.year) - q.year) + (q.mil != null && x.mil != null ? Math.abs(x.mil - q.mil) / 15 : 2);
+      return d(a) - d(b);
+    }).slice(0, 4);
+    return { n: use.length, label, min: Math.min(...ps), max: Math.max(...ps), med: median(ps), ex };
+  }
+  return null;
+}
+
+function mailtoFor(q, r) {
+  const body = [
+    '株式会社AIdollargame 御中', '',
+    'トラックの買取査定をお願いします。', '',
+    '【車両】',
+    'ボディ形状：' + q.body,
+    '大きさ：' + q.cls,
+    '年式：' + q.year + '年',
+    '走行距離：' + (q.mil != null ? q.mil + '万km' : ''),
+    '最大積載量：' + (q.load ? q.load + 'kg' : ''),
+    'メーカー：' + (q.maker || ''),
+    '車名・型式：',
+    '車検の残り：',
+    '車両の状態（傷・修復歴・不具合など）：',
+    '所在地（都道府県）：', '',
+    '【ご連絡先】',
+    '会社名：', 'お名前：', 'お電話：', 'メール：', '',
+    '売却をご検討の時期：', '',
+    r ? '（サイト表示の相場：中央値 ' + r.med + '万円／' + r.min + '〜' + r.max + '万円・根拠' + r.n + '台）' : '',
+  ].join('\n');
+  return 'mailto:nosuke@aidollargame.com?subject=' + encodeURIComponent('トラック買取査定の依頼') + '&body=' + encodeURIComponent(body);
+}
+
+$('go').addEventListener('click', () => {
+  const q = {
+    body: $('fBody').value, cls: $('fCls').value,
+    year: +$('fYear').value || null,
+    mil: $('fMil').value === '' ? null : +$('fMil').value,
+    load: +$('fLoad').value || null,
+    maker: $('fMaker').value,
+  };
+  if (!q.body || !q.cls || !q.year) { alert('ボディ形状・大きさ・年式を入れてください。'); return; }
+  const r = estimate(q);
+  $('result').style.display = 'block';
+  if (!r) {
+    $('rMin').textContent = ''; $('rMax').textContent = '';
+    $('rMid').textContent = '—';
+    $('rBasis').textContent = 'この条件に近い車両が手元のデータに足りず、相場を出せませんでした。無料査定でお調べします。';
+    $('rSamples').innerHTML = '';
+    $('rNote').textContent = '';
+  } else {
+    $('rMin').textContent = r.min + '万円';
+    $('rMax').textContent = r.max + '万円';
+    $('rMid').textContent = Math.round(r.med);
+    $('rBasis').textContent = '根拠: ' + r.label + ' の売り出し ' + r.n + '台の中央値';
+    $('rSamples').innerHTML = r.ex.map(x =>
+      '<div class="s"><span>' + esc(x.maker || '') + ' ' + (x.year || '') + '年' +
+      (x.mil != null ? '・走行' + x.mil + '万km' : '') + '</span><b>' + x.price + '万円</b></div>').join('');
+    $('rNote').textContent =
+      'この金額は、いま販売店が売りに出している価格の中央値です。買取のご提示額は、ここから整備や販売にかかる費用を差し引いた金額になります。' +
+      '車検の残り、傷や修復歴、架装の状態で上下しますので、正確な金額は無料査定でご案内します。';
+  }
+  $('rCta').href = mailtoFor(q, r);
+  $('result').scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+load().catch(() => { $('badge').textContent = '読み込みに失敗しました'; });
+</script>
+</body>
+</html>

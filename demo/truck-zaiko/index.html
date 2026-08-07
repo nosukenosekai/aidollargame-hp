@@ -154,7 +154,7 @@
     トラック在庫
   </span>
   <h1>検索アシスタント <span>｜ 仕入れ担当者用</span></h1>
-  <a class="headcta" id="ctaSellTop" href="#">トラックを売りたい方はこちら</a>
+  <a class="headcta" id="ctaSellTop" href="/demo/truck-satei/">トラックを売りたい方はこちら</a>
   <button class="fontbtn" id="fontToggle">文字を大きく</button>
   <span class="badge" id="badge">読み込み中…</span>
 </header>
@@ -192,7 +192,7 @@
     <div class="cta">
       <h4>トラックを売りたい方へ</h4>
       <p>車両の条件をお送りいただければ、掲載中の同型車の相場をお調べして無料でご案内します。買取をご希望の場合は買取店へおつなぎします。</p>
-      <a class="cta-btn" id="ctaSell" href="#">無料で相場を調べる</a>
+      <a class="cta-btn" id="ctaSell" href="/demo/truck-satei/">無料で相場を調べる</a>
     </div>
     <div class="cta ghost">
       <h4>販売店の方へ</h4>
@@ -512,8 +512,8 @@ const sellMail = mailto('トラックの相場照会・売却相談', [
   '年式：', '走行距離：', 'ボディ形状：', '積載量：', '所在地：', '', '【ご連絡先】',
   '会社名：', 'お名前：', 'お電話：', '', 'ご要望（売却希望・時期など）：', '',
 ].join('\n'));
-document.getElementById('ctaSell').href = sellMail;
-document.getElementById('ctaSellTop').href = sellMail;
+document.getElementById('ctaSell').href = '/demo/truck-satei/';
+document.getElementById('ctaSellTop').href = '/demo/truck-satei/';
 document.getElementById('ctaDealer').href = mailto('在庫の無料掲載の申し込み', [
   '株式会社AIdollargame 御中', '',
   'トラック在庫検索アシスタントへの在庫掲載を希望します。', '',

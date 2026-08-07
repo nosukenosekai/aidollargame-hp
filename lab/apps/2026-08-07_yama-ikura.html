@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>山いくら｜ヤードに積んだ山を、ドローン一周で金額にする</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.piles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pile{border:1px solid #ddd9cf;border-radius:12px;padding:12px;background:#faf9f5;cursor:pointer;text-align:left}
+.pile.on{border-color:#2563eb;background:#eef2fd}
+.pile b{display:block;font-size:16px;margin-bottom:3px}
+.pile span{font-size:12px;color:#847e70;line-height:1.6}
+.btn{background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px 16px;
+ font-size:16px;font-weight:600;width:100%;cursor:pointer;margin-top:12px}
+.btn:disabled{background:#c8c3b7}
+.btn-ghost{background:#fff;color:#2563eb;border:1px solid #d6d2c8}
+.scan{width:100%;height:150px;display:block;background:#faf9f5;border-radius:12px}
+.steps{font-size:13px;color:#847e70;line-height:1.9;margin:10px 0 0}
+.steps b{color:#1b1a17}
+.big{font-size:44px;font-weight:800;color:#2563eb;line-height:1.05}
+.unit{font-size:19px;font-weight:700;color:#2563eb;margin-left:2px}
+.row{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #efece4;font-size:15px;color:#4a453c}
+.row:first-child{border-top:0}
+.row b{font-size:17px;color:#1b1a17}
+.res{font-size:15px;line-height:1.85;color:#4a453c}
+.res b{font-size:20px;color:#1b1a17}
+input[type=range]{width:100%;accent-color:#2563eb;height:30px}
+.mk{display:flex;justify-content:space-between;font-size:12px;color:#847e70;margin-top:-4px}
+.verdict{font-size:20px;font-weight:700;line-height:1.6;margin:4px 0 8px}
+.verdict.sell{color:#1d6b3f}
+.verdict.hold{color:#c2410c}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+.src{font-size:12px;color:#8d8778;line-height:1.7;margin-top:18px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（架空のヤード・サンプルデータ）</div>
+  <h1>山いくら</h1>
+  <p class="lead">ヤードに積んだ鉄スクラップの山を、ドローンで一周した映像から体積で測り、その日の相場で金額に直します。目分量とベテランの勘でしか出せなかった「今この山はいくらか」を、誰でも同じ数字で言えるようにします。</p>
+
+  <div class="card">
+    <div class="label">1．測る山を選ぶ（丸和金属リサイクル・架空／北ヤード）</div>
+    <div class="piles" id="piles"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">2．ドローンで一周する</div>
+    <svg class="scan" id="scan" viewBox="0 0 300 150"></svg>
+    <button class="btn" id="go">一周してみる（約40秒ぶんを再生）</button>
+    <div class="steps" id="steps"></div>
+  </div>
+
+  <div id="out" class="hide">
+    <div class="card">
+      <div class="label">3．この山はいくらか</div>
+      <div><span class="big" id="yen">－</span><span class="unit">万円</span></div>
+      <div class="res" style="margin:8px 0 12px" id="sub"></div>
+      <div class="row"><span>体積（三角測量の推定）</span><b id="vol">－</b></div>
+      <div class="row"><span>かさ密度</span><b id="dens">－</b></div>
+      <div class="row"><span>推定重量</span><b id="ton">－</b></div>
+      <div class="row"><span>建値（本日・架空）</span><b id="rate">－</b></div>
+      <div class="note" style="margin-top:10px">目視の在庫表との差は <span id="gap">－</span>。棚卸しのたびに出るこの差が、そのまま利益の見えない部分になります。</div>
+    </div>
+
+    <div class="card">
+      <div class="label">4．今出すか、ひと月待つか</div>
+      <input type="range" id="mv" min="-15" max="15" value="4">
+      <div class="mk"><span>1か月で15%下げ</span><span>横ばい</span><span>15%上げ</span></div>
+      <div class="verdict" id="verdict"></div>
+      <div class="res" id="hold"></div>
+    </div>
+  </div>
+
+  <p class="src">相場・体積・かさ密度はすべて架空の値です。実際の建値は日々変動し、ヤードごとの荷姿や品位で単価は変わります。売買の判断に使える精度は保証しません。</p>
+</div>
+
+<script>
+var PILES = [
+  {id:0, name:'H2 鉄くず', memo:'一番大きい山。先月から積みっぱなし', vol:412, dens:0.95, rate:4.6, book:340, color:'#8a8578'},
+  {id:1, name:'新断バラ', memo:'工場からの戻り。品位は安定', vol:96, dens:1.25, rate:5.9, book:105, color:'#6b6558'},
+  {id:2, name:'銅線くず', memo:'量は少ないが単価が高い', vol:14, dens:1.55, rate:118.0, book:18, color:'#a1552e'},
+  {id:3, name:'アルミサッシ', memo:'解体現場からの持ち込み', vol:63, dens:0.42, rate:22.5, book:22, color:'#9aa3ad'}
+];
+var cur = 0, scanned = false;
+
+function drawPiles(){
+  document.getElementById('piles').innerHTML = PILES.map(function(p){
+    return '<button class="pile'+(p.id===cur?' on':'')+'" data-i="'+p.id+'">'
+      + '<b>'+p.name+'</b><span>'+p.memo+'</span></button>';
+  }).join('');
+  Array.prototype.forEach.call(document.querySelectorAll('.pile'), function(el){
+    el.onclick = function(){
+      cur = +this.getAttribute('data-i');
+      scanned = false;
+      if(timer){ clearInterval(timer); timer = null; }
+      document.getElementById('out').classList.add('hide');
+      document.getElementById('go').disabled = false;
+      document.getElementById('go').textContent = '一周してみる（約40秒ぶんを再生）';
+      document.getElementById('steps').textContent = '';
+      drawPiles(); drawScan(0);
+    };
+  });
+}
+
+// 山の断面を描き、周回に応じて測点が増えていく
+function drawScan(prog){
+  var p = PILES[cur];
+  var w=300,h=150,s='';
+  s += '<rect x="0" y="118" width="300" height="32" fill="#efece4"/>';
+  // 山（三角）
+  var hh = 24 + Math.min(p.vol,420)/420*70;
+  var half = 55 + Math.min(p.vol,420)/420*60;
+  s += '<path d="M'+(150-half)+',118 L150,'+(118-hh)+' L'+(150+half)+',118 Z" fill="'+p.color+'"/>';
+  s += '<path d="M150,'+(118-hh)+' L'+(150+half)+',118 L150,118 Z" fill="#000" opacity="0.12"/>';
+  // 測点
+  var n = Math.round(prog*46);
+  for(var i=0;i<n;i++){
+    var a = i/46*Math.PI*2;
+    var x = 150 + Math.cos(a)*(half-6);
+    var yb = 118 - Math.abs(Math.sin(a))*10;
+    var top = 118 - hh*(0.15+0.85*Math.abs(Math.cos(a*1.7)));
+    var y = Math.max(top, yb-18-((i*37)%22));
+    s += '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="1.9" fill="#2563eb" opacity="0.9"/>';
+  }
+  // ドローン
+  if(prog>0 && prog<1){
+    var a2 = prog*Math.PI*2;
+    var dx = 150 + Math.cos(a2)*(half+18);
+    var dy = 46 + Math.sin(a2)*12;
+    s += '<circle cx="'+dx.toFixed(1)+'" cy="'+dy.toFixed(1)+'" r="4.5" fill="#1b1a17"/>';
+    s += '<line x1="'+dx.toFixed(1)+'" y1="'+dy.toFixed(1)+'" x2="150" y2="'+(118-hh/2)+'" stroke="#2563eb" stroke-width="1" opacity="0.45"/>';
+  }
+  s += '<text x="8" y="142" font-size="10" fill="#847e70">'+p.name+'（断面イメージ）</text>';
+  document.getElementById('scan').innerHTML = s;
+}
+
+var timer = null;
+document.getElementById('go').onclick = function(){
+  var btn = this; btn.disabled = true;
+  if(timer) clearInterval(timer);
+  var step = 0, total = 52; // 50ミリ秒 × 52 で約2.6秒
+  var st = document.getElementById('steps');
+  timer = setInterval(function(){
+    step++;
+    var pr = Math.min(step/total, 1);
+    drawScan(pr);
+    btn.textContent = '飛行中… ' + Math.round(pr*100) + '%';
+    if(pr<0.34) st.innerHTML = '<b>測点を拾っています</b>：映像の連続コマから同じ点を探して、山の表面の形をつくります。';
+    else if(pr<0.7) st.innerHTML = '<b>地面の高さを決めています</b>：山のない場所を基準面にして、そこからの高さを積み上げます。';
+    else st.innerHTML = '<b>体積を出しています</b>：基準面と表面の間を細かく刻んで足し合わせます。';
+    if(pr>=1){
+      clearInterval(timer); timer = null;
+      btn.textContent='もう一度飛ばす'; btn.disabled=false; scanned=true; show();
+    }
+  }, 50);
+};
+
+function show(){
+  var p = PILES[cur];
+  var ton = p.vol * p.dens;
+  var yen = ton * p.rate; // 万円
+  document.getElementById('out').classList.remove('hide');
+  document.getElementById('yen').textContent = Math.round(yen).toLocaleString();
+  document.getElementById('sub').innerHTML = p.name + 'の山ひとつぶん。<b>' + Math.round(ton) + 'トン</b> 相当と見ています。';
+  document.getElementById('vol').textContent = Math.round(p.vol) + ' 立方メートル';
+  document.getElementById('dens').textContent = p.dens.toFixed(2) + ' トン／立方メートル';
+  document.getElementById('ton').textContent = Math.round(ton) + ' トン';
+  document.getElementById('rate').textContent = p.rate.toFixed(1) + ' 万円／トン';
+  var gap = Math.round(ton) - p.book;
+  document.getElementById('gap').textContent =
+    (gap>=0?'＋':'－') + Math.abs(gap) + 'トン（金額で ' + Math.abs(Math.round(gap*p.rate)) + '万円）';
+  move();
+}
+
+function move(){
+  if(!scanned) return;
+  var p = PILES[cur];
+  var ton = p.vol * p.dens;
+  var pct = +document.getElementById('mv').value;
+  var now = ton * p.rate;
+  var later = now * (1 + pct/100);
+  var yardCost = ton * 0.09; // ひと月置く場所代・手間の想定（万円）
+  var diff = later - now - yardCost;
+  var v = document.getElementById('verdict');
+  if(diff > 0){
+    v.className = 'verdict hold'; v.textContent = 'ひと月待つほうが ' + Math.round(diff) + '万円 得';
+  } else {
+    v.className = 'verdict sell'; v.textContent = '今出すほうが ' + Math.round(-diff) + '万円 得';
+  }
+  document.getElementById('hold').innerHTML =
+    '今出す：<b>' + Math.round(now).toLocaleString() + '万円</b>　／　ひと月後：<b>' + Math.round(later).toLocaleString() + '万円</b><br>'
+    + 'ただし置いておくと、場所代と積み替えの手間で <b>' + Math.round(yardCost) + '万円</b> かかる前提です。'
+    + '山を数字で持っていない会社は、この比較そのものができません。';
+}
+
+document.getElementById('mv').addEventListener('input', move);
+drawPiles(); drawScan(0);
+</script>
+</body>
+</html>

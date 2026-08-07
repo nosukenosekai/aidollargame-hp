@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>あと十年の家賃｜築古アパートが、年金の代わりに何年もつか</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:6px}
+.val{font-size:22px;font-weight:800;margin-bottom:2px}
+.val small{font-size:14px;font-weight:600;color:#847e70;margin-left:3px}
+input[type=range]{width:100%;accent-color:#2563eb;height:30px}
+.mk{display:flex;justify-content:space-between;font-size:12px;color:#847e70;margin-top:-6px;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin:2px 0 12px}
+.tabs button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#6b6558;
+ border-radius:11px;padding:12px 6px;font-size:14px;font-weight:600;cursor:pointer;line-height:1.4}
+.tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.chart{width:100%;height:190px;display:block}
+.legend{display:flex;gap:14px;font-size:12px;color:#847e70;margin-top:6px;flex-wrap:wrap}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:5px;vertical-align:3px}
+.big{font-size:42px;font-weight:800;color:#2563eb;line-height:1.05}
+.big.warn{color:#c2410c}
+.unit{font-size:19px;font-weight:700;margin-left:2px}
+.res{font-size:15px;line-height:1.85;color:#4a453c}
+.res b{font-size:19px;color:#1b1a17}
+.row{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #efece4;font-size:15px;color:#4a453c}
+.row:first-child{border-top:0}
+.row b{font-size:17px;color:#1b1a17}
+.verdict{font-size:19px;font-weight:700;line-height:1.6;margin:4px 0 10px}
+.verdict.ok{color:#1d6b3f}
+.verdict.warn{color:#c2410c}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+.src{font-size:12px;color:#8d8778;line-height:1.7;margin-top:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（架空の物件・サンプルデータ）</div>
+  <h1>あと十年の家賃</h1>
+  <p class="lead">築古アパートを持つオーナーの多くは70代です。「あと何年、年金の足しになるのか」を誰も数字で言わないまま、修繕を先送りしています。家賃の下がり方、空室、これから来る修繕を10年ぶん並べて、判断できる形にします。</p>
+
+  <div class="card">
+    <div class="label">コーポみのり（架空・木造2階建）</div>
+    <div class="val" id="v1">築32<small>年</small></div>
+    <input type="range" id="age" min="15" max="45" value="32">
+    <div class="mk"><span>築15年</span><span>築45年</span></div>
+
+    <div class="val" id="v2">8<small>戸</small></div>
+    <input type="range" id="units" min="4" max="20" value="8">
+    <div class="mk"><span>4戸</span><span>20戸</span></div>
+
+    <div class="val" id="v3">5.8<small>万円／戸・月</small></div>
+    <input type="range" id="rent" min="35" max="120" value="58">
+    <div class="mk"><span>3.5万円</span><span>12万円</span></div>
+  </div>
+
+  <div class="card">
+    <div class="label">これからの10年をどうするか</div>
+    <div class="tabs">
+      <button id="tA" class="on">何もしない</button>
+      <button id="tB">3年目に外壁と屋根<br>（大規模修繕）</button>
+    </div>
+    <svg class="chart" id="chart" viewBox="0 0 300 190"></svg>
+    <div class="legend">
+      <span><i style="background:#2563eb"></i>年ごとの手残り</span>
+      <span><i style="background:#c2410c"></i>赤字の年</span>
+      <span><i style="background:#c8c3b7"></i>もう一方の案</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">10年でオーナーの手元に残る額</div>
+    <div><span class="big" id="total">－</span><span class="unit" id="tunit">万円</span></div>
+    <div class="verdict" id="verdict" style="margin-top:10px"></div>
+    <div class="row"><span>10年の家賃収入</span><b id="r1">－</b></div>
+    <div class="row"><span>空室で入らない額</span><b id="r2">－</b></div>
+    <div class="row"><span>修繕・原状回復</span><b id="r3">－</b></div>
+    <div class="row"><span>固定資産税・管理料など</span><b id="r4">－</b></div>
+    <div class="row"><span>月あたりに直すと</span><b id="r5">－</b></div>
+  </div>
+
+  <div class="card">
+    <div class="label">言いにくいことを、先に数字で</div>
+    <div class="res" id="msg"></div>
+  </div>
+
+  <p class="src">家賃の下落率、空室率、修繕費はすべて架空の想定値です。実際は地域・構造・入居者の入れ替わりで大きく変わります。相続税や借入の返済は含めていません。投資判断の助言ではありません。</p>
+</div>
+
+<script>
+var scen = 'A';
+var els = {age:document.getElementById('age'), units:document.getElementById('units'), rent:document.getElementById('rent')};
+
+function simulate(s){
+  var age = +els.age.value, units = +els.units.value, rent = +els.rent.value/10; // 万円
+  var years = [], cum = 0;
+  for(var y=1;y<=10;y++){
+    var a = age + y;
+    // 家賃は築年が進むほど下がる（古いほど下げ幅は鈍る）
+    var down = Math.pow(0.986, y) * (a>40 ? 0.985 : 1);
+    var r = rent * down;
+    // 空室率は築年で上がる。修繕した場合は改善
+    var vac = Math.min(0.06 + Math.max(a-25,0)*0.011, 0.34);
+    if(s==='B' && y>=3) vac = Math.max(vac - 0.09, 0.05);
+    if(s==='B' && y>=3) r = r * 1.05;
+    var gross = r * units * 12;
+    var loss = gross * vac;
+    // 修繕
+    var rep = units * 1.6 + Math.max(a-30,0)*0.9; // 経常の修繕・原状回復
+    if(s==='B' && y===3) rep += units * 55; // 外壁と屋根（1戸あたり55万円の想定）
+    if(s==='A' && a>=38 && y%3===0) rep += units * 5; // 先送りのツケ
+    var fix = gross * 0.14 + units * 1.1; // 税・管理料
+    var net = gross - loss - rep - fix;
+    cum += net;
+    years.push({y:y, age:a, gross:gross, loss:loss, rep:rep, fix:fix, net:net});
+  }
+  return {years:years, cum:cum};
+}
+
+function fmt(n){ return Math.round(n).toLocaleString(); }
+
+function draw(){
+  document.getElementById('v1').innerHTML = '築'+els.age.value+'<small>年</small>';
+  document.getElementById('v2').innerHTML = els.units.value+'<small>戸</small>';
+  document.getElementById('v3').innerHTML = (+els.rent.value/10).toFixed(1)+'<small>万円／戸・月</small>';
+
+  var cur = simulate(scen), other = simulate(scen==='A'?'B':'A');
+  var all = cur.years.concat(other.years).map(function(o){return o.net;});
+  var max = Math.max.apply(null, all.concat([1]));
+  var min = Math.min.apply(null, all.concat([0]));
+  var w=300,h=190,pad=26, bw=(w-pad-8)/10;
+  var zero = pad/2 + (h-pad-14) * (max/(max-min||1));
+  var s = '';
+  s += '<line x1="0" y1="'+zero.toFixed(1)+'" x2="300" y2="'+zero.toFixed(1)+'" stroke="#ddd9cf" stroke-width="1"/>';
+  function ypos(v){ return pad/2 + (h-pad-14) * ((max-v)/(max-min||1)); }
+  // もう一方の案（薄い線）
+  var pts = other.years.map(function(o,i){ return (pad+bw*i+bw/2).toFixed(1)+','+ypos(o.net).toFixed(1); });
+  s += '<polyline points="'+pts.join(' ')+'" fill="none" stroke="#c8c3b7" stroke-width="2"/>';
+  // 棒
+  cur.years.forEach(function(o,i){
+    var x = pad + bw*i + 3;
+    var y = ypos(o.net), y0 = zero;
+    var top = Math.min(y,y0), hh = Math.max(Math.abs(y-y0),2);
+    s += '<rect x="'+x.toFixed(1)+'" y="'+top.toFixed(1)+'" width="'+(bw-6).toFixed(1)+'" height="'+hh.toFixed(1)
+       + '" rx="3" fill="'+(o.net<0?'#c2410c':'#2563eb')+'"/>';
+    if(i%2===0) s += '<text x="'+(x+(bw-6)/2).toFixed(1)+'" y="'+(h-3)+'" font-size="9" fill="#8d8778" text-anchor="middle">'+o.y+'年</text>';
+  });
+  s += '<text x="4" y="12" font-size="9" fill="#8d8778">万円</text>';
+  document.getElementById('chart').innerHTML = s;
+
+  var t = cur.years.reduce(function(a,o){return {g:a.g+o.gross,l:a.l+o.loss,r:a.r+o.rep,f:a.f+o.fix};},{g:0,l:0,r:0,f:0});
+  var el = document.getElementById('total');
+  el.textContent = fmt(cur.cum);
+  el.className = 'big' + (cur.cum<0?' warn':'');
+  document.getElementById('r1').textContent = fmt(t.g)+' 万円';
+  document.getElementById('r2').textContent = '－'+fmt(t.l)+' 万円';
+  document.getElementById('r3').textContent = '－'+fmt(t.r)+' 万円';
+  document.getElementById('r4').textContent = '－'+fmt(t.f)+' 万円';
+  document.getElementById('r5').textContent = (cur.cum/120).toFixed(1)+' 万円／月';
+
+  var diff = cur.cum - other.cum;
+  var v = document.getElementById('verdict');
+  if(scen==='A'){
+    if(diff >= 0){ v.className='verdict ok'; v.textContent='この物件は、直すより今のまま回すほうが '+fmt(diff)+'万円 多く残ります'; }
+    else { v.className='verdict warn'; v.textContent='3年目に直したほうが、10年で '+fmt(-diff)+'万円 多く残ります'; }
+  } else {
+    if(diff >= 0){ v.className='verdict ok'; v.textContent='直したほうが、10年で '+fmt(diff)+'万円 多く残ります'; }
+    else { v.className='verdict warn'; v.textContent='この条件だと、修繕費を家賃で取り戻しきれません（'+fmt(-diff)+'万円 不足）'; }
+  }
+
+  var neg = cur.years.filter(function(o){return o.net<0;});
+  var m = '';
+  var monthly = cur.cum/120;
+  m += 'この物件の手残りは、月あたり <b>'+monthly.toFixed(1)+'万円</b> です。'
+     + 'オーナーが年金の足しとして見込んでいる額と、ここが合っているかを最初に確かめます。<br><br>';
+  if(neg.length){
+    m += '<b>'+neg[0].y+'年目（築'+neg[0].age+'年）に持ち出しが出ます。</b>'
+       + 'この年に何が起きるかを先に見せておくと、その場で「お金がない」と言われて話が止まることがなくなります。<br><br>';
+  }
+  if(scen==='A'){
+    m += '先送りは、築38年を超えたあたりから、まとめて跳ね返ってきます。'
+       + '直さない案を選ぶなら、いつ売るか・いつ建て替えるかを同じ紙に書いておく必要があります。';
+  } else {
+    m += '大規模修繕は '+fmt(+els.units.value*55)+'万円 の持ち出しになります。'
+       + 'ここで大事なのは工事の中身ではなく、そのあと10年ぶんの家賃で戻るかどうかです。上の数字がその答えです。';
+  }
+  document.getElementById('msg').innerHTML = m;
+}
+
+['age','units','rent'].forEach(function(k){ els[k].addEventListener('input', draw); });
+document.getElementById('tA').onclick = function(){ scen='A'; this.classList.add('on'); document.getElementById('tB').classList.remove('on'); draw(); };
+document.getElementById('tB').onclick = function(){ scen='B'; this.classList.add('on'); document.getElementById('tA').classList.remove('on'); draw(); };
+draw();
+</script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>あつさ交代｜倒れてから呼ぶのではなく、先に交代の順番を出す</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.clock{display:flex;align-items:baseline;gap:10px;margin-bottom:2px}
+.clock b{font-size:34px}
+.clock span{font-size:13px;color:#847e70}
+input[type=range]{width:100%;accent-color:#2563eb;height:30px}
+.wbgt{margin-top:8px}
+.wbgt b{display:block;font-size:26px;white-space:nowrap;margin-bottom:3px}
+.wbgt span{display:block;font-size:13px;color:#847e70;line-height:1.65}
+.g{border-top:1px solid #efece4;padding:13px 0}
+.g:first-of-type{border-top:0;padding-top:2px}
+.gh{display:flex;justify-content:space-between;align-items:baseline}
+.gn{font-size:16px;font-weight:700}
+.gn em{font-style:normal;font-size:12px;color:#847e70;font-weight:600;margin-left:6px}
+.gs{font-size:14px;font-weight:700}
+.bar{height:12px;border-radius:6px;background:#f1eee6;margin:8px 0 6px;overflow:hidden}
+.bar i{display:block;height:100%;transition:width .3s}
+.vit{display:flex;gap:14px;font-size:13px;color:#847e70;flex-wrap:wrap}
+.vit b{color:#1b1a17;font-weight:700}
+.gmemo{font-size:13px;line-height:1.7;margin-top:6px}
+.gmemo.hot{color:#c2410c;font-weight:600}
+.rest{font-size:13px;color:#1d6b3f;font-weight:600;margin-top:6px}
+.plan{background:#eef2fd;border-radius:12px;padding:14px;margin-top:6px}
+.plan b{display:block;font-size:16px;margin-bottom:6px}
+.plan ol{margin:0;padding-left:20px;font-size:14px;line-height:1.9;color:#4a453c}
+.btn{background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px 16px;
+ font-size:16px;font-weight:600;width:100%;cursor:pointer;margin-top:12px}
+.btn:disabled{background:#c8c3b7}
+.done{background:#e8f3ec;border-radius:12px;padding:14px;margin-top:12px;
+ font-size:15px;line-height:1.8;color:#1d6b3f;font-weight:600}
+.warnbox{background:#fdf1ea;border-radius:12px;padding:14px;margin-top:12px;
+ font-size:15px;line-height:1.8;color:#c2410c;font-weight:600}
+.res{font-size:15px;line-height:1.85;color:#4a453c}
+.res b{font-size:19px;color:#1b1a17}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+.src{font-size:12px;color:#8d8778;line-height:1.7;margin-top:18px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（架空の現場・サンプルデータ）</div>
+  <h1>あつさ交代</h1>
+  <p class="lead">交通誘導は、立っているだけに見えて体に熱がたまり続けます。隊員は自分から「きつい」と言いません。腕時計型の端末で脈と体表温を拾い、倒れる前に交代の順番を隊長のスマホへ先に出します。</p>
+
+  <div class="card">
+    <div class="label">中野三丁目 舗装工事（架空）／隊員5名・2026年8月7日</div>
+    <div class="clock"><b id="now">09:00</b><span>スライドで時間を動かせます</span></div>
+    <input type="range" id="t" min="0" max="16" value="0">
+    <div class="wbgt">
+      <b id="wb">－</b>
+      <span id="wbmemo"></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">隊員の状態（架空の人物です）</div>
+    <div id="list"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">交代の順番</div>
+    <div class="plan">
+      <b id="ptitle">－</b>
+      <ol id="plist"></ol>
+    </div>
+    <button class="btn" id="apply">この順で交代を回す</button>
+    <div class="done hide" id="done"></div>
+    <div class="warnbox hide" id="warn"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">隊長がこれで得るもの</div>
+    <div class="res" id="value"></div>
+  </div>
+
+  <p class="src">脈拍・体表温・暑さ指数はすべて架空の値です。この画面は体調の目安を示すもので、診断ではありません。具合が悪い人が出たら、指数や画面の表示にかかわらず作業を止め、涼しい場所へ移し、必要なら救急に連絡してください。産業医や労働基準監督署の指導が優先されます。</p>
+</div>
+
+<script>
+// 09:00から30分刻みで17コマ（17:00まで）
+var WBGT = [24.5,25.6,26.8,27.9,28.8,29.6,30.4,31.1,31.6,31.9,31.7,31.2,30.5,29.7,28.9,28.0,27.1];
+var GUARDS = [
+  {n:'Aさん', age:68, base:78, tol:0.78, pos:'東側 車線規制'},
+  {n:'Bさん', age:44, base:72, tol:1.15, pos:'西側 歩行者誘導'},
+  {n:'Cさん', age:71, base:82, tol:0.66, pos:'north 交差点',},
+  {n:'Dさん', age:52, base:70, tol:1.00, pos:'資材搬入口'},
+  {n:'Eさん', age:39, base:68, tol:1.28, pos:'予備・休憩所'}
+];
+GUARDS[2].pos = '北側 交差点';
+var restedAt = {};   // 交代を当てた時刻
+var appliedCount = 0;
+
+function clockLabel(i){
+  var m = 9*60 + i*30, h=Math.floor(m/60), mm=m%60;
+  return (h<10?'0':'')+h+':'+(mm<10?'0':'')+mm;
+}
+
+// 蓄積した熱負担（0-100）
+function loadOf(g, i){
+  var start = restedAt[g.n] !== undefined ? restedAt[g.n] : 0;
+  var v = 0;
+  for(var k=0;k<=i;k++){
+    if(k < start){ continue; }
+    var over = Math.max(WBGT[k] - 24, 0);
+    v += over * 1.55 / g.tol;
+    if(k === start && start > 0) v = 12; // 交代直後は下がった状態から
+  }
+  // 予備は最初から低い
+  if(g.pos.indexOf('予備') >= 0 && restedAt[g.n]===undefined) v *= 0.45;
+  return Math.max(0, Math.min(v, 100));
+}
+
+function hr(g,i,l){ return Math.round(g.base + l*0.52 + (WBGT[i]-24)*1.1); }
+function temp(g,i,l){ return (35.4 + l*0.021 + (WBGT[i]-24)*0.035).toFixed(1); }
+
+function color(l){ return l>=72 ? '#c2410c' : l>=48 ? '#e8a33d' : '#2563eb'; }
+function word(l){ return l>=72 ? '交代が要る' : l>=48 ? '様子を見る' : '余裕あり'; }
+
+function render(){
+  var i = +document.getElementById('t').value;
+  document.getElementById('now').textContent = clockLabel(i);
+  var w = WBGT[i];
+  document.getElementById('wb').textContent = '暑さ指数 ' + w.toFixed(1);
+  document.getElementById('wb').style.color = w>=31 ? '#c2410c' : w>=28 ? '#e8a33d' : '#2563eb';
+  document.getElementById('wbmemo').textContent =
+    w>=31 ? '危険の域。原則として激しい作業は中止、こまめな交代が要ります'
+    : w>=28 ? '厳重警戒。休憩を増やす目安です'
+    : '警戒。水分と塩分をとりながら進められます';
+
+  var rows = GUARDS.map(function(g){ return {g:g, l:loadOf(g,i)}; });
+  document.getElementById('list').innerHTML = rows.map(function(r){
+    var g=r.g, l=r.l, c=color(l);
+    var memo = l>=72 ? '脈が下がらなくなっています。この状態で立ち続けるのは危険です'
+             : l>=48 ? '汗が減り始めています。次の交代でここを先に抜きます'
+             : '問題ありません';
+    return '<div class="g"><div class="gh"><span class="gn">'+g.n+'<em>'+g.age+'歳・'+g.pos+'</em></span>'
+      + '<span class="gs" style="color:'+c+'">'+word(l)+'</span></div>'
+      + '<div class="bar"><i style="width:'+l.toFixed(0)+'%;background:'+c+'"></i></div>'
+      + '<div class="vit"><span>脈 <b>'+hr(g,i,l)+'</b>／分</span><span>体表温 <b>'+temp(g,i,l)+'</b>度</span>'
+      + '<span>連続 <b>'+Math.round((i-(restedAt[g.n]||0))*30)+'</b>分</span></div>'
+      + '<div class="gmemo'+(l>=72?' hot':'')+'">'+memo+'</div>'
+      + (restedAt[g.n]!==undefined ? '<div class="rest">'+clockLabel(restedAt[g.n])+'に交代しました</div>' : '')
+      + '</div>';
+  }).join('');
+
+  // 交代案
+  var sorted = rows.slice().sort(function(a,b){ return b.l - a.l; });
+  // 現場を回す都合上、一度に抜けるのは2名まで
+  var need = sorted.filter(function(r){ return r.l >= 48; }).slice(0,2);
+  var waiting = sorted.filter(function(r){ return r.l >= 48; }).length - need.length;
+  var pt = document.getElementById('ptitle'), pl = document.getElementById('plist');
+  var btn = document.getElementById('apply');
+  if(need.length === 0){
+    pt.textContent = '今は交代の必要なし';
+    pl.innerHTML = '<li>全員が余裕の範囲です。次の見直しは30分後です。</li>';
+    btn.disabled = true;
+  } else {
+    pt.textContent = need[0].l >= 72
+      ? '今すぐ抜く：' + need[0].g.n
+      : '次の30分で抜く：' + need[0].g.n;
+    pl.innerHTML = need.map(function(r,idx){
+      var into = sorted[sorted.length-1-idx];
+      var swap = (into && into.g.n !== r.g.n && into.l < 40) ? into.g.n + 'と交代' : '休憩所へ15分';
+      return '<li>'+r.g.n+'（'+r.g.pos+'）を '+swap+'</li>';
+    }).join('') + (waiting > 0
+      ? '<li>残り'+waiting+'名も域に入っていますが、現場が回らなくなるため次の30分に送ります</li>' : '');
+    btn.disabled = false;
+  }
+
+  var over = rows.filter(function(r){return r.l>=72;}).length;
+  document.getElementById('warn').classList.toggle('hide', over===0);
+  if(over) document.getElementById('warn').textContent =
+    over + '名が危険の域に入っています。この時間帯の作業を止めるかどうかは、現場の判断で早めに決めてください。';
+
+  var v = '交通誘導の熱中症は、倒れてから救急を呼ぶと、その日の現場が止まります。'
+    + '止まった1日ぶんの人件費と工程の遅れで、警備会社の負担は <b>数十万円</b> から始まります。<br><br>'
+    + 'この画面がやっているのは予知ではありません。'
+    + '<b>誰から抜くか</b>という、隊長が毎日その場の勘で決めていた順番を、脈と体表温の数字で置き換えているだけです。'
+    + '本人が「大丈夫です」と言っても、順番は動きません。<br><br>';
+  if(appliedCount > 0){
+    v += '今日ここまでで <b>'+appliedCount+'回</b> 交代を回しました。全員の負担が下がった状態で夕方を迎えられます。';
+  } else {
+    v += '交代を1回も回さないまま14時を過ぎると、指数が下がっても体にたまった熱は戻りません。午前中の交代が効きます。';
+  }
+  document.getElementById('value').innerHTML = v;
+}
+
+document.getElementById('apply').onclick = function(){
+  var i = +document.getElementById('t').value;
+  var rows = GUARDS.map(function(g){ return {g:g, l:loadOf(g,i)}; });
+  var need = rows.filter(function(r){ return r.l >= 48; })
+                 .sort(function(a,b){ return b.l - a.l; }).slice(0,2);
+  if(!need.length) return;
+  need.forEach(function(r){ restedAt[r.g.n] = i; });
+  appliedCount++;
+  var d = document.getElementById('done');
+  d.classList.remove('hide');
+  d.textContent = clockLabel(i) + ' に ' + need.map(function(r){return r.g.n;}).join('・')
+    + ' を交代しました。持ち場は残りの隊員で回しています。';
+  render();
+};
+
+document.getElementById('t').addEventListener('input', function(){
+  document.getElementById('done').classList.add('hide');
+  render();
+});
+render();
+</script>
+</body>
+</html>

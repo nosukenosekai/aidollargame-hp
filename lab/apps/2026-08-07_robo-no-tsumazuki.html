@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ロボのつまづき｜配膳ロボが止まる場所は、店の動線が悪い場所</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.plan{width:100%;display:block;background:#faf9f5;border-radius:12px;touch-action:manipulation}
+.legend{display:flex;gap:14px;font-size:12px;color:#847e70;margin-top:8px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.big{font-size:44px;font-weight:800;color:#2563eb;line-height:1.05}
+.unit{font-size:19px;font-weight:700;color:#2563eb;margin-left:2px}
+.res{font-size:15px;line-height:1.85;color:#4a453c}
+.res b{font-size:19px;color:#1b1a17}
+.row{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid #efece4;font-size:15px;color:#4a453c}
+.row:first-child{border-top:0}
+.row b{font-size:17px;color:#1b1a17}
+.btn{background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px 16px;
+ font-size:16px;font-weight:600;width:100%;cursor:pointer;margin-top:12px}
+.btn:disabled{background:#c8c3b7}
+.btn-ghost{background:#fff;color:#2563eb;border:1px solid #d6d2c8;margin-top:8px}
+.hint{font-size:14px;color:#2563eb;font-weight:600;margin-top:10px}
+.why{font-size:15px;line-height:1.85;color:#4a453c;margin:4px 0 0}
+.fix{background:#eef2fd;border-radius:12px;padding:14px;margin-top:12px}
+.fix b{display:block;font-size:16px;margin-bottom:5px}
+.fix span{font-size:14px;line-height:1.8;color:#4a453c}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+.src{font-size:12px;color:#8d8778;line-height:1.7;margin-top:18px}
+.hide{display:none}
+.done{background:#e8f3ec;border-radius:12px;padding:14px;margin-top:12px;font-size:15px;line-height:1.8;color:#1d6b3f;font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（架空の店舗・サンプルデータ）</div>
+  <h1>ロボのつまづき</h1>
+  <p class="lead">配膳ロボを入れたのに思ったほど楽にならない店は多いです。原因はロボではなく、通路です。ロボが減速・停止した場所の記録を平面図に重ねると、人が毎日よけて歩いていた場所がそのまま出てきます。</p>
+
+  <div class="card">
+    <div class="label">大衆酒場かねまる（架空）／先週7日ぶんの走行記録</div>
+    <svg class="plan" id="plan" viewBox="0 0 300 240"></svg>
+    <div class="legend">
+      <span><i style="background:#c2410c"></i>止まった回数が多い</span>
+      <span><i style="background:#e8a33d"></i>減速した</span>
+      <span><i style="background:#2563eb"></i>問題なし</span>
+    </div>
+    <div class="hint" id="hint">丸をタップすると、そこで何が起きているか出ます</div>
+  </div>
+
+  <div class="card">
+    <div class="label">1週間の停止で失っている時間</div>
+    <div><span class="big" id="lost">－</span><span class="unit">分</span></div>
+    <div class="res" style="margin-top:8px" id="lostsub"></div>
+    <div class="row" style="margin-top:10px"><span>停止・減速の回数</span><b id="cnt">－</b></div>
+    <div class="row"><span>1回あたりの足止め</span><b id="each">－</b></div>
+    <div class="row"><span>年に直すと（時給1,150円換算）</span><b id="money">－</b></div>
+  </div>
+
+  <div class="card hide" id="detail">
+    <div class="label" id="dname"></div>
+    <div class="res" id="dnum"></div>
+    <p class="why" id="dwhy"></p>
+    <div class="fix">
+      <b id="fixname"></b>
+      <span id="fixdesc"></span>
+    </div>
+    <button class="btn" id="apply">この直しを当ててみる</button>
+    <div class="done hide" id="done"></div>
+  </div>
+
+  <p class="src">走行記録・停止回数・時給換算はすべて架空の値です。実際の効果は店の広さ、卓の数、ロボの機種で変わります。</p>
+</div>
+
+<script>
+var SPOTS = [
+  {id:0,x:119,y:76,stop:214,sec:9,name:'1卓と2卓のあいだ',
+   why:'通路の実測が74センチ。ロボの必要幅は80センチです。客が椅子を引いた瞬間に通れなくなり、ロボは待ちます。人はこの6センチを無意識に体をひねって通っていたので、誰も狭いと言い出しませんでした。',
+   fixname:'2卓を10センチ右に寄せる',
+   fixdesc:'卓の位置を10センチずらすだけで通路は84センチになります。席数は減りません。工事も不要です。',
+   cut:0.72},
+  {id:1,x:186,y:132,stop:158,sec:7,name:'ドリンク台の角',
+   why:'角を曲がる時にロボは必ず減速します。さらにここは、おしぼりの補充でスタッフが立つ定位置と重なっています。人とロボが同じ1平方メートルを取り合っています。',
+   fixname:'おしぼりの置き場を1メートル奥へ',
+   fixdesc:'補充で立つ位置を通路から外します。棚を動かすだけで、人とロボが同時にここを使えます。',
+   cut:0.6},
+  {id:2,x:52,y:186,stop:96,sec:12,name:'厨房の出口',
+   why:'ロボが料理を受け取る場所と、下げ膳を置く場所が同じ扉の前です。出るロボと戻るロボが正面衝突し、どちらかが下がります。1回あたりの足止めが12秒と、店内で一番長い場所です。',
+   fixname:'受け取りと下げ膳を左右に分ける',
+   fixdesc:'扉の右を出発、左を到着にします。ラインテープ2本ぶんの作業です。',
+   cut:0.8},
+  {id:3,x:236,y:34,stop:38,sec:5,name:'5卓の窓側',
+   why:'夕方の日差しでロボのセンサーが一瞬迷います。回数も足止めも小さく、優先度は低い場所です。',
+   fixname:'ブラインドを17時に下ろす',
+   fixdesc:'開店前の作業に1行足すだけです。効果は小さいので、上の3つが済んでからで構いません。',
+   cut:0.5}
+];
+var TABLES = [
+  [70,60,44,30],[124,60,44,30],[70,104,44,30],[124,104,44,30],
+  [200,44,64,28],[200,84,64,28],[196,150,70,30],[70,148,50,28]
+];
+var applied = {};
+var sel = null;
+
+function color(s){
+  var eff = s.stop * (applied[s.id] ? (1-s.cut) : 1);
+  return eff>140 ? '#c2410c' : eff>60 ? '#e8a33d' : '#2563eb';
+}
+
+function draw(){
+  var s = '';
+  s += '<rect x="8" y="8" width="284" height="224" rx="10" fill="#fff" stroke="#e4e0d6"/>';
+  // 厨房
+  s += '<rect x="14" y="168" width="70" height="58" rx="6" fill="#efece4"/>';
+  s += '<text x="24" y="202" font-size="11" fill="#847e70">厨房</text>';
+  // ドリンク台
+  s += '<rect x="168" y="112" width="54" height="18" rx="4" fill="#efece4"/>';
+  s += '<text x="172" y="125" font-size="9" fill="#847e70">ドリンク台</text>';
+  // 卓
+  TABLES.forEach(function(t,i){
+    s += '<rect x="'+t[0]+'" y="'+t[1]+'" width="'+t[2]+'" height="'+t[3]+'" rx="5" fill="#faf9f5" stroke="#ddd9cf"/>';
+    s += '<text x="'+(t[0]+5)+'" y="'+(t[1]+18)+'" font-size="10" fill="#8d8778">'+(i+1)+'卓</text>';
+  });
+  // 停止点
+  SPOTS.forEach(function(sp){
+    var eff = sp.stop * (applied[sp.id] ? (1-sp.cut) : 1);
+    var r = 8 + Math.sqrt(eff)*0.85;
+    var c = color(sp);
+    s += '<circle cx="'+sp.x+'" cy="'+sp.y+'" r="'+(r+7)+'" fill="'+c+'" opacity="0.15"/>';
+    s += '<circle cx="'+sp.x+'" cy="'+sp.y+'" r="'+r+'" fill="'+c+'" opacity="0.85" '
+       + 'data-i="'+sp.id+'" class="hit" style="cursor:pointer"/>';
+    s += '<text x="'+sp.x+'" y="'+(sp.y+4)+'" font-size="11" font-weight="700" fill="#fff" '
+       + 'text-anchor="middle" pointer-events="none">'+Math.round(eff)+'</text>';
+  });
+  document.getElementById('plan').innerHTML = s;
+  Array.prototype.forEach.call(document.querySelectorAll('.hit'), function(el){
+    el.addEventListener('click', function(){ open(+this.getAttribute('data-i')); });
+  });
+  totals();
+}
+
+function totals(){
+  var cnt=0, sec=0;
+  SPOTS.forEach(function(sp){
+    var k = applied[sp.id] ? (1-sp.cut) : 1;
+    cnt += sp.stop*k;
+    sec += sp.stop*k*sp.sec;
+  });
+  var min = sec/60;
+  document.getElementById('lost').textContent = Math.round(min);
+  document.getElementById('cnt').textContent = Math.round(cnt) + ' 回';
+  document.getElementById('each').textContent = (sec/Math.max(cnt,1)).toFixed(1) + ' 秒';
+  document.getElementById('money').textContent = (min*52/60*1150/10000).toFixed(1) + ' 万円ぶん';
+  var base = 0;
+  SPOTS.forEach(function(sp){ base += sp.stop*sp.sec; });
+  var cut = base/60 - min;
+  document.getElementById('lostsub').innerHTML = cut > 0.5
+    ? '直す前は '+Math.round(base/60)+'分でした。<b>週'+Math.round(cut)+'分</b>、年でおよそ <b>'+Math.round(cut*52/60)+'時間</b> 戻ります。'
+    : 'ロボが1週間で足止めされた時間の合計です。この時間はそのまま、人が料理を運ぶ時間に戻っています。';
+}
+
+function open(i){
+  sel = SPOTS[i];
+  var eff = sel.stop * (applied[i] ? (1-sel.cut) : 1);
+  document.getElementById('detail').classList.remove('hide');
+  document.getElementById('dname').textContent = sel.name;
+  document.getElementById('dnum').innerHTML =
+    '1週間で <b>'+Math.round(eff)+'回</b> 止まりました。1回あたり <b>'+sel.sec+'秒</b>、合計で <b>'
+    + Math.round(eff*sel.sec/60) + '分</b> です。';
+  document.getElementById('dwhy').textContent = sel.why;
+  document.getElementById('fixname').textContent = sel.fixname;
+  document.getElementById('fixdesc').textContent = sel.fixdesc;
+  var b = document.getElementById('apply');
+  var d = document.getElementById('done');
+  if(applied[i]){
+    b.classList.add('hide'); d.classList.remove('hide');
+    d.textContent = '当てました。ここでの足止めは ' + Math.round(sel.cut*100) + '％ 減りました。';
+  } else {
+    b.classList.remove('hide'); d.classList.add('hide');
+  }
+  document.getElementById('detail').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+document.getElementById('apply').onclick = function(){
+  if(!sel) return;
+  applied[sel.id] = true;
+  draw();
+  open(sel.id);
+};
+
+draw();
+</script>
+</body>
+</html>

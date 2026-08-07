@@ -34,8 +34,13 @@
   header .logo svg { width:26px; height:26px; }
   header h1 { font-size:16px; font-weight:700; margin:0; }
   header h1 span { font-weight:400; opacity:.6; }
+  header .headcta {
+    margin-left:auto; background:var(--accent); color:#fff; text-decoration:none;
+    border-radius:8px; padding:8px 16px; font-size:13px; font-weight:800; white-space:nowrap;
+  }
+  header .headcta:hover { background:var(--accentDark); }
   header .fontbtn {
-    margin-left:auto; background:rgba(255,255,255,.14); color:#fff; border:1px solid rgba(255,255,255,.3);
+    background:rgba(255,255,255,.14); color:#fff; border:1px solid rgba(255,255,255,.3);
     border-radius:8px; padding:7px 13px; font-size:12.5px; font-weight:700; cursor:pointer;
   }
   header .fontbtn:hover { background:rgba(255,255,255,.26); }
@@ -63,6 +68,18 @@
   .btn-primary:hover { background:var(--accentDark); }
   .btn-clear { background:#fff; color:var(--muted); border:1px solid var(--line); padding:8px; width:100%; margin-top:8px; font-size:12.5px; }
   .btn-clear:hover { background:var(--soft); }
+
+  .cta { margin-top:20px; padding:14px 15px; border:1px solid var(--line); border-radius:12px; background:#fffaf4; }
+  .cta.ghost { background:var(--soft); }
+  .cta h4 { margin:0 0 6px; font-size:13.5px; color:var(--head); font-weight:800; }
+  .cta p { margin:0 0 11px; font-size:12px; line-height:1.75; color:var(--muted); }
+  .cta-btn {
+    display:block; text-align:center; text-decoration:none; background:var(--accent); color:#fff;
+    font-size:13px; font-weight:800; padding:10px; border-radius:9px;
+  }
+  .cta-btn:hover { background:var(--accentDark); }
+  .cta-btn.ghost { background:#fff; color:var(--head); border:1px solid var(--line); }
+  .cta-btn.ghost:hover { background:#fff; border-color:var(--accent); color:var(--accent); }
 
   .chat { display:flex; flex-direction:column; min-height:calc(100dvh - 130px); }
   .chat-head { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
@@ -137,6 +154,7 @@
     トラック在庫
   </span>
   <h1>検索アシスタント <span>｜ 仕入れ担当者用</span></h1>
+  <a class="headcta" id="ctaSellTop" href="#">トラックを売りたい方はこちら</a>
   <button class="fontbtn" id="fontToggle">文字を大きく</button>
   <span class="badge" id="badge">読み込み中…</span>
 </header>
@@ -170,6 +188,17 @@
     <input id="fKw" placeholder="例: プロフィア">
     <button class="btn-primary" id="doFilter">この条件で検索する</button>
     <button class="btn-clear" id="clearFilter">条件をクリア</button>
+
+    <div class="cta">
+      <h4>トラックを売りたい方へ</h4>
+      <p>車両の条件をお送りいただければ、掲載中の同型車の相場をお調べして無料でご案内します。買取をご希望の場合は買取店へおつなぎします。</p>
+      <a class="cta-btn" id="ctaSell" href="#">無料で相場を調べる</a>
+    </div>
+    <div class="cta ghost">
+      <h4>販売店の方へ</h4>
+      <p>御社の在庫をこの検索に無料で掲載します。掲載料はいただきません。買い手が条件を入力すると御社の車両が表示され、そのまま御社の掲載ページへご案内します。</p>
+      <a class="cta-btn ghost" id="ctaDealer" href="#">無料掲載を申し込む</a>
+    </div>
   </aside>
 
   <div class="card chat">
@@ -181,11 +210,11 @@
     <div class="chat-log" id="log"></div>
 
     <div class="quick" id="quick">
-      <button data-q="大阪府のダンプ 300万以下">大阪府のダンプ 300万以下</button>
-      <button data-q="日野の大型ウイング 2018年以降">日野の大型ウイング 2018年以降</button>
-      <button data-q="冷凍バン 中型 400万以下">冷凍バン 中型 400万以下</button>
-      <button data-q="トラクタ 走行80万km以下">トラクタ 走行80万km以下</button>
+      <button data-q="大型ウイング 2015年以降">大型ウイング 2015年以降</button>
       <button data-q="クレーン 低走行">クレーン 低走行</button>
+      <button data-q="日野のダンプ">日野のダンプ</button>
+      <button data-q="トラクタ 走行80万km以下">トラクタ 走行80万km以下</button>
+      <button data-q="冷凍バン 中型">冷凍バン 中型</button>
     </div>
 
     <div class="chat-input">
@@ -252,7 +281,9 @@ async function loadData() {
   document.getElementById('badge').innerHTML = '<b>' + L.length.toLocaleString() + '</b> 台を横断検索';
   document.getElementById('srcNote').textContent =
     '出典: ' + RAW.meta.sources.map(s => s.name + '（' + s.n.toLocaleString() + '台）').join(' ／ ') +
-    '。2026年8月5〜6日にクロールを許可しているサイトから取得した公開情報です。価格・在庫状況は取得時点のもので、最新は各掲載ページでご確認ください。図はボディ形状のイラストで実車の外観とは異なります。';
+    '。各サイトが公開している車両の事実情報（メーカー・年式・走行距離・積載量・価格・所在地）のみを収録し、写真と説明文は転載していません。' +
+    '利用規約で転載を禁じているサイトは収録していません。' + RAW.meta.collected + '時点の情報のため、最新の価格と在庫状況は各掲載ページでご確認ください。' +
+    '車両の図はボディ形状を表すイラストで、実車の外観とは異なります（実車の写真は掲載ページでご覧いただけます）。';
 
   const opt = (sel, arr) => { const e = document.getElementById(sel); arr.forEach(v => { const o = document.createElement('option'); o.textContent = v; e.appendChild(o); }); };
   const count = (key) => { const m = {}; L.forEach(x => { if (x[key]) m[x[key]] = (m[x[key]] || 0) + 1; }); return Object.entries(m).sort((a, b) => b[1] - a[1]).map(e => e[0]); };
@@ -422,7 +453,7 @@ async function ask(text) {
   if (!L.length) { addAi('在庫データを読み込んでいます…'); try { await dataReady; } catch (e) { addAi('読み込みに失敗しました。ページを再読み込みしてください。'); return; } }
   const cond = parse(text);
   if (!Object.keys(cond).length) {
-    addAi('条件を読み取れませんでした。「大阪府のダンプ 300万以下」「日野の大型ウイング 2018年以降」のように、地域・メーカー・ボディ・クラス・年式・予算・走行距離を書いてください。左の絞り込みからも探せます。');
+    addAi('条件を読み取れませんでした。「大型ウイング 2015年以降」「日野のダンプ」のように、地域・メーカー・ボディ・クラス・年式・予算・走行距離を書いてください。左の絞り込みからも探せます。');
     return;
   }
   answer(cond, condLabel(cond));
@@ -459,7 +490,7 @@ document.getElementById('clearFilter').addEventListener('click', () => {
 });
 document.getElementById('newChat').addEventListener('click', () => {
   logEl.innerHTML = '';
-  addAi('在庫さがしのお手伝いをします。「大阪府のダンプ 300万以下」のように、探している条件を話しかけてください。');
+  addAi('在庫さがしのお手伝いをします。「大型ウイング 2015年以降」のように、探している条件を話しかけてください。');
 });
 document.getElementById('fontToggle').addEventListener('click', e => {
   const big = document.documentElement.style.getPropertyValue('--ts') === '1.15';
@@ -468,7 +499,31 @@ document.getElementById('fontToggle').addEventListener('click', e => {
   e.target.textContent = big ? '文字を大きく' : '文字をもとに戻す';
 });
 
-addAi('在庫さがしのお手伝いをします。「大阪府のダンプ 300万以下」のように、探している条件を話しかけてください。左の絞り込みからも探せます。');
+/* 問い合わせ導線（メールソフトが開くだけで、送信はご本人の操作です） */
+const MAILTO = 'nosuke@aidollargame.com';
+function mailto(subject, body) {
+  return 'mailto:' + MAILTO + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+}
+const sellMail = mailto('トラックの相場照会・売却相談', [
+  '株式会社AIdollargame 御中', '',
+  'トラックの相場を調べてください。', '',
+  '【車両】',
+  'メーカー・車名：',
+  '年式：', '走行距離：', 'ボディ形状：', '積載量：', '所在地：', '', '【ご連絡先】',
+  '会社名：', 'お名前：', 'お電話：', '', 'ご要望（売却希望・時期など）：', '',
+].join('\n'));
+document.getElementById('ctaSell').href = sellMail;
+document.getElementById('ctaSellTop').href = sellMail;
+document.getElementById('ctaDealer').href = mailto('在庫の無料掲載の申し込み', [
+  '株式会社AIdollargame 御中', '',
+  'トラック在庫検索アシスタントへの在庫掲載を希望します。', '',
+  '会社名：', '店舗名：', 'ご担当者：', 'お電話：', '自社サイトURL：',
+  '在庫台数（およそ）：',
+  '在庫データの形式（CSV／自社サイト／その他）：', '',
+  'ご質問・ご要望：', '',
+].join('\n'));
+
+addAi('在庫さがしのお手伝いをします。「大型ウイング 2015年以降」「クレーン 低走行」のように、探している条件を話しかけてください。左の絞り込みからも探せます。');
 dataReady = loadData();
 dataReady.catch(() => { document.getElementById('badge').textContent = '読み込み失敗'; });
 </script>

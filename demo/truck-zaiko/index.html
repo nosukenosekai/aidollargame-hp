@@ -9,18 +9,18 @@
 <title>トラック在庫 検索アシスタント | AIdollargame</title>
 <style>
   :root {
-    --head:#2f3a45;      /* ヘッダー・見出しの濃色 */
-    --headGrad:#46545f;
-    --accent:#e8760c;    /* アクセント（ボタン・強調） */
-    --accentDark:#c56104;
-    --bg:#f7f5f1;
-    --line:#e4dfd6;
-    --ink:#3d4550;
-    --muted:#7c8794;
-    --faint:#a6afb9;
+    --head:#16263c;      /* ヘッダー・見出しの濃紺 */
+    --headGrad:#2c4460;
+    --accent:#2563eb;    /* アクセント（ボタン・強調）＝自社ブランド青 */
+    --accentDark:#1d4ed8;
+    --bg:#f3f6fa;
+    --line:#dde3ec;
+    --ink:#1f2937;
+    --muted:#556070;
+    --faint:#8b96a6;
     --panel:#ffffff;
-    --soft:#f1ede7;
-    --good:#1f7a4d;
+    --soft:#eaf0f8;
+    --good:#0f766e;
     --ts:1;
   }
   * { box-sizing:border-box; }
@@ -69,7 +69,7 @@
   .btn-clear { background:#fff; color:var(--muted); border:1px solid var(--line); padding:8px; width:100%; margin-top:8px; font-size:12.5px; }
   .btn-clear:hover { background:var(--soft); }
 
-  .cta { margin-top:20px; padding:14px 15px; border:1px solid var(--line); border-radius:12px; background:#fffaf4; }
+  .cta { margin-top:20px; padding:14px 15px; border:1px solid var(--line); border-radius:12px; background:#f0f5fd; }
   .cta.ghost { background:var(--soft); }
   .cta h4 { margin:0 0 6px; font-size:13.5px; color:var(--head); font-weight:800; }
   .cta p { margin:0 0 11px; font-size:12px; line-height:1.75; color:var(--muted); }
@@ -98,7 +98,7 @@
   /* 車両カード（カルーセル） */
   .cards { display:flex; gap:12px; overflow-x:auto; padding:6px 2px 12px; scroll-snap-type:x mandatory; }
   .cards::-webkit-scrollbar { height:8px; }
-  .cards::-webkit-scrollbar-thumb { background:#d5cdc2; border-radius:4px; }
+  .cards::-webkit-scrollbar-thumb { background:#c6d0de; border-radius:4px; }
   .tcard {
     flex:0 0 250px; scroll-snap-align:start; background:#fff; border:1px solid var(--line);
     border-radius:14px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 2px 8px rgba(47,58,69,.07);
@@ -107,7 +107,7 @@
   .tcard-badge { display:inline-block; background:var(--accent); color:#fff; font-size:10px; font-weight:800; padding:2px 9px; border-radius:999px; margin-bottom:6px; }
   .tcard-name { font-size:calc(14px * var(--ts)); font-weight:800; line-height:1.4; }
   .tcard-art { background:var(--soft); display:grid; place-items:center; padding:8px 0 4px; }
-  .tcard-art svg { width:86%; height:auto; color:#8b95a1; }
+  .tcard-art svg { width:86%; height:auto; color:#7b8798; }
   .tcard-price { padding:9px 13px 4px; display:flex; align-items:baseline; gap:7px; }
   .tcard-price .v { font-size:calc(24px * var(--ts)); font-weight:800; color:var(--head); font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
   .tcard-price .u { font-size:calc(12px * var(--ts)); font-weight:700; color:var(--muted); }
@@ -127,7 +127,7 @@
   .tcard-btns .primary { background:var(--accent); color:#fff; }
   .tcard-btns .primary:hover { background:var(--accentDark); }
   .tcard-btns .ghost { background:var(--soft); color:var(--head); }
-  .tcard-btns .ghost:hover { background:#e7e0d6; }
+  .tcard-btns .ghost:hover { background:#dde6f3; }
   .more-btn { display:block; margin:2px auto 12px; background:#fff; border:1px solid var(--accent); color:var(--accent); font-weight:800; font-size:13px; padding:8px 20px; border-radius:9px; }
   .more-btn:hover { background:var(--accent); color:#fff; }
 

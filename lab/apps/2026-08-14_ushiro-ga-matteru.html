@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>うしろが待ってる｜詰まりの出どころだけに、そっと伝える</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin:14px 0 0}
+.tabs button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#6b6558;
+ border-radius:11px;padding:11px 6px;font-size:14px;font-weight:600;cursor:pointer}
+.tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.btn{display:block;width:100%;border:0;background:#2563eb;color:#fff;border-radius:12px;
+ padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px}
+.btn.sub{background:#fff;color:#2563eb;border:1px solid #2563eb}
+.btn:disabled{background:#e6e3da;color:#a29c8e;cursor:default}
+.sum{display:flex;gap:10px}
+.sum div{flex:1;background:#faf9f5;border-radius:11px;padding:12px;text-align:center}
+.sum span{display:block;font-size:12px;color:#847e70;margin-bottom:3px}
+.sum b{font-size:26px;font-weight:800;color:#2563eb;line-height:1.1}
+.sum b.bad{color:#c9452f}
+.sum b i{font-size:13px;font-style:normal;color:#847e70;font-weight:600}
+/* コース */
+.scale{display:flex;font-size:10px;color:#8d8778;margin:0 0 4px;padding-left:64px}
+.scale span{flex:1;text-align:center}
+.trk{display:flex;align-items:center;gap:6px;padding:6px 0;cursor:pointer;border-radius:9px}
+.trk:hover{background:#faf9f5}
+.trk.sel{background:#eef3fd}
+.trk .who{width:58px;flex-shrink:0;font-size:12.5px;font-weight:700;line-height:1.35}
+.trk .who small{display:block;font-size:10.5px;color:#8d8778;font-weight:600}
+.trk .line{flex:1;position:relative;height:26px;background:#efece4;border-radius:6px}
+.trk .line i{position:absolute;top:0;bottom:0;width:2px;background:#e2ded4}
+.pin{position:absolute;top:3px;height:20px;min-width:20px;transform:translateX(-50%);
+ background:#2563eb;border-radius:6px;color:#fff;font-size:11px;font-weight:700;
+ line-height:20px;text-align:center;padding:0 5px;white-space:nowrap}
+.pin.late{background:#c9452f}
+.pin.wait{background:#a9c2f2;color:#3d4b63}
+.lg{display:flex;gap:12px;font-size:11.5px;color:#847e70;margin-top:10px;flex-wrap:wrap}
+.lg span:before{content:"";display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+.lg .a:before{background:#2563eb}.lg .b:before{background:#c9452f}.lg .c:before{background:#a9c2f2}
+/* 詳細 */
+.det{border-top:1px solid #efece4;margin-top:12px;padding-top:14px}
+.det h3{font-size:18px;margin:0 0 2px}
+.det .sub{font-size:13px;color:#847e70;margin:0 0 12px;line-height:1.7}
+.kv{display:flex;gap:10px;margin-bottom:12px}
+.kv div{flex:1;background:#faf9f5;border-radius:10px;padding:11px;text-align:center}
+.kv span{display:block;font-size:11.5px;color:#847e70;margin-bottom:3px}
+.kv b{font-size:21px;font-weight:800}
+.kv b.bad{color:#c9452f}.kv b.ok{color:#2f8f5b}
+.diag{border-radius:11px;padding:13px;font-size:14px;line-height:1.8}
+.diag.src{background:#fbeae7;color:#8f3423}
+.diag.vic{background:#eef3fd;color:#274a8f}
+.diag.fine{background:#e8f3ec;color:#2a6b46}
+.band{background:#1b1a17;border-radius:13px;padding:16px;margin-top:12px}
+.band .cap{font-size:10.5px;color:#8d8778;letter-spacing:.1em;margin-bottom:8px}
+.band .scr{background:#262420;border-radius:9px;padding:14px}
+.band .scr p{margin:0;color:#f0eee6;font-size:15px;line-height:1.75}
+.band .scr .t{font-size:11px;color:#8d8778;margin-bottom:6px}
+.sent{background:#e8f3ec;color:#2a6b46;border-radius:11px;padding:12px;font-size:14px;
+ line-height:1.7;margin-top:12px;font-weight:600}
+.note{font-size:13px;color:#847e70;line-height:1.75;margin-top:10px}
+.row{display:flex;align-items:center;gap:10px;border-top:1px solid #efece4;padding:12px 0}
+.row:first-child{border-top:0}
+.row .t{flex:1;font-size:14.5px}
+.row .t small{display:block;color:#8d8778;font-size:12px;margin-top:2px;line-height:1.6}
+.row .m{font-size:14px;font-weight:700;color:#2563eb;white-space:nowrap}
+.foot{font-size:12px;color:#8d8778;line-height:1.8;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（架空のゴルフ場・サンプルデータ）</div>
+<h1>うしろが待ってる</h1>
+<p class="lead">セルフのコースでは、遅い組に誰も言えません。同伴者にも、後ろの常連にも言いにくいからです。腕のバンドで組の位置だけを見て、詰まりを作っている1組にだけ短い言葉を出します。待たされている組には、あなたのせいではないと出します。</p>
+
+<div class="tabs">
+  <button id="t1" class="on" onclick="tab(1)">進行</button>
+  <button id="t2" onclick="tab(2)">支配人</button>
+</div>
+
+<div id="v1">
+  <div class="card">
+    <div class="label">8月14日（金）10時22分・OUT 7組が回っています</div>
+    <div class="sum">
+      <div><span>いちばんの遅れ</span><b id="kMax" class="bad">－<i>分</i></b></div>
+      <div><span>詰まりの出どころ</span><b id="kSrc">－</b></div>
+      <div><span>最終組の上がり</span><b id="kEnd">－</b></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">コース上の位置</div>
+    <div class="scale"><span>1</span><span>3</span><span>5</span><span>7</span><span>9</span><span>11</span><span>13</span><span>15</span><span>17</span></div>
+    <div id="track"></div>
+    <div class="lg"><span class="a">予定どおり</span><span class="b">詰まりの出どころ</span><span class="c">待たされている</span></div>
+    <div class="det" id="det" style="display:none"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">デモを進める</div>
+    <button class="btn sub" onclick="advance()">20分たったことにする</button>
+    <p class="note">声かけを送った組は、次の20分で少し取り戻します。送っていない組はそのまま遅れます。</p>
+  </div>
+</div>
+
+<div id="v2" style="display:none">
+  <div class="card">
+    <div class="label">今日のスタート枠</div>
+    <div class="row"><div class="t">OUT 7時30分〜<small>組数28・7分間隔</small></div><div class="m" id="mOut">－</div></div>
+    <div class="row"><div class="t">IN 7時30分〜<small>組数26・7分間隔</small></div><div class="m">予定どおり</div></div>
+    <div class="row"><div class="t">昼またぎの詰まり<small>9番上がりの待ち</small></div><div class="m" id="mNoon">－</div></div>
+    <p class="note" id="mNote"></p>
+  </div>
+
+  <div class="card">
+    <div class="label">声かけの実績（今月）</div>
+    <div class="row"><div class="t">出どころへの声かけ<small>後ろが2組以上ついたとき</small></div><div class="m">62回</div></div>
+    <div class="row"><div class="t">そのうち20分で戻った<small>標準まで回復</small></div><div class="m">44回</div></div>
+    <div class="row"><div class="t">キャディの現地対応<small>カートで追いかけた回数</small></div><div class="m">5回</div></div>
+    <p class="note">先月の現地対応は23回でした。追いかける前に伝わると、言いに行った側も角が立ちません。</p>
+  </div>
+</div>
+
+<p class="foot">白樺カントリークラブと組の名前は架空です。所要時間や回復のしかたはサンプルの計算で、実際のコースの進行を示すものではありません。</p>
+</div>
+
+<script>
+var STD = 13; // 1ホールの標準（分）
+var groups = [
+  {id:0, name:'岡田様', n:4, pos:11.6, delay:0,  msg:null},
+  {id:1, name:'白井様', n:4, pos:10.4, delay:2,  msg:null},
+  {id:2, name:'三上様', n:3, pos:9.2,  delay:4,  msg:null},
+  {id:3, name:'村瀬様', n:4, pos:7.1,  delay:21, msg:null},
+  {id:4, name:'東様',   n:4, pos:6.5,  delay:23, msg:null},
+  {id:5, name:'荻野様', n:4, pos:5.9,  delay:24, msg:null},
+  {id:6, name:'谷口様', n:2, pos:5.3,  delay:26, msg:null}
+];
+var sel = -1;
+var clock = 10*60 + 22;
+
+function tab(n){
+  document.getElementById('t1').className = n===1?'on':'';
+  document.getElementById('t2').className = n===2?'on':'';
+  document.getElementById('v1').style.display = n===1?'':'none';
+  document.getElementById('v2').style.display = n===2?'':'none';
+}
+function kindOf(i){
+  var g = groups[i];
+  if (g.delay < 10) return 'ok';
+  var ahead = null;
+  for (var j=0;j<groups.length;j++) if (groups[j].pos > g.pos && (!ahead || groups[j].pos < ahead.pos)) ahead = groups[j];
+  if (!ahead) return 'src';                 // 先頭で遅れている＝自分が出どころ
+  return (ahead.pos - g.pos) > 1.15 ? 'src' : 'wait';
+}
+function behindCount(i){
+  var c = 0;
+  for (var j=0;j<groups.length;j++) if (groups[j].pos < groups[i].pos) c++;
+  return c;
+}
+function hhmm(m){
+  var h = Math.floor(m/60), mm = m%60;
+  return h + '時' + (mm<10?'0':'') + mm + '分';
+}
+function sel_(i){ sel = i; render(); }
+
+function send(i){
+  groups[i].msg = kindOf(i);
+  render();
+}
+function advance(){
+  var STEP = 20;
+  clock += STEP;
+  var prev = {};
+  for (var i=0;i<groups.length;i++) prev[groups[i].id] = groups[i].pos;
+
+  for (var a=0;a<groups.length;a++){
+    var g = groups[a], k = kindOf(a);
+    var move = STEP / STD;                   // 標準ならこれだけ進む
+    // 詰まりの出どころは、声をかけられていなければ遅れ続ける
+    if (k === 'src') move *= (g.msg ? 1.18 : 0.70);
+    g.pos += move;
+    if (g.pos > 18.9) g.pos = 18.9;
+  }
+  // 前の組は追い越せない（待たされている組はここで頭を押さえられる）
+  groups.sort(function(x, y){ return y.pos - x.pos; });
+  for (var j=1;j<groups.length;j++){
+    if (groups[j].pos > groups[j-1].pos - 0.45) groups[j].pos = groups[j-1].pos - 0.45;
+  }
+  // 遅れは「実際に進めたぶん」から増減させる。標準どおり進めた組は変わらない
+  for (var m=0;m<groups.length;m++){
+    var moved = groups[m].pos - prev[groups[m].id];
+    groups[m].delay = Math.max(0, Math.round(groups[m].delay + STEP - moved * STD));
+  }
+  render();
+}
+
+function render(){
+  groups.sort(function(a,b){ return b.pos - a.pos; });
+  var maxD = 0, srcName = 'なし';
+  for (var i=0;i<groups.length;i++){
+    if (groups[i].delay > maxD) maxD = groups[i].delay;
+    if (kindOf(i) === 'src' && srcName === 'なし') srcName = groups[i].name;
+  }
+  document.getElementById('kMax').innerHTML = maxD + '<i>分</i>';
+  document.getElementById('kMax').className = maxD >= 15 ? 'bad' : '';
+  document.getElementById('kSrc').innerHTML = '<span style="font-size:19px">' + srcName + '</span>';
+  var last = groups[groups.length-1];
+  document.getElementById('kEnd').innerHTML = '<span style="font-size:19px">' + hhmm(clock + Math.round((18.9 - last.pos) * STD)) + '</span>';
+
+  var html = '';
+  for (var g=0;g<groups.length;g++){
+    var gr = groups[g], k = kindOf(g);
+    var left = Math.max(3, Math.min(97, (gr.pos - 1) / 18 * 100));
+    var cls = k==='src' ? 'late' : (k==='wait' ? 'wait' : '');
+    html += '<div class="trk' + (sel===gr.id?' sel':'') + '" onclick="sel_(' + gr.id + ')">'
+         + '<div class="who">' + gr.name + '<small>' + gr.n + '名</small></div>'
+         + '<div class="line">'
+         + '<i style="left:50%"></i>'
+         + '<div class="pin ' + cls + '" style="left:' + left + '%">' + Math.floor(gr.pos) + 'H</div>'
+         + '</div></div>';
+  }
+  document.getElementById('track').innerHTML = html;
+
+  var d = document.getElementById('det');
+  if (sel < 0){ d.style.display = 'none'; }
+  else {
+    var idx = -1;
+    for (var q=0;q<groups.length;q++) if (groups[q].id === sel) idx = q;
+    var G = groups[idx], K = kindOf(idx), B = behindCount(idx);
+    var diag, msgTitle, msgBody, canSend = true;
+    if (K === 'src'){
+      diag = '<div class="diag src">後ろに' + B + '組がついています。前は空いていて、詰まりはこの組から始まっています。'
+           + '声をかける相手はここだけです。</div>';
+      msgTitle = '腕のバンドに出る言葉';
+      msgBody = 'うしろが' + B + '組お待ちです。<br>次の1打から、打つ順を気にせず<br>準備できた方から打ってください。';
+    } else if (K === 'wait'){
+      var srcN = '前の組';
+      for (var s=idx-1;s>=0;s--) if (kindOf(s)==='src'){ srcN = groups[s].name; break; }
+      diag = '<div class="diag vic">前の' + srcN + 'が詰まっているため、この組は待っています。'
+           + 'この組の打つ速さの問題ではありません。急かす言葉は出しません。</div>';
+      msgTitle = '腕のバンドに出る言葉';
+      msgBody = '前が混み合っています。<br>お急ぎいただく必要はありません。<br>' + (18 - Math.floor(G.pos)) + 'ホール、ごゆっくりどうぞ。';
+    } else {
+      diag = '<div class="diag fine">予定どおりです。何も出しません。</div>';
+      msgTitle = '';
+      msgBody = '';
+      canSend = false;
+    }
+    d.style.display = '';
+    d.innerHTML = '<h3>' + G.name + '（' + G.n + '名）</h3>'
+      + '<p class="sub">いま' + Math.floor(G.pos) + '番ホール</p>'
+      + '<div class="kv">'
+      + '<div><span>標準からの遅れ</span><b class="' + (G.delay>=15?'bad':(G.delay<10?'ok':'')) + '">' + G.delay + '分</b></div>'
+      + '<div><span>後ろの組</span><b>' + B + '組</b></div>'
+      + '<div><span>前とのあき</span><b>' + (idx===0 ? '先頭' : Math.round((groups[idx-1].pos - G.pos)*10)/10 + 'H') + '</b></div>'
+      + '</div>'
+      + diag
+      + (canSend
+          ? '<div class="band"><div class="cap">' + msgTitle + '</div><div class="scr"><div class="t">白樺CC</div><p>' + msgBody + '</p></div></div>'
+            + (G.msg ? '<div class="sent">送りました。次の20分で戻るかを見ます。</div>'
+                     : '<button class="btn" onclick="send(' + idx + ')">この言葉を送る</button>')
+          : '');
+  }
+
+  document.getElementById('mOut').textContent = maxD >= 15 ? ('最大' + maxD + '分の遅れ') : '予定どおり';
+  document.getElementById('mNoon').textContent = maxD >= 20 ? '9番上がりで待ちが出ます' : 'なし';
+  document.getElementById('mNote').textContent = maxD >= 20
+    ? '最終組の上がりが' + hhmm(clock + Math.round((18.9 - last.pos) * STD)) + 'の見込みです。日没前に終わらせるには、昼の休憩を詰めるか、出どころの組に先に伝える必要があります。'
+    : '進行は落ち着いています。このままなら最終組も明るいうちに上がります。';
+}
+render();
+</script>
+</body>
+</html>

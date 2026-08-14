@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>氷いくつ｜明日の氷と軽油を、勘から数字に</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin:14px 0 0}
+.tabs button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#6b6558;
+ border-radius:11px;padding:11px 6px;font-size:14px;font-weight:600;cursor:pointer}
+.tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.seg button{border:1px solid #ddd9cf;background:#fff;color:#4a453c;border-radius:10px;
+ padding:9px 12px;font-size:14px;font-weight:600;cursor:pointer}
+.seg button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.cond{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cond div{background:#faf9f5;border-radius:11px;padding:11px}
+.cond span{display:block;font-size:12px;color:#847e70;margin-bottom:3px}
+.cond b{font-size:17px}
+.btn{display:block;width:100%;border:0;background:#2563eb;color:#fff;border-radius:12px;
+ padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px}
+.btn.sub{background:#fff;color:#2563eb;border:1px solid #2563eb}
+.load{display:flex;align-items:baseline;gap:10px;border-top:1px solid #efece4;padding:14px 0}
+.load:first-of-type{border-top:0;padding-top:2px}
+.load .k{flex:1;font-size:16px;font-weight:700}
+.load .v{font-size:34px;font-weight:800;color:#2563eb;line-height:1}
+.load .u{font-size:14px;color:#847e70;font-weight:600}
+.why{font-size:13px;color:#847e70;line-height:1.75;margin-top:2px}
+.adj{display:flex;align-items:center;gap:8px;margin-top:10px}
+.adj button{width:44px;height:44px;border:1px solid #ddd9cf;background:#fff;border-radius:11px;
+ font-size:20px;font-weight:700;color:#2563eb;cursor:pointer}
+.adj span{font-size:14px;color:#847e70}
+.res{font-size:15px;line-height:1.85;color:#4a453c}
+.res b{font-size:20px;color:#1b1a17}
+.big{font-size:38px;font-weight:800;color:#2563eb;line-height:1.1}
+.row{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;padding:10px 0;border-top:1px solid #efece4}
+.row:first-child{border-top:0}
+.row b{font-size:18px}
+.bar{height:14px;border-radius:7px;background:#f1eee6;margin:8px 0 2px;overflow:hidden;display:flex}
+.bar i{display:block;height:100%;background:#2563eb}
+.bar i.waste{background:#c2410c}
+.legend{font-size:12px;color:#847e70;margin-top:4px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;
+ background:#eef2fd;color:#2563eb;margin-left:6px}
+.pill.warn{background:#fdeeea;color:#c2410c}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+.src{font-size:12px;color:#8d8778;line-height:1.7;margin-top:18px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（架空の漁協・サンプルデータ）</div>
+  <h1>氷いくつ</h1>
+  <p class="lead">出漁前に積む氷と軽油の量を、前日の水揚げ・水温・潮・行き先から出します。多く積めば捨てるだけ、足りなければ値が落ちる。その線引きを毎朝5時に一人で決めなくてよくするための道具です。</p>
+
+  <div class="tabs">
+    <button id="tabA" class="on">明日の積み込み</button>
+    <button id="tabB">積みすぎの年額</button>
+    <button id="tabC">戻ってから</button>
+  </div>
+
+  <div id="paneA">
+    <div class="card">
+      <div class="label">第七あおなぎ丸（架空・小型底びき網 4.9トン）</div>
+      <div class="label" style="font-weight:400;color:#847e70">行き先を選ぶと条件が入れ替わります</div>
+      <div class="seg" id="seg"></div>
+      <div class="cond" id="cond"></div>
+      <button class="btn" id="go">明日の積み込み量を出す</button>
+    </div>
+
+    <div class="card hide" id="outCard">
+      <div class="label">8月10日（月）4:30出港ぶん<span class="pill" id="conf">確からしさ 中</span></div>
+      <div id="out"></div>
+      <div class="adj">
+        <button id="minus">−</button><button id="plus">＋</button>
+        <span>船長の手直し：<b id="adjv">0</b>％（勘のぶんを足し引きできます）</span>
+      </div>
+      <div class="note" style="margin-top:12px" id="cost"></div>
+      <button class="btn sub" id="ok" style="margin-top:12px">この量で製氷所に注文する</button>
+      <div id="okmsg" class="res hide" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div id="paneB" class="hide">
+    <div class="card">
+      <div class="label">この船の1年（架空の実績にもとづく試算）</div>
+      <div class="row"><span>年間の出漁</span><b>182回</b></div>
+      <div class="row"><span>1回あたり積む氷</span><b>380キロ</b></div>
+      <div class="row"><span>そのうち使わずに溶かした氷</span><b style="color:#c2410c">平均 92キロ</b></div>
+      <div class="bar"><i style="width:76%"></i><i class="waste" style="width:24%"></i></div>
+      <div class="legend">青＝使った氷　／　橙＝捨てた氷</div>
+      <div class="row" style="margin-top:14px"><span>捨てた氷の代金（年）</span><b style="color:#c2410c">約 33万円</b></div>
+      <div class="row"><span>積みすぎで増えた軽油（年）</span><b style="color:#c2410c">約 14万円</b></div>
+      <div class="row"><span>足りずに値が落ちた日の損（年）</span><b style="color:#c2410c">約 21万円</b></div>
+      <div class="row"><span>合わせて</span><b class="big" style="font-size:26px">約 68万円</b></div>
+      <div class="note" style="margin-top:10px">氷1キロ20円、軽油1リットル130円で計算した架空の例です。単価と航海数は船ごとに入れ替えます。</div>
+    </div>
+    <div class="card">
+      <div class="label">払うのは誰か</div>
+      <div class="res">
+        買うのは漁協と船主です。氷は漁協の製氷所から買うので、使用量は漁協の帳簿にすでにあります。新しく計測器を付ける必要はありません。<br><br>
+        漁協にとっては、製氷所の稼働をならせるのが利点です。朝5時に注文が集中して余分に作る、という形が減ります。
+      </div>
+    </div>
+  </div>
+
+  <div id="paneC" class="hide">
+    <div class="card">
+      <div class="label">帰港したら、3つだけ入れる</div>
+      <div class="res">
+        水揚げ（キロ）・残った氷（箱）・給油量（リットル）。この3つを帰港時に入れると、翌日の見立てが直ります。伝票を写した紙をそのまま置き換えるので、増える手間はありません。
+      </div>
+      <div class="row" style="margin-top:12px"><span>8月7日　見立て 340キロ</span><b>実際 355キロ</b></div>
+      <div class="row"><span>8月8日　見立て 300キロ</span><b>実際 288キロ</b></div>
+      <div class="row"><span>8月9日　見立て 415キロ</span><b>実際 402キロ</b></div>
+      <div class="note" style="margin-top:10px">4週間ぶんの実績が入ると、外れ幅がだいたい1割の中に収まります。数字は架空の例です。</div>
+    </div>
+    <div class="card">
+      <div class="label">言わないこと</div>
+      <div class="res">
+        魚がどこにいるかは当てません。売り物は「持っていく量」だけです。漁場の判断は船長のもので、そこに口を出すと現場では使われません。
+      </div>
+    </div>
+  </div>
+
+  <div class="src">デモ用のサンプルデータです。船名・漁協名はすべて架空。単価や漁獲量は説明のための仮の数字で、実在の相場を示すものではありません。<br>株式会社AIdollargame「1日1アプリ実験室」</div>
+</div>
+
+<script>
+var SPOTS=[
+ {n:"西の瀬（近場）",t:2.5,fish:"マダイ・イサキ",catch:280,sea:26.4,tide:"中潮",wind:"南 3m",conf:"高"},
+ {n:"沖の三番（遠出）",t:5.0,fish:"アカムツ・ノドグロ",catch:410,sea:24.1,tide:"大潮",wind:"南西 6m",conf:"中"},
+ {n:"島影（浅場）",t:1.5,fish:"タコ・小アジ",catch:150,sea:27.8,tide:"小潮",wind:"北東 2m",conf:"高"}
+];
+var sel=0,adj=0;
+function el(id){return document.getElementById(id)}
+function yen(n){return n.toLocaleString("ja-JP")}
+
+function drawSeg(){
+ var h="";SPOTS.forEach(function(s,i){h+='<button data-i="'+i+'" class="'+(i==sel?"on":"")+'">'+s.n+'</button>'});
+ el("seg").innerHTML=h;
+ Array.prototype.forEach.call(el("seg").children,function(b){
+  b.onclick=function(){sel=+b.getAttribute("data-i");adj=0;el("outCard").className="card hide";el("okmsg").className="res hide";drawSeg();drawCond()};
+ });
+}
+function drawCond(){
+ var s=SPOTS[sel];
+ el("cond").innerHTML=
+  '<div><span>前3日の平均水揚げ</span><b>'+s.catch+' キロ</b></div>'+
+  '<div><span>表面水温</span><b>'+s.sea+' 度</b></div>'+
+  '<div><span>潮</span><b>'+s.tide+'</b></div>'+
+  '<div><span>風</span><b>'+s.wind+'</b></div>'+
+  '<div><span>片道の時間</span><b>'+s.t+' 時間</b></div>'+
+  '<div><span>主な魚</span><b style="font-size:15px">'+s.fish+'</b></div>';
+}
+function calc(){
+ var s=SPOTS[sel];
+ var ice=Math.round((s.catch*0.9+(s.sea-24)*22+s.t*18)*(1+adj/100)/5)*5;
+ var oil=Math.round((s.t*2*38+60)*(1+adj/100)/5)*5;
+ return {ice:ice,oil:oil,s:s};
+}
+function drawOut(){
+ var c=calc(),s=c.s;
+ el("out").innerHTML=
+  '<div class="load"><div class="k">砕氷<div class="why">水温'+s.sea+'度で溶けるぶん、片道'+s.t+'時間の戻りぶんを含みます</div></div>'+
+   '<div><span class="v">'+c.ice+'</span> <span class="u">キロ</span></div></div>'+
+  '<div class="load"><div class="k">軽油<div class="why">往復'+(s.t*2)+'時間ぶんに、待機と余裕を60リットル足しています</div></div>'+
+   '<div><span class="v">'+c.oil+'</span> <span class="u">リットル</span></div></div>'+
+  '<div class="load"><div class="k">魚箱<div class="why">前3日の平均'+s.catch+'キロを20キロ箱で割った数です</div></div>'+
+   '<div><span class="v">'+Math.ceil(s.catch/20)+'</span> <span class="u">箱</span></div></div>';
+ el("conf").textContent="確からしさ "+s.conf;
+ el("conf").className=s.conf=="高"?"pill":"pill warn";
+ el("adjv").textContent=(adj>0?"+":"")+adj;
+ var base=Math.round((s.catch*0.9+(s.sea-24)*22+s.t*18)/5)*5;
+ var old=Math.round(base*1.28/10)*10;
+ el("cost").innerHTML="これまでの積み方（いつも"+old+"キロ）と比べると、氷代で1回あたり <b style='color:#2563eb'>"+yen((old-c.ice)*20)+"円</b> 変わります。年182回なら約 "+((old-c.ice)*20*182/10000).toFixed(0)+"万円です。";
+}
+el("go").onclick=function(){el("outCard").className="card";drawOut()};
+el("plus").onclick=function(){adj=Math.min(30,adj+5);drawOut()};
+el("minus").onclick=function(){adj=Math.max(-30,adj-5);drawOut()};
+el("ok").onclick=function(){
+ var c=calc();
+ el("okmsg").className="res";
+ el("okmsg").innerHTML="<b>製氷所に注文を出しました。</b>砕氷"+c.ice+"キロを8月10日3:30に受け取り。漁協の売上伝票にもそのまま載ります。帰港したら、残った氷の箱数だけ入れてください。";
+};
+function tab(a){
+ el("tabA").className=a==0?"on":"";el("tabB").className=a==1?"on":"";el("tabC").className=a==2?"on":"";
+ el("paneA").className=a==0?"":"hide";el("paneB").className=a==1?"":"hide";el("paneC").className=a==2?"":"hide";
+}
+el("tabA").onclick=function(){tab(0)};el("tabB").onclick=function(){tab(1)};el("tabC").onclick=function(){tab(2)};
+drawSeg();drawCond();
+</script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>あしたの穴｜当日欠員の穴埋めを、断りやすい形で回す</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin:14px 0 0}
+.tabs button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#6b6558;
+ border-radius:11px;padding:11px 6px;font-size:14px;font-weight:600;cursor:pointer}
+.tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.hole{border:1px solid #ddd9cf;border-radius:12px;padding:13px;margin-bottom:10px;cursor:pointer;background:#fff}
+.hole.on{border-color:#2563eb;background:#f4f7fe}
+.hole b{font-size:17px}
+.hole span{display:block;font-size:13px;color:#847e70;margin-top:4px;line-height:1.7}
+.btn{display:block;width:100%;border:0;background:#2563eb;color:#fff;border-radius:12px;
+ padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:6px}
+.btn.sub{background:#fff;color:#2563eb;border:1px solid #2563eb}
+.btn:disabled{background:#c8c3b7;cursor:default}
+.person{border-top:1px solid #efece4;padding:13px 0;display:flex;gap:11px;align-items:flex-start}
+.person:first-of-type{border-top:0;padding-top:2px}
+.rank{width:26px;height:26px;border-radius:50%;background:#eef2fd;color:#2563eb;
+ font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto;margin-top:2px}
+.rank.off{background:#f1eee6;color:#a29b8b}
+.pinfo{flex:1;min-width:0}
+.pname{font-size:16px;font-weight:700}
+.pwhy{font-size:13px;color:#847e70;line-height:1.7;margin-top:3px}
+.state{font-size:13px;font-weight:700;margin-top:5px}
+.state.ok{color:#1d6b3f}
+.state.ng{color:#a29b8b}
+.state.wait{color:#c2410c}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;
+ background:#eef2fd;color:#2563eb;margin-left:6px}
+.pill.stop{background:#fdeeea;color:#c2410c}
+.phone{background:#faf9f5;border-radius:12px;padding:14px;margin-top:10px}
+.bubble{background:#fff;border-radius:12px;padding:12px;font-size:14px;line-height:1.8;border:1px solid #efece4}
+.reply{display:flex;gap:8px;margin-top:10px}
+.reply button{flex:1;border:1px solid #ddd9cf;background:#fff;border-radius:11px;padding:12px 4px;
+ font-size:14px;font-weight:700;cursor:pointer;color:#4a453c}
+.reply button.yes{background:#2563eb;border-color:#2563eb;color:#fff}
+.res{font-size:15px;line-height:1.85;color:#4a453c}
+.res b{font-size:20px;color:#1b1a17}
+.big{font-size:38px;font-weight:800;color:#2563eb;line-height:1.1}
+.bar{height:12px;border-radius:6px;background:#f1eee6;margin:6px 0 4px;overflow:hidden}
+.bar i{display:block;height:100%;background:#2563eb}
+.bar i.hot{background:#c2410c}
+.row{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;margin-top:11px}
+.row em{font-style:normal;color:#847e70;font-size:13px}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+.src{font-size:12px;color:#8d8778;line-height:1.7;margin-top:18px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（架空の病院・サンプルデータ）</div>
+  <h1>あしたの穴</h1>
+  <p class="lead">当日の欠員が出たとき、師長が誰に電話するかを一人で抱えないための道具です。声をかける順番を先に決め、頼まれた側は理由を書かずに断れるようにしました。</p>
+
+  <div class="tabs">
+    <button id="tabA" class="on">師長の画面</button>
+    <button id="tabB">頼まれた人の画面</button>
+    <button id="tabC">今月の偏り</button>
+  </div>
+
+  <div id="paneA">
+    <div class="card">
+      <div class="label">きたしんかわ病院（架空）／8月10日（月）の穴</div>
+      <div id="holes"></div>
+      <button class="btn" id="go">この穴の声かけ順をつくる</button>
+    </div>
+
+    <div class="card hide" id="listCard">
+      <div class="label">声をかける順番<span class="pill" id="cnt">6人</span></div>
+      <div id="list"></div>
+      <div class="note" id="foot" style="margin-top:12px"></div>
+      <button class="btn sub hide" id="next" style="margin-top:12px">次の人に声をかける</button>
+    </div>
+  </div>
+
+  <div id="paneB" class="hide">
+    <div class="card">
+      <div class="label">田村さん（准看護師・パート）のスマホに届く画面</div>
+      <div class="phone">
+        <div class="bubble" id="msg"></div>
+        <div class="reply">
+          <button class="yes" id="rYes">入れます</button>
+          <button id="rNo">今日は無理</button>
+        </div>
+        <div class="note" style="margin-top:10px">「今日は無理」を押しても、理由の入力はありません。師長の画面には人数だけが返り、誰が何回断ったかは本人と管理者以外に出ません。</div>
+      </div>
+      <div id="rRes" class="res hide" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <div class="label">断りにくさを減らすためにやめたこと</div>
+      <div class="res">
+        ・全員一斉のグループ送信をやめました。最初に見た人が返さないと気まずい形は、結局いつも同じ人が返します。<br>
+        ・「誰か入れませんか」ではなく、一人ずつ順番に、時間を区切って聞きます。<br>
+        ・断った回数は評価に出しません。出すのは、頼んだ回数の偏りだけです。
+      </div>
+    </div>
+  </div>
+
+  <div id="paneC" class="hide">
+    <div class="card">
+      <div class="label">8月に声をかけた回数（一人あたり）</div>
+      <div id="bias"></div>
+      <div class="note" style="margin-top:12px">上位2人に声かけの半分が集まっています。頼みやすい人に寄るのは自然ですが、その人から先に辞めます。順番づくりでは直近14日に3回以上頼んだ人を後ろに回しています。</div>
+    </div>
+    <div class="card">
+      <div class="label">穴埋めにかかった時間</div>
+      <div class="row"><span>これまで（電話とLINEで探す）</span><b>平均 47分</b></div>
+      <div class="row"><span>この仕組みを入れた4週間</span><b style="color:#2563eb">平均 9分</b></div>
+      <div class="note" style="margin-top:10px">数字は架空の病院での例示です。実際の効果は施設ごとに違います。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">これは誰のためのものか</div>
+    <div class="res">
+      買うのは病院と介護施設です。当日欠員の穴埋めは師長や主任が個人の携帯で回していて、記録も残りません。人が足りないことより、頼む側と断る側の気まずさで人が減っていきます。<br><br>
+      派遣会社への当日依頼は1回あたり数万円かかります。院内で埋まれば、その分がまるごと残ります。
+    </div>
+  </div>
+
+  <div class="src">デモ用のサンプルデータです。人名・施設名はすべて架空。実在の医療機関とは関係ありません。<br>株式会社AIdollargame「1日1アプリ実験室」</div>
+</div>
+
+<script>
+var HOLES=[
+ {id:0,ward:"3階 東病棟",shift:"日勤 8:30-17:15",who:"看護師1名（発熱のため）",need:"看護師",hard:"入浴介助あり"},
+ {id:1,ward:"2階 西病棟",shift:"夜勤 16:30-9:15",who:"看護師1名（子の急病）",need:"看護師",hard:"夜勤は2人体制のため必須"},
+ {id:2,ward:"外来",shift:"午前のみ 8:30-13:00",who:"看護補助1名",need:"看護補助",hard:"採血の介助なし"}
+];
+var STAFF=[
+ {n:"川口 みさき",r:"看護師・常勤",why:"前日が休み。3階東の入浴介助は担当経験あり",ans:"no",ng:false},
+ {n:"田村 ゆかり",r:"准看護師・パート",why:"月曜は元々シフトなし。子の保育園は18時まで",ans:"yes",ng:false},
+ {n:"佐々木 とおる",r:"看護師・常勤",why:"日勤明け。夜勤なら入れると本人申告",ans:"none",ng:false},
+ {n:"新垣 あやの",r:"看護師・常勤",why:"直近14日で4回頼んでいるため後ろに回しました",ans:"yes",ng:false},
+ {n:"堀内 けんじ",r:"看護補助・パート",job:"補助",why:"資格の区分が合いません（看護師の穴には出しません）",ans:"yes",ng:true},
+ {n:"内海 さとみ",r:"看護師・常勤",why:"6日連続勤務になるため、法令と院内規程の両方で外しました",ans:"none",ng:true}
+];
+var BIAS=[["新垣 あやの",9],["川口 みさき",7],["佐々木 とおる",4],["田村 ゆかり",3],["内海 さとみ",2],["堀内 けんじ",1]];
+
+var sel=0,step=0,order=[];
+function el(id){return document.getElementById(id)}
+
+function drawHoles(){
+ var h="";
+ HOLES.forEach(function(x,i){
+  h+='<div class="hole '+(i==sel?"on":"")+'" data-i="'+i+'"><b>'+x.ward+'　'+x.shift+'</b>'+
+     '<span>'+x.who+' ／ '+x.hard+'</span></div>';
+ });
+ el("holes").innerHTML=h;
+ Array.prototype.forEach.call(document.querySelectorAll(".hole"),function(d){
+  d.onclick=function(){sel=+d.getAttribute("data-i");step=0;el("listCard").className="card hide";drawHoles()};
+ });
+}
+
+function drawList(){
+ var pool=STAFF.slice();
+ if(HOLES[sel].need=="看護補助"){
+  pool=pool.map(function(p){var q={};for(var k in p)q[k]=p[k];
+   if(p.job=="補助"){q.ng=false;q.ans="yes";q.why="外来の午前だけなら入れると本人申告"}
+   else if(p.r.indexOf("常勤")>=0&&!p.ng){q.ng=true;q.why="常勤看護師をこの穴に充てると、本来の持ち場が空きます"}
+   return q});
+ }
+ order=pool.filter(function(p){return !p.ng}).concat(pool.filter(function(p){return p.ng}));
+ var fill=order.filter(function(p){return !p.ng});
+ var h="";
+ order.forEach(function(p,i){
+  var out=p.ng,st="";
+  if(!out){
+   if(i<step-1){st=p.ans=="no"?'<div class="state ng">返事：今日は無理（理由の入力なし）</div>'
+                               :'<div class="state ng">30分の期限切れ。次へ回しました</div>'}
+   else if(i==step-1){st=p.ans=="yes"?'<div class="state ok">返事：入れます　→　この穴は埋まりました</div>'
+                                     :'<div class="state wait">送信済み。30分待ちます</div>'}
+   else if(step>0){st='<div class="state wait">未送信（前の人の返事待ち）</div>'}
+  }
+  h+='<div class="person"><div class="rank '+(out?"off":"")+'">'+(out?"—":(i+1))+'</div><div class="pinfo">'+
+     '<div class="pname">'+p.n+'<span class="pill '+(out?"stop":"")+'">'+p.r+'</span></div>'+
+     '<div class="pwhy">'+p.why+'</div>'+st+'</div></div>';
+ });
+ el("list").innerHTML=h;
+ el("cnt").textContent=fill.length+"人";
+ var cur=step>0?fill[step-1]:null;
+ var done=cur&&cur.ans=="yes";
+ var last=step>1?fill[step-2]:null;
+ if(step==0){el("foot").innerHTML="上から順に1人ずつ、30分の期限つきで届きます。全員に一斉には送りません。"}
+ else if(done){el("foot").innerHTML="<b>"+(step*8)+"分で埋まりました。</b>これまでの平均は47分でした。派遣の当日依頼（1回あたり数万円）は使っていません。"}
+ else if(last&&last.ans=="no"){el("foot").innerHTML="1人目からは「今日は無理」が返りました。断った記録は本人と管理者しか見られません。次の人に自動で回っています。"}
+ else{el("foot").innerHTML="1人目に送信しました。30分で返事がなければ、押さなくても次の人に回ります。"}
+ el("next").className=(done||!cur)?"btn sub hide":"btn sub";
+}
+
+el("go").onclick=function(){step=1;el("listCard").className="card";drawList()};
+el("next").onclick=function(){step++;drawList()};
+
+function tab(a){
+ el("tabA").className=a==0?"on":"";el("tabB").className=a==1?"on":"";el("tabC").className=a==2?"on":"";
+ el("paneA").className=a==0?"":"hide";el("paneB").className=a==1?"":"hide";el("paneC").className=a==2?"":"hide";
+}
+el("tabA").onclick=function(){tab(0)};el("tabB").onclick=function(){tab(1)};el("tabC").onclick=function(){tab(2)};
+
+el("msg").innerHTML="きたしんかわ病院<br><b>8月10日（月）日勤 8:30-17:15</b><br>3階 東病棟／看護師1名<br>入浴介助あり<br><br>この枠に入れますか。30分以内に返事がなければ次の人に回ります。返事は「入れます」か「今日は無理」の2つだけです。";
+el("rYes").onclick=function(){el("rRes").className="res";el("rRes").innerHTML="<b>ありがとうございます。</b>師長の画面には「田村さんで確定」とだけ表示され、シフト表にも自動で入ります。"};
+el("rNo").onclick=function(){el("rRes").className="res";el("rRes").innerHTML="<b>了解しました。</b>師長の画面には「1人目は不可」としか出ません。理由も、あなたが断ったという通知も、他のスタッフには届きません。"};
+
+var bh="";
+BIAS.forEach(function(b){
+ bh+='<div class="row"><span>'+b[0]+'</span><em>'+b[1]+'回</em></div>'+
+     '<div class="bar"><i class="'+(b[1]>=7?"hot":"")+'" style="width:'+(b[1]/9*100)+'%"></i></div>';
+});
+el("bias").innerHTML=bh;
+
+drawHoles();
+</script>
+</body>
+</html>

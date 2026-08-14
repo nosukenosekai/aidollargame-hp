@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>御朱印の順番｜列に並ばせず、境内を歩いてもらう</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin:14px 0 0}
+.tabs button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#6b6558;
+ border-radius:11px;padding:11px 6px;font-size:14px;font-weight:600;cursor:pointer}
+.tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.btn{display:block;width:100%;border:0;background:#2563eb;color:#fff;border-radius:12px;
+ padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px}
+.btn.sub{background:#fff;color:#2563eb;border:1px solid #2563eb}
+.btn:disabled{background:#e6e3da;color:#a29c8e;cursor:default}
+.ticket{background:#faf9f5;border:1px dashed #cfc9bb;border-radius:13px;padding:18px;text-align:center}
+.ticket .no{font-size:52px;font-weight:800;line-height:1;letter-spacing:.02em}
+.ticket .cap{font-size:12px;color:#847e70;margin-bottom:4px}
+.big{display:flex;gap:10px;margin-top:12px}
+.big div{flex:1;background:#faf9f5;border-radius:11px;padding:12px;text-align:center}
+.big span{display:block;font-size:12px;color:#847e70;margin-bottom:3px}
+.big b{font-size:28px;font-weight:800;color:#2563eb;line-height:1.1}
+.big b i{font-size:14px;font-style:normal;color:#847e70;font-weight:600}
+.seg{display:flex;gap:6px;margin-bottom:12px}
+.seg button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#4a453c;border-radius:10px;
+ padding:11px 8px;font-size:14px;font-weight:600;cursor:pointer;line-height:1.5}
+.seg button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.seg button small{display:block;font-size:11px;font-weight:500;opacity:.8}
+.note{font-size:13px;color:#847e70;line-height:1.75;margin-top:10px}
+.row{display:flex;align-items:center;gap:10px;border-top:1px solid #efece4;padding:11px 0}
+.row:first-child{border-top:0}
+.row .n{width:52px;font-size:17px;font-weight:800;color:#2563eb}
+.row .t{flex:1;font-size:14px;color:#4a453c}
+.row .t small{display:block;color:#8d8778;font-size:12px}
+.row .m{font-size:13px;color:#847e70;font-weight:600}
+.row.me{background:#eef3fd;margin:0 -8px;padding:11px 8px;border-radius:10px;border-top:0}
+.bar{height:9px;background:#efece4;border-radius:5px;overflow:hidden;display:flex;margin:8px 0 4px}
+.bar i{display:block;height:100%}
+.lg{display:flex;gap:14px;font-size:12px;color:#847e70;margin-bottom:12px}
+.lg span:before{content:"";display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+.lg .a:before{background:#2563eb}.lg .b:before{background:#a9c2f2}
+.called{background:#2563eb;color:#fff;border-radius:13px;padding:20px;text-align:center;margin-top:12px}
+.called b{display:block;font-size:22px;margin-bottom:4px}
+.called span{font-size:14px;opacity:.9}
+.stepper{display:flex;align-items:center;gap:10px;margin-top:10px}
+.stepper button{width:46px;height:46px;border:1px solid #ddd9cf;background:#fff;border-radius:11px;
+ font-size:20px;font-weight:700;color:#2563eb;cursor:pointer}
+.stepper .v{flex:1;text-align:center;font-size:15px;font-weight:700}
+.foot{font-size:12px;color:#8d8778;line-height:1.8;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（架空の神社・サンプルデータ）</div>
+<h1>御朱印の順番</h1>
+<p class="lead">授与所に列を作らず、番号だけ渡します。参拝者は境内を歩いて待ち、順番が近づいたら手元に出ます。授与所側は、いま並んでいる列があと何分で終わるかを見ながら書き手の数を決められます。</p>
+
+<div class="tabs">
+  <button id="t1" class="on" onclick="tab(1)">参拝者</button>
+  <button id="t2" onclick="tab(2)">授与所</button>
+</div>
+
+<!-- 参拝者 -->
+<div id="v1">
+  <div class="card" id="preIssue">
+    <div class="label">どちらをお受けになりますか</div>
+    <div class="seg">
+      <button id="mk-w" class="on" onclick="setKind('直書き')">直書き<small>御朱印帳にその場で</small></button>
+      <button id="mk-p" onclick="setKind('書き置き')">書き置き<small>用意した紙をお渡し</small></button>
+    </div>
+    <div class="big">
+      <div><span>いまの待ち</span><b id="pWait">－<i>分</i></b></div>
+      <div><span>同じ側で前に</span><b id="pAhead">－<i>人</i></b></div>
+    </div>
+    <button class="btn" onclick="issue()">この内容で番号を受け取る</button>
+    <p class="note">番号を受け取ったあとは、授与所の前に立っていただく必要はありません。順番が近づくとこの画面が変わります。</p>
+  </div>
+
+  <div class="card" id="postIssue" style="display:none">
+    <div class="ticket">
+      <div class="cap">あなたの番号</div>
+      <div class="no" id="myNo">－</div>
+      <div class="cap" id="myKind" style="margin-top:6px"></div>
+    </div>
+    <div class="big">
+      <div><span>お呼びまで</span><b id="myWait">－<i>分</i></b></div>
+      <div><span>同じ側で前に</span><b id="myAhead">－<i>人</i></b></div>
+    </div>
+    <div id="callBox"></div>
+    <button class="btn sub" id="switchBtn" onclick="switchToPaper()">書き置きに変える（待ち時間が短くなります）</button>
+    <p class="note" id="myHint"></p>
+  </div>
+
+  <div class="card">
+    <div class="label">いまの列</div>
+    <div id="queueList"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">デモを進める</div>
+    <button class="btn sub" onclick="advance(5)">5分たったことにする</button>
+    <p class="note">実際は時間の経過とともに自動で進みます。ここでは動きを見るためのボタンです。</p>
+  </div>
+</div>
+
+<!-- 授与所 -->
+<div id="v2" style="display:none">
+  <div class="card">
+    <div class="label">いま抱えている列</div>
+    <div class="big">
+      <div><span>お待ちの方</span><b id="sTotal">－<i>人</i></b></div>
+      <div><span>直書きの捌け</span><b id="sClear">－<i>分</i></b></div>
+    </div>
+    <div class="lg"><span class="a">直書き</span><span class="b">書き置き</span></div>
+    <div class="bar" id="sBar"></div>
+    <p class="note" id="sMix"></p>
+  </div>
+
+  <div class="card">
+    <div class="label">書き手の数</div>
+    <div class="stepper">
+      <button onclick="setWriters(-1)">－</button>
+      <div class="v" id="sWriters">2人</div>
+      <button onclick="setWriters(1)">＋</button>
+    </div>
+    <p class="note" id="sAdvice"></p>
+  </div>
+
+  <div class="card">
+    <div class="label">呼び出し</div>
+    <div id="sNext"></div>
+    <button class="btn" onclick="callNext()">次の方をお呼びする</button>
+  </div>
+
+  <div class="card">
+    <div class="label">今日ここまで</div>
+    <div class="row"><div class="t">お渡しした数<small>直書き・書き置きの合計</small></div><div class="m" id="sDone">－</div></div>
+    <div class="row"><div class="t">書き置きに変えた方<small>待ち時間の案内を見て</small></div><div class="m" id="sSwitch">－</div></div>
+    <div class="row"><div class="t">列から離れた方<small>番号を取ったまま来られず</small></div><div class="m" id="sGone">－</div></div>
+  </div>
+</div>
+
+<p class="foot">白鳩神社は架空の神社です。人数・所要時間はすべてサンプルの数値で、実在の社寺の混雑を示すものではありません。</p>
+</div>
+
+<script>
+var WRITE_MIN = 4.5;   // 直書き1件あたりの所要（分・書き手1人）
+var PAPER_MIN = 0.6;   // 書き置き1件あたりの所要（分）
+var writers = 2;
+var kind = '直書き';
+var myNo = null;
+var stat = {done: 18, sw: 6, gone: 2};
+
+var names = ['1042','1043','1044','1045','1046','1047','1048','1049','1050','1051','1052','1053','1054','1055'];
+var queue = [];
+(function seed(){
+  var mix = ['直書き','直書き','書き置き','直書き','直書き','書き置き','直書き','書き置き','直書き','直書き','書き置き','直書き'];
+  for (var i=0;i<mix.length;i++) queue.push({no: names[i], kind: mix[i], me:false});
+})();
+var nextNoIdx = 12;
+
+// 直書きは書き手が並んで書く列、書き置きは用意した紙を渡すだけの別の窓口。
+// 列は分かれているので、待ち時間は「同じ側に自分より前が何人いるか」で決まる。
+function laneWait(list, kind){
+  var n = 0;
+  for (var i=0;i<list.length;i++) if (list[i].kind === kind) n++;
+  return kind === '直書き' ? n * WRITE_MIN / writers : n * PAPER_MIN;
+}
+function clearWrite(){ return laneWait(queue, '直書き'); }
+function myIndex(){
+  for (var i=0;i<queue.length;i++) if (queue[i].me) return i;
+  return -1;
+}
+function fmt(m){ return m < 1 ? '1未満' : String(Math.round(m)); }
+
+function setKind(k){
+  kind = k;
+  document.getElementById('mk-w').className = (k==='直書き'?'on':'');
+  document.getElementById('mk-p').className = (k==='書き置き'?'on':'');
+  render();
+}
+function issue(){
+  var no = names[nextNoIdx] || String(1042 + nextNoIdx);
+  nextNoIdx++;
+  myNo = no;
+  queue.push({no: no, kind: kind, me: true});
+  document.getElementById('preIssue').style.display = 'none';
+  document.getElementById('postIssue').style.display = '';
+  render();
+}
+function switchToPaper(){
+  var i = myIndex();
+  if (i < 0) return;
+  queue[i].kind = '書き置き';
+  stat.sw++;
+  render();
+}
+function callNext(){
+  if (!queue.length) return;
+  var g = queue.shift();
+  stat.done++;
+  if (g.me){ myNo = null; }
+  render();
+}
+function advance(mins){
+  // 2つの窓口はそれぞれ独立に進む
+  var bw = mins * writers, bp = mins;
+  var keep = [];
+  for (var i=0;i<queue.length;i++){
+    var g = queue[i];
+    if (g.kind === '直書き' && bw >= WRITE_MIN){ bw -= WRITE_MIN; stat.done++; if (g.me) myNo = null; }
+    else if (g.kind === '書き置き' && bp >= PAPER_MIN){ bp -= PAPER_MIN; stat.done++; if (g.me) myNo = null; }
+    else keep.push(g);
+  }
+  queue = keep;
+  render();
+}
+function setWriters(d){
+  writers = Math.min(4, Math.max(1, writers + d));
+  render();
+}
+function tab(n){
+  document.getElementById('t1').className = n===1?'on':'';
+  document.getElementById('t2').className = n===2?'on':'';
+  document.getElementById('v1').style.display = n===1?'':'none';
+  document.getElementById('v2').style.display = n===2?'':'none';
+}
+
+function render(){
+  // 発券前の見込み（選んでいる側の列だけを数える）
+  var sameLane = 0;
+  for (var z=0;z<queue.length;z++) if (queue[z].kind === kind) sameLane++;
+  document.getElementById('pAhead').innerHTML = sameLane + '<i>人</i>';
+  document.getElementById('pWait').innerHTML = fmt(laneWait(queue, kind)) + '<i>分</i>';
+
+  // 自分の札
+  var i = myIndex();
+  var cb = document.getElementById('callBox');
+  var sb = document.getElementById('switchBtn');
+  if (myNo === null && document.getElementById('postIssue').style.display !== 'none'){
+    document.getElementById('myNo').textContent = '－';
+    document.getElementById('myKind').textContent = 'お渡しが済みました';
+    document.getElementById('myWait').innerHTML = '－<i>分</i>';
+    document.getElementById('myAhead').innerHTML = '－<i>人</i>';
+    cb.innerHTML = '<div class="called"><b>お渡しが済みました</b><span>お気をつけてお帰りください</span></div>';
+    sb.style.display = 'none';
+    document.getElementById('myHint').textContent = '';
+  } else if (i >= 0){
+    var ahead = queue.slice(0, i);
+    var myKindNow = queue[i].kind;
+    var wait = laneWait(ahead, myKindNow);
+    var aheadSame = 0;
+    for (var y=0;y<ahead.length;y++) if (ahead[y].kind === myKindNow) aheadSame++;
+    document.getElementById('myNo').textContent = queue[i].no;
+    document.getElementById('myKind').textContent = myKindNow;
+    document.getElementById('myWait').innerHTML = fmt(wait) + '<i>分</i>';
+    document.getElementById('myAhead').innerHTML = aheadSame + '<i>人</i>';
+    if (wait < 2){
+      cb.innerHTML = '<div class="called"><b>まもなくお呼びします</b><span>授与所までお戻りください</span></div>';
+      document.getElementById('myHint').textContent = '';
+    } else {
+      cb.innerHTML = '';
+      document.getElementById('myHint').textContent =
+        wait >= 20
+          ? '本殿から奥の社まで歩いて戻ると、ちょうど' + fmt(wait) + '分ほどです。'
+          : 'あと少しです。授与所の近くでお待ちください。';
+    }
+    sb.style.display = queue[i].kind==='直書き' ? '' : 'none';
+  }
+
+  // 列
+  var html = '';
+  for (var k=0;k<queue.length && k<12;k++){
+    var g = queue[k];
+    var w = laneWait(queue.slice(0,k), g.kind);
+    html += '<div class="row' + (g.me?' me':'') + '">'
+         + '<div class="n">' + g.no + '</div>'
+         + '<div class="t">' + g.kind + (g.me?'<small>あなたの番号です</small>':'') + '</div>'
+         + '<div class="m">' + (w < 1 ? 'お呼び出し中' : 'あと' + fmt(w) + '分') + '</div></div>';
+  }
+  if (!queue.length) html = '<p class="note">いまお待ちの方はいません。</p>';
+  document.getElementById('queueList').innerHTML = html;
+
+  // 授与所
+  var nw = 0, np = 0;
+  for (var j=0;j<queue.length;j++){ if (queue[j].kind==='直書き') nw++; else np++; }
+  document.getElementById('sTotal').innerHTML = queue.length + '<i>人</i>';
+  document.getElementById('sClear').innerHTML = fmt(clearWrite()) + '<i>分</i>';
+  var tw = nw*WRITE_MIN, tp = np*PAPER_MIN, tt = tw+tp || 1;
+  document.getElementById('sBar').innerHTML =
+    '<i style="width:' + (tw/tt*100) + '%;background:#2563eb"></i>' +
+    '<i style="width:' + (tp/tt*100) + '%;background:#a9c2f2"></i>';
+  document.getElementById('sMix').textContent =
+    '直書き' + nw + '人・書き置き' + np + '人。列の時間の' + Math.round(tw/tt*100) + '％を直書きが占めています。';
+  document.getElementById('sWriters').textContent = writers + '人';
+
+  var clear = clearWrite();
+  var adv;
+  if (clear >= 45) adv = '書き手をもう1人増やすと、捌け終わりが' + fmt(clear*writers/(writers+1)) + '分になります。45分を超える列は、番号を取ったまま戻らない方が増えます。';
+  else if (clear >= 20) adv = 'いまの列で' + fmt(clear) + '分です。境内を一周して戻ってこられる長さに収まっています。';
+  else adv = '列は落ち着いています。書き手を1人、授与品の対応に回せます。';
+  document.getElementById('sAdvice').textContent = adv;
+
+  var sn = '';
+  for (var m=0;m<3 && m<queue.length;m++){
+    sn += '<div class="row"><div class="n">' + queue[m].no + '</div><div class="t">' + queue[m].kind
+       + (queue[m].me?'<small>あなたの番号です</small>':'') + '</div><div class="m">' + (m===0?'次':'') + '</div></div>';
+  }
+  if (!sn) sn = '<p class="note">お待ちの方はいません。</p>';
+  document.getElementById('sNext').innerHTML = sn;
+
+  document.getElementById('sDone').textContent = stat.done + '件';
+  document.getElementById('sSwitch').textContent = stat.sw + '人';
+  document.getElementById('sGone').textContent = stat.gone + '人';
+}
+render();
+</script>
+</body>
+</html>

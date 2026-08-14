@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>一年目こよみ｜就農1年目に、資材をいつ頼むかを先に出す</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin:14px 0 0}
+.tabs button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#6b6558;
+ border-radius:11px;padding:11px 6px;font-size:14px;font-weight:600;cursor:pointer}
+.tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.seg button{border:1px solid #ddd9cf;background:#fff;color:#4a453c;border-radius:10px;
+ padding:9px 13px;font-size:14px;font-weight:600;cursor:pointer}
+.seg button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.btn{display:block;width:100%;border:0;background:#2563eb;color:#fff;border-radius:12px;
+ padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px}
+.btn.sub{background:#fff;color:#2563eb;border:1px solid #2563eb}
+.dateline{display:flex;align-items:center;gap:10px;margin-top:6px}
+.dateline button{width:46px;height:46px;border:1px solid #ddd9cf;background:#fff;border-radius:11px;
+ font-size:20px;font-weight:700;color:#2563eb;cursor:pointer}
+.dateline .v{flex:1;text-align:center;font-size:19px;font-weight:800}
+.dateline .v small{display:block;font-size:12px;color:#847e70;font-weight:600}
+/* こよみ */
+.wk{display:flex;gap:10px;border-top:1px solid #efece4;padding:13px 0}
+.wk:first-child{border-top:0;padding-top:4px}
+.wk .when{width:74px;flex-shrink:0}
+.wk .when b{display:block;font-size:15px;font-weight:800}
+.wk .when small{display:block;font-size:11px;color:#8d8778;margin-top:2px}
+.wk .body{flex:1}
+.item{display:flex;align-items:flex-start;gap:9px;padding:7px 0}
+.item .dot{width:11px;height:11px;border-radius:4px;margin-top:5px;flex-shrink:0;background:#a9c2f2}
+.item.late .dot{background:#c9452f}
+.item.now .dot{background:#2563eb}
+.item .txt{flex:1;font-size:14.5px;line-height:1.6}
+.item .txt small{display:block;font-size:12.5px;color:#847e70;line-height:1.7;margin-top:2px}
+.item .amt{font-size:13px;color:#4a453c;font-weight:700;white-space:nowrap}
+.chk{width:24px;height:24px;border:1px solid #cfc9bb;border-radius:7px;background:#fff;
+ cursor:pointer;flex-shrink:0;margin-top:1px;padding:0;position:relative}
+.chk.on{background:#2563eb;border-color:#2563eb}
+.chk.on:after{content:"";position:absolute;left:7px;top:4px;width:6px;height:11px;
+ border:solid #fff;border-width:0 2px 2px 0;transform:rotate(42deg)}
+.item.done{opacity:.55}
+.item.done .dot{background:#c4bfb2}
+.item.done .amt{color:#8d8778}
+.badge{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:1px}
+.badge.late{background:#fbeae7;color:#c9452f}
+.badge.now{background:#eef3fd;color:#2563eb}
+.sum{display:flex;gap:10px}
+.sum div{flex:1;background:#faf9f5;border-radius:11px;padding:12px;text-align:center}
+.sum span{display:block;font-size:12px;color:#847e70;margin-bottom:3px}
+.sum b{font-size:26px;font-weight:800;color:#2563eb;line-height:1.1}
+.sum b i{font-size:13px;font-style:normal;color:#847e70;font-weight:600}
+.note{font-size:13px;color:#847e70;line-height:1.75;margin-top:10px}
+.row{display:flex;align-items:center;gap:10px;border-top:1px solid #efece4;padding:12px 0}
+.row:first-child{border-top:0}
+.row .t{flex:1;font-size:14.5px}
+.row .t small{display:block;color:#8d8778;font-size:12px;margin-top:2px;line-height:1.6}
+.row .m{font-size:14px;font-weight:700;color:#2563eb;white-space:nowrap}
+.warn{background:#fbeae7;border-radius:11px;padding:13px;font-size:14px;line-height:1.75;color:#8f3423;margin-top:10px}
+.foot{font-size:12px;color:#8d8778;line-height:1.8;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（架空の資材店・サンプルデータ）</div>
+<h1>一年目こよみ</h1>
+<p class="lead">脱サラして畑を借りた1年目の人は、何をいつ頼めばいいのかを誰にも聞けません。作物と植える日を入れると、資材の手配日が先に並びます。資材店側からは、今週動く客が見えます。</p>
+
+<div class="tabs">
+  <button id="t1" class="on" onclick="tab(1)">就農1年目</button>
+  <button id="t2" onclick="tab(2)">資材店</button>
+</div>
+
+<div id="v1">
+  <div class="card">
+    <div class="label">何を植えますか</div>
+    <div class="seg" id="crops"></div>
+    <div class="label" style="margin-top:16px">定植の予定日</div>
+    <div class="dateline">
+      <button onclick="shift(-7)">－</button>
+      <div class="v" id="dateV">－<small id="dateS"></small></div>
+      <button onclick="shift(7)">＋</button>
+    </div>
+    <p class="note">1週間ずつ動かせます。日付を決めると、逆算した手配日がこよみに並びます。</p>
+  </div>
+
+  <div class="card">
+    <div class="sum">
+      <div><span>手遅れ</span><b id="nLate">－<i>件</i></b></div>
+      <div><span>今週中</span><b id="nNow">－<i>件</i></b></div>
+      <div><span>資材の概算</span><b id="nCost">－<i>万円</i></b></div>
+    </div>
+    <div id="warnBox"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">こよみ（今日は8月14日）</div>
+    <div id="koyomi"></div>
+    <p class="note">丸を押すと「頼んだ」になります。赤は定植に間に合う期限を過ぎたもの、青は今週中に動くものです。</p>
+  </div>
+</div>
+
+<div id="v2" style="display:none">
+  <div class="card">
+    <div class="label">今週このあたりが動きます</div>
+    <div id="shopList"></div>
+    <p class="note">1年目の人は、必要になってから店に来ます。届くまで3日かかる資材は、その時点でもう遅れています。</p>
+  </div>
+  <div class="card">
+    <div class="label">この畑の年内の見込み</div>
+    <div class="sum">
+      <div><span>まだ頼まれていない</span><b id="sOpen">－<i>万円</i></b></div>
+      <div><span>頼まれた</span><b id="sDone">－<i>万円</i></b></div>
+    </div>
+    <p class="note" id="sNote"></p>
+  </div>
+</div>
+
+<p class="foot">みどり農材店・佐々木さんの畑は架空です。品目の日数や金額はサンプルの数値で、実際の栽培計画や相場を示すものではありません。地域と品種で適期は変わります。</p>
+</div>
+
+<script>
+var TODAY = new Date(2026, 7, 14); // 8/14
+var DAY = 86400000;
+
+// 作物ごとの「定植日からの相対日数」で手配する資材
+var CROPS = {
+  'ほうれん草（秋まき）': {plant: new Date(2026,8,10), items: [
+    {d:-28, n:'土壌酸度の矯正資材', w:'苦土石灰 20kg×6袋', y:1.1, lead:2, why:'まいてから2週間以上おかないと根が傷みます'},
+    {d:-21, n:'元肥',            w:'化成肥料 20kg×4袋', y:1.6, lead:2, why:'石灰と同時に入れると効きが落ちます'},
+    {d:-10, n:'種子',            w:'ほうれん草 30ml×8', y:2.4, lead:5, why:'秋まきの品種は9月に品切れが出ます'},
+    {d:-7,  n:'防虫ネット',      w:'1.8m×50m ×2本',   y:1.8, lead:3, why:'発芽直後にかけないと意味がありません'},
+    {d:-3,  n:'かん水チューブ',  w:'200m ×2巻',        y:1.2, lead:3, why:'定植前に敷き終える必要があります'},
+    {d:+14, n:'追肥',            w:'液肥 10L×2',       y:0.6, lead:2, why:'本葉が3枚を過ぎたころ'},
+    {d:+40, n:'出荷資材',        w:'袋・シール一式',    y:2.2, lead:7, why:'名入りの袋は刷るのに1週間かかります'}
+  ]},
+  'ブロッコリー': {plant: new Date(2026,8,25), items: [
+    {d:-30, n:'土壌酸度の矯正資材', w:'苦土石灰 20kg×8袋', y:1.4, lead:2, why:'酸性のままだと根こぶ病が出ます'},
+    {d:-25, n:'元肥',            w:'有機配合 20kg×6袋', y:2.8, lead:3, why:'土になじませる期間が要ります'},
+    {d:-35, n:'苗の予約',        w:'セル苗 1,200本',    y:4.8, lead:30,why:'苗屋の予約は1か月前で締まります'},
+    {d:-7,  n:'マルチ',          w:'黒 0.95m×200m×4', y:1.5, lead:3, why:'張る日の風を考えて前日までに'},
+    {d:-5,  n:'防虫ネット',      w:'2.1m×50m ×3本',   y:2.7, lead:3, why:'定植当日にかけます'},
+    {d:+21, n:'追肥',            w:'化成 20kg×3袋',    y:1.2, lead:2, why:'側枝が動き出すころ'},
+    {d:+75, n:'出荷資材',        w:'コンテナ・氷',      y:3.1, lead:7, why:'冷やして出す品目です'}
+  ]},
+  '玉ねぎ': {plant: new Date(2026,10,8), items: [
+    {d:-60, n:'苗の予約',        w:'中生 8,000本',      y:6.4, lead:45,why:'苗は9月中に押さえないと確保できません'},
+    {d:-40, n:'土壌酸度の矯正資材', w:'苦土石灰 20kg×10袋',y:1.8, lead:2, why:'秋の雨が続くと入れられなくなります'},
+    {d:-30, n:'元肥',            w:'玉ねぎ専用 20kg×8', y:3.6, lead:3, why:'専用配合は取り寄せです'},
+    {d:-14, n:'マルチ',          w:'5条穴あき 200m×5',  y:2.9, lead:5, why:'穴あきは在庫が薄く取り寄せになります'},
+    {d:+90, n:'追肥',            w:'化成 20kg×5袋',     y:2.0, lead:2, why:'年明けの生育を見て'},
+    {d:+180,n:'出荷資材',        w:'ネット・コンテナ',   y:4.2, lead:7, why:'収穫は来年6月です'}
+  ]}
+};
+
+var crop = 'ほうれん草（秋まき）';
+var plant = new Date(CROPS[crop].plant.getTime());
+var done = {};
+
+function tab(n){
+  document.getElementById('t1').className = n===1?'on':'';
+  document.getElementById('t2').className = n===2?'on':'';
+  document.getElementById('v1').style.display = n===1?'':'none';
+  document.getElementById('v2').style.display = n===2?'':'none';
+}
+function pickCrop(c){
+  crop = c;
+  plant = new Date(CROPS[c].plant.getTime());
+  done = {};
+  render();
+}
+function shift(d){
+  plant = new Date(plant.getTime() + d*DAY);
+  render();
+}
+function md(dt){ return (dt.getMonth()+1) + '月' + dt.getDate() + '日'; }
+function wd(dt){ return '日月火水木金土'.charAt(dt.getDay()) + '曜'; }
+function toggle(i){ done[i] = !done[i]; render(); }
+
+function build(){
+  var list = [];
+  var items = CROPS[crop].items;
+  for (var i=0;i<items.length;i++){
+    var it = items[i];
+    var need = new Date(plant.getTime() + it.d*DAY);        // 使う日
+    var order = new Date(need.getTime() - it.lead*DAY);      // 頼む期限
+    var days = Math.round((order - TODAY)/DAY);
+    list.push({i:i, it:it, need:need, order:order, days:days, done:!!done[i]});
+  }
+  list.sort(function(a,b){ return a.order - b.order; });
+  return list;
+}
+
+function render(){
+  // 作物ボタン
+  var cs = '';
+  for (var k in CROPS) cs += '<button class="' + (k===crop?'on':'') + '" onclick="pickCrop(\'' + k + '\')">' + k + '</button>';
+  document.getElementById('crops').innerHTML = cs;
+  document.getElementById('dateV').innerHTML = md(plant) + '<small>' + wd(plant) + '・定植</small>';
+
+  var list = build();
+  var late=0, now=0, cost=0, open=0, dcost=0;
+  for (var i=0;i<list.length;i++){
+    var r = list[i];
+    cost += r.it.y;
+    if (r.done) dcost += r.it.y; else open += r.it.y;
+    if (!r.done && r.days < 0) late++;
+    else if (!r.done && r.days <= 7) now++;
+  }
+  document.getElementById('nLate').innerHTML = late + '<i>件</i>';
+  document.getElementById('nNow').innerHTML = now + '<i>件</i>';
+  document.getElementById('nCost').innerHTML = cost.toFixed(1) + '<i>万円</i>';
+
+  document.getElementById('warnBox').innerHTML = late
+    ? '<div class="warn">' + late + '件が、定植日に間に合わない時期に入っています。定植を'
+      + Math.abs(Math.min.apply(null, list.filter(function(r){return !r.done && r.days<0}).map(function(r){return r.days;})))
+      + '日うしろにずらすか、この分だけ手当てが要ります。</div>'
+    : '';
+
+  // こよみ
+  var html = '', lastKey = '';
+  for (var j=0;j<list.length;j++){
+    var r = list[j];
+    var key = md(r.order);
+    var cls = r.done ? 'done' : (r.days < 0 ? 'late' : (r.days <= 7 ? 'now' : ''));
+    var badge = r.done ? '' : (r.days < 0
+        ? '<span class="badge late">' + Math.abs(r.days) + '日すぎ</span>'
+        : (r.days <= 7 ? '<span class="badge now">あと' + r.days + '日</span>' : ''));
+    if (key !== lastKey){
+      if (lastKey) html += '</div></div>';
+      html += '<div class="wk"><div class="when"><b>' + key + '</b><small>までに頼む</small></div><div class="body">';
+      lastKey = key;
+    }
+    html += '<div class="item ' + cls + '">'
+         + '<button class="chk' + (r.done?' on':'') + '" onclick="toggle(' + r.i + ')"></button>'
+         + '<span class="dot"></span>'
+         + '<div class="txt">' + r.it.n + badge
+         + '<small>' + r.it.w + '　／　' + md(r.need) + 'に使う。' + r.it.why + '</small></div>'
+         + '<div class="amt">' + r.it.y.toFixed(1) + '万円</div></div>';
+  }
+  if (lastKey) html += '</div></div>';
+  document.getElementById('koyomi').innerHTML = html;
+
+  // 資材店
+  var sh = '';
+  for (var m=0;m<list.length;m++){
+    var s = list[m];
+    if (s.done || s.days > 10) continue;
+    sh += '<div class="row"><div class="t">' + s.it.n
+       + '<small>' + s.it.w + '　／　佐々木さん（1年目・' + crop + '）</small></div>'
+       + '<div class="m">' + (s.days < 0 ? '手配ずみか要確認' : (s.days===0?'本日':'あと' + s.days + '日')) + '</div></div>';
+  }
+  if (!sh) sh = '<p class="note">今週動くものはありません。</p>';
+  document.getElementById('shopList').innerHTML = sh;
+  document.getElementById('sOpen').innerHTML = open.toFixed(1) + '<i>万円</i>';
+  document.getElementById('sDone').innerHTML = dcost.toFixed(1) + '<i>万円</i>';
+  var slow = list.filter(function(x){ return !x.done && x.it.lead >= 7; });
+  document.getElementById('sNote').textContent = slow.length
+    ? '取り寄せに1週間以上かかるものが' + slow.length + '件あります（' + slow.map(function(x){return x.it.n}).join('・')
+      + '）。ここを落とすと、その年の作付けごと動きます。'
+    : '取り寄せに時間のかかるものは、すべて手配が済んでいます。';
+}
+render();
+</script>
+</body>
+</html>

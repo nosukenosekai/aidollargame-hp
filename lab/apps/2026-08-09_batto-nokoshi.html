@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>バット残し｜朝食バイキングの残りを1枚撮って、明日の仕込みにする</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin:14px 0 0}
+.tabs button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#6b6558;
+ border-radius:11px;padding:11px 6px;font-size:14px;font-weight:600;cursor:pointer}
+.tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.photo{width:100%;border-radius:12px;display:block;background:#e9e5db}
+.shot{position:relative}
+.shot .cap{position:absolute;left:10px;top:10px;background:rgba(27,26,23,.72);color:#fff;
+ font-size:11px;padding:4px 8px;border-radius:8px;letter-spacing:.06em}
+.seg{display:flex;gap:6px;margin:12px 0}
+.seg button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#4a453c;border-radius:10px;
+ padding:10px 4px;font-size:14px;font-weight:600;cursor:pointer}
+.seg button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.btn{display:block;width:100%;border:0;background:#2563eb;color:#fff;border-radius:12px;
+ padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:6px}
+.btn.sub{background:#fff;color:#2563eb;border:1px solid #2563eb}
+.d{border-top:1px solid #efece4;padding:13px 0}
+.d:first-of-type{border-top:0;padding-top:2px}
+.dtop{display:flex;justify-content:space-between;align-items:baseline}
+.dname{font-size:16px;font-weight:700}
+.dpct{font-size:15px;font-weight:800}
+.dpct.hot{color:#c2410c}
+.dpct.ok{color:#1d6b3f}
+.bar{height:12px;border-radius:6px;background:#f1eee6;margin:7px 0 5px;overflow:hidden}
+.bar i{display:block;height:100%;background:#2563eb;transition:width .4s}
+.bar i.hot{background:#c2410c}
+.dmemo{font-size:13px;color:#847e70;line-height:1.7}
+.dfix{font-size:14px;font-weight:700;color:#2563eb;margin-top:5px}
+.big{font-size:38px;font-weight:800;color:#c2410c;line-height:1.1}
+.res{font-size:15px;line-height:1.85;color:#4a453c}
+.res b{font-size:20px;color:#1b1a17}
+.row{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;padding:10px 0;border-top:1px solid #efece4}
+.row:first-child{border-top:0}
+.row b{font-size:18px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;
+ background:#eef2fd;color:#2563eb;margin-left:6px}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+.src{font-size:12px;color:#8d8778;line-height:1.7;margin-top:18px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（架空の旅館・サンプルデータ）</div>
+  <h1>バット残し</h1>
+  <p class="lead">朝食の片付け前に、バイキング台を1枚だけ撮ります。どの料理がいくら残ったかを読み取り、明日の仕込み量と、今日捨てた食材の金額を出します。板場のノートに書いていた勘を、そのまま数字にする道具です。</p>
+
+  <div class="tabs">
+    <button id="tabA" class="on">撮って読む</button>
+    <button id="tabB">明日の仕込み</button>
+    <button id="tabC">今月のロス</button>
+  </div>
+
+  <div id="paneA">
+    <div class="card">
+      <div class="label">旅館 しののめ荘（架空・客室18室）／8月9日 9時40分</div>
+      <div class="seg" id="seg"></div>
+      <div class="shot">
+        <svg class="photo" id="pic" viewBox="0 0 340 200" aria-label="バイキング台の写真（デモ用の描画）"></svg>
+        <div class="cap" id="cap">写真（デモ用の描画）</div>
+      </div>
+      <button class="btn" id="go">この1枚を読む</button>
+    </div>
+
+    <div class="card hide" id="outCard">
+      <div class="label">読み取り結果<span class="pill" id="stay">宿泊 31名</span></div>
+      <div id="out"></div>
+      <div class="note" style="margin-top:12px" id="sum"></div>
+    </div>
+  </div>
+
+  <div id="paneB" class="hide">
+    <div class="card">
+      <div class="label">8月10日（月）朝食の仕込み<span class="pill">宿泊 24名の予約</span></div>
+      <div id="plan"></div>
+      <div class="note" style="margin-top:12px">前3日の残り方と、明日の宿泊人数・団体の有無から出しています。数字は板場が上書きできます。上書きした回数が多い料理は、次から人の判断を優先します。</div>
+      <button class="btn sub" id="print" style="margin-top:12px">仕込み表を板場に出す</button>
+      <div id="pmsg" class="res hide" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div id="paneC" class="hide">
+    <div class="card">
+      <div class="label">7月ぶんの捨てた食材（架空の実績）</div>
+      <div class="row"><span>朝食の食材費</span><b>32万円</b></div>
+      <div class="row"><span>そのうち手をつけられず廃棄</span><b style="color:#c2410c">5万1千円</b></div>
+      <div class="row"><span>廃棄の割合</span><b style="color:#c2410c">15.9％</b></div>
+      <div class="row"><span>いちばん捨てている料理</span><b>だし巻き玉子</b></div>
+      <div class="note" style="margin-top:10px">1食あたりの原価を480円として計算した架空の例です。実際の割合は旅館ごとに違います。</div>
+    </div>
+    <div class="card">
+      <div class="label">払うのは誰か</div>
+      <div class="res">
+        買うのは旅館とビジネスホテルです。板前個人ではなく、施設が払います。<br><br>
+        朝食の食材費は月に数十万円あり、そのうち1割強が手つかずで捨てられています。人を減らす話ではなく、同じ人数で捨てる量だけ減らす話なので、現場が反対しません。<br><br>
+        写真は片付けの前に1枚撮るだけです。新しい機械も、台に付ける計量器もいりません。
+      </div>
+    </div>
+  </div>
+
+  <div class="src">デモ用のサンプルデータです。旅館名は架空、写真はこのページ内で描いた図です。原価と廃棄率は説明のための仮の数字です。<br>株式会社AIdollargame「1日1アプリ実験室」</div>
+</div>
+
+<script>
+function el(id){return document.getElementById(id)}
+var DAYS=[
+ {d:"今日 8月9日（土）",stay:31,note:"高校の合宿が入り、白飯とウインナーが早く消えました",
+  items:[
+   {n:"だし巻き玉子",left:62,made:"60本",cost:800,fix:"明日は 38本（−22本）"},
+   {n:"白飯",left:8,made:"6升",cost:90,fix:"明日は 5升のまま（切らしかけました）"},
+   {n:"焼き鮭",left:24,made:"35切れ",cost:280,fix:"明日は 28切れ（−7切れ）"},
+   {n:"ひじき煮",left:71,made:"3.5キロ",cost:230,fix:"明日は 2キロ（−1.5キロ）"},
+   {n:"ウインナー",left:5,made:"2キロ",cost:40,fix:"明日は 2.4キロ（＋0.4キロ）"},
+   {n:"サラダ",left:44,made:"4.5キロ",cost:260,fix:"明日は 3.2キロ（−1.3キロ）"}
+  ]},
+ {d:"8月8日（金）",stay:22,note:"ビジネス客中心。和食の減りが遅い日です",
+  items:[
+   {n:"だし巻き玉子",left:55,made:"45本",cost:520,fix:"当日 33本が適量でした"},
+   {n:"白飯",left:31,made:"5升",cost:150,fix:"当日 3.5升が適量でした"},
+   {n:"焼き鮭",left:18,made:"28切れ",cost:190,fix:"当日 23切れが適量でした"},
+   {n:"ひじき煮",left:66,made:"3キロ",cost:210,fix:"当日 1.8キロが適量でした"},
+   {n:"ウインナー",left:12,made:"1.6キロ",cost:50,fix:"当日 1.6キロで妥当でした"},
+   {n:"サラダ",left:38,made:"4キロ",cost:220,fix:"当日 2.8キロが適量でした"}
+  ]},
+ {d:"8月7日（木）",stay:14,note:"雨。朝食を抜いて出た客が4名いました",
+  items:[
+   {n:"だし巻き玉子",left:74,made:"40本",cost:620,fix:"当日 18本が適量でした"},
+   {n:"白飯",left:48,made:"4升",cost:230,fix:"当日 2升が適量でした"},
+   {n:"焼き鮭",left:41,made:"22切れ",cost:280,fix:"当日 14切れが適量でした"},
+   {n:"ひじき煮",left:80,made:"3キロ",cost:260,fix:"当日 1.2キロが適量でした"},
+   {n:"ウインナー",left:29,made:"1.6キロ",cost:70,fix:"当日 1.2キロが適量でした"},
+   {n:"サラダ",left:52,made:"4キロ",cost:300,fix:"当日 2.2キロが適量でした"}
+  ]}
+];
+var PLAN=[
+ ["だし巻き玉子","38本","前3日の残り 62／55／74％"],
+ ["白飯","5升","切らしかけたため減らしません"],
+ ["焼き鮭","28切れ","残り 24％。少しだけ絞ります"],
+ ["ひじき煮","2キロ","3日続けて7割残っています"],
+ ["ウインナー","2.4キロ","子ども連れの予約が2組"],
+ ["サラダ","3.2キロ","残り 44％"]
+];
+var sel=0;
+
+function drawPic(){
+ var day=DAYS[sel],s='';
+ s+='<rect width="340" height="200" fill="#dcd6c9"/>';
+ s+='<rect x="0" y="0" width="340" height="46" fill="#cfc7b6"/>';
+ s+='<rect x="0" y="150" width="340" height="50" fill="#c7bfae"/>';
+ s+='<rect x="12" y="46" width="316" height="104" rx="6" fill="#b9b2a3"/>';
+ var xs=[20,124,228],ys=[52,102];
+ day.items.forEach(function(it,i){
+  var x=xs[i%3],y=ys[Math.floor(i/3)];
+  s+='<rect x="'+x+'" y="'+y+'" width="96" height="44" rx="4" fill="#a8a294"/>';
+  s+='<rect x="'+(x+4)+'" y="'+(y+4)+'" width="88" height="36" rx="3" fill="#efece4"/>';
+  var h=Math.round(36*it.left/100);
+  var col=it.left>=55?"#c2410c":(it.left>=25?"#d8a15a":"#8fb08a");
+  s+='<rect x="'+(x+4)+'" y="'+(y+4+36-h)+'" width="88" height="'+h+'" rx="3" fill="'+col+'" opacity="0.85"/>';
+  s+='<text x="'+(x+48)+'" y="'+(y+26)+'" font-size="9" fill="#1b1a17" text-anchor="middle" font-family="sans-serif">'+it.n+'</text>';
+ });
+ s+='<rect x="0" y="0" width="340" height="200" fill="none"/>';
+ el("pic").innerHTML=s;
+ el("cap").textContent="写真（デモ用の描画）　"+day.d;
+}
+function drawSeg(){
+ var h="";DAYS.forEach(function(d,i){h+='<button data-i="'+i+'" class="'+(i==sel?"on":"")+'">'+d.d.replace("今日 ","")+'</button>'});
+ el("seg").innerHTML=h;
+ Array.prototype.forEach.call(el("seg").children,function(b){
+  b.onclick=function(){sel=+b.getAttribute("data-i");el("outCard").className="card hide";drawSeg();drawPic()};
+ });
+}
+function drawOut(){
+ var day=DAYS[sel],h="",total=0;
+ day.items.forEach(function(it){
+  total+=it.cost;
+  var cls=it.left>=55?"hot":(it.left<25?"ok":"");
+  h+='<div class="d"><div class="dtop"><div class="dname">'+it.n+'</div>'+
+     '<div class="dpct '+cls+'">残り '+it.left+'％</div></div>'+
+     '<div class="bar"><i class="'+(it.left>=55?"hot":"")+'" style="width:'+it.left+'%"></i></div>'+
+     '<div class="dmemo">用意した量：'+it.made+'　／　捨てた分の原価：'+it.cost.toLocaleString("ja-JP")+'円</div>'+
+     '<div class="dfix">'+it.fix+'</div></div>';
+ });
+ el("out").innerHTML=h;
+ el("stay").textContent="宿泊 "+day.stay+"名";
+ el("sum").innerHTML="この日に手をつけられず捨てた食材は <b style='color:#c2410c;font-size:20px'>"+total.toLocaleString("ja-JP")+"円</b> ぶん。30日ぶんなら約 "+Math.round(total*30/10000)+"万円です。<br>"+day.note;
+}
+el("go").onclick=function(){el("outCard").className="card";drawOut()};
+
+var ph="";
+PLAN.forEach(function(p){
+ ph+='<div class="d"><div class="dtop"><div class="dname">'+p[0]+'</div><div class="dpct" style="color:#2563eb">'+p[1]+'</div></div>'+
+     '<div class="dmemo">'+p[2]+'</div></div>';
+});
+el("plan").innerHTML=ph;
+el("print").onclick=function(){
+ el("pmsg").className="res";
+ el("pmsg").innerHTML="<b>厨房の紙に出しました。</b>板場が数字を書き換えたら、その場で控えます。書き換えが3回続いた料理は、次から機械の見立てを前に出しません。";
+};
+
+function tab(a){
+ el("tabA").className=a==0?"on":"";el("tabB").className=a==1?"on":"";el("tabC").className=a==2?"on":"";
+ el("paneA").className=a==0?"":"hide";el("paneB").className=a==1?"":"hide";el("paneC").className=a==2?"":"hide";
+}
+el("tabA").onclick=function(){tab(0)};el("tabB").onclick=function(){tab(1)};el("tabC").onclick=function(){tab(2)};
+drawSeg();drawPic();
+</script>
+</body>
+</html>

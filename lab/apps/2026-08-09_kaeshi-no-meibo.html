@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>返しの名簿｜受付の紙を、香典返しの一覧までつなぐ</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin:14px 0 0}
+.tabs button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#6b6558;
+ border-radius:11px;padding:11px 6px;font-size:14px;font-weight:600;cursor:pointer}
+.tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.qr{width:132px;height:132px;margin:4px auto 10px;display:block}
+.center{text-align:center}
+.field{margin-bottom:12px}
+.field span{display:block;font-size:13px;color:#6b6558;font-weight:600;margin-bottom:5px}
+.field input{width:100%;border:1px solid #ddd9cf;border-radius:11px;padding:13px;font-size:16px;
+ background:#fff;color:#1b1a17;font-family:inherit}
+.field input:focus{outline:2px solid #2563eb;outline-offset:-2px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{border:1px solid #ddd9cf;background:#fff;color:#4a453c;border-radius:10px;
+ padding:11px 14px;font-size:15px;font-weight:600;cursor:pointer}
+.chips button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.btn{display:block;width:100%;border:0;background:#2563eb;color:#fff;border-radius:12px;
+ padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:6px}
+.btn.sub{background:#fff;color:#2563eb;border:1px solid #2563eb}
+.g{border-top:1px solid #efece4;padding:13px 0}
+.g:first-of-type{border-top:0;padding-top:2px}
+.gtop{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.gname{font-size:16px;font-weight:700}
+.gyen{font-size:17px;font-weight:800;white-space:nowrap}
+.gsub{font-size:13px;color:#847e70;line-height:1.7;margin-top:4px}
+.gret{font-size:14px;color:#2563eb;font-weight:700;margin-top:6px}
+.past{font-size:13px;background:#faf9f5;border-radius:10px;padding:9px 11px;margin-top:7px;
+ color:#4a453c;line-height:1.7}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;
+ background:#eef2fd;color:#2563eb;margin-left:6px}
+.pill.warn{background:#fdeeea;color:#c2410c}
+.res{font-size:15px;line-height:1.85;color:#4a453c}
+.res b{font-size:20px;color:#1b1a17}
+.row{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;padding:10px 0;border-top:1px solid #efece4}
+.row:first-child{border-top:0}
+.row b{font-size:18px}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+.src{font-size:12px;color:#8d8778;line-height:1.7;margin-top:18px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（架空の葬儀社・サンプルデータ）</div>
+  <h1>返しの名簿</h1>
+  <p class="lead">受付に置いたQRから、参列した方が自分で名前と住所を入れます。喪主の手元には、四十九日のあとに誰へいくらの品を返すかの一覧が残ります。芳名帳の字が読めない、金額と名前が結びつかない、をなくすためのものです。</p>
+
+  <div class="tabs">
+    <button id="tabA" class="on">受付の画面</button>
+    <button id="tabB">喪主の一覧</button>
+    <button id="tabC">葬儀社の話</button>
+  </div>
+
+  <div id="paneA">
+    <div class="card center">
+      <div class="label" style="text-align:left">受付台に置く札（架空・故人 佐久間 とし江 様）</div>
+      <svg class="qr" viewBox="0 0 33 33" shape-rendering="crispEdges" aria-label="受付用の二次元コード（デモ）">
+        <rect width="33" height="33" fill="#fff"/>
+        <g fill="#1b1a17" id="qrg"></g>
+      </svg>
+      <div class="note">読み取ると下の入力が開きます。アプリの用意はいりません。</div>
+    </div>
+
+    <div class="card" id="formCard">
+      <div class="label">ご参列の方の入力（30秒）</div>
+      <div class="field"><span>お名前</span><input id="fn" value="宮下 たけし" autocomplete="off"></div>
+      <div class="field"><span>ご住所（返礼のお届け先）</span><input id="fa" value="新宿区北新宿1-7-20" autocomplete="off"></div>
+      <div class="field"><span>故人との間柄</span>
+        <div class="chips" id="rel"></div>
+      </div>
+      <div class="field" style="margin-top:12px"><span>お包み</span>
+        <div class="chips" id="amt"></div>
+      </div>
+      <button class="btn" id="send">受付に出す</button>
+      <div id="done" class="res hide" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div id="paneB" class="hide">
+    <div class="card">
+      <div class="label">いただいた方の一覧<span class="pill" id="cnt">6件</span></div>
+      <div id="glist"></div>
+    </div>
+    <div class="card">
+      <div class="label">四十九日のあとに返すもの（目安）</div>
+      <div class="row"><span>お包みの合計</span><b id="tot">-</b></div>
+      <div class="row"><span>半返しの目安（半額）</span><b id="half">-</b></div>
+      <div class="row"><span>返礼の品の手配</span><b id="hn" style="color:#2563eb">-</b></div>
+      <div class="note" style="margin-top:10px">半返しは全国で一律ではありません。地域と間柄で三分の一に留める習わしもあるため、金額は目安として出し、最後は喪主が決める形にしています。</div>
+    </div>
+  </div>
+
+  <div id="paneC" class="hide">
+    <div class="card">
+      <div class="label">払うのは葬儀社</div>
+      <div class="res">
+        買うのは町の葬儀社です。喪主に売る道具ではありません。<br><br>
+        葬儀社にとって返礼品は本業の売上ですが、いまは四十九日の直前に喪主から電話が来て、読めない芳名帳を前に一緒に数えるところから始まります。名簿がその場でできていれば、返礼の注文までが1本の線になります。<br><br>
+        受付の紙をなくす話ではありません。紙は紙で残します。書けない人、スマホを持たない人がいる前提で、両方受けられる形にしてあります。
+      </div>
+    </div>
+    <div class="card">
+      <div class="label">やらないこと</div>
+      <div class="res">
+        金額を他の参列者に見せることはしません。見えるのは喪主と葬儀社だけです。<br>
+        参列者への広告配信にも使いません。住所は返礼品の発送だけに使い、四十九日から3か月で消えます。
+      </div>
+    </div>
+  </div>
+
+  <div class="src">デモ用のサンプルデータです。故人名・参列者名・葬儀社名はすべて架空。金額と習わしは説明のための例で、地域によって異なります。<br>株式会社AIdollargame「1日1アプリ実験室」</div>
+</div>
+
+<script>
+function el(id){return document.getElementById(id)}
+var pat=[];
+(function(){
+ var s=7;function rnd(){s=(s*1103515245+12345)%2147483648;return s/2147483648}
+ var g="";
+ function finder(x,y){
+  for(var i=0;i<7;i++)for(var j=0;j<7;j++){
+   var edge=(i==0||i==6||j==0||j==6),mid=(i>1&&i<5&&j>1&&j<5);
+   if(edge||mid)g+='<rect x="'+(x+i)+'" y="'+(y+j)+'" width="1" height="1"/>';
+  }
+ }
+ finder(0,0);finder(26,0);finder(0,26);
+ for(var x=0;x<33;x++)for(var y=0;y<33;y++){
+  var inF=(x<9&&y<9)||(x>23&&y<9)||(x<9&&y>23);
+  if(inF)continue;
+  if(rnd()>0.53)g+='<rect x="'+x+'" y="'+y+'" width="1" height="1"/>';
+ }
+ el("qrg").innerHTML=g;
+})();
+
+var RELS=["親族","近所","仕事","友人"],AMTS=["5千円","1万円","3万円","供花のみ"];
+var relSel=1,amtSel=1;
+function chips(id,arr,cur,cb){
+ var h="";arr.forEach(function(a,i){h+='<button data-i="'+i+'" class="'+(i==cur?"on":"")+'">'+a+'</button>'});
+ el(id).innerHTML=h;
+ Array.prototype.forEach.call(el(id).children,function(b){b.onclick=function(){cb(+b.getAttribute("data-i"))}});
+}
+function drawChips(){
+ chips("rel",RELS,relSel,function(i){relSel=i;drawChips()});
+ chips("amt",AMTS,amtSel,function(i){amtSel=i;drawChips()});
+}
+drawChips();
+
+var GUESTS=[
+ {n:"宮下 たけし",a:"新宿区北新宿1-7-20",rel:"近所",yen:"1万円",past:"3年前のご葬儀で、こちらから1万円をお包みしています"},
+ {n:"佐久間 ひろこ",a:"世田谷区代田4-11-2",rel:"親族",yen:"5万円",past:""},
+ {n:"有限会社かどや商店",a:"新宿区大久保2-3-9",rel:"仕事",yen:"3万円",past:"故人が30年取引された酒屋さん。先代のご葬儀では2万円をお包み"},
+ {n:"高梨 のぶ子",a:"中野区新井1-8-4",rel:"友人",yen:"1万円",past:""},
+ {n:"町会 北新宿二丁目",a:"新宿区北新宿2-1-1",rel:"近所",yen:"供花のみ",past:"町会からの供花は返礼を辞退される決まりです"},
+ {n:"沢渡 きよし",a:"練馬区豊玉北5-2-7",rel:"仕事",yen:"5千円",past:""}
+];
+var YEN={"5千円":5000,"1万円":10000,"3万円":30000,"5万円":50000,"供花のみ":0};
+function ret(y){
+ if(y=="供花のみ")return "返礼なし（辞退のお申し出）";
+ var n=Math.round(YEN[y]/2);
+ return "返礼の目安 "+n.toLocaleString("ja-JP")+"円";
+}
+function drawG(){
+ var h="";
+ GUESTS.forEach(function(g){
+  h+='<div class="g"><div class="gtop"><div class="gname">'+g.n+'<span class="pill '+(g.yen=="供花のみ"?"warn":"")+'">'+g.rel+'</span></div>'+
+     '<div class="gyen">'+g.yen+'</div></div>'+
+     '<div class="gsub">'+g.a+'</div>'+
+     '<div class="gret">'+ret(g.yen)+'</div>'+
+     (g.past?'<div class="past">前回のこと：'+g.past+'</div>':'')+'</div>';
+ });
+ el("glist").innerHTML=h;
+ el("cnt").textContent=GUESTS.length+"件";
+ var t=0,hn=0;
+ GUESTS.forEach(function(g){t+=YEN[g.yen]||0;if(YEN[g.yen])hn++});
+ el("tot").textContent=t.toLocaleString("ja-JP")+"円";
+ el("half").textContent="約 "+Math.round(t/2).toLocaleString("ja-JP")+"円";
+ el("hn").textContent=hn+"件ぶんを印刷";
+}
+drawG();
+
+el("send").onclick=function(){
+ var n=el("fn").value.trim()||"お名前未記入",a=el("fa").value.trim()||"住所未記入";
+ var g={n:n,a:a,rel:RELS[relSel],yen:AMTS[amtSel],past:""};
+ GUESTS.unshift(g);drawG();
+ el("done").className="res";
+ el("done").innerHTML="<b>受付に出しました。</b>受付の係の画面に、いま入れた内容がそのまま並びます。書き直しは受付でもできます。上のタブ「喪主の一覧」を見ると、返礼の目安まで入った状態になっています。";
+};
+
+function tab(a){
+ el("tabA").className=a==0?"on":"";el("tabB").className=a==1?"on":"";el("tabC").className=a==2?"on":"";
+ el("paneA").className=a==0?"":"hide";el("paneB").className=a==1?"":"hide";el("paneC").className=a==2?"":"hide";
+}
+el("tabA").onclick=function(){tab(0)};el("tabB").onclick=function(){tab(1)};el("tabC").onclick=function(){tab(2)};
+</script>
+</body>
+</html>

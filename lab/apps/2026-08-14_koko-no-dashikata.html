@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ここの出し方｜集積所の写真から、誰も名指しせずに直す</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin:14px 0 0}
+.tabs button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#6b6558;
+ border-radius:11px;padding:11px 6px;font-size:14px;font-weight:600;cursor:pointer}
+.tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.btn{display:block;width:100%;border:0;background:#2563eb;color:#fff;border-radius:12px;
+ padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px}
+.btn.sub{background:#fff;color:#2563eb;border:1px solid #2563eb}
+/* 集積所の図 */
+.scene{position:relative;background:#e8e5db;border-radius:12px;padding:0;overflow:hidden}
+.scene svg{display:block;width:100%;height:auto}
+.hit{position:absolute;border:2px solid rgba(37,99,235,0);border-radius:9px;cursor:pointer;
+ transition:border-color .15s, background .15s;background:rgba(37,99,235,0)}
+.hit:hover{border-color:rgba(37,99,235,.5);background:rgba(37,99,235,.08)}
+.hit.flag{border-color:#c9452f;background:rgba(201,69,47,.13)}
+.hit.ok{border-color:#2f8f5b;background:rgba(47,143,91,.10)}
+.hint{font-size:13px;color:#847e70;line-height:1.75;margin-top:10px}
+.result{border-top:1px solid #efece4;margin-top:14px;padding-top:14px}
+.result h3{font-size:17px;margin:0 0 4px}
+.result .sub{font-size:13px;color:#847e70;line-height:1.7;margin:0 0 10px}
+.verdict{display:inline-block;font-size:12px;font-weight:700;border-radius:7px;padding:4px 10px;margin-bottom:8px}
+.verdict.ng{background:#fbeae7;color:#c9452f}
+.verdict.ok{background:#e8f3ec;color:#2f8f5b}
+.reason{background:#faf9f5;border-radius:11px;padding:13px;font-size:14px;line-height:1.8;color:#4a453c}
+.reason b{color:#1b1a17}
+.paper{background:#fffdf6;border:1px solid #e3dcc8;border-radius:11px;padding:16px;margin-top:12px}
+.paper .ttl{font-size:17px;font-weight:800;text-align:center;margin-bottom:8px;letter-spacing:.04em}
+.paper p{font-size:14px;line-height:1.9;margin:0 0 8px;color:#3d382f}
+.paper .sig{font-size:12px;color:#8d8778;text-align:right;margin:0}
+.sum{display:flex;gap:10px;margin-bottom:4px}
+.sum div{flex:1;background:#faf9f5;border-radius:11px;padding:12px;text-align:center}
+.sum span{display:block;font-size:12px;color:#847e70;margin-bottom:3px}
+.sum b{font-size:26px;font-weight:800;color:#2563eb;line-height:1.1}
+.sum b i{font-size:13px;font-style:normal;color:#847e70;font-weight:600}
+.row{display:flex;align-items:center;gap:10px;border-top:1px solid #efece4;padding:12px 0}
+.row:first-child{border-top:0}
+.row .t{flex:1;font-size:14.5px}
+.row .t small{display:block;color:#8d8778;font-size:12px;margin-top:2px;line-height:1.6}
+.row .m{font-size:14px;font-weight:700;white-space:nowrap;color:#2563eb}
+.row .m.bad{color:#c9452f}
+.trend{display:flex;align-items:flex-end;gap:5px;height:74px;margin:6px 0 8px}
+.trend div{flex:1;background:#a9c2f2;border-radius:4px 4px 0 0;position:relative}
+.trend div.hi{background:#2563eb}
+.trend div span{position:absolute;bottom:-19px;left:0;right:0;text-align:center;font-size:10px;color:#8d8778}
+.note{font-size:13px;color:#847e70;line-height:1.75;margin-top:16px}
+.foot{font-size:12px;color:#8d8778;line-height:1.8;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（架空の集合住宅・サンプルデータ／図はイラストです）</div>
+<h1>ここの出し方</h1>
+<p class="lead">収集の前に集積所を1枚撮ると、間違った出し方だけを拾います。誰が出したかは調べません。出てくるのは、その集積所に貼る紙です。名指しをやめると、貼り紙は読まれるようになります。</p>
+
+<div class="tabs">
+  <button id="t1" class="on" onclick="tab(1)">その日の1枚</button>
+  <button id="t2" onclick="tab(2)">管理会社</button>
+</div>
+
+<div id="v1">
+  <div class="card">
+    <div class="label">8月14日（金）7時40分・けやき台ハイツ 第2集積所</div>
+    <div class="scene" id="scene">
+      <svg viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg" aria-label="集積所のイラスト">
+        <!-- 背景 -->
+        <rect width="520" height="300" fill="#e8e5db"/>
+        <rect y="196" width="520" height="104" fill="#d9d5c8"/>
+        <rect y="192" width="520" height="5" fill="#c8c3b3"/>
+        <!-- ネット枠 -->
+        <rect x="26" y="96" width="468" height="104" rx="8" fill="none" stroke="#b9b4a3" stroke-width="3"/>
+        <path d="M26 130 H494 M26 165 H494 M120 96 V200 M260 96 V200 M400 96 V200" stroke="#c6c1b0" stroke-width="1.5"/>
+        <!-- 看板 -->
+        <rect x="196" y="34" width="128" height="46" rx="6" fill="#fdfcf6" stroke="#b9b4a3" stroke-width="2"/>
+        <text x="260" y="55" font-size="15" font-weight="700" text-anchor="middle" fill="#4a453c">燃やすごみ</text>
+        <text x="260" y="72" font-size="12" text-anchor="middle" fill="#8d8778">火・金／朝8時まで</text>
+        <rect x="255" y="80" width="10" height="18" fill="#b9b4a3"/>
+        <!-- 袋1 正しい半透明 -->
+        <ellipse cx="76" cy="182" rx="42" ry="10" fill="#00000012"/>
+        <path d="M76 108 C50 118 42 150 46 172 C50 186 102 186 106 172 C110 150 102 118 76 108 Z" fill="#dfe6ee" stroke="#b3bcc6" stroke-width="2"/>
+        <path d="M76 108 l-11 -13 h22 z" fill="#c8d1da" stroke="#b3bcc6" stroke-width="2"/>
+        <!-- 袋2 正しい -->
+        <ellipse cx="168" cy="184" rx="40" ry="10" fill="#00000012"/>
+        <path d="M168 116 C144 125 137 154 141 174 C145 187 191 187 195 174 C199 154 192 125 168 116 Z" fill="#dfe6ee" stroke="#b3bcc6" stroke-width="2"/>
+        <path d="M168 116 l-10 -12 h20 z" fill="#c8d1da" stroke="#b3bcc6" stroke-width="2"/>
+        <!-- 袋3 中身が違う色（資源が混ざっている） -->
+        <ellipse cx="262" cy="184" rx="40" ry="10" fill="#00000012"/>
+        <path d="M262 116 C238 125 231 154 235 174 C239 187 285 187 289 174 C293 154 286 125 262 116 Z" fill="#dfe6ee" stroke="#b3bcc6" stroke-width="2"/>
+        <path d="M262 116 l-10 -12 h20 z" fill="#c8d1da" stroke="#b3bcc6" stroke-width="2"/>
+        <rect x="243" y="146" width="15" height="26" rx="6" fill="#9fd0e8" opacity=".92"/>
+        <rect x="262" y="150" width="14" height="24" rx="6" fill="#9fd0e8" opacity=".92"/>
+        <rect x="252" y="132" width="13" height="20" rx="5" fill="#bfe0ef" opacity=".92"/>
+        <!-- 袋4 中身の見えない黒袋 -->
+        <ellipse cx="356" cy="184" rx="40" ry="10" fill="#00000012"/>
+        <path d="M356 116 C332 125 325 154 329 174 C333 187 379 187 383 174 C387 154 380 125 356 116 Z" fill="#5c5a55" stroke="#47453f" stroke-width="2"/>
+        <path d="M356 116 l-10 -12 h20 z" fill="#6b6862" stroke="#47453f" stroke-width="2"/>
+        <!-- 5 ネット枠の外（手前の地面）に置かれた段ボール -->
+        <g>
+          <ellipse cx="436" cy="272" rx="62" ry="11" fill="#00000012"/>
+          <rect x="380" y="228" width="112" height="44" rx="3" fill="#d3b489" stroke="#b3936a" stroke-width="2"/>
+          <path d="M380 250 H492" stroke="#b3936a" stroke-width="2"/>
+          <rect x="392" y="210" width="88" height="20" rx="3" fill="#dcc09a" stroke="#b3936a" stroke-width="2"/>
+        </g>
+      </svg>
+      <!-- クリック領域（％で配置） -->
+      <div class="hit" id="h0" style="left:8%;top:33%;width:16%;height:30%"  onclick="tapItem(0)"></div>
+      <div class="hit" id="h1" style="left:26%;top:36%;width:15%;height:28%" onclick="tapItem(1)"></div>
+      <div class="hit" id="h2" style="left:44%;top:36%;width:15%;height:28%" onclick="tapItem(2)"></div>
+      <div class="hit" id="h3" style="left:62%;top:36%;width:15%;height:28%" onclick="tapItem(3)"></div>
+      <div class="hit" id="h4" style="left:71%;top:68%;width:23%;height:22%" onclick="tapItem(4)"></div>
+    </div>
+    <p class="hint" id="hint">袋を押すと、判定の理由が出ます。5つのうち3つに問題があります。</p>
+    <div class="result" id="result" style="display:none"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">この日の貼り紙</div>
+    <div id="paperBox"></div>
+    <button class="btn sub" onclick="allTap()">3つとも確認したことにする</button>
+  </div>
+</div>
+
+<div id="v2" style="display:none">
+  <div class="card">
+    <div class="label">けやき台ハイツ（48戸）・第2集積所</div>
+    <div class="sum">
+      <div><span>今月の指摘</span><b>14<i>件</i></b></div>
+      <div><span>先月</span><b>31<i>件</i></b></div>
+      <div><span>持ち戻り</span><b>0<i>回</i></b></div>
+    </div>
+    <div class="trend">
+      <div style="height:100%"><span>4月</span></div>
+      <div style="height:92%"><span>5月</span></div>
+      <div style="height:74%"><span>6月</span></div>
+      <div style="height:61%"><span>7月</span></div>
+      <div class="hi" style="height:28%"><span>8月</span></div>
+    </div>
+    <p class="note" style="margin-top:22px">貼り紙を「誰かが違反した」から「この集積所で今週多いこと」に変えた5月から下がり続けています。持ち戻り（収集されずに残る）が起きると、管理会社の担当が現地に出ます。</p>
+  </div>
+
+  <div class="card">
+    <div class="label">物件ごとの手間</div>
+    <div class="row"><div class="t">けやき台ハイツ<small>48戸・第2集積所</small></div><div class="m">今月14件</div></div>
+    <div class="row"><div class="t">南通りレジデンス<small>22戸</small></div><div class="m">今月3件</div></div>
+    <div class="row"><div class="t">みどりコーポ<small>16戸・学生が多い</small></div><div class="m bad">今月38件</div></div>
+    <div class="row"><div class="t">本町ハイム<small>30戸</small></div><div class="m">今月7件</div></div>
+    <p class="note">みどりコーポは3月と9月に跳ねます。入れ替わりの時期だけ、貼り紙を多言語と図に切り替えます。</p>
+  </div>
+</div>
+
+<p class="foot">けやき台ハイツ・けやき台管理は架空です。分別のきまりは自治体ごとに違い、この画面の判定はサンプルです。実際の分別は、お住まいの市区町村の案内をご確認ください。</p>
+</div>
+
+<script>
+var ITEMS = [
+  {ng:false, ttl:'指定袋・中身が見える', sub:'左端の袋',
+   why:'中身が透けていて、燃やすごみ以外は入っていません。口も結ばれています。', act:''},
+  {ng:false, ttl:'指定袋・中身が見える', sub:'左から2つ目',
+   why:'問題ありません。', act:''},
+  {ng:true,  ttl:'資源プラが混ざっている', sub:'左から3つ目・中に容器が見えます',
+   why:'燃やすごみの袋に、洗って出せる容器包装プラスチックが3点入っています。<b>この地区では水曜が容器包装の日</b>です。',
+   act:'燃やすごみに容器包装プラが混ざっています'},
+  {ng:true,  ttl:'中身の見えない袋', sub:'左から4つ目・黒い袋',
+   why:'中が見えない袋は、収集の人が危険物の有無を確認できないため<b>持ち戻り</b>になります。指定袋か、透ける袋に入れ替えが要ります。',
+   act:'中身の見えない黒い袋は収集されません'},
+  {ng:true,  ttl:'枠の外・段ボール', sub:'右のネット枠の外',
+   why:'ネットの外に置かれています。段ボールは<b>第2土曜の資源の日</b>で、たたんでひもで縛る決まりです。カラスに引かれると、収集後も残ります。',
+   act:'段ボールは枠の外に置かず、第2土曜にたたんで出してください'}
+];
+
+var tapped = {};
+var cur = -1;
+
+function tab(n){
+  document.getElementById('t1').className = n===1?'on':'';
+  document.getElementById('t2').className = n===2?'on':'';
+  document.getElementById('v1').style.display = n===1?'':'none';
+  document.getElementById('v2').style.display = n===2?'':'none';
+}
+function tapItem(i){
+  tapped[i] = true; cur = i;
+  render();
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function allTap(){
+  for (var i=0;i<ITEMS.length;i++) if (ITEMS[i].ng) tapped[i] = true;
+  cur = -1;
+  render();
+}
+
+function render(){
+  for (var i=0;i<ITEMS.length;i++){
+    var el = document.getElementById('h'+i);
+    el.className = 'hit' + (tapped[i] ? (ITEMS[i].ng ? ' flag' : ' ok') : '');
+  }
+  var r = document.getElementById('result');
+  if (cur >= 0){
+    var it = ITEMS[cur];
+    r.style.display = '';
+    r.innerHTML = '<span class="verdict ' + (it.ng?'ng':'ok') + '">' + (it.ng?'このままでは収集されません':'このまま出せます') + '</span>'
+                + '<h3>' + it.ttl + '</h3><p class="sub">' + it.sub + '</p>'
+                + '<div class="reason">' + it.why + '</div>';
+  } else {
+    r.style.display = 'none';
+  }
+
+  var found = [];
+  for (var j=0;j<ITEMS.length;j++) if (tapped[j] && ITEMS[j].ng) found.push(ITEMS[j].act);
+  document.getElementById('hint').textContent =
+    found.length === 3 ? '3つとも見つかりました。下に貼り紙ができています。'
+    : '袋を押すと、判定の理由が出ます。5つのうち3つに問題があります。（' + found.length + '／3）';
+
+  var pb = document.getElementById('paperBox');
+  if (!found.length){
+    pb.innerHTML = '<p class="hint" style="margin-top:0">問題のある袋を押すと、その内容だけを載せた貼り紙ができます。</p>';
+  } else {
+    var body = '';
+    for (var m=0;m<found.length;m++) body += '<p>・' + found[m] + '</p>';
+    pb.innerHTML = '<div class="paper"><div class="ttl">今週、この集積所で多いこと</div>'
+      + body
+      + '<p style="margin-top:12px;color:#6b6558">どなたのものかは調べていません。次の収集日から直していただけると、持ち戻りがなくなります。</p>'
+      + '<p class="sig">8月14日　けやき台管理</p></div>'
+      + '<p class="hint">この紙にはお部屋番号も、日付以外の特定につながる情報も入りません。</p>';
+  }
+}
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>畑の口約束｜借りている農地を、相続で失う前に紙にする</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin:14px 0 0}
+.tabs button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#6b6558;
+ border-radius:11px;padding:11px 6px;font-size:14px;font-weight:600;cursor:pointer}
+.tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.plot{border:1px solid #ddd9cf;border-radius:12px;padding:13px;margin-bottom:10px;cursor:pointer;background:#fff}
+.plot.on{border-color:#2563eb;background:#f4f7fe}
+.ptop{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.pname{font-size:16px;font-weight:700}
+.risk{font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.risk.hi{background:#fdeeea;color:#c2410c}
+.risk.mid{background:#fdf4e6;color:#a56b16}
+.risk.lo{background:#eaf3ec;color:#1d6b3f}
+.pmemo{font-size:13px;color:#847e70;line-height:1.75;margin-top:5px}
+.btn{display:block;width:100%;border:0;background:#2563eb;color:#fff;border-radius:12px;
+ padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:6px}
+.btn.sub{background:#fff;color:#2563eb;border:1px solid #2563eb}
+.paper{background:#fdfcf9;border:1px solid #e6e1d5;border-radius:12px;padding:16px;font-size:14px;line-height:1.95}
+.paper h3{font-size:16px;margin:0 0 10px;text-align:center}
+.paper .k{color:#847e70;font-size:13px}
+.paper hr{border:0;border-top:1px solid #ece7db;margin:12px 0}
+.chk{display:flex;gap:9px;align-items:flex-start;padding:9px 0;border-top:1px solid #efece4;cursor:pointer}
+.chk:first-of-type{border-top:0}
+.box{width:22px;height:22px;border:2px solid #c9c3b4;border-radius:6px;flex:0 0 auto;margin-top:2px;
+ display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff}
+.box.on{background:#2563eb;border-color:#2563eb}
+.ck{display:block;width:6px;height:11px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(42deg);margin-bottom:3px}
+.chk span{font-size:15px;line-height:1.7}
+.res{font-size:15px;line-height:1.85;color:#4a453c}
+.res b{font-size:20px;color:#1b1a17}
+.row{display:flex;justify-content:space-between;align-items:baseline;font-size:15px;padding:10px 0;border-top:1px solid #efece4}
+.row:first-child{border-top:0}
+.row b{font-size:18px}
+.big{font-size:38px;font-weight:800;color:#2563eb;line-height:1.1}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;
+ background:#eef2fd;color:#2563eb;margin-left:6px}
+.note{font-size:13px;color:#847e70;line-height:1.75}
+.warn{background:#fdf4e6;border-radius:11px;padding:12px;font-size:13px;line-height:1.8;color:#7a5a17}
+.src{font-size:12px;color:#8d8778;line-height:1.7;margin-top:18px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（架空の農業法人・サンプルデータ）</div>
+  <h1>畑の口約束</h1>
+  <p class="lead">借りている畑の多くは、先代どうしの口約束のままです。地権者が亡くなると、相続した子どもが誰なのか分からず、作付けの途中で返してほしいと言われることがあります。危ない区画から順に、事実を紙にしていくための道具です。</p>
+
+  <div class="tabs">
+    <button id="tabA" class="on">借りている畑</button>
+    <button id="tabB">確認の紙</button>
+    <button id="tabC">なぜ今か</button>
+  </div>
+
+  <div id="paneA">
+    <div class="card">
+      <div class="label">農事組合法人 あさひ野（架空・水稲と大豆 21ヘクタール）</div>
+      <div class="note" style="margin-bottom:10px">危ない順に並べています。押すと下の紙が入れ替わります。</div>
+      <div id="plots"></div>
+    </div>
+    <div class="card">
+      <div class="label">全体</div>
+      <div class="row"><span>借りている区画</span><b>34枚</b></div>
+      <div class="row"><span>書面がある</span><b>11枚</b></div>
+      <div class="row"><span>口約束のまま</span><b style="color:#c2410c">23枚（14.2ヘクタール）</b></div>
+      <div class="row"><span>地権者が80歳以上、または連絡先が本人だけ</span><b style="color:#c2410c">9枚</b></div>
+      <div class="note" style="margin-top:10px">この9枚が、次の3年でいちばん動く可能性が高い区画です。</div>
+    </div>
+  </div>
+
+  <div id="paneB" class="hide">
+    <div class="card">
+      <div class="label">地権者にお渡しする1枚<span class="pill" id="pnm">大谷地の3番</span></div>
+      <div class="paper" id="paper"></div>
+      <div class="note" style="margin-top:10px">法律の手続きの紙ではありません。事実の確認と連絡先の控えです。正式な貸し借りの手続きは市町村の農業委員会や農地中間管理機構が窓口になります。この紙は、その相談に持っていく材料になります。</div>
+    </div>
+    <div class="card">
+      <div class="label">渡すときに聞くこと（3つだけ）</div>
+      <div id="chks"></div>
+      <button class="btn" id="save" style="margin-top:12px">聞き取りを台帳に残す</button>
+      <div id="smsg" class="res hide" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div id="paneC" class="hide">
+    <div class="card">
+      <div class="label">払うのは誰か</div>
+      <div class="res">
+        買うのは農業法人と集落営農組織です。個人の農家に売るものではありません。<br><br>
+        借地が20ヘクタールを超えると、誰から何枚借りているかを頭の中だけで持てなくなります。それでも台帳を作らないのは、作るのに一冬かかるからです。危ない9枚から始められるなら、着手できます。
+      </div>
+    </div>
+    <div class="card">
+      <div class="label">畑を1枚返してほしいと言われると</div>
+      <div class="row"><span>その区画の年間の売上（1ヘクタール・水稲）</span><b>約 110万円</b></div>
+      <div class="row"><span>すでに入れた肥料と苗の費用</span><b>約 28万円</b></div>
+      <div class="row"><span>機械の動線が分断されて増える作業時間</span><b>年 40時間ほど</b></div>
+      <div class="note" style="margin-top:10px">架空の法人での試算です。作物と地域で大きく変わります。金額そのものより、1枚抜けると隣接の区画までまとめて効率が落ちるところが痛みです。</div>
+    </div>
+    <div class="card">
+      <div class="label">やらないこと</div>
+      <div class="res">
+        相続の手続きの代行はしません。相続人を勝手に調べることもしません。聞けるのは地権者本人からだけで、本人が言いたくないことは空欄のまま残します。<br>
+        空欄が残っていること自体が、次に確かめる場所として台帳に出ます。
+      </div>
+    </div>
+  </div>
+
+  <div class="src">デモ用のサンプルデータです。法人名・地権者名・地番はすべて架空。金額は説明のための仮の数字です。制度の手続きは市町村と農業委員会にご確認ください。<br>株式会社AIdollargame「1日1アプリ実験室」</div>
+</div>
+
+<script>
+function el(id){return document.getElementById(id)}
+var PLOTS=[
+ {n:"大谷地の3番",area:"52アール",owner:"梅木 さだお 様（86歳）",since:"昭和56年から先代どうしの口約束",
+  rent:"米3俵（現物）",risk:"hi",why:"書面なし。連絡先は自宅の固定電話のみ。ご子息は県外にお住まいと聞いています",crop:"水稲"},
+ {n:"川向こうの1番・2番",area:"88アール",owner:"津久井 のぶ 様（91歳）",since:"平成9年から口約束",
+  rent:"年 4万円",risk:"hi",why:"昨年から施設に入られ、集落に住む方がいません。地番の境界を示す杭も見当たりません",crop:"大豆"},
+ {n:"堤下の5番",area:"31アール",owner:"沢内 きよみ 様（74歳）",since:"平成24年から口約束",
+  rent:"年 2万5千円",risk:"mid",why:"連絡はつきますが書面がありません。相続人のお名前は伺えていません",crop:"水稲"},
+ {n:"新田の7番",area:"64アール",owner:"あさひ野第二組合",since:"平成30年に利用権を設定",
+  rent:"年 6万円",risk:"lo",why:"書面あり。期間は令和11年3月まで。更新の連絡は期限の6か月前に出ます",crop:"大豆"}
+];
+var CHKS=[
+ "この畑を、これからも貸していただけますか（今のところのお気持ちで結構です）",
+ "もしものときに、ご家族のどなたにご連絡すればよいでしょうか",
+ "小作料は現物と現金のどちらがよいですか。今の形で不都合はありませんか"
+];
+var sel=0,cst=[false,false,false];
+
+function drawPlots(){
+ var h="";
+ PLOTS.forEach(function(p,i){
+  var lab={hi:"危ない",mid:"要確認",lo:"書面あり"}[p.risk];
+  h+='<div class="plot '+(i==sel?"on":"")+'" data-i="'+i+'"><div class="ptop">'+
+     '<div class="pname">'+p.n+'</div><div class="risk '+p.risk+'">'+lab+'</div></div>'+
+     '<div class="pmemo">'+p.area+'／'+p.crop+'　地権者：'+p.owner+'<br>'+p.since+'　小作料：'+p.rent+'<br>'+p.why+'</div></div>';
+ });
+ el("plots").innerHTML=h;
+ Array.prototype.forEach.call(document.querySelectorAll(".plot"),function(d){
+  d.onclick=function(){sel=+d.getAttribute("data-i");cst=[false,false,false];drawPlots();drawPaper();drawChks();
+   el("smsg").className="res hide";tab(1);window.scrollTo(0,0)};
+ });
+}
+function drawPaper(){
+ var p=PLOTS[sel];
+ el("pnm").textContent=p.n;
+ el("paper").innerHTML=
+  '<h3>畑をお借りしていることの確認</h3>'+
+  '<div class="k">お渡し先</div>'+p.owner+'<br>'+
+  '<div class="k" style="margin-top:8px">お借りしている畑</div>'+p.n+'（'+p.area+'・'+p.crop+'）<br>'+
+  '<div class="k" style="margin-top:8px">いつから</div>'+p.since+'<br>'+
+  '<div class="k" style="margin-top:8px">今の小作料</div>'+p.rent+
+  '<hr>'+
+  '<div class="k">こちらで分かっていること</div>'+p.why+
+  '<hr>'+
+  '<div class="k">お願い</div>'+
+  '長らくお借りしてまいりましたが、書面を交わさないままになっております。作付けの計画を立てるうえで、今のお気持ちと、ご家族のご連絡先を伺えますと助かります。<br><br>'+
+  '正式な貸し借りの手続きは市町村の農業委員会が窓口になります。この紙は、その前にこちらの記録を合わせるためのものです。'+
+  '<hr>'+
+  '<div class="k">農事組合法人 あさひ野（架空）</div>代表理事　中江 しげる<br>電話 000-0000-0000';
+}
+function drawChks(){
+ var h="";
+ CHKS.forEach(function(c,i){
+  h+='<div class="chk" data-i="'+i+'"><div class="box '+(cst[i]?"on":"")+'">'+(cst[i]?"<i class=\'ck\'></i>":"")+'</div><span>'+c+'</span></div>';
+ });
+ el("chks").innerHTML=h;
+ Array.prototype.forEach.call(document.querySelectorAll(".chk"),function(d){
+  d.onclick=function(){var i=+d.getAttribute("data-i");cst[i]=!cst[i];drawChks()};
+ });
+}
+el("save").onclick=function(){
+ var n=cst.filter(Boolean).length;
+ el("smsg").className="res";
+ if(n==0){el("smsg").innerHTML="<b>まだ何も聞けていない状態で保存しました。</b>それでも構いません。訪ねた日付だけ残ります。空欄は次に確かめる場所として、台帳の先頭に上がります。"}
+ else if(n<3){el("smsg").innerHTML="<b>"+n+"つ伺えました。</b>残りは空欄のまま台帳に入ります。全部そろっていなくても、伺った日と分かったことが残るほうが先です。"}
+ else{el("smsg").innerHTML="<b>3つとも伺えました。</b>この区画は「要確認」から外れます。ご家族の連絡先が入ったので、次に動きがあったときに最初の一報が届きます。農業委員会への相談に持っていく紙も、このまま印刷できます。"}
+};
+function tab(a){
+ el("tabA").className=a==0?"on":"";el("tabB").className=a==1?"on":"";el("tabC").className=a==2?"on":"";
+ el("paneA").className=a==0?"":"hide";el("paneB").className=a==1?"":"hide";el("paneC").className=a==2?"":"hide";
+}
+el("tabA").onclick=function(){tab(0)};el("tabB").onclick=function(){tab(1)};el("tabC").onclick=function(){tab(2)};
+drawPlots();drawPaper();drawChks();
+</script>
+</body>
+</html>

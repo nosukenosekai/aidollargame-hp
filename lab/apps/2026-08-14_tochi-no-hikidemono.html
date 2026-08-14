@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>土地の引き出物｜両家で慣習が違うとき、どちらにも合わせない</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin:14px 0 0}
+.tabs button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#6b6558;
+ border-radius:11px;padding:11px 6px;font-size:14px;font-weight:600;cursor:pointer}
+.tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.btn{display:block;width:100%;border:0;background:#2563eb;color:#fff;border-radius:12px;
+ padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px}
+.btn.sub{background:#fff;color:#2563eb;border:1px solid #2563eb}
+.side{display:flex;gap:10px;margin-bottom:6px}
+.side>div{flex:1}
+.side .h{font-size:12.5px;color:#847e70;font-weight:700;margin-bottom:6px}
+select{width:100%;font-size:15px;font-family:inherit;color:#1b1a17;background:#faf9f5;
+ border:1px solid #ddd9cf;border-radius:10px;padding:12px 10px;-webkit-appearance:none;appearance:none}
+.cnt{border-top:1px solid #efece4;padding:13px 0}
+.cnt:first-of-type{border-top:0;padding-top:2px}
+.ct{font-size:15px;font-weight:700}
+.ct small{display:block;font-size:12px;color:#8d8778;font-weight:500;margin-top:2px}
+.cr{display:flex;gap:10px;margin-top:9px}
+.cg{flex:1;display:flex;align-items:center;gap:5px;background:#faf9f5;border-radius:10px;padding:7px 7px}
+.cg span{font-size:11px;color:#847e70;font-weight:700;width:26px;flex-shrink:0;line-height:1.25}
+.cg button{width:33px;height:33px;border:1px solid #ddd9cf;background:#fff;border-radius:9px;
+ font-size:17px;font-weight:700;color:#2563eb;cursor:pointer;flex-shrink:0;padding:0}
+.cg b{flex:1;text-align:center;font-size:16px;font-weight:800}
+.sum{display:flex;gap:10px}
+.sum div{flex:1;background:#faf9f5;border-radius:11px;padding:12px;text-align:center}
+.sum span{display:block;font-size:12px;color:#847e70;margin-bottom:3px}
+.sum div{padding:12px 6px}
+.sum span{white-space:nowrap}
+.sum b{font-size:22px;font-weight:800;color:#2563eb;line-height:1.15;white-space:nowrap}
+.sum b i{font-size:13px;font-style:normal;color:#847e70;font-weight:600}
+.verdict{border-radius:12px;padding:15px;font-size:15px;line-height:1.85;margin-top:2px}
+.verdict.split{background:#eef3fd;color:#274a8f}
+.verdict.same{background:#e8f3ec;color:#2a6b46}
+.verdict.care{background:#fbeae7;color:#8f3423}
+.verdict b{font-size:16px}
+.tbl{margin-top:4px}
+.tr{display:flex;align-items:center;gap:8px;border-top:1px solid #efece4;padding:12px 0}
+.tr:first-child{border-top:0}
+.tr .who{width:106px;flex-shrink:0;font-size:14px;font-weight:700;line-height:1.4}
+.tr .who small{display:block;font-size:11.5px;color:#8d8778;font-weight:600;margin-top:1px}
+.tr .what{flex:1;font-size:13.5px;line-height:1.65;color:#4a453c}
+.tr .amt{font-size:14px;font-weight:800;white-space:nowrap;color:#2563eb}
+.pill{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px;margin-left:5px}
+.pill.g{background:#eef3fd;color:#2563eb}
+.pill.o{background:#fbeae7;color:#c9452f}
+.dist{margin-top:6px}
+.dist .d{display:flex;align-items:center;gap:9px;padding:6px 0}
+.dist .d .k{width:64px;font-size:13px;font-weight:700}
+.dist .d .b{flex:1;height:20px;background:#efece4;border-radius:5px;overflow:hidden}
+.dist .d .b i{display:block;height:100%;background:#a9c2f2}
+.dist .d .b i.on{background:#2563eb}
+.dist .d .p{width:42px;text-align:right;font-size:13px;color:#847e70;font-weight:700}
+.chip{display:inline-block;background:#faf9f5;border:1px solid #ddd9cf;border-radius:8px;
+ padding:6px 10px;font-size:12.5px;color:#6b6558;margin:0 6px 6px 0}
+.note{font-size:13px;color:#847e70;line-height:1.75;margin-top:12px}
+.note b{color:#4a453c}
+.foot{font-size:12px;color:#8d8778;line-height:1.8;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（架空の式場・サンプルデータ）</div>
+<h1>土地の引き出物</h1>
+<p class="lead">引き出物でもめるのは、二人ではなく両家の親です。地元でのふつうが違うだけなのに、どちらかが折れる話になります。出身地と列席者を入れると、どちらにも合わせずに済む形が出ます。</p>
+
+<div class="tabs">
+  <button id="t1" class="on" onclick="tab(1)">お二人と両家</button>
+  <button id="t2" onclick="tab(2)">プランナー</button>
+</div>
+
+<div id="v1">
+  <div class="card">
+    <div class="label">ご両家の地元</div>
+    <div class="side">
+      <div>
+        <div class="h">新郎側</div>
+        <select id="rA" onchange="render()"></select>
+      </div>
+      <div>
+        <div class="h">新婦側</div>
+        <select id="rB" onchange="render()"></select>
+      </div>
+    </div>
+    <p class="note" id="regionNote"></p>
+  </div>
+
+  <div class="card">
+    <div class="label">列席者</div>
+    <div id="counts"></div>
+  </div>
+
+  <div class="card">
+    <div class="sum">
+      <div><span>列席者</span><b id="kN">－<i>名</i></b></div>
+      <div><span>引き出物</span><b id="kY">－<i>万円</i></b></div>
+      <div><span>一人あたり</span><b id="kU">－<i>円</i></b></div>
+    </div>
+    <div id="verdict"></div>
+  </div>
+
+  <div class="card">
+    <div class="label">誰に何をお渡しするか</div>
+    <div class="tbl" id="plan"></div>
+    <p class="note" id="planNote"></p>
+  </div>
+
+  <div class="card">
+    <div class="label">同じ規模の式で、みなさんが選んだ品数</div>
+    <div class="dist" id="dist"></div>
+    <p class="note">当式場で行われた同じ人数帯の式のうち、その品数を選んだ割合です（サンプルの数値）。多いほうが正しいという話ではありませんが、親御さまに説明するときの材料になります。</p>
+  </div>
+</div>
+
+<div id="v2" style="display:none">
+  <div class="card">
+    <div class="label">この打ち合わせで先に聞くこと</div>
+    <div class="tr"><div class="who">1</div><div class="what">両家それぞれの<b>親の出身地</b>。お二人の現住所ではありません。慣習は親の代の土地に付きます。</div></div>
+    <div class="tr"><div class="who">2</div><div class="what">親族の列席が<b>片側に偏っていないか</b>。偏ると、贈り分けの見え方が変わります。</div></div>
+    <div class="tr"><div class="who">3</div><div class="what">ご祝儀の相場観。<b>会費制の地域</b>が片側に入ると、引き出物の前提そのものが変わります。</div></div>
+  </div>
+  <div class="card">
+    <div class="label">この式場でよくある組み合わせ</div>
+    <div class="tr"><div class="who">関東 × 関東<small>いちばん多い</small></div><div class="what">3品でそろい、もめません</div><div class="amt">41%</div></div>
+    <div class="tr"><div class="who">関東 × 東海<small>説明が要る</small></div><div class="what">品数の考え方が食い違います</div><div class="amt">13%</div></div>
+    <div class="tr"><div class="who">関東 × 北海道<small>前提から違う</small></div><div class="what">会費制かご祝儀制かを先に決めます</div><div class="amt">6%</div></div>
+    <p class="note">食い違う組み合わせは全体の約2割です。ここを打ち合わせの2回目まで放置すると、発注の締切前に親御さまから連絡が入ります。</p>
+  </div>
+  <div class="card">
+    <div class="label">言い方の型</div>
+    <p class="note" style="margin-top:0"><b>どちらに合わせますか、と聞かない。</b>その質問はどちらかが折れる形にしかなりません。「側ごとに分けられます」と先に置くと、両家とも地元のふつうのまま進められます。贈り分けは失礼ではなく、いまは一般的な選び方です。</p>
+  </div>
+</div>
+
+<p class="foot">白樺台迎賓館は架空の式場です。品数・金額・割合はすべてサンプルの数値で、実際の相場や慣習を保証するものではありません。地域の慣習は同じ県内でも異なります。最終的なご判断は、ご両家とご相談ください。</p>
+</div>
+
+<script>
+var REG = {
+  '関東': {n:3, note:'引き出物・引き菓子・縁起物の3品でそろえる形が基本と言われる地域です。'},
+  '関西': {n:3, note:'3品または5品。奇数でそろえる考え方が根強い地域です。'},
+  '名古屋・東海': {n:5, note:'品数を多くしてお持たせする慣習が残っている地域です。3品だと少なく見られることがあります。'},
+  '九州': {n:3, note:'3品が基本です。地域によっては小さな品を添える形があります。'},
+  '東北': {n:3, note:'3品が基本ですが、親族には別に用意する家が多い地域です。'},
+  '北海道': {n:0, note:'会費制の式が主流で、引き出物を用意しない形が一般的な地域です。'}
+};
+var UNIT = {'親族':9000, '上司・恩師':7000, '友人・同僚':5000};
+var G = [
+  {k:'親族',      a:8,  b:6,  s:'おじ・おば・いとこなど'},
+  {k:'上司・恩師',a:5,  b:4,  s:'職場の上司、恩師'},
+  {k:'友人・同僚',a:14, b:17, s:'友人、同期'}
+];
+var regA = '関東', regB = '名古屋・東海';
+
+function tab(n){
+  document.getElementById('t1').className = n===1?'on':'';
+  document.getElementById('t2').className = n===2?'on':'';
+  document.getElementById('v1').style.display = n===1?'':'none';
+  document.getElementById('v2').style.display = n===2?'':'none';
+}
+function initSel(){
+  var a = document.getElementById('rA'), b = document.getElementById('rB'), h = '';
+  for (var k in REG) h += '<option value="' + k + '">' + k + '</option>';
+  a.innerHTML = h; b.innerHTML = h;
+  a.value = regA; b.value = regB;
+}
+function bump(i, side, d){
+  G[i][side] = Math.max(0, Math.min(60, G[i][side] + d));
+  render();
+}
+function yen(v){ return v.toLocaleString('ja-JP'); }
+function man(v){ return (v/10000).toFixed(1); }
+
+function render(){
+  regA = document.getElementById('rA').value;
+  regB = document.getElementById('rB').value;
+  var A = REG[regA], B = REG[regB];
+
+  // 会費制とご祝儀制は、片方の側だけという形にはできない。式ごとにどちらかを選ぶ。
+  var mixed = (A.n === 0) !== (B.n === 0);
+  var base = mixed ? (A.n === 0 ? B.n : A.n) : 0;   // ご祝儀制でそろえた場合の品数
+  var nA = mixed ? base : A.n;
+  var nB = mixed ? base : B.n;
+  var diff = nA !== nB;
+  // 品数が多い地域は、その分だけ総額も上がる
+  function mult(n){ return n === 0 ? 0 : (n >= 5 ? 1.35 : 1); }
+
+  document.getElementById('regionNote').innerHTML =
+    '<b>新郎側・' + regA + '</b>　' + A.note + '<br><br><b>新婦側・' + regB + '</b>　' + B.note;
+
+  // 人数
+  var ch = '';
+  for (var i=0;i<G.length;i++){
+    ch += '<div class="cnt"><div class="ct">' + G[i].k + '<small>' + G[i].s + '</small></div>'
+       + '<div class="cr">'
+       + '<div class="cg"><span>新郎<br>側</span>'
+       + '<button onclick="bump(' + i + ',\'a\',-1)">－</button><b>' + G[i].a + '</b>'
+       + '<button onclick="bump(' + i + ',\'a\',1)">＋</button></div>'
+       + '<div class="cg"><span>新婦<br>側</span>'
+       + '<button onclick="bump(' + i + ',\'b\',-1)">－</button><b>' + G[i].b + '</b>'
+       + '<button onclick="bump(' + i + ',\'b\',1)">＋</button></div>'
+       + '</div></div>';
+  }
+  document.getElementById('counts').innerHTML = ch;
+
+  // 集計
+  var total = 0, yen_ = 0, plan = '';
+  for (var j=0;j<G.length;j++){
+    var g = G[j];
+    total += g.a + g.b;
+    var uA = Math.round(UNIT[g.k] * mult(nA));
+    var uB = Math.round(UNIT[g.k] * mult(nB));
+    yen_ += g.a * uA + g.b * uB;
+
+    var wA = nA === 0 ? '引き出物なし（会費制）' : nA + '品';
+    var wB = nB === 0 ? '引き出物なし（会費制）' : nB + '品';
+    plan += '<div class="tr"><div class="who">' + g.k + '<small>新郎側 ' + g.a + '名</small></div>'
+         + '<div class="what">' + wA + (diff ? '<span class="pill g">' + regA + 'の形</span>' : '') + '</div>'
+         + '<div class="amt">' + (uA ? yen(g.a*uA) + '円' : '－') + '</div></div>';
+    plan += '<div class="tr"><div class="who" style="color:#8d8778">　<small>新婦側 ' + g.b + '名</small></div>'
+         + '<div class="what">' + wB + (diff ? '<span class="pill g">' + regB + 'の形</span>' : '') + '</div>'
+         + '<div class="amt">' + (uB ? yen(g.b*uB) + '円' : '－') + '</div></div>';
+  }
+  document.getElementById('kN').innerHTML = total + '<i>名</i>';
+  document.getElementById('kY').innerHTML = man(yen_) + '<i>万円</i>';
+  document.getElementById('kU').innerHTML = (total ? yen(Math.round(yen_/total)) : '0') + '<i>円</i>';
+  document.getElementById('plan').innerHTML = plan;
+
+  // 判定
+  var v = document.getElementById('verdict');
+  if (mixed){
+    var kName = A.n === 0 ? regA : regB;
+    var gName = A.n === 0 ? regB : regA;
+    v.className = 'verdict care';
+    v.innerHTML = '<b>ここだけは、側で分けられません。</b><br>'
+      + kName + 'は会費制、' + gName + 'はご祝儀制が地元のふつうです。'
+      + '会費制は「決まった額を受付で払う」、ご祝儀制は「包んで渡す」で、'
+      + '同じ披露宴の中に二つは並べられません。片方の親族だけ会費で、もう片方はご祝儀、という形にすると、'
+      + 'どちらの側にも説明がつかなくなります。<br><br>'
+      + '決めるのは品数ではなく、<b>式全体をどちらの集金の形にするか</b>です。'
+      + 'ここを先に決めれば、引き出物は自動的に決まります。'
+      + '下の表は、ご祝儀制にそろえた場合の見積りです。';
+  } else if (diff){
+    v.className = 'verdict split';
+    v.innerHTML = '<b>どちらにも合わせず、側ごとに分けます。</b><br>'
+      + regA + 'は' + (A.n===0?'会費制':A.n+'品') + '、' + regB + 'は' + (B.n===0?'会費制':B.n+'品') + 'が地元のふつうです。'
+      + '同じ卓に別の品が並ぶことはありません。引き出物は席次に合わせて置くため、'
+      + '新郎側の列席者には' + regA + 'の形、新婦側には' + regB + 'の形で用意できます。'
+      + 'どちらの親御さまも、地元でおかしくない形のまま進められます。';
+  } else {
+    v.className = 'verdict same';
+    v.innerHTML = '<b>両家とも同じ考え方の地域です。</b><br>'
+      + (nA===0 ? '両家とも会費制が前提のため、引き出物を用意しない形で問題ありません。'
+                : nA + '品でそろえれば、どちらの親御さまにも説明が要りません。分ける必要はありません。');
+  }
+  document.getElementById('planNote').innerHTML = mixed
+    ? 'この表は、<b>ご祝儀制にそろえた場合</b>の数字です。会費制に決めた場合、引き出物の欄はすべてなくなり、代わりに会費の額を決める話になります。'
+    : (diff
+      ? '発注は2種類になりますが、席次が決まっていれば数え間違いは起きません。<b>親族だけ単価を上げる</b>のは、どの地域でも一般的な形です。'
+      : '単価を親族・上司・友人で分けています。全員を同じ品にそろえる形も選べます。');
+
+  // 分布
+  var d = [
+    {k:'3品', p:62}, {k:'5品', p:16}, {k:'2品', p:12}, {k:'側で分ける', p:7}, {k:'用意しない', p:3}
+  ];
+  var myKey = mixed ? (base + '品') : (diff ? '側で分ける' : (nA===0 ? '用意しない' : nA + '品'));
+  var dh = '';
+  for (var m=0;m<d.length;m++){
+    var on = d[m].k === myKey;
+    dh += '<div class="d"><div class="k">' + d[m].k + '</div>'
+       + '<div class="b"><i class="' + (on?'on':'') + '" style="width:' + (d[m].p/62*100) + '%"></i></div>'
+       + '<div class="p">' + d[m].p + '%</div></div>';
+  }
+  document.getElementById('dist').innerHTML = dh;
+}
+initSel();
+render();
+</script>
+</body>
+</html>

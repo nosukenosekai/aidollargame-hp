@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>朱印便｜来られない人に、郵送で授ける</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f4f0;color:#1b1a17;
+ font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+ -webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+.tag{font-size:11px;color:#8d8778;letter-spacing:.1em}
+h1{font-size:26px;margin:6px 0 6px}
+.lead{font-size:15px;line-height:1.75;color:#5c574c;margin:0 0 14px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:12px 0;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.label{font-size:14px;color:#6b6558;font-weight:600;margin-bottom:10px}
+.tabs{display:flex;gap:6px;margin:14px 0 0}
+.tabs button{flex:1;border:1px solid #ddd9cf;background:#fff;color:#6b6558;
+ border-radius:11px;padding:11px 6px;font-size:14px;font-weight:600;cursor:pointer}
+.tabs button.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.btn{display:block;width:100%;border:0;background:#2563eb;color:#fff;border-radius:12px;
+ padding:15px;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px}
+.btn.sub{background:#fff;color:#2563eb;border:1px solid #2563eb}
+.btn:disabled{background:#e6e3da;color:#a29c8e;cursor:default}
+.item{display:flex;gap:12px;align-items:flex-start;border:1px solid #e7e3d9;border-radius:12px;
+ padding:12px;margin-bottom:10px;cursor:pointer;background:#fff}
+.item.on{border-color:#2563eb;background:#eef3fd}
+.item.out{opacity:.5;cursor:default}
+.item .th{width:56px;height:74px;border-radius:8px;flex:none;border:1px solid #ddd9cf;
+ background:#faf9f5;display:flex;align-items:center;justify-content:center;
+ font-size:11px;color:#8d8778;text-align:center;line-height:1.4;padding:4px}
+.item .bd{flex:1;min-width:0}
+.item .nm{font-size:15px;font-weight:700;line-height:1.5}
+.item .sb{font-size:12px;color:#847e70;margin-top:3px;line-height:1.6}
+.item .pr{font-size:15px;font-weight:800;color:#2563eb;margin-top:6px}
+.item .pr i{font-size:12px;font-style:normal;color:#847e70;font-weight:600;margin-left:4px}
+.bar{height:7px;background:#efece4;border-radius:4px;overflow:hidden;margin-top:7px}
+.bar i{display:block;height:100%;background:#2563eb}
+.f{margin-bottom:11px}
+.f label{display:block;font-size:13px;color:#6b6558;font-weight:600;margin-bottom:5px}
+.f input,.f textarea{width:100%;border:1px solid #ddd9cf;border-radius:10px;padding:12px;
+ font-size:16px;background:#fff;color:#1b1a17;font-family:inherit}
+.f textarea{height:74px;resize:none;line-height:1.6}
+.sum{background:#faf9f5;border-radius:11px;padding:13px}
+.sum div{display:flex;justify-content:space-between;font-size:14px;color:#4a453c;padding:4px 0}
+.sum div.t{border-top:1px solid #e7e3d9;margin-top:6px;padding-top:9px;font-size:16px;font-weight:800}
+.sum div.t b{color:#2563eb}
+.done{background:#2563eb;color:#fff;border-radius:13px;padding:20px;text-align:center}
+.done b{display:block;font-size:21px;margin-bottom:6px}
+.done span{font-size:14px;opacity:.92;line-height:1.7;display:block}
+.big{display:flex;gap:10px;margin-bottom:12px}
+.big div{flex:1;background:#faf9f5;border-radius:11px;padding:12px;text-align:center}
+.big span{display:block;font-size:12px;color:#847e70;margin-bottom:3px}
+.big b{font-size:28px;font-weight:800;color:#2563eb;line-height:1.1}
+.big b i{font-size:13px;font-style:normal;color:#847e70;font-weight:600;margin-left:2px}
+.row{display:flex;align-items:center;gap:10px;border-top:1px solid #efece4;padding:12px 0}
+.row:first-child{border-top:0}
+.row .t{flex:1;min-width:0}
+.row .t b{font-size:15px;font-weight:700;display:block}
+.row .t small{display:block;color:#8d8778;font-size:12px;line-height:1.6;margin-top:2px}
+.row .a{flex:none}
+.mini{border:1px solid #2563eb;background:#fff;color:#2563eb;border-radius:9px;
+ padding:9px 12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.mini.g{border-color:#ddd9cf;color:#a29c8e;background:#faf9f5;cursor:default}
+.pill{display:inline-block;font-size:11px;font-weight:700;border-radius:20px;padding:3px 9px;margin-right:5px}
+.pill.w{background:#fdf0e3;color:#a2600f}
+.pill.o{background:#e9f3ec;color:#1f6b3b}
+.note{font-size:13px;color:#847e70;line-height:1.75;margin-top:10px}
+.lbs{display:flex;flex-wrap:wrap;gap:8px}
+.lb{width:calc(50% - 4px);border:1px dashed #cfc9bb;border-radius:10px;padding:11px;
+ background:#faf9f5;font-size:12px;line-height:1.75;min-height:118px}
+.lb .zip{font-size:11px;color:#847e70;letter-spacing:.08em}
+.lb .ad{color:#4a453c}
+.lb .nm2{font-size:15px;font-weight:700;margin-top:5px}
+.lb .it{font-size:11px;color:#847e70;border-top:1px solid #e7e3d9;margin-top:7px;padding-top:5px}
+.foot{font-size:12px;color:#8d8778;line-height:1.8;margin-top:22px}
+@media(max-width:400px){h1{font-size:23px}.lb{width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">デモ（架空の神社・サンプルデータ）</div>
+  <h1>朱印便</h1>
+  <p class="lead">限定の御朱印は、遠くの人ほど受けたい。申し込みを1本にまとめ、そのまま貼れる宛名を作ります。社務所側は、封に入れる数と残りの数だけを見ます。</p>
+
+  <div class="tabs">
+    <button id="t1" class="on" onclick="tab(1)">受ける人</button>
+    <button id="t2" onclick="tab(2)">社務所</button>
+    <button id="t3" onclick="tab(3)">宛名</button>
+  </div>
+
+  <!-- 参拝者 -->
+  <div id="v1">
+    <div class="card">
+      <div class="label">長月の頒布（9月1日から9月30日まで）</div>
+      <div id="items"></div>
+      <p class="note">郵送でお受けになれるのは書き置きのみです。御朱印帳への直書きは、ご参拝のうえ授与所でお受けください。</p>
+    </div>
+    <div id="form" style="display:none">
+      <div class="card">
+        <div class="label">お届け先</div>
+        <div class="f"><label>お名前</label><input id="i-nm" value="山田 佐和子"></div>
+        <div class="f"><label>郵便番号</label><input id="i-zip" value="386-0018"></div>
+        <div class="f"><label>ご住所</label><textarea id="i-ad">長野県上田市常田三丁目4-15 常田ハイツ203</textarea></div>
+        <div class="sum" id="sum"></div>
+        <button class="btn" onclick="apply()">この内容で申し込む</button>
+        <p class="note">初穂料と送料は、申し込み後にお送りする案内でお納めください。入金を確認してから発送いたします。</p>
+      </div>
+    </div>
+    <div id="thanks" style="display:none">
+      <div class="card">
+        <div class="done">
+          <b>お申し込みを承りました</b>
+          <span>受付番号 <b style="display:inline;font-size:21px" id="rno">－</b></span>
+          <span style="margin-top:8px">入金の確認がとれ次第、社務所より発送いたします。</span>
+        </div>
+        <button class="btn sub" onclick="tab(2)">社務所の画面を見る</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 社務所 -->
+  <div id="v2" style="display:none">
+    <div class="card">
+      <div class="label">いま抱えている郵送</div>
+      <div class="big">
+        <div><span>入金待ち</span><b id="s-wait">－</b></div>
+        <div><span>本日封入</span><b id="s-ready">－</b></div>
+        <div><span>発送済</span><b id="s-sent">－</b></div>
+      </div>
+      <div id="orders"></div>
+      <p class="note">入金を確認したものだけが宛名に回ります。宛名を作ったあと発送済みにすると、この列から外れます。</p>
+    </div>
+    <div class="card">
+      <div class="label">長月の残り</div>
+      <div id="stock"></div>
+    </div>
+  </div>
+
+  <!-- 宛名 -->
+  <div id="v3" style="display:none">
+    <div class="card">
+      <div class="label">封に貼る宛名（入金済みで未発送のぶん）</div>
+      <div class="lbs" id="labels"></div>
+      <button class="btn" onclick="ship()">この宛名ぶんを発送済みにする</button>
+      <p class="note">実際は宛名用紙に面付けして印刷します。ここでは画面での並びだけをお見せしています。</p>
+    </div>
+  </div>
+
+  <p class="foot">三日月八幡宮は架空の神社です。人名・住所・件数はすべてサンプルの数値で、実在の社寺の頒布状況を示すものではありません。金額は初穂料と送料の目安で、実際の頒布条件は各社寺により異なります。</p>
+</div>
+
+<script>
+var SHIP = 370; // 送料（円・レターパック等の目安）
+var goods = [
+  {id:'a', nm:'切り絵御朱印「秋草」', sb:'一枚ずつ手押し。台紙つき', pr:2000, cap:150, left:38},
+  {id:'b', nm:'月替わり御朱印「長月」', sb:'長月のみの図柄', pr:1000, cap:300, left:212},
+  {id:'c', nm:'重陽の節句 限定', sb:'9月9日のみの頒布', pr:1500, cap:80, left:0}
+];
+var orders = [
+  {no:'0912', nm:'佐々木 光子', zip:'939-0341', ad:'富山県射水市三ケ2871-4', g:'a', qty:1, paid:true, sent:false},
+  {no:'0913', nm:'東 康一', zip:'810-0022', ad:'福岡県福岡市中央区薬院二丁目1-8 薬院ビル504', g:'b', qty:2, paid:true, sent:false},
+  {no:'0914', nm:'新田 ゆかり', zip:'062-0933', ad:'北海道札幌市豊平区平岸三条五丁目7-21', g:'a', qty:1, paid:false, sent:false},
+  {no:'0915', nm:'堀内 まさ', zip:'770-0942', ad:'徳島県徳島市昭和町四丁目16', g:'b', qty:1, paid:true, sent:false},
+  {no:'0916', nm:'三宅 直人', zip:'520-0044', ad:'滋賀県大津市京町三丁目2-9', g:'a', qty:2, paid:false, sent:false}
+];
+var sentCount = 24;
+var nextNo = 917;
+var picked = null;
+
+function g(id){ for (var i=0;i<goods.length;i++) if (goods[i].id===id) return goods[i]; return null; }
+function yen(n){ return n.toLocaleString('ja-JP') + '円'; }
+
+function tab(n){
+  for (var i=1;i<=3;i++){
+    document.getElementById('t'+i).className = (i===n?'on':'');
+    document.getElementById('v'+i).style.display = (i===n?'':'none');
+  }
+  render();
+  window.scrollTo(0,0);
+}
+
+function pick(id){
+  var it = g(id);
+  if (!it || it.left<=0) return;
+  picked = id;
+  document.getElementById('form').style.display = '';
+  document.getElementById('thanks').style.display = 'none';
+  render();
+}
+
+function apply(){
+  var it = g(picked);
+  if (!it) return;
+  it.left = it.left - 1;
+  var no = String(nextNo++);
+  orders.unshift({
+    no:no,
+    nm:document.getElementById('i-nm').value || 'お名前未記入',
+    zip:document.getElementById('i-zip').value,
+    ad:document.getElementById('i-ad').value,
+    g:picked, qty:1, paid:false, sent:false, mine:true
+  });
+  document.getElementById('rno').textContent = no;
+  document.getElementById('form').style.display = 'none';
+  document.getElementById('thanks').style.display = '';
+  picked = null;
+  render();
+  window.scrollTo(0,0);
+}
+
+function pay(no){
+  for (var i=0;i<orders.length;i++) if (orders[i].no===no) orders[i].paid = true;
+  render();
+}
+
+function ship(){
+  var n = 0;
+  for (var i=0;i<orders.length;i++){
+    if (orders[i].paid && !orders[i].sent){ orders[i].sent = true; n++; }
+  }
+  sentCount += n;
+  render();
+}
+
+function render(){
+  // 頒布一覧
+  var h = '';
+  for (var i=0;i<goods.length;i++){
+    var it = goods[i];
+    var out = it.left<=0;
+    var pct = Math.round((it.cap-it.left)/it.cap*100);
+    h += '<div class="item '+(out?'out':(picked===it.id?'on':''))+'" '+(out?'':'onclick="pick(\''+it.id+'\')"')+'>'
+      +   '<div class="th">書き置き<br>一枚</div>'
+      +   '<div class="bd">'
+      +     '<div class="nm">'+it.nm+'</div>'
+      +     '<div class="sb">'+it.sb+'</div>'
+      +     '<div class="pr">'+yen(it.pr)+'<i>初穂料</i></div>'
+      +     '<div class="bar"><i style="width:'+pct+'%"></i></div>'
+      +     '<div class="sb">'+(out?'本日ぶんの頒布は終わりました':'残り '+it.left+' 枚（'+it.cap+'枚のうち）')+'</div>'
+      +   '</div></div>';
+  }
+  document.getElementById('items').innerHTML = h;
+
+  // 申込内容
+  if (picked){
+    var p = g(picked);
+    document.getElementById('sum').innerHTML =
+      '<div><span>'+p.nm+' 1枚</span><span>'+yen(p.pr)+'</span></div>'
+      + '<div><span>送料</span><span>'+yen(SHIP)+'</span></div>'
+      + '<div class="t"><span>合計</span><b>'+yen(p.pr+SHIP)+'</b></div>';
+  }
+
+  // 社務所
+  var wait=0, ready=0;
+  var oh = '';
+  for (var j=0;j<orders.length;j++){
+    var o = orders[j];
+    if (o.sent) continue;
+    if (o.paid) ready++; else wait++;
+    var gg = g(o.g);
+    oh += '<div class="row"><div class="t">'
+      + '<b>'+o.nm+' 様'+(o.mine?'<span class="pill w" style="margin-left:6px">いま届いた</span>':'')+'</b>'
+      + '<small>'+(o.paid?'<span class="pill o">入金済</span>':'<span class="pill w">入金待ち</span>')
+      +   gg.nm+' '+o.qty+'枚　受付'+o.no+'</small>'
+      + '<small>'+o.zip+'　'+o.ad+'</small></div>'
+      + '<div class="a">'+(o.paid
+          ? '<button class="mini g">宛名へ</button>'
+          : '<button class="mini" onclick="pay(\''+o.no+'\')">入金を確認</button>')+'</div></div>';
+  }
+  if (!oh) oh = '<p class="note">未発送の申し込みはありません。</p>';
+  document.getElementById('orders').innerHTML = oh;
+  document.getElementById('s-wait').innerHTML = wait+'<i>件</i>';
+  document.getElementById('s-ready').innerHTML = ready+'<i>件</i>';
+  document.getElementById('s-sent').innerHTML = sentCount+'<i>件</i>';
+
+  // 残り
+  var sh = '';
+  for (var k=0;k<goods.length;k++){
+    var s = goods[k];
+    var pc = Math.round((s.cap-s.left)/s.cap*100);
+    sh += '<div class="row"><div class="t"><b>'+s.nm+'</b>'
+      + '<small>'+(s.left>0? '残り '+s.left+' 枚':'頒布終了')+'　'+(s.cap-s.left)+' / '+s.cap+' 枚が出ました</small>'
+      + '<div class="bar"><i style="width:'+pc+'%"></i></div></div></div>';
+  }
+  document.getElementById('stock').innerHTML = sh;
+
+  // 宛名
+  var lh = '';
+  for (var m=0;m<orders.length;m++){
+    var q = orders[m];
+    if (!q.paid || q.sent) continue;
+    var qg = g(q.g);
+    lh += '<div class="lb"><div class="zip">〒'+q.zip+'</div>'
+      + '<div class="ad">'+q.ad+'</div>'
+      + '<div class="nm2">'+q.nm+' 様</div>'
+      + '<div class="it">'+qg.nm+' '+q.qty+'枚　受付'+q.no+'</div></div>';
+  }
+  if (!lh) lh = '<p class="note">入金済みで未発送のものがありません。社務所の画面で入金を確認すると、ここに宛名が並びます。</p>';
+  document.getElementById('labels').innerHTML = lh;
+}
+
+render();
+</script>
+</body>
+</html>

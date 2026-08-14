@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>30秒内見 — 掲載写真から募集動画を組み立てる</title>
+<style>
+  * { box-sizing: border-box; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: #f5f4f0; color: #1c1b19;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+    font-size: 17px; line-height: 1.75;
+  }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; letter-spacing:.04em; text-align:center; padding:6px 12px; }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 20px 16px 64px; }
+  h1 { font-size: 27px; line-height: 1.35; margin: 18px 0 6px; letter-spacing: -.01em; }
+  .lead { margin: 0 0 4px; color: #55524c; font-size: 16px; }
+  .src { font-size: 13px; color: #78746c; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:18px; margin:14px 0; }
+  h2 { font-size: 19px; margin: 0 0 12px; }
+  .step { font-size:12px; color:#2563eb; font-weight:700; letter-spacing:.08em; margin:0 0 4px; }
+  .props { display:grid; gap:10px; }
+  .prop { display:block; width:100%; text-align:left; cursor:pointer; background:#fbfaf7;
+          border:1.5px solid #e5e2db; border-radius:12px; padding:13px 15px; font:inherit; color:inherit; }
+  .prop.on { border-color:#2563eb; background:#f0f5ff; }
+  .prop b { display:block; font-size:17px; }
+  .prop span { font-size:14px; color:#55524c; }
+  .split { display:grid; gap:14px; }
+  @media (min-width:700px){ .split { grid-template-columns: 300px 1fr; align-items:start; } }
+  .phone { width:270px; max-width:100%; margin:0 auto; background:#1c1b19; border-radius:22px; padding:10px; }
+  .screen { position:relative; width:100%; aspect-ratio:9/16; border-radius:14px; overflow:hidden; background:#2a2823; }
+  .scene { position:absolute; inset:0; opacity:0; transition:opacity .45s ease, transform 4s linear; transform:scale(1); }
+  .scene.on { opacity:1; transform:scale(1.09); }
+  .scene svg { width:100%; height:100%; display:block; }
+  .cap { position:absolute; left:12px; right:12px; bottom:16px; color:#fff; font-size:15px; font-weight:700;
+         line-height:1.5; text-shadow:0 1px 6px rgba(0,0,0,.6); }
+  .badge { position:absolute; top:12px; left:12px; background:#2563eb; color:#fff; font-size:11px;
+           border-radius:999px; padding:3px 10px; }
+  .bar { height:3px; background:rgba(255,255,255,.28); margin-top:8px; border-radius:2px; overflow:hidden; }
+  .bar i { display:block; height:100%; width:0; background:#fff; }
+  .scenes { display:grid; gap:8px; }
+  .srow { display:flex; gap:10px; align-items:flex-start; background:#fbfaf7; border:1px solid #e5e2db;
+          border-radius:12px; padding:10px 12px; }
+  .srow.playing { border-color:#2563eb; background:#f0f5ff; }
+  .srow .no { font-size:13px; color:#78746c; width:22px; flex:none; padding-top:3px; }
+  .srow input { flex:1; font:inherit; font-size:15px; border:0; background:transparent; color:#1c1b19; padding:2px 0; }
+  .srow input:focus { outline:2px solid #2563eb; outline-offset:3px; border-radius:4px; }
+  .srow .kill { border:0; background:transparent; color:#78746c; font:inherit; cursor:pointer; font-size:14px; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:13px 20px;
+                   font:inherit; font-weight:700; cursor:pointer; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+                 padding:13px 20px; font:inherit; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  .note { font-size:13px; color:#78746c; margin-top:12px; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<div class="demoflag">デモ（サンプルデータ）— 物件も会社も架空です。写真の代わりに図で表示しています</div>
+<div class="wrap">
+
+<h1>30秒内見</h1>
+<p class="lead">ポータルに載せている物件写真と条件から、縦型の募集動画を組み立てます。撮り直しも編集ソフトも要りません。</p>
+<p class="src">賃貸仲介店・管理会社向け。1店で月80〜120件の募集が出るのに、動画まで手が回らない現場のためのものです。</p>
+
+<div class="card">
+  <p class="step">STEP 1</p>
+  <h2>動画にする物件を選ぶ</h2>
+  <div class="props" id="props"></div>
+</div>
+
+<div class="card">
+  <p class="step">STEP 2</p>
+  <h2>組み立てと確認</h2>
+  <div class="split">
+    <div>
+      <div class="phone">
+        <div class="screen" id="screen"></div>
+        <div class="bar"><i id="bar"></i></div>
+      </div>
+      <div class="btns" style="justify-content:center">
+        <button class="primary" id="play">再生する</button>
+      </div>
+    </div>
+    <div>
+      <p class="src" id="reason"></p>
+      <p class="src" id="sec"></p>
+      <div class="scenes" id="scenes"></div>
+      <p class="note">文言はその場で書き換えられます。順番はAIが「入居者が最初に知りたい順」で並べています（家賃・広さ→水まわり→収納→周辺）。</p>
+      <div class="btns">
+        <button class="ghost" id="short">15秒に詰める</button>
+        <button class="ghost" id="reset">組み直す</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="out">
+  <p class="step">STEP 3</p>
+  <h2>書き出し</h2>
+  <p id="outbody" class="src">再生して内容を確かめてから書き出してください。</p>
+  <div class="btns"><button class="primary" id="mk">この構成で書き出す</button></div>
+  <div id="mkout" class="hidden"></div>
+</div>
+
+</div>
+
+<script>
+const ART = {
+  madori: `<svg viewBox="0 0 90 160"><rect width="90" height="160" fill="#efece5"/>
+    <rect x="10" y="16" width="70" height="60" fill="#fff" stroke="#9a958b"/>
+    <rect x="10" y="80" width="34" height="34" fill="#fff" stroke="#9a958b"/>
+    <rect x="48" y="80" width="32" height="34" fill="#fff" stroke="#9a958b"/>
+    <rect x="10" y="118" width="70" height="26" fill="#fff" stroke="#9a958b"/>
+    <text x="45" y="50" font-size="9" fill="#55524c" text-anchor="middle">洋室 8.2</text>
+    <text x="27" y="100" font-size="7" fill="#55524c" text-anchor="middle">浴室</text>
+    <text x="64" y="100" font-size="7" fill="#55524c" text-anchor="middle">洗面</text>
+    <text x="45" y="134" font-size="7" fill="#55524c" text-anchor="middle">キッチン・玄関</text></svg>`,
+  living: `<svg viewBox="0 0 90 160"><rect width="90" height="160" fill="#d9d3c6"/>
+    <rect x="0" y="104" width="90" height="56" fill="#c2b39a"/>
+    <rect x="12" y="30" width="40" height="54" fill="#f2f6ff" stroke="#8e8a80"/>
+    <line x1="32" y1="30" x2="32" y2="84" stroke="#8e8a80"/>
+    <rect x="58" y="66" width="24" height="38" fill="#efece5" stroke="#8e8a80"/>
+    <rect x="10" y="112" width="46" height="16" rx="3" fill="#8e8a80"/></svg>`,
+  mizu: `<svg viewBox="0 0 90 160"><rect width="90" height="160" fill="#e3e6e2"/>
+    <rect x="14" y="56" width="62" height="70" rx="6" fill="#fff" stroke="#9a958b"/>
+    <rect x="22" y="30" width="46" height="22" rx="3" fill="#f2f6ff" stroke="#9a958b"/>
+    <circle cx="45" cy="24" r="5" fill="none" stroke="#9a958b"/>
+    <line x1="45" y1="29" x2="45" y2="56" stroke="#9a958b"/></svg>`,
+  shuno: `<svg viewBox="0 0 90 160"><rect width="90" height="160" fill="#ded8cb"/>
+    <rect x="16" y="26" width="58" height="112" fill="#fff" stroke="#9a958b"/>
+    <line x1="45" y1="26" x2="45" y2="138" stroke="#9a958b"/>
+    <line x1="16" y1="70" x2="74" y2="70" stroke="#9a958b"/>
+    <circle cx="41" cy="82" r="2.5" fill="#9a958b"/><circle cx="49" cy="82" r="2.5" fill="#9a958b"/></svg>`,
+  machi: `<svg viewBox="0 0 90 160"><rect width="90" height="160" fill="#cfd9e6"/>
+    <rect x="0" y="96" width="90" height="64" fill="#b8bfae"/>
+    <rect x="8" y="52" width="20" height="44" fill="#efece5" stroke="#8e8a80"/>
+    <rect x="34" y="34" width="22" height="62" fill="#fff" stroke="#8e8a80"/>
+    <rect x="62" y="62" width="20" height="34" fill="#efece5" stroke="#8e8a80"/>
+    <line x1="0" y1="126" x2="90" y2="126" stroke="#fff" stroke-dasharray="7 6" stroke-width="2"/></svg>`,
+};
+
+const PROPS = [
+  { id:'p1', name:'（架空）コーポ青梅 203号室', line:'私鉄・みどり台駅 徒歩7分／1LDK 41.8平米／5.8万円・管理費4千円',
+    reason:'写真が7枚ある物件です。この中から、問い合わせにつながりやすい5枚を選んで並べました。',
+    scenes:[
+      { art:'living', cap:'駅から7分、家賃5.8万円' },
+      { art:'madori', cap:'1LDK 41.8平米。角部屋です' },
+      { art:'mizu',   cap:'追いだき付き。洗面は独立' },
+      { art:'shuno',  cap:'クローゼットは天井まで' },
+      { art:'machi',  cap:'スーパーは徒歩3分。夜も明るい道です' },
+    ]},
+  { id:'p2', name:'（架空）サンハイツ北新 105号室', line:'JR・北新町駅 徒歩12分／2DK 46.0平米／6.9万円・管理費なし',
+    reason:'写真は5枚。1階で日当たりの説明が要るので、間取りを先に見せる構成にしました。',
+    scenes:[
+      { art:'madori', cap:'2DK 46平米、家賃6.9万円' },
+      { art:'living', cap:'南向き。午前中はよく入ります' },
+      { art:'mizu',   cap:'バス・トイレは別。独立洗面あり' },
+      { art:'machi',  cap:'小学校まで徒歩5分、公園が向かい' },
+    ]},
+  { id:'p3', name:'（架空）ヴィラ栄町 401号室', line:'市バス・栄町 徒歩3分／ワンルーム 24.5平米／4.2万円・管理費3千円',
+    reason:'単身向け。家賃の安さと、収納・水まわりの状態を早めに見せる順にしています。',
+    scenes:[
+      { art:'living', cap:'4.2万円。最上階の角です' },
+      { art:'shuno',  cap:'ベッド下まで入る収納' },
+      { art:'mizu',   cap:'ユニットですが去年入れ替え済み' },
+      { art:'machi',  cap:'コンビニ2軒、バス停は目の前' },
+    ]},
+];
+
+let cur = PROPS[0], scenes = [], timer = null, idx = -1, target = 30;
+
+function drawProps(){
+  document.getElementById('props').innerHTML = PROPS.map(p => `
+    <button class="prop ${p.id===cur.id?'on':''}" data-id="${p.id}">
+      <b>${p.name}</b><span>${p.line}</span>
+    </button>`).join('');
+  document.querySelectorAll('.prop').forEach(b => b.onclick = () => {
+    cur = PROPS.find(p => p.id === b.dataset.id); load(); drawProps();
+  });
+}
+
+function load(){
+  stop();
+  target = 30;
+  scenes = cur.scenes.map(s => ({...s}));
+  document.getElementById('reason').textContent = cur.reason;
+  document.getElementById('mkout').classList.add('hidden');
+  document.getElementById('outbody').textContent = '再生して内容を確かめてから書き出してください。';
+  render();
+}
+
+function render(){
+  const sec = (target / scenes.length).toFixed(1);
+  document.getElementById('screen').innerHTML =
+    scenes.map((s,i) => `<div class="scene" data-i="${i}">${ART[s.art]}
+      <div class="badge">${i===0?'物件紹介':(i+1)+' / '+scenes.length}</div>
+      <div class="cap">${s.cap}</div></div>`).join('');
+  document.getElementById('scenes').innerHTML = scenes.map((s,i) => `
+    <div class="srow" data-i="${i}">
+      <span class="no">${i+1}</span>
+      <input value="${s.cap.replace(/"/g,'&quot;')}" data-i="${i}">
+      <button class="kill" data-kill="${i}">消す</button>
+    </div>`).join('');
+  document.querySelectorAll('#scenes input').forEach(inp => inp.oninput = () => {
+    scenes[+inp.dataset.i].cap = inp.value;
+    const sc = document.querySelector(`.scene[data-i="${inp.dataset.i}"] .cap`);
+    if (sc) sc.textContent = inp.value;
+  });
+  document.querySelectorAll('[data-kill]').forEach(b => b.onclick = () => {
+    if (scenes.length <= 2) return;
+    scenes.splice(+b.dataset.kill, 1); stop(); render();
+  });
+  document.getElementById('sec').textContent = `全${scenes.length}カット／1カット ${sec}秒／合計 約${target}秒`;
+}
+
+function stop(){
+  if (timer) clearInterval(timer);
+  timer = null; idx = -1;
+  document.getElementById('bar').style.width = '0';
+  document.querySelectorAll('.scene').forEach(e => e.classList.remove('on'));
+  document.querySelectorAll('.srow').forEach(e => e.classList.remove('playing'));
+  document.getElementById('play').textContent = '再生する';
+}
+
+document.getElementById('play').onclick = () => {
+  if (timer) { stop(); return; }
+  document.getElementById('play').textContent = '止める';
+  const per = Math.round(target / scenes.length * 1000);
+  idx = -1;
+  const tick = () => {
+    idx++;
+    if (idx >= scenes.length) { stop(); return; }
+    document.querySelectorAll('.scene').forEach(e => e.classList.toggle('on', +e.dataset.i === idx));
+    document.querySelectorAll('.srow').forEach(e => e.classList.toggle('playing', +e.dataset.i === idx));
+    document.getElementById('bar').style.width = ((idx+1)/scenes.length*100) + '%';
+  };
+  tick();
+  timer = setInterval(tick, per);
+};
+
+document.getElementById('short').onclick = () => {
+  target = target === 30 ? 15 : 30;
+  document.getElementById('short').textContent = target === 30 ? '15秒に詰める' : '30秒に戻す';
+  stop(); render();
+};
+document.getElementById('reset').onclick = () => load();
+
+document.getElementById('mk').onclick = () => {
+  const sec = target;
+  const el = document.getElementById('mkout');
+  el.classList.remove('hidden');
+  el.innerHTML = `
+    <p class="note" style="margin-top:16px">書き出し内容（実際は縦型の動画ファイルと、貼り付け用の説明文になります）</p>
+    <div style="background:#fbfaf7;border:1px solid #e5e2db;border-radius:12px;padding:14px;font-size:15px">
+      <div><b>${cur.name}</b></div>
+      <div class="src">${cur.line}</div>
+      <div class="src">尺 約${sec}秒（${scenes.length}カット）／縦 1080×1920／字幕あり</div>
+      <ol style="padding-left:20px;margin:10px 0 0">
+        ${scenes.map(s => `<li>${s.cap}</li>`).join('')}
+      </ol>
+    </div>
+    <p class="note">この画面では送信も投稿もしません。数字と設備は募集図面から取っています。実際に出す前に、担当者が募集条件と相違ないか確認してください。</p>`;
+  document.getElementById('outbody').textContent = `${scenes.length}カット・約${sec}秒で書き出します。1件あたりの作業は3分ほどです。`;
+};
+
+drawProps(); load();
+</script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>すてる前に — 現場の残置物を、処分費と買取で比べる</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.75; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; letter-spacing:.04em; text-align:center; padding:6px 12px; }
+  .wrap { max-width:880px; margin:0 auto; padding:20px 16px 64px; }
+  h1 { font-size:27px; line-height:1.35; margin:18px 0 6px; letter-spacing:-.01em; }
+  .lead { margin:0 0 4px; color:#55524c; font-size:16px; }
+  .src { font-size:13px; color:#78746c; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:18px; margin:14px 0; }
+  h2 { font-size:19px; margin:0 0 12px; }
+  .step { font-size:12px; color:#2563eb; font-weight:700; letter-spacing:.08em; margin:0 0 4px; }
+  .items { display:grid; gap:8px; }
+  .it { display:grid; grid-template-columns:1fr 96px; gap:10px; align-items:center;
+        background:#fbfaf7; border:1.5px solid #e5e2db; border-radius:12px; padding:10px 13px; }
+  .it.on { border-color:#2563eb; background:#f0f5ff; }
+  .it .nm { font-size:16px; }
+  .it .nm span { display:block; font-size:13px; color:#78746c; }
+  .it .nm em { font-style:normal; color:#2563eb; font-weight:700; }
+  .it .nm em.neg { color:#b6431a; }
+  .qtybox { display:flex; align-items:center; gap:6px; justify-content:flex-end; }
+  .qtybox button { width:30px; height:30px; border-radius:8px; border:1.5px solid #e5e2db;
+    background:#fff; font:inherit; font-size:17px; cursor:pointer; line-height:1; }
+  .qtybox button:hover { border-color:#2563eb; color:#2563eb; }
+  .qtybox b { min-width:26px; text-align:center; font-size:16px; }
+  .totals { display:grid; gap:10px; }
+  @media (min-width:620px){ .totals { grid-template-columns:repeat(3,1fr); } }
+  .tot { border:1.5px solid #e5e2db; border-radius:12px; padding:14px; background:#fbfaf7; }
+  .tot.win { border-color:#2563eb; background:#f0f5ff; }
+  .tot h3 { margin:0; font-size:15px; color:#55524c; font-weight:600; }
+  .tot .big { font-size:26px; font-weight:700; letter-spacing:-.02em; margin:4px 0 0; }
+  .tot .sub { font-size:13px; color:#78746c; }
+  .neg { color:#b6431a; }
+  .pos { color:#2563eb; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:13px 20px;
+    font:inherit; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:13px 20px; font:inherit; cursor:pointer; }
+  .note { font-size:13px; color:#78746c; margin-top:12px; }
+  .hidden { display:none; }
+  .sheet { border-top:3px solid #2563eb; }
+  .sheet .box { background:#fbfaf7; border:1px solid #e5e2db; border-radius:12px; padding:14px;
+    font-size:15px; white-space:pre-wrap; margin-top:10px; }
+  .bidders { display:grid; gap:8px; margin-top:10px; }
+  .bd { display:flex; justify-content:space-between; gap:10px; background:#fff; border:1px solid #e5e2db;
+        border-radius:10px; padding:9px 13px; font-size:15px; }
+  .bd span { display:block; color:#78746c; font-size:13px; }
+</style>
+</head>
+<body>
+<div class="demoflag">デモ（サンプルデータ）— 業者名・現場・相場の数字はすべて架空です</div>
+<div class="wrap">
+
+<h1>すてる前に</h1>
+<p class="lead">現場から出るものを「処分費で出す」前に、値がつくものを分けます。相場を調べる手間をなくすための道具です。</p>
+<p class="src">解体・内装・設備工事の業者向け。全部まとめて処分費で出していた分の一部を、収入側に振り替えます。</p>
+
+<div class="card">
+  <p class="step">STEP 1</p>
+  <h2>今回の現場から出るもの</h2>
+  <p class="src" id="site">現場：（架空）旧・みなと食堂の内装解体　鉄骨2階建の1階部分　工期 8/24〜8/29</p>
+  <div class="items" id="items"></div>
+  <div class="btns"><button class="ghost" id="reset">入力をやり直す</button></div>
+</div>
+
+<div class="card">
+  <p class="step">STEP 2</p>
+  <h2>比べる</h2>
+  <div class="totals" id="totals"></div>
+  <p class="note" id="msg"></p>
+</div>
+
+<div class="card">
+  <button class="primary" id="mk">引取業者に出す打診書をつくる</button>
+</div>
+
+<div class="card sheet hidden" id="sheet"></div>
+
+</div>
+
+<script>
+// unit: 単位 / dispose: 処分にかかる円（1単位あたり）/ buy: 買い取ってもらえる円（1単位あたり）
+const ITEMS = [
+  { k:'厨房のステンレス台・シンク', u:'台', dispose: 3800, buy: 5200, q:6,
+    memo:'ステンレスは相場が安定しています。分別して積めば引き取り側の手間が減ります。' },
+  { k:'業務用冷蔵庫（動くもの）', u:'台', dispose: 9500, buy: 22000, q:2,
+    memo:'通電確認ができると値が跳ねます。動かないものは鉄と銅で見ます。' },
+  { k:'エアコン室外機', u:'台', dispose: 4200, buy: 3400, q:3,
+    memo:'銅とアルミが入っています。フロンの回収は法律で決まった手順が要ります。' },
+  { k:'配線・電線（被覆つき）', u:'kg', dispose: 60, buy: 340, q:120,
+    memo:'銅の値が高い時期です。まとめて100kgを超えると単価が上がります。' },
+  { k:'鉄くず（アングル・鉄扉）', u:'kg', dispose: 28, buy: 41, q:900,
+    memo:'重量物。運ぶ距離で手取りが変わります。' },
+  { k:'アルミサッシ', u:'kg', dispose: 45, buy: 210, q:180,
+    memo:'ガラスとゴムを外してあるかで単価が変わります。' },
+  { k:'木くず（造作・下地）', u:'立米', dispose: 8500, buy: 0, q:14,
+    memo:'値はつきません。木くずは処分費のままです。' },
+  { k:'石こうボード', u:'立米', dispose: 12000, buy: 0, q:9,
+    memo:'値はつきません。受け入れ先が限られるので早めに枠を押さえてください。' },
+  { k:'什器・テーブル椅子（使えるもの）', u:'点', dispose: 1600, buy: 2800, q:22,
+    memo:'状態が良いものだけ。写真を1枚付けると引き合いが増えます。' },
+];
+
+const BIDDERS = [
+  { n:'（架空）とよだ金属', tag:'金属全般・自社ヤードあり', bias:1.00, note:'翌日回収に対応' },
+  { n:'（架空）中央リサイクル商会', tag:'電線・銅に強い', bias:1.06, note:'電線100kg以上で単価上乗せ' },
+  { n:'（架空）ハシモト厨房機器', tag:'厨房機器の中古買取', bias:0.94, note:'動作品のみ。木くずは扱いません' },
+];
+
+let qty = {};
+function init(){ ITEMS.forEach(i => qty[i.k] = i.q); }
+
+function draw(){
+  document.getElementById('items').innerHTML = ITEMS.map((i,n) => {
+    const q = qty[i.k];
+    const net = (i.buy - i.dispose) * q;
+    return `<div class="it ${q>0?'on':''}">
+      <div class="nm">${i.k}
+        <span>${i.memo}</span>
+        <span>処分 ${i.dispose.toLocaleString()}円/${i.u}　買取 ${i.buy ? i.buy.toLocaleString()+'円/'+i.u : 'なし'}
+        　差 <em class="${net<0?'neg':''}">${net>=0?'+':''}${Math.round(net).toLocaleString()}円</em></span>
+      </div>
+      <div class="qtybox">
+        <button data-m="${n}">−</button><b>${q}</b><button data-p="${n}">＋</button>
+      </div>
+    </div>`;
+  }).join('');
+  const stepOf = i => (i.u === 'kg' ? 10 : 1);
+  document.querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
+    const i = ITEMS[+b.dataset.p]; qty[i.k] += stepOf(i); draw();
+  });
+  document.querySelectorAll('[data-m]').forEach(b => b.onclick = () => {
+    const i = ITEMS[+b.dataset.m]; qty[i.k] = Math.max(0, qty[i.k] - stepOf(i)); draw();
+  });
+  totals();
+  document.getElementById('sheet').classList.add('hidden');
+}
+
+function sums(){
+  let allDispose = 0, sellDispose = 0, buy = 0;
+  ITEMS.forEach(i => {
+    const q = qty[i.k];
+    allDispose += i.dispose * q;
+    if (i.buy > 0) { buy += i.buy * q; } else { sellDispose += i.dispose * q; }
+  });
+  return { allDispose, sellDispose, buy, net: sellDispose - buy };
+}
+
+function totals(){
+  const s = sums();
+  const saved = s.allDispose - s.net;
+  document.getElementById('totals').innerHTML = `
+    <div class="tot">
+      <h3>ぜんぶ処分に出す</h3>
+      <div class="big neg">−${(s.allDispose/10000).toFixed(1)}万円</div>
+      <div class="sub">いつものやり方</div>
+    </div>
+    <div class="tot win">
+      <h3>値がつくものを分ける</h3>
+      <div class="big ${s.net>0?'neg':'pos'}">${s.net>0?'−':'+'}${(Math.abs(s.net)/10000).toFixed(1)}万円</div>
+      <div class="sub">買取 ${(s.buy/10000).toFixed(1)}万円 − 処分 ${(s.sellDispose/10000).toFixed(1)}万円</div>
+    </div>
+    <div class="tot">
+      <h3>差</h3>
+      <div class="big pos">+${(saved/10000).toFixed(1)}万円</div>
+      <div class="sub">この現場1件ぶん</div>
+    </div>`;
+  document.getElementById('msg').textContent =
+    `分別の手間はおよそ半日ぶん増えます。それで ${(saved/10000).toFixed(1)}万円 動きます。`
+    + `単価はデモ用の架空の数字です。実際の相場は日々動くので、打診書を出して各社の返事で決めてください。`;
+}
+
+document.getElementById('reset').onclick = () => { init(); draw(); };
+
+document.getElementById('mk').onclick = () => {
+  const s = sums();
+  const lines = ITEMS.filter(i => i.buy > 0 && qty[i.k] > 0);
+  const el = document.getElementById('sheet');
+  el.classList.remove('hidden');
+  el.innerHTML = `
+    <p class="step">打診書（案）</p>
+    <h2>買取のお願い</h2>
+    <div class="box">件名：解体現場からの金属・厨房機器の買取についてのご相談
+
+いつもお世話になっております。（架空）みなみ建装の岩井です。
+
+下記の現場で出るものについて、買取のご相談です。
+搬出は8月26日から28日のあいだで調整できます。分別してヤードにまとめておきます。
+
+現場：（架空）旧・みなと食堂の内装解体（1階部分）
+${lines.map(i => `・${i.k}　約${qty[i.k]}${i.u}`).join('\n')}
+
+上記について、単価と引き取りの可否をご返信いただけますでしょうか。
+写真が要るものがあればお知らせください。
+
+よろしくお願いいたします。</div>
+    <p class="note">この画面では送信しません。文面をコピーして、いつもの方法で流してください。</p>
+    <h2 style="margin-top:20px">出し先の候補</h2>
+    <div class="bidders">
+      ${BIDDERS.map(b => `<div class="bd">
+        <div>${b.n}<span>${b.tag}　${b.note}</span></div>
+        <div style="white-space:nowrap">見込み ${((s.buy*b.bias)/10000).toFixed(1)}万円</div>
+      </div>`).join('')}
+    </div>
+    <p class="note">見込み額は過去の取引からの目安です。約束された金額ではありません。
+    産業廃棄物として出す分は、これまでどおり許可のある業者へマニフェストを付けて出してください。この道具は処分の手続きを代わりにやるものではありません。</p>`;
+  el.scrollIntoView({ behavior:'smooth', block:'start' });
+};
+
+init(); draw();
+</script>
+</body>
+</html>

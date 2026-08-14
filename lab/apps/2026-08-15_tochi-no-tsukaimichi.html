@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>土地のつかいみち — 遊休地の使い道を3案で比べる</title>
+<style>
+  * { box-sizing: border-box; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: #f5f4f0; color: #1c1b19;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+    font-size: 17px; line-height: 1.75;
+  }
+  .demoflag {
+    background: #1c1b19; color: #fff; font-size: 12px; letter-spacing: .04em;
+    text-align: center; padding: 6px 12px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 20px 16px 64px; }
+  header h1 { font-size: 27px; line-height: 1.35; margin: 18px 0 6px; letter-spacing: -.01em; }
+  header p.lead { margin: 0 0 4px; color: #55524c; font-size: 16px; }
+  .card {
+    background: #fff; border: 1px solid #e5e2db; border-radius: 14px;
+    padding: 18px; margin: 14px 0;
+  }
+  h2 { font-size: 19px; margin: 0 0 12px; }
+  .step { font-size: 12px; color: #2563eb; font-weight: 700; letter-spacing: .08em; margin: 0 0 4px; }
+  .lotlist { display: grid; gap: 10px; }
+  .lot {
+    display: block; width: 100%; text-align: left; cursor: pointer;
+    background: #fbfaf7; border: 1.5px solid #e5e2db; border-radius: 12px;
+    padding: 13px 15px; font: inherit; color: inherit;
+  }
+  .lot:hover { border-color: #b9c8ee; }
+  .lot.on { border-color: #2563eb; background: #f0f5ff; }
+  .lot b { display: block; font-size: 17px; }
+  .lot span { font-size: 14px; color: #55524c; }
+  .knobs { display: grid; gap: 14px; margin-top: 4px; }
+  .knob label { display: flex; justify-content: space-between; font-size: 15px; margin-bottom: 2px; }
+  .knob label i { font-style: normal; color: #2563eb; font-weight: 700; }
+  input[type=range] { width: 100%; accent-color: #2563eb; }
+  .plans { display: grid; gap: 12px; }
+  @media (min-width: 620px) { .plans { grid-template-columns: repeat(3, 1fr); } }
+  .plan { border: 1.5px solid #e5e2db; border-radius: 12px; padding: 14px; background: #fbfaf7; }
+  .plan.best { border-color: #2563eb; background: #f0f5ff; }
+  .plan h3 { margin: 0 0 2px; font-size: 16px; }
+  .plan .big { font-size: 25px; font-weight: 700; letter-spacing: -.02em; margin: 6px 0 2px; }
+  .plan .unit { font-size: 13px; color: #55524c; font-weight: 400; }
+  .plan ul { margin: 8px 0 0; padding-left: 18px; font-size: 14px; color: #55524c; }
+  .tag { display: inline-block; font-size: 11px; background: #2563eb; color: #fff; border-radius: 999px; padding: 2px 9px; }
+  button.primary {
+    background: #2563eb; color: #fff; border: 0; border-radius: 12px;
+    padding: 14px 18px; font: inherit; font-weight: 700; cursor: pointer; width: 100%;
+  }
+  button.primary:hover { background: #1d4fd0; }
+  .sheet { border-top: 3px solid #2563eb; }
+  .sheet .row { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed #e5e2db; padding: 8px 0; font-size: 15px; }
+  .sheet .row b { white-space: nowrap; }
+  .note { font-size: 13px; color: #78746c; margin-top: 12px; }
+  .hidden { display: none; }
+  .src { font-size: 13px; color: #78746c; }
+</style>
+</head>
+<body>
+<div class="demoflag">デモ（サンプルデータ）— 実在の土地・実在の会社ではありません</div>
+<div class="wrap">
+
+<header>
+  <h1>土地のつかいみち</h1>
+  <p class="lead">相続した土地を「月極・コインパーキング・売却」の3案で比べて、地主さんに渡せる1枚にします。</p>
+  <p class="src">駐車場運営会社の仕入れ営業が、初回訪問の場で出すための道具です。</p>
+</header>
+
+<div class="card">
+  <p class="step">STEP 1</p>
+  <h2>お預かりした土地を選ぶ</h2>
+  <div class="lotlist" id="lots"></div>
+</div>
+
+<div class="card" id="knobcard">
+  <p class="step">STEP 2</p>
+  <h2>条件を動かす</h2>
+  <div class="knobs">
+    <div class="knob">
+      <label>停められる台数 <i id="capLabel">—</i></label>
+      <input type="range" id="cap" min="3" max="30" value="10">
+    </div>
+    <div class="knob">
+      <label>近くの月極相場（1台・月） <i id="rentLabel">—</i></label>
+      <input type="range" id="rent" min="4000" max="40000" step="500" value="12000">
+    </div>
+    <div class="knob">
+      <label>コインPの想定稼働 <i id="occLabel">—</i></label>
+      <input type="range" id="occ" min="10" max="80" value="38">
+    </div>
+  </div>
+  <p class="note">初期値は、選んだ土地の周辺の公開情報（路線価・周辺の月極募集・近隣コインPの料金表）から入れています。話しながら動かしてください。</p>
+</div>
+
+<div class="card" id="plancard">
+  <p class="step">STEP 3</p>
+  <h2>3案の手残り（年・税引前）</h2>
+  <div class="plans" id="plans"></div>
+  <p class="note" id="taxnote"></p>
+</div>
+
+<div class="card">
+  <button class="primary" id="mk">この内容で提案書を作る</button>
+</div>
+
+<div class="card sheet hidden" id="sheet"></div>
+
+</div>
+
+<script>
+const LOTS = [
+  { id:'a', name:'城北三丁目の空き地', addr:'（架空）北関東・私鉄駅から徒歩9分',
+    sqm:198, tax:11.2, price:1450, cap:8, rent:9500, occ:32,
+    memo:'去年ご相続。今は月1回の草刈りだけ。ご本人は都内在住。' },
+  { id:'b', name:'旧・カネタ商店の跡地', addr:'（架空）県庁前の商店街のはずれ',
+    sqm:132, tax:18.6, price:2380, cap:6, rent:16000, occ:52,
+    memo:'建物を解体済み。平日昼の人通りは多く、夜は静か。' },
+  { id:'c', name:'田んぼ向かいの資材置き場', addr:'（架空）国道沿い・郊外',
+    sqm:410, tax:7.4, price:980, cap:22, rent:5500, occ:14,
+    memo:'ご家族の会社が使っていた土地。今は空。近くに工場が3社。' },
+];
+const yen = n => (n >= 10000 ? (n/10000).toFixed(n >= 100000 ? 0 : 1) + '万円' : Math.round(n).toLocaleString() + '円');
+const man = n => (n/10000);
+
+let cur = LOTS[0];
+
+function drawLots() {
+  document.getElementById('lots').innerHTML = LOTS.map(l => `
+    <button class="lot ${l.id===cur.id?'on':''}" data-id="${l.id}">
+      <b>${l.name}</b>
+      <span>${l.addr}　${l.sqm}平米　固定資産税 年${l.tax}万円</span>
+      <span>${l.memo}</span>
+    </button>`).join('');
+  document.querySelectorAll('.lot').forEach(b => b.onclick = () => {
+    cur = LOTS.find(l => l.id === b.dataset.id);
+    document.getElementById('cap').value = cur.cap;
+    document.getElementById('rent').value = cur.rent;
+    document.getElementById('occ').value = cur.occ;
+    document.getElementById('sheet').classList.add('hidden');
+    drawLots(); calc();
+  });
+}
+
+function state() {
+  return {
+    cap: +document.getElementById('cap').value,
+    rent: +document.getElementById('rent').value,
+    occ: +document.getElementById('occ').value,
+  };
+}
+
+function calc() {
+  const s = state();
+  document.getElementById('capLabel').textContent = s.cap + '台';
+  document.getElementById('rentLabel').textContent = yen(s.rent);
+  document.getElementById('occLabel').textContent = s.occ + '%';
+
+  // 月極：稼働8割・管理料10%・整地の初期費を7年で割る
+  const tsukigimeInit = s.cap * 12;               // 万円（ロープ・砂利・区画線）
+  const tsukigime = s.rent * s.cap * 12 * 0.8 * 0.9 / 10000 - cur.tax - tsukigimeInit / 7;
+
+  // コインP：月極相場の2.4倍を稼働38%のときの売上とみなし、稼働で伸縮させる
+  const coinSales = s.rent * s.cap * 12 * (s.occ / 38) * 2.4 / 10000;   // 万円/年
+  const coin = coinSales * 0.62 - s.cap * 6 - cur.tax;                  // 手数料等 ＋ 1台あたり年6万円の維持費
+  const coinInit = s.cap * 28;                    // 万円（機器・舗装）
+
+  // 売却：手取りを運用に回した場合の年利1.0%相当（比較用の目安）
+  const net = cur.price * 0.94;                   // 仲介手数料・測量・登記をざっくり控除
+  const sale = net * 0.010;
+
+  const rows = [
+    { key:'月極', name:'月極駐車場', v: tsukigime, init: tsukigimeInit,
+      pts:['整地とロープだけで始められる','満車まで平均5〜8か月','解約の連絡や滞納の督促はこちらで受けます'] },
+    { key:'コインP', name:'コインパーキング', v: coin, init: coinInit,
+      pts:['機器はこちらの負担でも構いません','人通り・時間帯で振れ幅が大きい','夜間の見回りを含みます'] },
+    { key:'売却', name:'売却して現金に', v: sale, init: 0,
+      pts:[`手取りの目安 ${cur.price*0.94|0}万円`,'固定資産税と草刈りから完全に離れられます','戻せません。ご家族の合意が要ります'] },
+  ];
+  const best = rows.reduce((a,b) => b.v > a.v ? b : a);
+  document.getElementById('plans').innerHTML = rows.map(r => `
+    <div class="plan ${r===best?'best':''}">
+      ${r===best?'<span class="tag">いちばん残る</span>':'<span class="tag" style="background:#e5e2db;color:#55524c">比較</span>'}
+      <h3>${r.name}</h3>
+      <div class="big">${r.v.toFixed(1)}<span class="unit">万円 / 年</span></div>
+      ${r.init ? `<div class="unit">はじめにかかる費用 ${r.init}万円</div>` : '<div class="unit">はじめにかかる費用 なし</div>'}
+      <ul>${r.pts.map(p => `<li>${p}</li>`).join('')}</ul>
+    </div>`).join('');
+
+  document.getElementById('taxnote').textContent =
+    `固定資産税 年${cur.tax}万円を差し引いた数字です。売却の欄は「売った手取りを年1.0%で置いた場合」の比較用の目安で、利回りを約束するものではありません。相続税や譲渡所得税は入れていません。`;
+  return { s, rows, best };
+}
+
+document.getElementById('mk').onclick = () => {
+  const { s, rows, best } = calc();
+  const el = document.getElementById('sheet');
+  el.classList.remove('hidden');
+  el.innerHTML = `
+    <p class="step">お渡しする1枚</p>
+    <h2>${cur.name} のつかいみち</h2>
+    <p class="src">${cur.addr}　${cur.sqm}平米　作成日 2026年8月15日</p>
+    <div class="row"><span>いま出ていくお金</span><b>固定資産税 年${cur.tax}万円 ＋ 草刈り</b></div>
+    ${rows.map(r => `<div class="row"><span>${r.name}</span><b>${r.v.toFixed(1)}万円 / 年${r.init?`（初期${r.init}万円）`:''}</b></div>`).join('')}
+    <div class="row"><span>おすすめ</span><b style="color:#2563eb">${best.name}</b></div>
+    <p class="note">前提：${s.cap}台 ／ 近くの月極相場 ${yen(s.rent)} ／ コインPの稼働 ${s.occ}%。
+    条件が変わると数字も変わります。この紙は概算で、契約の内容ではありません。</p>
+    <p class="note">ご相談先：（架空）まるみ駐車場サービス　担当・北原</p>`;
+  el.scrollIntoView({ behavior:'smooth', block:'start' });
+};
+
+['cap','rent','occ'].forEach(id => document.getElementById(id).oninput = () => {
+  document.getElementById('sheet').classList.add('hidden');
+  calc();
+});
+
+drawLots();
+document.getElementById('cap').value = cur.cap;
+document.getElementById('rent').value = cur.rent;
+document.getElementById('occ').value = cur.occ;
+calc();
+</script>
+</body>
+</html>

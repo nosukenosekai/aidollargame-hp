@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>上のほう — 全員が上半分に入ることはできない</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .q { margin-bottom:22px; }
+  .q p { margin:0 0 2px; font-size:18px; }
+  .q .hint { font-size:14px; color:#78746c; margin-bottom:6px; }
+  .val { font-size:30px; font-weight:800; letter-spacing:-.03em; }
+  .val small { font-size:15px; font-weight:600; letter-spacing:0; color:#55524c; }
+  input[type=range] { width:100%; accent-color:#2563eb; height:34px; }
+  .ends { display:flex; justify-content:space-between; font-size:13px; color:#78746c; margin-top:-6px; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:14px 22px; font:inherit; font-size:17px; cursor:pointer; }
+  .room { margin:14px 0 6px; }
+  .people { display:grid; grid-template-columns:repeat(10,1fr); gap:4px; }
+  .p { aspect-ratio:1; border-radius:3px; background:#ddd8cd; }
+  .p.up { background:#2563eb; }
+  .p.you { background:#a33c1c; }
+  .big { font-size:30px; font-weight:800; letter-spacing:-.03em; margin:8px 0 2px; line-height:1.35; }
+  .big.hit { color:#a33c1c; }
+  .sub { font-size:16px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:8px; font-size:16px; }
+  .hidden { display:none; }
+  .bar { display:flex; height:36px; border-radius:8px; overflow:hidden; margin:10px 0 4px; }
+  .bar div { display:flex; align-items:center; justify-content:center; font-size:13px; color:#fff; white-space:nowrap; }
+  .bar .a { background:#2563eb; }
+  .bar .b { background:#c9c4b8; color:#55524c; }
+  table { width:100%; border-collapse:collapse; font-size:16px; margin-top:6px; }
+  th,td { text-align:left; padding:9px 6px; border-bottom:1px solid #eeebe4; }
+  td.num { text-align:right; white-space:nowrap; font-weight:700; }
+  td.num.over { color:#a33c1c; }
+</style>
+</head>
+<body>
+<div class="demoflag">実験室の一本 — 最後に出る数字は、実際の調査の結果です</div>
+<div class="wrap">
+
+<h1>上のほう</h1>
+<p class="lead">あなたと同じくらいの年齢・立場の人が100人いるとします。その中で、あなたは上から何番目くらいだと思いますか。3つ、正直なところを置いてください。</p>
+
+<div class="card" id="c1">
+  <div class="q" data-i="0">
+    <p>車の運転が安全なほう</p>
+    <p class="hint">事故を起こしにくい、という意味で</p>
+    <p class="val"><span id="v0">50</span><small> 番目あたり（100人中）</small></p>
+    <input type="range" id="q0" min="1" max="100" value="50">
+    <div class="ends"><span>いちばん上</span><span>まん中</span><span>いちばん下</span></div>
+  </div>
+  <div class="q" data-i="1">
+    <p>人の話を、さえぎらずに聞けるほう</p>
+    <p class="hint">最後まで聞いてから話しはじめられるか</p>
+    <p class="val"><span id="v1">50</span><small> 番目あたり（100人中）</small></p>
+    <input type="range" id="q1" min="1" max="100" value="50">
+    <div class="ends"><span>いちばん上</span><span>まん中</span><span>いちばん下</span></div>
+  </div>
+  <div class="q" data-i="2">
+    <p>仕事の段取りが良いほう</p>
+    <p class="hint">先を読んで、手戻りを出さずに進められるか</p>
+    <p class="val"><span id="v2">50</span><small> 番目あたり（100人中）</small></p>
+    <input type="range" id="q2" min="1" max="100" value="50">
+    <div class="ends"><span>いちばん上</span><span>まん中</span><span>いちばん下</span></div>
+  </div>
+  <div class="btns"><button class="primary" id="submit">置いた</button></div>
+  <p class="src">この画面は答えをどこにも送りません。全部、この端末の中だけで動いています。</p>
+</div>
+
+<div class="card hidden" id="c2">
+  <p class="big" id="verdict">—</p>
+  <p class="sub" id="vsub"></p>
+  <div class="room">
+    <div class="people" id="people"></div>
+  </div>
+  <p class="src">赤があなた。青は「自分は上半分だ」と答える人たち。下の調査の割合で塗っています。</p>
+  <table id="tbl"></table>
+</div>
+
+<div class="card hidden" id="c3">
+  <h2>実際に聞いてみた結果</h2>
+  <p class="sub">1981年、アメリカとスウェーデンの人に「あなたの運転技術・安全性は、他のドライバーと比べてどのあたりか」を聞いた調査があります。大多数が、自分を中央値よりはるか上に置きました。半分より上に入れるのは、定義上、半分だけなのに、です。</p>
+  <p class="sub">2023年の追試では、数字はこうなりました。</p>
+  <div class="bar">
+    <div class="a" style="width:91%">自分は平均より安全 91%</div><div class="b" style="width:9%">9%</div>
+  </div>
+  <div class="bar">
+    <div class="a" style="width:93%">自分は平均より上手い 93%</div><div class="b" style="width:7%">7%</div>
+  </div>
+  <p class="src">この「自分は平均より上」という思い込みは、運転にかぎらず、聞く力・段取り・人柄など、はかりにくいものほど強く出ることが知られています。</p>
+
+  <h2 style="margin-top:22px">現場に直すと</h2>
+  <div class="field">
+    社内アンケートで「引き継ぎはできている」「報告は十分」に多数が丸をつけても、それは現状の証明になりません。
+    はかりにくいことを自己申告で聞くと、9割が上半分に入ります。
+    聞くなら、能力ではなく<b>回数と時刻</b>を聞いてください。「引き継ぎができているか」ではなく「先週、何件を何分で渡したか」。
+  </div>
+  <p class="src" style="margin-top:16px">出典：Svenson O. Are we all less risky and more skillful than our fellow drivers? Acta Psychologica, 1981;47(2):143-148.<br>
+  追試の91%・93%は Koppel S ほかによる replication and extension（2023）の報告値です。<br>
+  <a href="https://www.researchgate.net/publication/370641742_We_are_all_less_risky_and_more_skillful_than_our_fellow_drivers_Successful_replication_and_extension_of_Svenson_1981" target="_blank" rel="noopener">追試の論文（ResearchGate）</a><br>
+  1981年の原典について、アメリカとスウェーデンそれぞれの内訳の数値は、今回の調べでは一次資料まで当たれませんでした。ここに載せた91%・93%は追試のものです。</p>
+  <div class="btns"><button class="ghost" id="again">置き直す</button></div>
+</div>
+
+</div>
+
+<script>
+const LABELS = ['運転の安全さ', '人の話を聞ける', '仕事の段取り'];
+
+[0,1,2].forEach(i => {
+  const r = document.getElementById('q' + i);
+  r.oninput = () => document.getElementById('v' + i).textContent = r.value;
+});
+
+document.getElementById('submit').onclick = () => {
+  const vals = [0,1,2].map(i => +document.getElementById('q' + i).value);
+  const above = vals.filter(v => v < 50).length;
+  const best = Math.min(...vals);
+
+  document.getElementById('c1').classList.add('hidden');
+  ['c2','c3'].forEach(id => document.getElementById(id).classList.remove('hidden'));
+
+  const v = document.getElementById('verdict');
+  if (above === 3) {
+    v.textContent = '3つとも、上半分に置きました';
+    v.className = 'big hit';
+    document.getElementById('vsub').textContent =
+      'これは責められることではありません。ほとんどの人がそうします。それが下の調査で出ていることです。';
+  } else if (above === 0) {
+    v.textContent = '3つとも、下半分に置きました';
+    v.className = 'big';
+    document.getElementById('vsub').textContent =
+      'かなり珍しい置き方です。下の調査では、ここに入る人は1割ほどしかいません。';
+  } else {
+    v.textContent = `3つのうち ${above}つを、上半分に置きました`;
+    v.className = 'big';
+    document.getElementById('vsub').textContent =
+      'いちばん自信があったのは「' + LABELS[vals.indexOf(best)] + '」で、100人中 ' + best + '番目あたりでした。';
+  }
+
+  const you = Math.max(1, Math.min(100, Math.round(vals.reduce((a,b) => a + b, 0) / 3)));
+  document.getElementById('people').innerHTML = Array.from({length:100}, (_, i) => {
+    const n = i + 1;
+    if (n === you) return '<div class="p you" title="あなた"></div>';
+    return `<div class="p ${n <= 91 ? 'up' : ''}"></div>`;
+  }).join('');
+
+  document.getElementById('tbl').innerHTML = `
+    <tr><th>置いたところ</th><th style="text-align:right">100人中</th></tr>
+    ${vals.map((x,i) => `<tr><td>${LABELS[i]}</td>
+      <td class="num ${x < 50 ? 'over' : ''}">${x} 番目</td></tr>`).join('')}
+    <tr><td>3つの平均</td><td class="num ${you < 50 ? 'over' : ''}">${you} 番目</td></tr>`;
+
+  document.getElementById('c2').scrollIntoView({ behavior:'smooth', block:'start' });
+};
+
+document.getElementById('again').onclick = () => {
+  ['c2','c3'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  document.getElementById('c1').classList.remove('hidden');
+  document.getElementById('c1').scrollIntoView({ behavior:'smooth', block:'center' });
+};
+</script>
+</body>
+</html>

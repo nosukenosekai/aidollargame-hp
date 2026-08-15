@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>いろのじゃま — 読めてしまう字が、手を遅らせる</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .stim { display:flex; align-items:center; justify-content:center; min-height:170px;
+    font-size:64px; font-weight:800; letter-spacing:.1em; background:#fff;
+    border:2px solid #e5e2db; border-radius:12px; margin:6px 0 14px; user-select:none; }
+  .choices { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  @media (min-width:520px){ .choices { grid-template-columns:repeat(4,1fr); } }
+  .choices button { font:inherit; font-size:19px; font-weight:700; padding:16px 8px;
+    border:2px solid #e5e2db; border-radius:12px; background:#fff; cursor:pointer; color:#1c1b19; }
+  .choices button:hover { border-color:#2563eb; }
+  .prog { display:flex; justify-content:space-between; font-size:14px; color:#78746c; }
+  .progbar { height:6px; background:#efece5; border-radius:3px; overflow:hidden; margin:6px 0 12px; }
+  .progbar i { display:block; height:100%; background:#2563eb; transition:width .2s; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:14px 22px; font:inherit; font-size:17px; cursor:pointer; }
+  .res { display:grid; gap:12px; margin-top:6px; }
+  @media (min-width:520px){ .res { grid-template-columns:1fr 1fr; } }
+  .rbox { border:1.5px solid #e5e2db; border-radius:12px; padding:14px; background:#fbfaf7; }
+  .rbox.hi { border-color:#2563eb; background:#f0f5ff; }
+  .rbox h3 { margin:0; font-size:15px; color:#55524c; font-weight:600; }
+  .rbox .n { font-size:32px; font-weight:800; letter-spacing:-.03em; margin:2px 0 0; }
+  .rbox .n small { font-size:15px; font-weight:600; letter-spacing:0; }
+  .gap { text-align:center; padding:18px 14px; border:2px solid #2563eb; border-radius:12px;
+    background:#f0f5ff; margin-top:12px; }
+  .gap .n { font-size:44px; font-weight:800; letter-spacing:-.04em; color:#2563eb; line-height:1.1; }
+  .sub { font-size:16px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:8px; font-size:16px; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<div class="demoflag">実験室の一本 — 1935年の課題を、そのまま自分で測ります</div>
+<div class="wrap">
+
+<h1>いろのじゃま</h1>
+<p class="lead">出てくるのは色の名前です。<b>書いてある字は無視して、その字が塗られている色</b>を選んでください。20回。速さを測ります。</p>
+
+<div class="card" id="c1">
+  <div class="prog"><span id="pn">0 / 20</span><span id="pmode"></span></div>
+  <div class="progbar"><i id="pbar" style="width:0"></i></div>
+  <div class="stim" id="stim">はじめる</div>
+  <div class="choices" id="ch"></div>
+  <div class="btns"><button class="primary" id="start">はじめる</button></div>
+  <p class="src">最初の数回は練習だと思ってかまいません。指がもたついた回は結果から除きます。</p>
+</div>
+
+<div class="card hidden" id="c2">
+  <h2>あなたの結果</h2>
+  <div class="res">
+    <div class="rbox">
+      <h3>字と色が合っている（あか＝赤）</h3>
+      <p class="n" id="rc">—<small> ミリ秒</small></p>
+    </div>
+    <div class="rbox hi">
+      <h3>字と色が食い違う（あお＝赤）</h3>
+      <p class="n" id="ri">—<small> ミリ秒</small></p>
+    </div>
+  </div>
+  <div class="gap">
+    <p class="sub" style="margin:0">じゃまされて遅くなったぶん</p>
+    <p class="n" id="rg">—</p>
+    <p class="sub" style="margin:0" id="rgsub"></p>
+  </div>
+  <p class="sub" id="acc" style="margin-top:12px"></p>
+  <div class="btns"><button class="ghost" id="again">もう一度</button></div>
+</div>
+
+<div class="card hidden" id="c3">
+  <h2>もとの実験</h2>
+  <p class="sub">1935年に報告された課題です。字を読むことは訓練しすぎていて、止められない。だから「色を答えろ」と言われても、書いてある字が先に頭に入ってしまい、それを打ち消すぶんだけ遅れます。この遅れは、意志の強さでは消えません。</p>
+  <p class="src">研究によって条件はまちまちですが、合っている条件はおよそ500〜700ミリ秒、食い違う条件はおよそ800〜1,100ミリ秒に伸びると報告されています。差はおおむね100〜400ミリ秒の範囲で、85ミリ秒という報告もあります。マウスやタップで答えるこの画面は、声で答える本来の課題より全体に遅く出ます。差のほうを見てください。</p>
+  <h2 style="margin-top:22px">現場に直すと</h2>
+  <div class="field">
+    表示と中身が食い違っているものは、それだけで人を遅らせ、間違えさせます。
+    赤いラベルの箱に青い部品、「至急」と書かれた通常便、去年の様式のまま中身だけ変えた注文書。
+    貼り替えを面倒がって残した1枚が、毎回この0コンマ何秒と、たまの取り違えを生みます。
+  </div>
+  <p class="src" style="margin-top:16px">出典：Stroop JR. Studies of interference in serial verbal reactions. Journal of Experimental Psychology, 1935;18(6):643-662.<br>
+  反応時間の目安は複数の解説・実験報告の範囲で、特定の1論文の値ではありません。参考：<a href="https://www.simplypsychology.org/stroop-effect.html" target="_blank" rel="noopener">https://www.simplypsychology.org/stroop-effect.html</a></p>
+</div>
+
+</div>
+
+<script>
+const COLORS = [
+  { key:'あか',  hex:'#d23b1f' },
+  { key:'あお',  hex:'#1f5fd2' },
+  { key:'みどり', hex:'#1e8a4c' },
+  { key:'きいろ', hex:'#c79a06' },
+];
+const N = 20;
+
+let trials = [], t = 0, t0 = 0, log = [];
+
+// 出す順は毎回同じ。合っている10回と食い違う10回を、色がかたよらないように混ぜてある
+const ORDER = [3,11,0,14,7,1,18,5,12,9,16,2,8,19,4,13,6,15,10,17];
+
+function build(){
+  const cong = [];
+  for (let i = 0; i < 10; i++) {
+    const c = COLORS[i % 4];
+    cong.push({ word:c, ink:c, congruent:true });
+  }
+  const pairs = [];
+  COLORS.forEach(ink => COLORS.forEach(w => { if (w.key !== ink.key) pairs.push({ word:w, ink, congruent:false }); }));
+  const inc = [];
+  for (let i = 0; i < 10; i++) inc.push(pairs[(i * 5 + 1) % pairs.length]);
+
+  const seq = [];
+  for (let i = 0; i < 10; i++) { seq.push(cong[i]); seq.push(inc[i]); }
+  trials = ORDER.map(i => seq[i]);
+}
+
+function drawChoices(){
+  document.getElementById('ch').innerHTML = COLORS.map(c =>
+    `<button data-k="${c.key}">${c.key}</button>`).join('');
+  document.querySelectorAll('#ch button').forEach(b => b.onclick = () => pick(b.dataset.k));
+}
+
+function next(){
+  if (t >= N) { done(); return; }
+  const tr = trials[t];
+  const el = document.getElementById('stim');
+  el.textContent = tr.word.key;
+  el.style.color = tr.ink.hex;
+  document.getElementById('pn').textContent = `${t + 1} / ${N}`;
+  document.getElementById('pbar').style.width = (t / N * 100) + '%';
+  t0 = performance.now();
+}
+
+function pick(k){
+  if (!t0) return;
+  const tr = trials[t];
+  log.push({ ms: performance.now() - t0, ok: k === tr.ink.key, congruent: tr.congruent });
+  t++; t0 = 0;
+  const el = document.getElementById('stim');
+  el.textContent = '';
+  setTimeout(next, 220);
+}
+
+function mean(a){ return a.length ? a.reduce((x,y) => x + y, 0) / a.length : 0; }
+
+function done(){
+  document.getElementById('pbar').style.width = '100%';
+  document.getElementById('c1').classList.add('hidden');
+  ['c2','c3'].forEach(id => document.getElementById(id).classList.remove('hidden'));
+
+  const valid = log.filter(l => l.ok && l.ms > 250 && l.ms < 5000);
+  const c = valid.filter(l => l.congruent).map(l => l.ms);
+  const i = valid.filter(l => !l.congruent).map(l => l.ms);
+  const mc = Math.round(mean(c)), mi = Math.round(mean(i)), gap = mi - mc;
+
+  document.getElementById('rc').innerHTML = (c.length ? mc : '—') + '<small> ミリ秒</small>';
+  document.getElementById('ri').innerHTML = (i.length ? mi : '—') + '<small> ミリ秒</small>';
+  document.getElementById('rg').textContent = (c.length && i.length)
+    ? (gap >= 0 ? '+' : '') + gap + ' ミリ秒' : '測れませんでした';
+
+  document.getElementById('rgsub').textContent =
+    !c.length || !i.length ? '正解が足りず、比べられませんでした。'
+    : gap >= 100 ? '報告されている範囲（およそ100〜400ミリ秒）に入っています。'
+    : gap > 0 ? '差は出ましたが、報告の範囲より小さめです。回数が少ないと、こうなることもあります。'
+    : '今回は差が出ませんでした。1人が20回やっただけなので、こういう回も出ます。';
+
+  const wrong = log.filter(l => !l.ok);
+  const wrongI = wrong.filter(l => !l.congruent).length;
+  document.getElementById('acc').textContent =
+    wrong.length === 0
+      ? '20回すべて正解。速さのぶんだけ、じゃまが出ています。'
+      : `間違いは ${wrong.length}回。そのうち ${wrongI}回が、字と色が食い違う回でした。`;
+}
+
+document.getElementById('start').onclick = () => {
+  document.getElementById('start').classList.add('hidden');
+  build(); drawChoices(); t = 0; log = []; next();
+};
+
+document.getElementById('again').onclick = () => {
+  ['c2','c3'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  document.getElementById('c1').classList.remove('hidden');
+  document.getElementById('pbar').style.width = '0';
+  build(); t = 0; log = []; next();
+  document.getElementById('c1').scrollIntoView({ behavior:'smooth', block:'center' });
+};
+
+drawChoices();
+</script>
+</body>
+</html>

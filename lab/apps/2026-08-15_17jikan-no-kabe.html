@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>17時間の壁 — 起きている時間を、酒に換算する</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  label.q { display:block; font-size:16px; color:#55524c; margin-bottom:4px; }
+  .hours { font-size:52px; font-weight:800; letter-spacing:-.04em; line-height:1.1; margin:2px 0 0; }
+  .hours small { font-size:20px; font-weight:600; letter-spacing:0; margin-left:4px; }
+  input[type=range] { width:100%; accent-color:#2563eb; height:34px; }
+  input[type=time] { font:inherit; font-size:19px; border:1.5px solid #e5e2db; border-radius:10px;
+    padding:8px 12px; background:#fff; color:#1c1b19; }
+  .scale { position:relative; height:56px; margin:26px 0 8px; }
+  .scale .track { position:absolute; left:0; right:0; top:20px; height:14px; border-radius:7px;
+    background:linear-gradient(90deg,#cfd9e6 0%,#8fa3c6 42%,#e0a97a 62%,#c96a3d 85%,#a33c1c 100%); }
+  .scale .pin { position:absolute; top:2px; width:4px; height:50px; background:#1c1b19; border-radius:2px;
+    transform:translateX(-2px); transition:left .3s ease; }
+  .scale .tick { position:absolute; top:38px; font-size:12px; color:#78746c; transform:translateX(-50%); }
+  .verdict { font-size:25px; font-weight:700; letter-spacing:-.02em; margin:14px 0 2px; line-height:1.45; }
+  .verdict.hi { color:#a33c1c; }
+  .sub { font-size:16px; color:#55524c; }
+  .bars { margin-top:16px; }
+  .barrow { display:grid; grid-template-columns:96px 1fr; gap:10px; align-items:center; margin-bottom:8px; }
+  .barrow span { font-size:14px; color:#55524c; }
+  .barrow .bg { background:#efece5; border-radius:7px; height:26px; position:relative; overflow:hidden; }
+  .barrow .fg { position:absolute; inset:0 auto 0 0; background:#c9d4ea; border-radius:7px; transition:width .4s; }
+  .barrow .fg.you { background:#2563eb; }
+  .barrow .lab { position:absolute; inset:0; display:flex; align-items:center; padding-left:9px;
+    font-size:13px; color:#1c1b19; }
+  .barrow .fg.you + .lab { color:#fff; }
+  details { margin-top:10px; border-top:1px solid #eeebe4; padding-top:12px; }
+  summary { cursor:pointer; font-size:15px; color:#2563eb; }
+  .src { font-size:14px; color:#78746c; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:8px; font-size:16px; }
+</style>
+</head>
+<body>
+<div class="demoflag">実験室の一本 — 数字は下に挙げた論文の実測値です</div>
+<div class="wrap">
+
+<h1>17時間の壁</h1>
+<p class="lead">眠らずに起きている時間が延びると、判断力と手の動きは酒を飲んだときと同じところまで落ちる。何時間で、どのくらいか。自分の数字を出してみてください。</p>
+
+<div class="card">
+  <label class="q" for="wake">今日、起きた時刻</label>
+  <input type="time" id="wake" value="07:00">
+  <p class="hours" id="h">— <small>時間 起きている</small></p>
+  <input type="range" id="adj" min="0" max="28" step="0.5" value="0" aria-label="起きている時間を動かす">
+  <p class="src" id="now"></p>
+
+  <div class="scale">
+    <div class="track"></div>
+    <div class="pin" id="pin" style="left:0%"></div>
+    <div class="tick" style="left:0%">0h</div>
+    <div class="tick" style="left:35.7%">10h</div>
+    <div class="tick" style="left:60.7%">17h</div>
+    <div class="tick" style="left:100%">28h</div>
+  </div>
+
+  <p class="verdict" id="v">—</p>
+  <p class="sub" id="s"></p>
+</div>
+
+<div class="card">
+  <h2 style="font-size:19px;margin:0 0 4px">実験で何が起きたか</h2>
+  <p class="src">39人（運送業の従業員30人・陸軍9人）に、28時間眠らせない条件と、酒を飲ませた条件の両方で、同じ課題をやらせて比べた研究です。下は、覚醒時間ごとに「酒に直すとどのくらいか」を並べたもの。</p>
+  <div class="bars" id="bars"></div>
+  <details>
+    <summary>この研究で分かったこと（3行）</summary>
+    <p class="src">17〜19時間 眠らずにいると、いくつかの課題の成績は 血中アルコール濃度 0.05% のときと同じか、それより悪くなった。反応の速さは課題によって最大50%遅くなった。さらに時間が延びると、この研究で飲ませた最大量（0.1%）にあたる水準まで落ちた。</p>
+  </details>
+</div>
+
+<div class="card">
+  <h2 style="font-size:19px;margin:0 0 4px">現場に直すと</h2>
+  <div class="field">
+    朝7時に起きた人は、夜中の0時に「17時間」に届きます。夜勤明けの引き継ぎ、早朝の積み込み、当直明けの運転は、この線の向こう側で起きています。
+    シフトを組む側が見るべきは、働いた時間ではなく<b>最後に寝てから何時間か</b>です。
+  </div>
+  <p class="src" style="margin-top:14px">この画面は医学的な診断ではありません。研究の被験者39人で起きたことを、あなたの時間に当てはめて表示しているだけです。</p>
+</div>
+
+<div class="card">
+  <p class="src">出典：Williamson AM, Feyer AM. Moderate sleep deprivation produces impairments in cognitive and motor performance equivalent to legally prescribed levels of alcohol intoxication. Occupational and Environmental Medicine, 2000;57(10):649-655.<br>
+  <a href="https://pubmed.ncbi.nlm.nih.gov/10984335/" target="_blank" rel="noopener">https://pubmed.ncbi.nlm.nih.gov/10984335/</a></p>
+</div>
+
+</div>
+
+<script>
+const LEVELS = [
+  { h:10, bac:0.00, txt:'まだ、ふだんどおりです' },
+  { h:13, bac:0.02, txt:'少し落ちはじめる' },
+  { h:17, bac:0.05, txt:'この研究で 0.05% と並んだ線' },
+  { h:20, bac:0.07, txt:'0.05% を超えていく' },
+  { h:24, bac:0.10, txt:'この研究で飲ませた最大量と同じ水準' },
+];
+
+function bacFor(h){
+  if (h <= 10) return 0;
+  if (h >= 24) return 0.10;
+  // 10時間を起点に、17時間で0.05%、24時間で0.10%を通る折れ線
+  if (h <= 17) return (h - 10) / 7 * 0.05;
+  return 0.05 + (h - 17) / 7 * 0.05;
+}
+
+let manual = null;
+
+function hoursAwake(){
+  if (manual !== null) return manual;
+  const [hh, mm] = document.getElementById('wake').value.split(':').map(Number);
+  const now = new Date();
+  const wake = new Date(now); wake.setHours(hh, mm, 0, 0);
+  let diff = (now - wake) / 3600000;
+  if (diff < 0) diff += 24;
+  return Math.min(28, Math.round(diff * 2) / 2);
+}
+
+function draw(){
+  const h = hoursAwake();
+  const bac = bacFor(h);
+  document.getElementById('h').innerHTML = h.toFixed(1) + '<small>時間 起きている</small>';
+  document.getElementById('adj').value = h;
+  document.getElementById('pin').style.left = (h / 28 * 100) + '%';
+  const now = new Date();
+  document.getElementById('now').textContent = manual === null
+    ? `いまは ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}。起きた時刻を変えるか、下のつまみで時間を動かせます。`
+    : 'つまみで動かしています。起きた時刻を入れ直すと、いまの時刻から計算し直します。';
+
+  const v = document.getElementById('v');
+  if (bac === 0) {
+    v.textContent = 'まだ、酒に直せる差は出ていません';
+    v.className = 'verdict';
+    document.getElementById('s').textContent =
+      'この研究で差がはっきり出はじめるのは、10時間を超えたあたりからです。';
+  } else {
+    v.innerHTML = `酒に直すと、およそ <span style="white-space:nowrap">血中 ${bac.toFixed(3)}%</span> 相当`;
+    v.className = 'verdict' + (bac >= 0.05 ? ' hi' : '');
+    const near = LEVELS.reduce((a,b) => Math.abs(b.h - h) < Math.abs(a.h - h) ? b : a);
+    document.getElementById('s').textContent =
+      (bac > 0.05
+        ? '論文の題にある「法で定められた酔いの水準」を、すでに越えたあたりです。'
+        : bac === 0.05
+          ? 'ちょうど、論文の題にある「法で定められた酔いの水準」と並んだところです。'
+          : 'まだ線の手前です。') + near.txt + '。';
+  }
+}
+
+document.getElementById('bars').innerHTML = LEVELS.map(l => `
+  <div class="barrow" data-h="${l.h}">
+    <span>${l.h}時間</span>
+    <div class="bg"><div class="fg" style="width:${l.bac/0.10*100}%"></div>
+      <div class="lab">${l.bac === 0 ? '差なし' : '血中 ' + l.bac.toFixed(2) + '% 相当'}</div></div>
+  </div>`).join('');
+
+function markBars(){
+  const h = hoursAwake();
+  document.querySelectorAll('.barrow').forEach(r => {
+    const on = h >= +r.dataset.h;
+    r.querySelector('.fg').classList.toggle('you', on);
+  });
+}
+
+document.getElementById('wake').oninput = () => { manual = null; draw(); markBars(); };
+document.getElementById('adj').oninput = e => { manual = +e.target.value; draw(); markBars(); };
+document.querySelectorAll('.barrow').forEach(r => r.onclick = () => {
+  manual = +r.dataset.h; draw(); markBars();
+});
+
+draw(); markBars();
+</script>
+</body>
+</html>

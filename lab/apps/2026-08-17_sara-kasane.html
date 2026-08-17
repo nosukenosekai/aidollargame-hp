@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>皿かさね — 流れてきた皿を、色ごとに積み直す</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; -webkit-tap-highlight-color:transparent; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:20px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:14px 0 8px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:16px; margin:0 0 16px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:18px; margin:14px 0; }
+  h2 { font-size:19px; margin:0 0 8px; }
+  .bar { display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; }
+  .stat { font-size:15px; color:#55524c; }
+  .stat b { font-size:22px; color:#1c1b19; font-variant-numeric:tabular-nums; }
+  .seg { display:flex; gap:6px; }
+  .seg button { font:inherit; font-size:14px; font-weight:700; padding:7px 12px; border-radius:9px;
+    border:1.5px solid #e5e2db; background:#fff; color:#55524c; cursor:pointer; }
+  .seg button.on { border-color:#2563eb; background:#f0f5ff; color:#2563eb; }
+
+  .lanes { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:14px; }
+  @media (min-width:520px){ .lanes { grid-template-columns:repeat(auto-fit,minmax(58px,1fr)); } }
+  .lane { border:2px solid #e5e2db; border-radius:10px; background:#faf8f3; padding:6px 4px 5px;
+    display:flex; flex-direction:column; justify-content:flex-end; gap:4px; min-height:104px; cursor:pointer; }
+  .lane.sel { border-color:#2563eb; background:#f0f5ff; }
+  .lane.done { border-color:#2f8f5b; background:#f1f8f3; }
+  .lane .slot { height:17px; }
+  .plate { height:17px; border-radius:9px; border-bottom:3px solid rgba(0,0,0,.22); }
+  .plate.lift { transform:translateY(-6px); box-shadow:0 3px 0 rgba(0,0,0,.12); }
+
+  .legend { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; font-size:13px; color:#55524c; }
+  .legend span { display:flex; align-items:center; gap:5px; }
+  .legend i { width:20px; height:11px; border-radius:6px; display:block; border-bottom:2px solid rgba(0,0,0,.22); }
+
+  .btns { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:11px; padding:13px 20px;
+    font:inherit; font-size:16px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:11px;
+    padding:13px 20px; font:inherit; font-size:16px; cursor:pointer; }
+  button:disabled { opacity:.4; cursor:default; }
+
+  .win { text-align:center; padding:18px 14px; border:2px solid #2f8f5b; border-radius:12px;
+    background:#f1f8f3; margin-top:14px; }
+  .win .n { font-size:38px; font-weight:800; letter-spacing:-.03em; color:#2f8f5b; line-height:1.2; }
+  .sub { font-size:15px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+  ol.rule { margin:6px 0 0; padding-left:1.3em; font-size:16px; }
+  ol.rule li { margin-bottom:2px; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<div class="demoflag">デモ — 架空の店「まわる寿司 みなと」。実在の店とは関係ありません</div>
+<div class="wrap">
+
+<h1>皿かさね</h1>
+<p class="lead">閉店後のバックヤード。色がばらばらに混ざった皿立てを、<b>色ごとに積み直す</b>だけのパズルです。動かせるのは各列の一番上の1枚だけ。</p>
+
+<div class="card">
+  <div class="bar">
+    <div class="stat">手数 <b id="moves">0</b></div>
+    <div class="seg">
+      <button id="d1" class="on">やさしい</button>
+      <button id="d2">ふつう</button>
+      <button id="d3">むずかしい</button>
+    </div>
+  </div>
+
+  <div class="lanes" id="lanes"></div>
+
+  <div class="legend" id="legend"></div>
+
+  <div class="btns">
+    <button class="ghost" id="undo">1手もどす</button>
+    <button class="ghost" id="reset">はじめから</button>
+    <button class="primary" id="newg">新しい皿立て</button>
+  </div>
+
+  <div class="win hidden" id="win">
+    <div class="sub">全部そろいました</div>
+    <div class="n" id="winN">—</div>
+    <div class="sub" id="winSub"></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>ルール</h2>
+  <ol class="rule">
+    <li>列をタップすると、一番上の皿が持ち上がります</li>
+    <li>置けるのは、<b>空の列</b>か、<b>一番上が同じ色の列</b>だけ</li>
+    <li>1列は4枚まで</li>
+    <li>すべての列が1色（または空）になれば終わり</li>
+  </ol>
+  <p class="src" style="margin-top:10px">配られる皿立ては、そろった状態から逆向きに手を戻して作っています。<b>どの盤面も必ず解けます</b>。詰んだと思ったら、それは手順の問題です。</p>
+</div>
+
+<div class="card">
+  <h2>これは何を真似たのか</h2>
+  <p style="margin:0">2026年8月17日のApp Store（日本）の無料アプリランキングで、<b>Bus Traffic Fever!（色分けの駐車パズル）が6〜8位、Block Blastが7〜8位</b>に入っていました。上位にカジュアルパズルが並んでいます。この「色を揃えるだけ・言葉がいらない・1手が軽い」型を、日本の絵で作り直したのがこの画面です。皿の色は回転寿司の価格帯そのままで、説明がなくても何をすればいいかが分かります。</p>
+  <p class="src" style="margin-top:10px">ランキングの確認元：<br>
+  <a href="https://applion.jp/iphone/rank/jp/">https://applion.jp/iphone/rank/jp/</a><br>
+  <a href="https://topappranking300.appios.net/">https://topappranking300.appios.net/</a></p>
+  <div class="field">
+    <b>ひとこと。</b>この型が世界中で当たり続けているのは、<b>ルールの説明がいらない</b>からです。色が混ざっている、揃えたい。それだけで人は手を動かします。自社の画面に説明文を3行書きたくなったときは、代わりに「見ただけで次に何をするか分かる絵」にできないかを先に考えてください。
+  </div>
+</div>
+
+</div>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+
+  var COLORS = [
+    { c:'#d1453f', name:'赤皿',  yen:'110円' },
+    { c:'#2563eb', name:'青皿',  yen:'165円' },
+    { c:'#e0a800', name:'黄皿',  yen:'220円' },
+    { c:'#2f8f5b', name:'緑皿',  yen:'330円' },
+    { c:'#33312e', name:'黒皿',  yen:'550円' },
+    { c:'#9c5bb5', name:'紫皿',  yen:'660円' }
+  ];
+  var CAP = 4;
+  var LEVELS = { d1:{ colors:4, empty:2 }, d2:{ colors:5, empty:2 }, d3:{ colors:6, empty:2 } };
+  var level = 'd1';
+
+  var lanes = [], start = [], history = [], sel = -1, moves = 0, won = false;
+
+  function clone(s){ return s.map(function(l){ return l.slice(); }); }
+
+  function solved(state){
+    return state.every(function(l){
+      if (l.length === 0) return true;
+      if (l.length !== CAP) return false;
+      return l.every(function(v){ return v === l[0]; });
+    });
+  }
+
+  function generate(){
+    var cfg = LEVELS[level];
+    var st = [];
+    for (var i = 0; i < cfg.colors; i++) {
+      var l = [];
+      for (var j = 0; j < CAP; j++) l.push(i);
+      st.push(l);
+    }
+    for (var e = 0; e < cfg.empty; e++) st.push([]);
+
+    // そろった状態から「逆向きの手」だけを積む＝必ず解ける盤面になる
+    var tries = 0, done = 0, target = 120 + cfg.colors * 40;
+    while (done < target && tries < target * 40) {
+      tries++;
+      var xi = Math.floor(Math.random() * st.length);
+      var X = st[xi];
+      if (X.length === 0) continue;
+      var p = X[X.length-1];
+      // 逆手が成立する条件：この皿を戻したとき、元の手が合法だったこと
+      if (!(X.length === 1 || X[X.length-2] === p)) continue;
+      var cand = [];
+      for (var yi = 0; yi < st.length; yi++) {
+        if (yi !== xi && st[yi].length < CAP) cand.push(yi);
+      }
+      if (!cand.length) continue;
+      var y = cand[Math.floor(Math.random() * cand.length)];
+      X.pop();
+      st[y].push(p);
+      done++;
+    }
+    if (solved(st)) return generate();
+    return st;
+  }
+
+  function draw(){
+    var host = $('lanes');
+    host.innerHTML = '';
+    lanes.forEach(function(l, i){
+      var d = document.createElement('div');
+      d.className = 'lane'
+        + (i === sel ? ' sel' : '')
+        + ((l.length === CAP && l.every(function(v){ return v === l[0]; })) ? ' done' : '');
+      for (var s = 0; s < CAP - l.length; s++) {
+        var sp = document.createElement('div'); sp.className = 'slot'; d.appendChild(sp);
+      }
+      l.forEach(function(v, j){
+        var p = document.createElement('div');
+        p.className = 'plate' + (i === sel && j === l.length-1 ? ' lift' : '');
+        p.style.background = COLORS[v].c;
+        d.appendChild(p);
+      });
+      d.onclick = function(){ tap(i); };
+      host.appendChild(d);
+    });
+    $('moves').textContent = moves;
+    $('undo').disabled = history.length === 0 || won;
+
+    var lg = $('legend'); lg.innerHTML = '';
+    var used = LEVELS[level].colors;
+    for (var k = 0; k < used; k++) {
+      var s = document.createElement('span');
+      s.innerHTML = '<i style="background:' + COLORS[k].c + '"></i>' + COLORS[k].yen;
+      lg.appendChild(s);
+    }
+  }
+
+  function tap(i){
+    if (won) return;
+    if (sel === -1) {
+      if (lanes[i].length === 0) return;
+      sel = i; draw(); return;
+    }
+    if (sel === i) { sel = -1; draw(); return; }
+    var from = lanes[sel], to = lanes[i];
+    var p = from[from.length-1];
+    if (to.length < CAP && (to.length === 0 || to[to.length-1] === p)) {
+      history.push(clone(lanes));
+      from.pop(); to.push(p);
+      moves++;
+      sel = -1;
+      draw();
+      if (solved(lanes)) finish();
+    } else {
+      // 置けない列を選んだら、そちらを持ち上げ直す
+      sel = (lanes[i].length ? i : -1);
+      draw();
+    }
+  }
+
+  function finish(){
+    won = true;
+    $('win').classList.remove('hidden');
+    $('winN').textContent = moves + ' 手';
+    $('winSub').textContent = '「はじめから」で同じ皿立てをもう一度やれます。もっと短い手数で終われるはずです。';
+    draw();
+  }
+
+  function newGame(){
+    lanes = generate();
+    start = clone(lanes);
+    history = []; sel = -1; moves = 0; won = false;
+    $('win').classList.add('hidden');
+    draw();
+  }
+
+  $('undo').onclick = function(){
+    if (!history.length || won) return;
+    lanes = history.pop();
+    moves = Math.max(0, moves - 1);
+    sel = -1; draw();
+  };
+  $('reset').onclick = function(){
+    lanes = clone(start); history = []; sel = -1; moves = 0; won = false;
+    $('win').classList.add('hidden');
+    draw();
+  };
+  $('newg').onclick = newGame;
+
+  ['d1','d2','d3'].forEach(function(id){
+    $(id).onclick = function(){
+      level = id;
+      ['d1','d2','d3'].forEach(function(o){ $(o).className = (o === id ? 'on' : ''); });
+      newGame();
+    };
+  });
+
+  newGame();
+})();
+</script>
+</body>
+</html>

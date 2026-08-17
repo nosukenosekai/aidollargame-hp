@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>んの手前 — しりとりと一筆書きを、同じ盤の上で同時にやる</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; -webkit-tap-highlight-color:transparent; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:20px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:14px 0 8px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:16px; margin:0 0 16px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:18px; margin:14px 0; }
+  h2 { font-size:19px; margin:0 0 8px; }
+  .bar { display:flex; justify-content:space-between; align-items:baseline; gap:10px; flex-wrap:wrap; }
+  .stat { font-size:15px; color:#55524c; }
+  .stat b { font-size:24px; color:#2563eb; font-variant-numeric:tabular-nums; }
+
+  .grid { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-top:12px; }
+  .cell { aspect-ratio:1/1; border:2px solid #e5e2db; border-radius:10px; background:#fff;
+    display:flex; align-items:center; justify-content:center; cursor:pointer; padding:2px;
+    font-size:15px; font-weight:700; color:#1c1b19; line-height:1.15; text-align:center;
+    font:inherit; letter-spacing:-.02em; }
+  .cell span { font-size:15px; font-weight:700; white-space:nowrap; }
+  .cell.len4 span { font-size:12px; letter-spacing:-.04em; }
+  .cell.on   { border-color:#2563eb; background:#e8f0ff; color:#1d4fd0; }
+  .cell.cur  { border-color:#1c1b19; background:#1c1b19; color:#fff; }
+  .cell.next { border-color:#2563eb; box-shadow:inset 0 0 0 3px #dce8ff; }
+  .cell.best { border-color:#2f8f5b; background:#eef7f1; color:#1f6b43; }
+  .cell.dead { opacity:.45; }
+
+  .chain { font-size:15px; color:#55524c; margin-top:12px; min-height:28px; overflow-wrap:anywhere; }
+  .chain b { color:#1c1b19; }
+  .msg { margin-top:10px; padding:12px 14px; border-radius:11px; font-size:16px; }
+  .msg.stop { background:#fff6f0; border:2px solid #c2410c; color:#7c3a12; }
+  .msg.end  { background:#f0f5ff; border:2px solid #2563eb; color:#1d4fd0; }
+
+  .btns { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:11px; padding:13px 20px;
+    font:inherit; font-size:16px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:11px;
+    padding:13px 20px; font:inherit; font-size:16px; cursor:pointer; }
+  button:disabled { opacity:.4; cursor:default; }
+
+  .sub { font-size:15px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+  ol.rule { margin:6px 0 0; padding-left:1.3em; font-size:16px; }
+  ol.rule li { margin-bottom:2px; }
+</style>
+</head>
+<body>
+<div class="demoflag">デモ — 盤は毎回その場で作っています。同じ盤は二度と出ません</div>
+<div class="wrap">
+
+<h1>んの手前</h1>
+<p class="lead">しりとりと一筆書きを、同じ盤の上で同時にやります。<b>となりのマスへ、しりとりでつながるときだけ進めます。</b>一度通ったマスは戻れません。「ん」で終わる言葉に入ったら、そこで打ち止めです。</p>
+
+<div class="card">
+  <div class="bar">
+    <div class="stat">つないだマス <b id="cnt">0</b></div>
+    <div class="stat" id="bestlab">この盤の最長 <b id="best">—</b></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <p class="chain" id="chain">好きなマスから始めてください。</p>
+  <div id="msgbox"></div>
+  <div class="btns">
+    <button class="ghost" id="undo">1つもどす</button>
+    <button class="ghost" id="retry">同じ盤でやり直す</button>
+    <button class="ghost" id="show">最長を見せる</button>
+    <button class="primary" id="newg">新しい盤</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>ルール</h2>
+  <ol class="rule">
+    <li>どのマスから始めてもかまいません</li>
+    <li>次に進めるのは<b>上下左右のとなり</b>だけ。ななめは進めません</li>
+    <li>今の言葉の最後の文字と、次の言葉の最初の文字が同じであること</li>
+    <li>一度通ったマスには戻れません</li>
+    <li>「ん」で終わる言葉に入ったら、そのマスまでで終わりです</li>
+  </ol>
+  <p class="src" style="margin-top:10px">進めるマスは青いふちで示しています。「最長を見せる」を押すと、この盤で理論上いちばん長くつなげる道を緑で表示します。自分の記録と比べてみてください。</p>
+</div>
+
+<div class="card">
+  <h2>これは何を真似たのか</h2>
+  <p style="margin:0">2026年8月17日のApp Store（日本）の無料アプリランキングで、<b>3位に新作パズル Meowdoku!</b> が入っていました。数独とマインスイーパという、みんながすでに知っている2つのルールを<b>1つの盤に重ねた</b>だけのゲームです。新しく覚えることがないのに、頭の使い方だけが新しくなる。同じランキングには<b>23位に漢字分解パズル</b>もあり、日本語を知っている人にしか遊べないものが上位に居座っています。</p>
+  <p style="margin:8px 0 0">この2つを足して作ったのがこの画面です。重ねたルールは<b>しりとり</b>と<b>一筆書き</b>。どちらも説明のいらない遊びですが、同時にやると、先を読まないとすぐ行き止まります。</p>
+  <p class="src" style="margin-top:10px">ランキングの確認元：<br>
+  <a href="https://applion.jp/iphone/rank/jp/">https://applion.jp/iphone/rank/jp/</a><br>
+  <a href="https://topappranking300.appios.net/">https://topappranking300.appios.net/</a></p>
+  <div class="field">
+    <b>ひとこと。</b>当たっている新作は、新しいルールを発明していません。<b>すでに全員が知っているものを2つ、重ねているだけ</b>です。ゼロから何かを考えるより、自分の商売でお客さんがもう知っている手順を2つ持ってきて、重ねられないかを考えたほうが早い。覚え直しがいらないものは、それだけで強い。
+  </div>
+</div>
+
+</div>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+
+  var WORDS = (
+    'あさひ あめ あり あたま あき ' +
+    'いす いぬ いし いえ いと ' +
+    'うみ うし うた うま うどん ' +
+    'えき えさ えほん ' +
+    'おかね おと おに おかし ' +
+    'かさ かめ かた かがみ かま ' +
+    'きつね きり きた きもの きし きりん ' +
+    'くさ くつ くま くち くも ' +
+    'けむり けさ けいと ' +
+    'こま こおり こと こめ こな ' +
+    'さかな さら さとう さめ ' +
+    'しま しろ しお しか しる ' +
+    'すな すみ すいか すもも ' +
+    'せみ せかい せなか ' +
+    'そと そこ そら ' +
+    'たこ たけ たな たいこ ' +
+    'ちり ちから ちきゅう ' +
+    'つき つち つめ つな つくえ ' +
+    'てら てがみ てんき てあし ' +
+    'とり とけい とうふ とし とも ' +
+    'なつ なみ なす なわ ' +
+    'にく にわ にもつ にほん ' +
+    'ぬの ぬま ' +
+    'ねこ ねつ ねずみ ' +
+    'のり のはら のこぎり ' +
+    'はし はな はり はこ はた ' +
+    'ひかり ひる ひも ひたい ' +
+    'ふね ふゆ ふえ ふく ふた ふとん ' +
+    'へや へそ ' +
+    'ほし ほね ほのお ほうき ' +
+    'まち まめ まくら まつ ' +
+    'みち みみ みなと みかん ' +
+    'むし むら むね ' +
+    'めがね めだま ' +
+    'もり もち もも もぐら ' +
+    'やま やね やさい ' +
+    'ゆき ゆめ ゆか ' +
+    'よる よこ ようかん ' +
+    'らいおん ' +
+    'るす るすばん ' +
+    'れきし れんこん ' +
+    'ろうそく ' +
+    'わに わた ' +
+    'りす りょうり りぼん'
+  ).split(' ').filter(Boolean);
+
+  var last  = function(w){ return w.charAt(w.length-1); };
+  var head  = function(w){ return w.charAt(0); };
+  var isEnd = function(w){ return last(w) === 'ん'; };
+
+  var BY_HEAD = {};
+  WORDS.forEach(function(w){ (BY_HEAD[head(w)] = BY_HEAD[head(w)] || []).push(w); });
+
+  var N = 5, SIZE = N * N;
+  function nbrs(i){
+    var r = Math.floor(i / N), c = i % N, out = [];
+    if (r > 0) out.push(i - N);
+    if (r < N-1) out.push(i + N);
+    if (c > 0) out.push(i - 1);
+    if (c < N-1) out.push(i + 1);
+    return out;
+  }
+  function shuffle(a){
+    for (var i = a.length-1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+    return a;
+  }
+
+  // ---- 盤づくり：先に「通れる道」を1本つくり、その上にしりとりを敷く ----
+  function makePath(target){
+    var best = null;
+    for (var attempt = 0; attempt < 60; attempt++) {
+      var startCell = Math.floor(Math.random()*SIZE);
+      var seen = {}, path = [startCell]; seen[startCell] = 1;
+      while (path.length < target) {
+        var cur = path[path.length-1];
+        var open = shuffle(nbrs(cur).filter(function(x){ return !seen[x]; }));
+        if (!open.length) break;
+        seen[open[0]] = 1; path.push(open[0]);
+      }
+      if (!best || path.length > best.length) best = path;
+      if (best.length >= target) break;
+    }
+    return best;
+  }
+
+  function layChain(path){
+    var board = {}, used = {};
+    function fill(k){
+      if (k >= path.length) return true;
+      var pool;
+      if (k === 0) pool = WORDS.filter(function(w){ return !isEnd(w); });
+      else {
+        var need = last(board[path[k-1]]);
+        pool = (BY_HEAD[need] || []).filter(function(w){ return !isEnd(w); });
+      }
+      pool = shuffle(pool.slice());
+      for (var i = 0; i < pool.length; i++) {
+        var w = pool[i];
+        if (used[w]) continue;
+        // 行き止まりの文字は避ける（最後の1マスだけ許す）
+        if (k < path.length-1) {
+          var nx = (BY_HEAD[last(w)] || []).filter(function(x){ return !isEnd(x) && !used[x] && x !== w; });
+          if (!nx.length) continue;
+        }
+        used[w] = 1; board[path[k]] = w;
+        if (fill(k+1)) return true;
+        delete used[w]; delete board[path[k]];
+      }
+      return false;
+    }
+    return fill(0) ? { board:board, used:used } : null;
+  }
+
+  function makeBoard(){
+    for (var t = 0; t < 40; t++) {
+      var path = makePath(16);
+      if (!path || path.length < 11) continue;
+      var laid = layChain(path);
+      if (!laid) continue;
+      var board = laid.board, used = laid.used;
+      var rest = [];
+      for (var i = 0; i < SIZE; i++) if (!(i in board)) rest.push(i);
+      var pool = shuffle(WORDS.filter(function(w){ return !used[w]; }));
+      var traps = shuffle(pool.filter(isEnd)), plain = pool.filter(function(w){ return !isEnd(w); });
+      var nTrap = Math.min(traps.length, Math.max(2, Math.round(rest.length * 0.35)));
+      var give = shuffle(traps.slice(0, nTrap).concat(plain.slice(0, rest.length - nTrap)));
+      if (give.length < rest.length) continue;
+      rest.forEach(function(cell, k){ board[cell] = give[k]; });
+      var arr = [];
+      for (var j = 0; j < SIZE; j++) arr.push(board[j]);
+      return arr;
+    }
+    return null;
+  }
+
+  // ---- この盤の最長経路（総当たり・上限つき） ----
+  function longest(cells){
+    var bestPath = [], nodes = 0, CAP = 400000, capped = false;
+    var seen = new Array(SIZE).fill(false);
+    function dfs(i, depth, path){
+      nodes++;
+      if (nodes > CAP) { capped = true; return; }
+      if (depth > bestPath.length) bestPath = path.slice();
+      if (isEnd(cells[i])) return;
+      var need = last(cells[i]);
+      var ns = nbrs(i);
+      for (var k = 0; k < ns.length; k++) {
+        var j = ns[k];
+        if (seen[j] || head(cells[j]) !== need) continue;
+        seen[j] = true; path.push(j);
+        dfs(j, depth+1, path);
+        path.pop(); seen[j] = false;
+        if (capped) return;
+      }
+    }
+    for (var s = 0; s < SIZE; s++) {
+      seen[s] = true;
+      dfs(s, 1, [s]);
+      seen[s] = false;
+      if (capped) break;
+    }
+    return { path:bestPath, capped:capped };
+  }
+
+  // ---- 状態 ----
+  var cells = [], route = [], bestInfo = null, showingBest = false, finished = false;
+
+  function legalNext(){
+    if (!route.length) return [];
+    var cur = route[route.length-1];
+    if (isEnd(cells[cur])) return [];
+    var need = last(cells[cur]);
+    return nbrs(cur).filter(function(j){
+      return route.indexOf(j) === -1 && head(cells[j]) === need;
+    });
+  }
+
+  function draw(){
+    var host = $('grid'); host.innerHTML = '';
+    var nx = legalNext();
+    var bp = (showingBest && bestInfo) ? bestInfo.path : [];
+    cells.forEach(function(w, i){
+      var b = document.createElement('button');
+      var cls = 'cell' + (w.length >= 4 ? ' len4' : '');
+      var pos = route.indexOf(i);
+      if (bp.indexOf(i) !== -1) cls += ' best';
+      else if (pos === route.length-1 && pos !== -1) cls += ' cur';
+      else if (pos !== -1) cls += ' on';
+      else if (route.length && nx.indexOf(i) !== -1) cls += ' next';
+      else if (route.length) cls += ' dead';
+      b.className = cls;
+      b.innerHTML = '<span>' + w + '</span>';
+      b.onclick = function(){ tap(i); };
+      host.appendChild(b);
+    });
+
+    $('cnt').textContent = route.length;
+    $('chain').innerHTML = route.length
+      ? route.map(function(i, k){ return (k === route.length-1 ? '<b>' + cells[i] + '</b>' : cells[i]); }).join(' → ')
+      : '好きなマスから始めてください。';
+    $('undo').disabled = route.length === 0;
+
+    var box = $('msgbox'); box.innerHTML = '';
+    if (route.length) {
+      var cur = route[route.length-1];
+      if (isEnd(cells[cur])) {
+        box.innerHTML = '<div class="msg stop">「' + cells[cur] + '」で「ん」。ここで打ち止めです。'
+          + route.length + ' マスつなぎました。</div>';
+        finished = true;
+      } else if (!nx.length) {
+        box.innerHTML = '<div class="msg end">進める先がなくなりました。' + route.length + ' マスです。</div>';
+        finished = true;
+      } else { finished = false; }
+    }
+  }
+
+  function tap(i){
+    if (showingBest) { showingBest = false; }
+    if (!route.length) { route = [i]; draw(); return; }
+    if (finished) return;
+    var pos = route.indexOf(i);
+    if (pos !== -1) {                    // 通った道を押したらそこまで戻る
+      route = route.slice(0, pos+1);
+      draw(); return;
+    }
+    if (legalNext().indexOf(i) === -1) return;
+    route.push(i);
+    draw();
+  }
+
+  function newGame(){
+    var b = null, guard = 0;
+    while (!b && guard++ < 8) b = makeBoard();
+    if (!b) { $('chain').textContent = '盤を作れませんでした。「新しい盤」をもう一度押してください。'; return; }
+    cells = b;
+    route = []; showingBest = false; finished = false;
+    $('best').textContent = '…';
+    draw();
+    setTimeout(function(){
+      bestInfo = longest(cells);
+      $('best').textContent = bestInfo.path.length + ' マス';
+      $('bestlab').innerHTML = 'この盤の最長 <b id="best">' + bestInfo.path.length + ' マス</b>'
+        + (bestInfo.capped ? '<span class="src">（探索打ち切り。これ以上ある可能性あり）</span>' : '');
+    }, 20);
+  }
+
+  $('undo').onclick = function(){ if (route.length) { route.pop(); showingBest = false; finished = false; draw(); } };
+  $('retry').onclick = function(){ route = []; showingBest = false; finished = false; draw(); };
+  $('show').onclick = function(){ showingBest = !showingBest; draw(); };
+  $('newg').onclick = newGame;
+
+  newGame();
+})();
+</script>
+</body>
+</html>

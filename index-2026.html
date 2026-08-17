@@ -351,31 +351,28 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
   .nav-toggle{display:block;}
 }
 
-/* ---------- ヒーロー（動画=alation式 / 文字=ライブHPのまま） ---------- */
-.hero{position:relative;min-height:min(88vh,780px);display:flex;align-items:center;justify-content:center;background:#0b0e16;overflow:hidden;}
+/* ---------- ヒーロー（明るい実写動画+白の紗。全体のトーンに合わせる） ---------- */
+.hero{position:relative;min-height:min(84vh,720px);display:flex;align-items:center;justify-content:center;background:#f4f5f7;overflow:hidden;}
 .hero-media{position:absolute;inset:0;overflow:hidden;}
 .hero-media video{width:100%;height:100%;object-fit:cover;object-position:center;}
-.hero-media::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(6,9,18,0.28) 0%,rgba(6,9,18,0.7) 100%);}
+.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.68) 0%,rgba(250,250,252,0.8) 100%);}
 .hero-body{position:relative;max-width:1080px;margin:0 auto;padding:120px 24px 110px;width:100%;text-align:center;}
-.hero-eyebrow{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:0.24em;color:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;gap:0.7rem;margin-bottom:1.6rem;}
-.hero-eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);animation:heroPulse 2.4s ease-in-out infinite;}
-@keyframes heroPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.45;transform:scale(0.8);}}
-.hero h1{font-family:var(--font-display);font-size:clamp(2.1rem,6.6vw,5.6rem);font-weight:900;line-height:1.22;letter-spacing:-0.02em;white-space:nowrap;color:#fff;}
-.hero h1 ruby rt{font-size:0.42em;font-weight:500;opacity:0.85;}
-.hero h1 .em{color:inherit;}
-.hero h1 .em.hl{background:linear-gradient(180deg,transparent 0,transparent 60%,#ffe45c 60%,#ffd84a 84%,transparent 84%);}
-.hero p.hero-sub{color:rgba(255,255,255,0.92);font-size:1.05rem;line-height:2.1;margin:2.2rem auto 0;max-width:640px;}
+.hero h1{font-family:var(--font-display);font-size:clamp(2.8rem,8.4vw,6rem);font-weight:900;line-height:1.15;letter-spacing:-0.02em;color:var(--ink);}
+.hero h1 .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757;}
+.hero h1 .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757;}
+.hero .hero-tag{font-family:var(--font-display);color:var(--ink);font-size:clamp(1.05rem,2.4vw,1.5rem);font-weight:900;letter-spacing:0.02em;margin-top:1.8rem;}
+.hero .hero-tag ruby rt{font-size:0.42em;font-weight:500;}
+.hero .hero-tag .hl{background:linear-gradient(180deg,transparent 0,transparent 60%,#ffe45c 60%,#ffd84a 84%,transparent 84%);}
 .hero-cta{display:flex;gap:3rem;flex-wrap:wrap;margin-top:2.8rem;justify-content:center;}
-.cta-text{position:relative;color:#fff;font-size:0.92rem;font-weight:700;letter-spacing:0.14em;padding-bottom:0.65rem;}
-.cta-text::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:rgba(255,255,255,0.5);transition:background 0.3s var(--ease);}
+.cta-text{position:relative;color:var(--ink);font-size:0.92rem;font-weight:700;letter-spacing:0.14em;padding-bottom:0.65rem;}
+.cta-text::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:#c2c8d6;transition:background 0.3s var(--ease);}
 .cta-text.main::after{background:var(--blue);}
-.cta-text:hover::after{background:#fff;}
-.scroll-cue{position:absolute;right:32px;bottom:24px;display:flex;align-items:center;gap:0.7rem;color:rgba(255,255,255,0.75);font-size:0.68rem;letter-spacing:0.24em;font-weight:700;}
-.scroll-cue i{display:block;width:1px;height:44px;background:rgba(255,255,255,0.5);position:relative;overflow:hidden;}
-.scroll-cue i::after{content:"";position:absolute;left:0;top:-44px;width:1px;height:44px;background:#fff;animation:cue 2.4s var(--ease) infinite;}
+.cta-text:hover::after{background:var(--ink);}
+.scroll-cue{position:absolute;right:32px;bottom:24px;display:flex;align-items:center;gap:0.7rem;color:var(--muted);font-size:0.68rem;letter-spacing:0.24em;font-weight:700;}
+.scroll-cue i{display:block;width:1px;height:44px;background:#c2c8d6;position:relative;overflow:hidden;}
+.scroll-cue i::after{content:"";position:absolute;left:0;top:-44px;width:1px;height:44px;background:var(--ink);animation:cue 2.4s var(--ease) infinite;}
 @keyframes cue{0%{transform:translateY(0)}60%{transform:translateY(88px)}100%{transform:translateY(88px)}}
 @media(max-width:900px){.scroll-cue{display:none;}}
-@media(max-width:720px){.hero h1{white-space:normal;font-size:clamp(1.9rem,8.4vw,2.6rem);line-height:1.4;letter-spacing:-0.01em;}.hero-eyebrow{font-size:0.68rem;letter-spacing:0.18em;}.hero p.hero-sub{font-size:0.92rem;line-height:1.95;}.hero p.hero-sub br{display:none;}}
 @media(prefers-reduced-motion:reduce){.hero-media video{display:none;}}
 /* AI研修の告知はヒーローから出して細い帯に */
 .notice{background:#fff;border-bottom:1px solid var(--line);}
@@ -668,13 +665,12 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 
 <section class="hero" id="hero">
   <div class="hero-media" aria-hidden="true">
-    <video src="hero-desk.mp4" muted autoplay loop playsinline preload="metadata"></video>
+    <video src="hero-office.mp4" muted autoplay loop playsinline preload="metadata"></video>
   </div>
   <div class="hero-body">
-    <div class="hero-eyebrow" data-rv="up" style="--d:100ms" data-edit="hero-eyebrow">AIで、人と人をつなぐ。</div>
-    <h1 data-rv="up" style="--d:240ms" data-edit="hero-title">AIで<span class="em">「<ruby>楽<rt>らく</rt></ruby>」</span>ではなく<br><span class="em hl">「<ruby>楽<rt>たの</rt></ruby>しい」</span>を考える</h1>
-    <p class="hero-sub" data-rv="up" style="--d:420ms" data-edit="hero-sub">仕事を「<ruby>楽<rt>らく</rt></ruby>」にすることが、私たちの目的ではありません。<br>人と人が本気で向き合える「<ruby>楽<rt>たの</rt></ruby>しい」現場を共に創る。<br>AIプロダクト開発と現場のAI活用支援を通じて、そんな舞台を創り上げます。</p>
-    <div class="hero-cta" data-rv="up" style="--d:640ms">
+    <h1 data-rv="up" style="--d:160ms">A<span class="heart-i">ı</span>dollargame</h1>
+    <p class="hero-tag" data-rv="up" style="--d:400ms" data-edit="hero-tagline">AIで「<ruby>楽<rt>らく</rt></ruby>」ではなく<span class="hl">「<ruby>楽<rt>たの</rt></ruby>しい」</span>を考える</p>
+    <div class="hero-cta" data-rv="up" style="--d:620ms">
       <a href="#contact" class="cta-text main">無料相談を予約する</a>
       <a href="shindan.html" class="cta-text">3分で無料AI診断</a>
     </div>
@@ -960,34 +956,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec sec--white" id="event">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-label" data-rv="up">Event</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms">イベント・登壇</h2>
-      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-    </div>
-    <div class="posts">
-      <a class="post" href="articles/nbc-kigyojuku-2026-07.html" data-rv="up" style="--d:0ms">
-        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/nbc-kigyojuku-2026-07-hero.jpg')"></div></div>
-        <div class="pbody">
-          <div class="meta-row"><span class="cat">登壇</span><span class="date">2026 / 07 / 16</span></div>
-          <div class="ptitle">東京NBC起業塾で「事業承継 × AI」を発表</div>
-          <div class="pdesc">社長の判断を会社の資産に変える『承継OS』の構想を発表しました。</div>
-        </div>
-      </a>
-      <a class="post" href="articles/nbc-2026-07.html" data-rv="up" style="--d:120ms">
-        <div class="pbody">
-          <div class="meta-row"><span class="cat">出演</span><span class="date">2026 / 09 / 23 公開予定</span></div>
-          <div class="ptitle">東京NBC公式YouTube番組に代表・佐藤が出演</div>
-          <div class="pdesc">メンバー紹介コーナーでAIdollargameの事業をインタビュー。秋分の日に公開予定です。</div>
-        </div>
-      </a>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="column">
+<section class="sec sec--white" id="column">
   <div class="wrap">
     <div class="sec-head">
       <div class="sec-label" data-rv="up">Column</div>
@@ -1025,7 +994,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec sec--white" id="news">
+<section class="sec" id="news">
   <div class="wrap">
     <div class="sec-head">
       <div class="sec-label" data-rv="up">News</div>
@@ -1056,7 +1025,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec" id="faq">
+<section class="sec sec--white" id="faq">
   <div class="wrap">
     <div class="sec-head">
       <div class="sec-label" data-rv="up">FAQ</div>
@@ -1104,7 +1073,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec sec--white" id="shiryo">
+<section class="sec" id="shiryo">
   <div class="wrap">
     <div class="sec-head">
       <div class="sec-label" data-rv="up">Free Download</div>
@@ -1131,7 +1100,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec" id="contact">
+<section class="sec sec--white" id="contact">
   <div class="wrap">
     <div class="sec-head">
       <div class="sec-label" data-rv="up">Contact</div>

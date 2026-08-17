@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三つ目の値段 — 誰も買わない3つ目が、あなたの選択を動かす</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .step { font-size:14px; color:#78746c; margin:0 0 4px; }
+  .plans { display:grid; gap:12px; margin-top:12px; }
+  .plan { text-align:left; border:2px solid #e5e2db; border-radius:12px; padding:16px; background:#fff;
+    cursor:pointer; font:inherit; color:#1c1b19; display:block; width:100%; }
+  .plan:hover { border-color:#2563eb; }
+  .plan .pn { font-size:17px; font-weight:700; }
+  .plan .pp { font-size:27px; font-weight:800; letter-spacing:-.03em; margin:2px 0; }
+  .plan .pd { font-size:15px; color:#55524c; line-height:1.6; }
+  .plan.mark { border-color:#2563eb; background:#f0f5ff; }
+  .plan.dim { opacity:.62; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:14px 22px; font:inherit; font-size:17px; cursor:pointer; }
+  .gap { text-align:center; padding:18px 14px; border:2px solid #2563eb; border-radius:12px;
+    background:#f0f5ff; margin-top:12px; }
+  .gap .n { font-size:34px; font-weight:800; letter-spacing:-.03em; color:#2563eb; line-height:1.25; }
+  .sub { font-size:16px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+  table { border-collapse:collapse; width:100%; font-size:15px; margin-top:8px; }
+  th,td { border-bottom:1px solid #eceae4; padding:8px 6px; text-align:left; }
+  td.num { text-align:right; font-weight:700; }
+  .bar { height:26px; background:#efece5; border-radius:6px; overflow:hidden; display:flex; margin:4px 0; }
+  .bar i { display:block; height:100%; font-size:12px; color:#fff; text-align:center; line-height:26px; font-style:normal; }
+  .bar i.a { background:#2563eb; }
+  .bar i.d { background:#9db4e8; }
+  .bar i.b { background:#b8b2a6; }
+  label { display:block; font-size:15px; font-weight:600; margin-top:10px; }
+  input[type=number] { font:inherit; font-size:17px; padding:11px 12px; width:100%;
+    border:1.5px solid #e5e2db; border-radius:10px; background:#fff; color:#1c1b19; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<div class="demoflag">実験室の一本 — 1982年からある選択の実験を、あなた自身で1回やります</div>
+<div class="wrap">
+
+<h1>三つ目の値段</h1>
+<p class="lead">2つから選ぶ。次に、<b>ほぼ誰も選ばない3つ目</b>を足して、また選ぶ。それだけで人の選択は動きます。動かされる側を先に体験してから、動かす側の使い方を見ます。</p>
+
+<div class="card" id="q1">
+  <p class="step">1 / 4　家電量販店にいます</p>
+  <h2>どちらの電子レンジを買いますか</h2>
+  <div class="plans" id="q1p"></div>
+</div>
+
+<div class="card hidden" id="q2">
+  <p class="step">2 / 4　同じ店に、もう1つ型番がありました</p>
+  <h2>3つの中から、どれを買いますか</h2>
+  <div class="plans" id="q2p"></div>
+</div>
+
+<div class="card hidden" id="q3">
+  <p class="step">3 / 4　こんどは自分の会社の買い物です</p>
+  <h2>事務所の清掃、どちらを契約しますか</h2>
+  <div class="plans" id="q3p"></div>
+</div>
+
+<div class="card hidden" id="q4">
+  <p class="step">4 / 4　見積書がもう1枚届きました</p>
+  <h2>3つの中から、どれを契約しますか</h2>
+  <div class="plans" id="q4p"></div>
+</div>
+
+<div class="card hidden" id="res">
+  <h2>種明かし</h2>
+  <p style="margin:0">足した3つ目は、どちらの回も<b>「高いほうの案と中身はほぼ同じで、値段だけ高い」</b>という、まともな人なら選ばない選択肢でした。高いほうの案に一方的に負けていて、安いほうの案には負けていない。この形を、1982年の論文は<b>非対称に支配された選択肢</b>と呼びました。</p>
+
+  <div class="gap">
+    <div class="sub">あなたの2回</div>
+    <div class="n" id="verdict">—</div>
+    <div class="sub" id="verdictSub"></div>
+  </div>
+
+  <h2 style="margin-top:22px">1人ではなく、集団で測るとこうなる</h2>
+  <p style="margin:0 0 4px">電子レンジで同じことを2群に分けて測った結果です（Ariely &amp; Hayout, 1991。Ariely &amp; Wallsten の論文中に報告）。</p>
+  <p class="src" style="margin:8px 0 2px">2つだけ見せた群</p>
+  <div class="bar"><i class="a" style="width:40%">A 40%</i><i class="b" style="width:60%">B 60%</i></div>
+  <p class="src" style="margin:8px 0 2px">3つ目（Aとほぼ同じで高いだけのA')を足した群</p>
+  <div class="bar"><i class="a" style="width:56%">A 56%</i><i class="d" style="width:8%">8%</i><i class="b" style="width:36%">B 36%</i></div>
+  <p style="margin:10px 0 0">3つ目を選んだのは8%。ほとんど誰も買っていません。それでも高いほうのAは<b>40%から56%へ、16ポイント増えました</b>。選択肢を1つ足しただけで、他の2つの比率が動いています。</p>
+  <p class="src" style="margin-top:10px">初出：Huber, J., Payne, J. W., &amp; Puto, C. (1982). Adding Asymmetrically Dominated Alternatives: Violations of Regularity and the Similarity Hypothesis. <i>Journal of Consumer Research</i>, 9(1), 90–98.<br>
+  <a href="https://academic.oup.com/jcr/article/9/1/90/1839380">https://academic.oup.com/jcr/article/9/1/90/1839380</a><br>
+  上の電子レンジの数字：Ariely, D., &amp; Wallsten, T. S. Seeking Subjective Dominance in Multidimensional Space: An Explanation of the Asymmetric Dominance Effect.<br>
+  <a href="https://erationality.media.mit.edu/papers/dan/eRational/Context%20effects/ade.pdf">https://erationality.media.mit.edu/papers/dan/eRational/Context effects/ade.pdf</a></p>
+
+  <h2 style="margin-top:22px">自分の料金表で置いてみる</h2>
+  <p style="margin:0">売りたいほうのプランと、もう一方の価格を入れてください。3つ目をどこに置けばいいかだけ出ます。</p>
+  <label>売りたいプランの価格（円・税込）<input type="number" id="ia" value="48000" min="1" step="100"></label>
+  <label>もう一方（安いほう）の価格（円・税込）<input type="number" id="ib" value="28000" min="1" step="100"></label>
+  <div class="btns"><button class="primary" id="calc">3つ目を出す</button></div>
+  <div id="out" class="hidden" style="margin-top:10px"></div>
+
+  <div class="field">
+    <b>中小企業の行動に直すと。</b>プランが2つしかない料金表は、客に「高いか安いか」だけを考えさせます。売りたいプランと<b>中身をほぼ同じにして、値段だけ高い3つ目</b>を並べる。3つ目は売れなくてかまいません。仕事はそこではなく、売りたいプランを「得に見せる」ことです。逆に、自分が買う側のときは——見積が3枚来たら、真ん中が最初から本命でないかを疑ってください。
+  </div>
+
+  <div class="btns"><button class="ghost" id="again">もう一度やる</button></div>
+</div>
+
+</div>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var yen = function(n){ return n.toLocaleString('ja-JP') + '円'; };
+
+  var SETS = {
+    micro2: [
+      {k:'A', n:'上位機',   p:'32,000円', d:'庫内26L／オーブン機能つき／国内メーカー'},
+      {k:'B', n:'普及機',   p:'19,800円', d:'庫内20L／あたため中心／国内メーカー'}
+    ],
+    micro3: [
+      {k:'A', n:'上位機',   p:'32,000円', d:'庫内26L／オーブン機能つき／国内メーカー'},
+      {k:'D', n:'上位機（別カラー）', p:'39,800円', d:'庫内26L／オーブン機能つき／国内メーカー'},
+      {k:'B', n:'普及機',   p:'19,800円', d:'庫内20L／あたため中心／国内メーカー'}
+    ],
+    clean2: [
+      {k:'A', n:'週2回プラン', p:'月48,000円', d:'床・水回り・ゴミ出し／2名体制'},
+      {k:'B', n:'週1回プラン', p:'月28,000円', d:'床・水回り・ゴミ出し／2名体制'}
+    ],
+    clean3: [
+      {k:'A', n:'週2回プラン', p:'月48,000円', d:'床・水回り・ゴミ出し／2名体制'},
+      {k:'D', n:'週2回プラン（土曜枠）', p:'月57,000円', d:'床・水回り・ゴミ出し／2名体制'},
+      {k:'B', n:'週1回プラン', p:'月28,000円', d:'床・水回り・ゴミ出し／2名体制'}
+    ]
+  };
+
+  var pick = {};
+
+  function render(hostId, set, onPick){
+    var host = $(hostId);
+    host.innerHTML = '';
+    set.forEach(function(o){
+      var b = document.createElement('button');
+      b.className = 'plan';
+      b.innerHTML = '<span class="pn">' + o.n + '</span>'
+                  + '<span class="pp">' + o.p + '</span>'
+                  + '<span class="pd">' + o.d + '</span>';
+      b.onclick = function(){ onPick(o.k); };
+      host.appendChild(b);
+    });
+  }
+
+  function step1(){
+    render('q1p', SETS.micro2, function(k){
+      pick.m2 = k;
+      $('q1').classList.add('hidden');
+      $('q2').classList.remove('hidden');
+      window.scrollTo(0,0);
+    });
+  }
+  function step2(){
+    render('q2p', SETS.micro3, function(k){
+      pick.m3 = k;
+      $('q2').classList.add('hidden');
+      $('q3').classList.remove('hidden');
+      window.scrollTo(0,0);
+    });
+  }
+  function step3(){
+    render('q3p', SETS.clean2, function(k){
+      pick.c2 = k;
+      $('q3').classList.add('hidden');
+      $('q4').classList.remove('hidden');
+      window.scrollTo(0,0);
+    });
+  }
+  function step4(){
+    render('q4p', SETS.clean3, function(k){
+      pick.c4 = k;
+      $('q4').classList.add('hidden');
+      show();
+      window.scrollTo(0,0);
+    });
+  }
+
+  function moved(before, after){
+    // 「安いほう」から「高いほう」に動いたか
+    return before === 'B' && (after === 'A' || after === 'D');
+  }
+
+  function show(){
+    $('res').classList.remove('hidden');
+    var m = moved(pick.m2, pick.m3), c = moved(pick.c2, pick.c4);
+    var n = (m?1:0) + (c?1:0);
+    var v, s;
+    if (n === 2) {
+      v = '2回とも、高いほうへ動きました';
+      s = '3つ目が出たとたん、あなたの選択は両方とも上に移りました。値段も中身も、1つも変わっていないのに。';
+    } else if (n === 1) {
+      v = '2回のうち1回、高いほうへ動きました';
+      s = (m ? '電子レンジのほうで動きました。' : '清掃契約のほうで動きました。') + '動かなかった回のほうが、実は普通です。この効果は「必ず動く」ものではなく、集団で数えると比率が変わる、という大きさで出ます。';
+    } else {
+      v = '2回とも、動きませんでした';
+      s = 'これで正解です。この効果は1人を必ず動かすものではありません。100人に見せると比率が10〜20ポイント動く、という強さです。下のグラフがその大きさです。';
+    }
+    if (pick.m3 === 'D' || pick.c4 === 'D') {
+      s += ' なお、あなたは3つ目そのものを選びました。実験でも8%の人がそうしています。';
+    }
+    $('verdict').textContent = v;
+    $('verdictSub').textContent = s;
+  }
+
+  $('calc').onclick = function(){
+    var a = parseInt($('ia').value, 10), b = parseInt($('ib').value, 10);
+    var out = $('out');
+    out.classList.remove('hidden');
+    if (!a || !b || a <= 0 || b <= 0) { out.innerHTML = '<p class="src">価格を2つとも入れてください。</p>'; return; }
+    if (a <= b) {
+      out.innerHTML = '<p class="src">売りたいプランのほうが安い場合、この形は使えません。3つ目は「売りたいプランより高くて中身が同じ」でなければ効きません。売りたいほうを高いプランにするか、2つの価格を入れ替えてください。</p>';
+      return;
+    }
+    var d1 = Math.round(a * 1.18 / 100) * 100;
+    var d2 = Math.round(a * 1.25 / 100) * 100;
+    out.innerHTML =
+      '<table>'
+      + '<tr><th>並べる順</th><th>価格</th><th>中身</th></tr>'
+      + '<tr><td>3つ目（おとり）</td><td class="num">' + yen(d1) + '〜' + yen(d2) + '</td><td>売りたいプランと<b>ほぼ同じ</b>。付け足すのは名前と枠だけ</td></tr>'
+      + '<tr><td>売りたいプラン</td><td class="num">' + yen(a) + '</td><td>ここが本命</td></tr>'
+      + '<tr><td>安いプラン</td><td class="num">' + yen(b) + '</td><td>そのまま</td></tr>'
+      + '</table>'
+      + '<p class="src" style="margin-top:8px">目安は売りたいプランの1.2倍前後。離しすぎると比べる対象にならず、近すぎると迷わせます。3つ目の中身を良くしてはいけません。良くすると、ただの上位プランになって効果が消えます。</p>';
+  };
+
+  $('again').onclick = function(){
+    pick = {};
+    ['q2','q3','q4','res'].forEach(function(id){ $(id).classList.add('hidden'); });
+    $('out').classList.add('hidden');
+    $('q1').classList.remove('hidden');
+    window.scrollTo(0,0);
+  };
+
+  step1(); step2(); step3(); step4();
+})();
+</script>
+</body>
+</html>

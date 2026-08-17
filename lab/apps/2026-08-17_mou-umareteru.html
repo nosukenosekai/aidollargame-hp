@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>もう生まれてる — 6年後のお客さんは、全員もう生まれています</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  label { display:block; font-size:15px; font-weight:600; margin-top:12px; }
+  input[type=number] { font:inherit; font-size:20px; font-weight:700; padding:12px; width:100%;
+    border:1.5px solid #e5e2db; border-radius:10px; background:#fff; color:#1c1b19; }
+  .seg { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+  .seg button { font:inherit; font-size:16px; font-weight:700; padding:12px 6px; border-radius:10px;
+    border:2px solid #e5e2db; background:#fff; color:#1c1b19; cursor:pointer; }
+  .seg button.on { border-color:#2563eb; background:#f0f5ff; color:#2563eb; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  .gap { text-align:center; padding:18px 14px; border:2px solid #2563eb; border-radius:12px;
+    background:#f0f5ff; margin-top:12px; }
+  .gap .n { font-size:44px; font-weight:800; letter-spacing:-.04em; color:#2563eb; line-height:1.15; }
+  .sub { font-size:16px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+  table { border-collapse:collapse; width:100%; font-size:15px; margin-top:10px; }
+  th,td { border-bottom:1px solid #eceae4; padding:9px 5px; text-align:left; }
+  th { font-size:13px; color:#78746c; font-weight:600; }
+  td.num { text-align:right; font-weight:700; font-variant-numeric:tabular-nums; }
+  tr.now td { background:#faf8f3; }
+  tr.last td { color:#2563eb; }
+  .rowbar { height:8px; background:#efece5; border-radius:4px; overflow:hidden; }
+  .rowbar i { display:block; height:100%; background:#2563eb; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<div class="demoflag">数字は厚生労働省 人口動態統計（確定数）の出生数そのままです。推計や予測は足していません</div>
+<div class="wrap">
+
+<h1>もう生まれてる</h1>
+<p class="lead">来年から6年後までに小学1年生になる子どもは、<b>今日すでに全員生まれています</b>。だから、これは予測ではありません。もう起きたことを、まだ来ていない年に並べ替えるだけです。</p>
+
+<div class="card">
+  <h2>あなたの商圏を1つだけ入れる</h2>
+  <label>いま、1学年あたり何人を相手にしていますか（教室の生徒数・店の来店客数など）
+    <input type="number" id="base" value="40" min="1" step="1"></label>
+  <label>1人あたりの月の単価（円）
+    <input type="number" id="tan" value="12000" min="0" step="100"></label>
+  <label>対象にしている学年</label>
+  <div class="seg">
+    <button id="s1" class="on">小1だけ</button>
+    <button id="s6">小1〜小6</button>
+  </div>
+  <div class="btns"><button class="primary" id="run">6年先まで進める</button></div>
+</div>
+
+<div class="card hidden" id="res">
+  <h2 id="rh">6年先の姿</h2>
+  <table>
+    <thead><tr><th>年度</th><th>対象の人数</th><th style="width:34%"></th><th style="text-align:right">月の売上</th></tr></thead>
+    <tbody id="tb"></tbody>
+  </table>
+  <div class="gap">
+    <div class="sub">2031年度は、2026年度の</div>
+    <div class="n" id="ratio">—</div>
+    <div class="sub" id="ratioSub"></div>
+  </div>
+  <p class="src" id="note" style="margin-top:12px"></p>
+
+  <h2 style="margin-top:22px">元にした数字</h2>
+  <p style="margin:0">全国の出生数です。すべて確定数で、これから変わることはありません。上の表は、この実数の比をあなたの人数に当てただけのものです。</p>
+  <table>
+    <thead><tr><th>生まれた年</th><th style="text-align:right">出生数</th><th>小1になる年度</th></tr></thead>
+    <tbody id="tb2"></tbody>
+  </table>
+  <p class="src" style="margin-top:10px">出典：厚生労働省「人口動態統計（確定数）」出生 表4-1 年次別にみた出生数<br>
+  <a href="https://www.e-stat.go.jp/dbview?sid=0003411595">https://www.e-stat.go.jp/dbview?sid=0003411595</a><br>
+  2024年（令和6年）の686,173人は「令和6年（2024）人口動態統計（確定数）の概況」より。<br>
+  <a href="https://www.mhlw.go.jp/toukei/saikin/hw/jinkou/kakutei24/index.html">https://www.mhlw.go.jp/toukei/saikin/hw/jinkou/kakutei24/index.html</a></p>
+
+  <p class="src"><b>言えないこと。</b>学年は4月から翌年3月生まれで区切りますが、上の表は暦年の出生数をそのまま学年に当てています（1年のうち1〜3月生まれのぶんがずれます）。全国の比を使っているので、あなたの地域の増減は入っていません。転入・転出、私立への進学、あなたの店のシェアの変化も入っていません。<b>入っているのは「全国で何人生まれたか」だけ</b>です。地域の実数が要るなら、市区町村ごとの出生数が同じ統計に載っています。</p>
+
+  <div class="field">
+    <b>中小企業の行動に直すと。</b>子ども相手の商売は、6年先の客数が今日わかる珍しい業種です。全国並みなら、いまと同じシェアのままでは売上が黙って2割前後減ります。埋め方は2つしかありません。<b>1人あたりの単価を上げる</b>か、<b>商圏の中でのシェアを上げる</b>か。人数が増えるのを待つ選択肢は、この表には無い。
+  </div>
+</div>
+
+</div>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  // 厚生労働省 人口動態統計（確定数）出生数。年 → 人数
+  var BIRTHS = {
+    2013:1029817, 2014:1003609, 2015:1005721, 2016:977242, 2017:946146,
+    2018:918400,  2019:865239,  2020:840835,  2021:811622, 2022:770759,
+    2023:727288,  2024:686173
+  };
+  // 暦年 y に生まれた子が小1になる年度（近似）
+  var ENTER = function(y){ return y + 7; };
+  var YEARS = [2026,2027,2028,2029,2030,2031];
+  var grades = 1;
+
+  var yen = function(n){ return Math.round(n).toLocaleString('ja-JP'); };
+  function man(n){
+    if (n >= 100000000) return (n/100000000).toFixed(2) + '億円';
+    return (n/10000).toFixed(1) + '万円';
+  }
+
+  // 年度 y における対象学年（小1〜小g）の出生数合計
+  function cohort(y, g){
+    var s = 0;
+    for (var k = 0; k < g; k++) {
+      var by = y - 7 - k;
+      if (!(by in BIRTHS)) return null;
+      s += BIRTHS[by];
+    }
+    return s;
+  }
+
+  $('s1').onclick = function(){ grades = 1; $('s1').className='on'; $('s6').className=''; };
+  $('s6').onclick = function(){ grades = 6; $('s6').className='on'; $('s1').className=''; };
+
+  $('run').onclick = function(){
+    var base = parseFloat($('base').value) || 0;
+    var tan  = parseFloat($('tan').value) || 0;
+    if (base <= 0) { $('base').focus(); return; }
+
+    var b0 = cohort(2026, grades);
+    var rows = YEARS.map(function(y){
+      var c = cohort(y, grades);
+      var r = c / b0;
+      return { y:y, r:r, n:base * (grades===1 ? r : r), c:c };
+    });
+    // 小1〜小6のときは、入力の「1学年あたり」を6学年ぶんに広げる
+    var mult = (grades === 6) ? 6 : 1;
+
+    var tb = $('tb'); tb.innerHTML = '';
+    var max = rows[0].n * mult;
+    rows.forEach(function(o, i){
+      var n = o.n * mult;
+      var tr = document.createElement('tr');
+      if (i === 0) tr.className = 'now';
+      if (i === rows.length-1) tr.className = 'last';
+      tr.innerHTML =
+        '<td>' + o.y + '年度' + (i===0 ? '<br><span class="src">いま</span>' : '') + '</td>'
+        + '<td class="num">' + n.toFixed(1) + ' 人</td>'
+        + '<td><span class="rowbar"><i style="width:' + (n/max*100).toFixed(1) + '%"></i></span></td>'
+        + '<td class="num">' + (tan > 0 ? man(n * tan) : '—') + '</td>';
+      tb.appendChild(tr);
+    });
+
+    var last = rows[rows.length-1].r;
+    $('ratio').textContent = (last*100).toFixed(0) + '%';
+    var drop = (1-last)*100;
+    var lostN = rows[0].n*mult - rows[rows.length-1].n*mult;
+    $('ratioSub').textContent = '6年で ' + drop.toFixed(0) + '% 減ります'
+      + (tan > 0 ? '。月の売上でいうと ' + man(lostN * tan) + ' が消えます。' : '。');
+    $('rh').textContent = (grades === 1 ? '小1だけを見たとき' : '小1〜小6を合わせたとき') + 'の6年先';
+    $('note').textContent = (grades === 1)
+      ? '2031年度に小1になるのは2024年生まれ。その686,173人は、もう生まれています。'
+      : '2031年度に小1〜小6になる子は、2019年から2024年に生まれた子です。全員もう生まれています。';
+
+    var tb2 = $('tb2'); tb2.innerHTML = '';
+    [2019,2020,2021,2022,2023,2024].forEach(function(y){
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + y + '年</td><td class="num">' + yen(BIRTHS[y]) + ' 人</td><td>'
+        + ENTER(y) + '年度</td>';
+      tb2.appendChild(tr);
+    });
+
+    $('res').classList.remove('hidden');
+    $('res').scrollIntoView({behavior:'smooth', block:'start'});
+  };
+})();
+</script>
+</body>
+</html>

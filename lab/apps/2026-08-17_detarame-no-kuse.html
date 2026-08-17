@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>でたらめの癖 — あなたが作った数字は、1桁目でばれる</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .inrow { display:flex; gap:10px; margin-top:10px; }
+  input[type=number] { font:inherit; font-size:22px; font-weight:700; padding:12px 12px; flex:1; min-width:0;
+    border:1.5px solid #e5e2db; border-radius:10px; background:#fff; color:#1c1b19; }
+  .chips { display:flex; flex-wrap:wrap; gap:7px; margin-top:12px; min-height:34px; }
+  .chip { font-size:15px; font-weight:700; background:#f0f5ff; border:1px solid #d5e2ff; color:#2563eb;
+    border-radius:8px; padding:3px 10px; }
+  .prog { display:flex; justify-content:space-between; font-size:14px; color:#78746c; margin-top:12px; }
+  .progbar { height:6px; background:#efece5; border-radius:3px; overflow:hidden; margin:6px 0 0; }
+  .progbar i { display:block; height:100%; background:#2563eb; transition:width .2s; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:14px 22px; font:inherit; font-size:17px; cursor:pointer; }
+  .gap { text-align:center; padding:18px 14px; border:2px solid #2563eb; border-radius:12px;
+    background:#f0f5ff; margin-top:12px; }
+  .gap .n { font-size:34px; font-weight:800; letter-spacing:-.03em; color:#2563eb; line-height:1.25; }
+  .sub { font-size:16px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+  .grid { display:grid; grid-template-columns:22px 1fr 52px; gap:6px 8px; align-items:center; margin-top:10px; }
+  .grid .d { font-weight:800; font-size:16px; text-align:center; }
+  .track { background:#efece5; border-radius:5px; height:22px; position:relative; overflow:hidden; }
+  .track i { position:absolute; left:0; top:0; height:100%; display:block; border-radius:5px; }
+  .track i.mine { background:#2563eb; }
+  .track i.law { background:#b8b2a6; }
+  .track .lawline { position:absolute; top:-2px; bottom:-2px; width:2px; background:#1c1b19; }
+  .val { font-size:14px; font-weight:700; text-align:right; color:#55524c; }
+  .legend { font-size:14px; color:#78746c; margin-top:8px; }
+  .legend b.k1 { display:inline-block; width:12px; height:12px; background:#2563eb; border-radius:3px; vertical-align:-1px; }
+  .legend b.k2 { display:inline-block; width:2px; height:13px; background:#1c1b19; vertical-align:-2px; margin:0 5px 0 2px; }
+  table { border-collapse:collapse; width:100%; font-size:15px; margin-top:8px; }
+  th,td { border-bottom:1px solid #eceae4; padding:8px 6px; text-align:left; }
+  td.num { text-align:right; font-weight:700; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<div class="demoflag">実験室の一本 — 数字は自分で作ります。実在の帳簿は使っていません</div>
+<div class="wrap">
+
+<h1>でたらめの癖</h1>
+<p class="lead">これから<b>でたらめな金額を15個</b>入れてもらいます。ルールはありません。好きに打ってください。<br>そのあと、あなたの数字の<b>1桁目</b>だけを見ます。</p>
+
+<div class="card" id="cIn">
+  <h2>でたらめな金額を15個</h2>
+  <p style="margin:0 0 2px" class="src">たとえば「経費の金額っぽいもの」を、思いつくまま。桁もばらばらでかまいません。</p>
+  <div class="inrow">
+    <input type="number" id="num" inputmode="numeric" placeholder="金額" min="1" step="1">
+    <button class="primary" id="add">入れる</button>
+  </div>
+  <div class="prog"><span id="pn">0 / 15</span><span>1桁目だけ使います</span></div>
+  <div class="progbar"><i id="pbar" style="width:0"></i></div>
+  <div class="chips" id="chips"></div>
+  <div class="btns"><button class="ghost" id="undo">1つ戻す</button></div>
+</div>
+
+<div class="card hidden" id="cRes">
+  <h2>あなたの1桁目</h2>
+  <div class="grid" id="g1"></div>
+  <p class="legend"><b class="k1"></b> あなたの15個　<b class="k2"></b> ベンフォードの法則が言う割合</p>
+
+  <div class="gap">
+    <div class="sub">1で始まった数</div>
+    <div class="n" id="one">—</div>
+    <div class="sub" id="oneSub"></div>
+  </div>
+
+  <h2 style="margin-top:22px">1桁目は、均等ではありません</h2>
+  <p style="margin:0">自然に育った数字の集まり——売上、経費、人口、川の長さ、株価——では、1桁目が<b>1になる確率が約30%</b>、9になる確率は約4.6%しかありません。9通りあるのに、1が3割を占めます。式はこれだけです。</p>
+  <p style="text-align:center; font-size:20px; font-weight:700; margin:12px 0">1桁目がdになる確率 ＝ log<sub>10</sub>(1 + 1/d)</p>
+  <table>
+    <tr><th>1桁目</th><th style="text-align:right">法則の値</th><th style="text-align:right">あなた</th></tr>
+    <tbody id="tb"></tbody>
+  </table>
+
+  <h2 style="margin-top:22px">本当にそうなるのか、この場で確かめる</h2>
+  <p style="margin:0">下は、この画面が<b>いま計算した</b>2の1乗から2の300乗までの300個の数の、1桁目の分布です。どこかから持ってきた数字ではありません。ボタンを押せば計算し直します。</p>
+  <div class="grid" id="g2"></div>
+  <p class="legend"><b class="k1"></b> 2のべき乗300個　<b class="k2"></b> ベンフォードの法則が言う割合</p>
+  <div class="btns"><button class="ghost" id="recalc">計算し直す</button></div>
+
+  <h2 style="margin-top:22px">なぜこれが不正の見つけ方になるのか</h2>
+  <p style="margin:0">人が数字を作るとき、1桁目は真ん中あたり（4〜7）に寄り、1は少なくなります。「1で始まると安っぽい」「9,800円は作りすぎに見える」——そういう感覚が手を動かすからです。だから、<b>実在する取引なら30%あるはずの「1で始まる伝票」が、作られた帳簿では目に見えて減ります。</b>会計監査でこの1桁目の分布を見るやり方は、Nigriniの一連の研究をきっかけに広まりました。</p>
+  <p class="src" style="margin-top:10px">この法則は1881年にSimon Newcombが指摘し、1938年にFrank Benfordが多数の実データで再発見したものです（Benford, F. (1938). The Law of Anomalous Numbers. <i>Proceedings of the American Philosophical Society</i>, 78(4), 551–572）。1桁目の割合 30.1 / 17.6 / 12.5 / 9.7 / 7.9 / 6.7 / 5.8 / 5.1 / 4.6% と、会計不正検知への応用（Nigrini, 1996）については下記に整理があります。<br>
+  <a href="https://arxiv.org/pdf/1712.00131">https://arxiv.org/pdf/1712.00131</a><br>
+  <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8720889/">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8720889/</a></p>
+  <p class="src"><b>言えないこと。</b>15個では何も判定できません。ずれていても偶然の範囲です。実務でこの見方を使うときは数百件以上をまとめて見ますし、ずれが出ても「不正がある」ではなく「ここを先に見る」という順番の話にしかなりません。金額に上限がある（1件5万円まで等）データや、連番・電話番号のような番号にはそもそも当てはまりません。</p>
+
+  <div class="field">
+    <b>中小企業の行動に直すと。</b>経費精算と外注費を1年ぶん取り出して、1桁目だけ数えてみてください。表計算1本でできます。「1で始まる伝票が全体の2割を切っていないか」——それだけが見どころです。切っていたら不正だ、ではなく、<b>そこから先に目を通す</b>。全件見るより、見る順番を変えるほうが早く終わります。
+  </div>
+
+  <div class="btns"><button class="ghost" id="again">もう一度やる</button></div>
+</div>
+
+</div>
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var N = 15;
+  var LAW = [];
+  for (var d = 1; d <= 9; d++) LAW.push(Math.log10(1 + 1/d) * 100);
+
+  var nums = [];
+
+  function firstDigit(v){
+    var s = String(Math.abs(v)).replace(/[^0-9]/g,'').replace(/^0+/,'');
+    return s.length ? parseInt(s.charAt(0),10) : 0;
+  }
+
+  function draw(hostId, counts, total){
+    var host = $(hostId);
+    host.innerHTML = '';
+    var max = Math.max(35, Math.max.apply(null, counts.map(function(c){ return total ? c/total*100 : 0; })));
+    for (var d = 1; d <= 9; d++) {
+      var pct = total ? counts[d-1]/total*100 : 0;
+      var dd = document.createElement('div'); dd.className = 'd'; dd.textContent = d;
+      var tr = document.createElement('div'); tr.className = 'track';
+      var bar = document.createElement('i'); bar.className = 'mine';
+      bar.style.width = (pct/max*100) + '%';
+      var line = document.createElement('span'); line.className = 'lawline';
+      line.style.left = (LAW[d-1]/max*100) + '%';
+      tr.appendChild(bar); tr.appendChild(line);
+      var v = document.createElement('div'); v.className = 'val';
+      v.textContent = pct.toFixed(0) + '%';
+      host.appendChild(dd); host.appendChild(tr); host.appendChild(v);
+    }
+  }
+
+  function countDigits(arr){
+    var c = [0,0,0,0,0,0,0,0,0];
+    arr.forEach(function(v){ var d = firstDigit(v); if (d >= 1) c[d-1]++; });
+    return c;
+  }
+
+  function refresh(){
+    $('pn').textContent = nums.length + ' / ' + N;
+    $('pbar').style.width = (nums.length / N * 100) + '%';
+    var c = $('chips'); c.innerHTML = '';
+    nums.forEach(function(v){
+      var s = document.createElement('span'); s.className = 'chip';
+      s.textContent = v.toLocaleString('ja-JP');
+      c.appendChild(s);
+    });
+    if (nums.length >= N) finish();
+  }
+
+  function add(){
+    var v = parseInt($('num').value, 10);
+    if (!v || v <= 0) { $('num').focus(); return; }
+    nums.push(v);
+    $('num').value = '';
+    $('num').focus();
+    refresh();
+  }
+
+  function powersOfTwo(){
+    var c = [0,0,0,0,0,0,0,0,0], x = 1;
+    for (var i = 1; i <= 300; i++) {
+      x = x * 2;
+      // 先頭桁だけ必要なので、桁があふれる前に丸める
+      var s = x.toExponential(12);
+      var d = parseInt(s.charAt(0), 10);
+      if (d >= 1) c[d-1]++;
+      if (x > 1e300) x = x / 1e150;  // 溢れ回避（先頭桁は保たれる）
+    }
+    return c;
+  }
+
+  function finish(){
+    $('cIn').classList.add('hidden');
+    $('cRes').classList.remove('hidden');
+    var c = countDigits(nums);
+    draw('g1', c, nums.length);
+
+    var ones = c[0], pct = ones / nums.length * 100;
+    $('one').textContent = ones + ' 個 / 15 個（' + pct.toFixed(0) + '%）';
+    var sub;
+    if (pct >= 26) sub = '法則の30%に近い出方です。めずらしいほうです。';
+    else if (pct >= 14) sub = '法則の30%より少なめ。作った数字によくある出方です。';
+    else sub = 'かなり少なめです。「1で始まる金額は選びにくい」という手の癖が出ています。';
+    $('oneSub').textContent = sub + '（15個では偶然の幅が大きいので、これ自体は判定になりません）';
+
+    var tb = $('tb'); tb.innerHTML = '';
+    for (var d = 1; d <= 9; d++) {
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + d + '</td><td class="num">' + LAW[d-1].toFixed(1) + '%</td>'
+        + '<td class="num" style="color:#2563eb">' + (c[d-1]/nums.length*100).toFixed(0) + '%</td>';
+      tb.appendChild(tr);
+    }
+    draw('g2', powersOfTwo(), 300);
+  }
+
+  $('add').onclick = add;
+  $('num').addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); add(); }
+  });
+  $('undo').onclick = function(){ nums.pop(); refresh(); };
+  $('recalc').onclick = function(){ draw('g2', powersOfTwo(), 300); };
+  $('again').onclick = function(){
+    nums = [];
+    $('cRes').classList.add('hidden');
+    $('cIn').classList.remove('hidden');
+    refresh();
+    window.scrollTo(0,0);
+  };
+  refresh();
+})();
+</script>
+</body>
+</html>

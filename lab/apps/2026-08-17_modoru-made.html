@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>もどるまで — 切り替えるたびに、あなたは何ミリ秒を落としているか</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .tag { display:inline-block; font-size:13px; font-weight:700; color:#2563eb;
+    background:#f0f5ff; border:1px solid #d5e2ff; border-radius:999px; padding:2px 12px; margin-bottom:8px; }
+  .stim { display:flex; align-items:center; justify-content:center; min-height:150px;
+    font-size:52px; font-weight:800; letter-spacing:.04em; background:#fff;
+    border:2px solid #e5e2db; border-radius:12px; margin:6px 0 14px; user-select:none; }
+  .choices { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  @media (min-width:520px){ .choices { grid-template-columns:repeat(4,1fr); } }
+  .choices button { font:inherit; font-size:22px; font-weight:700; padding:18px 8px;
+    border:2px solid #e5e2db; border-radius:12px; background:#fff; cursor:pointer; color:#1c1b19; }
+  .choices button:hover { border-color:#2563eb; }
+  .prog { display:flex; justify-content:space-between; font-size:14px; color:#78746c; }
+  .progbar { height:6px; background:#efece5; border-radius:3px; overflow:hidden; margin:6px 0 12px; }
+  .progbar i { display:block; height:100%; background:#2563eb; transition:width .2s; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:14px 22px; font:inherit; font-size:17px; cursor:pointer; }
+  .res { display:grid; gap:12px; margin-top:6px; }
+  @media (min-width:520px){ .res { grid-template-columns:1fr 1fr; } }
+  .rbox { border:1.5px solid #e5e2db; border-radius:12px; padding:14px; background:#fbfaf7; }
+  .rbox.hi { border-color:#2563eb; background:#f0f5ff; }
+  .rbox h3 { margin:0; font-size:15px; color:#55524c; font-weight:600; }
+  .rbox .n { font-size:32px; font-weight:800; letter-spacing:-.03em; margin:2px 0 0; }
+  .rbox .n small { font-size:15px; font-weight:600; letter-spacing:0; }
+  .gap { text-align:center; padding:18px 14px; border:2px solid #2563eb; border-radius:12px;
+    background:#f0f5ff; margin-top:12px; }
+  .gap .n { font-size:46px; font-weight:800; letter-spacing:-.04em; color:#2563eb; line-height:1.1; }
+  .sub { font-size:16px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+  table { border-collapse:collapse; width:100%; font-size:15px; margin-top:8px; }
+  th,td { border-bottom:1px solid #eceae4; padding:8px 6px; text-align:left; }
+  td.num { text-align:right; font-weight:700; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<div class="demoflag">実験室の一本 — 2001年の論文と同じ形の課題を、そのまま自分で測ります</div>
+<div class="wrap">
+
+<h1>もどるまで</h1>
+<p class="lead">同じ計算だけを続けたときと、たし算とひき算を1問ごとに行き来したとき。<b>正解率は変わらないのに、時間だけが増えます。</b>その増えぶんが、あなたが切り替えに払っている代金です。</p>
+
+<div class="card" id="cIntro">
+  <h2>やること</h2>
+  <p style="margin:0 0 6px">2けたの計算が出ます。答えを4つの中から選ぶだけ。全部で44問、2分ほどです。</p>
+  <table>
+    <tr><td>前半22問</td><td>たし算だけが続く</td></tr>
+    <tr><td>後半22問</td><td>たし算とひき算が1問ごとに入れ替わる</td></tr>
+  </table>
+  <p class="src" style="margin-top:10px">なるべく速く、なるべく正確に。指がすべった回（誤答・5秒超）は集計から外します。各ブロックの最初の2問は練習として捨てます。</p>
+  <div class="btns"><button class="primary" id="start">はじめる</button></div>
+</div>
+
+<div class="card hidden" id="cRun">
+  <div class="prog"><span id="pn">0 / 22</span><span id="pmode"></span></div>
+  <div class="progbar"><i id="pbar" style="width:0"></i></div>
+  <div class="stim" id="stim">用意</div>
+  <div class="choices" id="ch"></div>
+</div>
+
+<div class="card hidden" id="cBreak">
+  <h2>前半おわり</h2>
+  <p>ここからは<b>たし算とひき算が1問ごとに入れ替わります</b>。記号をよく見てください。</p>
+  <div class="btns"><button class="primary" id="go2">後半をはじめる</button></div>
+</div>
+
+<div class="card hidden" id="cRes">
+  <h2>あなたの結果</h2>
+  <div class="res">
+    <div class="rbox">
+      <h3>同じ計算が続いたとき（前半）</h3>
+      <p class="n" id="rA">—<small> ミリ秒</small></p>
+      <p class="src" id="rAn"></p>
+    </div>
+    <div class="rbox hi">
+      <h3>1問ごとに切り替えたとき（後半）</h3>
+      <p class="n" id="rB">—<small> ミリ秒</small></p>
+      <p class="src" id="rBn"></p>
+    </div>
+  </div>
+  <div class="gap">
+    <div class="sub">1回切り替えるたびに、あなたが余分に使った時間</div>
+    <div class="n" id="rCost">—</div>
+    <div class="sub" id="rCostSub"></div>
+  </div>
+  <p class="src" id="rErr" style="margin-top:10px"></p>
+
+  <h2 style="margin-top:22px">論文の数字と並べる</h2>
+  <p style="margin:0">Rubinstein・Meyer・Evans（2001）は、同じ「同じ課題を続ける vs 1問ごとに入れ替える」の比較を4つの実験でやっています。報告されている平均の切り替えコストは次のとおりです。</p>
+  <table>
+    <tr><th>実験</th><th>課題</th><th style="text-align:right">切り替えコスト</th></tr>
+    <tr><td>実験1</td><td>図形の分類</td><td class="num">975 ミリ秒</td></tr>
+    <tr><td>実験2</td><td>四則計算</td><td class="num">653 ミリ秒</td></tr>
+    <tr><td>実験3</td><td>四則計算</td><td class="num">614 ミリ秒</td></tr>
+    <tr><td>実験4</td><td>図形の分類</td><td class="num">1,096 ミリ秒</td></tr>
+    <tr><td colspan="2">あなた（四則計算）</td><td class="num" id="rMine" style="color:#2563eb">—</td></tr>
+  </table>
+  <p class="src" style="margin-top:10px">この画面の課題は実験2・実験3と同じ形（四則計算の交互）ですが、同じものではありません。論文では紙のカードの束を使い、ルールも複数条件で振っています。また同論文では、<b>次にどちらの課題か手がかりが出ている</b>と切り替えコストが平均467ミリ秒下がると報告されています。この画面は記号（＋−）が見えている＝手がかりありの条件にあたるので、出る値は小さめに出ます。前半で慣れたぶんも後半に効くので、この測り方はコストを小さく見積もる側に転びます。</p>
+  <p class="src">出典：Rubinstein, J. S., Meyer, D. E., &amp; Evans, J. E. (2001). Executive Control of Cognitive Processes in Task Switching. <i>Journal of Experimental Psychology: Human Perception and Performance</i>, 27(4), 763–797.<br>
+  <a href="https://www.apa.org/pubs/journals/releases/xhp274763.pdf">https://www.apa.org/pubs/journals/releases/xhp274763.pdf</a></p>
+
+  <div class="field">
+    <b>中小企業の行動に直すと。</b>この0.6秒は、2けたの足し算という一番軽い切り替えの値段です。見積を書く手を止めて電話に出る、シフト表から請求書に移る——実務の切り替えはこれよりずっと重い。人を増やす前に、まず「1人が1日に何回ちがう仕事に飛ばされているか」を数えてください。減らせるのは回数のほうです。
+  </div>
+
+  <div class="btns"><button class="ghost" id="again">もう一度やる</button></div>
+</div>
+
+</div>
+<script>
+(function(){
+  var TRIALS = 22, DROP = 2, MAXRT = 5000;
+  var seq = [], idx = 0, block = 1, t0 = 0, data = {1:[],2:[]}, errs = {1:0,2:0};
+
+  var $ = function(id){ return document.getElementById(id); };
+  function ri(a,b){ return a + Math.floor(Math.random()*(b-a+1)); }
+
+  function makeTrial(op){
+    var a, b, ans;
+    if (op === '+') { a = ri(13,48); b = ri(3,9); ans = a + b; }
+    else { a = ri(24,68); b = ri(3,9); ans = a - b; }
+    var opts = [ans];
+    var offs = [1,-1,2,-2,10,-10];
+    while (opts.length < 4) {
+      var o = ans + offs[ri(0,offs.length-1)];
+      if (o > 0 && opts.indexOf(o) === -1) opts.push(o);
+    }
+    for (var i = opts.length-1; i > 0; i--) { var j = ri(0,i), t = opts[i]; opts[i] = opts[j]; opts[j] = t; }
+    return { a:a, b:b, op:op, ans:ans, opts:opts };
+  }
+
+  function buildBlock(n){
+    var out = [];
+    for (var i = 0; i < TRIALS; i++) {
+      var op = (n === 1) ? '+' : (i % 2 === 0 ? '+' : '-');
+      out.push(makeTrial(op));
+    }
+    return out;
+  }
+
+  function show(){
+    var t = seq[idx];
+    $('pn').textContent = (idx+1) + ' / ' + TRIALS;
+    $('pmode').textContent = (block === 1) ? '前半：たし算だけ' : '後半：1問ごとに入れ替わる';
+    $('pbar').style.width = ((idx / TRIALS) * 100) + '%';
+    $('stim').textContent = t.a + ' ' + (t.op === '+' ? '＋' : '−') + ' ' + t.b;
+    var ch = $('ch');
+    ch.innerHTML = '';
+    t.opts.forEach(function(o){
+      var b = document.createElement('button');
+      b.textContent = o;
+      b.onclick = function(){ answer(o); };
+      ch.appendChild(b);
+    });
+    t0 = performance.now();
+  }
+
+  function answer(o){
+    var rt = performance.now() - t0, t = seq[idx];
+    if (idx >= DROP) {
+      if (o !== t.ans) errs[block]++;
+      else if (rt <= MAXRT) data[block].push(rt);
+    }
+    idx++;
+    if (idx < TRIALS) { show(); return; }
+    if (block === 1) {
+      $('cRun').classList.add('hidden');
+      $('cBreak').classList.remove('hidden');
+    } else {
+      finish();
+    }
+  }
+
+  function median(a){
+    if (!a.length) return null;
+    var s = a.slice().sort(function(x,y){ return x-y; });
+    var m = Math.floor(s.length/2);
+    return s.length % 2 ? s[m] : (s[m-1]+s[m])/2;
+  }
+
+  function finish(){
+    $('cRun').classList.add('hidden');
+    $('cRes').classList.remove('hidden');
+    var mA = median(data[1]), mB = median(data[2]);
+    if (mA === null || mB === null) {
+      $('rCost').textContent = '測れず';
+      $('rCostSub').textContent = '正解できた回が少なすぎました。もう一度やってみてください。';
+      return;
+    }
+    var cost = Math.round(mB - mA);
+    $('rA').innerHTML = Math.round(mA) + '<small> ミリ秒</small>';
+    $('rB').innerHTML = Math.round(mB) + '<small> ミリ秒</small>';
+    $('rAn').textContent = '集計に使った回：' + data[1].length + ' / ' + (TRIALS-DROP);
+    $('rBn').textContent = '集計に使った回：' + data[2].length + ' / ' + (TRIALS-DROP);
+    $('rCost').textContent = (cost >= 0 ? '＋' : '−') + Math.abs(cost) + ' ミリ秒';
+    $('rMine').textContent = (cost >= 0 ? '' : '−') + Math.abs(cost) + ' ミリ秒';
+    var sub;
+    if (cost <= 0) sub = '今回は差が出ませんでした。回数が少ないと逆転することがあります。もう一度どうぞ。';
+    else sub = '1日に100回この切り替えが起きるなら、合計 ' + (cost*100/1000).toFixed(1) + ' 秒。回数が増えるほど効いてきます。';
+    $('rCostSub').textContent = sub;
+    var errMsg;
+    if (errs[2] > errs[1]) errMsg = '切り替え側でまちがいも増えています。時間だけでなく正確さも落ちる型です。';
+    else if (cost > 0) errMsg = '正確さはほぼ保たれています。落ちたのは時間のほうです。';
+    else errMsg = '正確さは保たれています。';
+    $('rErr').textContent = '押しまちがい：前半 ' + errs[1] + ' 回 / 後半 ' + errs[2] + ' 回。' + errMsg;
+  }
+
+  function startBlock(n){
+    block = n; idx = 0; seq = buildBlock(n);
+    $('cIntro').classList.add('hidden');
+    $('cBreak').classList.add('hidden');
+    $('cRes').classList.add('hidden');
+    $('cRun').classList.remove('hidden');
+    show();
+  }
+
+  $('start').onclick = function(){ data = {1:[],2:[]}; errs = {1:0,2:0}; startBlock(1); };
+  $('go2').onclick  = function(){ startBlock(2); };
+  $('again').onclick = function(){
+    data = {1:[],2:[]}; errs = {1:0,2:0};
+    $('cRes').classList.add('hidden');
+    startBlock(1);
+  };
+})();
+</script>
+</body>
+</html>

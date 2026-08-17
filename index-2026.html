@@ -351,26 +351,27 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
   .nav-toggle{display:block;}
 }
 
-/* ---------- ヒーロー（明るい実写動画+白の紗。全体のトーンに合わせる） ---------- */
-.hero{position:relative;min-height:min(84vh,720px);display:flex;align-items:center;justify-content:center;background:#f4f5f7;overflow:hidden;}
+/* ---------- ヒーロー（alationと同構図の実写・暗トーン+押せるボタン） ---------- */
+.hero{position:relative;min-height:min(86vh,760px);display:flex;align-items:center;justify-content:center;background:#0c0f16;overflow:hidden;}
 .hero-media{position:absolute;inset:0;overflow:hidden;}
 .hero-media video{width:100%;height:100%;object-fit:cover;object-position:center;}
-.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.68) 0%,rgba(250,250,252,0.8) 100%);}
+.hero-media::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(8,10,16,0.3) 0%,rgba(8,10,16,0.66) 100%);}
 .hero-body{position:relative;max-width:1080px;margin:0 auto;padding:120px 24px 110px;width:100%;text-align:center;}
-.hero h1{font-family:var(--font-display);font-size:clamp(2.8rem,8.4vw,6rem);font-weight:900;line-height:1.15;letter-spacing:-0.02em;color:var(--ink);}
+.hero h1{font-family:var(--font-display);font-size:clamp(2.8rem,8.4vw,6rem);font-weight:900;line-height:1.15;letter-spacing:-0.02em;color:#fff;}
 .hero h1 .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757;}
 .hero h1 .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757;}
-.hero .hero-tag{font-family:var(--font-display);color:var(--ink);font-size:clamp(1.05rem,2.4vw,1.5rem);font-weight:900;letter-spacing:0.02em;margin-top:1.8rem;}
+.hero .hero-tag{font-family:var(--font-display);color:#fff;font-size:clamp(1.05rem,2.4vw,1.5rem);font-weight:900;letter-spacing:0.02em;margin-top:1.8rem;}
 .hero .hero-tag ruby rt{font-size:0.42em;font-weight:500;}
-.hero .hero-tag .hl{background:linear-gradient(180deg,transparent 0,transparent 60%,#ffe45c 60%,#ffd84a 84%,transparent 84%);}
-.hero-cta{display:flex;gap:3rem;flex-wrap:wrap;margin-top:2.8rem;justify-content:center;}
-.cta-text{position:relative;color:var(--ink);font-size:0.92rem;font-weight:700;letter-spacing:0.14em;padding-bottom:0.65rem;}
-.cta-text::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:#c2c8d6;transition:background 0.3s var(--ease);}
-.cta-text.main::after{background:var(--blue);}
-.cta-text:hover::after{background:var(--ink);}
-.scroll-cue{position:absolute;right:32px;bottom:24px;display:flex;align-items:center;gap:0.7rem;color:var(--muted);font-size:0.68rem;letter-spacing:0.24em;font-weight:700;}
-.scroll-cue i{display:block;width:1px;height:44px;background:#c2c8d6;position:relative;overflow:hidden;}
-.scroll-cue i::after{content:"";position:absolute;left:0;top:-44px;width:1px;height:44px;background:var(--ink);animation:cue 2.4s var(--ease) infinite;}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2.6rem;justify-content:center;}
+.hero-cta .btn-hero{display:inline-flex;align-items:center;gap:0.6rem;padding:1rem 2.1rem;border-radius:10px;font-size:0.98rem;font-weight:700;letter-spacing:0.04em;transition:transform 0.3s var(--ease),background 0.3s var(--ease),box-shadow 0.4s var(--ease);}
+.hero-cta .btn-hero:hover{transform:translateY(-2px);}
+.hero-cta .btn-hero.fill{background:var(--blue);color:#fff;box-shadow:0 14px 34px -14px rgba(47,86,201,0.7);}
+.hero-cta .btn-hero.fill:hover{background:#2446ad;}
+.hero-cta .btn-hero.white{background:#fff;color:var(--ink);box-shadow:0 14px 34px -18px rgba(0,0,0,0.5);}
+.hero-cta .btn-hero.white:hover{background:#eef1f8;}
+.scroll-cue{position:absolute;right:32px;bottom:24px;display:flex;align-items:center;gap:0.7rem;color:rgba(255,255,255,0.75);font-size:0.68rem;letter-spacing:0.24em;font-weight:700;}
+.scroll-cue i{display:block;width:1px;height:44px;background:rgba(255,255,255,0.5);position:relative;overflow:hidden;}
+.scroll-cue i::after{content:"";position:absolute;left:0;top:-44px;width:1px;height:44px;background:#fff;animation:cue 2.4s var(--ease) infinite;}
 @keyframes cue{0%{transform:translateY(0)}60%{transform:translateY(88px)}100%{transform:translateY(88px)}}
 @media(max-width:900px){.scroll-cue{display:none;}}
 @media(prefers-reduced-motion:reduce){.hero-media video{display:none;}}
@@ -665,14 +666,14 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 
 <section class="hero" id="hero">
   <div class="hero-media" aria-hidden="true">
-    <video src="hero-office.mp4" muted autoplay loop playsinline preload="metadata"></video>
+    <video src="hero-night.mp4" muted autoplay loop playsinline preload="metadata"></video>
   </div>
   <div class="hero-body">
     <h1 data-rv="up" style="--d:160ms">A<span class="heart-i">ı</span>dollargame</h1>
-    <p class="hero-tag" data-rv="up" style="--d:400ms" data-edit="hero-tagline">AIで「<ruby>楽<rt>らく</rt></ruby>」ではなく<span class="hl">「<ruby>楽<rt>たの</rt></ruby>しい」</span>を考える</p>
+    <p class="hero-tag" data-rv="up" style="--d:400ms" data-edit="hero-tagline">AIで「<ruby>楽<rt>らく</rt></ruby>」ではなく「<ruby>楽<rt>たの</rt></ruby>しい」を考える</p>
     <div class="hero-cta" data-rv="up" style="--d:620ms">
-      <a href="#contact" class="cta-text main">無料相談を予約する</a>
-      <a href="shindan.html" class="cta-text">3分で無料AI診断</a>
+      <a href="#contact" class="btn-hero fill"><span data-edit="hero-cta1">無料相談を予約する</span></a>
+      <a href="shindan.html" class="btn-hero white"><span data-edit="hero-cta2">3分で無料AI診断</span></a>
     </div>
   </div>
   <div class="scroll-cue"><span>SCROLL</span><i></i></div>

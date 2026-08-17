@@ -284,12 +284,11 @@
   --ink-soft:#3a3f4d;
   --muted:#6b7080;
   --blue:#2f56c9;
-  --navy:#2c3f7d;
   --navy-deep:#1b2a55;
   --orange:#f0a63c;
-  --bg:#f5f5f7;
-  --lavender:#e7ebfb;
-  --band-blue:#e9eefb;
+  --bg:#f7f8fa;
+  --lavender:#eef2fc;
+  --band-blue:#edf1fb;
   --line:#e6e8ef;
   --line-green:#06c755;
   --radius:16px;
@@ -349,18 +348,20 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 /* ---------- ヒーロー（opthub式=写真に青をかぶせて明るく） ---------- */
 .hero{position:relative;min-height:min(72vh,600px);display:flex;align-items:center;background:var(--navy-deep);overflow:hidden;}
 .hero-media{position:absolute;inset:0;overflow:hidden;}
-.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 30%;filter:saturate(0.85) brightness(1.02);scale:1.1;transition:scale 14s linear;}
-.hero.ready .hero-media img{scale:1;}
-.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(30,49,110,0.9) 0%,rgba(30,49,110,0.66) 48%,rgba(30,49,110,0.34) 100%);}
+.hero-strip{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr 1fr;}
+.hero-strip .hs{background-size:cover;background-position:center;filter:saturate(0.7);scale:1.08;transition:scale 14s linear;}
+.hero.ready .hero-strip .hs{scale:1;}
+.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(27,42,85,0.92) 0%,rgba(27,42,85,0.74) 50%,rgba(27,42,85,0.5) 100%);}
+@media(max-width:760px){.hero-strip{grid-template-columns:1fr;}.hero-strip .hs:nth-child(n+2){display:none;}}
 .hero-body{position:relative;max-width:var(--maxw);margin:0 auto;padding:110px 24px 90px;width:100%;}
 .hero-eyebrow{color:#dbe6ff;font-size:0.85rem;font-weight:700;letter-spacing:0.22em;margin-bottom:1rem;}
 .hero h1{color:#fff;font-size:clamp(1.9rem,4.4vw,3rem);font-weight:700;line-height:1.5;letter-spacing:0.03em;}
 .hero h1 ruby rt{font-size:0.42em;font-weight:500;opacity:0.85;}
 .hero p.hero-sub{color:rgba(255,255,255,0.94);font-size:1rem;line-height:2;margin-top:1.3rem;max-width:44em;}
 .hero-cta{display:flex;gap:0.9rem;flex-wrap:wrap;margin-top:2rem;}
-.hero-banner{display:inline-flex;align-items:center;gap:0.8rem;margin-top:1.6rem;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.35);border-radius:999px;padding:0.55rem 1.2rem;color:#fff;font-size:0.85rem;transition:background 0.3s var(--ease);}
-.hero-banner:hover{background:rgba(255,255,255,0.24);}
-.hero-banner .hb-badge{background:var(--orange);color:#3c2a05;font-weight:700;font-size:0.72rem;border-radius:999px;padding:0.15rem 0.7rem;}
+.hero-banner{display:inline-flex;align-items:center;gap:0.8rem;margin-top:1.6rem;background:#fff;border-radius:999px;padding:0.55rem 1.2rem;color:var(--ink);font-size:0.85rem;box-shadow:0 10px 30px -14px rgba(10,20,50,0.4);transition:transform 0.3s var(--ease);}
+.hero-banner:hover{transform:translateY(-2px);}
+.hero-banner .hb-badge{background:var(--blue);color:#fff;font-weight:700;font-size:0.72rem;border-radius:999px;padding:0.15rem 0.7rem;}
 .hero-banner .mk{font-weight:700;}
 .scroll-cue{position:absolute;right:32px;bottom:24px;display:flex;align-items:center;gap:0.7rem;color:rgba(255,255,255,0.75);font-size:0.68rem;letter-spacing:0.24em;font-weight:700;}
 .scroll-cue i{display:block;width:1px;height:44px;background:rgba(255,255,255,0.5);position:relative;overflow:hidden;}
@@ -374,20 +375,24 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .btn-fill:hover{background:#2446ad;box-shadow:0 16px 34px -18px rgba(47,86,201,0.6);}
 .btn-line{border:1px solid rgba(255,255,255,0.65);color:#fff;}
 .btn-line:hover{background:rgba(255,255,255,0.14);}
-.btn-navy{background:var(--navy);color:#fff;}
-.btn-navy:hover{background:#233468;box-shadow:0 16px 34px -18px rgba(44,63,125,0.6);}
+.btn-navy{background:var(--blue);color:#fff;}
+.btn-navy:hover{background:#2446ad;box-shadow:0 16px 34px -18px rgba(47,86,201,0.55);}
 .btn-orange{background:var(--orange);color:#3c2a05;}
 .btn-orange:hover{background:#e29a2e;box-shadow:0 16px 34px -18px rgba(240,166,60,0.55);}
 .btn-ghost{border:1px solid var(--line);color:var(--ink);background:#fff;}
 .btn-ghost:hover{border-color:var(--blue);color:var(--blue);}
 
-/* ---------- 実績帯（opthubのロゴ帯の位置。実名の実績を文字で） ---------- */
-.cred{background:#fff;border-bottom:1px solid var(--line);}
-.cred-inner{max-width:var(--maxw);margin:0 auto;padding:22px 24px;display:flex;align-items:center;gap:2.2rem;flex-wrap:wrap;justify-content:center;}
-.cred .cl{font-size:0.72rem;letter-spacing:0.18em;font-weight:700;color:var(--muted);flex:none;}
-.cred .ci{font-size:0.9rem;font-weight:700;color:var(--ink-soft);white-space:nowrap;text-align:center;}
-.cred .ci small{display:block;font-size:0.68rem;font-weight:500;color:var(--muted);letter-spacing:0.04em;}
-@media(max-width:760px){.cred-inner{gap:1rem 1.6rem;}.cred .ci{white-space:normal;}}
+/* ---------- キーワード帯（ライブHPのマーキーを復活・明るい配色に） ---------- */
+.belt{background:#fff;border-bottom:1px solid var(--line);overflow:hidden;padding:16px 0;}
+.belt__track{display:flex;width:max-content;animation:beltScroll 30s linear infinite;}
+.belt:hover .belt__track{animation-play-state:paused;}
+@media(prefers-reduced-motion:reduce){.belt__track{animation:none;}}
+.belt__inner{display:flex;align-items:center;gap:1.1rem;padding-right:1.1rem;}
+.belt__item{white-space:nowrap;font-size:0.85rem;font-weight:700;border-radius:999px;padding:0.42rem 1.1rem;}
+.belt__item--fill{background:var(--blue);color:#fff;}
+.belt__item--outline{border:1px solid #c7d2ee;color:var(--ink-soft);}
+.belt__dot{width:5px;height:5px;border-radius:999px;background:#c7d2ee;flex:none;}
+@keyframes beltScroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
 /* ---------- セクション見出し（英語ラベル+青見出し+短い下線） ---------- */
 .sec-head{margin-bottom:44px;}
@@ -454,8 +459,8 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .tags span{font-size:0.73rem;font-weight:700;color:var(--blue);background:var(--band-blue);border-radius:999px;padding:0.3rem 0.8rem;}
 .card-foot{margin-top:auto;display:flex;gap:0.7rem;flex-wrap:wrap;}
 .card-foot a{font-size:0.85rem;font-weight:700;padding:0.6rem 1.25rem;border-radius:999px;transition:background 0.3s var(--ease),color 0.3s var(--ease),border-color 0.3s var(--ease),transform 0.3s var(--ease);}
-.card-foot a.solid{background:var(--navy);color:#fff;}
-.card-foot a.solid:hover{background:#233468;transform:translateY(-2px);}
+.card-foot a.solid{background:var(--blue);color:#fff;}
+.card-foot a.solid:hover{background:#2446ad;transform:translateY(-2px);}
 .card-foot a.thin{border:1px solid var(--line);color:var(--ink);}
 .card-foot a.thin:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px);}
 
@@ -631,8 +636,12 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 </header>
 
 <section class="hero" id="hero">
-  <div class="hero-media">
-    <img src="aidollargame-ceo-sato-norinosuke-seminar.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介とエンジニア森によるセミナー登壇の様子（左：佐藤、右：森）">
+  <div class="hero-media" aria-hidden="true">
+    <div class="hero-strip">
+      <div class="hs" style="background-image:url('https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1200&q=80&fit=crop')"></div>
+      <div class="hs" style="background-image:url('https://images.unsplash.com/photo-1553413077-190dd305871c?w=1200&q=80&fit=crop')"></div>
+      <div class="hs" style="background-image:url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&q=80&fit=crop')"></div>
+    </div>
   </div>
   <div class="hero-body">
     <div class="hero-eyebrow" data-rv="up" style="--d:100ms" data-edit="hero-eyebrow">AIで、人と人をつなぐ。</div>
@@ -649,12 +658,26 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   <div class="scroll-cue"><span>SCROLL</span><i></i></div>
 </section>
 
-<div class="cred">
-  <div class="cred-inner">
-    <span class="cl">TRACK RECORD</span>
-    <span class="ci" data-edit="cred-1">NEC PC「LAVIE SOL」共同企画・開発<small>2025年3・4月 売上全国No.1</small></span>
-    <span class="ci" data-edit="cred-2">東京ニュービジネス協議会（東京NBC）<small>起業塾 登壇（2026年7月）</small></span>
-    <span class="ci" data-edit="cred-3">PR TIMES／VOIX／財経新聞<small>メディア掲載</small></span>
+<div class="belt" aria-hidden="true">
+  <div class="belt__track">
+    <div class="belt__inner">
+      <span class="belt__item belt__item--fill">AIチャットエージェント</span><span class="belt__dot"></span>
+      <span class="belt__item belt__item--outline">AIwill — 社長クローンAI</span><span class="belt__dot"></span>
+      <span class="belt__item belt__item--fill">AIside — 付き人AI</span><span class="belt__dot"></span>
+      <span class="belt__item belt__item--outline">AIコンサルティング・導入支援</span><span class="belt__dot"></span>
+      <span class="belt__item belt__item--fill">AI研修・社員リスキリング</span><span class="belt__dot"></span>
+      <span class="belt__item belt__item--outline">「楽」ではなく「楽しい」を考える</span><span class="belt__dot"></span>
+      <span class="belt__item belt__item--fill">AIで、人と人をつなぐ。</span><span class="belt__dot"></span>
+    </div>
+    <div class="belt__inner">
+      <span class="belt__item belt__item--fill">AIチャットエージェント</span><span class="belt__dot"></span>
+      <span class="belt__item belt__item--outline">AIwill — 社長クローンAI</span><span class="belt__dot"></span>
+      <span class="belt__item belt__item--fill">AIside — 付き人AI</span><span class="belt__dot"></span>
+      <span class="belt__item belt__item--outline">AIコンサルティング・導入支援</span><span class="belt__dot"></span>
+      <span class="belt__item belt__item--fill">AI研修・社員リスキリング</span><span class="belt__dot"></span>
+      <span class="belt__item belt__item--outline">「楽」ではなく「楽しい」を考える</span><span class="belt__dot"></span>
+      <span class="belt__item belt__item--fill">AIで、人と人をつなぐ。</span><span class="belt__dot"></span>
+    </div>
   </div>
 </div>
 
@@ -764,7 +787,6 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       </svg>
       </div>
       <p class="swipe">横にスクロールできます</p>
-      <p class="cap" data-edit="service-cap">この流れを自社内で完結させているため、提案する会社と実装する会社が分かれません。</p>
     </div>
   </div>
 </section>
@@ -872,7 +894,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   <p data-rv="up" style="--d:120ms" data-edit="midcta-lead">御社の業務に合わせたAIをお作りします。まずは3分の無料診断で、AIに任せられる業務の目安をご確認ください。</p>
   <div class="btns" data-rv="up" style="--d:240ms">
     <a href="shindan.html" class="btn btn-orange">3分で無料AI診断</a>
-    <a href="#contact" class="btn btn-navy">お問い合わせはこちら</a>
+    <a href="#contact" class="btn" style="background:var(--navy-deep);color:#fff;">お問い合わせはこちら</a>
   </div>
 </div>
 

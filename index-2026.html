@@ -314,7 +314,7 @@ html.js [data-rv="down"]{translate:0 -40px;}
 html.js [data-rv="left"]{translate:-32px 0;}
 html.js [data-rv="right"]{translate:32px 0;}
 html.js [data-rv="line"]{scale:0 1;transform-origin:left center;transition-duration:1.2s;}
-[data-rv].in{opacity:1;translate:0 0;scale:1 1;}
+html.js [data-rv].in{opacity:1;translate:0 0;scale:1 1;}
 @media(prefers-reduced-motion:reduce){[data-rv]{opacity:1!important;translate:none!important;scale:1 1!important;transition:none!important;}}
 
 /* ---------- ヘッダー ---------- */
@@ -372,7 +372,7 @@ header.site.scrolled .site-inner{height:62px;}
 
 /* ---------- 実績帯（数字はカウントアップ） ---------- */
 .facts{background:var(--blue-deep);color:#fff;}
-.facts-grid{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(4,1fr);}
+.facts-grid{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(3,1fr);}
 .fact{padding:30px 26px 30px 0;border-right:1px solid rgba(255,255,255,0.14);}
 .fact:last-child{border-right:0;}
 .fact:not(:first-child){padding-left:26px;}
@@ -380,7 +380,7 @@ header.site.scrolled .site-inner{height:62px;}
 .fact dd{margin-top:0.4rem;font-size:0.9rem;line-height:1.7;color:#dbe4f8;}
 .fact .big{display:block;margin-bottom:0.35rem;font-size:1.9rem;font-weight:700;letter-spacing:0.02em;line-height:1.3;font-variant-numeric:tabular-nums;}
 .fact .big small{font-size:0.9rem;font-weight:700;margin-left:0.15rem;}
-@media(max-width:860px){.facts-grid{grid-template-columns:1fr 1fr;}.fact{border-bottom:1px solid rgba(255,255,255,0.14);padding:22px 20px;}.fact:nth-child(2n){border-right:0;}.fact:not(:first-child){padding-left:20px;}}
+@media(max-width:860px){.facts-grid{grid-template-columns:1fr;}.fact{border-bottom:1px solid rgba(255,255,255,0.14);padding:22px 20px;}.fact:nth-child(2n){border-right:0;}.fact:not(:first-child){padding-left:20px;}}
 
 /* ---------- セクション見出し ---------- */
 .sec-head{margin-bottom:48px;}
@@ -426,7 +426,7 @@ header.site.scrolled .site-inner{height:62px;}
 .dg-flow{font-size:12.5px;font-weight:700;fill:var(--blue);}
 .dg-ic{stroke:var(--blue);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 html.js [data-rv="draw"]{stroke-dasharray:420;stroke-dashoffset:420;opacity:1;transition:stroke-dashoffset 1.6s var(--ease);transition-delay:var(--d,0ms);}
-[data-rv="draw"].in{stroke-dashoffset:0;}
+html.js [data-rv="draw"].in{stroke-dashoffset:0;}
 
 /* ---------- サービスカード ---------- */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:20px;}
@@ -483,8 +483,9 @@ html.js [data-rv="draw"]{stroke-dasharray:420;stroke-dashoffset:420;opacity:1;tr
 .phone-bar .t{font-size:0.82rem;font-weight:700;}
 .phone-bar .s{font-size:0.66rem;color:#a9bde8;}
 .chat{padding:1rem 0.9rem 1.4rem;display:flex;flex-direction:column;gap:0.7rem;min-height:340px;}
-.bub{max-width:82%;font-size:0.82rem;line-height:1.75;padding:0.7rem 0.9rem;border-radius:14px;opacity:0;translate:0 10px;transition:opacity 0.5s var(--ease),translate 0.5s var(--ease);}
-.bub.show{opacity:1;translate:0 0;}
+.bub{max-width:82%;font-size:0.82rem;line-height:1.75;padding:0.7rem 0.9rem;border-radius:14px;transition:opacity 0.5s var(--ease),translate 0.5s var(--ease);}
+html.js .chat .bub{opacity:0;translate:0 10px;}
+html.js .chat .bub.show{opacity:1;translate:0 0;}
 .bub.them{background:#fff;border:1px solid #e0e5ef;align-self:flex-start;}
 .bub.me{background:var(--blue);color:#fff;align-self:flex-end;}
 .chat .note{font-size:0.68rem;color:var(--muted);text-align:center;margin-top:0.4rem;}
@@ -640,20 +641,16 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 <div class="facts">
   <dl class="facts-grid" id="facts">
     <div class="fact" data-rv="up" style="--d:0ms">
-      <dt>COMPANY</dt>
-      <dd><span class="big">2025<small>年4月設立</small></span>東京・新宿／代表 佐藤徳之介</dd>
-    </div>
-    <div class="fact" data-rv="up" style="--d:120ms">
-      <dt>PRODUCTS</dt>
-      <dd><span class="big"><span class="cnt" data-to="4">0</span><small>本</small></span>自社で開発・運用するAIプロダクト</dd>
-    </div>
-    <div class="fact" data-rv="up" style="--d:240ms">
       <dt>TRAINING</dt>
-      <dd><span class="big">最大<span class="cnt" data-to="75">0</span><small>%</small></span>AI研修の訓練経費が助成対象（中小企業）</dd>
+      <dd><span class="big">最大<span class="cnt" data-to="75">0</span><small>%</small></span>AI研修の訓練経費が助成対象（中小企業）。令和8年度が最終年度です</dd>
     </div>
-    <div class="fact" data-rv="up" style="--d:360ms">
-      <dt>KNOWLEDGE</dt>
-      <dd><span class="big"><span class="cnt" data-to="52">0</span><small>本</small></span>公開しているAI活用の記事</dd>
+    <div class="fact" data-rv="up" style="--d:140ms">
+      <dt>PRODUCTS</dt>
+      <dd><span class="big"><span class="cnt" data-to="4">0</span><small>本</small></span>自社で開発して、自社で運用しているAIプロダクト</dd>
+    </div>
+    <div class="fact" data-rv="up" style="--d:280ms">
+      <dt>FIRST STEP</dt>
+      <dd><span class="big"><span class="cnt" data-to="30">0</span><small>分・無料</small></span>初回のオンライン相談。何から手をつけるか未定でも大丈夫です</dd>
     </div>
   </dl>
 </div>
@@ -1157,10 +1154,9 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="info" data-rv="up" style="--d:240ms">
         <dl>
           <div><dt>メール</dt><dd><a href="mailto:info@aidollargame.com">info@aidollargame.com</a></dd></div>
-          <div><dt>会社名</dt><dd>株式会社AIdollargame</dd></div>
-          <div><dt>所在地</dt><dd>東京都新宿区北新宿1-7-20</dd></div>
-          <div><dt>ウェブサイト</dt><dd>aidollargame.com</dd></div>
-          <div><dt>プロダクト・サービス</dt><dd>AI研修（人材開発支援助成金対象）<br>AIチャットエージェント<br>社長クローンAI（AIwill）<br>付き人AI（AIside）<br>AIコンサルティング・導入支援<br>AI活用診断ツール</dd></div>
+          <div><dt>会社名</dt><dd>株式会社AIdollargame（東京都新宿区北新宿1-7-20）</dd></div>
+          <div><dt>初回相談</dt><dd>オンラインで30分・無料。資料だけ見たい方は<a href="shiryo.html">無料資料</a>へ</dd></div>
+          <div><dt>返信</dt><dd>2営業日以内にご返信します</dd></div>
         </dl>
       </div>
     </div>
@@ -1209,60 +1205,88 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 </footer>
 
 <script>
-/* ヒーローのゆっくりズーム */
-requestAnimationFrame(function(){ document.getElementById('hero').classList.add('ready'); });
-
-/* スクロールで出てくる（opthubの.appear相当） */
+/* ============================================================
+   動き（opthubの.appear相当）
+   スクロール位置を見て、画面に入ったものだけを出す。
+   IntersectionObserverではなく素のスクロール判定にしているのは、
+   「時間で全部出す」保険を入れずに確実に動かすため。
+   ============================================================ */
 (function(){
-  var els = document.querySelectorAll('[data-rv]');
-  if (!('IntersectionObserver' in window)) { els.forEach(function(e){ e.classList.add('in'); }); return; }
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
-  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-  els.forEach(function(e){ io.observe(e); });
-  setTimeout(function(){ els.forEach(function(e){ e.classList.add('in'); }); }, 3000);
-})();
-
-/* 数字のカウントアップ */
-(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = [].slice.call(document.querySelectorAll('[data-rv]'));
   var facts = document.getElementById('facts');
-  if (!facts) return;
-  var done = false;
-  function run(){
-    if (done) return; done = true;
-    facts.querySelectorAll('.cnt').forEach(function(el){
-      var to = parseInt(el.dataset.to, 10) || 0, t0 = null, dur = 1200;
-      function step(ts){
-        if (!t0) t0 = ts;
-        var p = Math.min(1, (ts - t0) / dur);
-        el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))).toLocaleString('ja-JP');
-        if (p < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    });
-  }
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    facts.querySelectorAll('.cnt').forEach(function(el){ el.textContent = el.dataset.to; });
+  var chat = document.getElementById('chat');
+  var bubs = chat ? [].slice.call(chat.querySelectorAll('.bub')) : [];
+  var countStarted = false, chatStarted = false;
+
+  if (reduce) {
+    els.forEach(function(e){ e.classList.add('in'); });
+    if (facts) facts.querySelectorAll('.cnt').forEach(function(el){ el.textContent = el.dataset.to; });
+    bubs.forEach(function(b){ b.classList.add('show'); });
     return;
   }
-  new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) run(); }); }, { threshold: 0.3 }).observe(facts);
-  setTimeout(function(){ if (!done) { facts.querySelectorAll('.cnt').forEach(function(el){ el.textContent = parseInt(el.dataset.to,10).toLocaleString('ja-JP'); }); done = true; } }, 3000);
-})();
 
-/* スマホのチャットが順に出る */
-(function(){
-  var chat = document.getElementById('chat');
-  if (!chat) return;
-  var bubs = chat.querySelectorAll('.bub');
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { bubs.forEach(function(b){ b.classList.add('show'); }); return; }
-  new IntersectionObserver(function(es, o){
-    es.forEach(function(e){
-      if (!e.isIntersecting) return;
-      o.unobserve(e.target);
-      bubs.forEach(function(b, i){ setTimeout(function(){ b.classList.add('show'); }, 260 * i); });
+  /* ヒーローのゆっくりズーム */
+  setTimeout(function(){ var h = document.getElementById('hero'); if (h) h.classList.add('ready'); }, 60);
+
+  function viewportH(){ return window.innerHeight || document.documentElement.clientHeight || 0; }
+
+  function inView(el, ratio){
+    var vh = viewportH();
+    if (!vh) return true; /* 画面サイズが取れない環境では隠したままにしない */
+    var r = el.getBoundingClientRect();
+    var line = vh * (ratio || 0.9);
+    return r.top < line && r.bottom > 0;
+  }
+
+  function countUp(){
+    if (countStarted || !facts) return;
+    countStarted = true;
+    facts.querySelectorAll('.cnt').forEach(function(el){
+      var to = parseInt(el.dataset.to, 10) || 0, t0 = null, dur = 1100;
+      var tick = function(){
+        if (t0 === null) t0 = Date.now();
+        var p = Math.min(1, (Date.now() - t0) / dur);
+        el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) setTimeout(tick, 32);
+      };
+      tick();
     });
-  }, { threshold: 0.35 }).observe(chat);
-  setTimeout(function(){ bubs.forEach(function(b){ b.classList.add('show'); }); }, 3200);
+  }
+
+  function runChat(){
+    if (chatStarted || !chat) return;
+    chatStarted = true;
+    bubs.forEach(function(b, i){ setTimeout(function(){ b.classList.add('show'); }, 300 * i); });
+  }
+
+  function sweep(){
+    els = els.filter(function(el){
+      if (!inView(el)) return true;
+      el.classList.add('in');
+      return false;
+    });
+    if (facts && inView(facts, 0.85)) countUp();
+    if (chat && inView(chat, 0.8)) runChat();
+  }
+
+  var queued = false;
+  function onScroll(){
+    if (queued) return;
+    queued = true;
+    setTimeout(function(){ queued = false; sweep(); }, 60);
+  }
+
+  sweep();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  window.addEventListener('load', sweep);
+  /* スクロールイベントを取りこぼしても必ず出るように、未表示が残っている間だけ定期確認 */
+  var iv = setInterval(function(){
+    if (!els.length) { clearInterval(iv); return; }
+    sweep();
+  }, 500);
+  window.__sweep = sweep; /* 動作確認用 */
 })();
 
 /* ヘッダーの影 */

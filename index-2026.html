@@ -348,18 +348,18 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
   .nav-toggle{display:block;}
 }
 
-/* ---------- ヒーロー（alation.com式=1枚実写+自然な暗さ+中央大見出し+下線CTA） ---------- */
-.hero{position:relative;min-height:min(86vh,760px);display:flex;align-items:center;justify-content:center;background:#0d0f14;overflow:hidden;}
+/* ---------- ヒーロー（alation.com式=動画背景+社名だけ） ---------- */
+.hero{position:relative;min-height:min(88vh,780px);display:flex;align-items:center;justify-content:center;background:#0b0e16;overflow:hidden;}
 .hero-media{position:absolute;inset:0;overflow:hidden;}
-.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center;scale:1.08;transition:scale 16s linear;}
-.hero.ready .hero-media img{scale:1;}
-.hero-media::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(8,10,16,0.35) 0%,rgba(8,10,16,0.72) 100%);}
+.hero-media video,.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center;}
+.hero-media::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(6,9,18,0.2) 0%,rgba(6,9,18,0.66) 100%);}
 .hero-body{position:relative;max-width:980px;margin:0 auto;padding:120px 24px 110px;width:100%;text-align:center;}
-.hero-eyebrow{color:rgba(255,255,255,0.85);font-size:0.85rem;font-weight:700;letter-spacing:0.26em;margin-bottom:1.4rem;}
-.hero h1{color:#fff;font-size:clamp(2.2rem,5.6vw,3.9rem);font-weight:700;line-height:1.4;letter-spacing:0.03em;}
-.hero h1 ruby rt{font-size:0.4em;font-weight:500;opacity:0.85;}
-.hero p.hero-sub{color:rgba(255,255,255,0.88);font-size:1.02rem;line-height:2.05;margin:1.8rem auto 0;max-width:40em;}
-.hero-cta{display:flex;gap:3rem;flex-wrap:wrap;margin-top:2.6rem;justify-content:center;}
+.hero h1{color:#fff;font-size:clamp(3rem,9vw,6.2rem);font-weight:700;line-height:1.2;letter-spacing:-0.01em;}
+.hero h1 .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757;}
+.hero h1 .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757;}
+.hero .hero-tag{color:rgba(255,255,255,0.92);font-size:clamp(1rem,2vw,1.2rem);font-weight:700;letter-spacing:0.14em;margin-top:1.6rem;}
+.hero .hero-tag ruby rt{font-size:0.4em;font-weight:500;opacity:0.85;}
+.hero-cta{display:flex;gap:3rem;flex-wrap:wrap;margin-top:3rem;justify-content:center;}
 .cta-text{position:relative;color:#fff;font-size:0.92rem;font-weight:700;letter-spacing:0.14em;padding-bottom:0.65rem;}
 .cta-text::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:rgba(255,255,255,0.5);transition:background 0.3s var(--ease);}
 .cta-text.main::after{background:var(--blue);}
@@ -369,6 +369,7 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .scroll-cue i::after{content:"";position:absolute;left:0;top:-44px;width:1px;height:44px;background:#fff;animation:cue 2.4s var(--ease) infinite;}
 @keyframes cue{0%{transform:translateY(0)}60%{transform:translateY(88px)}100%{transform:translateY(88px)}}
 @media(max-width:900px){.scroll-cue{display:none;}}
+@media(prefers-reduced-motion:reduce){.hero-media video{display:none;}}
 /* AI研修の告知はヒーローから出して細い帯に */
 .notice{background:#fff;border-bottom:1px solid var(--line);}
 .notice a{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:center;gap:0.8rem;font-size:0.86rem;color:var(--ink);flex-wrap:wrap;text-align:center;}
@@ -660,13 +661,12 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 
 <section class="hero" id="hero">
   <div class="hero-media" aria-hidden="true">
-    <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?w=1800&q=80&fit=crop" alt="">
+    <video src="hero-plexus.mp4" muted autoplay loop playsinline preload="metadata"></video>
   </div>
   <div class="hero-body">
-    <div class="hero-eyebrow" data-rv="up" style="--d:100ms" data-edit="hero-eyebrow">AIで、人と人をつなぐ。</div>
-    <h1 data-rv="up" style="--d:240ms" data-edit="hero-title">AIで「<ruby>楽<rt>らく</rt></ruby>」ではなく<br>「<ruby>楽<rt>たの</rt></ruby>しい」を考える</h1>
-    <p class="hero-sub" data-rv="up" style="--d:420ms" data-edit="hero-sub">仕事を「<ruby>楽<rt>らく</rt></ruby>」にすることが、私たちの目的ではありません。<br>人と人が本気で向き合える「<ruby>楽<rt>たの</rt></ruby>しい」現場を共に創る。<br>AIプロダクト開発と現場のAI活用支援を通じて、そんな舞台を創り上げます。</p>
-    <div class="hero-cta" data-rv="up" style="--d:580ms">
+    <h1 data-rv="up" style="--d:160ms">A<span class="heart-i">ı</span>dollargame</h1>
+    <p class="hero-tag" data-rv="up" style="--d:420ms" data-edit="hero-tagline">AIで「<ruby>楽<rt>らく</rt></ruby>」ではなく「<ruby>楽<rt>たの</rt></ruby>しい」を考える</p>
+    <div class="hero-cta" data-rv="up" style="--d:640ms">
       <a href="#contact" class="cta-text main">無料相談を予約する</a>
       <a href="shindan.html" class="cta-text">3分で無料AI診断</a>
     </div>

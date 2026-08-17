@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>TOMO(仮) UI見本 — 静けさの5画面</title>
+<style>
+  :root {
+    --pagebg: #eceae4; --pagetext: #1c2333; --pagesub: #6b7280;
+    --blue: #2563eb; --blue-deep: #1d4fd0; --blue-soft: #eef3fe;
+    --ink: #1a2130; --sub: #8a90a0; --line: #eef0f4; --paper: #fff;
+    --amber: #b45309; --amber-soft: #fdf4e5;
+    --mint: #0e7a52; --mint-soft: #e9f6f0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --pagebg: #14161b; --pagetext: #e8e9ec; --pagesub: #9aa1ad; }
+  }
+  :root[data-theme="light"] { --pagebg: #eceae4; --pagetext: #1c2333; --pagesub: #6b7280; }
+  :root[data-theme="dark"] { --pagebg: #14161b; --pagetext: #e8e9ec; --pagesub: #9aa1ad; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--pagebg); color: var(--pagetext); font-family: "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif; font-size: 17px; line-height: 1.8; padding: 48px 24px 80px; }
+  .head { max-width: 1240px; margin: 0 auto 8px; }
+  .eyebrow { font-size: 13px; letter-spacing: .14em; color: var(--blue); font-weight: 600; }
+  h1 { font-size: clamp(26px, 4vw, 36px); line-height: 1.4; }
+  .head p { color: var(--pagesub); font-size: 15.5px; max-width: 760px; margin-top: 8px; }
+  .rail { max-width: 1240px; margin: 36px auto 0; display: flex; gap: 28px; overflow-x: auto; padding-bottom: 24px; align-items: flex-start; }
+  .unit { flex: none; width: 320px; }
+  .unit .label { font-size: 15px; font-weight: 700; margin: 14px 2px 2px; }
+  .unit .note { font-size: 13.5px; color: var(--pagesub); line-height: 1.7; margin: 2px 2px 0; }
+  .phone {
+    width: 320px; border-radius: 44px; background: #0f1115; padding: 10px;
+    box-shadow: 0 24px 48px rgba(15,17,21,.25);
+  }
+  .screen { border-radius: 35px; overflow: hidden; background: var(--paper); height: 640px; position: relative; display: flex; flex-direction: column; }
+  .status { display: flex; justify-content: space-between; padding: 12px 24px 0; font-size: 12px; font-weight: 600; color: var(--ink); }
+  .app { flex: 1; padding: 10px 22px 0; overflow: hidden; display: flex; flex-direction: column; }
+
+  /* mascot: quiet geometric face */
+  .tomo { width: 34px; height: 34px; border-radius: 12px; background: var(--blue); position: relative; flex: none; }
+  .tomo::before, .tomo::after { content: ""; position: absolute; top: 14px; width: 4px; height: 7px; border-radius: 2px; background: #fff; }
+  .tomo::before { left: 10px; } .tomo::after { right: 10px; }
+  .tomo.sm { width: 26px; height: 26px; border-radius: 9px; }
+  .tomo.sm::before, .tomo.sm::after { top: 10px; width: 3px; height: 6px; }
+  .tomo.sm::before { left: 7px; } .tomo.sm::after { right: 7px; }
+
+  .apphead { display: flex; align-items: center; gap: 10px; padding: 10px 0 0; }
+  .apphead .t { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .apphead .d { font-size: 11.5px; color: var(--sub); }
+
+  /* screen 1: home */
+  .big { margin-top: 26px; font-size: 27px; font-weight: 700; line-height: 1.5; color: var(--ink); letter-spacing: .01em; }
+  .big small { display: block; font-size: 13px; color: var(--sub); font-weight: 600; letter-spacing: .06em; margin-bottom: 8px; }
+  .bbar { margin-top: 26px; }
+  .bbar .cap { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--sub); margin-bottom: 7px; }
+  .bbar .cap b { color: var(--ink); font-size: 14px; font-variant-numeric: tabular-nums; }
+  .bbar .tr { height: 10px; border-radius: 999px; background: var(--blue-soft); overflow: hidden; }
+  .bbar .tr i { display: block; height: 100%; width: 38%; background: var(--blue); border-radius: 999px; }
+  .oshi { margin-top: 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--mint); background: var(--mint-soft); border-radius: 10px; padding: 8px 12px; font-weight: 600; }
+  .quiet { margin-top: 26px; border-top: 1px solid var(--line); padding-top: 14px; }
+  .quiet .q { font-size: 11.5px; letter-spacing: .1em; color: var(--sub); font-weight: 600; margin-bottom: 8px; }
+  .quiet .row { display: flex; justify-content: space-between; font-size: 13.5px; color: var(--ink); padding: 5px 0; }
+  .quiet .row span:last-child { color: var(--sub); font-variant-numeric: tabular-nums; }
+  .tabbar { margin-top: auto; border-top: 1px solid var(--line); display: flex; justify-content: space-around; padding: 12px 0 22px; }
+  .tab { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 10px; color: var(--sub); }
+  .tab.on { color: var(--blue); font-weight: 700; }
+  .tab svg { stroke: currentColor; }
+
+  /* screen 2: feed */
+  .feed { margin-top: 14px; display: flex; flex-direction: column; gap: 12px; overflow: hidden; }
+  .day { text-align: center; font-size: 11px; color: var(--sub); letter-spacing: .08em; }
+  .msg { display: flex; gap: 9px; align-items: flex-end; }
+  .msg .bubble { background: #f4f6fa; border-radius: 16px 16px 16px 5px; padding: 11px 14px; font-size: 13.5px; line-height: 1.7; color: var(--ink); max-width: 226px; }
+  .msg .bubble b { font-weight: 700; }
+  .msg .bubble .meta { font-size: 11.5px; color: var(--sub); margin-top: 4px; }
+  .ask { border: 1.5px solid var(--blue); background: var(--blue-soft); }
+  .askbtns { display: flex; gap: 8px; margin-top: 9px; }
+  .askbtns .b1 { background: var(--blue); color: #fff; border-radius: 9px; padding: 7px 14px; font-size: 12.5px; font-weight: 700; }
+  .askbtns .b2 { background: #fff; color: var(--ink); border: 1px solid #d7dbe4; border-radius: 9px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; }
+
+  /* screen 3: approval */
+  .aphead { margin-top: 22px; }
+  .aphead .t { font-size: 20px; font-weight: 700; color: var(--ink); line-height: 1.5; }
+  .aphead .d { font-size: 13px; color: var(--sub); margin-top: 4px; }
+  .cards { display: flex; gap: 10px; margin-top: 18px; overflow: hidden; }
+  .pcard { flex: none; width: 178px; border: 1.5px solid var(--line); border-radius: 16px; padding: 14px 15px; }
+  .pcard.pick { border-color: var(--blue); background: var(--blue-soft); }
+  .pcard .shop { font-size: 12px; color: var(--sub); font-weight: 600; }
+  .pcard .price { font-size: 21px; font-weight: 700; color: var(--ink); margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .pcard .lead { font-size: 12px; color: var(--sub); margin-top: 2px; }
+  .pcard .why { margin-top: 9px; font-size: 11.5px; color: var(--blue); font-weight: 700; }
+  .approve-btn { margin-top: 20px; background: var(--blue); color: #fff; border-radius: 14px; text-align: center; padding: 15px; font-size: 16px; font-weight: 700; }
+  .skip { text-align: center; font-size: 13px; color: var(--sub); margin-top: 12px; }
+  .guard { margin-top: 18px; background: var(--amber-soft); color: var(--amber); border-radius: 10px; padding: 9px 12px; font-size: 12px; font-weight: 600; }
+
+  /* screen 4: items */
+  .items { margin-top: 14px; display: flex; flex-direction: column; }
+  .item { display: flex; align-items: center; gap: 11px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+  .item .nm { flex: 1; }
+  .item .nm .n { font-size: 14.5px; font-weight: 700; color: var(--ink); }
+  .item .nm .s { font-size: 11.5px; color: var(--sub); margin-top: 1px; }
+  .steps4 { display: flex; gap: 3px; }
+  .steps4 i { width: 13px; height: 5px; border-radius: 3px; background: #e5e8ef; }
+  .steps4 i.f { background: var(--blue); }
+  .lv { font-size: 11px; font-weight: 700; color: var(--blue); width: 52px; text-align: right; }
+  .itemnote { margin-top: 14px; font-size: 12px; color: var(--sub); line-height: 1.7; }
+
+  /* screen 5: postcard */
+  .post { margin: 22px 0 0; border-radius: 20px; background: linear-gradient(160deg, #2563eb, #1e46b8); color: #fff; padding: 26px 24px; position: relative; overflow: hidden; }
+  .post .moon { position: absolute; right: -22px; top: -22px; width: 110px; height: 110px; border-radius: 50%; background: rgba(255,255,255,.09); }
+  .post .m { font-size: 12px; letter-spacing: .16em; opacity: .85; font-weight: 600; }
+  .post .v { font-size: 34px; font-weight: 700; margin-top: 10px; font-variant-numeric: tabular-nums; }
+  .post .vd { font-size: 13px; opacity: .9; margin-top: 2px; }
+  .post .rows { margin-top: 18px; border-top: 1px solid rgba(255,255,255,.25); padding-top: 12px; display: flex; flex-direction: column; gap: 7px; }
+  .post .r { display: flex; justify-content: space-between; font-size: 13px; }
+  .post .r b { font-variant-numeric: tabular-nums; }
+  .share { margin-top: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid #d7dbe4; border-radius: 12px; padding: 12px; font-size: 14px; font-weight: 700; color: var(--ink); }
+  .share svg { stroke: var(--ink); }
+  .postnote { text-align: center; font-size: 12px; color: var(--sub); margin-top: 10px; }
+
+  .foot { max-width: 1240px; margin: 26px auto 0; font-size: 14px; color: var(--pagesub); line-height: 2; border-top: 1px solid rgba(128,128,128,.25); padding-top: 16px; }
+</style>
+</head>
+<body>
+
+
+<div class="head">
+  <div class="eyebrow">TOMO(仮称) UI見本 v1 — 2026-08-17 / 静けさの5画面</div>
+  <h1>マネーフォワードが鏡なら、これは執事。</h1>
+  <p>鏡(家計簿)は全部見せて、判断をあなたに返す。執事は見るのが仕事で、あなたに届くのは結論だけ。グラフなし・赤字なし・触る場所は1画面に1つ。開かない日が普通、が理想。参考実例: みんなの銀行(白ミニマル)/Copilot Money(数字の品)/LINE(通知の距離感)/B/43(ペア文化)。</p>
+</div>
+
+<div class="rail">
+
+  <!-- 1 HOME -->
+  <div class="unit">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span>&#9679;&#9679;&#9679;</span></div>
+      <div class="app">
+        <div class="apphead"><div class="tomo"></div><div><div class="t">トモ</div><div class="d">8月17日(月)</div></div></div>
+        <div class="big"><small>TODAY</small>今日も、<br>足りてます。</div>
+        <div class="bbar">
+          <div class="cap"><span>8月の予算 のこり</span><b>¥46,800</b></div>
+          <div class="tr"><i></i></div>
+        </div>
+        <div class="oshi">推し活資金 ¥23,000 たしかに確保中</div>
+        <div class="quiet">
+          <div class="q">トモが今日やったこと</div>
+          <div class="row"><span>コンタクトの残りを確認</span><span>あと11日</span></div>
+          <div class="row"><span>引き落とし2件を照合</span><span>予算内</span></div>
+        </div>
+        <div class="tabbar">
+          <div class="tab on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>ホーム</div>
+          <div class="tab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>トモ</div>
+          <div class="tab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>品目</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="label">1. ホーム「今日の1枚」</div>
+    <div class="note">開いた瞬間に安心が終わる画面。数字は残り予算1つ、バー1本。Z世代の顔は「推し活資金 確保中」の1行で作る。グラフと赤字は永久に置かない。</div>
+  </div>
+
+  <!-- 2 FEED -->
+  <div class="unit">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span>&#9679;&#9679;&#9679;</span></div>
+      <div class="app">
+        <div class="apphead"><div class="tomo"></div><div><div class="t">トモ</div><div class="d">いつも隣にいます</div></div></div>
+        <div class="feed">
+          <div class="day">8月15日(土)</div>
+          <div class="msg"><div class="tomo sm"></div><div class="bubble">Workspaceの引き落とし <b>¥11,000</b>、先月と同じだったよ。<div class="meta">8:02</div></div></div>
+          <div class="msg"><div class="tomo sm"></div><div class="bubble">見慣れない引き落としが1件。<b>Square ¥63,790</b>。心あたりある?<div class="askbtns"><div class="b1">あるよ</div><div class="b2">確認する</div></div><div class="meta">8:02</div></div></div>
+          <div class="day">8月17日(月)</div>
+          <div class="msg"><div class="tomo sm"></div><div class="bubble ask">コンタクトが<b>あと11日</b>で切れそう。3社比べて最安を見つけたよ。<b>¥4,980</b>・木曜に届く。<div class="askbtns"><div class="b1">おねがい</div><div class="b2">今回はいい</div></div><div class="meta">9:30</div></div></div>
+        </div>
+        <div class="tabbar">
+          <div class="tab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>ホーム</div>
+          <div class="tab on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>トモ</div>
+          <div class="tab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>品目</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="label">2. トモのフィード</div>
+    <div class="note">家計簿の表ではなく、相棒のトーク。異常検知(見張り)も発注の提案(買う)も、同じ声で届く。1日2〜3枚まで、深夜は喋らない。この画面が「マネフォとの違い」の本体。</div>
+  </div>
+
+  <!-- 3 APPROVE -->
+  <div class="unit">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span>&#9679;&#9679;&#9679;</span></div>
+      <div class="app">
+        <div class="apphead"><div class="tomo"></div><div><div class="t">おねがいの確認</div><div class="d">上限を超えたときだけ聞きます</div></div></div>
+        <div class="aphead">
+          <div class="t">コンタクト 2week × 6箱</div>
+          <div class="d">残り11日分・届くまで3日。3社を比べました</div>
+        </div>
+        <div class="cards">
+          <div class="pcard pick"><div class="shop">A社</div><div class="price">¥4,980</div><div class="lead">木曜に届く</div><div class="why">トモのおすすめ</div></div>
+          <div class="pcard"><div class="shop">B社</div><div class="price">¥5,240</div><div class="lead">水曜に届く</div></div>
+        </div>
+        <div class="approve-btn">これでおねがい</div>
+        <div class="skip">今回はやめておく</div>
+        <div class="guard">予算の残り ¥46,800 の内側です。月の上限を超える提案はしません</div>
+        <div class="tabbar" style="margin-top:auto">
+          <div class="tab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>ホーム</div>
+          <div class="tab on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>トモ</div>
+          <div class="tab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>品目</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="label">3. 承認(稟議の代替)</div>
+    <div class="note">通知からなら1タップで終わり。開いた場合も、選ぶ→押すの2動作だけ。下の琥珀の1行が責任憲章(上限の内側でしか動かない)のUI表現。</div>
+  </div>
+
+  <!-- 4 ITEMS -->
+  <div class="unit">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span>&#9679;&#9679;&#9679;</span></div>
+      <div class="app">
+        <div class="apphead"><div class="tomo"></div><div><div class="t">品目とおまかせ度</div><div class="d">まかせ方は、あなたが1つずつ決める</div></div></div>
+        <div class="items">
+          <div class="item"><div class="nm"><div class="n">コンタクト 2week</div><div class="s">聞いてから買う</div></div><div class="steps4"><i class="f"></i><i class="f"></i><i></i><i></i></div><div class="lv">段位 2</div></div>
+          <div class="item"><div class="nm"><div class="n">シャンプー・トリートメント</div><div class="s">買ってから報告</div></div><div class="steps4"><i class="f"></i><i class="f"></i><i class="f"></i><i></i></div><div class="lv">段位 3</div></div>
+          <div class="item"><div class="nm"><div class="n">水 2L×9本</div><div class="s">無言でおまかせ・8ヶ月目</div></div><div class="steps4"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i></div><div class="lv">段位 4</div></div>
+          <div class="item"><div class="nm"><div class="n">プロテイン</div><div class="s">まだ観察中(ペース学習)</div></div><div class="steps4"><i class="f"></i><i></i><i></i><i></i></div><div class="lv">段位 1</div></div>
+        </div>
+        <div class="itemnote">段位はいつでも下げられます。トモが勝手に上げることはありません。積み上がった段位と履歴は、この関係の資産です。</div>
+        <div class="tabbar" style="margin-top:auto">
+          <div class="tab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>ホーム</div>
+          <div class="tab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>トモ</div>
+          <div class="tab on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>品目</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="label">4. 品目とおまかせ度(信頼の階段)</div>
+    <div class="note">段位①観察→②提案→③事後報告→④無言。この画面は競合に無い、うち固有の発明部分。段位が育つほど乗り換えられなくなる(=強み)のを、ユーザー自身の資産として見せる。</div>
+  </div>
+
+  <!-- 5 POSTCARD -->
+  <div class="unit">
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span>&#9679;&#9679;&#9679;</span></div>
+      <div class="app">
+        <div class="apphead"><div class="tomo"></div><div><div class="t">8月のまとめ</div><div class="d">月にいちどだけ、少しにぎやかに</div></div></div>
+        <div class="post">
+          <div class="moon"></div>
+          <div class="m">AUGUST — TOMO REPORT</div>
+          <div class="v">¥12,400</div>
+          <div class="vd">トモが比べて浮いた額(推し活へ)</div>
+          <div class="rows">
+            <div class="r"><span>切らした回数</span><b>0回</b></div>
+            <div class="r"><span>あなたの操作</span><b>7タップ</b></div>
+            <div class="r"><span>予算</span><b>のこして着地</b></div>
+          </div>
+        </div>
+        <div class="share">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4"/><path d="M12 2v13"/></svg>
+          この1枚をシェア
+        </div>
+        <div class="postnote">数字は自分の実績のみ。盛らない・比較しない・煽らない。</div>
+        <div class="tabbar" style="margin-top:auto">
+          <div class="tab on"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="m3 10 9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>ホーム</div>
+          <div class="tab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>トモ</div>
+          <div class="tab"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/></svg>品目</div>
+        </div>
+      </div>
+    </div></div>
+    <div class="label">5. 月末の絵葉書(シェア装置)</div>
+    <div class="note">月に1枚だけ情緒を許す画面。「浮いた額は推しへ」のフレームでZ世代のストーリーズに乗る。獲得導線はこの1枚が担う。</div>
+  </div>
+
+</div>
+
+<div class="foot">
+  マネフォとの違いの設計メモ: ①主語が違う(家計簿=あなたが見る/トモ=トモが見た結果だけ話す) ②終点が違う(家計簿=見るのが終点/トモ=段位が上がると「買っておいたよ」に到達する) ③感情が違う(赤字グラフの罪悪感/「足りてます」の安心)。データ源(明細)が同じでも、この3つで別の製品になる。マスコットは仮(青い角丸+目2つ)。本実装時はみんなの銀行・B/43・Copilot Money・LINEの実画面を開いてから作る。
+</div>
+
+</body>
+</html>

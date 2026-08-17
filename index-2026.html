@@ -334,14 +334,17 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .site-nav a:not(.pill)::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--blue);scale:0 1;transform-origin:left center;transition:scale 0.35s var(--ease);}
 .site-nav a:not(.pill):hover{color:var(--blue);}
 .site-nav a:not(.pill):hover::after{scale:1 1;}
-.site-nav a.pill{background:var(--blue);color:#fff;padding:0.6rem 1.3rem;border-radius:999px;font-weight:700;font-size:0.86rem;transition:background 0.3s var(--ease),transform 0.3s var(--ease);}
-.site-nav a.pill:hover{background:#2446ad;transform:translateY(-2px);}
+.site-nav a.hbtn{display:inline-flex;align-items:center;gap:0.55rem;color:#fff;padding:0.72rem 1.25rem;border-radius:8px;font-weight:700;font-size:0.88rem;transition:opacity 0.25s var(--ease),transform 0.25s var(--ease);}
+.site-nav a.hbtn:hover{opacity:0.88;transform:translateY(-1px);}
+.site-nav a.hbtn svg{width:16px;height:16px;stroke:#fff;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none;}
+.site-nav a.hbtn.dl{background:var(--blue);}
+.site-nav a.hbtn.ct{background:#17191f;}
 .nav-toggle{display:none;margin-left:auto;background:none;border:1px solid var(--line);border-radius:8px;padding:0.45rem 0.7rem;font-size:0.85rem;cursor:pointer;font-family:inherit;}
 @media(max-width:1000px){
   .site-nav{position:fixed;inset:70px 0 auto;flex-direction:column;align-items:flex-start;gap:0;background:#fff;border-bottom:1px solid var(--line);padding:0.5rem 24px 1.4rem;display:none;}
   .site-nav.open{display:flex;}
   .site-nav a{padding:0.75rem 0;width:100%;border-bottom:1px solid var(--line);font-size:1rem;}
-  .site-nav a.pill{margin-top:1rem;border-bottom:0;text-align:center;}
+  .site-nav a.hbtn{margin-top:1rem;border-bottom:0;justify-content:center;}
   .nav-toggle{display:block;}
 }
 
@@ -577,19 +580,35 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .lead-mag li + li{margin-top:0.8rem;}
 .lead-mag li::before{content:"";position:absolute;left:0;top:0.8em;width:6px;height:6px;border-radius:999px;background:var(--blue);}
 
-/* ---------- お問い合わせ ---------- */
-.contact{display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;}
-@media(max-width:900px){.contact{grid-template-columns:1fr;}}
-.field{margin-bottom:1.2rem;}
-.field label{display:block;font-size:0.75rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);margin-bottom:0.5rem;}
-.field input,.field textarea{width:100%;font:inherit;font-size:1rem;padding:0.85rem 1rem;border:1px solid var(--line);border-radius:10px;background:#fff;transition:border-color 0.3s var(--ease),box-shadow 0.3s var(--ease);}
-.field textarea{min-height:9rem;line-height:1.85;}
+/* ---------- お問い合わせ（ZeroDemo式: 左=案内 右=フォーム） ---------- */
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+@media(max-width:900px){.contact{grid-template-columns:1fr;gap:40px;}}
+.c-left h3{font-size:clamp(1.3rem,2.6vw,1.7rem);font-weight:700;line-height:1.6;text-align:center;margin-bottom:1.8rem;}
+.c-left ul{list-style:none;max-width:26em;margin:0 auto;}
+.c-left li{font-size:0.98rem;line-height:2;padding-left:1.2em;position:relative;color:var(--ink-soft);}
+.c-left li::before{content:"・";position:absolute;left:0;}
+.c-left .reply{color:var(--blue);font-weight:700;font-size:1.05rem;line-height:2;text-align:center;margin:2.2rem auto;max-width:24em;}
+.c-left .sub-link{display:flex;align-items:center;justify-content:center;gap:0.8rem;max-width:20em;margin:0 auto;border:1px solid var(--blue);border-radius:12px;padding:1rem 1.4rem;color:var(--blue);font-weight:700;transition:background 0.3s var(--ease);}
+.c-left .sub-link:hover{background:var(--band-blue);}
+.c-left .sub-link .circle{width:30px;height:30px;border-radius:999px;background:var(--blue);color:#fff;display:grid;place-items:center;flex:none;}
+.c-left .sub-cap{text-align:center;color:var(--muted);font-size:0.85rem;line-height:1.9;margin-top:0.9rem;}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:560px){.f-row{grid-template-columns:1fr;}}
+.field{margin-bottom:1.3rem;}
+.field label{display:flex;align-items:center;gap:0.5rem;font-size:0.92rem;font-weight:700;color:var(--ink);margin-bottom:0.5rem;}
+.badge-req,.badge-opt{font-size:0.68rem;font-weight:700;border-radius:4px;padding:0.12rem 0.45rem;line-height:1.4;}
+.badge-req{background:#d93025;color:#fff;}
+.badge-opt{background:#e6e8ef;color:#555;}
+.field input,.field textarea{width:100%;font:inherit;font-size:1rem;padding:0.8rem 1rem;border:1px solid #cfd4e0;border-radius:6px;background:#fff;transition:border-color 0.3s var(--ease),box-shadow 0.3s var(--ease);}
+.field input::placeholder,.field textarea::placeholder{color:#b6bcc9;}
+.field textarea{min-height:8rem;line-height:1.85;}
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,86,201,0.15);}
-.info{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
-.info div + div{margin-top:1.2rem;}
-.info dt{font-size:0.75rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);}
-.info dd{font-size:0.96rem;line-height:1.85;margin-top:0.25rem;}
-.info a{color:var(--blue);text-decoration:underline;}
+.consent{display:flex;align-items:flex-start;gap:0.6rem;font-size:0.9rem;line-height:1.8;margin:0.4rem 0 1.4rem;}
+.consent input{width:17px;height:17px;margin-top:0.35rem;flex:none;accent-color:var(--blue);}
+.consent a{color:var(--blue);text-decoration:underline;}
+.submit-btn{display:block;width:100%;background:#4c9df0;color:#fff;font:inherit;font-size:1.05rem;font-weight:700;letter-spacing:0.1em;border:0;border-radius:6px;padding:0.95rem;cursor:pointer;transition:background 0.3s var(--ease),transform 0.3s var(--ease);}
+.submit-btn:hover{background:var(--blue);transform:translateY(-1px);}
+.form-note{font-size:0.84rem;color:var(--muted);line-height:1.9;margin-top:1rem;}
 
 /* ---------- 紺のプレフッターCTA（opthubそのまま） ---------- */
 .precta{background:var(--navy-deep);color:#fff;text-align:center;padding:76px 24px;}
@@ -632,9 +651,9 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <a href="#agent-demo">実装イメージ</a>
       <a href="#case">事例</a>
       <a href="#column">記事</a>
-      <a href="#news">お知らせ</a>
       <a href="#faq">FAQ</a>
-      <a href="#contact" class="pill">お問い合わせ</a>
+      <a href="shiryo.html" class="hbtn dl">資料ダウンロード<svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"></path><path d="M14 3v6h6"></path></svg></a>
+      <a href="#contact" class="hbtn ct">お問い合わせ<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="m3 7 9 6 9-6"></path></svg></a>
     </nav>
   </div>
 </header>
@@ -1110,26 +1129,35 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="sec-label" data-rv="up">Contact</div>
       <h2 class="sec-title" data-rv="up" style="--d:100ms">お問い合わせ</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="contact-lead">AIの可能性についてのご相談、プロダクトのお問い合わせはこちらからどうぞ。担当者より2営業日以内にご返信いたします。</p>
     </div>
     <div class="contact">
-      <form action="https://formspree.io/f/xeevwrgp" method="POST" data-rv="up" style="--d:120ms">
+      <div class="c-left" data-rv="up" style="--d:120ms">
+        <h3 data-edit="contact-h">AIdollargameが、貴社のAI導入を<br>サポートします</h3>
+        <ul>
+          <li data-edit="contact-li1">AI導入の無料相談（初回30分・オンライン）</li>
+          <li data-edit="contact-li2">お見積もり</li>
+          <li data-edit="contact-li3">AI研修・各プロダクト・その他サービスについてのお問い合わせ</li>
+        </ul>
+        <p class="reply" data-edit="contact-reply">フォームの送信後、担当者より通常2営業日以内にご返信させていただきます。</p>
+        <a href="shindan.html" class="sub-link"><span data-edit="contact-sublink">3分でわかる無料AI診断</span><span class="circle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></span></a>
+        <p class="sub-cap" data-edit="contact-subcap">3つの質問に答えるだけで、自社に合うAIの使い方の目安がわかります</p>
+      </div>
+      <form action="https://formspree.io/f/xeevwrgp" method="POST" data-rv="up" style="--d:240ms">
         <input type="hidden" name="_subject" value="【AIdollargame HP】お問い合わせ">
         <input type="hidden" name="_next" value="https://aidollargame.com/thanks.html">
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
-        <div class="field"><label>会社名</label><input type="text" name="company" placeholder="株式会社〇〇" required></div>
-        <div class="field"><label>お名前</label><input type="text" name="name" placeholder="山田 太郎" required></div>
-        <div class="field"><label>メールアドレス</label><input type="email" name="email" placeholder="email@example.com" required></div>
-        <div class="field"><label>ご相談内容</label><textarea name="message" placeholder="ご相談内容をご記入ください" required></textarea></div>
-        <button class="btn btn-navy" type="submit" style="cursor:pointer;font-family:inherit;border:0;">送信する →</button>
+        <div class="f-row">
+          <div class="field"><label>姓 <span class="badge-req">必須</span></label><input type="text" name="last_name" placeholder="山田" required></div>
+          <div class="field"><label>名 <span class="badge-req">必須</span></label><input type="text" name="first_name" placeholder="太郎" required></div>
+        </div>
+        <div class="field"><label>会社名 <span class="badge-opt">任意</span></label><input type="text" name="company" placeholder="株式会社 カンパニー"></div>
+        <div class="field"><label>メールアドレス <span class="badge-req">必須</span></label><input type="email" name="email" placeholder="example@yourdomain.com" required></div>
+        <div class="field"><label>電話番号 <span class="badge-opt">任意</span></label><input type="tel" name="tel" placeholder="00000000000"></div>
+        <div class="field"><label>ご相談内容 <span class="badge-req">必須</span></label><textarea name="message" placeholder="ご相談内容をご記入ください" required></textarea></div>
+        <label class="consent"><input type="checkbox" required><span>ご提供いただく<a href="privacy.html" target="_blank" rel="noopener">個人情報のお取り扱い</a>に同意する</span></label>
+        <button class="submit-btn" type="submit">送信</button>
+        <p class="form-note" data-edit="contact-note">※上記フォームへ必要事項をご記入の上、送信をお願いいたします。担当者より通常2営業日以内にご返信いたします。</p>
       </form>
-      <div class="info" data-rv="up" style="--d:240ms">
-        <dl>
-          <div><dt>メール</dt><dd><a href="mailto:info@aidollargame.com">info@aidollargame.com</a></dd></div>
-          <div><dt>会社名</dt><dd>株式会社AIdollargame（東京都新宿区北新宿1-7-20）</dd></div>
-          <div><dt>初回相談</dt><dd>オンラインで30分・無料。資料だけ見たい方は<a href="shiryo.html">無料資料</a>へ</dd></div>
-        </dl>
-      </div>
     </div>
   </div>
 </section>

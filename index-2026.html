@@ -269,155 +269,169 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Share+Tech+Mono&family=Yuji+Syuku&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   aidollargame.com トップページ v2026-08 rev2
-   参考にした実在デザイン: opthub.ai（STUDIO製）
-   ・動き: .appear = opacity0 + translate(0,-48px/30px) + scale-x(0)の下線、
-     遅延200〜400ms・最長1600ms・easing cubic-bezier(0.4,0.4,0,1) を再現
-   ・構造: 英語ラベル→青見出し→短い下線 / 円環の関係図 / 線画アイコン付き白カード /
-     ラベンダーの中間CTA帯 / サムネ+バッジのカード / 丸矢印の一覧リンク
-   文字は現行どおりApple標準のシステムフォント。
+   aidollargame.com トップページ v2026-08 rev4
+   参考: opthub.ai（構成を変えずに踏襲）
+   Hero(写真+青かぶせ) → 実績帯 → 課題 → About → 事業内容(循環図)
+   → プロダクト5枚 → LINE実装デモ(現行の動くデモを移植) → 薄紫CTA帯
+   → 事例 → イベント → 記事 → ニュース → FAQ → 資料 → 問い合わせ
+   → 紺CTA → 黒フッター
+   色はopthubの明るい配色(地#f5f5f7・青#2f56c9・紺ボタン#2c3f7d・薄紫#e7ebfb)。
+   文字はApple標準のシステムフォント。
+   本文の文言は data-edit 属性つき＝記事エディタ(:8819)で本人が編集できる。
    ============================================================ */
 :root{
-  --ink:#0e1116;
-  --ink-soft:#333845;
-  --muted:#5d6270;
-  --blue:#2657c4;
-  --blue-mid:#3f6fdc;
-  --blue-deep:#14224e;
-  --band:#f2f4fa;
-  --band-blue:#e6edff;
-  --lav:#e8ecfd;
-  --line:#e3e6ee;
-  --radius:14px;
+  --ink:#14161f;
+  --ink-soft:#3a3f4d;
+  --muted:#6b7080;
+  --blue:#2f56c9;
+  --navy:#2c3f7d;
+  --navy-deep:#1b2a55;
+  --orange:#f0a63c;
+  --bg:#f5f5f7;
+  --lavender:#e7ebfb;
+  --band-blue:#e9eefb;
+  --line:#e6e8ef;
+  --line-green:#06c755;
+  --radius:16px;
   --maxw:1180px;
   --ease:cubic-bezier(0.4,0.4,0,1);
+  --shadow:0 2px 14px rgba(20,30,70,0.06);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;background:#fff;}
+html{scroll-behavior:smooth;background:var(--bg);}
 body{
-  background:#fff;color:var(--ink);
+  background:var(--bg);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;
-  font-size:17px;line-height:1.95;letter-spacing:0.02em;
+  font-size:16.5px;line-height:1.95;letter-spacing:0.02em;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
 }
 img{max-width:100%;height:auto;display:block;}
 a{color:inherit;text-decoration:none;}
 svg{display:block;}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
-.sec{padding:104px 0;}
-.sec--band{background:var(--band);}
+.sec{padding:92px 0;}
+.sec--white{background:#fff;}
 
-/* ---------- 動き（opthubの.appearに相当） ---------- */
+/* ---------- 動き（opthubの.appear相当） ---------- */
 html.js [data-rv]{opacity:0;transition:opacity 0.9s var(--ease),translate 0.9s var(--ease),scale 1.2s var(--ease);transition-delay:var(--d,0ms);}
 html.js [data-rv="up"]{translate:0 30px;}
 html.js [data-rv="down"]{translate:0 -40px;}
-html.js [data-rv="left"]{translate:-32px 0;}
 html.js [data-rv="right"]{translate:32px 0;}
 html.js [data-rv="line"]{scale:0 1;transform-origin:left center;transition-duration:1.2s;}
 html.js [data-rv].in{opacity:1;translate:0 0;scale:1 1;}
-@media(prefers-reduced-motion:reduce){[data-rv]{opacity:1!important;translate:none!important;scale:1 1!important;transition:none!important;}}
+html.js [data-rv="draw"]{stroke-dasharray:420;stroke-dashoffset:420;opacity:1;transition:stroke-dashoffset 1.6s var(--ease);transition-delay:var(--d,0ms);}
+html.js [data-rv="draw"].in{stroke-dashoffset:0;}
+@media(prefers-reduced-motion:reduce){html.js [data-rv]{opacity:1!important;translate:none!important;scale:1 1!important;transition:none!important;}}
 
 /* ---------- ヘッダー ---------- */
-header.site{position:sticky;top:0;z-index:60;background:rgba(255,255,255,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);transition:box-shadow 0.4s var(--ease),background 0.4s var(--ease);}
-header.site.scrolled{box-shadow:0 10px 30px -22px rgba(14,34,78,0.35);background:rgba(255,255,255,0.97);}
-.site-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;height:72px;display:flex;align-items:center;gap:26px;transition:height 0.4s var(--ease);}
-header.site.scrolled .site-inner{height:62px;}
-.brand{font-size:1.28rem;font-weight:700;letter-spacing:-0.01em;display:inline-flex;align-items:center;}
+header.site{position:sticky;top:0;z-index:60;background:rgba(255,255,255,0.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);transition:box-shadow 0.4s var(--ease);}
+header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
+.site-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;height:70px;display:flex;align-items:center;gap:26px;}
+.brand{font-size:1.26rem;font-weight:700;display:inline-flex;align-items:center;}
 .brand .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757;}
 .brand .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757;}
 .site-nav{margin-left:auto;display:flex;align-items:center;gap:20px;}
-.site-nav a{font-size:0.92rem;font-weight:500;color:var(--ink-soft);position:relative;padding:0.2rem 0;}
+.site-nav a{font-size:0.9rem;font-weight:500;color:var(--ink-soft);position:relative;padding:0.2rem 0;}
 .site-nav a:not(.pill)::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--blue);scale:0 1;transform-origin:left center;transition:scale 0.35s var(--ease);}
 .site-nav a:not(.pill):hover{color:var(--blue);}
 .site-nav a:not(.pill):hover::after{scale:1 1;}
-.site-nav a.pill{background:var(--blue);color:#fff;padding:0.6rem 1.3rem;border-radius:999px;font-weight:700;font-size:0.88rem;transition:background 0.3s var(--ease),transform 0.3s var(--ease);}
-.site-nav a.pill:hover{background:#1c46a8;transform:translateY(-2px);}
+.site-nav a.pill{background:var(--blue);color:#fff;padding:0.6rem 1.3rem;border-radius:999px;font-weight:700;font-size:0.86rem;transition:background 0.3s var(--ease),transform 0.3s var(--ease);}
+.site-nav a.pill:hover{background:#2446ad;transform:translateY(-2px);}
 .nav-toggle{display:none;margin-left:auto;background:none;border:1px solid var(--line);border-radius:8px;padding:0.45rem 0.7rem;font-size:0.85rem;cursor:pointer;font-family:inherit;}
 @media(max-width:1000px){
-  .site-nav{position:fixed;inset:72px 0 auto;flex-direction:column;align-items:flex-start;gap:0;background:#fff;border-bottom:1px solid var(--line);padding:0.5rem 24px 1.4rem;display:none;}
+  .site-nav{position:fixed;inset:70px 0 auto;flex-direction:column;align-items:flex-start;gap:0;background:#fff;border-bottom:1px solid var(--line);padding:0.5rem 24px 1.4rem;display:none;}
   .site-nav.open{display:flex;}
   .site-nav a{padding:0.75rem 0;width:100%;border-bottom:1px solid var(--line);font-size:1rem;}
   .site-nav a.pill{margin-top:1rem;border-bottom:0;text-align:center;}
   .nav-toggle{display:block;}
 }
 
-/* ---------- ヒーロー ---------- */
-.hero{position:relative;min-height:min(80vh,660px);display:flex;align-items:flex-end;background:#0b1220;overflow:hidden;}
+/* ---------- ヒーロー（opthub式=写真に青をかぶせて明るく） ---------- */
+.hero{position:relative;min-height:min(72vh,600px);display:flex;align-items:center;background:var(--navy-deep);overflow:hidden;}
 .hero-media{position:absolute;inset:0;overflow:hidden;}
-.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 32%;opacity:0.6;scale:1.12;transition:scale 14s linear,opacity 1.6s var(--ease);}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 30%;filter:saturate(0.85) brightness(1.02);scale:1.1;transition:scale 14s linear;}
 .hero.ready .hero-media img{scale:1;}
-.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,12,28,0.88) 0%,rgba(6,12,28,0.64) 46%,rgba(6,12,28,0.28) 100%);}
-.hero-body{position:relative;max-width:var(--maxw);margin:0 auto;padding:130px 24px 74px;width:100%;}
-.hero-eyebrow{color:#cfe0ff;font-size:0.86rem;font-weight:700;letter-spacing:0.22em;margin-bottom:1.1rem;}
+.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(30,49,110,0.9) 0%,rgba(30,49,110,0.66) 48%,rgba(30,49,110,0.34) 100%);}
+.hero-body{position:relative;max-width:var(--maxw);margin:0 auto;padding:110px 24px 90px;width:100%;}
+.hero-eyebrow{color:#dbe6ff;font-size:0.85rem;font-weight:700;letter-spacing:0.22em;margin-bottom:1rem;}
 .hero h1{color:#fff;font-size:clamp(1.9rem,4.4vw,3rem);font-weight:700;line-height:1.5;letter-spacing:0.03em;}
 .hero h1 ruby rt{font-size:0.42em;font-weight:500;opacity:0.85;}
-.hero p.hero-sub{color:rgba(255,255,255,0.9);font-size:1.02rem;line-height:1.95;margin-top:1.4rem;max-width:44em;}
-.hero-cta{display:flex;gap:0.9rem;flex-wrap:wrap;margin-top:2.2rem;}
-.scroll-cue{position:absolute;right:32px;bottom:26px;display:flex;align-items:center;gap:0.7rem;color:rgba(255,255,255,0.72);font-size:0.7rem;letter-spacing:0.24em;font-weight:700;}
-.scroll-cue i{display:block;width:1px;height:46px;background:rgba(255,255,255,0.5);position:relative;overflow:hidden;}
-.scroll-cue i::after{content:"";position:absolute;left:0;top:-46px;width:1px;height:46px;background:#fff;animation:cue 2.4s var(--ease) infinite;}
-@keyframes cue{0%{transform:translateY(0)}60%{transform:translateY(92px)}100%{transform:translateY(92px)}}
+.hero p.hero-sub{color:rgba(255,255,255,0.94);font-size:1rem;line-height:2;margin-top:1.3rem;max-width:44em;}
+.hero-cta{display:flex;gap:0.9rem;flex-wrap:wrap;margin-top:2rem;}
+.hero-banner{display:inline-flex;align-items:center;gap:0.8rem;margin-top:1.6rem;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.35);border-radius:999px;padding:0.55rem 1.2rem;color:#fff;font-size:0.85rem;transition:background 0.3s var(--ease);}
+.hero-banner:hover{background:rgba(255,255,255,0.24);}
+.hero-banner .hb-badge{background:var(--orange);color:#3c2a05;font-weight:700;font-size:0.72rem;border-radius:999px;padding:0.15rem 0.7rem;}
+.hero-banner .mk{font-weight:700;}
+.scroll-cue{position:absolute;right:32px;bottom:24px;display:flex;align-items:center;gap:0.7rem;color:rgba(255,255,255,0.75);font-size:0.68rem;letter-spacing:0.24em;font-weight:700;}
+.scroll-cue i{display:block;width:1px;height:44px;background:rgba(255,255,255,0.5);position:relative;overflow:hidden;}
+.scroll-cue i::after{content:"";position:absolute;left:0;top:-44px;width:1px;height:44px;background:#fff;animation:cue 2.4s var(--ease) infinite;}
+@keyframes cue{0%{transform:translateY(0)}60%{transform:translateY(88px)}100%{transform:translateY(88px)}}
 @media(max-width:900px){.scroll-cue{display:none;}}
 
-.btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.95rem 1.7rem;border-radius:999px;font-size:0.95rem;font-weight:700;letter-spacing:0.04em;transition:transform 0.3s var(--ease),background 0.3s var(--ease),box-shadow 0.4s var(--ease),color 0.3s var(--ease),border-color 0.3s var(--ease);}
+.btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 1.7rem;border-radius:999px;font-size:0.93rem;font-weight:700;letter-spacing:0.04em;transition:transform 0.3s var(--ease),background 0.3s var(--ease),box-shadow 0.4s var(--ease),color 0.3s var(--ease),border-color 0.3s var(--ease);}
 .btn:hover{transform:translateY(-2px);}
 .btn-fill{background:var(--blue);color:#fff;}
-.btn-fill:hover{background:#1c46a8;box-shadow:0 16px 34px -18px rgba(38,87,196,0.7);}
-.btn-line{border:1px solid rgba(255,255,255,0.6);color:#fff;}
+.btn-fill:hover{background:#2446ad;box-shadow:0 16px 34px -18px rgba(47,86,201,0.6);}
+.btn-line{border:1px solid rgba(255,255,255,0.65);color:#fff;}
 .btn-line:hover{background:rgba(255,255,255,0.14);}
-.btn-dark{background:var(--blue-deep);color:#fff;}
-.btn-dark:hover{background:#0c1636;box-shadow:0 16px 34px -18px rgba(20,34,78,0.7);}
+.btn-navy{background:var(--navy);color:#fff;}
+.btn-navy:hover{background:#233468;box-shadow:0 16px 34px -18px rgba(44,63,125,0.6);}
+.btn-orange{background:var(--orange);color:#3c2a05;}
+.btn-orange:hover{background:#e29a2e;box-shadow:0 16px 34px -18px rgba(240,166,60,0.55);}
 .btn-ghost{border:1px solid var(--line);color:var(--ink);background:#fff;}
 .btn-ghost:hover{border-color:var(--blue);color:var(--blue);}
 
-/* ---------- 実績帯（数字はカウントアップ） ---------- */
-.facts{background:var(--blue-deep);color:#fff;}
-.facts-grid{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(3,1fr);}
-.fact{padding:30px 26px 30px 0;border-right:1px solid rgba(255,255,255,0.14);}
-.fact:last-child{border-right:0;}
-.fact:not(:first-child){padding-left:26px;}
-.fact dt{font-size:0.74rem;letter-spacing:0.18em;color:#a9bde8;font-weight:700;}
-.fact dd{margin-top:0.4rem;font-size:0.9rem;line-height:1.7;color:#dbe4f8;}
-.fact .big{display:block;margin-bottom:0.35rem;font-size:1.9rem;font-weight:700;letter-spacing:0.02em;line-height:1.3;font-variant-numeric:tabular-nums;}
-.fact .big small{font-size:0.9rem;font-weight:700;margin-left:0.15rem;}
-@media(max-width:860px){.facts-grid{grid-template-columns:1fr;}.fact{border-bottom:1px solid rgba(255,255,255,0.14);padding:22px 20px;}.fact:nth-child(2n){border-right:0;}.fact:not(:first-child){padding-left:20px;}}
+/* ---------- 実績帯（opthubのロゴ帯の位置。実名の実績を文字で） ---------- */
+.cred{background:#fff;border-bottom:1px solid var(--line);}
+.cred-inner{max-width:var(--maxw);margin:0 auto;padding:22px 24px;display:flex;align-items:center;gap:2.2rem;flex-wrap:wrap;justify-content:center;}
+.cred .cl{font-size:0.72rem;letter-spacing:0.18em;font-weight:700;color:var(--muted);flex:none;}
+.cred .ci{font-size:0.9rem;font-weight:700;color:var(--ink-soft);white-space:nowrap;text-align:center;}
+.cred .ci small{display:block;font-size:0.68rem;font-weight:500;color:var(--muted);letter-spacing:0.04em;}
+@media(max-width:760px){.cred-inner{gap:1rem 1.6rem;}.cred .ci{white-space:normal;}}
 
-/* ---------- セクション見出し ---------- */
-.sec-head{margin-bottom:48px;}
-.sec-label{font-size:0.86rem;font-weight:700;letter-spacing:0.16em;color:var(--ink);}
-.sec-title{color:var(--blue);font-size:clamp(1.5rem,3.2vw,2rem);font-weight:700;line-height:1.5;letter-spacing:0.05em;margin-top:0.35rem;}
-.sec-rule{width:56px;height:2px;background:var(--blue);margin-top:20px;}
-.sec-lead{color:var(--muted);font-size:1rem;margin-top:22px;max-width:52em;}
+/* ---------- セクション見出し（英語ラベル+青見出し+短い下線） ---------- */
+.sec-head{margin-bottom:44px;}
+.sec-label{font-size:0.85rem;font-weight:700;letter-spacing:0.16em;color:var(--ink);}
+.sec-title{color:var(--blue);font-size:clamp(1.45rem,3.2vw,1.95rem);font-weight:700;line-height:1.5;letter-spacing:0.05em;margin-top:0.35rem;}
+.sec-rule{width:56px;height:2px;background:var(--blue);margin-top:18px;}
+.sec-lead{color:var(--muted);font-size:0.98rem;margin-top:20px;max-width:52em;}
 .sec-head.center{text-align:center;}
 .sec-head.center .sec-rule{margin-left:auto;margin-right:auto;}
 .sec-head.center .sec-lead{margin-left:auto;margin-right:auto;}
 
-/* ---------- 丸矢印リンク ---------- */
-.arrow-link{display:inline-flex;align-items:center;gap:0.9rem;font-weight:700;font-size:0.95rem;color:var(--ink);}
-.arrow-link .circle{width:48px;height:48px;border-radius:999px;background:var(--blue);color:#fff;display:grid;place-items:center;transition:transform 0.35s var(--ease),background 0.35s var(--ease);}
-.arrow-link:hover .circle{transform:translateX(6px);background:#1c46a8;}
+/* ---------- 丸矢印リンク（opthubの一覧リンク） ---------- */
+.arrow-link{display:inline-flex;align-items:center;gap:0.9rem;font-weight:700;font-size:0.93rem;color:var(--ink);}
+.arrow-link .circle{width:46px;height:46px;border-radius:999px;background:var(--blue);color:#fff;display:grid;place-items:center;transition:transform 0.35s var(--ease),background 0.35s var(--ease);flex:none;}
+.arrow-link:hover .circle{transform:translateX(6px);background:#2446ad;}
 .arrow-link:hover{color:var(--blue);}
 
-/* ---------- 2カラム ---------- */
+/* ---------- 課題リスト ---------- */
+.issues{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;}
+@media(max-width:860px){.issues{grid-template-columns:1fr;}}
+.issues a{display:flex;align-items:center;gap:1rem;padding:19px 4px;border-bottom:1px solid var(--line);font-size:0.98rem;line-height:1.7;transition:color 0.3s var(--ease),padding-left 0.3s var(--ease);}
+.issues a::after{content:"";margin-left:auto;width:8px;height:8px;border-right:1.8px solid var(--blue);border-top:1.8px solid var(--blue);transform:rotate(45deg);transition:transform 0.3s var(--ease);flex:none;}
+.issues a:hover{color:var(--blue);padding-left:10px;}
+.issues .no{font-size:0.76rem;font-weight:700;color:#9aa3bb;min-width:2.2em;letter-spacing:0.08em;}
+
+/* ---------- About ---------- */
 .split{display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;}
-@media(max-width:900px){.split{grid-template-columns:1fr;gap:34px;}}
-.split p{color:var(--ink-soft);}
-.split p + p{margin-top:1.1rem;}
+@media(max-width:900px){.split{grid-template-columns:1fr;gap:32px;}}
+.split .msg p{color:var(--ink-soft);margin-bottom:1rem;}
 .photo-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.photo-pair figure{margin:0;overflow:hidden;border-radius:var(--radius);}
+.photo-pair figure{margin:0;}
 .photo-pair .ph{overflow:hidden;border-radius:var(--radius);border:1px solid var(--line);}
 .photo-pair img{width:100%;aspect-ratio:4/3;object-fit:cover;transition:scale 0.9s var(--ease);}
 .photo-pair figure:hover img{scale:1.06;}
-.photo-pair figcaption{font-size:0.78rem;color:var(--muted);margin-top:0.55rem;line-height:1.6;}
+.photo-pair figcaption{font-size:0.76rem;color:var(--muted);margin-top:0.5rem;line-height:1.6;}
 
-/* ---------- 関係図 ---------- */
-.diagram{background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 24px 26px;}
+/* ---------- 循環図 ---------- */
+.diagram{background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 24px 26px;box-shadow:var(--shadow);}
 .diagram .dg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .diagram svg{width:100%;height:auto;max-width:940px;margin:0 auto;}
-.diagram .swipe{display:none;text-align:center;font-size:0.76rem;color:var(--muted);margin-top:0.6rem;}
+.diagram .swipe{display:none;text-align:center;font-size:0.74rem;color:var(--muted);margin-top:0.6rem;}
 @media(max-width:760px){.diagram{padding:24px 14px 20px;}.diagram svg{min-width:700px;}.diagram .swipe{display:block;}}
 .diagram .cap{text-align:center;color:var(--muted);font-size:0.84rem;margin-top:1rem;}
-.dg-line{stroke:var(--blue);stroke-width:1.6;fill:none;stroke-dasharray:1 1;stroke-dashoffset:0;}
+.dg-line{stroke:var(--blue);stroke-width:1.6;fill:none;}
 .dg-arrow{fill:var(--blue);}
 .dg-circle{fill:#fff;stroke:var(--line);stroke-width:1.4;}
 .dg-circle-main{fill:var(--band-blue);stroke:#c9d7f7;}
@@ -425,172 +439,167 @@ header.site.scrolled .site-inner{height:62px;}
 .dg-sub{font-size:12.5px;fill:var(--muted);}
 .dg-flow{font-size:12.5px;font-weight:700;fill:var(--blue);}
 .dg-ic{stroke:var(--blue);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
-html.js [data-rv="draw"]{stroke-dasharray:420;stroke-dashoffset:420;opacity:1;transition:stroke-dashoffset 1.6s var(--ease);transition-delay:var(--d,0ms);}
-html.js [data-rv="draw"].in{stroke-dashoffset:0;}
 
-/* ---------- サービスカード ---------- */
+/* ---------- プロダクトカード ---------- */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:20px;}
-.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px 28px 26px;display:flex;flex-direction:column;transition:box-shadow 0.4s var(--ease),transform 0.4s var(--ease),border-color 0.4s var(--ease);}
-.card:hover{box-shadow:0 22px 50px -28px rgba(14,34,78,0.36);transform:translateY(-4px);border-color:#cdd6ea;}
-.card .ic{width:46px;height:46px;border-radius:12px;background:var(--band-blue);display:grid;place-items:center;margin-bottom:1.1rem;transition:background 0.4s var(--ease);}
-.card:hover .ic{background:#d6e1ff;}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 28px 26px;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:box-shadow 0.4s var(--ease),transform 0.4s var(--ease),border-color 0.4s var(--ease);}
+.card:hover{box-shadow:0 22px 50px -28px rgba(30,49,110,0.3);transform:translateY(-4px);border-color:#cdd6ea;}
+.card .ic{width:46px;height:46px;border-radius:12px;background:var(--band-blue);display:grid;place-items:center;margin-bottom:1.1rem;}
 .card .ic svg{width:24px;height:24px;stroke:var(--blue);stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 .card .kicker{font-size:0.72rem;font-weight:700;letter-spacing:0.16em;color:var(--blue);}
-.card .issue{font-size:0.86rem;color:var(--muted);margin-top:0.8rem;line-height:1.8;}
-.card h3{font-size:1.16rem;font-weight:700;line-height:1.6;margin:0.45rem 0 0.9rem;letter-spacing:0.02em;}
-.card p{font-size:0.95rem;color:var(--ink-soft);line-height:1.9;}
+.card .issue{font-size:0.85rem;color:var(--muted);margin-top:0.8rem;line-height:1.8;}
+.card h3{font-size:1.14rem;font-weight:700;line-height:1.6;margin:0.45rem 0 0.9rem;}
+.card p{font-size:0.94rem;color:var(--ink-soft);line-height:1.9;}
 .tags{display:flex;flex-wrap:wrap;gap:0.45rem;margin:1.2rem 0 1.4rem;}
-.tags span{font-size:0.74rem;font-weight:700;color:var(--blue);background:var(--band-blue);border-radius:999px;padding:0.3rem 0.8rem;}
+.tags span{font-size:0.73rem;font-weight:700;color:var(--blue);background:var(--band-blue);border-radius:999px;padding:0.3rem 0.8rem;}
 .card-foot{margin-top:auto;display:flex;gap:0.7rem;flex-wrap:wrap;}
-.card-foot a{font-size:0.86rem;font-weight:700;padding:0.62rem 1.25rem;border-radius:999px;transition:background 0.3s var(--ease),color 0.3s var(--ease),border-color 0.3s var(--ease),transform 0.3s var(--ease);}
-.card-foot a.solid{background:var(--blue-deep);color:#fff;}
-.card-foot a.solid:hover{background:#0c1636;transform:translateY(-2px);}
+.card-foot a{font-size:0.85rem;font-weight:700;padding:0.6rem 1.25rem;border-radius:999px;transition:background 0.3s var(--ease),color 0.3s var(--ease),border-color 0.3s var(--ease),transform 0.3s var(--ease);}
+.card-foot a.solid{background:var(--navy);color:#fff;}
+.card-foot a.solid:hover{background:#233468;transform:translateY(-2px);}
 .card-foot a.thin{border:1px solid var(--line);color:var(--ink);}
 .card-foot a.thin:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px);}
 
-/* ---------- 導入の流れ ---------- */
-.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
-@media(max-width:1000px){.flow{grid-template-columns:1fr 1fr;}}
-@media(max-width:620px){.flow{grid-template-columns:1fr;}}
-.step{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;position:relative;transition:transform 0.4s var(--ease),box-shadow 0.4s var(--ease);}
-.step:hover{transform:translateY(-4px);box-shadow:0 20px 44px -28px rgba(14,34,78,0.34);}
-.step .n{font-size:0.72rem;font-weight:700;letter-spacing:0.14em;color:var(--blue);}
-.step .ic svg{width:26px;height:26px;stroke:var(--blue);stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;margin:0.9rem 0;}
-.step h4{font-size:1rem;font-weight:700;line-height:1.6;}
-.step p{font-size:0.86rem;color:var(--muted);line-height:1.8;margin-top:0.45rem;}
-.step::after{content:"";position:absolute;right:-11px;top:50%;width:8px;height:8px;border-right:1.6px solid #b9c5e4;border-bottom:1.6px solid #b9c5e4;transform:translateY(-50%) rotate(-45deg);}
-.step:last-child::after{display:none;}
-@media(max-width:1000px){.step::after{display:none;}}
-
-/* ---------- 課題リスト ---------- */
-.issues{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;}
-@media(max-width:860px){.issues{grid-template-columns:1fr;}}
-.issues a{display:flex;align-items:center;gap:1rem;padding:20px 4px;border-bottom:1px solid var(--line);font-size:1rem;line-height:1.7;transition:color 0.3s var(--ease),padding-left 0.3s var(--ease);}
-.issues a::after{content:"";margin-left:auto;width:8px;height:8px;border-right:1.8px solid var(--blue);border-top:1.8px solid var(--blue);transform:rotate(45deg);transition:transform 0.3s var(--ease);flex:none;}
-.issues a:hover{color:var(--blue);padding-left:10px;}
-.issues a:hover::after{transform:rotate(45deg) translate(4px,-4px);}
-.issues .no{font-size:0.78rem;font-weight:700;color:#9aa3bb;min-width:2.2em;letter-spacing:0.08em;}
-
-/* ---------- エージェント ---------- */
+/* ---------- LINE実装デモ（ライブHPの動くデモをそのまま移植） ---------- */
 .agent{display:grid;grid-template-columns:1.02fr 0.98fr;gap:56px;align-items:center;}
 @media(max-width:900px){.agent{grid-template-columns:1fr;}}
-.industries{display:flex;flex-wrap:wrap;gap:0.5rem;margin:1.6rem 0 2rem;}
-.industries span{font-size:0.84rem;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:999px;padding:0.4rem 1rem;color:var(--ink-soft);transition:border-color 0.3s var(--ease),color 0.3s var(--ease);}
-.industries span:hover{border-color:var(--blue);color:var(--blue);}
-.phone{width:300px;max-width:100%;margin:0 auto;border:10px solid #101728;border-radius:38px;background:#101728;box-shadow:0 34px 74px -34px rgba(9,18,40,0.55);}
-.phone-screen{background:#eef1f7;border-radius:28px;overflow:hidden;}
-.phone-bar{background:var(--blue-deep);color:#fff;padding:0.85rem 1rem;}
-.phone-bar .t{font-size:0.82rem;font-weight:700;}
-.phone-bar .s{font-size:0.66rem;color:#a9bde8;}
-.chat{padding:1rem 0.9rem 1.4rem;display:flex;flex-direction:column;gap:0.7rem;min-height:340px;}
-.bub{max-width:82%;font-size:0.82rem;line-height:1.75;padding:0.7rem 0.9rem;border-radius:14px;transition:opacity 0.5s var(--ease),translate 0.5s var(--ease);}
-html.js .chat .bub{opacity:0;translate:0 10px;}
-html.js .chat .bub.show{opacity:1;translate:0 0;}
-.bub.them{background:#fff;border:1px solid #e0e5ef;align-self:flex-start;}
-.bub.me{background:var(--blue);color:#fff;align-self:flex-end;}
-.chat .note{font-size:0.68rem;color:var(--muted);text-align:center;margin-top:0.4rem;}
+.industries{display:flex;flex-wrap:wrap;gap:0.5rem;margin:1.5rem 0 1.9rem;}
+.industries span{font-size:0.83rem;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:999px;padding:0.4rem 1rem;color:var(--ink-soft);}
+.phone-stage{position:relative;padding:1rem 0;max-width:420px;margin:0 auto;}
+.phone-frame{background:#eceef2;border:1px solid var(--line);border-radius:28px;padding:0.6rem;box-shadow:0 30px 70px -28px rgba(16,18,24,0.35);max-width:380px;margin:0 auto;position:relative;animation:phoneFloat 5s ease-in-out infinite;}
+@keyframes phoneFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+@media(prefers-reduced-motion:reduce){.phone-frame{animation:none;}}
+.phone-screen{background:#7da4d2;border-radius:18px;height:560px;overflow:hidden;display:flex;flex-direction:column;position:relative;}
+.phone-bar{background:rgba(255,255,255,0.92);padding:0.7rem 1rem;display:flex;align-items:center;gap:0.6rem;border-bottom:1px solid rgba(0,0,0,0.05);flex-shrink:0;}
+.phone-back{color:#444;font-size:1rem;}
+.phone-title-wrap{flex:1;}
+.phone-title{font-size:0.88rem;font-weight:600;color:#222;}
+.phone-sub{font-size:0.65rem;color:#888;}
+.phone-actions{display:flex;gap:0.7rem;color:#666;font-size:0.85rem;}
+.chat-stream{flex:1;padding:1rem 0.85rem;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:0.5rem;background:linear-gradient(180deg,#8eb5e0 0%,#7da4d2 100%);position:relative;}
+.chat-stream::-webkit-scrollbar{display:none;}
+.line-msg{display:flex;gap:0.5rem;align-items:flex-end;opacity:0;animation:lineSlide 0.55s cubic-bezier(.2,.8,.2,1) forwards;}
+.line-msg.user{flex-direction:row-reverse;animation-name:lineSlideRight;}
+.line-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7ad99a,#5dc680);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.65rem;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,0.15);}
+.line-bubble{max-width:75%;padding:0.55rem 0.8rem;border-radius:14px;font-size:0.78rem;line-height:1.55;color:#222;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.line-bubble.ai{background:#fff;border-top-left-radius:4px;}
+.line-bubble.user-msg{background:linear-gradient(135deg,#b8eb6a,#a3e154);border-top-right-radius:4px;color:#1e2a1a;}
+.line-time{font-size:0.6rem;color:rgba(255,255,255,0.85);align-self:flex-end;padding:0 0.2rem 0.1rem;}
+.facility-cards{display:flex;gap:0.5rem;padding:0.4rem 0;overflow-x:hidden;opacity:0;animation:lineSlide 0.55s cubic-bezier(.2,.8,.2,1) forwards;}
+.facility-card{flex:0 0 145px;background:#fff;border-radius:8px;padding:0.7rem;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;flex-direction:column;gap:0.3rem;animation:cardPop 0.6s cubic-bezier(.2,.8,.2,1) backwards;}
+.facility-card:nth-child(1){animation-delay:0.1s;}
+.facility-card:nth-child(2){animation-delay:0.25s;}
+.facility-card:nth-child(3){animation-delay:0.4s;}
+@keyframes cardPop{from{opacity:0;transform:translateY(12px) scale(0.92);}to{opacity:1;transform:translateY(0) scale(1);}}
+.fc-name{font-size:0.7rem;font-weight:700;color:#222;}
+.fc-type{font-size:0.6rem;color:var(--line-green);font-weight:600;}
+.fc-price{font-size:0.72rem;font-weight:700;color:#222;}
+.fc-meta{font-size:0.55rem;color:#777;line-height:1.4;min-height:24px;}
+.fc-buttons{display:flex;flex-direction:column;gap:0.25rem;margin-top:0.3rem;}
+.fc-btn{padding:0.32rem;font-size:0.62rem;font-weight:700;text-align:center;border-radius:4px;}
+.fc-btn.primary{background:var(--line-green);color:#fff;}
+.fc-btn.secondary{background:#e8eaf0;color:#444;}
+.date-cards{display:flex;gap:0.5rem;padding:0.4rem 0;overflow-x:hidden;opacity:0;animation:lineSlide 0.55s cubic-bezier(.2,.8,.2,1) forwards;}
+.date-card{flex:0 0 110px;background:#fff;border-radius:8px;padding:0.6rem;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);animation:cardPop 0.6s cubic-bezier(.2,.8,.2,1) backwards;}
+.date-card:nth-child(1){animation-delay:0.1s;}
+.date-card:nth-child(2){animation-delay:0.22s;}
+.date-card:nth-child(3){animation-delay:0.34s;}
+.dc-date{font-size:0.78rem;font-weight:700;color:#222;}
+.dc-time{font-size:0.62rem;color:#777;margin-top:0.15rem;}
+.dc-btn{background:linear-gradient(135deg,#06c755,#05a847);color:#fff;padding:0.32rem;border-radius:4px;font-size:0.62rem;font-weight:700;margin-top:0.4rem;box-shadow:0 2px 6px rgba(6,199,85,0.3);}
+.typing-line{display:flex;gap:0.5rem;align-items:flex-end;opacity:0;animation:lineSlide 0.4s forwards;}
+.typing-bubble{background:#fff;border-radius:14px;border-top-left-radius:4px;padding:0.65rem 0.9rem;display:flex;gap:3px;box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.typing-bubble span{width:5px;height:5px;background:#aaa;border-radius:50%;animation:dotBounce 1.2s infinite;}
+.typing-bubble span:nth-child(2){animation-delay:0.15s;}
+.typing-bubble span:nth-child(3){animation-delay:0.3s;}
+@keyframes dotBounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-4px);}}
+@keyframes lineSlide{from{opacity:0;transform:translateX(-14px) translateY(4px);}to{opacity:1;transform:translateX(0) translateY(0);}}
+@keyframes lineSlideRight{from{opacity:0;transform:translateX(14px) translateY(4px);}to{opacity:1;transform:translateX(0) translateY(0);}}
 
-/* ---------- チーム ---------- */
-.team{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
-@media(max-width:900px){.team{grid-template-columns:1fr;}}
-.member{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px 28px;transition:box-shadow 0.4s var(--ease),transform 0.4s var(--ease);}
-.member:hover{box-shadow:0 22px 50px -30px rgba(14,34,78,0.32);transform:translateY(-3px);}
-.member img{width:96px;height:96px;border-radius:999px;object-fit:cover;object-position:center top;border:1px solid var(--line);}
-.member .role{font-size:0.72rem;letter-spacing:0.16em;font-weight:700;color:var(--blue);margin-top:1.1rem;}
-.member .name{font-size:1.2rem;font-weight:700;margin-top:0.3rem;}
-.member .name-en{font-size:0.74rem;letter-spacing:0.14em;color:var(--muted);}
-.member p{font-size:0.94rem;color:var(--ink-soft);line-height:1.9;margin-top:1rem;}
-.member ul{list-style:none;margin-top:1.2rem;border-top:1px solid var(--line);padding-top:1rem;}
-.member li{font-size:0.86rem;color:var(--muted);line-height:1.8;padding-left:1rem;position:relative;}
-.member li::before{content:"";position:absolute;left:0;top:0.85em;width:5px;height:5px;border-radius:999px;background:var(--blue);}
-
-/* ---------- 中間CTA帯 ---------- */
-.midcta{background:var(--lav);text-align:center;padding:76px 24px;}
-.midcta h2{font-size:clamp(1.4rem,3vw,1.95rem);font-weight:700;line-height:1.6;letter-spacing:0.04em;color:var(--blue-deep);}
-.midcta p{color:#4a5372;font-size:1rem;margin:1rem auto 2.1rem;max-width:44em;}
+/* ---------- 薄紫の中間CTA帯（opthubそのまま） ---------- */
+.midcta{background:var(--lavender);text-align:center;padding:72px 24px;}
+.midcta h2{font-size:clamp(1.35rem,3vw,1.85rem);font-weight:700;line-height:1.6;letter-spacing:0.04em;color:var(--ink);}
+.midcta p{color:#4a5372;font-size:0.98rem;margin:1rem auto 2rem;max-width:44em;}
 .midcta .btns{display:flex;gap:0.9rem;justify-content:center;flex-wrap:wrap;}
 
+/* ---------- 事例・イベント・記事カード（サムネ+バッジ） ---------- */
+.posts{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;}
+.post{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow);transition:box-shadow 0.4s var(--ease),transform 0.4s var(--ease);}
+.post:hover{box-shadow:0 22px 50px -28px rgba(30,49,110,0.28);transform:translateY(-4px);}
+.post .thumb-wrap{overflow:hidden;height:168px;background:#e3e8f4;}
+.post .thumb{height:100%;background-size:cover;background-position:center;transition:scale 0.9s var(--ease);}
+.post:hover .thumb{scale:1.07;}
+.post .pbody{padding:20px 22px 22px;display:flex;flex-direction:column;gap:0.5rem;flex:1;}
+.post .meta-row{display:flex;align-items:center;gap:0.6rem;}
+.post .cat{font-size:0.68rem;font-weight:700;letter-spacing:0.08em;color:#fff;background:var(--blue);border-radius:999px;padding:0.2rem 0.75rem;}
+.post .date{font-size:0.72rem;color:var(--muted);letter-spacing:0.06em;}
+.post .ptitle{font-size:0.98rem;font-weight:700;line-height:1.65;}
+.post .pdesc{font-size:0.87rem;color:var(--muted);line-height:1.85;flex:1;}
+.center{margin-top:32px;}
+
 /* ---------- ニュース ---------- */
-.news a{display:grid;grid-template-columns:6.4rem 5.8rem 1fr auto;gap:1.2rem;align-items:baseline;padding:20px 4px;border-bottom:1px solid var(--line);transition:color 0.3s var(--ease),padding-left 0.3s var(--ease);}
+.news a{display:grid;grid-template-columns:6.4rem 5.8rem 1fr auto;gap:1.2rem;align-items:baseline;padding:19px 4px;border-bottom:1px solid var(--line);transition:color 0.3s var(--ease),padding-left 0.3s var(--ease);}
 .news a:hover{color:var(--blue);padding-left:8px;}
-.news .d{font-size:0.82rem;color:var(--muted);letter-spacing:0.04em;}
-.news .b{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;color:var(--blue);background:var(--band-blue);border-radius:999px;padding:0.24rem 0.6rem;text-align:center;}
-.news .t{font-size:0.98rem;line-height:1.8;}
+.news .d{font-size:0.8rem;color:var(--muted);}
+.news .b{font-size:0.66rem;font-weight:700;letter-spacing:0.1em;color:var(--blue);background:var(--band-blue);border-radius:999px;padding:0.22rem 0.6rem;text-align:center;}
+.news .t{font-size:0.95rem;line-height:1.8;}
 .news .a{color:var(--blue);font-weight:700;}
 .news .more{display:none;}
 .news.open .more{display:grid;}
 @media(max-width:760px){.news a{grid-template-columns:1fr;gap:0.35rem;}.news .b{justify-self:start;}.news .a{display:none;}}
-.center{text-align:center;margin-top:34px;}
-
-/* ---------- 記事 ---------- */
-.posts{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;}
-.post{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow 0.4s var(--ease),transform 0.4s var(--ease);}
-.post:hover{box-shadow:0 22px 50px -28px rgba(14,34,78,0.34);transform:translateY(-4px);}
-.post .thumb-wrap{overflow:hidden;height:172px;background:#dfe4f0;}
-.post .thumb{height:100%;background-size:cover;background-position:center;transition:scale 0.9s var(--ease);}
-.post:hover .thumb{scale:1.07;}
-.post .pbody{padding:22px 22px 24px;display:flex;flex-direction:column;gap:0.5rem;flex:1;}
-.post .cat{font-size:0.7rem;font-weight:700;letter-spacing:0.1em;color:#fff;background:var(--blue);border-radius:999px;padding:0.22rem 0.7rem;align-self:flex-start;}
-.post .date{font-size:0.72rem;color:var(--muted);letter-spacing:0.06em;}
-.post .ptitle{font-size:1rem;font-weight:700;line-height:1.65;}
-.post .pdesc{font-size:0.88rem;color:var(--muted);line-height:1.85;flex:1;}
-.post .plink{font-size:0.74rem;font-weight:700;letter-spacing:0.1em;color:var(--blue);border-top:1px solid var(--line);padding-top:0.9rem;margin-top:0.4rem;}
 
 /* ---------- FAQ ---------- */
 .faq details{border-bottom:1px solid var(--line);}
-.faq summary{list-style:none;cursor:pointer;padding:22px 3rem 22px 0;font-size:1rem;font-weight:700;line-height:1.7;position:relative;transition:color 0.3s var(--ease);}
+.faq summary{list-style:none;cursor:pointer;padding:20px 3rem 20px 0;font-size:0.98rem;font-weight:700;line-height:1.7;position:relative;transition:color 0.3s var(--ease);}
 .faq summary:hover{color:var(--blue);}
 .faq summary::-webkit-details-marker{display:none;}
-.faq summary::before,.faq summary::after{content:"";position:absolute;right:0.6rem;top:33px;width:14px;height:2px;background:var(--blue);transition:transform 0.35s var(--ease);}
+.faq summary::before,.faq summary::after{content:"";position:absolute;right:0.6rem;top:31px;width:14px;height:2px;background:var(--blue);transition:transform 0.35s var(--ease);}
 .faq summary::after{transform:rotate(90deg);}
 .faq details[open] summary::after{transform:rotate(0deg);}
-.faq .a{font-size:0.96rem;color:var(--ink-soft);line-height:1.95;padding:0 0 24px;max-width:60em;}
+.faq .a{font-size:0.94rem;color:var(--ink-soft);line-height:1.95;padding:0 0 22px;max-width:60em;}
 
 /* ---------- 無料資料 ---------- */
-.lead-mag{display:grid;grid-template-columns:1.05fr 0.95fr;gap:44px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:44px;}
+.lead-mag{display:grid;grid-template-columns:1.05fr 0.95fr;gap:44px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:40px;box-shadow:var(--shadow);}
 @media(max-width:900px){.lead-mag{grid-template-columns:1fr;padding:28px;}}
-.lead-mag .eyebrow{font-size:0.8rem;font-weight:700;letter-spacing:0.1em;color:var(--blue);}
-.lead-mag h3{font-size:1.55rem;font-weight:700;line-height:1.55;margin:0.6rem 0 1rem;}
-.lead-mag p{font-size:0.96rem;color:var(--ink-soft);line-height:1.9;margin-bottom:1.8rem;}
-.lead-mag ul{list-style:none;background:var(--band);border-radius:var(--radius);padding:26px 28px;}
-.lead-mag li{font-size:0.94rem;line-height:1.85;padding-left:1.3rem;position:relative;color:var(--ink-soft);}
+.lead-mag .eyebrow{font-size:0.78rem;font-weight:700;letter-spacing:0.1em;color:var(--blue);}
+.lead-mag h3{font-size:1.5rem;font-weight:700;line-height:1.55;margin:0.6rem 0 1rem;}
+.lead-mag p{font-size:0.94rem;color:var(--ink-soft);line-height:1.9;margin-bottom:1.7rem;}
+.lead-mag ul{list-style:none;background:var(--bg);border-radius:var(--radius);padding:26px 28px;}
+.lead-mag li{font-size:0.92rem;line-height:1.85;padding-left:1.3rem;position:relative;color:var(--ink-soft);}
 .lead-mag li + li{margin-top:0.8rem;}
 .lead-mag li::before{content:"";position:absolute;left:0;top:0.8em;width:6px;height:6px;border-radius:999px;background:var(--blue);}
 
 /* ---------- お問い合わせ ---------- */
 .contact{display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;}
 @media(max-width:900px){.contact{grid-template-columns:1fr;}}
-.field{margin-bottom:1.3rem;}
-.field label{display:block;font-size:0.76rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);margin-bottom:0.5rem;}
+.field{margin-bottom:1.2rem;}
+.field label{display:block;font-size:0.75rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);margin-bottom:0.5rem;}
 .field input,.field textarea{width:100%;font:inherit;font-size:1rem;padding:0.85rem 1rem;border:1px solid var(--line);border-radius:10px;background:#fff;transition:border-color 0.3s var(--ease),box-shadow 0.3s var(--ease);}
 .field textarea{min-height:9rem;line-height:1.85;}
-.field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(38,87,196,0.16);}
-.info{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 28px;}
-.info div + div{margin-top:1.3rem;}
-.info dt{font-size:0.76rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);}
-.info dd{font-size:0.98rem;line-height:1.85;margin-top:0.25rem;}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,86,201,0.15);}
+.info{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;box-shadow:var(--shadow);}
+.info div + div{margin-top:1.2rem;}
+.info dt{font-size:0.75rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);}
+.info dd{font-size:0.96rem;line-height:1.85;margin-top:0.25rem;}
 .info a{color:var(--blue);text-decoration:underline;}
 
-/* ---------- 下部CTA ---------- */
-.precta{background:var(--blue-deep);color:#fff;text-align:center;padding:84px 24px;position:relative;overflow:hidden;}
-.precta::after{content:"";position:absolute;inset:auto -10% -60% -10%;height:60%;background:radial-gradient(ellipse at center,rgba(63,111,220,0.5),transparent 70%);}
-.precta > *{position:relative;}
-.precta h2{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;line-height:1.6;letter-spacing:0.04em;}
-.precta p{color:#c3d2f0;font-size:1rem;margin:1.1rem auto 2.2rem;max-width:44em;}
+/* ---------- 紺のプレフッターCTA（opthubそのまま） ---------- */
+.precta{background:var(--navy-deep);color:#fff;text-align:center;padding:76px 24px;}
+.precta h2{font-size:clamp(1.35rem,3vw,1.9rem);font-weight:700;line-height:1.6;letter-spacing:0.04em;}
+.precta p{color:#c3d2f0;font-size:0.98rem;margin:1.1rem auto 2.1rem;max-width:44em;}
 .precta .btns{display:flex;gap:0.9rem;justify-content:center;flex-wrap:wrap;}
-.precta .btn-fill{background:#fff;color:var(--blue-deep);}
+.precta .btn-fill{background:#fff;color:var(--navy-deep);}
 .precta .btn-fill:hover{background:#e8eeff;}
 
 /* ---------- フッター ---------- */
-footer.site{background:#0b0e14;color:#fff;padding:64px 0 34px;}
+footer.site{background:#0b0e14;color:#fff;padding:60px 0 32px;}
 .foot-top{display:grid;grid-template-columns:1.1fr 2fr;gap:40px;}
 @media(max-width:900px){.foot-top{grid-template-columns:1fr;gap:26px;}}
 footer.site .brand{color:#fff;font-size:1.2rem;}
-.foot-addr{font-size:0.86rem;color:#98a0b3;line-height:1.9;margin-top:1rem;}
+.foot-addr{font-size:0.85rem;color:#98a0b3;line-height:1.9;margin-top:1rem;}
 .foot-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.6rem 1.6rem;}
-.foot-links a{font-size:0.86rem;color:#b9c0d0;padding:0.2rem 0;transition:color 0.3s var(--ease),padding-left 0.3s var(--ease);}
+.foot-links a{font-size:0.85rem;color:#b9c0d0;padding:0.2rem 0;transition:color 0.3s var(--ease),padding-left 0.3s var(--ease);}
 .foot-links a:hover{color:#fff;padding-left:4px;}
-.foot-copy{border-top:1px solid rgba(255,255,255,0.12);margin-top:44px;padding-top:20px;font-size:0.76rem;color:#7c8497;letter-spacing:0.06em;}
+.foot-copy{border-top:1px solid rgba(255,255,255,0.12);margin-top:40px;padding-top:20px;font-size:0.75rem;color:#7c8497;letter-spacing:0.06em;}
 </style>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
 <!-- Google tag (gtag.js) -->
@@ -610,12 +619,11 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     <a href="index.html" class="brand">A<span class="heart-i">ı</span>dollargame</a>
     <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false">メニュー</button>
     <nav class="site-nav" id="siteNav">
-      <a href="#service">事業内容</a>
-      <a href="#flow">導入の流れ</a>
-      <a href="#issues">課題から探す</a>
-      <a href="#about">会社情報</a>
-      <a href="#news">ニュース</a>
-      <a href="./articles/">記事</a>
+      <a href="#products">事業内容</a>
+      <a href="#agent-demo">実装イメージ</a>
+      <a href="#case">事例</a>
+      <a href="#column">記事</a>
+      <a href="#news">お知らせ</a>
       <a href="#faq">FAQ</a>
       <a href="#contact" class="pill">お問い合わせ</a>
     </nav>
@@ -627,49 +635,64 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     <img src="aidollargame-ceo-sato-norinosuke-seminar.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介とエンジニア森によるセミナー登壇の様子（左：佐藤、右：森）">
   </div>
   <div class="hero-body">
-    <div class="hero-eyebrow" data-rv="up" style="--d:120ms">AIで、人と人をつなぐ。</div>
-    <h1 data-rv="up" style="--d:260ms">AIで「<ruby>楽<rt>らく</rt></ruby>」ではなく<br>「<ruby>楽<rt>たの</rt></ruby>しい」を考える</h1>
-    <p class="hero-sub" data-rv="up" style="--d:440ms">仕事を「楽」にすることが、私たちの目的ではありません。人と人が本気で向き合える「楽しい」現場を共に創る。AIプロダクト開発と現場のAI活用支援を通じて、そんな舞台を創り上げます。</p>
-    <div class="hero-cta" data-rv="up" style="--d:600ms">
+    <div class="hero-eyebrow" data-rv="up" style="--d:100ms" data-edit="hero-eyebrow">AIで、人と人をつなぐ。</div>
+    <h1 data-rv="up" style="--d:240ms" data-edit="hero-title">AIで「<ruby>楽<rt>らく</rt></ruby>」ではなく<br>「<ruby>楽<rt>たの</rt></ruby>しい」を考える</h1>
+    <p class="hero-sub" data-rv="up" style="--d:420ms" data-edit="hero-sub">仕事を「<ruby>楽<rt>らく</rt></ruby>」にすることが、私たちの目的ではありません。<br>人と人が本気で向き合える「<ruby>楽<rt>たの</rt></ruby>しい」現場を共に創る。<br>AIプロダクト開発と現場のAI活用支援を通じて、そんな舞台を創り上げます。</p>
+    <div class="hero-cta" data-rv="up" style="--d:580ms">
       <a href="#contact" class="btn btn-fill">無料相談を予約する</a>
       <a href="shindan.html" class="btn btn-line">3分で無料AI診断</a>
+    </div>
+    <div data-rv="up" style="--d:720ms">
+      <a href="ai-training.html" class="hero-banner"><span class="hb-badge">AI研修</span><span data-edit="hero-banner">訓練経費は<span class="mk">中小最大75%が助成対象</span>／令和8年度が最終年度</span><span>→</span></a>
     </div>
   </div>
   <div class="scroll-cue"><span>SCROLL</span><i></i></div>
 </section>
 
-<div class="facts">
-  <dl class="facts-grid" id="facts">
-    <div class="fact" data-rv="up" style="--d:0ms">
-      <dt>TRAINING</dt>
-      <dd><span class="big">最大<span class="cnt" data-to="75">0</span><small>%</small></span>AI研修の訓練経費が助成対象（中小企業）。令和8年度が最終年度です</dd>
-    </div>
-    <div class="fact" data-rv="up" style="--d:140ms">
-      <dt>PRODUCTS</dt>
-      <dd><span class="big"><span class="cnt" data-to="4">0</span><small>本</small></span>自社で開発して、自社で運用しているAIプロダクト</dd>
-    </div>
-    <div class="fact" data-rv="up" style="--d:280ms">
-      <dt>FIRST STEP</dt>
-      <dd><span class="big"><span class="cnt" data-to="30">0</span><small>分・無料</small></span>初回のオンライン相談。何から手をつけるか未定でも大丈夫です</dd>
-    </div>
-  </dl>
+<div class="cred">
+  <div class="cred-inner">
+    <span class="cl">TRACK RECORD</span>
+    <span class="ci" data-edit="cred-1">NEC PC「LAVIE SOL」共同企画・開発<small>2025年3・4月 売上全国No.1</small></span>
+    <span class="ci" data-edit="cred-2">東京ニュービジネス協議会（東京NBC）<small>起業塾 登壇（2026年7月）</small></span>
+    <span class="ci" data-edit="cred-3">PR TIMES／VOIX／財経新聞<small>メディア掲載</small></span>
+  </div>
 </div>
 
-<section class="sec" id="about">
+<section class="sec" id="check">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label" data-rv="up">Check</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="check-title">こんな状態になっていませんか？</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="check-lead">当てはまる項目を選ぶと、合う解決策のページに進めます。</p>
+    </div>
+    <div class="issues">
+      <a href="line-ai-agent.html" data-rv="up" style="--d:0ms"><span class="no">01</span><span data-edit="chk-1">問い合わせ対応も、社内の「これどうやるんだっけ」も、特定の人頼み</span></a>
+      <a href="human-clone-ai.html" data-rv="up" style="--d:80ms"><span class="no">02</span><span data-edit="chk-2">社長が不在だと、決裁と相談が止まる</span></a>
+      <a href="human-clone-ai.html" data-rv="up" style="--d:160ms"><span class="no">03</span><span data-edit="chk-3">引き継ぎたいのに、ノウハウが社長の頭の中にしかない</span></a>
+      <a href="aiside.html" data-rv="up" style="--d:240ms"><span class="no">04</span><span data-edit="chk-4">予定調整とメールと雑務で、経営者の一日が終わる</span></a>
+      <a href="manual-ai.html" data-rv="up" style="--d:320ms"><span class="no">05</span><span data-edit="chk-5">マニュアルはあるのに、誰も読まずに毎回ベテランに聞いている</span></a>
+      <a href="ai-training.html" data-rv="up" style="--d:400ms"><span class="no">06</span><span data-edit="chk-6">セミナーは受けたのに、翌日から現場が何も変わらなかった</span></a>
+      <a href="ai-consulting.html" data-rv="up" style="--d:480ms"><span class="no">07</span><span data-edit="chk-7">AIを入れたい気持ちはあるが、何から手をつけるか分からない</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec--white" id="about">
   <div class="wrap">
     <div class="split">
       <div>
         <div class="sec-head">
           <div class="sec-label" data-rv="up">About</div>
-          <h2 class="sec-title" data-rv="up" style="--d:100ms">機械にできる作業に、<br>人生を捧げるのは終わりにする</h2>
+          <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="about-title">機械にできる作業に、人生を捧げるのは、<br>もう終わりにしませんか</h2>
           <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
         </div>
-        <div data-rv="up" style="--d:200ms">
-          <p>繰り返しの作業をAIに任せれば、業務はぐっと「楽」になります。そこから生まれた時間で、人はもっと多くのことに本気で向き合えるはずです。</p>
-          <p>本気で打ち込みたい仕事、家族との食卓、仲間との一杯。ひとつひとつに向き合えることが、新しい価値を生んでいく。それが私たちの考える「楽しい」であり、つくり続けたい舞台です。</p>
-          <p>株式会社AIdollargameは、AIプロダクトを自社で開発・運用しながら、中小企業の現場にAIを持ち込む会社です。説明だけで終わらせず、実装と運用まで責任を持ちます。</p>
+        <div class="msg" data-rv="up" style="--d:200ms">
+          <p data-edit="about-p1">繰り返しの作業はAIに任せれば、業務はぐっと「楽」になります。そこから生まれた時間で、人はもっと多くのことに本気で向き合えるはずです。</p>
+          <p data-edit="about-p2">本気で打ち込みたい仕事、家族との食卓、仲間との一杯。一つ一つに向き合えることが、新しい価値を生んでいく。それこそが私たちが目指す「楽しい」であり、つくり続けたい「舞台」です。</p>
+          <p data-edit="about-p3">株式会社AIdollargameは、AIプロダクトを自社で開発・運用しながら、中小企業の現場にAIを届けている会社です。</p>
         </div>
-        <div style="margin-top:2rem;" data-rv="up" style="--d:320ms">
+        <div style="margin-top:2rem;" data-rv="up">
           <a href="company.html" class="arrow-link"><span class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>会社情報</a>
         </div>
       </div>
@@ -687,18 +710,17 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec sec--band" id="structure">
+<section class="sec" id="service">
   <div class="wrap">
     <div class="sec-head center">
-      <div class="sec-label" data-rv="up">Structure</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms">AIの最前線と、中小企業の現場をつなぐ</h2>
+      <div class="sec-label" data-rv="up">Service</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="service-title">AIの最前線の技術を、<br>中小企業の現場で使える形に</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms">最新のAIは毎月変わります。私たちはそれを自社プロダクトで先に試し、動いたものだけを現場に持ち込み、運用まで引き受けます。現場で出た課題は、次のプロダクトに戻します。</p>
+      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="service-lead">最新のAIをまず自社プロダクトで使い込み、成果が出たものだけを現場にお届けします。現場で見つかった課題は、次のプロダクト開発に反映します。</p>
     </div>
     <div class="diagram" data-rv="up" style="--d:120ms">
       <div class="dg-scroll">
       <svg viewBox="0 0 940 380" role="img" aria-label="AIの最前線とAIdollargameと中小企業の現場が循環する関係図">
-        <!-- 左：AIの最前線 -->
         <circle class="dg-circle" cx="130" cy="190" r="92"></circle>
         <g transform="translate(110,136)">
           <rect class="dg-ic" x="5" y="5" width="18" height="18" rx="3"></rect>
@@ -708,15 +730,13 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <text class="dg-label" x="130" y="200" text-anchor="middle">AIの最前線</text>
         <text class="dg-sub" x="130" y="222" text-anchor="middle">最新モデル・研究・論文</text>
 
-        <!-- 中央：AIdollargame -->
         <circle class="dg-circle dg-circle-main" cx="470" cy="190" r="108"></circle>
         <text class="dg-label" x="470" y="168" text-anchor="middle" style="font-size:17px">AIdollargame</text>
         <text class="dg-sub" x="470" y="192" text-anchor="middle">自社で開発して、自社で運用</text>
-        <text class="dg-sub" x="470" y="212" text-anchor="middle">プロダクト4本／AI研修／導入支援</text>
+        <text class="dg-sub" x="470" y="212" text-anchor="middle">AIプロダクト／AI研修／導入支援</text>
         <line x1="410" y1="228" x2="530" y2="228" stroke="#c9d7f7" stroke-width="1.4"></line>
-        <text class="dg-flow" x="470" y="248" text-anchor="middle">実装と運用に責任を持つ</text>
+        <text class="dg-flow" x="470" y="248" text-anchor="middle">実装と運用まで担当</text>
 
-        <!-- 右：中小企業の現場 -->
         <circle class="dg-circle" cx="810" cy="190" r="92"></circle>
         <g transform="translate(795,136)">
           <path class="dg-ic" d="M3 27V7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v20"></path>
@@ -726,47 +746,45 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <text class="dg-label" x="810" y="200" text-anchor="middle">中小企業の現場</text>
         <text class="dg-sub" x="810" y="222" text-anchor="middle">問い合わせ・ナレッジ・判断</text>
 
-        <!-- 上の矢印（左→中→右） -->
-        <path class="dg-line" data-rv="draw" style="--d:300ms" d="M205 128 C 260 78, 320 66, 372 96" stroke-dasharray="none"></path>
+        <path class="dg-line" data-rv="draw" style="--d:300ms" d="M205 128 C 260 78, 320 66, 372 96"></path>
         <polygon class="dg-arrow" points="372,96 360,86 358,102"></polygon>
         <text class="dg-flow" x="288" y="68" text-anchor="middle">試して、選ぶ</text>
 
-        <path class="dg-line" data-rv="draw" style="--d:520ms" d="M568 96 C 620 66, 680 78, 735 128" stroke-dasharray="none"></path>
+        <path class="dg-line" data-rv="draw" style="--d:520ms" d="M568 96 C 620 66, 680 78, 735 128"></path>
         <polygon class="dg-arrow" points="735,128 720,124 728,112"></polygon>
         <text class="dg-flow" x="652" y="68" text-anchor="middle">使える形で届ける</text>
 
-        <!-- 下の矢印（右→中→左） -->
         <path class="dg-line" data-rv="draw" style="--d:740ms" d="M735 252 C 680 302, 620 314, 568 284"></path>
         <polygon class="dg-arrow" points="568,284 580,294 582,278"></polygon>
         <text class="dg-flow" x="652" y="330" text-anchor="middle">現場の課題とデータ</text>
 
         <path class="dg-line" data-rv="draw" style="--d:960ms" d="M372 284 C 320 314, 260 302, 205 252"></path>
         <polygon class="dg-arrow" points="205,252 220,256 212,268"></polygon>
-        <text class="dg-flow" x="288" y="330" text-anchor="middle">次の一手として研究に戻す</text>
+        <text class="dg-flow" x="288" y="330" text-anchor="middle">次の開発に反映</text>
       </svg>
       </div>
       <p class="swipe">横にスクロールできます</p>
-      <p class="cap">この循環を、社内だけで回しています。だから説明と実装が別会社になりません。</p>
+      <p class="cap" data-edit="service-cap">この流れを自社内で完結させているため、提案する会社と実装する会社が分かれません。</p>
     </div>
   </div>
 </section>
 
-<section class="sec" id="service">
+<section class="sec sec--white" id="products">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-label" data-rv="up">Service</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms">事業内容</h2>
+      <div class="sec-label" data-rv="up">Products &amp; Service</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="products-title">作業はAIに</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms">助成金を使えるAI研修から、自社開発のAIプロダクト、導入支援まで。中小企業の「人頼み」をまるごと引き受けます。</p>
+      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="products-lead">助成金を使えるAI研修から、自社開発のAIプロダクト、導入支援まで。中小企業の「人頼み」をまるごと引き受けます。</p>
     </div>
     <div class="cards">
 
       <div class="card" data-rv="up" style="--d:0ms">
         <div class="ic"><svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5Z"></path><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"></path></svg></div>
         <div class="kicker">SERVICE 01</div>
-        <div class="issue">セミナーは受けたのに、翌日から現場が何も変わらなかった会社へ</div>
-        <h3>AI研修・社員リスキリング（助成金対象）</h3>
-        <p>貴社の実業務を教材に、生成AIを「翌日から仕事で使える」状態にする実践型研修です。訓練経費は人材開発支援助成金（事業展開等リスキリング支援コース）で中小企業なら最大75%が助成対象。ただしこの助成コースは令和8年度が最終年度で、計画届は訓練開始の1ヶ月前までに提出が必要です。</p>
+        <div class="issue" data-edit="p1-issue">セミナーは受けたのに、翌日から現場が何も変わらなかった会社へ</div>
+        <h3 data-edit="p1-title">AI研修・社員リスキリング（助成金対象）</h3>
+        <p data-edit="p1-desc">貴社の実業務を教材に、生成AIを「翌日から仕事で使える」状態にする実践型研修です。訓練経費は人材開発支援助成金（事業展開等リスキリング支援コース）で中小企業なら最大75%が助成対象。ただしこの助成コースは令和8年度が最終年度で、計画届は訓練開始の1ヶ月前までに提出が必要です。</p>
         <div class="tags"><span>最大75%助成</span><span>令和8年度が最終</span><span>実践型研修</span><span>定着フォロー</span></div>
         <div class="card-foot"><a href="ai-training.html" class="solid">詳しく見る</a><a href="#contact" class="thin">無料相談</a></div>
       </div>
@@ -774,19 +792,19 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="card" data-rv="up" style="--d:120ms">
         <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.5-5A8 8 0 1 1 21 12Z"></path><path d="M8 11h8M8 15h5"></path></svg></div>
         <div class="kicker">PRODUCT 02</div>
-        <div class="issue">問い合わせ対応と社内ナレッジが人頼みになっている会社へ</div>
-        <h3>AIチャットエージェント</h3>
-        <p>自社を覚えたAIをひとつ育てて、自社サイトへの1行埋め込み・LINE等のSNS・社内ツールのどこにでも設置。問い合わせ対応・予約受付・見積もり案内から社内マニュアル参照まで、24時間365日自動化。CRMやカレンダーと連携し、社外の接客も社内のナレッジも、ひとつのAIでこなします。</p>
+        <div class="issue" data-edit="p2-issue">問い合わせ対応と社内ナレッジが人頼みになっている会社へ</div>
+        <h3 data-edit="p2-title">AIチャットエージェント</h3>
+        <p data-edit="p2-desc">自社を覚えたAIをひとつ育てて、自社サイトへの1行埋め込み・LINE等のSNS・社内ツールのどこにでも設置。問い合わせ対応・予約受付・見積もり案内から社内マニュアル参照まで、24時間365日自動化。CRMやカレンダーと連携し、社外の接客も社内のナレッジも、ひとつのAIでこなします。</p>
         <div class="tags"><span>サイト埋め込み</span><span>LINE</span><span>社内ナレッジ</span><span>24H対応</span></div>
-        <div class="card-foot"><a href="line-ai-agent.html" class="solid">詳しく見る</a><a href="#contact" class="thin">導入相談</a></div>
+        <div class="card-foot"><a href="line-ai-agent.html" class="solid">詳しく見る</a><a href="#agent-demo" class="thin">動くデモを見る</a></div>
       </div>
 
       <div class="card" data-rv="up" style="--d:240ms">
         <div class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"></circle><path d="M3 20c0-3.3 2.7-5.4 6-5.4 1.2 0 2.3.3 3.2.8"></path><path d="M14.5 17.5l2 2 4-4.5"></path></svg></div>
         <div class="kicker">PRODUCT 03</div>
-        <div class="issue">「社長にしか判断できない」「引き継げない」を変えたい会社へ</div>
-        <h3>AIwill（社長クローンAI）</h3>
-        <p>経営者の思考・判断・経験をAIに学習させ「もう一人の社長」をつくります。経営判断の壁打ち相手になり、社長に集中する相談を肩代わり。社員はいつでも社長の考え方を参照でき、意思決定のスピードと一貫性が上がります。後継者育成・属人化の解消にも。スティーブ・ジョブズ版のデモを公開中。</p>
+        <div class="issue" data-edit="p3-issue">「社長にしか判断できない」「引き継げない」を変えたい会社へ</div>
+        <h3 data-edit="p3-title">AIwill（社長クローンAI）</h3>
+        <p data-edit="p3-desc">経営者の思考・判断・経験をAIに学習させ「もう一人の社長」をつくります。経営判断の壁打ち相手になり、社長に集中する相談を肩代わり。社員はいつでも社長の考え方を参照でき、意思決定のスピードと一貫性が上がります。後継者育成・属人化の解消にも。スティーブ・ジョブズ版のデモを公開中。</p>
         <div class="tags"><span>後継者育成</span><span>意思決定AI</span><span>経営支援</span></div>
         <div class="card-foot"><a href="human-clone-ai.html" class="solid">詳しく見る</a><a href="https://human-clone-frontend.hassy.workers.dev/" target="_blank" rel="noopener" class="thin">デモを見る（Jobs版）</a></div>
       </div>
@@ -794,9 +812,9 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="card" data-rv="up" style="--d:0ms">
         <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 11h18"></path><path d="M12 14v3l2 1"></path></svg></div>
         <div class="kicker">PRODUCT 04</div>
-        <div class="issue">予定とメールと雑務で一日が終わる経営者へ</div>
-        <h3>AIside（アイサイド）／ あなたの付き人AI</h3>
-        <p>一人社長・多忙な経営者のための「付き人AI」。Gmail・カレンダー・Slack・Chatworkなど既存ツールを横断し、予定調整・メール下書き・タスク整理・情報集約を先回りで代行。あなたの仕事のやり方を覚えて、もう一人の自分として日々の雑務を引き受けます。</p>
+        <div class="issue" data-edit="p4-issue">予定とメールと雑務で一日が終わる経営者へ</div>
+        <h3 data-edit="p4-title">AIside（アイサイド）／ あなたの付き人AI</h3>
+        <p data-edit="p4-desc">一人社長・多忙な経営者のための「付き人AI」。Gmail・カレンダー・Slack・Chatworkなど既存ツールを横断し、予定調整・メール下書き・タスク整理・情報集約を先回りで代行。あなたの仕事のやり方を覚えて、もう一人の自分として日々の雑務を引き受けます。</p>
         <div class="tags"><span>一人社長</span><span>付き人AI</span><span>先回り</span><span>ツール横断</span></div>
         <div class="card-foot"><a href="aiside.html" class="solid">詳しく見る</a><a href="aiside.html#cta" class="thin">無料相談</a></div>
       </div>
@@ -804,9 +822,9 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="card" data-rv="up" style="--d:120ms">
         <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M15.5 8.5 10 10l-1.5 5.5L14 14l1.5-5.5Z"></path></svg></div>
         <div class="kicker">SERVICE 05</div>
-        <div class="issue">AIを入れたいが、何から手をつけるか分からない会社へ</div>
-        <h3>AIコンサルティング・導入支援</h3>
-        <p>戦略立案・業務診断・プロダクト選定・実装・社員リスキリング・運用伴走までを一気通貫で。自社でAIプロダクトを開発・運用してきた経験を、そのまま御社の現場に持ち込みます。「説明」と「実装」の両方に責任を持つ伴走型コンサルティングです。</p>
+        <div class="issue" data-edit="p5-issue">AIを入れたいが、何から手をつけるか分からない会社へ</div>
+        <h3 data-edit="p5-title">AIコンサルティング・導入支援</h3>
+        <p data-edit="p5-desc">戦略立案・業務診断・プロダクト選定・実装・社員リスキリング・運用伴走までを一気通貫で。自社でAIプロダクトを開発・運用してきた経験を、そのまま御社の現場に持ち込みます。「説明」と「実装」の両方に責任を持つ伴走型コンサルティングです。</p>
         <div class="tags"><span>戦略立案</span><span>業務診断</span><span>リスキリング</span><span>運用伴走</span></div>
         <div class="card-foot"><a href="ai-consulting.html" class="solid">詳しく見る</a><a href="#contact" class="thin">無料相談</a></div>
       </div>
@@ -815,94 +833,33 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec sec--band" id="flow">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-label" data-rv="up">Flow</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms">導入の流れ</h2>
-      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms">一気に大きく変えません。最初の1業務で効果を確かめてから、隣の業務・部署へ広げます。</p>
-    </div>
-    <div class="flow">
-      <div class="step" data-rv="up" style="--d:0ms">
-        <div class="n">STEP 01</div>
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.5-5A8 8 0 1 1 21 12Z"></path></svg></div>
-        <h4>無料相談</h4>
-        <p>初回30分はオンラインで無料。何から手をつけるか決まっていない段階でかまいません。</p>
-      </div>
-      <div class="step" data-rv="up" style="--d:120ms">
-        <div class="n">STEP 02</div>
-        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M16 16l5 5"></path></svg></div>
-        <h4>業務診断</h4>
-        <p>約2週間。どの業務にどれだけ時間が取られているかを一緒に洗い出します。</p>
-      </div>
-      <div class="step" data-rv="up" style="--d:240ms">
-        <div class="n">STEP 03</div>
-        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18M9 21V9"></path></svg></div>
-        <h4>活用プラン作成</h4>
-        <p>最初にAI化する1業務と、費用・助成金の使い方を含めた計画を出します。</p>
-      </div>
-      <div class="step" data-rv="up" style="--d:360ms">
-        <div class="n">STEP 04</div>
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 1 5 5L9 22H4v-5L14.7 6.3Z"></path><path d="M13 8l3 3"></path></svg></div>
-        <h4>実装・社員研修</h4>
-        <p>1〜3ヶ月。実業務を教材にした研修と、AIの設置・調整を並行して進めます。</p>
-      </div>
-      <div class="step" data-rv="up" style="--d:480ms">
-        <div class="n">STEP 05</div>
-        <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"></path><path d="M21 4v5h-5"></path></svg></div>
-        <h4>運用伴走</h4>
-        <p>使われているか、答えが合っているかを見ながら手を入れ続けます。ここを外注扱いにしません。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="issues">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-label" data-rv="up">Issues</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms">こんな状態になっていませんか</h2>
-      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms">ひとつでも当てはまったら、そこが会社の止まりどころです。項目を選ぶと、合う解決策のページに進めます。</p>
-    </div>
-    <div class="issues">
-      <a href="line-ai-agent.html" data-rv="up" style="--d:0ms"><span class="no">01</span>問い合わせ対応も、社内の「これどうやるんだっけ」も、特定の人頼み</a>
-      <a href="human-clone-ai.html" data-rv="up" style="--d:80ms"><span class="no">02</span>社長が不在だと、決裁と相談が止まる</a>
-      <a href="human-clone-ai.html" data-rv="up" style="--d:160ms"><span class="no">03</span>引き継ぎたいのに、ノウハウが社長の頭の中にしかない</a>
-      <a href="aiside.html" data-rv="up" style="--d:240ms"><span class="no">04</span>予定調整とメールと雑務で、経営者の一日が終わる</a>
-      <a href="manual-ai.html" data-rv="up" style="--d:320ms"><span class="no">05</span>マニュアルはあるのに、誰も読まずに毎回ベテランに聞いている</a>
-      <a href="ai-training.html" data-rv="up" style="--d:400ms"><span class="no">06</span>セミナーは受けたのに、翌日から現場が何も変わらなかった</a>
-      <a href="ai-consulting.html" data-rv="up" style="--d:480ms"><span class="no">07</span>AIを入れたい気持ちはあるが、何から手をつけるか分からない</a>
-    </div>
-  </div>
-</section>
-
-<section class="sec sec--band" id="agent">
+<section class="sec" id="agent-demo">
   <div class="wrap">
     <div class="agent">
       <div>
         <div class="sec-head">
-          <div class="sec-label" data-rv="up">AI Agent</div>
-          <h2 class="sec-title" data-rv="up" style="--d:100ms">業界に特化した<br>対話型AIエージェント</h2>
+          <div class="sec-label" data-rv="up">AI Agent — LINE実装イメージ</div>
+          <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="agent-title">業界に特化した<br>対話型AIエージェント</h2>
           <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-          <p class="sec-lead" data-rv="up" style="--d:200ms">問い合わせ・比較提案・予約・決済まで、ユーザーが話しかけるだけで完結するAIを、自社サイトやLINE公式アカウントに実装します。CRM連動・カレンダー連携に対応。</p>
+          <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="agent-lead">問い合わせ・比較提案・予約・決済まで、ユーザーが話しかけるだけで完結するAIをLINE公式アカウントに実装します。CRM連動・カレンダー連携対応。<br><span style="font-size:0.8rem;opacity:0.75;">※デモ画面はサンプルです。実装は業種に合わせてカスタマイズします。</span></p>
         </div>
         <div class="industries" data-rv="up" style="--d:260ms">
           <span>介護・福祉</span><span>不動産</span><span>医療</span><span>飲食</span><span>フィットネス</span><span>EC・小売</span>
         </div>
         <a href="#contact" class="arrow-link" data-rv="up" style="--d:340ms"><span class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>導入を相談する</a>
       </div>
-      <div class="phone" data-rv="right" style="--d:200ms">
-        <div class="phone-screen">
-          <div class="phone-bar"><div class="t">AI Concierge — Demo</div><div class="s">オンライン</div></div>
-          <div class="chat" id="chat">
-            <div class="bub them">お問い合わせありがとうございます。ご希望の条件をお聞かせください。</div>
-            <div class="bub me">今週末、2名で個室のある店を探しています</div>
-            <div class="bub them">今週末に個室が空いているのは3店舗です。予算と場所のご希望はありますか。</div>
-            <div class="bub me">1人5,000円くらい、駅の近くで</div>
-            <div class="bub them">条件に合う2店舗をご案内します。このまま予約まで進めますか。</div>
-            <div class="note">画面はサンプルです。実装は業種に合わせてつくり込みます。</div>
+      <div class="phone-stage" data-rv="right" style="--d:200ms">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <div class="phone-bar">
+              <span class="phone-back">‹</span>
+              <div class="phone-title-wrap">
+                <div class="phone-title">AI Concierge — Demo</div>
+                <div class="phone-sub">オンライン</div>
+              </div>
+              <div class="phone-actions">⌕ ☰</div>
+            </div>
+            <div class="chat-stream" id="chatStream"><!-- JSがループ再生 --></div>
           </div>
         </div>
       </div>
@@ -911,158 +868,150 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 </section>
 
 <div class="midcta">
-  <h2 data-rv="up">この一覧にない業務でも、たいてい削れます</h2>
-  <p data-rv="up" style="--d:120ms">うちが売っているのは道具ではなく、人の手が空く時間です。まず1業務、いちばん問い合わせが多いところから測りましょう。</p>
+  <h2 data-rv="up" data-edit="midcta-title">ここにない課題でも、ご相談ください</h2>
+  <p data-rv="up" style="--d:120ms" data-edit="midcta-lead">御社の業務に合わせたAIをお作りします。まずは3分の無料診断で、AIに任せられる業務の目安をご確認ください。</p>
   <div class="btns" data-rv="up" style="--d:240ms">
-    <a href="shindan.html" class="btn btn-fill">3分でAI診断する</a>
-    <a href="#contact" class="btn btn-dark">無料相談はこちら</a>
+    <a href="shindan.html" class="btn btn-orange">3分で無料AI診断</a>
+    <a href="#contact" class="btn btn-navy">お問い合わせはこちら</a>
   </div>
 </div>
 
-<section class="sec" id="team">
+<section class="sec" id="case">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-label" data-rv="up">Team</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms">つくっている人</h2>
+      <div class="sec-label" data-rv="up">Case</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="case-title">導入事例・つくれるもの</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
     </div>
-    <div class="team">
-      <div class="member" data-rv="up" style="--d:0ms">
-        <img src="aidollargame-ceo-sato-norinosuke.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介" loading="lazy">
-        <div class="role">REPRESENTATIVE DIRECTOR / CEO</div>
-        <div class="name">佐藤 徳之介</div>
-        <div class="name-en">NORINOSUKE SATO</div>
-        <p>私は、エンジニアのような精巧なプロダクトを作れません。だからこそ、AIが人間に何をもたらすべきか、誰よりも深く考えています。私の仕事は、世界最高のエンジニアたちが生み出す「魔法」を、あなたの人生における「感動」として届けること。「効率化」のその先にある人間の熱量を取り戻すために、このチームを率いています。</p>
-        <ul>
-          <li>慶應義塾大学在学中にAI開発会社を起業</li>
-          <li>NEC PC社と「LAVIE SOL」を共同企画・開発 — 2025年3・4月 売上全国No.1</li>
-          <li>東京ニュービジネス協議会（東京NBC）起業塾に登壇 — 「事業承継 × AI」の新規事業構想『承継OS』を発表（2026年7月）</li>
-          <li>MEN'S HAIR SENSE ブランドアンバサダー</li>
-        </ul>
-        <div style="margin-top:1.4rem;"><a href="profile-sato.html" style="font-size:0.88rem;font-weight:700;color:var(--blue);text-decoration:underline;">代表プロフィールを見る →</a></div>
-      </div>
-      <div class="member" data-rv="up" style="--d:160ms">
-        <img src="aidollargame-cto-hashimoto-kazuki.png" alt="株式会社AIdollargame リードエンジニア/CTO 橋本一輝（アバターイラスト）" loading="lazy">
-        <div class="role">LEAD ENGINEER / CTO</div>
-        <div class="name">橋本 一輝</div>
-        <div class="name-en">KAZUKI HASHIMOTO</div>
-        <p>私は、AIの最前線を実装し続けてきました。生成AI・ブロックチェーン・空間コンピューティング。次に来る技術の臨界点を、6年間ずっと最前線で見続けています。私の仕事は、世界最高の「魔法」を、現場で本当に動くプロダクトに落とし込むこと。経営者の意志とエンジニアの精度、その両方を持ったチームでしか作れないものを、ここで作っています。</p>
-        <ul>
-          <li>大手IT企業にて生成AI・ブロックチェーン・法人向け大規模アプリの新規事業を6年間リード</li>
-          <li>Apple Vision Pro向けAIアプリ「VirtuAlly」をApp Storeでグローバルリリース — Apple Foundation Models Hackathon 優勝（2025年）</li>
-          <li>大手主導のWeb3ゲームプロジェクトに参画 — NFT売買機能の実装、次世代ゲームエコシステム設計に貢献</li>
-        </ul>
-      </div>
+    <div class="posts">
+      <a class="post" href="jirei.html" data-rv="up" style="--d:0ms">
+        <div class="pbody">
+          <div class="meta-row"><span class="cat">介護・福祉</span></div>
+          <div class="ptitle" data-edit="case-1">施設探し・入居相談の一次対応をAIで24時間受け付ける</div>
+          <div class="pdesc" data-edit="case-1d">空き状況・料金・条件のよくある質問に自動で答え、見学予約まで進めます。</div>
+        </div>
+      </a>
+      <a class="post" href="jirei.html" data-rv="up" style="--d:120ms">
+        <div class="pbody">
+          <div class="meta-row"><span class="cat">不動産</span></div>
+          <div class="ptitle" data-edit="case-2">反響対応と内見予約を取りこぼさない</div>
+          <div class="pdesc" data-edit="case-2d">営業時間外や接客中の問い合わせにAIが一次対応し、内見候補日の案内まで自動化します。</div>
+        </div>
+      </a>
+      <a class="post" href="jirei.html" data-rv="up" style="--d:240ms">
+        <div class="pbody">
+          <div class="meta-row"><span class="cat">社内ナレッジ</span></div>
+          <div class="ptitle" data-edit="case-3">「ベテランに聞かないと分からない」をなくす</div>
+          <div class="pdesc" data-edit="case-3d">社内マニュアル・過去資料をAIに覚えさせ、同じ質問への回答を自動化します。</div>
+        </div>
+      </a>
+    </div>
+    <div class="center" data-rv="up"><a href="jirei.html" class="arrow-link"><span class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>導入事例一覧へ</a></div>
+  </div>
+</section>
+
+<section class="sec sec--white" id="event">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label" data-rv="up">Event</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">イベント・登壇</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+    </div>
+    <div class="posts">
+      <a class="post" href="articles/nbc-kigyojuku-2026-07.html" data-rv="up" style="--d:0ms">
+        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/nbc-kigyojuku-2026-07-hero.jpg')"></div></div>
+        <div class="pbody">
+          <div class="meta-row"><span class="cat">登壇</span><span class="date">2026 / 07 / 16</span></div>
+          <div class="ptitle">東京NBC起業塾で「事業承継 × AI」を発表</div>
+          <div class="pdesc">社長の判断を会社の資産に変える『承継OS』の構想を発表しました。</div>
+        </div>
+      </a>
+      <a class="post" href="articles/nbc-2026-07.html" data-rv="up" style="--d:120ms">
+        <div class="pbody">
+          <div class="meta-row"><span class="cat">出演</span><span class="date">2026 / 09 / 23 公開予定</span></div>
+          <div class="ptitle">東京NBC公式YouTube番組に代表・佐藤が出演</div>
+          <div class="pdesc">メンバー紹介コーナーでAIdollargameの事業をインタビュー。秋分の日に公開予定です。</div>
+        </div>
+      </a>
     </div>
   </div>
 </section>
 
-<section class="sec sec--band" id="news">
+<section class="sec" id="column">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label" data-rv="up">Column</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">記事・コラム</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="column-lead">公的統計と一次資料にあたって、中小企業がその日から動ける形に翻訳しています。</p>
+    </div>
+    <div class="posts">
+      <a class="post" href="./articles/shimoda-joho-2026.html" data-rv="up" style="--d:0ms">
+        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/shimoda-joho-2026-og.jpg')"></div></div>
+        <div class="pbody">
+          <div class="meta-row"><span class="cat">現場から</span><span class="date">2026 / 08 / 17</span></div>
+          <div class="ptitle">海も宿も飯もあった。探すのが大変だった｜伊豆下田で気づいた「情報がない」の重さ</div>
+          <div class="pdesc">行ってみるまで分からない土地で何が失われているのかを、観光統計と国の資料で確かめました。</div>
+        </div>
+      </a>
+      <a class="post" href="./articles/ai-training-evidence-2026.html" data-rv="up" style="--d:120ms">
+        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/ai-training-evidence-2026-hero.jpg')"></div></div>
+        <div class="pbody">
+          <div class="meta-row"><span class="cat">AI×人材育成</span><span class="date">2026 / 08 / 04</span></div>
+          <div class="ptitle">AIで研修すると人は育つのか｜学習が2倍伸びた実験と、成績が17%下がった実験</div>
+          <div class="pdesc">AIと教育の実証研究5本を読み比べ。結果を分けたのは教育用にどう設計したかでした。</div>
+        </div>
+      </a>
+      <a class="post" href="./articles/ai-teiten-2026-08.html" data-rv="up" style="--d:240ms">
+        <div class="thumb-wrap"><div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1553413077-190dd305871c?w=600&q=80&fit=crop')"></div></div>
+        <div class="pbody">
+          <div class="meta-row"><span class="cat">定点観測</span><span class="date">2026 / 08 / 04</span></div>
+          <div class="ptitle">定点観測 vol.2｜求人は増えているのに、人手不足倒産は過去最多（2026年8月号）</div>
+          <div class="pdesc">6月の有効求人倍率は1.18倍。それでも上半期の人手不足倒産は過去最多の237件でした。</div>
+        </div>
+      </a>
+    </div>
+    <div class="center" data-rv="up"><a href="./articles/" class="arrow-link"><span class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>記事一覧へ</a></div>
+  </div>
+</section>
+
+<section class="sec sec--white" id="news">
   <div class="wrap">
     <div class="sec-head">
       <div class="sec-label" data-rv="up">News</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms">ニュース</h2>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">お知らせ</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
     </div>
     <div class="news" id="newsList" data-rv="up" style="--d:160ms">
       <a href="articles/shimoda-joho-2026.html"><span class="d">2026 / 08 / 17</span><span class="b">REPORT</span><span class="t">記事「海も宿も飯もあった。探すのが大変だった」を公開 — 伊豆下田で店と駐車場を探せなかった体験を、観光統計と国の駐車場データで確かめました</span><span class="a">→</span></a>
-      <a href="articles/ai-training-evidence-2026.html"><span class="d">2026 / 08 / 04</span><span class="b">RESEARCH</span><span class="t">記事「AIで研修すると人は育つのか」を公開 — AIと教育の実証研究5本を読み比べ。学習が2倍伸びた研究も、成績が17%下がった研究も実在します</span><span class="a">→</span></a>
-      <a href="articles/ai-overview-observation-2026.html"><span class="d">2026 / 08 / 03</span><span class="b">REPORT</span><span class="t">記事「AIに『いい会社ですか』と23日間聞き続けた記録」を公開 — 検索のAI要約が自社をどう説明するか、サイト整備・プレス配信の前後で実測した自社データです</span><span class="a">→</span></a>
-      <a href="articles/ai-roi-cases-2026.html"><span class="d">2026 / 07 / 30</span><span class="b">CASE</span><span class="t">記事「AI導入が『利益・コスト・時間』に効いた実例10選」を公開 — 年12億円削減・18.6万時間削減・利益20倍超など、実例を全件出典つきでまとめました</span><span class="a">→</span></a>
+      <a href="articles/ai-training-evidence-2026.html"><span class="d">2026 / 08 / 04</span><span class="b">RESEARCH</span><span class="t">記事「AIで研修すると人は育つのか」を公開 — AIと教育の実証研究5本を読み比べ</span><span class="a">→</span></a>
+      <a href="articles/ai-overview-observation-2026.html"><span class="d">2026 / 08 / 03</span><span class="b">REPORT</span><span class="t">記事「AIに『いい会社ですか』と23日間聞き続けた記録」を公開</span><span class="a">→</span></a>
+      <a href="articles/ai-roi-cases-2026.html"><span class="d">2026 / 07 / 30</span><span class="b">CASE</span><span class="t">記事「AI導入が『利益・コスト・時間』に効いた実例10選」を公開 — 実例を全件出典つきでまとめました</span><span class="a">→</span></a>
       <a href="media.html"><span class="d">2026 / 07 / 28</span><span class="b">PRESS</span><span class="t">メディア掲載ページを公開 — PR TIMES配信、ニュースメディアVOIX・財経新聞ほかでの掲載実績をまとめました</span><span class="a">→</span></a>
       <a href="lab/"><span class="d">2026 / 07 / 28</span><span class="b">LAB</span><span class="t">「1日1アプリ実験室」の公開アプリが15本に — 企業の「こんなアプリが欲しい」を、AIが毎日1本ずつ動く形にしていく実験場です</span><span class="a">→</span></a>
-      <a class="more" href="articles/nbc-kigyojuku-2026-07.html"><span class="d">2026 / 07 / 16</span><span class="b">EVENT</span><span class="t">代表・佐藤が東京ニュービジネス協議会（東京NBC）の起業塾に登壇 — 「事業承継 × AI」をテーマに、社長の判断を会社の資産に変える『承継OS』の構想を発表しました</span><span class="a">→</span></a>
-      <a class="more" href="articles/ai-hikaku-2026.html"><span class="d">2026 / 07 / 14</span><span class="b">GUIDE</span><span class="t">解説記事「ChatGPT・Claude・Gemini、会社で使うならどれ？」を公開 — 3つ全部使う会社が業務別に正直比較</span><span class="a">→</span></a>
+      <a class="more" href="articles/nbc-kigyojuku-2026-07.html"><span class="d">2026 / 07 / 16</span><span class="b">EVENT</span><span class="t">代表・佐藤が東京ニュービジネス協議会（東京NBC）の起業塾に登壇 — 「事業承継 × AI」をテーマに『承継OS』の構想を発表しました</span><span class="a">→</span></a>
+      <a class="more" href="articles/ai-hikaku-2026.html"><span class="d">2026 / 07 / 14</span><span class="b">GUIDE</span><span class="t">解説記事「ChatGPT・Claude・Gemini、会社で使うならどれ？」を公開</span><span class="a">→</span></a>
       <a class="more" href="articles/ai-teiten-2026-07.html"><span class="d">2026 / 07 / 11</span><span class="b">SERIES</span><span class="t">新連載「定点観測」開始 — 公的調査の一次データで中小企業のAI導入を毎月読み解きます</span><span class="a">→</span></a>
       <a class="more" href="ai-training.html"><span class="d">2026 / 07 / 11</span><span class="b">SERVICE</span><span class="t">AI研修・社員リスキリングの専用ページを公開 — 貴社の実業務を教材にした実践型の4プログラム</span><span class="a">→</span></a>
-      <a class="more" href="articles/nbc-2026-07.html"><span class="d">2026 / 07 / 09</span><span class="b">MEDIA</span><span class="t">代表・佐藤が東京ニュービジネス協議会（東京NBC）の公式YouTube番組に出演 — メンバー紹介コーナーでAIdollargameの事業をインタビュー。2026年9月23日（秋分の日）公開予定</span><span class="a">→</span></a>
+      <a class="more" href="articles/nbc-2026-07.html"><span class="d">2026 / 07 / 09</span><span class="b">MEDIA</span><span class="t">代表・佐藤が東京NBCの公式YouTube番組に出演 — 2026年9月23日（秋分の日）公開予定</span><span class="a">→</span></a>
       <a class="more" href="https://note.com/aidollargame" target="_blank" rel="noopener"><span class="d">2026 / 06 / 12</span><span class="b">NOTE</span><span class="t">公式noteを開設 — 第一弾「コードが一行も書けない私が、AIだけで会社のサイトを作成し公開した話」を公開</span><span class="a">→</span></a>
       <a class="more" href="shindan.html"><span class="d">2026 / 06 / 11</span><span class="b">TOOL</span><span class="t">AI活用診断ツールを公開 — 3つの悩みから、自社に最適なAIの使い方が3分でわかる</span><span class="a">→</span></a>
       <a class="more" href="aiside.html"><span class="d">2026 / 05 / 15</span><span class="b">PRODUCT</span><span class="t">AIside（アイサイド）の開発を開始 — 一人社長・経営者の「もう一人の自分」となる付き人AI</span><span class="a">→</span></a>
       <a class="more" href="human-clone-ai.html"><span class="d">2026 / 05 / 01</span><span class="b">PRODUCT</span><span class="t">社長クローンAIの開発を開始 — 経営者の意思決定をAIに継承</span><span class="a">→</span></a>
       <a class="more" href="line-ai-agent.html"><span class="d">2026 / 03 / 01</span><span class="b">DEV</span><span class="t">AIチャットエージェントの開発を開始 — LINE公式アカウント向け対話型AIをローンチ</span><span class="a">→</span></a>
-      <a class="more" href="#contact"><span class="d">2025 / 04 / 15</span><span class="b">SERVICE</span><span class="t">AIコンサルティング・社員リスキリング研修の提供を開始 — 戦略立案からDX推進まで一貫支援</span><span class="a">→</span></a>
+      <a class="more" href="#contact"><span class="d">2025 / 04 / 15</span><span class="b">SERVICE</span><span class="t">AIコンサルティング・社員リスキリング研修の提供を開始</span><span class="a">→</span></a>
       <a class="more" href="company.html"><span class="d">2025 / 04 / 08</span><span class="b">COMPANY</span><span class="t">株式会社AIdollargameを設立</span><span class="a">→</span></a>
     </div>
     <div class="center"><button class="btn btn-ghost" id="newsMore" type="button">もっと見る</button></div>
   </div>
 </section>
 
-<section class="sec" id="articles">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-label" data-rv="up">Articles</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms">記事・発信</h2>
-      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms">公的統計と一次資料をあたって、中小企業がその日から動ける形に翻訳しています。</p>
-    </div>
-    <div class="posts">
-      <a class="post" href="./articles/shimoda-joho-2026.html" data-rv="up" style="--d:0ms">
-        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/shimoda-joho-2026-og.jpg')"></div></div>
-        <div class="pbody">
-          <div class="cat">現場から</div><div class="date">2026 / 08 / 17</div>
-          <div class="ptitle">海も宿も飯もあった。探すのが大変だった｜伊豆下田で気づいた「情報がない」の重さ</div>
-          <div class="pdesc">店が今日やっているか、駐車場が空いているか。行ってみるまで分からない土地で何が失われているのかを、観光統計と国の資料で確かめました。</div>
-          <div class="plink">READ MORE →</div>
-        </div>
-      </a>
-      <a class="post" href="./articles/ai-training-evidence-2026.html" data-rv="up" style="--d:120ms">
-        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/ai-training-evidence-2026-hero.jpg')"></div></div>
-        <div class="pbody">
-          <div class="cat">AI×人材育成</div><div class="date">2026 / 08 / 04</div>
-          <div class="ptitle">AIで研修すると人は育つのか｜学習が2倍伸びた実験と、成績が17%下がった実験</div>
-          <div class="pdesc">AIと教育の実証研究5本を読み比べ。結果を分けたのはモデルの賢さではなく、教育用にどう設計したかでした。</div>
-          <div class="plink">READ MORE →</div>
-        </div>
-      </a>
-      <a class="post" href="./articles/ai-teiten-2026-08.html" data-rv="up" style="--d:240ms">
-        <div class="thumb-wrap"><div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1553413077-190dd305871c?w=600&q=80&fit=crop')"></div></div>
-        <div class="pbody">
-          <div class="cat">定点観測</div><div class="date">2026 / 08 / 04</div>
-          <div class="ptitle">定点観測 vol.2｜求人は増えているのに、人手不足倒産は過去最多（2026年8月号）</div>
-          <div class="pdesc">6月の有効求人倍率は1.18倍。それでも上半期の人手不足倒産は過去最多の237件でした。</div>
-          <div class="plink">READ MORE →</div>
-        </div>
-      </a>
-      <a class="post" href="./articles/ai-overview-observation-2026.html" data-rv="up" style="--d:0ms">
-        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/ai-overview-observation-2026-hero.jpg')"></div></div>
-        <div class="pbody">
-          <div class="cat">自社実測</div><div class="date">2026 / 08 / 03</div>
-          <div class="ptitle">AIに「いい会社ですか」と23日間聞き続けた記録｜自社サイトを直しても評価は動かなかった</div>
-          <div class="pdesc">検索のAI要約が自社をどう説明するか。同じ検索を同じ手順で23日間続けた自社データです。</div>
-          <div class="plink">READ MORE →</div>
-        </div>
-      </a>
-      <a class="post" href="./articles/ai-roi-cases-2026.html" data-rv="up" style="--d:120ms">
-        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/ai-roi-cases-2026-hero.jpg')"></div></div>
-        <div class="pbody">
-          <div class="cat">導入事例</div><div class="date">2026 / 07 / 30</div>
-          <div class="ptitle">AI導入が「利益・コスト・時間」に効いた実例10選｜数字と出典つき（2026年最新）</div>
-          <div class="pdesc">年12億円削減・18.6万時間削減・利益20倍超。AIが効いた実例を全件出典つきで10件まとめました。</div>
-          <div class="plink">READ MORE →</div>
-        </div>
-      </a>
-      <a class="post" href="./articles/zokujinka-2026.html" data-rv="up" style="--d:240ms">
-        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/zokujinka-2026-hero.jpg')"></div></div>
-        <div class="pbody">
-          <div class="cat">課題解決</div><div class="date">2026 / 07 / 16</div>
-          <div class="ptitle">「あの人しか分からない」が会社を止める前に｜業務の属人化をほどく3つの手順</div>
-          <div class="pdesc">特定の人に集中した仕事を、AIを使って少しずつほどく3つの手順を、ひとり社長の実感から解説します。</div>
-          <div class="plink">READ MORE →</div>
-        </div>
-      </a>
-    </div>
-    <div class="center"><a href="./articles/" class="btn btn-ghost">全記事を見る →</a></div>
-  </div>
-</section>
-
-<section class="sec sec--band" id="faq">
+<section class="sec" id="faq">
   <div class="wrap">
     <div class="sec-head">
       <div class="sec-label" data-rv="up">FAQ</div>
       <h2 class="sec-title" data-rv="up" style="--d:100ms">よくあるご質問</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms">AIdollargame と各プロダクトについて、よく寄せられるご質問にお答えします。</p>
     </div>
     <div class="faq" data-rv="up" style="--d:160ms">
       <details open>
@@ -1105,20 +1054,20 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec" id="shiryo">
+<section class="sec sec--white" id="shiryo">
   <div class="wrap">
     <div class="sec-head">
       <div class="sec-label" data-rv="up">Free Download</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms">まだ相談は早い、という方へ</h2>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="shiryo-title">まだ相談は早い、という方へ</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms">「何から手をつけるか」を自分のペースで整理できる無料資料を用意しました。相談の前に、まずこちらだけでも。</p>
+      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="shiryo-lead">「何から手をつけるか」を自分のペースで整理できる無料資料を用意しました。相談の前に、まずこちらだけでも。</p>
     </div>
     <div class="lead-mag" data-rv="up" style="--d:160ms">
       <div>
         <div class="eyebrow">A4・全16ページ／メールアドレスだけで無料</div>
-        <h3>AI導入はじめの一歩<br>チェックリスト20</h3>
-        <p>読む資料ではなく、書き込む資料です。20個の□と記入欄を埋めていくと、読み終わったときには自社のAI導入計画・社内ルール・90日計画が手元に残ります。ツール名は出てきません。</p>
-        <a href="shiryo.html" class="btn btn-dark">無料でダウンロード →</a>
+        <h3 data-edit="shiryo-name">AI導入はじめの一歩<br>チェックリスト20</h3>
+        <p data-edit="shiryo-desc">読む資料ではなく、書き込む資料です。20個の□と記入欄を埋めていくと、読み終わったときには自社のAI導入計画・社内ルール・90日計画が手元に残ります。ツール名は出てきません。</p>
+        <a href="shiryo.html" class="btn btn-navy">無料でダウンロード →</a>
       </div>
       <div>
         <ul>
@@ -1132,13 +1081,13 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec sec--band" id="contact">
+<section class="sec" id="contact">
   <div class="wrap">
     <div class="sec-head">
       <div class="sec-label" data-rv="up">Contact</div>
       <h2 class="sec-title" data-rv="up" style="--d:100ms">お問い合わせ</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms">AIの可能性についてのご相談、プロダクトのお問い合わせはこちらからどうぞ。担当者より2営業日以内にご返信いたします。</p>
+      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="contact-lead">AIの可能性についてのご相談、プロダクトのお問い合わせはこちらからどうぞ。担当者より2営業日以内にご返信いたします。</p>
     </div>
     <div class="contact">
       <form action="https://formspree.io/f/xeevwrgp" method="POST" data-rv="up" style="--d:120ms">
@@ -1149,14 +1098,13 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <div class="field"><label>お名前</label><input type="text" name="name" placeholder="山田 太郎" required></div>
         <div class="field"><label>メールアドレス</label><input type="email" name="email" placeholder="email@example.com" required></div>
         <div class="field"><label>ご相談内容</label><textarea name="message" placeholder="ご相談内容をご記入ください" required></textarea></div>
-        <button class="btn btn-dark" type="submit" style="cursor:pointer;font-family:inherit;border:0;">送信する →</button>
+        <button class="btn btn-navy" type="submit" style="cursor:pointer;font-family:inherit;border:0;">送信する →</button>
       </form>
       <div class="info" data-rv="up" style="--d:240ms">
         <dl>
           <div><dt>メール</dt><dd><a href="mailto:info@aidollargame.com">info@aidollargame.com</a></dd></div>
           <div><dt>会社名</dt><dd>株式会社AIdollargame（東京都新宿区北新宿1-7-20）</dd></div>
           <div><dt>初回相談</dt><dd>オンラインで30分・無料。資料だけ見たい方は<a href="shiryo.html">無料資料</a>へ</dd></div>
-          <div><dt>返信</dt><dd>2営業日以内にご返信します</dd></div>
         </dl>
       </div>
     </div>
@@ -1164,8 +1112,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 </section>
 
 <div class="precta">
-  <h2 data-rv="up">まず1業務から、AIに任せてみませんか</h2>
-  <p data-rv="up" style="--d:120ms">初回30分のオンライン相談は無料です。何から手をつけるか決まっていない段階のご相談でかまいません。</p>
+  <h2 data-rv="up" data-edit="precta-title">まず1業務から、AIに任せてみませんか</h2>
+  <p data-rv="up" style="--d:120ms" data-edit="precta-lead">初回30分のオンライン相談は無料です。何から手をつけるか決まっていない段階のご相談でかまいません。</p>
   <div class="btns" data-rv="up" style="--d:240ms">
     <a href="#contact" class="btn btn-fill">無料相談を予約する</a>
     <a href="shindan.html" class="btn btn-line">3分で無料AI診断</a>
@@ -1206,87 +1154,136 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 
 <script>
 /* ============================================================
-   動き（opthubの.appear相当）
-   スクロール位置を見て、画面に入ったものだけを出す。
-   IntersectionObserverではなく素のスクロール判定にしているのは、
-   「時間で全部出す」保険を入れずに確実に動かすため。
+   スクロールで出す（opthubの.appear相当）。時間で全部出す保険は入れない。
    ============================================================ */
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var els = [].slice.call(document.querySelectorAll('[data-rv]'));
-  var facts = document.getElementById('facts');
-  var chat = document.getElementById('chat');
-  var bubs = chat ? [].slice.call(chat.querySelectorAll('.bub')) : [];
-  var countStarted = false, chatStarted = false;
+  if (reduce) { els.forEach(function(e){ e.classList.add('in'); }); return; }
 
-  if (reduce) {
-    els.forEach(function(e){ e.classList.add('in'); });
-    if (facts) facts.querySelectorAll('.cnt').forEach(function(el){ el.textContent = el.dataset.to; });
-    bubs.forEach(function(b){ b.classList.add('show'); });
-    return;
-  }
-
-  /* ヒーローのゆっくりズーム */
   setTimeout(function(){ var h = document.getElementById('hero'); if (h) h.classList.add('ready'); }, 60);
 
   function viewportH(){ return window.innerHeight || document.documentElement.clientHeight || 0; }
-
   function inView(el, ratio){
     var vh = viewportH();
-    if (!vh) return true; /* 画面サイズが取れない環境では隠したままにしない */
+    if (!vh) return true;
     var r = el.getBoundingClientRect();
     var line = vh * (ratio || 0.9);
-    return r.top < line && r.bottom > 0;
+    /* 一度でも見える位置に来たら出す。速いスクロールで通り過ぎた要素も含む */
+    return r.top < line;
   }
-
-  function countUp(){
-    if (countStarted || !facts) return;
-    countStarted = true;
-    facts.querySelectorAll('.cnt').forEach(function(el){
-      var to = parseInt(el.dataset.to, 10) || 0, t0 = null, dur = 1100;
-      var tick = function(){
-        if (t0 === null) t0 = Date.now();
-        var p = Math.min(1, (Date.now() - t0) / dur);
-        el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
-        if (p < 1) setTimeout(tick, 32);
-      };
-      tick();
-    });
-  }
-
-  function runChat(){
-    if (chatStarted || !chat) return;
-    chatStarted = true;
-    bubs.forEach(function(b, i){ setTimeout(function(){ b.classList.add('show'); }, 300 * i); });
-  }
-
   function sweep(){
     els = els.filter(function(el){
       if (!inView(el)) return true;
       el.classList.add('in');
       return false;
     });
-    if (facts && inView(facts, 0.85)) countUp();
-    if (chat && inView(chat, 0.8)) runChat();
   }
-
   var queued = false;
   function onScroll(){
     if (queued) return;
     queued = true;
     setTimeout(function(){ queued = false; sweep(); }, 60);
   }
-
   sweep();
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   window.addEventListener('load', sweep);
-  /* スクロールイベントを取りこぼしても必ず出るように、未表示が残っている間だけ定期確認 */
-  var iv = setInterval(function(){
-    if (!els.length) { clearInterval(iv); return; }
-    sweep();
-  }, 500);
-  window.__sweep = sweep; /* 動作確認用 */
+  var iv = setInterval(function(){ if (!els.length) { clearInterval(iv); return; } sweep(); }, 500);
+})();
+
+/* LINE風チャットデモ — ライブHPと同じ自動ループ */
+(function(){
+  const stream=document.getElementById('chatStream');
+  if(!stream)return;
+
+  const facilities=[
+    {n:'プランA', t:'スタンダード', p:'月額 ◯◯万円〜', m:'入居一時金 ◯◯万円〜<br>都心部・駅近'},
+    {n:'プランB', t:'プレミアム', p:'月額 ◯◯万円〜', m:'入居一時金 ◯◯万円〜<br>緑豊かなエリア'},
+    {n:'プランC', t:'コンフォート', p:'月額 ◯◯万円〜', m:'入居一時金 ◯◯万円〜<br>医療連携充実'},
+  ];
+  const dates=[
+    {d:'◯月◯日(月)', t:'10:00'},
+    {d:'◯月◯日(火)', t:'14:00'},
+    {d:'◯月◯日(木)', t:'11:00'},
+  ];
+  const script=[
+    {type:'ai', text:'こんにちは。AIコンシェルジュです。<br>どのようなご要望でお探しですか？', delay:600},
+    {type:'user', text:'プランを比較したいです', delay:1300},
+    {type:'ai', text:'承知しました。ご利用条件を教えてください。<br>(エリア・予算・希望日 など)', delay:1400},
+    {type:'user', text:'都心部で予算◯◯万円', delay:1300},
+    {type:'ai', text:'条件に合うプランを3件ご提案します。', delay:1500},
+    {type:'facilities', delay:600},
+    {type:'user', text:'プランAを詳しく見たい', delay:1500},
+    {type:'ai', text:'見学候補日をご案内します。<br>以下からお選びください。', delay:1400},
+    {type:'dates', delay:600},
+    {type:'user', text:'◯月◯日(月) 10:00 で予約', delay:1400},
+    {type:'ai', text:'ご予約ありがとうございます。<br>カレンダー連携も可能です。', delay:1500},
+  ];
+
+  let i=0;
+  function step(){
+    const item=script[i];
+    if(item.type==='ai' || item.type==='user'){
+      if(item.type==='ai'){
+        const t=document.createElement('div');
+        t.className='typing-line';
+        t.innerHTML='<div class="line-avatar">AI</div><div class="typing-bubble"><span></span><span></span><span></span></div>';
+        stream.appendChild(t);
+        scrollStream();
+        setTimeout(()=>{ t.remove(); addBubble(item); next(); }, 800);
+      } else {
+        addBubble(item);
+        next();
+      }
+    } else if(item.type==='facilities'){
+      const wrap=document.createElement('div');
+      wrap.className='facility-cards';
+      wrap.innerHTML=facilities.map(f=>'<div class="facility-card"><div class="fc-name">'+f.n+'</div><div class="fc-type">'+f.t+'</div><div class="fc-price">'+f.p+'</div><div class="fc-meta">'+f.m+'</div><div class="fc-buttons"><div class="fc-btn primary">詳細を見る</div><div class="fc-btn secondary">見学予約</div></div></div>').join('');
+      stream.appendChild(wrap);
+      scrollStream();
+      next();
+    } else if(item.type==='dates'){
+      const wrap=document.createElement('div');
+      wrap.className='date-cards';
+      wrap.innerHTML=dates.map(d=>'<div class="date-card"><div class="dc-date">'+d.d+'</div><div class="dc-time">'+d.t+'</div><div class="dc-btn">この日時で予約</div></div>').join('');
+      stream.appendChild(wrap);
+      scrollStream();
+      next();
+    }
+  }
+  function addBubble(item){
+    const m=document.createElement('div');
+    m.className='line-msg ' + (item.type==='user'?'user':'');
+    if(item.type==='ai'){
+      m.innerHTML='<div class="line-avatar">AI</div><div class="line-bubble ai">'+item.text+'</div>';
+    } else {
+      m.innerHTML='<div class="line-bubble user-msg">'+item.text+'</div><div class="line-time">既読</div>';
+    }
+    stream.appendChild(m);
+    scrollStream();
+  }
+  function scrollStream(){ stream.scrollTop=stream.scrollHeight; }
+  function next(){
+    i++;
+    if(i>=script.length){
+      setTimeout(()=>{ stream.innerHTML=''; i=0; step(); }, 4500);
+      return;
+    }
+    setTimeout(step, script[i-1].delay || 1200);
+  }
+  var started=false;
+  function maybeStart(){
+    if(started)return;
+    var sec=document.getElementById('agent-demo');
+    var vh=window.innerHeight || document.documentElement.clientHeight || 0;
+    if(!vh){ started=true; step(); return; }
+    var r=sec.getBoundingClientRect();
+    if(r.top < vh*0.85 && r.bottom > 0){ started=true; step(); }
+  }
+  maybeStart();
+  window.addEventListener('scroll', maybeStart, {passive:true});
+  var ivd=setInterval(function(){ if(started){clearInterval(ivd);return;} maybeStart(); }, 500);
 })();
 
 /* ヘッダーの影 */

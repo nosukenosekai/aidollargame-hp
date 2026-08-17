@@ -269,24 +269,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Share+Tech+Mono&family=Yuji+Syuku&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   aidollargame.com トップページ v2026-08（構成・見た目の作り替え）
-   参考にした実在デザイン: opthub.ai（B2B AI企業サイトの情報設計・余白・
-   英語ラベル+青見出し+短い下線・写真ヒーロー・実績帯・白カード・黒フッター）
-   文字は現行どおりApple標準のシステムフォントを継続。
+   aidollargame.com トップページ v2026-08 rev2
+   参考にした実在デザイン: opthub.ai（STUDIO製）
+   ・動き: .appear = opacity0 + translate(0,-48px/30px) + scale-x(0)の下線、
+     遅延200〜400ms・最長1600ms・easing cubic-bezier(0.4,0.4,0,1) を再現
+   ・構造: 英語ラベル→青見出し→短い下線 / 円環の関係図 / 線画アイコン付き白カード /
+     ラベンダーの中間CTA帯 / サムネ+バッジのカード / 丸矢印の一覧リンク
+   文字は現行どおりApple標準のシステムフォント。
    ============================================================ */
 :root{
   --ink:#0e1116;
   --ink-soft:#333845;
   --muted:#5d6270;
   --blue:#2657c4;
+  --blue-mid:#3f6fdc;
   --blue-deep:#14224e;
-  --blue-ink:#0d1b4e;
   --band:#f2f4fa;
   --band-blue:#e6edff;
+  --lav:#e8ecfd;
   --line:#e3e6ee;
-  --white:#fff;
   --radius:14px;
   --maxw:1180px;
+  --ease:cubic-bezier(0.4,0.4,0,1);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;background:#fff;}
@@ -298,132 +302,200 @@ body{
 }
 img{max-width:100%;height:auto;display:block;}
 a{color:inherit;text-decoration:none;}
+svg{display:block;}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
-.sec{padding:96px 0;}
+.sec{padding:104px 0;}
 .sec--band{background:var(--band);}
-.sec--tight{padding:72px 0;}
 
-/* ---- ヘッダー ---- */
-header.site{position:sticky;top:0;z-index:60;background:rgba(255,255,255,0.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);}
-.site-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;height:68px;display:flex;align-items:center;gap:28px;}
+/* ---------- 動き（opthubの.appearに相当） ---------- */
+html.js [data-rv]{opacity:0;transition:opacity 0.9s var(--ease),translate 0.9s var(--ease),scale 1.2s var(--ease);transition-delay:var(--d,0ms);}
+html.js [data-rv="up"]{translate:0 30px;}
+html.js [data-rv="down"]{translate:0 -40px;}
+html.js [data-rv="left"]{translate:-32px 0;}
+html.js [data-rv="right"]{translate:32px 0;}
+html.js [data-rv="line"]{scale:0 1;transform-origin:left center;transition-duration:1.2s;}
+[data-rv].in{opacity:1;translate:0 0;scale:1 1;}
+@media(prefers-reduced-motion:reduce){[data-rv]{opacity:1!important;translate:none!important;scale:1 1!important;transition:none!important;}}
+
+/* ---------- ヘッダー ---------- */
+header.site{position:sticky;top:0;z-index:60;background:rgba(255,255,255,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);transition:box-shadow 0.4s var(--ease),background 0.4s var(--ease);}
+header.site.scrolled{box-shadow:0 10px 30px -22px rgba(14,34,78,0.35);background:rgba(255,255,255,0.97);}
+.site-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;height:72px;display:flex;align-items:center;gap:26px;transition:height 0.4s var(--ease);}
+header.site.scrolled .site-inner{height:62px;}
 .brand{font-size:1.28rem;font-weight:700;letter-spacing:-0.01em;display:inline-flex;align-items:center;}
 .brand .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757;}
 .brand .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757;}
-.site-nav{margin-left:auto;display:flex;align-items:center;gap:22px;}
-.site-nav a{font-size:0.92rem;font-weight:500;color:var(--ink-soft);}
-.site-nav a:hover{color:var(--blue);}
-.site-nav a.pill{background:var(--blue);color:#fff;padding:0.6rem 1.3rem;border-radius:999px;font-weight:700;font-size:0.88rem;}
-.site-nav a.pill:hover{background:#1c46a8;color:#fff;}
+.site-nav{margin-left:auto;display:flex;align-items:center;gap:20px;}
+.site-nav a{font-size:0.92rem;font-weight:500;color:var(--ink-soft);position:relative;padding:0.2rem 0;}
+.site-nav a:not(.pill)::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--blue);scale:0 1;transform-origin:left center;transition:scale 0.35s var(--ease);}
+.site-nav a:not(.pill):hover{color:var(--blue);}
+.site-nav a:not(.pill):hover::after{scale:1 1;}
+.site-nav a.pill{background:var(--blue);color:#fff;padding:0.6rem 1.3rem;border-radius:999px;font-weight:700;font-size:0.88rem;transition:background 0.3s var(--ease),transform 0.3s var(--ease);}
+.site-nav a.pill:hover{background:#1c46a8;transform:translateY(-2px);}
 .nav-toggle{display:none;margin-left:auto;background:none;border:1px solid var(--line);border-radius:8px;padding:0.45rem 0.7rem;font-size:0.85rem;cursor:pointer;font-family:inherit;}
-@media(max-width:960px){
-  .site-nav{position:fixed;inset:68px 0 auto;flex-direction:column;align-items:flex-start;gap:0;background:#fff;border-bottom:1px solid var(--line);padding:0.5rem 24px 1.4rem;display:none;}
+@media(max-width:1000px){
+  .site-nav{position:fixed;inset:72px 0 auto;flex-direction:column;align-items:flex-start;gap:0;background:#fff;border-bottom:1px solid var(--line);padding:0.5rem 24px 1.4rem;display:none;}
   .site-nav.open{display:flex;}
   .site-nav a{padding:0.75rem 0;width:100%;border-bottom:1px solid var(--line);font-size:1rem;}
   .site-nav a.pill{margin-top:1rem;border-bottom:0;text-align:center;}
   .nav-toggle{display:block;}
 }
 
-/* ---- ヒーロー ---- */
-.hero{position:relative;min-height:min(74vh,620px);display:flex;align-items:flex-end;background:#0b1220;}
+/* ---------- ヒーロー ---------- */
+.hero{position:relative;min-height:min(80vh,660px);display:flex;align-items:flex-end;background:#0b1220;overflow:hidden;}
 .hero-media{position:absolute;inset:0;overflow:hidden;}
-.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 32%;opacity:0.62;}
-.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,12,28,0.86) 0%,rgba(6,12,28,0.62) 46%,rgba(6,12,28,0.30) 100%);}
-.hero-body{position:relative;max-width:var(--maxw);margin:0 auto;padding:120px 24px 64px;width:100%;}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:center 32%;opacity:0.6;scale:1.12;transition:scale 14s linear,opacity 1.6s var(--ease);}
+.hero.ready .hero-media img{scale:1;}
+.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,12,28,0.88) 0%,rgba(6,12,28,0.64) 46%,rgba(6,12,28,0.28) 100%);}
+.hero-body{position:relative;max-width:var(--maxw);margin:0 auto;padding:130px 24px 74px;width:100%;}
 .hero-eyebrow{color:#cfe0ff;font-size:0.86rem;font-weight:700;letter-spacing:0.22em;margin-bottom:1.1rem;}
 .hero h1{color:#fff;font-size:clamp(1.9rem,4.4vw,3rem);font-weight:700;line-height:1.5;letter-spacing:0.03em;}
 .hero h1 ruby rt{font-size:0.42em;font-weight:500;opacity:0.85;}
 .hero p.hero-sub{color:rgba(255,255,255,0.9);font-size:1.02rem;line-height:1.95;margin-top:1.4rem;max-width:44em;}
 .hero-cta{display:flex;gap:0.9rem;flex-wrap:wrap;margin-top:2.2rem;}
-.btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.95rem 1.7rem;border-radius:999px;font-size:0.95rem;font-weight:700;letter-spacing:0.04em;}
+.scroll-cue{position:absolute;right:32px;bottom:26px;display:flex;align-items:center;gap:0.7rem;color:rgba(255,255,255,0.72);font-size:0.7rem;letter-spacing:0.24em;font-weight:700;}
+.scroll-cue i{display:block;width:1px;height:46px;background:rgba(255,255,255,0.5);position:relative;overflow:hidden;}
+.scroll-cue i::after{content:"";position:absolute;left:0;top:-46px;width:1px;height:46px;background:#fff;animation:cue 2.4s var(--ease) infinite;}
+@keyframes cue{0%{transform:translateY(0)}60%{transform:translateY(92px)}100%{transform:translateY(92px)}}
+@media(max-width:900px){.scroll-cue{display:none;}}
+
+.btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.95rem 1.7rem;border-radius:999px;font-size:0.95rem;font-weight:700;letter-spacing:0.04em;transition:transform 0.3s var(--ease),background 0.3s var(--ease),box-shadow 0.4s var(--ease),color 0.3s var(--ease),border-color 0.3s var(--ease);}
+.btn:hover{transform:translateY(-2px);}
 .btn-fill{background:var(--blue);color:#fff;}
-.btn-fill:hover{background:#1c46a8;}
+.btn-fill:hover{background:#1c46a8;box-shadow:0 16px 34px -18px rgba(38,87,196,0.7);}
 .btn-line{border:1px solid rgba(255,255,255,0.6);color:#fff;}
-.btn-line:hover{background:rgba(255,255,255,0.12);}
+.btn-line:hover{background:rgba(255,255,255,0.14);}
 .btn-dark{background:var(--blue-deep);color:#fff;}
-.btn-dark:hover{background:#0c1636;}
+.btn-dark:hover{background:#0c1636;box-shadow:0 16px 34px -18px rgba(20,34,78,0.7);}
 .btn-ghost{border:1px solid var(--line);color:var(--ink);background:#fff;}
 .btn-ghost:hover{border-color:var(--blue);color:var(--blue);}
 
-/* ---- 実績帯 ---- */
+/* ---------- 実績帯（数字はカウントアップ） ---------- */
 .facts{background:var(--blue-deep);color:#fff;}
 .facts-grid{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(4,1fr);}
-.fact{padding:26px 26px 26px 0;border-right:1px solid rgba(255,255,255,0.14);}
+.fact{padding:30px 26px 30px 0;border-right:1px solid rgba(255,255,255,0.14);}
 .fact:last-child{border-right:0;}
 .fact:not(:first-child){padding-left:26px;}
-.fact dt{font-size:0.76rem;letter-spacing:0.18em;color:#a9bde8;font-weight:700;}
-.fact dd{font-size:0.98rem;line-height:1.7;margin-top:0.35rem;font-weight:500;}
-@media(max-width:860px){.facts-grid{grid-template-columns:1fr 1fr;}.fact{border-bottom:1px solid rgba(255,255,255,0.14);padding:20px;}.fact:nth-child(2n){border-right:0;}.fact:not(:first-child){padding-left:20px;}}
+.fact dt{font-size:0.74rem;letter-spacing:0.18em;color:#a9bde8;font-weight:700;}
+.fact dd{margin-top:0.4rem;font-size:0.9rem;line-height:1.7;color:#dbe4f8;}
+.fact .big{display:block;margin-bottom:0.35rem;font-size:1.9rem;font-weight:700;letter-spacing:0.02em;line-height:1.3;font-variant-numeric:tabular-nums;}
+.fact .big small{font-size:0.9rem;font-weight:700;margin-left:0.15rem;}
+@media(max-width:860px){.facts-grid{grid-template-columns:1fr 1fr;}.fact{border-bottom:1px solid rgba(255,255,255,0.14);padding:22px 20px;}.fact:nth-child(2n){border-right:0;}.fact:not(:first-child){padding-left:20px;}}
 
-/* ---- セクション見出し ---- */
-.sec-head{margin-bottom:44px;}
+/* ---------- セクション見出し ---------- */
+.sec-head{margin-bottom:48px;}
 .sec-label{font-size:0.86rem;font-weight:700;letter-spacing:0.16em;color:var(--ink);}
-.sec-title{color:var(--blue);font-size:clamp(1.5rem,3.2vw,2rem);font-weight:700;line-height:1.5;letter-spacing:0.05em;margin-top:0.35rem;padding-bottom:20px;position:relative;}
-.sec-title::after{content:"";position:absolute;left:0;bottom:0;width:56px;height:2px;background:var(--blue);}
+.sec-title{color:var(--blue);font-size:clamp(1.5rem,3.2vw,2rem);font-weight:700;line-height:1.5;letter-spacing:0.05em;margin-top:0.35rem;}
+.sec-rule{width:56px;height:2px;background:var(--blue);margin-top:20px;}
 .sec-lead{color:var(--muted);font-size:1rem;margin-top:22px;max-width:52em;}
+.sec-head.center{text-align:center;}
+.sec-head.center .sec-rule{margin-left:auto;margin-right:auto;}
+.sec-head.center .sec-lead{margin-left:auto;margin-right:auto;}
 
-/* ---- 丸矢印リンク ---- */
+/* ---------- 丸矢印リンク ---------- */
 .arrow-link{display:inline-flex;align-items:center;gap:0.9rem;font-weight:700;font-size:0.95rem;color:var(--ink);}
-.arrow-link .circle{width:46px;height:46px;border-radius:999px;background:var(--blue);color:#fff;display:grid;place-items:center;font-size:1rem;transition:transform 0.25s;}
-.arrow-link:hover .circle{transform:translateX(4px);}
+.arrow-link .circle{width:48px;height:48px;border-radius:999px;background:var(--blue);color:#fff;display:grid;place-items:center;transition:transform 0.35s var(--ease),background 0.35s var(--ease);}
+.arrow-link:hover .circle{transform:translateX(6px);background:#1c46a8;}
+.arrow-link:hover{color:var(--blue);}
 
-/* ---- 2カラム（会社紹介） ---- */
+/* ---------- 2カラム ---------- */
 .split{display:grid;grid-template-columns:1.05fr 0.95fr;gap:56px;align-items:center;}
-@media(max-width:900px){.split{grid-template-columns:1fr;gap:32px;}}
+@media(max-width:900px){.split{grid-template-columns:1fr;gap:34px;}}
 .split p{color:var(--ink-soft);}
 .split p + p{margin-top:1.1rem;}
 .photo-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.photo-pair figure{margin:0;}
-.photo-pair img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--radius);border:1px solid var(--line);}
-.photo-pair figcaption{font-size:0.78rem;color:var(--muted);margin-top:0.5rem;line-height:1.6;}
+.photo-pair figure{margin:0;overflow:hidden;border-radius:var(--radius);}
+.photo-pair .ph{overflow:hidden;border-radius:var(--radius);border:1px solid var(--line);}
+.photo-pair img{width:100%;aspect-ratio:4/3;object-fit:cover;transition:scale 0.9s var(--ease);}
+.photo-pair figure:hover img{scale:1.06;}
+.photo-pair figcaption{font-size:0.78rem;color:var(--muted);margin-top:0.55rem;line-height:1.6;}
 
-/* ---- サービスカード ---- */
+/* ---------- 関係図 ---------- */
+.diagram{background:#fff;border:1px solid var(--line);border-radius:20px;padding:34px 24px 26px;}
+.diagram .dg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.diagram svg{width:100%;height:auto;max-width:940px;margin:0 auto;}
+.diagram .swipe{display:none;text-align:center;font-size:0.76rem;color:var(--muted);margin-top:0.6rem;}
+@media(max-width:760px){.diagram{padding:24px 14px 20px;}.diagram svg{min-width:700px;}.diagram .swipe{display:block;}}
+.diagram .cap{text-align:center;color:var(--muted);font-size:0.84rem;margin-top:1rem;}
+.dg-line{stroke:var(--blue);stroke-width:1.6;fill:none;stroke-dasharray:1 1;stroke-dashoffset:0;}
+.dg-arrow{fill:var(--blue);}
+.dg-circle{fill:#fff;stroke:var(--line);stroke-width:1.4;}
+.dg-circle-main{fill:var(--band-blue);stroke:#c9d7f7;}
+.dg-label{font-size:15px;font-weight:700;fill:var(--ink);}
+.dg-sub{font-size:12.5px;fill:var(--muted);}
+.dg-flow{font-size:12.5px;font-weight:700;fill:var(--blue);}
+.dg-ic{stroke:var(--blue);stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+html.js [data-rv="draw"]{stroke-dasharray:420;stroke-dashoffset:420;opacity:1;transition:stroke-dashoffset 1.6s var(--ease);transition-delay:var(--d,0ms);}
+[data-rv="draw"].in{stroke-dashoffset:0;}
+
+/* ---------- サービスカード ---------- */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:20px;}
-.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 28px 26px;display:flex;flex-direction:column;transition:box-shadow 0.3s,transform 0.3s,border-color 0.3s;}
-.card:hover{box-shadow:0 18px 44px -26px rgba(14,34,78,0.32);transform:translateY(-3px);border-color:#cdd6ea;}
-.card .kicker{font-size:0.74rem;font-weight:700;letter-spacing:0.16em;color:var(--blue);}
-.card .issue{font-size:0.86rem;color:var(--muted);margin-top:0.9rem;line-height:1.8;}
-.card h3{font-size:1.16rem;font-weight:700;line-height:1.6;margin:0.5rem 0 0.9rem;letter-spacing:0.02em;}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px 28px 26px;display:flex;flex-direction:column;transition:box-shadow 0.4s var(--ease),transform 0.4s var(--ease),border-color 0.4s var(--ease);}
+.card:hover{box-shadow:0 22px 50px -28px rgba(14,34,78,0.36);transform:translateY(-4px);border-color:#cdd6ea;}
+.card .ic{width:46px;height:46px;border-radius:12px;background:var(--band-blue);display:grid;place-items:center;margin-bottom:1.1rem;transition:background 0.4s var(--ease);}
+.card:hover .ic{background:#d6e1ff;}
+.card .ic svg{width:24px;height:24px;stroke:var(--blue);stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.card .kicker{font-size:0.72rem;font-weight:700;letter-spacing:0.16em;color:var(--blue);}
+.card .issue{font-size:0.86rem;color:var(--muted);margin-top:0.8rem;line-height:1.8;}
+.card h3{font-size:1.16rem;font-weight:700;line-height:1.6;margin:0.45rem 0 0.9rem;letter-spacing:0.02em;}
 .card p{font-size:0.95rem;color:var(--ink-soft);line-height:1.9;}
 .tags{display:flex;flex-wrap:wrap;gap:0.45rem;margin:1.2rem 0 1.4rem;}
-.tags span{font-size:0.74rem;font-weight:700;color:var(--blue);background:var(--band-blue);border-radius:999px;padding:0.3rem 0.8rem;letter-spacing:0.03em;}
+.tags span{font-size:0.74rem;font-weight:700;color:var(--blue);background:var(--band-blue);border-radius:999px;padding:0.3rem 0.8rem;}
 .card-foot{margin-top:auto;display:flex;gap:0.7rem;flex-wrap:wrap;}
-.card-foot a{font-size:0.86rem;font-weight:700;padding:0.6rem 1.2rem;border-radius:999px;}
+.card-foot a{font-size:0.86rem;font-weight:700;padding:0.62rem 1.25rem;border-radius:999px;transition:background 0.3s var(--ease),color 0.3s var(--ease),border-color 0.3s var(--ease),transform 0.3s var(--ease);}
 .card-foot a.solid{background:var(--blue-deep);color:#fff;}
-.card-foot a.solid:hover{background:#0c1636;}
+.card-foot a.solid:hover{background:#0c1636;transform:translateY(-2px);}
 .card-foot a.thin{border:1px solid var(--line);color:var(--ink);}
-.card-foot a.thin:hover{border-color:var(--blue);color:var(--blue);}
+.card-foot a.thin:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px);}
 
-/* ---- 課題リスト ---- */
+/* ---------- 導入の流れ ---------- */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
+@media(max-width:1000px){.flow{grid-template-columns:1fr 1fr;}}
+@media(max-width:620px){.flow{grid-template-columns:1fr;}}
+.step{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;position:relative;transition:transform 0.4s var(--ease),box-shadow 0.4s var(--ease);}
+.step:hover{transform:translateY(-4px);box-shadow:0 20px 44px -28px rgba(14,34,78,0.34);}
+.step .n{font-size:0.72rem;font-weight:700;letter-spacing:0.14em;color:var(--blue);}
+.step .ic svg{width:26px;height:26px;stroke:var(--blue);stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;margin:0.9rem 0;}
+.step h4{font-size:1rem;font-weight:700;line-height:1.6;}
+.step p{font-size:0.86rem;color:var(--muted);line-height:1.8;margin-top:0.45rem;}
+.step::after{content:"";position:absolute;right:-11px;top:50%;width:8px;height:8px;border-right:1.6px solid #b9c5e4;border-bottom:1.6px solid #b9c5e4;transform:translateY(-50%) rotate(-45deg);}
+.step:last-child::after{display:none;}
+@media(max-width:1000px){.step::after{display:none;}}
+
+/* ---------- 課題リスト ---------- */
 .issues{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;}
 @media(max-width:860px){.issues{grid-template-columns:1fr;}}
-.issues a{display:flex;align-items:center;gap:1rem;padding:20px 4px;border-bottom:1px solid var(--line);font-size:1rem;color:var(--ink);line-height:1.7;}
-.issues a::after{content:"→";margin-left:auto;color:var(--blue);font-weight:700;transition:transform 0.2s;}
-.issues a:hover{color:var(--blue);}
-.issues a:hover::after{transform:translateX(4px);}
+.issues a{display:flex;align-items:center;gap:1rem;padding:20px 4px;border-bottom:1px solid var(--line);font-size:1rem;line-height:1.7;transition:color 0.3s var(--ease),padding-left 0.3s var(--ease);}
+.issues a::after{content:"";margin-left:auto;width:8px;height:8px;border-right:1.8px solid var(--blue);border-top:1.8px solid var(--blue);transform:rotate(45deg);transition:transform 0.3s var(--ease);flex:none;}
+.issues a:hover{color:var(--blue);padding-left:10px;}
+.issues a:hover::after{transform:rotate(45deg) translate(4px,-4px);}
 .issues .no{font-size:0.78rem;font-weight:700;color:#9aa3bb;min-width:2.2em;letter-spacing:0.08em;}
 
-/* ---- エージェント（スマホ実装イメージ） ---- */
+/* ---------- エージェント ---------- */
 .agent{display:grid;grid-template-columns:1.02fr 0.98fr;gap:56px;align-items:center;}
 @media(max-width:900px){.agent{grid-template-columns:1fr;}}
 .industries{display:flex;flex-wrap:wrap;gap:0.5rem;margin:1.6rem 0 2rem;}
-.industries span{font-size:0.84rem;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:999px;padding:0.4rem 1rem;color:var(--ink-soft);}
-.phone{width:300px;max-width:100%;margin:0 auto;border:10px solid #101728;border-radius:38px;background:#101728;box-shadow:0 30px 70px -34px rgba(9,18,40,0.5);}
+.industries span{font-size:0.84rem;font-weight:600;border:1px solid var(--line);background:#fff;border-radius:999px;padding:0.4rem 1rem;color:var(--ink-soft);transition:border-color 0.3s var(--ease),color 0.3s var(--ease);}
+.industries span:hover{border-color:var(--blue);color:var(--blue);}
+.phone{width:300px;max-width:100%;margin:0 auto;border:10px solid #101728;border-radius:38px;background:#101728;box-shadow:0 34px 74px -34px rgba(9,18,40,0.55);}
 .phone-screen{background:#eef1f7;border-radius:28px;overflow:hidden;}
-.phone-bar{background:var(--blue-deep);color:#fff;padding:0.85rem 1rem;display:flex;align-items:center;gap:0.7rem;}
+.phone-bar{background:var(--blue-deep);color:#fff;padding:0.85rem 1rem;}
 .phone-bar .t{font-size:0.82rem;font-weight:700;}
 .phone-bar .s{font-size:0.66rem;color:#a9bde8;}
-.chat{padding:1rem 0.9rem 1.4rem;display:flex;flex-direction:column;gap:0.7rem;min-height:330px;}
-.bub{max-width:82%;font-size:0.82rem;line-height:1.75;padding:0.7rem 0.9rem;border-radius:14px;}
+.chat{padding:1rem 0.9rem 1.4rem;display:flex;flex-direction:column;gap:0.7rem;min-height:340px;}
+.bub{max-width:82%;font-size:0.82rem;line-height:1.75;padding:0.7rem 0.9rem;border-radius:14px;opacity:0;translate:0 10px;transition:opacity 0.5s var(--ease),translate 0.5s var(--ease);}
+.bub.show{opacity:1;translate:0 0;}
 .bub.them{background:#fff;border:1px solid #e0e5ef;align-self:flex-start;}
 .bub.me{background:var(--blue);color:#fff;align-self:flex-end;}
 .chat .note{font-size:0.68rem;color:var(--muted);text-align:center;margin-top:0.4rem;}
 
-/* ---- チーム ---- */
+/* ---------- チーム ---------- */
 .team{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
 @media(max-width:900px){.team{grid-template-columns:1fr;}}
-.member{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 28px;}
+.member{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:32px 28px;transition:box-shadow 0.4s var(--ease),transform 0.4s var(--ease);}
+.member:hover{box-shadow:0 22px 50px -30px rgba(14,34,78,0.32);transform:translateY(-3px);}
 .member img{width:96px;height:96px;border-radius:999px;object-fit:cover;object-position:center top;border:1px solid var(--line);}
-.member .role{font-size:0.74rem;letter-spacing:0.16em;font-weight:700;color:var(--blue);margin-top:1.1rem;}
+.member .role{font-size:0.72rem;letter-spacing:0.16em;font-weight:700;color:var(--blue);margin-top:1.1rem;}
 .member .name{font-size:1.2rem;font-weight:700;margin-top:0.3rem;}
 .member .name-en{font-size:0.74rem;letter-spacing:0.14em;color:var(--muted);}
 .member p{font-size:0.94rem;color:var(--ink-soft);line-height:1.9;margin-top:1rem;}
@@ -431,81 +503,93 @@ header.site{position:sticky;top:0;z-index:60;background:rgba(255,255,255,0.94);b
 .member li{font-size:0.86rem;color:var(--muted);line-height:1.8;padding-left:1rem;position:relative;}
 .member li::before{content:"";position:absolute;left:0;top:0.85em;width:5px;height:5px;border-radius:999px;background:var(--blue);}
 
-/* ---- ニュース ---- */
-.news a{display:grid;grid-template-columns:6.4rem 5.6rem 1fr auto;gap:1.2rem;align-items:baseline;padding:20px 4px;border-bottom:1px solid var(--line);}
-.news a:hover{color:var(--blue);}
+/* ---------- 中間CTA帯 ---------- */
+.midcta{background:var(--lav);text-align:center;padding:76px 24px;}
+.midcta h2{font-size:clamp(1.4rem,3vw,1.95rem);font-weight:700;line-height:1.6;letter-spacing:0.04em;color:var(--blue-deep);}
+.midcta p{color:#4a5372;font-size:1rem;margin:1rem auto 2.1rem;max-width:44em;}
+.midcta .btns{display:flex;gap:0.9rem;justify-content:center;flex-wrap:wrap;}
+
+/* ---------- ニュース ---------- */
+.news a{display:grid;grid-template-columns:6.4rem 5.8rem 1fr auto;gap:1.2rem;align-items:baseline;padding:20px 4px;border-bottom:1px solid var(--line);transition:color 0.3s var(--ease),padding-left 0.3s var(--ease);}
+.news a:hover{color:var(--blue);padding-left:8px;}
 .news .d{font-size:0.82rem;color:var(--muted);letter-spacing:0.04em;}
-.news .b{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;color:var(--blue);background:var(--band-blue);border-radius:4px;padding:0.2rem 0.5rem;text-align:center;}
+.news .b{font-size:0.68rem;font-weight:700;letter-spacing:0.1em;color:var(--blue);background:var(--band-blue);border-radius:999px;padding:0.24rem 0.6rem;text-align:center;}
 .news .t{font-size:0.98rem;line-height:1.8;}
 .news .a{color:var(--blue);font-weight:700;}
 .news .more{display:none;}
 .news.open .more{display:grid;}
 @media(max-width:760px){.news a{grid-template-columns:1fr;gap:0.35rem;}.news .b{justify-self:start;}.news .a{display:none;}}
-.center{text-align:center;margin-top:32px;}
+.center{text-align:center;margin-top:34px;}
 
-/* ---- 記事 ---- */
+/* ---------- 記事 ---------- */
 .posts{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;}
-.post{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow 0.3s,transform 0.3s;}
-.post:hover{box-shadow:0 18px 44px -26px rgba(14,34,78,0.3);transform:translateY(-3px);}
-.post .thumb{height:168px;background-size:cover;background-position:center;background-color:#dfe4f0;}
+.post{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow 0.4s var(--ease),transform 0.4s var(--ease);}
+.post:hover{box-shadow:0 22px 50px -28px rgba(14,34,78,0.34);transform:translateY(-4px);}
+.post .thumb-wrap{overflow:hidden;height:172px;background:#dfe4f0;}
+.post .thumb{height:100%;background-size:cover;background-position:center;transition:scale 0.9s var(--ease);}
+.post:hover .thumb{scale:1.07;}
 .post .pbody{padding:22px 22px 24px;display:flex;flex-direction:column;gap:0.5rem;flex:1;}
-.post .cat{font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:var(--blue);}
+.post .cat{font-size:0.7rem;font-weight:700;letter-spacing:0.1em;color:#fff;background:var(--blue);border-radius:999px;padding:0.22rem 0.7rem;align-self:flex-start;}
 .post .date{font-size:0.72rem;color:var(--muted);letter-spacing:0.06em;}
 .post .ptitle{font-size:1rem;font-weight:700;line-height:1.65;}
 .post .pdesc{font-size:0.88rem;color:var(--muted);line-height:1.85;flex:1;}
 .post .plink{font-size:0.74rem;font-weight:700;letter-spacing:0.1em;color:var(--blue);border-top:1px solid var(--line);padding-top:0.9rem;margin-top:0.4rem;}
 
-/* ---- FAQ ---- */
+/* ---------- FAQ ---------- */
 .faq details{border-bottom:1px solid var(--line);}
-.faq summary{list-style:none;cursor:pointer;padding:22px 3rem 22px 0;font-size:1rem;font-weight:700;line-height:1.7;position:relative;}
+.faq summary{list-style:none;cursor:pointer;padding:22px 3rem 22px 0;font-size:1rem;font-weight:700;line-height:1.7;position:relative;transition:color 0.3s var(--ease);}
+.faq summary:hover{color:var(--blue);}
 .faq summary::-webkit-details-marker{display:none;}
-.faq summary::after{content:"＋";position:absolute;right:0.4rem;top:20px;color:var(--blue);font-weight:700;}
-.faq details[open] summary::after{content:"－";}
+.faq summary::before,.faq summary::after{content:"";position:absolute;right:0.6rem;top:33px;width:14px;height:2px;background:var(--blue);transition:transform 0.35s var(--ease);}
+.faq summary::after{transform:rotate(90deg);}
+.faq details[open] summary::after{transform:rotate(0deg);}
 .faq .a{font-size:0.96rem;color:var(--ink-soft);line-height:1.95;padding:0 0 24px;max-width:60em;}
 
-/* ---- 無料資料 ---- */
-.lead-mag{display:grid;grid-template-columns:1.05fr 0.95fr;gap:44px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:40px;}
+/* ---------- 無料資料 ---------- */
+.lead-mag{display:grid;grid-template-columns:1.05fr 0.95fr;gap:44px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:44px;}
 @media(max-width:900px){.lead-mag{grid-template-columns:1fr;padding:28px;}}
 .lead-mag .eyebrow{font-size:0.8rem;font-weight:700;letter-spacing:0.1em;color:var(--blue);}
-.lead-mag h3{font-size:1.5rem;font-weight:700;line-height:1.55;margin:0.6rem 0 1rem;}
+.lead-mag h3{font-size:1.55rem;font-weight:700;line-height:1.55;margin:0.6rem 0 1rem;}
 .lead-mag p{font-size:0.96rem;color:var(--ink-soft);line-height:1.9;margin-bottom:1.8rem;}
 .lead-mag ul{list-style:none;background:var(--band);border-radius:var(--radius);padding:26px 28px;}
 .lead-mag li{font-size:0.94rem;line-height:1.85;padding-left:1.3rem;position:relative;color:var(--ink-soft);}
 .lead-mag li + li{margin-top:0.8rem;}
 .lead-mag li::before{content:"";position:absolute;left:0;top:0.8em;width:6px;height:6px;border-radius:999px;background:var(--blue);}
 
-/* ---- お問い合わせ ---- */
+/* ---------- お問い合わせ ---------- */
 .contact{display:grid;grid-template-columns:1.1fr 0.9fr;gap:48px;}
 @media(max-width:900px){.contact{grid-template-columns:1fr;}}
 .field{margin-bottom:1.3rem;}
 .field label{display:block;font-size:0.76rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);margin-bottom:0.5rem;}
-.field input,.field textarea{width:100%;font:inherit;font-size:1rem;padding:0.85rem 1rem;border:1px solid var(--line);border-radius:10px;background:#fff;}
+.field input,.field textarea{width:100%;font:inherit;font-size:1rem;padding:0.85rem 1rem;border:1px solid var(--line);border-radius:10px;background:#fff;transition:border-color 0.3s var(--ease),box-shadow 0.3s var(--ease);}
 .field textarea{min-height:9rem;line-height:1.85;}
-.field input:focus,.field textarea:focus{outline:2px solid rgba(38,87,196,0.3);border-color:var(--blue);}
-.info{background:var(--band);border-radius:var(--radius);padding:30px 28px;}
-.info dl div + div{margin-top:1.3rem;}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(38,87,196,0.16);}
+.info{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 28px;}
+.info div + div{margin-top:1.3rem;}
 .info dt{font-size:0.76rem;font-weight:700;letter-spacing:0.14em;color:var(--muted);}
 .info dd{font-size:0.98rem;line-height:1.85;margin-top:0.25rem;}
 .info a{color:var(--blue);text-decoration:underline;}
 
-/* ---- 下部CTA ---- */
-.precta{background:var(--blue-deep);color:#fff;text-align:center;padding:76px 24px;}
-.precta h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;line-height:1.6;letter-spacing:0.04em;}
+/* ---------- 下部CTA ---------- */
+.precta{background:var(--blue-deep);color:#fff;text-align:center;padding:84px 24px;position:relative;overflow:hidden;}
+.precta::after{content:"";position:absolute;inset:auto -10% -60% -10%;height:60%;background:radial-gradient(ellipse at center,rgba(63,111,220,0.5),transparent 70%);}
+.precta > *{position:relative;}
+.precta h2{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;line-height:1.6;letter-spacing:0.04em;}
 .precta p{color:#c3d2f0;font-size:1rem;margin:1.1rem auto 2.2rem;max-width:44em;}
 .precta .btns{display:flex;gap:0.9rem;justify-content:center;flex-wrap:wrap;}
 .precta .btn-fill{background:#fff;color:var(--blue-deep);}
 .precta .btn-fill:hover{background:#e8eeff;}
 
-/* ---- フッター ---- */
-footer.site{background:#0b0e14;color:#fff;padding:60px 0 34px;}
+/* ---------- フッター ---------- */
+footer.site{background:#0b0e14;color:#fff;padding:64px 0 34px;}
 .foot-top{display:grid;grid-template-columns:1.1fr 2fr;gap:40px;}
 @media(max-width:900px){.foot-top{grid-template-columns:1fr;gap:26px;}}
 footer.site .brand{color:#fff;font-size:1.2rem;}
 .foot-addr{font-size:0.86rem;color:#98a0b3;line-height:1.9;margin-top:1rem;}
 .foot-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.6rem 1.6rem;}
-.foot-links a{font-size:0.86rem;color:#b9c0d0;padding:0.2rem 0;}
-.foot-links a:hover{color:#fff;}
-.foot-copy{border-top:1px solid rgba(255,255,255,0.12);margin-top:40px;padding-top:20px;font-size:0.76rem;color:#7c8497;letter-spacing:0.06em;}
+.foot-links a{font-size:0.86rem;color:#b9c0d0;padding:0.2rem 0;transition:color 0.3s var(--ease),padding-left 0.3s var(--ease);}
+.foot-links a:hover{color:#fff;padding-left:4px;}
+.foot-copy{border-top:1px solid rgba(255,255,255,0.12);margin-top:44px;padding-top:20px;font-size:0.76rem;color:#7c8497;letter-spacing:0.06em;}
 </style>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
 <!-- Google tag (gtag.js) -->
@@ -519,12 +603,14 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 </head>
 <body>
 
-<header class="site">
+<script>document.documentElement.className+=" js";</script>
+<header class="site" id="siteHeader">
   <div class="site-inner">
     <a href="index.html" class="brand">A<span class="heart-i">ı</span>dollargame</a>
     <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false">メニュー</button>
     <nav class="site-nav" id="siteNav">
       <a href="#service">事業内容</a>
+      <a href="#flow">導入の流れ</a>
       <a href="#issues">課題から探す</a>
       <a href="#about">会社情報</a>
       <a href="#news">ニュース</a>
@@ -535,27 +621,40 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </header>
 
-<section class="hero">
+<section class="hero" id="hero">
   <div class="hero-media">
     <img src="aidollargame-ceo-sato-norinosuke-seminar.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介とエンジニア森によるセミナー登壇の様子（左：佐藤、右：森）">
   </div>
   <div class="hero-body">
-    <div class="hero-eyebrow">AIで、人と人をつなぐ。</div>
-    <h1>AIで「<ruby>楽<rt>らく</rt></ruby>」ではなく<br>「<ruby>楽<rt>たの</rt></ruby>しい」を考える</h1>
-    <p class="hero-sub">仕事を「楽」にすることが、私たちの目的ではありません。人と人が本気で向き合える「楽しい」現場を共に創る。AIプロダクト開発と現場のAI活用支援を通じて、そんな舞台を創り上げます。</p>
-    <div class="hero-cta">
+    <div class="hero-eyebrow" data-rv="up" style="--d:120ms">AIで、人と人をつなぐ。</div>
+    <h1 data-rv="up" style="--d:260ms">AIで「<ruby>楽<rt>らく</rt></ruby>」ではなく<br>「<ruby>楽<rt>たの</rt></ruby>しい」を考える</h1>
+    <p class="hero-sub" data-rv="up" style="--d:440ms">仕事を「楽」にすることが、私たちの目的ではありません。人と人が本気で向き合える「楽しい」現場を共に創る。AIプロダクト開発と現場のAI活用支援を通じて、そんな舞台を創り上げます。</p>
+    <div class="hero-cta" data-rv="up" style="--d:600ms">
       <a href="#contact" class="btn btn-fill">無料相談を予約する</a>
       <a href="shindan.html" class="btn btn-line">3分で無料AI診断</a>
     </div>
   </div>
+  <div class="scroll-cue"><span>SCROLL</span><i></i></div>
 </section>
 
 <div class="facts">
-  <dl class="facts-grid">
-    <div class="fact"><dt>COMPANY</dt><dd>2025年4月設立<br>東京・新宿</dd></div>
-    <div class="fact"><dt>PRODUCTS</dt><dd>自社開発のAIプロダクト<br>4本を提供</dd></div>
-    <div class="fact"><dt>TRAINING</dt><dd>AI研修は訓練経費の最大75%が<br>助成対象（中小企業）</dd></div>
-    <div class="fact"><dt>KNOWLEDGE</dt><dd>AI活用の記事を<br>52本公開</dd></div>
+  <dl class="facts-grid" id="facts">
+    <div class="fact" data-rv="up" style="--d:0ms">
+      <dt>COMPANY</dt>
+      <dd><span class="big">2025<small>年4月設立</small></span>東京・新宿／代表 佐藤徳之介</dd>
+    </div>
+    <div class="fact" data-rv="up" style="--d:120ms">
+      <dt>PRODUCTS</dt>
+      <dd><span class="big"><span class="cnt" data-to="4">0</span><small>本</small></span>自社で開発・運用するAIプロダクト</dd>
+    </div>
+    <div class="fact" data-rv="up" style="--d:240ms">
+      <dt>TRAINING</dt>
+      <dd><span class="big">最大<span class="cnt" data-to="75">0</span><small>%</small></span>AI研修の訓練経費が助成対象（中小企業）</dd>
+    </div>
+    <div class="fact" data-rv="up" style="--d:360ms">
+      <dt>KNOWLEDGE</dt>
+      <dd><span class="big"><span class="cnt" data-to="52">0</span><small>本</small></span>公開しているAI活用の記事</dd>
+    </div>
   </dl>
 </div>
 
@@ -564,23 +663,26 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     <div class="split">
       <div>
         <div class="sec-head">
-          <div class="sec-label">About</div>
-          <h2 class="sec-title">機械にできる作業に、<br>人生を捧げるのは終わりにする</h2>
+          <div class="sec-label" data-rv="up">About</div>
+          <h2 class="sec-title" data-rv="up" style="--d:100ms">機械にできる作業に、<br>人生を捧げるのは終わりにする</h2>
+          <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
         </div>
-        <p>繰り返しの作業をAIに任せれば、業務はぐっと「楽」になります。そこから生まれた時間で、人はもっと多くのことに本気で向き合えるはずです。</p>
-        <p>本気で打ち込みたい仕事、家族との食卓、仲間との一杯。ひとつひとつに向き合えることが、新しい価値を生んでいく。それが私たちの考える「楽しい」であり、つくり続けたい舞台です。</p>
-        <p>株式会社AIdollargameは、AIプロダクトを自社で開発・運用しながら、中小企業の現場にAIを持ち込む会社です。説明だけで終わらせず、実装と運用まで責任を持ちます。</p>
-        <div style="margin-top:2rem;">
-          <a href="company.html" class="arrow-link"><span class="circle">→</span>会社情報</a>
+        <div data-rv="up" style="--d:200ms">
+          <p>繰り返しの作業をAIに任せれば、業務はぐっと「楽」になります。そこから生まれた時間で、人はもっと多くのことに本気で向き合えるはずです。</p>
+          <p>本気で打ち込みたい仕事、家族との食卓、仲間との一杯。ひとつひとつに向き合えることが、新しい価値を生んでいく。それが私たちの考える「楽しい」であり、つくり続けたい舞台です。</p>
+          <p>株式会社AIdollargameは、AIプロダクトを自社で開発・運用しながら、中小企業の現場にAIを持ち込む会社です。説明だけで終わらせず、実装と運用まで責任を持ちます。</p>
+        </div>
+        <div style="margin-top:2rem;" data-rv="up" style="--d:320ms">
+          <a href="company.html" class="arrow-link"><span class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>会社情報</a>
         </div>
       </div>
-      <div class="photo-pair">
+      <div class="photo-pair" data-rv="right" style="--d:200ms">
         <figure>
-          <img src="aidollargame-ceo-sato-norinosuke-interview.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介（対談収録の様子）" loading="lazy">
+          <div class="ph"><img src="aidollargame-ceo-sato-norinosuke-interview.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介（対談収録の様子）" loading="lazy"></div>
           <figcaption>対談収録の様子（代表取締役CEO 佐藤徳之介）</figcaption>
         </figure>
         <figure>
-          <img src="aidollargame-ceo-sato-norinosuke-seminar.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介とエンジニア森によるセミナー登壇の様子（左：佐藤、右：森）" loading="lazy">
+          <div class="ph"><img src="aidollargame-ceo-sato-norinosuke-seminar.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介とエンジニア森によるセミナー登壇の様子（左：佐藤、右：森）" loading="lazy"></div>
           <figcaption>セミナー登壇の様子（左：代表取締役CEO 佐藤徳之介、右：エンジニア 森）</figcaption>
         </figure>
       </div>
@@ -588,16 +690,82 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec sec--band" id="service">
+<section class="sec sec--band" id="structure">
+  <div class="wrap">
+    <div class="sec-head center">
+      <div class="sec-label" data-rv="up">Structure</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">AIの最前線と、中小企業の現場をつなぐ</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+      <p class="sec-lead" data-rv="up" style="--d:200ms">最新のAIは毎月変わります。私たちはそれを自社プロダクトで先に試し、動いたものだけを現場に持ち込み、運用まで引き受けます。現場で出た課題は、次のプロダクトに戻します。</p>
+    </div>
+    <div class="diagram" data-rv="up" style="--d:120ms">
+      <div class="dg-scroll">
+      <svg viewBox="0 0 940 380" role="img" aria-label="AIの最前線とAIdollargameと中小企業の現場が循環する関係図">
+        <!-- 左：AIの最前線 -->
+        <circle class="dg-circle" cx="130" cy="190" r="92"></circle>
+        <g transform="translate(110,136)">
+          <rect class="dg-ic" x="5" y="5" width="18" height="18" rx="3"></rect>
+          <rect class="dg-ic" x="10" y="10" width="8" height="8" rx="1.5"></rect>
+          <path class="dg-ic" d="M14 1v4M14 23v4M1 14h4M23 14h4M9 1v4M19 1v4M9 23v4M19 23v4M1 9h4M1 19h4M23 9h4M23 19h4"></path>
+        </g>
+        <text class="dg-label" x="130" y="200" text-anchor="middle">AIの最前線</text>
+        <text class="dg-sub" x="130" y="222" text-anchor="middle">最新モデル・研究・論文</text>
+
+        <!-- 中央：AIdollargame -->
+        <circle class="dg-circle dg-circle-main" cx="470" cy="190" r="108"></circle>
+        <text class="dg-label" x="470" y="168" text-anchor="middle" style="font-size:17px">AIdollargame</text>
+        <text class="dg-sub" x="470" y="192" text-anchor="middle">自社で開発して、自社で運用</text>
+        <text class="dg-sub" x="470" y="212" text-anchor="middle">プロダクト4本／AI研修／導入支援</text>
+        <line x1="410" y1="228" x2="530" y2="228" stroke="#c9d7f7" stroke-width="1.4"></line>
+        <text class="dg-flow" x="470" y="248" text-anchor="middle">実装と運用に責任を持つ</text>
+
+        <!-- 右：中小企業の現場 -->
+        <circle class="dg-circle" cx="810" cy="190" r="92"></circle>
+        <g transform="translate(795,136)">
+          <path class="dg-ic" d="M3 27V7a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v20"></path>
+          <path class="dg-ic" d="M16 13h6a2 2 0 0 1 2 2v12"></path>
+          <path class="dg-ic" d="M7 10h5M7 15h5M7 20h5M19 18h2M19 22h2"></path>
+        </g>
+        <text class="dg-label" x="810" y="200" text-anchor="middle">中小企業の現場</text>
+        <text class="dg-sub" x="810" y="222" text-anchor="middle">問い合わせ・ナレッジ・判断</text>
+
+        <!-- 上の矢印（左→中→右） -->
+        <path class="dg-line" data-rv="draw" style="--d:300ms" d="M205 128 C 260 78, 320 66, 372 96" stroke-dasharray="none"></path>
+        <polygon class="dg-arrow" points="372,96 360,86 358,102"></polygon>
+        <text class="dg-flow" x="288" y="68" text-anchor="middle">試して、選ぶ</text>
+
+        <path class="dg-line" data-rv="draw" style="--d:520ms" d="M568 96 C 620 66, 680 78, 735 128" stroke-dasharray="none"></path>
+        <polygon class="dg-arrow" points="735,128 720,124 728,112"></polygon>
+        <text class="dg-flow" x="652" y="68" text-anchor="middle">使える形で届ける</text>
+
+        <!-- 下の矢印（右→中→左） -->
+        <path class="dg-line" data-rv="draw" style="--d:740ms" d="M735 252 C 680 302, 620 314, 568 284"></path>
+        <polygon class="dg-arrow" points="568,284 580,294 582,278"></polygon>
+        <text class="dg-flow" x="652" y="330" text-anchor="middle">現場の課題とデータ</text>
+
+        <path class="dg-line" data-rv="draw" style="--d:960ms" d="M372 284 C 320 314, 260 302, 205 252"></path>
+        <polygon class="dg-arrow" points="205,252 220,256 212,268"></polygon>
+        <text class="dg-flow" x="288" y="330" text-anchor="middle">次の一手として研究に戻す</text>
+      </svg>
+      </div>
+      <p class="swipe">横にスクロールできます</p>
+      <p class="cap">この循環を、社内だけで回しています。だから説明と実装が別会社になりません。</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="service">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-label">Service</div>
-      <h2 class="sec-title">事業内容</h2>
-      <p class="sec-lead">助成金を使えるAI研修から、自社開発のAIプロダクト、導入支援まで。中小企業の「人頼み」をまるごと引き受けます。</p>
+      <div class="sec-label" data-rv="up">Service</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">事業内容</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+      <p class="sec-lead" data-rv="up" style="--d:200ms">助成金を使えるAI研修から、自社開発のAIプロダクト、導入支援まで。中小企業の「人頼み」をまるごと引き受けます。</p>
     </div>
     <div class="cards">
 
-      <div class="card">
+      <div class="card" data-rv="up" style="--d:0ms">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5Z"></path><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"></path></svg></div>
         <div class="kicker">SERVICE 01</div>
         <div class="issue">セミナーは受けたのに、翌日から現場が何も変わらなかった会社へ</div>
         <h3>AI研修・社員リスキリング（助成金対象）</h3>
@@ -606,7 +774,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <div class="card-foot"><a href="ai-training.html" class="solid">詳しく見る</a><a href="#contact" class="thin">無料相談</a></div>
       </div>
 
-      <div class="card">
+      <div class="card" data-rv="up" style="--d:120ms">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.5-5A8 8 0 1 1 21 12Z"></path><path d="M8 11h8M8 15h5"></path></svg></div>
         <div class="kicker">PRODUCT 02</div>
         <div class="issue">問い合わせ対応と社内ナレッジが人頼みになっている会社へ</div>
         <h3>AIチャットエージェント</h3>
@@ -615,7 +784,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <div class="card-foot"><a href="line-ai-agent.html" class="solid">詳しく見る</a><a href="#contact" class="thin">導入相談</a></div>
       </div>
 
-      <div class="card">
+      <div class="card" data-rv="up" style="--d:240ms">
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"></circle><path d="M3 20c0-3.3 2.7-5.4 6-5.4 1.2 0 2.3.3 3.2.8"></path><path d="M14.5 17.5l2 2 4-4.5"></path></svg></div>
         <div class="kicker">PRODUCT 03</div>
         <div class="issue">「社長にしか判断できない」「引き継げない」を変えたい会社へ</div>
         <h3>AIwill（社長クローンAI）</h3>
@@ -624,7 +794,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <div class="card-foot"><a href="human-clone-ai.html" class="solid">詳しく見る</a><a href="https://human-clone-frontend.hassy.workers.dev/" target="_blank" rel="noopener" class="thin">デモを見る（Jobs版）</a></div>
       </div>
 
-      <div class="card">
+      <div class="card" data-rv="up" style="--d:0ms">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 11h18"></path><path d="M12 14v3l2 1"></path></svg></div>
         <div class="kicker">PRODUCT 04</div>
         <div class="issue">予定とメールと雑務で一日が終わる経営者へ</div>
         <h3>AIside（アイサイド）／ あなたの付き人AI</h3>
@@ -633,7 +804,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <div class="card-foot"><a href="aiside.html" class="solid">詳しく見る</a><a href="aiside.html#cta" class="thin">無料相談</a></div>
       </div>
 
-      <div class="card">
+      <div class="card" data-rv="up" style="--d:120ms">
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M15.5 8.5 10 10l-1.5 5.5L14 14l1.5-5.5Z"></path></svg></div>
         <div class="kicker">SERVICE 05</div>
         <div class="issue">AIを入れたいが、何から手をつけるか分からない会社へ</div>
         <h3>AIコンサルティング・導入支援</h3>
@@ -646,21 +818,65 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
+<section class="sec sec--band" id="flow">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label" data-rv="up">Flow</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">導入の流れ</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+      <p class="sec-lead" data-rv="up" style="--d:200ms">一気に大きく変えません。最初の1業務で効果を確かめてから、隣の業務・部署へ広げます。</p>
+    </div>
+    <div class="flow">
+      <div class="step" data-rv="up" style="--d:0ms">
+        <div class="n">STEP 01</div>
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.5-5A8 8 0 1 1 21 12Z"></path></svg></div>
+        <h4>無料相談</h4>
+        <p>初回30分はオンラインで無料。何から手をつけるか決まっていない段階でかまいません。</p>
+      </div>
+      <div class="step" data-rv="up" style="--d:120ms">
+        <div class="n">STEP 02</div>
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="M16 16l5 5"></path></svg></div>
+        <h4>業務診断</h4>
+        <p>約2週間。どの業務にどれだけ時間が取られているかを一緒に洗い出します。</p>
+      </div>
+      <div class="step" data-rv="up" style="--d:240ms">
+        <div class="n">STEP 03</div>
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18M9 21V9"></path></svg></div>
+        <h4>活用プラン作成</h4>
+        <p>最初にAI化する1業務と、費用・助成金の使い方を含めた計画を出します。</p>
+      </div>
+      <div class="step" data-rv="up" style="--d:360ms">
+        <div class="n">STEP 04</div>
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 1 5 5L9 22H4v-5L14.7 6.3Z"></path><path d="M13 8l3 3"></path></svg></div>
+        <h4>実装・社員研修</h4>
+        <p>1〜3ヶ月。実業務を教材にした研修と、AIの設置・調整を並行して進めます。</p>
+      </div>
+      <div class="step" data-rv="up" style="--d:480ms">
+        <div class="n">STEP 05</div>
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"></path><path d="M21 4v5h-5"></path></svg></div>
+        <h4>運用伴走</h4>
+        <p>使われているか、答えが合っているかを見ながら手を入れ続けます。ここを外注扱いにしません。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec" id="issues">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-label">Issues</div>
-      <h2 class="sec-title">こんな状態になっていませんか</h2>
-      <p class="sec-lead">ひとつでも当てはまったら、そこが会社の止まりどころです。項目を選ぶと、合う解決策のページに進めます。</p>
+      <div class="sec-label" data-rv="up">Issues</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">こんな状態になっていませんか</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+      <p class="sec-lead" data-rv="up" style="--d:200ms">ひとつでも当てはまったら、そこが会社の止まりどころです。項目を選ぶと、合う解決策のページに進めます。</p>
     </div>
     <div class="issues">
-      <a href="line-ai-agent.html"><span class="no">01</span>問い合わせ対応も、社内の「これどうやるんだっけ」も、特定の人頼み</a>
-      <a href="human-clone-ai.html"><span class="no">02</span>社長が不在だと、決裁と相談が止まる</a>
-      <a href="human-clone-ai.html"><span class="no">03</span>引き継ぎたいのに、ノウハウが社長の頭の中にしかない</a>
-      <a href="aiside.html"><span class="no">04</span>予定調整とメールと雑務で、経営者の一日が終わる</a>
-      <a href="manual-ai.html"><span class="no">05</span>マニュアルはあるのに、誰も読まずに毎回ベテランに聞いている</a>
-      <a href="ai-training.html"><span class="no">06</span>セミナーは受けたのに、翌日から現場が何も変わらなかった</a>
-      <a href="ai-consulting.html"><span class="no">07</span>AIを入れたい気持ちはあるが、何から手をつけるか分からない</a>
+      <a href="line-ai-agent.html" data-rv="up" style="--d:0ms"><span class="no">01</span>問い合わせ対応も、社内の「これどうやるんだっけ」も、特定の人頼み</a>
+      <a href="human-clone-ai.html" data-rv="up" style="--d:80ms"><span class="no">02</span>社長が不在だと、決裁と相談が止まる</a>
+      <a href="human-clone-ai.html" data-rv="up" style="--d:160ms"><span class="no">03</span>引き継ぎたいのに、ノウハウが社長の頭の中にしかない</a>
+      <a href="aiside.html" data-rv="up" style="--d:240ms"><span class="no">04</span>予定調整とメールと雑務で、経営者の一日が終わる</a>
+      <a href="manual-ai.html" data-rv="up" style="--d:320ms"><span class="no">05</span>マニュアルはあるのに、誰も読まずに毎回ベテランに聞いている</a>
+      <a href="ai-training.html" data-rv="up" style="--d:400ms"><span class="no">06</span>セミナーは受けたのに、翌日から現場が何も変わらなかった</a>
+      <a href="ai-consulting.html" data-rv="up" style="--d:480ms"><span class="no">07</span>AIを入れたい気持ちはあるが、何から手をつけるか分からない</a>
     </div>
   </div>
 </section>
@@ -670,19 +886,20 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     <div class="agent">
       <div>
         <div class="sec-head">
-          <div class="sec-label">AI Agent</div>
-          <h2 class="sec-title">業界に特化した<br>対話型AIエージェント</h2>
-          <p class="sec-lead">問い合わせ・比較提案・予約・決済まで、ユーザーが話しかけるだけで完結するAIを、自社サイトやLINE公式アカウントに実装します。CRM連動・カレンダー連携に対応。</p>
+          <div class="sec-label" data-rv="up">AI Agent</div>
+          <h2 class="sec-title" data-rv="up" style="--d:100ms">業界に特化した<br>対話型AIエージェント</h2>
+          <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+          <p class="sec-lead" data-rv="up" style="--d:200ms">問い合わせ・比較提案・予約・決済まで、ユーザーが話しかけるだけで完結するAIを、自社サイトやLINE公式アカウントに実装します。CRM連動・カレンダー連携に対応。</p>
         </div>
-        <div class="industries">
+        <div class="industries" data-rv="up" style="--d:260ms">
           <span>介護・福祉</span><span>不動産</span><span>医療</span><span>飲食</span><span>フィットネス</span><span>EC・小売</span>
         </div>
-        <a href="#contact" class="arrow-link"><span class="circle">→</span>導入を相談する</a>
+        <a href="#contact" class="arrow-link" data-rv="up" style="--d:340ms"><span class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>導入を相談する</a>
       </div>
-      <div class="phone">
+      <div class="phone" data-rv="right" style="--d:200ms">
         <div class="phone-screen">
-          <div class="phone-bar"><div><div class="t">AI Concierge — Demo</div><div class="s">オンライン</div></div></div>
-          <div class="chat">
+          <div class="phone-bar"><div class="t">AI Concierge — Demo</div><div class="s">オンライン</div></div>
+          <div class="chat" id="chat">
             <div class="bub them">お問い合わせありがとうございます。ご希望の条件をお聞かせください。</div>
             <div class="bub me">今週末、2名で個室のある店を探しています</div>
             <div class="bub them">今週末に個室が空いているのは3店舗です。予算と場所のご希望はありますか。</div>
@@ -696,14 +913,24 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
+<div class="midcta">
+  <h2 data-rv="up">この一覧にない業務でも、たいてい削れます</h2>
+  <p data-rv="up" style="--d:120ms">うちが売っているのは道具ではなく、人の手が空く時間です。まず1業務、いちばん問い合わせが多いところから測りましょう。</p>
+  <div class="btns" data-rv="up" style="--d:240ms">
+    <a href="shindan.html" class="btn btn-fill">3分でAI診断する</a>
+    <a href="#contact" class="btn btn-dark">無料相談はこちら</a>
+  </div>
+</div>
+
 <section class="sec" id="team">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-label">Team</div>
-      <h2 class="sec-title">つくっている人</h2>
+      <div class="sec-label" data-rv="up">Team</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">つくっている人</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
     </div>
     <div class="team">
-      <div class="member">
+      <div class="member" data-rv="up" style="--d:0ms">
         <img src="aidollargame-ceo-sato-norinosuke.jpg" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介" loading="lazy">
         <div class="role">REPRESENTATIVE DIRECTOR / CEO</div>
         <div class="name">佐藤 徳之介</div>
@@ -717,7 +944,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         </ul>
         <div style="margin-top:1.4rem;"><a href="profile-sato.html" style="font-size:0.88rem;font-weight:700;color:var(--blue);text-decoration:underline;">代表プロフィールを見る →</a></div>
       </div>
-      <div class="member">
+      <div class="member" data-rv="up" style="--d:160ms">
         <img src="aidollargame-cto-hashimoto-kazuki.png" alt="株式会社AIdollargame リードエンジニア/CTO 橋本一輝（アバターイラスト）" loading="lazy">
         <div class="role">LEAD ENGINEER / CTO</div>
         <div class="name">橋本 一輝</div>
@@ -736,10 +963,11 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 <section class="sec sec--band" id="news">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-label">News</div>
-      <h2 class="sec-title">ニュース</h2>
+      <div class="sec-label" data-rv="up">News</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">ニュース</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
     </div>
-    <div class="news" id="newsList">
+    <div class="news" id="newsList" data-rv="up" style="--d:160ms">
       <a href="articles/shimoda-joho-2026.html"><span class="d">2026 / 08 / 17</span><span class="b">REPORT</span><span class="t">記事「海も宿も飯もあった。探すのが大変だった」を公開 — 伊豆下田で店と駐車場を探せなかった体験を、観光統計と国の駐車場データで確かめました</span><span class="a">→</span></a>
       <a href="articles/ai-training-evidence-2026.html"><span class="d">2026 / 08 / 04</span><span class="b">RESEARCH</span><span class="t">記事「AIで研修すると人は育つのか」を公開 — AIと教育の実証研究5本を読み比べ。学習が2倍伸びた研究も、成績が17%下がった研究も実在します</span><span class="a">→</span></a>
       <a href="articles/ai-overview-observation-2026.html"><span class="d">2026 / 08 / 03</span><span class="b">REPORT</span><span class="t">記事「AIに『いい会社ですか』と23日間聞き続けた記録」を公開 — 検索のAI要約が自社をどう説明するか、サイト整備・プレス配信の前後で実測した自社データです</span><span class="a">→</span></a>
@@ -766,13 +994,14 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 <section class="sec" id="articles">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-label">Articles</div>
-      <h2 class="sec-title">記事・発信</h2>
-      <p class="sec-lead">公的統計と一次資料をあたって、中小企業がその日から動ける形に翻訳しています。</p>
+      <div class="sec-label" data-rv="up">Articles</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">記事・発信</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+      <p class="sec-lead" data-rv="up" style="--d:200ms">公的統計と一次資料をあたって、中小企業がその日から動ける形に翻訳しています。</p>
     </div>
     <div class="posts">
-      <a class="post" href="./articles/shimoda-joho-2026.html">
-        <div class="thumb" style="background-image:url('./articles/shimoda-joho-2026-og.jpg')"></div>
+      <a class="post" href="./articles/shimoda-joho-2026.html" data-rv="up" style="--d:0ms">
+        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/shimoda-joho-2026-og.jpg')"></div></div>
         <div class="pbody">
           <div class="cat">現場から</div><div class="date">2026 / 08 / 17</div>
           <div class="ptitle">海も宿も飯もあった。探すのが大変だった｜伊豆下田で気づいた「情報がない」の重さ</div>
@@ -780,8 +1009,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
           <div class="plink">READ MORE →</div>
         </div>
       </a>
-      <a class="post" href="./articles/ai-training-evidence-2026.html">
-        <div class="thumb" style="background-image:url('./articles/ai-training-evidence-2026-hero.jpg')"></div>
+      <a class="post" href="./articles/ai-training-evidence-2026.html" data-rv="up" style="--d:120ms">
+        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/ai-training-evidence-2026-hero.jpg')"></div></div>
         <div class="pbody">
           <div class="cat">AI×人材育成</div><div class="date">2026 / 08 / 04</div>
           <div class="ptitle">AIで研修すると人は育つのか｜学習が2倍伸びた実験と、成績が17%下がった実験</div>
@@ -789,8 +1018,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
           <div class="plink">READ MORE →</div>
         </div>
       </a>
-      <a class="post" href="./articles/ai-teiten-2026-08.html">
-        <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1553413077-190dd305871c?w=600&q=80&fit=crop')"></div>
+      <a class="post" href="./articles/ai-teiten-2026-08.html" data-rv="up" style="--d:240ms">
+        <div class="thumb-wrap"><div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1553413077-190dd305871c?w=600&q=80&fit=crop')"></div></div>
         <div class="pbody">
           <div class="cat">定点観測</div><div class="date">2026 / 08 / 04</div>
           <div class="ptitle">定点観測 vol.2｜求人は増えているのに、人手不足倒産は過去最多（2026年8月号）</div>
@@ -798,8 +1027,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
           <div class="plink">READ MORE →</div>
         </div>
       </a>
-      <a class="post" href="./articles/ai-overview-observation-2026.html">
-        <div class="thumb" style="background-image:url('./articles/ai-overview-observation-2026-hero.jpg')"></div>
+      <a class="post" href="./articles/ai-overview-observation-2026.html" data-rv="up" style="--d:0ms">
+        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/ai-overview-observation-2026-hero.jpg')"></div></div>
         <div class="pbody">
           <div class="cat">自社実測</div><div class="date">2026 / 08 / 03</div>
           <div class="ptitle">AIに「いい会社ですか」と23日間聞き続けた記録｜自社サイトを直しても評価は動かなかった</div>
@@ -807,8 +1036,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
           <div class="plink">READ MORE →</div>
         </div>
       </a>
-      <a class="post" href="./articles/ai-roi-cases-2026.html">
-        <div class="thumb" style="background-image:url('./articles/ai-roi-cases-2026-hero.jpg')"></div>
+      <a class="post" href="./articles/ai-roi-cases-2026.html" data-rv="up" style="--d:120ms">
+        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/ai-roi-cases-2026-hero.jpg')"></div></div>
         <div class="pbody">
           <div class="cat">導入事例</div><div class="date">2026 / 07 / 30</div>
           <div class="ptitle">AI導入が「利益・コスト・時間」に効いた実例10選｜数字と出典つき（2026年最新）</div>
@@ -816,8 +1045,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
           <div class="plink">READ MORE →</div>
         </div>
       </a>
-      <a class="post" href="./articles/zokujinka-2026.html">
-        <div class="thumb" style="background-image:url('./articles/zokujinka-2026-hero.jpg')"></div>
+      <a class="post" href="./articles/zokujinka-2026.html" data-rv="up" style="--d:240ms">
+        <div class="thumb-wrap"><div class="thumb" style="background-image:url('./articles/zokujinka-2026-hero.jpg')"></div></div>
         <div class="pbody">
           <div class="cat">課題解決</div><div class="date">2026 / 07 / 16</div>
           <div class="ptitle">「あの人しか分からない」が会社を止める前に｜業務の属人化をほどく3つの手順</div>
@@ -833,11 +1062,12 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 <section class="sec sec--band" id="faq">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-label">FAQ</div>
-      <h2 class="sec-title">よくあるご質問</h2>
-      <p class="sec-lead">AIdollargame と各プロダクトについて、よく寄せられるご質問にお答えします。</p>
+      <div class="sec-label" data-rv="up">FAQ</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">よくあるご質問</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+      <p class="sec-lead" data-rv="up" style="--d:200ms">AIdollargame と各プロダクトについて、よく寄せられるご質問にお答えします。</p>
     </div>
-    <div class="faq">
+    <div class="faq" data-rv="up" style="--d:160ms">
       <details open>
         <summary>AIdollargameに何を頼めますか？（何ができますか？）</summary>
         <div class="a">大きく3つです。①AI研修・社員リスキリング：貴社の実業務を教材にした実践型研修で、人材開発支援助成金（事業展開等リスキリング支援コース）により中小企業は訓練経費が最大75%の助成対象です（令和8年度が最終年度）。②自社AIプロダクトの提供：AIチャットエージェント（サイト・LINE・社内に置けるAIで接客対応と社内ナレッジ共有を24時間自動化）、AIside（経営者の付き人AI）、AIwill（社長クローンAI）。③AI導入支援・コンサルティング：戦略立案から業務診断・実装・運用まで一貫して伴走します。「最初の1業務」から小さく始められます。</div>
@@ -881,11 +1111,12 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 <section class="sec" id="shiryo">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-label">Free Download</div>
-      <h2 class="sec-title">まだ相談は早い、という方へ</h2>
-      <p class="sec-lead">「何から手をつけるか」を自分のペースで整理できる無料資料を用意しました。相談の前に、まずこちらだけでも。</p>
+      <div class="sec-label" data-rv="up">Free Download</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">まだ相談は早い、という方へ</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+      <p class="sec-lead" data-rv="up" style="--d:200ms">「何から手をつけるか」を自分のペースで整理できる無料資料を用意しました。相談の前に、まずこちらだけでも。</p>
     </div>
-    <div class="lead-mag">
+    <div class="lead-mag" data-rv="up" style="--d:160ms">
       <div>
         <div class="eyebrow">A4・全16ページ／メールアドレスだけで無料</div>
         <h3>AI導入はじめの一歩<br>チェックリスト20</h3>
@@ -907,12 +1138,13 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 <section class="sec sec--band" id="contact">
   <div class="wrap">
     <div class="sec-head">
-      <div class="sec-label">Contact</div>
-      <h2 class="sec-title">お問い合わせ</h2>
-      <p class="sec-lead">AIの可能性についてのご相談、プロダクトのお問い合わせはこちらからどうぞ。担当者より2営業日以内にご返信いたします。</p>
+      <div class="sec-label" data-rv="up">Contact</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">お問い合わせ</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+      <p class="sec-lead" data-rv="up" style="--d:200ms">AIの可能性についてのご相談、プロダクトのお問い合わせはこちらからどうぞ。担当者より2営業日以内にご返信いたします。</p>
     </div>
     <div class="contact">
-      <form action="https://formspree.io/f/xeevwrgp" method="POST">
+      <form action="https://formspree.io/f/xeevwrgp" method="POST" data-rv="up" style="--d:120ms">
         <input type="hidden" name="_subject" value="【AIdollargame HP】お問い合わせ">
         <input type="hidden" name="_next" value="https://aidollargame.com/thanks.html">
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
@@ -922,7 +1154,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <div class="field"><label>ご相談内容</label><textarea name="message" placeholder="ご相談内容をご記入ください" required></textarea></div>
         <button class="btn btn-dark" type="submit" style="cursor:pointer;font-family:inherit;border:0;">送信する →</button>
       </form>
-      <div class="info">
+      <div class="info" data-rv="up" style="--d:240ms">
         <dl>
           <div><dt>メール</dt><dd><a href="mailto:info@aidollargame.com">info@aidollargame.com</a></dd></div>
           <div><dt>会社名</dt><dd>株式会社AIdollargame</dd></div>
@@ -936,9 +1168,9 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 </section>
 
 <div class="precta">
-  <h2>まず1業務から、AIに任せてみませんか</h2>
-  <p>初回30分のオンライン相談は無料です。何から手をつけるか決まっていない段階のご相談でかまいません。</p>
-  <div class="btns">
+  <h2 data-rv="up">まず1業務から、AIに任せてみませんか</h2>
+  <p data-rv="up" style="--d:120ms">初回30分のオンライン相談は無料です。何から手をつけるか決まっていない段階のご相談でかまいません。</p>
+  <div class="btns" data-rv="up" style="--d:240ms">
     <a href="#contact" class="btn btn-fill">無料相談を予約する</a>
     <a href="shindan.html" class="btn btn-line">3分で無料AI診断</a>
   </div>
@@ -977,25 +1209,90 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 </footer>
 
 <script>
+/* ヒーローのゆっくりズーム */
+requestAnimationFrame(function(){ document.getElementById('hero').classList.add('ready'); });
+
+/* スクロールで出てくる（opthubの.appear相当） */
+(function(){
+  var els = document.querySelectorAll('[data-rv]');
+  if (!('IntersectionObserver' in window)) { els.forEach(function(e){ e.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  els.forEach(function(e){ io.observe(e); });
+  setTimeout(function(){ els.forEach(function(e){ e.classList.add('in'); }); }, 3000);
+})();
+
+/* 数字のカウントアップ */
+(function(){
+  var facts = document.getElementById('facts');
+  if (!facts) return;
+  var done = false;
+  function run(){
+    if (done) return; done = true;
+    facts.querySelectorAll('.cnt').forEach(function(el){
+      var to = parseInt(el.dataset.to, 10) || 0, t0 = null, dur = 1200;
+      function step(ts){
+        if (!t0) t0 = ts;
+        var p = Math.min(1, (ts - t0) / dur);
+        el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3))).toLocaleString('ja-JP');
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    facts.querySelectorAll('.cnt').forEach(function(el){ el.textContent = el.dataset.to; });
+    return;
+  }
+  new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) run(); }); }, { threshold: 0.3 }).observe(facts);
+  setTimeout(function(){ if (!done) { facts.querySelectorAll('.cnt').forEach(function(el){ el.textContent = parseInt(el.dataset.to,10).toLocaleString('ja-JP'); }); done = true; } }, 3000);
+})();
+
+/* スマホのチャットが順に出る */
+(function(){
+  var chat = document.getElementById('chat');
+  if (!chat) return;
+  var bubs = chat.querySelectorAll('.bub');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { bubs.forEach(function(b){ b.classList.add('show'); }); return; }
+  new IntersectionObserver(function(es, o){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      o.unobserve(e.target);
+      bubs.forEach(function(b, i){ setTimeout(function(){ b.classList.add('show'); }, 260 * i); });
+    });
+  }, { threshold: 0.35 }).observe(chat);
+  setTimeout(function(){ bubs.forEach(function(b){ b.classList.add('show'); }); }, 3200);
+})();
+
+/* ヘッダーの影 */
+(function(){
+  var h = document.getElementById('siteHeader');
+  function onScroll(){ h.classList.toggle('scrolled', window.scrollY > 40); }
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+})();
+
 /* モバイルメニュー */
 (function(){
-  var t=document.getElementById('navToggle'), n=document.getElementById('siteNav');
-  if(!t||!n)return;
-  t.addEventListener('click',function(){
-    var open=n.classList.toggle('open');
-    t.setAttribute('aria-expanded',open?'true':'false');
+  var t = document.getElementById('navToggle'), n = document.getElementById('siteNav');
+  if (!t || !n) return;
+  t.addEventListener('click', function(){
+    var open = n.classList.toggle('open');
+    t.setAttribute('aria-expanded', open ? 'true' : 'false');
   });
-  n.addEventListener('click',function(e){ if(e.target.tagName==='A') n.classList.remove('open'); });
+  n.addEventListener('click', function(e){ if (e.target.tagName === 'A') n.classList.remove('open'); });
 })();
-/* ニュースの続きを表示 */
+
+/* ニュースの続き */
 (function(){
-  var list=document.getElementById('newsList'), btn=document.getElementById('newsMore');
-  if(!list||!btn)return;
-  btn.addEventListener('click',function(){
-    var open=list.classList.toggle('open');
-    btn.textContent=open?'閉じる':'もっと見る';
+  var list = document.getElementById('newsList'), btn = document.getElementById('newsMore');
+  if (!list || !btn) return;
+  btn.addEventListener('click', function(){
+    var open = list.classList.toggle('open');
+    btn.textContent = open ? '閉じる' : 'もっと見る';
   });
 })();
+
 /* コピーライトの年 */
 (function(){var y=new Date().getFullYear();document.querySelectorAll('.cpy-y').forEach(function(e){var s=parseInt(e.getAttribute('data-since')||e.textContent,10)||2025;e.textContent=(y>s)?s+'-'+y:s;});})();
 </script>

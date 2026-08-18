@@ -14,7 +14,6 @@
 <link rel="canonical" href="https://aidollargame.com/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="株式会社AIdollargame">
@@ -294,8 +293,8 @@
   --radius:16px;
   --maxw:1180px;
   --ease:cubic-bezier(0.4,0.4,0,1);
-  --font-display:"Archivo","Zen Kaku Gothic New",-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
-  --font-mono:"IBM Plex Mono","SF Mono","Menlo",monospace;
+  --font-display:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;
+  --font-mono:"SF Mono","Menlo",monospace;
   --accent:#ff5757;
   --shadow:0 2px 14px rgba(20,30,70,0.06);
 }
@@ -787,7 +786,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="sec-label" data-rv="up">Check</div>
       <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="check-title">こんな状態になっていませんか？</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="check-lead">当てはまる項目を選ぶと、合う解決策のページに進めます。</p>
+      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="check-lead">当てはまる項目を選ぶと、解決策のページに進めます。</p>
     </div>
     <div class="issues">
       <a href="line-ai-agent.html" data-rv="up" style="--d:0ms"><span class="no">01</span><span data-edit="chk-1">問い合わせ対応も、社内の「これどうやるんだっけ」も、特定の人頼み</span></a>
@@ -807,7 +806,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div>
         <div class="sec-head">
           <div class="sec-label" data-rv="up">About</div>
-          <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="about-title">機械にできる作業に、人生を捧げるのは、<br>もう終わりにしませんか</h2>
+          <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="about-title">「楽」ではなく「楽しい」を考える</h2>
           <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
         </div>
         <div class="msg" data-rv="up" style="--d:200ms">
@@ -837,7 +836,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   <div class="wrap">
     <div class="sec-head center">
       <div class="sec-label" data-rv="up">Service</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="service-title">AIの最前線の技術を、<br>中小企業の現場で使える形に</h2>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="service-title">AIの最前線の技術を<br>中小企業の現場で使える形に</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
       <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="service-lead">最新のAIをまず自社プロダクトで使い込み、成果が出たものだけを現場にお届けします。現場で見つかった課題は、次のプロダクト開発に反映します。</p>
     </div>
@@ -1048,7 +1047,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 
 <div class="midcta">
   <h2 data-rv="up" data-edit="midcta-title">ここにない課題でも、ご相談ください</h2>
-  <p data-rv="up" style="--d:120ms" data-edit="midcta-lead">御社の業務に合わせたAIをお作りします。まずは3分の無料診断で、AIに任せられる業務の目安をご確認ください。</p>
+  <p data-rv="up" style="--d:120ms" data-edit="midcta-lead">業務に合わせたAIをお作りします。まずは3分の無料診断で、AIに任せられる業務の目安をご確認ください。</p>
   <div class="btns" data-rv="up" style="--d:240ms">
     <a href="shindan.html" class="btn btn-orange">3分で無料AI診断</a>
     <a href="#contact" class="btn" style="background:var(--navy-deep);color:#fff;">お問い合わせはこちら</a>
@@ -1122,6 +1121,13 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     </div>
     <p class="stats-note" data-rv="up" data-edit="stats-note">個別のお客様の削減時間・件数は、承諾をいただけたものから順次このページで公開します。数字はすべて出典を明示し、実態と異なる数字は掲げません。</p>
     <div class="posts">
+      <a class="post" href="articles/i-proved-our-vision.html" data-rv="up" style="--d:0ms">
+        <div class="pbody">
+          <div class="meta-row"><span class="cat">自社実践</span></div>
+          <div class="ptitle" data-edit="case-0">この会社自体を、AIで運用しています</div>
+          <div class="pdesc" data-edit="case-0d">記事の制作、サイトの運用、経理や営業の事務まで、当社自身が毎日AIで回しています。自社で使い込んで効果のあった仕組みだけをご提案します。</div>
+        </div>
+      </a>
       <a class="post" href="jirei.html" data-rv="up" style="--d:0ms">
         <div class="pbody">
           <div class="meta-row"><span class="cat">介護・福祉</span></div>
@@ -1167,10 +1173,10 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         </ul>
       </div>
       <div class="trust" data-rv="up" style="--d:110ms">
-        <h3><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"></circle><path d="M3 20c0-3.3 2.7-5.4 6-5.4s6 2.1 6 5.4"></path><circle cx="17" cy="9" r="2.6"></circle><path d="M16 14.8c2.8 0.3 5 2.2 5 5.2"></path></svg><span data-edit="tr2-t">担当体制</span></h3>
+        <h3><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.5-5A8 8 0 1 1 21 12Z"></path><path d="M8 11h8M8 15h5"></path></svg><span data-edit="tr2-t">窓口・サポート</span></h3>
         <ul>
-          <li data-edit="tr2-1">窓口から業務設計まで、代表の佐藤が一貫して担当します。担当者の交代で話が振り出しに戻ることはありません</li>
-          <li data-edit="tr2-2">実装はCTOの橋本が担当。設計と実装のあいだで伝言ゲームが起きません</li>
+          <li data-edit="tr2-1">相談から設計・導入・運用まで、窓口を一本化しています。担当者の交代で話が振り出しに戻ることはありません</li>
+          <li data-edit="tr2-2">導入後の質問・不具合は、運用契約の範囲で対応します</li>
           <li data-edit="tr2-3">連絡はメール・オンライン会議に対応。全国どこでも対応できます</li>
         </ul>
       </div>
@@ -1185,7 +1191,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="trust" data-rv="up" style="--d:330ms">
         <h3><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01"></path><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path></svg><span data-edit="tr4-t">先にお伝えしていること</span></h3>
         <ul>
-          <li data-edit="tr4-1">なんでもAI化できるわけではありません。できないことは相談の場で正直にお伝えします</li>
+          <li data-edit="tr4-1">効果が出やすい業務から順にご提案します。AIに向かない業務は、その理由と代わりの進め方を相談の場でお伝えします</li>
           <li data-edit="tr4-2">元になる資料・データがない業務は、精度が出ません。その場合は資料づくりから一緒に始めます</li>
           <li data-edit="tr4-3">社内に「使う担当者」が不在だと定着しません。導入時に運用の担当者を一緒に決めます</li>
         </ul>
@@ -1379,7 +1385,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     </div>
     <div class="contact">
       <div class="c-left" data-rv="up" style="--d:120ms">
-        <h3 data-edit="contact-h">AIdollargameが、貴社のAI導入を<br>サポートします</h3>
+        <h3 data-edit="contact-h">AIdollargameが<br>AI導入をサポートします</h3>
         <ul>
           <li data-edit="contact-li1">AI導入の無料相談（初回30分・オンライン）</li>
           <li data-edit="contact-li2">お見積もり</li>

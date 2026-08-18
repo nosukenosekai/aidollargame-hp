@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>届いた日本語 — その一言は、翻訳を通ると何になって相手に着くか</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .tag { display:inline-block; font-size:13px; font-weight:700; color:#2563eb;
+    background:#f0f5ff; border:1px solid #d5e2ff; border-radius:999px; padding:2px 12px; margin-bottom:8px; }
+  .prog { display:flex; justify-content:space-between; font-size:14px; color:#78746c; }
+  .progbar { height:6px; background:#efece5; border-radius:3px; overflow:hidden; margin:6px 0 14px; }
+  .progbar i { display:block; height:100%; background:#2563eb; transition:width .2s; }
+  .said { font-size:27px; font-weight:800; letter-spacing:-.02em; line-height:1.5;
+    background:#fbfaf7; border:2px solid #e5e2db; border-radius:12px; padding:18px 18px; margin:8px 0 4px; }
+  .scene { font-size:15px; color:#78746c; margin:0 0 12px; }
+  .yn { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; }
+  .yn button { font:inherit; font-size:17px; font-weight:700; padding:16px 8px;
+    border:2px solid #e5e2db; border-radius:12px; background:#fff; cursor:pointer; color:#1c1b19; }
+  .yn button:hover { border-color:#2563eb; }
+  .flow { border-left:3px solid #e5e2db; padding-left:16px; margin:14px 0 0; }
+  .flow .step { margin-bottom:14px; }
+  .flow .k { font-size:14px; color:#78746c; }
+  .flow .en { font-family:"Helvetica Neue",Arial,sans-serif; font-size:17px; color:#55524c; }
+  .flow .back { font-size:20px; font-weight:700; line-height:1.6; }
+  .flow.fix { border-left-color:#2563eb; }
+  .chk { display:grid; gap:6px; margin-top:10px; }
+  .chk div { display:flex; align-items:center; gap:10px; font-size:16px; }
+  .mark { display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;
+    border-radius:7px; font-size:15px; font-weight:800; flex:none; }
+  .mark.no { background:#f3efe8; color:#a09a90; border:1.5px solid #e5e2db; }
+  .mark.yes { background:#2563eb; color:#fff; }
+  .verdict { padding:14px 16px; border-radius:12px; margin-top:12px; font-size:17px; }
+  .verdict.hit { background:#f0f5ff; border:2px solid #2563eb; }
+  .verdict.miss { background:#fbf6ec; border:2px solid #e4d3ae; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:14px 22px; font:inherit; font-size:17px; cursor:pointer; }
+  .gap { text-align:center; padding:18px 14px; border:2px solid #2563eb; border-radius:12px;
+    background:#f0f5ff; margin-top:8px; }
+  .gap .n { font-size:44px; font-weight:800; letter-spacing:-.04em; color:#2563eb; line-height:1.15; }
+  .sub { font-size:16px; color:#55524c; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:16px; font-size:16px; }
+  .note { font-size:15px; color:#78746c; }
+  .hidden { display:none; }
+  .listrow { border-bottom:1px solid #eceae4; padding:10px 0; font-size:16px; }
+  .listrow b { display:block; font-size:17px; }
+  .listrow span { color:#78746c; font-size:15px; }
+</style>
+</head>
+<body>
+<div class="demoflag">デモ（サンプルデータ）— 翻訳の例文は、この画面のために書いた見本です</div>
+<div class="wrap">
+
+  <h1>届いた日本語</h1>
+  <p class="lead">船の上でいつも言っている一言を、翻訳機に通し、もう一度日本語に戻します。相手のところに何が着いていたのかが見えます。5つ、2分ほどです。</p>
+
+  <div class="card" id="intro">
+    <span class="tag">やること</span>
+    <h2>「これ、通じてる」と思う側を先に押してください</h2>
+    <p>外国人の乗組員に、あなたはいつもこう言っている。それがそのまま通じていると思うかどうかを、先に答えてもらいます。答えたあとで、翻訳を通した先を見せます。</p>
+    <p class="note">言葉は「日本語 → 英語 → 日本語」の順に通します。実際の現場ではインドネシア語やベトナム語のことが多いですが、しくみは同じです。ここでは読める形にするため英語を経由しています。</p>
+    <div class="btns"><button class="primary" id="startBtn">はじめる</button></div>
+  </div>
+
+  <div class="card hidden" id="stage">
+    <div class="prog"><span id="sceneTag"></span><span id="counter">1 / 5</span></div>
+    <div class="progbar"><i id="pbar" style="width:0%"></i></div>
+    <p class="scene" id="scene"></p>
+    <div class="said" id="said"></div>
+    <div id="askWrap">
+      <p class="note" style="margin:10px 0 0">この一言、そのままで通じると思いますか。</p>
+      <div class="yn">
+        <button data-v="1">通じる</button>
+        <button data-v="0">通じない</button>
+      </div>
+    </div>
+
+    <div id="revealWrap" class="hidden">
+      <div class="verdict" id="verdict"></div>
+      <div class="flow">
+        <div class="step"><div class="k">翻訳機が作った英語</div><div class="en" id="en1"></div></div>
+        <div class="step"><div class="k">それを日本語に戻すと（相手に着いた意味）</div><div class="back" id="back1"></div></div>
+      </div>
+      <div class="chk" id="chk1"></div>
+      <p class="note" id="lost" style="margin-top:10px"></p>
+
+      <h2 style="margin-top:22px">言い直すと、こう着きます</h2>
+      <div class="said" id="fixed" style="border-color:#2563eb"></div>
+      <div class="flow fix">
+        <div class="step"><div class="k">翻訳機が作った英語</div><div class="en" id="en2"></div></div>
+        <div class="step"><div class="k">それを日本語に戻すと</div><div class="back" id="back2"></div></div>
+      </div>
+      <div class="chk" id="chk2"></div>
+      <div class="btns"><button class="primary" id="nextBtn">次へ</button></div>
+    </div>
+  </div>
+
+  <div class="card hidden" id="result">
+    <span class="tag">まとめ</span>
+    <h2>あなたが「通じる」と思った数</h2>
+    <div class="gap">
+      <div class="n" id="scoreN">—</div>
+      <div class="sub" id="scoreSub"></div>
+    </div>
+    <h2 style="margin-top:22px">直したのは、いつも同じ3つでした</h2>
+    <div id="recap"></div>
+    <p class="note" style="margin-top:12px">日本語の指示は、その場にいる者どうしなら主語も数量も期限も省けます。省いたぶんは翻訳機が補ってくれません。空欄のまま相手に着きます。</p>
+    <div class="field">
+      <b>中小企業の現場に置きかえると</b><br>
+      翻訳アプリを入れ替える前に、日本語の側を直したほうが早い。「何を」「どれだけ」「いつまでに」の3つを入れた言い方を、よく使う10文だけ紙に貼る。新しく入った人が辞める理由の多くは、仕事の難しさではなく、何をすればいいのかが分からない時間の長さです。
+    </div>
+    <div class="btns"><button class="ghost" id="againBtn">もう一度</button></div>
+  </div>
+
+</div>
+<script>
+(function(){
+  var ITEMS = [
+    {
+      scene: '甲板。ロープが張っている横に、新人が立っている',
+      said: 'そこ、危ないよ',
+      en1: 'It is dangerous there.',
+      back1: 'そこは危険です',
+      has1: [false,false,false],
+      lost: '「危ない」は伝わっても、何が危ないのか、どうすればいいのかが入っていません。相手はうなずいて、その場に立ったままになります。',
+      fixed: 'ロープの内側に立たないで。今すぐ2歩下がって',
+      en2: 'Do not stand inside the rope. Step back two steps now.',
+      back2: 'ロープの内側に立たないでください。今すぐ2歩下がってください',
+      has2: [true,true,true]
+    },
+    {
+      scene: '水揚げのあと。魚箱が積み上がっている',
+      said: 'あとでやっといて',
+      en1: 'Please do it later.',
+      back1: '後でやってください',
+      has1: [false,false,false],
+      lost: '「それ」が何かは、その場を見ていた人にしか分かりません。「あとで」も、5分後なのか明日なのかが決まっていません。',
+      fixed: '魚箱に氷を入れる作業を、15時までに終わらせて',
+      en2: 'Please finish putting ice into the fish boxes by 3 p.m.',
+      back2: '15時までに魚箱へ氷を入れ終えてください',
+      has2: [true,true,true]
+    },
+    {
+      scene: '網を引いている最中。手が離せない',
+      said: 'もうちょっと',
+      en1: 'A little more.',
+      back1: 'もう少し',
+      has1: [false,false,false],
+      lost: '何を、どちらへ、どれだけ。3つとも入っていません。手の動きが見えていない相手には、ただの音です。',
+      fixed: '網をあと1メートル、こちらへ引いて',
+      en2: 'Pull the net one more meter toward me.',
+      back2: '網をこちらへあと1メートル引いてください',
+      has2: [true,true,true]
+    },
+    {
+      scene: '作業のあと。相手が手をかばっているように見える',
+      said: '大丈夫？',
+      en1: 'Are you okay?',
+      back1: '大丈夫ですか',
+      has1: [false,false,false],
+      lost: '何について聞かれているのか分からないうえに、この聞き方だと相手は「はい」としか答えられません。痛くても「はい」と返ってきます。',
+      fixed: '手は痛い？ 痛いなら指1本、平気なら指2本を出して',
+      en2: 'Does your hand hurt? Show one finger if it hurts, two fingers if it is fine.',
+      back2: '手は痛いですか。痛ければ指を1本、大丈夫なら指を2本出してください',
+      has2: [true,true,true]
+    },
+    {
+      scene: '出港前。氷とシートの準備',
+      said: 'これ、いつものやつで',
+      en1: 'Do this the usual way.',
+      back1: 'これをいつもの方法でやってください',
+      has1: [false,false,false],
+      lost: '「いつもの」は、何年もここにいる人の頭の中にしかありません。先月来た人の中には、まだ存在しません。',
+      fixed: '箱に氷を3杯。上にシートを1枚かけて、フタを閉めて',
+      en2: 'Three scoops of ice in the box. Put one sheet on top, then close the lid.',
+      back2: '箱に氷を3杯。上にシートを1枚のせて、フタを閉めてください',
+      has2: [true,true,true]
+    }
+  ];
+  var KEYS = ['何をするか','どれだけ・どこまで','いつまでに'];
+
+  var idx = 0, saidYes = 0;
+  function show(id){ document.getElementById(id).classList.remove('hidden'); }
+  function hide(id){ document.getElementById(id).classList.add('hidden'); }
+
+  function renderChk(el, flags){
+    el.innerHTML = '';
+    KEYS.forEach(function(k,i){
+      var d = document.createElement('div');
+      d.innerHTML = '<span class="mark ' + (flags[i]?'yes':'no') + '">' + (flags[i]?'○':'—') + '</span><span>' + k + '</span>';
+      el.appendChild(d);
+    });
+  }
+
+  function renderItem(){
+    var it = ITEMS[idx];
+    document.getElementById('counter').textContent = (idx+1) + ' / ' + ITEMS.length;
+    document.getElementById('pbar').style.width = Math.round(idx/ITEMS.length*100) + '%';
+    document.getElementById('sceneTag').textContent = 'いつもの一言';
+    document.getElementById('scene').textContent = it.scene;
+    document.getElementById('said').textContent = '「' + it.said + '」';
+    show('askWrap'); hide('revealWrap');
+  }
+
+  function reveal(saidTsujiru){
+    var it = ITEMS[idx];
+    if(saidTsujiru) saidYes++;
+    hide('askWrap'); show('revealWrap');
+    var v = document.getElementById('verdict');
+    v.className = 'verdict ' + (saidTsujiru ? 'miss' : 'hit');
+    v.textContent = saidTsujiru
+      ? 'あなたは「通じる」と答えました。届いたのはこれです。'
+      : 'あなたは「通じない」と答えました。実際に届いたのはこれです。';
+    document.getElementById('en1').textContent = it.en1;
+    document.getElementById('back1').textContent = '「' + it.back1 + '」';
+    renderChk(document.getElementById('chk1'), it.has1);
+    document.getElementById('lost').textContent = it.lost;
+    document.getElementById('fixed').textContent = '「' + it.fixed + '」';
+    document.getElementById('en2').textContent = it.en2;
+    document.getElementById('back2').textContent = '「' + it.back2 + '」';
+    renderChk(document.getElementById('chk2'), it.has2);
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('#askWrap button'), function(b){
+    b.onclick = function(){ reveal(b.getAttribute('data-v') === '1'); };
+  });
+
+  document.getElementById('nextBtn').onclick = function(){
+    idx++;
+    if(idx >= ITEMS.length) finish(); else renderItem();
+  };
+
+  function finish(){
+    hide('stage'); show('result');
+    document.getElementById('scoreN').textContent = saidYes + ' / ' + ITEMS.length;
+    document.getElementById('scoreSub').textContent =
+      saidYes === 0 ? '全部「通じない」と答えました。分かっていても、現場では言ってしまう側の言葉です。'
+      : (saidYes === ITEMS.length ? '全部「通じる」と答えました。5つとも、3つの要素が抜けたまま届いていました。'
+      : saidYes + 'つは通じると思っていました。5つとも、3つの要素が抜けたまま届いています。');
+    var r = document.getElementById('recap');
+    r.innerHTML = '';
+    ITEMS.forEach(function(it){
+      var d = document.createElement('div');
+      d.className = 'listrow';
+      d.innerHTML = '<b>「' + it.said + '」 → 「' + it.fixed + '」</b><span>' + it.scene + '</span>';
+      r.appendChild(d);
+    });
+  }
+
+  document.getElementById('startBtn').onclick = function(){
+    idx = 0; saidYes = 0; hide('intro'); hide('result'); show('stage'); renderItem();
+  };
+  document.getElementById('againBtn').onclick = function(){
+    idx = 0; saidYes = 0; hide('result'); show('stage'); renderItem();
+  };
+})();
+</script>
+</body>
+</html>

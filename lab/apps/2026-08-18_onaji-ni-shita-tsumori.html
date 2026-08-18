@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>同じにしたつもり — 縦と横を同じ長さに揃えると、あなたは何%ずらすか</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .tag { display:inline-block; font-size:13px; font-weight:700; color:#2563eb;
+    background:#f0f5ff; border:1px solid #d5e2ff; border-radius:999px; padding:2px 12px; margin-bottom:8px; }
+  .stage { background:#fbfaf7; border:1.5px solid #e5e2db; border-radius:12px; padding:8px 4px; margin:10px 0 6px; }
+  svg { display:block; width:100%; height:auto; }
+  input[type=range] { width:100%; margin:14px 0 4px; height:34px; accent-color:#2563eb; }
+  .rangelab { display:flex; justify-content:space-between; font-size:14px; color:#78746c; }
+  .prog { display:flex; justify-content:space-between; font-size:14px; color:#78746c; }
+  .progbar { height:6px; background:#efece5; border-radius:3px; overflow:hidden; margin:6px 0 12px; }
+  .progbar i { display:block; height:100%; background:#2563eb; transition:width .2s; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:14px 22px; font:inherit; font-size:17px; cursor:pointer; }
+  .opts { display:grid; gap:10px; }
+  .opts button { font:inherit; font-size:17px; text-align:left; padding:14px 16px; background:#fff;
+    border:2px solid #e5e2db; border-radius:12px; cursor:pointer; color:#1c1b19; }
+  .opts button:hover { border-color:#2563eb; }
+  .res { display:grid; gap:12px; margin-top:6px; }
+  @media (min-width:520px){ .res { grid-template-columns:1fr 1fr; } }
+  .rbox { border:1.5px solid #e5e2db; border-radius:12px; padding:14px; background:#fbfaf7; }
+  .rbox.hi { border-color:#2563eb; background:#f0f5ff; }
+  .rbox h3 { margin:0; font-size:15px; color:#55524c; font-weight:600; }
+  .rbox .n { font-size:34px; font-weight:800; letter-spacing:-.03em; margin:2px 0 0; }
+  .rbox .n small { font-size:15px; font-weight:600; letter-spacing:0; }
+  .gap { text-align:center; padding:18px 14px; border:2px solid #2563eb; border-radius:12px;
+    background:#f0f5ff; margin-top:14px; }
+  .gap .n { font-size:44px; font-weight:800; letter-spacing:-.04em; color:#2563eb; line-height:1.15; }
+  .sub { font-size:16px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; margin-top:10px; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+  table { border-collapse:collapse; width:100%; font-size:15px; margin-top:8px; }
+  th,td { border-bottom:1px solid #eceae4; padding:8px 6px; text-align:left; }
+  td.num { text-align:right; font-weight:700; }
+  .hidden { display:none; }
+  .note { font-size:15px; color:#78746c; }
+</style>
+</head>
+<body>
+<div class="demoflag">実験室の一本 — 手を動かして測るのは、あなた自身の数字です</div>
+<div class="wrap">
+
+  <h1>同じにしたつもり</h1>
+  <p class="lead">縦の線と横の線を、目で見て同じ長さに揃えてもらいます。6回。そのあと、あなたが何%ずらしたかを出します。</p>
+
+  <div class="card" id="predict">
+    <span class="tag">先に答えてください</span>
+    <h2>あなたは、何%ずれると思いますか</h2>
+    <p class="sub">「同じ長さにしたつもり」で、実際にはどれくらいずれるか。先に予想を1つ選んでください。あとで自分の実測と並べます。</p>
+    <div class="opts" id="predOpts">
+      <button data-v="0">ほぼずれない（0〜2%）</button>
+      <button data-v="5">少しずれる（5%くらい）</button>
+      <button data-v="12">けっこうずれる（10〜15%）</button>
+      <button data-v="22">かなりずれる（20%以上）</button>
+    </div>
+  </div>
+
+  <div class="card hidden" id="stage">
+    <div class="prog"><span>縦と横を同じ長さに</span><span id="counter">1 / 6</span></div>
+    <div class="progbar"><i id="pbar" style="width:0%"></i></div>
+    <div class="stage">
+      <svg id="fig" viewBox="0 0 340 230" role="img" aria-label="縦線と横線の図形">
+        <line id="lineH" x1="0" y1="0" x2="0" y2="0" stroke="#1c1b19" stroke-width="4" stroke-linecap="butt"></line>
+        <line id="lineV" x1="0" y1="0" x2="0" y2="0" stroke="#2563eb" stroke-width="4" stroke-linecap="butt"></line>
+      </svg>
+    </div>
+    <p class="note" id="taskHint">青い縦の線と、黒い横の線が同じ長さに見えるところで止めてください。</p>
+    <input type="range" id="slider" min="45" max="175" step="1" value="100">
+    <div class="rangelab"><span>横を短く</span><span>横を長く</span></div>
+    <div class="btns"><button class="primary" id="nextBtn">これで同じ</button></div>
+  </div>
+
+  <div class="card hidden" id="result">
+    <span class="tag">あなたの実測</span>
+    <h2>同じにしたつもりで、これだけずらしていました</h2>
+    <div class="gap">
+      <div class="sub">6回の平均。プラスは「横を長くした」＝縦を長く見ていた</div>
+      <div class="n" id="avgN">—</div>
+      <div class="sub" id="predLine"></div>
+    </div>
+    <div class="res" style="margin-top:14px">
+      <div class="rbox hi"><h3>逆T字（縦が横を二分する形）</h3><div class="n" id="tN">—</div></div>
+      <div class="rbox"><h3>L字（縦が横の端に立つ形）</h3><div class="n" id="lN">—</div></div>
+    </div>
+    <p class="note" id="diffLine" style="margin-top:12px"></p>
+
+    <h2 style="margin-top:24px">この2つの形で差が出る理由</h2>
+    <p>Mamassian と de Montalembert は、この錯視を2つの成分に分けました（2010年、Vision Research 50巻956〜962頁）。</p>
+    <table>
+      <tr><th>成分</th><th>大きさ</th><th>どちらの形に効くか</th></tr>
+      <tr><td>向きの効果（横は縦より短く見える）</td><td class="num">約6%</td><td>逆T字・L字の両方</td></tr>
+      <tr><td>二分の効果（分けられた線は短く見える）</td><td class="num">約16%</td><td>逆T字だけ</td></tr>
+    </table>
+    <p class="note" style="margin-top:10px">つまり逆T字は2つが重なるぶん、L字よりずれが大きく出ます。あなたの2つの数字の差が、この「二分の効果」にあたります。</p>
+    <p class="src">出典（一次資料）：Mamassian, P., &amp; de Montalembert, M. (2010). A simple model of the vertical-horizontal illusion. <i>Vision Research</i>, 50(10), 956-962. doi:10.1016/j.visres.2010.03.005<br>
+      <a href="https://pubmed.ncbi.nlm.nih.gov/20298713/">https://pubmed.ncbi.nlm.nih.gov/20298713/</a></p>
+    <p class="note">断りとして：ずれの大きさは線の太さ・画面の大きさ・見る距離で変わります。6回・1人ぶんの数字なので、あなたの値が論文の値とずれても不思議はありません。ここで確かめられるのは「向きが変わるだけで長さの見え方が変わる」ことと「逆T字のほうが強い」ことの2点です。</p>
+
+    <div class="field">
+      <b>中小企業の現場に置きかえると</b><br>
+      同じ量でも、縦長の容器・縦長の看板・縦に積んだ盛りつけは大きく見える。値段を変えずに「多く見せる」余地は、量ではなく置き方の側に残っている。
+    </div>
+    <div class="btns"><button class="ghost" id="againBtn">もう一度やる</button></div>
+  </div>
+
+</div>
+<script>
+(function(){
+  var W = 340, H = 230, BASE_Y = 200, CX = 170;
+  var trials = [
+    { type:'T', v:120 }, { type:'T', v:150 }, { type:'T', v:170 },
+    { type:'L', v:120 }, { type:'L', v:150 }, { type:'L', v:170 }
+  ];
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+  var order, idx, prediction = null;
+  var slider = document.getElementById('slider');
+  var lineH = document.getElementById('lineH');
+  var lineV = document.getElementById('lineV');
+
+  function show(id){ document.getElementById(id).classList.remove('hidden'); }
+  function hide(id){ document.getElementById(id).classList.add('hidden'); }
+
+  function draw(){
+    var t = order[idx];
+    var v = t.v;
+    var h = v * (parseInt(slider.value,10) / 100);
+    var topY = BASE_Y - v;
+    if(t.type === 'T'){
+      lineH.setAttribute('x1', CX - h/2); lineH.setAttribute('x2', CX + h/2);
+      lineH.setAttribute('y1', BASE_Y);   lineH.setAttribute('y2', BASE_Y);
+      lineV.setAttribute('x1', CX); lineV.setAttribute('x2', CX);
+      lineV.setAttribute('y1', BASE_Y); lineV.setAttribute('y2', topY);
+    } else {
+      var left = CX - h/2;
+      lineH.setAttribute('x1', left); lineH.setAttribute('x2', left + h);
+      lineH.setAttribute('y1', BASE_Y); lineH.setAttribute('y2', BASE_Y);
+      lineV.setAttribute('x1', left); lineV.setAttribute('x2', left);
+      lineV.setAttribute('y1', BASE_Y); lineV.setAttribute('y2', topY);
+    }
+  }
+
+  function startTrial(){
+    document.getElementById('counter').textContent = (idx+1) + ' / ' + order.length;
+    document.getElementById('pbar').style.width = Math.round(idx/order.length*100) + '%';
+    slider.value = 55 + Math.floor(Math.random()*110);
+    draw();
+  }
+
+  function begin(){
+    order = shuffle(trials.map(function(t){ return { type:t.type, v:t.v }; }));
+    idx = 0;
+    hide('predict'); hide('result'); show('stage');
+    startTrial();
+  }
+
+  slider.addEventListener('input', draw);
+
+  document.getElementById('nextBtn').onclick = function(){
+    order[idx].set = parseInt(slider.value,10);
+    idx++;
+    if(idx >= order.length) finish(); else startTrial();
+  };
+
+  function avg(rows){
+    if(!rows.length) return null;
+    var s = rows.reduce(function(a,r){ return a + (r.set - 100); }, 0);
+    return Math.round(s / rows.length * 10) / 10;
+  }
+  function fmt(x){ return (x > 0 ? '+' : '') + x + '%'; }
+
+  function finish(){
+    hide('stage'); show('result');
+    var all = avg(order);
+    var tAvg = avg(order.filter(function(r){ return r.type==='T'; }));
+    var lAvg = avg(order.filter(function(r){ return r.type==='L'; }));
+    document.getElementById('avgN').textContent = fmt(all);
+    document.getElementById('tN').innerHTML = fmt(tAvg) + ' <small>横を長くした</small>';
+    document.getElementById('lN').innerHTML = fmt(lAvg) + ' <small>横を長くした</small>';
+
+    var p = prediction;
+    var predText = '';
+    if(p !== null){
+      var gap = Math.round(Math.abs(Math.abs(all) - p) * 10) / 10;
+      predText = 'あなたの予想は' + (p===0 ? 'ほぼずれない（0〜2%）' : 'およそ' + p + '%') +
+        '。実測との差は ' + gap + 'ポイントでした。';
+    }
+    document.getElementById('predLine').textContent = predText;
+
+    var d = Math.round((tAvg - lAvg) * 10) / 10;
+    document.getElementById('diffLine').textContent =
+      d > 0
+        ? '逆T字のほうが L字より ' + d + 'ポイント大きく出ました。縦線が横線を二分している形のほうが強く効く、という向きです。'
+        : (d === 0
+            ? '今回は2つの形で差が出ませんでした。6回では出ないこともあります。'
+            : '今回は L字のほうが ' + Math.abs(d) + 'ポイント大きく出ました。論文の向きとは逆です。6回・1人ぶんではよくあることです。');
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('#predOpts button'), function(b){
+    b.onclick = function(){ prediction = parseInt(b.getAttribute('data-v'),10); begin(); };
+  });
+  document.getElementById('againBtn').onclick = function(){
+    hide('result'); show('predict');
+  };
+})();
+</script>
+</body>
+</html>

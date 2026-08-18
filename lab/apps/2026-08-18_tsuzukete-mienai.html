@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>つづけて見えない — 何かに気づいた直後の0.3秒、人は次を見落とす</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .tag { display:inline-block; font-size:13px; font-weight:700; color:#2563eb;
+    background:#f0f5ff; border:1px solid #d5e2ff; border-radius:999px; padding:2px 12px; margin-bottom:8px; }
+  ol.steps { margin:8px 0 0; padding-left:22px; }
+  ol.steps li { margin-bottom:6px; }
+  .screen { display:flex; align-items:center; justify-content:center; min-height:210px;
+    background:#2a2825; border-radius:12px; margin:10px 0 14px; user-select:none;
+    font-size:76px; font-weight:800; letter-spacing:.06em; line-height:1; font-family:"Helvetica Neue",Arial,sans-serif; }
+  .screen .d { color:#8f8a80; }
+  .screen .t1 { color:#ffffff; }
+  .screen .fix { color:#6e6a63; font-size:44px; }
+  .choices { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+  @media (min-width:520px){ .choices { grid-template-columns:repeat(4,1fr); } }
+  .choices button { font:inherit; font-size:24px; font-weight:800; padding:18px 8px;
+    border:2px solid #e5e2db; border-radius:12px; background:#fff; cursor:pointer; color:#1c1b19; }
+  .choices button:hover { border-color:#2563eb; }
+  .yn { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .yn button { font:inherit; font-size:18px; font-weight:700; padding:18px 8px;
+    border:2px solid #e5e2db; border-radius:12px; background:#fff; cursor:pointer; color:#1c1b19; }
+  .yn button:hover { border-color:#2563eb; }
+  .qlabel { font-size:17px; font-weight:700; margin:2px 0 10px; }
+  .prog { display:flex; justify-content:space-between; font-size:14px; color:#78746c; }
+  .progbar { height:6px; background:#efece5; border-radius:3px; overflow:hidden; margin:6px 0 12px; }
+  .progbar i { display:block; height:100%; background:#2563eb; transition:width .2s; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:14px 22px; font:inherit; font-size:17px; cursor:pointer; }
+  .bars { margin-top:10px; }
+  .bar { margin:12px 0; }
+  .bar .lab { display:flex; justify-content:space-between; font-size:15px; margin-bottom:4px; }
+  .bar .lab b { font-size:20px; letter-spacing:-.02em; }
+  .track { height:26px; background:#efece5; border-radius:6px; overflow:hidden; }
+  .track i { display:block; height:100%; background:#9db4e8; }
+  .track i.hi { background:#2563eb; }
+  .track i.ctl { background:#1c1b19; }
+  .gap { text-align:center; padding:18px 14px; border:2px solid #2563eb; border-radius:12px;
+    background:#f0f5ff; margin-top:14px; }
+  .gap .n { font-size:46px; font-weight:800; letter-spacing:-.04em; color:#2563eb; line-height:1.15; }
+  .sub { font-size:16px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; margin-top:10px; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+  table { border-collapse:collapse; width:100%; font-size:15px; margin-top:8px; }
+  th,td { border-bottom:1px solid #eceae4; padding:8px 6px; text-align:left; }
+  td.num { text-align:right; font-weight:700; }
+  .hidden { display:none; }
+  .note { font-size:15px; color:#78746c; }
+</style>
+</head>
+<body>
+<div class="demoflag">実験室の一本 — 1992年の論文と同じ形の課題を、そのまま自分で走らせます</div>
+<div class="wrap">
+
+  <h1>つづけて見えない</h1>
+  <p class="lead">何かに気づいた直後の約0.3秒、人はその次に出たものを見落とす。1992年に報告された「注意の瞬き」を、あなたの目で再現します。</p>
+
+  <div class="card" id="intro">
+    <span class="tag">やること</span>
+    <h2>暗い画面に文字がパラパラ出ます</h2>
+    <ol class="steps">
+      <li>文字は1枚あたり0.1秒。速すぎて追えなくて構いません。</li>
+      <li>途中に<b>白い文字</b>が1つだけ混じります。何の字かを覚えます。</li>
+      <li>そのあとに<b>X</b>が出たかどうかを答えます。出ない回もあります。</li>
+    </ol>
+    <p class="note" style="margin-top:12px">まず「白い文字は無視して、Xだけ見る」練習を8回。そのあと本番を16回。合計24回、3分ほどです。音は出ません。</p>
+    <div class="btns"><button class="primary" id="startBtn">はじめる</button></div>
+  </div>
+
+  <div class="card hidden" id="stage">
+    <div class="prog"><span id="blockName">練習（Xだけ見る）</span><span id="counter">1 / 8</span></div>
+    <div class="progbar"><i id="pbar" style="width:0%"></i></div>
+    <div class="screen" id="screen"><span class="fix">+</span></div>
+    <div id="qwrap" class="hidden">
+      <div class="qlabel" id="qlabel"></div>
+      <div id="qbody"></div>
+    </div>
+  </div>
+
+  <div class="card hidden" id="result">
+    <span class="tag">あなたの結果</span>
+    <h2>Xに気づけた割合</h2>
+    <p class="sub" id="ctlLine"></p>
+    <div class="bars" id="bars"></div>
+    <div class="gap">
+      <div class="sub">白い文字に気づいた直後、Xの見落としが増えた分</div>
+      <div class="n" id="dropN">—</div>
+      <div class="sub" id="dropSub"></div>
+    </div>
+    <p class="note" id="t1line" style="margin-top:12px"></p>
+
+    <h2 style="margin-top:24px">1992年の論文ではこうだった</h2>
+    <p>Raymond・Shapiro・Arnell の実験（1992年、Journal of Experimental Psychology: Human Perception and Performance 18巻849〜860頁）。黒い文字の流れに白い文字を1つ混ぜ、そのあとにXを置く形は、この画面と同じです。</p>
+    <table>
+      <tr><th>条件</th><th>Xに気づけた割合</th></tr>
+      <tr><td>白い文字を無視した対照条件</td><td class="num">約91%（どの位置でもほぼ一定）</td></tr>
+      <tr><td>白い文字の直後（1つ後）</td><td class="num">約80%</td></tr>
+      <tr><td>白い文字の3つ後（約0.27秒後）</td><td class="num">約50%</td></tr>
+      <tr><td>白い文字の8つ後（約0.72秒後）</td><td class="num">約100%</td></tr>
+    </table>
+    <p class="note" style="margin-top:10px">直後（1つ後）だけ成績が落ちない現象は「lag-1 sparing」と呼ばれます。谷は3つ後あたりで、0.5秒ほどで元に戻ります。</p>
+    <p class="src">出典（一次資料）：Raymond, J. E., Shapiro, K. L., &amp; Arnell, K. M. (1992). Temporary suppression of visual processing in an RSVP task: An attentional blink? <i>JEP:HPP</i>, 18(3), 849-860.<br>
+      本文PDF <a href="https://psych.hanover.edu/classes/cognition/papers/raymond%20et%20al%201992%20attn%20blink.pdf">https://psych.hanover.edu/classes/cognition/papers/raymond et al 1992 attn blink.pdf</a><br>
+      追試（2021年、Journal of Cognition）<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8062350/">https://pmc.ncbi.nlm.nih.gov/articles/PMC8062350/</a></p>
+    <p class="note">この画面と原典の違い：原典は1枚15.15ミリ秒＋空白75.75ミリ秒（合計90.09ミリ秒）。ブラウザでその精度は出せないため、ここでは1枚60ミリ秒＋空白40ミリ秒（合計100ミリ秒）にしています。1人ぶん24回では、あなたの数字は偶然で±15%ほど動きます。谷が出ない回もあります。</p>
+
+    <div class="field">
+      <b>中小企業の現場に置きかえると</b><br>
+      大事なことを2つ続けて出すと、2つ目は読まれない。掲示・朝礼・レジ画面・現場の指差し確認では、1つ目に気づかせたあと0.5秒ぶんの間を空けるか、2つを1枚にまとめる。
+    </div>
+    <div class="btns"><button class="ghost" id="againBtn">もう一度やる</button></div>
+  </div>
+
+</div>
+<script>
+(function(){
+  var LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWZ'.split('');
+  var SOA_ON = 60, SOA_OFF = 40, FIX = 500;
+
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+  function randInt(lo,hi){ return lo+Math.floor(Math.random()*(hi-lo+1)); }
+
+  // bin: a=直後(1つ後) / b=0.2〜0.3秒後(2〜3つ後) / c=0.6〜0.8秒後(6〜8つ後)
+  var BINS = { a:[1], b:[2,3], c:[6,8] };
+  var BIN_LABEL = { a:'白い文字の直後（0.1秒後）', b:'0.2〜0.3秒後', c:'0.6〜0.8秒後' };
+
+  function makeTrial(cond, bin, xPresent){
+    var lag = pick(BINS[bin]);
+    var pre = randInt(7,11);
+    var postLen = 10;
+    var pool = LETTERS.slice();
+    var stream = [];
+    for(var i=0;i<pre;i++) stream.push({ ch:pick(pool), t1:false });
+    var t1ch = pick(pool);
+    stream.push({ ch:t1ch, t1:true });
+    for(var j=1;j<=postLen;j++){
+      if(xPresent && j===lag) stream.push({ ch:'X', t1:false });
+      else stream.push({ ch:pick(pool), t1:false });
+    }
+    return { cond:cond, bin:bin, lag:lag, xPresent:xPresent, stream:stream, t1:t1ch };
+  }
+
+  function buildTrials(){
+    var ctl = [];
+    ['a','b','c'].forEach(function(b){ ctl.push(makeTrial('ctl',b,true)); ctl.push(makeTrial('ctl',b,true)); });
+    ctl.push(makeTrial('ctl','b',false)); ctl.push(makeTrial('ctl','c',false));
+    var exp = [];
+    ['a','b','c'].forEach(function(b){ for(var k=0;k<4;k++) exp.push(makeTrial('exp',b,true)); });
+    exp.push(makeTrial('exp','a',false)); exp.push(makeTrial('exp','b',false));
+    exp.push(makeTrial('exp','b',false)); exp.push(makeTrial('exp','c',false));
+    return shuffle(ctl).concat(shuffle(exp));
+  }
+
+  var trials, idx, log;
+  var screen = document.getElementById('screen');
+  var qwrap = document.getElementById('qwrap');
+  var qlabel = document.getElementById('qlabel');
+  var qbody = document.getElementById('qbody');
+
+  function show(el){ el.classList.remove('hidden'); }
+  function hide(el){ el.classList.add('hidden'); }
+
+  function start(){
+    trials = buildTrials(); idx = 0; log = [];
+    hide(document.getElementById('intro')); hide(document.getElementById('result'));
+    show(document.getElementById('stage'));
+    runTrial();
+  }
+
+  function updateProg(){
+    var t = trials[idx];
+    var isCtl = t.cond==='ctl';
+    document.getElementById('blockName').textContent = isCtl ? '練習（白い文字は無視。Xだけ見る）' : '本番（白い文字を覚えて、Xも見る）';
+    var n = isCtl ? idx+1 : idx-7;
+    var total = isCtl ? 8 : 16;
+    document.getElementById('counter').textContent = n + ' / ' + total;
+    document.getElementById('pbar').style.width = Math.round((idx/trials.length)*100) + '%';
+  }
+
+  function runTrial(){
+    updateProg();
+    hide(qwrap);
+    var t = trials[idx];
+    screen.innerHTML = '<span class="fix">+</span>';
+    setTimeout(function(){ playStream(t, 0); }, FIX);
+  }
+
+  function playStream(t, i){
+    if(i >= t.stream.length){
+      screen.innerHTML = '';
+      setTimeout(function(){ askQuestions(t); }, 150);
+      return;
+    }
+    var it = t.stream[i];
+    screen.innerHTML = '<span class="' + (it.t1?'t1':'d') + '">' + it.ch + '</span>';
+    setTimeout(function(){
+      screen.innerHTML = '';
+      setTimeout(function(){ playStream(t, i+1); }, SOA_OFF);
+    }, SOA_ON);
+  }
+
+  function askQuestions(t){
+    show(qwrap);
+    if(t.cond === 'exp'){
+      qlabel.textContent = '白い文字はどれでしたか';
+      var opts = [t.t1];
+      while(opts.length < 4){ var c = pick(LETTERS); if(opts.indexOf(c) < 0) opts.push(c); }
+      shuffle(opts);
+      qbody.innerHTML = '<div class="choices"></div>';
+      var box = qbody.firstChild;
+      opts.forEach(function(c){
+        var b = document.createElement('button');
+        b.textContent = c;
+        b.onclick = function(){ t.t1answer = c; askX(t); };
+        box.appendChild(b);
+      });
+    } else {
+      askX(t);
+    }
+  }
+
+  function askX(t){
+    qlabel.textContent = 'そのあとに X は出ましたか';
+    qbody.innerHTML = '<div class="yn"><button data-v="1">出た</button><button data-v="0">出なかった</button></div>';
+    Array.prototype.forEach.call(qbody.querySelectorAll('button'), function(b){
+      b.onclick = function(){
+        var said = b.getAttribute('data-v') === '1';
+        log.push({ cond:t.cond, bin:t.bin, xPresent:t.xPresent, said:said,
+                   t1ok: t.cond==='exp' ? (t.t1answer === t.t1) : null });
+        idx++;
+        if(idx >= trials.length) finish(); else runTrial();
+      };
+    });
+  }
+
+  function rate(rows){
+    if(!rows.length) return null;
+    var hit = rows.filter(function(r){ return r.said; }).length;
+    return Math.round(hit / rows.length * 100);
+  }
+
+  function finish(){
+    hide(document.getElementById('stage'));
+    show(document.getElementById('result'));
+
+    var ctlHit = rate(log.filter(function(r){ return r.cond==='ctl' && r.xPresent; }));
+    var falseAlarm = log.filter(function(r){ return !r.xPresent && r.said; }).length;
+    var absentTotal = log.filter(function(r){ return !r.xPresent; }).length;
+
+    document.getElementById('ctlLine').innerHTML =
+      '練習（白い文字を無視した回）では <b>' + ctlHit + '%</b>。' +
+      'Xが出なかった' + absentTotal + '回のうち、出たと答えたのは ' + falseAlarm + '回。';
+
+    var bars = document.getElementById('bars');
+    bars.innerHTML = '';
+    function addBar(label, val, cls){
+      var d = document.createElement('div'); d.className = 'bar';
+      d.innerHTML = '<div class="lab"><span>' + label + '</span><b>' + (val===null?'—':val+'%') + '</b></div>' +
+        '<div class="track"><i class="' + cls + '" style="width:' + (val===null?0:val) + '%"></i></div>';
+      bars.appendChild(d);
+    }
+    addBar('練習：白い文字を無視した回', ctlHit, 'ctl');
+    var vals = {};
+    ['a','b','c'].forEach(function(b){
+      vals[b] = rate(log.filter(function(r){ return r.cond==='exp' && r.xPresent && r.bin===b; }));
+    });
+    var worst = ['a','b','c'].reduce(function(m,b){ return (vals[b]!==null && (m===null || vals[b] < vals[m])) ? b : m; }, null);
+    ['a','b','c'].forEach(function(b){
+      addBar('本番：' + BIN_LABEL[b], vals[b], b===worst ? 'hi' : '');
+    });
+
+    var lowest = worst===null ? null : vals[worst];
+    var drop = (ctlHit===null || lowest===null) ? null : ctlHit - lowest;
+    document.getElementById('dropN').textContent = drop===null ? '—' : (drop > 0 ? '−' + drop + 'ポイント' : '差なし');
+    document.getElementById('dropSub').textContent = drop===null ? '' :
+      (drop > 0
+        ? '一番落ちたのは「' + BIN_LABEL[worst] + '」。練習の' + ctlHit + '%から' + lowest + '%まで落ちました。'
+        : '今回はあなたに瞬きは出ませんでした。24回では出ない人もいます。');
+
+    var t1rows = log.filter(function(r){ return r.cond==='exp'; });
+    var t1ok = t1rows.filter(function(r){ return r.t1ok; }).length;
+    document.getElementById('t1line').textContent =
+      '白い文字そのものは ' + t1rows.length + '回中 ' + t1ok + '回 正解（' + Math.round(t1ok/t1rows.length*100) + '%）。' +
+      'ここが低いと、そもそも白い文字に気づけていないので、瞬きは出にくくなります。';
+  }
+
+  document.getElementById('startBtn').onclick = start;
+  document.getElementById('againBtn').onclick = start;
+})();
+</script>
+</body>
+</html>

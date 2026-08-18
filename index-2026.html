@@ -490,6 +490,32 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .mini-card small{display:block;font-weight:500;color:var(--muted);font-size:0.8rem;margin-top:0.2rem;}
 .mini-card .arw{color:var(--blue);font-weight:700;flex:none;}
 
+/* ---------- おすすめの始め方 ---------- */
+.start-rows{display:grid;gap:14px;}
+.start-row{display:grid;grid-template-columns:1.1fr 0.9fr auto;gap:1.2rem;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 24px;box-shadow:var(--shadow);transition:border-color 0.3s var(--ease),transform 0.3s var(--ease);}
+.start-row:hover{border-color:var(--blue);transform:translateY(-2px);}
+@media(max-width:760px){.start-row{grid-template-columns:1fr;gap:0.5rem;}}
+.start-row .who{font-weight:700;font-size:0.98rem;line-height:1.7;}
+.start-row .what{font-size:0.9rem;color:var(--ink-soft);line-height:1.7;}
+.start-row .what b{color:var(--blue);}
+.start-row .arw{color:var(--blue);font-weight:700;flex:none;}
+.price-box{margin-top:26px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;box-shadow:var(--shadow);}
+.price-box h3{font-size:1rem;font-weight:700;margin-bottom:0.7rem;}
+.price-box ul{list-style:none;}
+.price-box li{font-size:0.92rem;color:var(--ink-soft);line-height:1.9;padding-left:1.1rem;position:relative;}
+.price-box li + li{margin-top:0.4rem;}
+.price-box li::before{content:"";position:absolute;left:0;top:0.82em;width:5px;height:5px;border-radius:999px;background:var(--blue);}
+.price-box .pnote{font-size:0.84rem;color:var(--muted);margin-top:0.9rem;line-height:1.8;}
+
+/* ---------- 実績の数字 ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:34px;}
+@media(max-width:860px){.stats{grid-template-columns:1fr;}}
+.stat{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);}
+.stat .big{font-family:var(--font-display);font-size:1.7rem;font-weight:900;line-height:1.4;color:var(--ink);}
+.stat .big b{color:var(--blue);}
+.stat p{font-size:0.85rem;color:var(--muted);line-height:1.8;margin-top:0.4rem;}
+.stats-note{font-size:0.84rem;color:var(--muted);line-height:1.8;margin:-14px 0 30px;}
+
 /* ---------- 導入の流れ ---------- */
 .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
 @media(max-width:1000px){.flow{grid-template-columns:1fr 1fr;}}
@@ -761,7 +787,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="sec-label" data-rv="up">Check</div>
       <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="check-title">こんな状態になっていませんか？</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="check-lead">当てはまる項目を選ぶと、解決策のページに進めます。</p>
+      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="check-lead">当てはまる項目を選ぶと、合う解決策のページに進めます。</p>
     </div>
     <div class="issues">
       <a href="line-ai-agent.html" data-rv="up" style="--d:0ms"><span class="no">01</span><span data-edit="chk-1">問い合わせ対応も、社内の「これどうやるんだっけ」も、特定の人頼み</span></a>
@@ -781,7 +807,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div>
         <div class="sec-head">
           <div class="sec-label" data-rv="up">About</div>
-          <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="about-title">「楽」ではなく「楽しい」を考える</h2>
+          <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="about-title">機械にできる作業に、人生を捧げるのは、<br>もう終わりにしませんか</h2>
           <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
         </div>
         <div class="msg" data-rv="up" style="--d:200ms">
@@ -811,7 +837,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   <div class="wrap">
     <div class="sec-head center">
       <div class="sec-label" data-rv="up">Service</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="service-title">AIの最前線の技術を<br>中小企業の現場で使える形に</h2>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="service-title">AIの最前線の技術を、<br>中小企業の現場で使える形に</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
       <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="service-lead">最新のAIをまず自社プロダクトで使い込み、成果が出たものだけを現場にお届けします。現場で見つかった課題は、次のプロダクト開発に反映します。</p>
     </div>
@@ -944,7 +970,49 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec" id="agent-demo">
+<section class="sec" id="start">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label" data-rv="up">How to Start</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="start-title">おすすめの始め方</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="start-lead">どれから頼めばいいか迷ったら、この対応表からどうぞ。どの入口でも、初回相談は無料です。</p>
+    </div>
+    <div class="start-rows">
+      <a class="start-row" href="ai-training.html" data-rv="up" style="--d:0ms">
+        <span class="who" data-edit="st1-who">初めてAIを入れる会社</span>
+        <span class="what" data-edit="st1-what">まずは<b>AI研修＋無料AI診断</b>。社員が使える状態を先につくります</span>
+        <span class="arw">→</span>
+      </a>
+      <a class="start-row" href="line-ai-agent.html" data-rv="up" style="--d:100ms">
+        <span class="who" data-edit="st2-who">問い合わせ対応・社内の質問対応に追われている会社</span>
+        <span class="what" data-edit="st2-what"><b>AIチャットエージェント</b>。人頼みの一次対応をAIに置き換えます</span>
+        <span class="arw">→</span>
+      </a>
+      <a class="start-row" href="human-clone-ai.html" data-rv="up" style="--d:200ms">
+        <span class="who" data-edit="st3-who">「社長にしか判断できない仕事」が多い会社</span>
+        <span class="what" data-edit="st3-what"><b>AIwill（社長クローンAI）</b>。判断の考え方を会社の資産にします</span>
+        <span class="arw">→</span>
+      </a>
+      <a class="start-row" href="aiside.html" data-rv="up" style="--d:300ms">
+        <span class="who" data-edit="st4-who">予定調整・メール・雑務で経営者の一日が終わる会社</span>
+        <span class="what" data-edit="st4-what"><b>AIside（付き人AI）</b>。日々の細かい仕事を先回りで代行します</span>
+        <span class="arw">→</span>
+      </a>
+    </div>
+    <div class="price-box" data-rv="up">
+      <h3 data-edit="price-t">料金の目安</h3>
+      <ul>
+        <li data-edit="price-1">AI導入支援・コンサルティング: 20万円〜（業務範囲により個別見積もり）</li>
+        <li data-edit="price-2">社内マニュアルAI／AIチャットエージェント: 構築＋月々の運用サポートの2階建て（マニュアルの量・利用人数・社外対応の有無で変動）</li>
+        <li data-edit="price-3">AI研修・社員リスキリング: 人数・回数・フォロー期間で変動（中小企業は訓練経費の最大75%が助成対象）</li>
+      </ul>
+      <p class="pnote" data-edit="price-note">実態に合わない一律の料金表は出していません。何で費用が決まるかは<a href="ryokin.html" style="color:var(--blue);text-decoration:underline;">料金の考え方</a>ですべて公開しています。初回相談・見積もりは無料、相見積もりの1社としてのご利用も歓迎です。</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec sec--white" id="agent-demo">
   <div class="wrap">
     <div class="agent">
       <div>
@@ -980,7 +1048,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 
 <div class="midcta">
   <h2 data-rv="up" data-edit="midcta-title">ここにない課題でも、ご相談ください</h2>
-  <p data-rv="up" style="--d:120ms" data-edit="midcta-lead">業務に合わせたAIをお作りします。まずは3分の無料診断で、AIに任せられる業務の目安をご確認ください。</p>
+  <p data-rv="up" style="--d:120ms" data-edit="midcta-lead">御社の業務に合わせたAIをお作りします。まずは3分の無料診断で、AIに任せられる業務の目安をご確認ください。</p>
   <div class="btns" data-rv="up" style="--d:240ms">
     <a href="shindan.html" class="btn btn-orange">3分で無料AI診断</a>
     <a href="#contact" class="btn" style="background:var(--navy-deep);color:#fff;">お問い合わせはこちら</a>
@@ -1038,6 +1106,21 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="case-title">導入事例・つくれるもの</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
     </div>
+        <div class="stats">
+      <div class="stat" data-rv="up" style="--d:0ms">
+        <div class="big" data-edit="sn1-b">相談から稼働まで <b>最短2日</b></div>
+        <p data-edit="sn1-p">当社実績。任せる範囲と資料の状態により変わります（一律の期間は約束しません）</p>
+      </div>
+      <div class="stat" data-rv="up" style="--d:110ms">
+        <div class="big" data-edit="sn2-b">事務作業は1日 <b>平均75分</b> 減らせる</div>
+        <p data-edit="sn2-p">日本経済新聞の調査より（外部データ。当社の成果ではなく、AI活用全般の削減余地です）</p>
+      </div>
+      <div class="stat" data-rv="up" style="--d:220ms">
+        <div class="big" data-edit="sn3-b">導入後も<b>月額の運用契約で継続稼働中</b></div>
+        <p data-edit="sn3-p">介護・福祉、不動産での導入実績。「導入して終わり」にせず、資料更新や回答の改善まで請け負っています</p>
+      </div>
+    </div>
+    <p class="stats-note" data-rv="up" data-edit="stats-note">個別のお客様の削減時間・件数は、承諾をいただけたものから順次このページで公開します。数字はすべて出典を明示し、実態と異なる数字は掲げません。</p>
     <div class="posts">
       <a class="post" href="jirei.html" data-rv="up" style="--d:0ms">
         <div class="pbody">
@@ -1128,6 +1211,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
           <li data-edit="fit-ok3">まず1業務だけ、小さく効率化したい</li>
           <li data-edit="fit-ok4">研修だけで終わらせず、実装と運用まで伴走してほしい</li>
         </ul>
+        <p class="note" data-edit="fit-ok-note">想定しているのは、従業員1〜100名規模の中小企業です。</p>
       </div>
       <div class="fit ng" data-rv="up" style="--d:120ms">
         <h3 data-edit="fit-ng-t">当社が向いていない会社</h3>
@@ -1295,7 +1379,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     </div>
     <div class="contact">
       <div class="c-left" data-rv="up" style="--d:120ms">
-        <h3 data-edit="contact-h">AIdollargameが<br>AI導入をサポートします</h3>
+        <h3 data-edit="contact-h">AIdollargameが、貴社のAI導入を<br>サポートします</h3>
         <ul>
           <li data-edit="contact-li1">AI導入の無料相談（初回30分・オンライン）</li>
           <li data-edit="contact-li2">お見積もり</li>

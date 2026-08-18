@@ -42,9 +42,7 @@
 ## よくある質問 (FAQ)
 - AIdollargameとは: https://aidollargame.com/articles/about-aidollargame.html
 - AIコンサルティングとは: https://aidollargame.com/articles/what-is-ai-consulting.html
-- AI導入の費用: https://aidollargame.com/articles/ai-cost.html
 - AIエージェントとチャットボットの違い: https://aidollargame.com/articles/ai-agent-vs-chatbot.html
-- AI研修は何をする？内容・進め方・選び方: https://aidollargame.com/articles/ai-training-guide-2026.html
 - ChatGPT・Claude・Gemini 会社で使うならどれ？業務別の選び方: https://aidollargame.com/articles/ai-hikaku-2026.html
 - 不動産の問い合わせ対応を自動化する方法（反響の取りこぼし対策）: https://aidollargame.com/articles/fudosan-inquiry-automation.html
 - LINE AIエージェント導入チェックリスト（無料資料）: https://aidollargame.com/articles/line-ai-agent-checklist.html
@@ -53,6 +51,14 @@
 - 定点観測（中小企業のAI導入を公的調査の一次データで毎月読み解く連載）vol.1: https://aidollargame.com/articles/ai-teiten-2026-07.html
 
 ## 記事 (Articles)
+- AI導入の費用はいくら？中小企業の相場・予算の目安・補助金【2026年版】（各社公表の相場と、中小機構の実態調査・デジタル化AI導入補助金2026の補助率を出典つきで整理）: https://aidollargame.com/articles/ai-cost.html
+- AIを使っている会社は69%、なのに9割の経営者が「うちは何も変わっていない」と答えた（米英独豪6,000社調査）: https://aidollargame.com/articles/ai-firm-survey-2026.html
+- AIで雇用は減っていない。ただし22〜25歳の入口だけがへこんでいる（米ADPの給与データ数百万人分）: https://aidollargame.com/articles/ai-jobs-payroll-2026.html
+- AIに面接をやらせたら内定が12%増えた。でも採用にかかる日数は4日のびた（応募7万884件の実験）: https://aidollargame.com/articles/ai-interview-2026.html
+- AIで差は縮むのか、広がるのか｜逆の答えを出した2つの実験を読み比べる: https://aidollargame.com/articles/ai-skill-gap-2026.html
+- その電話、AIかもしれません｜新しいAI詐欺の手口4つと今日からできる対策: https://aidollargame.com/articles/ai-scam-2026.html
+- 100円ショップのセリアが代表電話の約75%をAIに任せた｜中小企業が真似できる線引き: https://aidollargame.com/articles/ai-phone-seria-2026.html
+- 中小企業のAI研修｜4つの課題と、内容・進め方・選び方【2026年版】: https://aidollargame.com/articles/ai-training-guide-2026.html
 - 不動産の問い合わせ対応を自動化する方法｜反響を取りこぼさないLINE AIエージェント: https://aidollargame.com/articles/fudosan-inquiry-automation.html
 - 【無料】中小企業のためのLINE AIエージェント導入チェックリスト: https://aidollargame.com/articles/line-ai-agent-checklist.html
 - AIdollargameとは？事業内容・対応業界・始め方をやさしく解説: https://aidollargame.com/articles/about-aidollargame.html
@@ -60,7 +66,6 @@
 - AIエージェントとチャットボットは何が違う？: https://aidollargame.com/articles/ai-agent-vs-chatbot.html
 - AIが役割を引き受けるとき、人間は何を手に入れるか: https://aidollargame.com/articles/ai-and-future.html
 - コードが書けない私が、AIだけで自社サイトを作り変えた話: https://aidollargame.com/articles/ai-built-my-site.html
-- 中小企業のAI導入、費用はどれくらい？相場と考え方: https://aidollargame.com/articles/ai-cost.html
 - Anthropicの最新AI「Fable 5」で、実際に何ができる？: https://aidollargame.com/articles/ai-fable5-explained.html
 - AI導入は、どこから始めればいい？: https://aidollargame.com/articles/ai-first-3-steps.html
 - 「楽ではなく、楽しいを考える。」の本当の意味: https://aidollargame.com/articles/ai-frees-humans.html

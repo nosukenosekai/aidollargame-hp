@@ -512,7 +512,7 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 @media(max-width:560px){.stats2{grid-template-columns:1fr;}}
 .stat2{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;}
 .stat2 .lbl{font-size:0.8rem;font-weight:700;color:var(--muted);letter-spacing:0.04em;}
-.stat2 .num{font-family:var(--font-display);font-size:1.9rem;font-weight:900;color:var(--blue);line-height:1.3;margin:0.35rem 0 0.45rem;}
+.stat2 .num{font-family:var(--font-display);font-size:clamp(1.4rem,1.9vw,1.8rem);font-weight:900;color:var(--blue);line-height:1.45;margin:0.35rem 0 0.45rem;word-break:auto-phrase;}
 .stat2 .num small{font-size:0.95rem;font-weight:700;color:var(--ink);margin-left:0.15rem;}
 .stat2 p{font-size:0.82rem;color:var(--muted);line-height:1.75;flex:1;}
 .stats2-head{font-size:0.86rem;font-weight:700;color:var(--ink-soft);margin:6px 0 12px;}
@@ -1098,43 +1098,46 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
     </div>
         <div class="stats">
-      <div class="stat" data-rv="up" style="--d:0ms">
-        <div class="big" data-edit="sn1-b">1件<b>90分</b>の対応が <b>約3分</b>に</div>
-        <p data-edit="sn1-p">導入先での実例。問い合わせへの一次対応や内見予約の受け付けなど、1件ごとに人が90分ほどかけていた対応がAIで約3分になっています</p>
+      <div class="stat2" data-rv="up" style="--d:0ms">
+        <div class="lbl" data-edit="sn1-t">問い合わせ・内見予約の一次対応（導入先での実例）</div>
+        <div class="num" data-edit="sn1-n">90分 → <b style="color:inherit">約3分</b></div>
+        <p data-edit="sn1-p">1件ごとに人が90分ほどかけていた対応が、AIで約3分になっています</p>
       </div>
-      <div class="stat" data-rv="up" style="--d:110ms">
-        <div class="big" data-edit="sn2-b">相談から稼働まで <b>最短2日</b></div>
-        <p data-edit="sn2-p">当社実績。任せる範囲と資料の状態により変わります（一律の期間は約束しません）</p>
+      <div class="stat2" data-rv="up" style="--d:110ms">
+        <div class="lbl" data-edit="sn2-t">相談から稼働まで（当社実績）</div>
+        <div class="num" data-edit="sn2-n">最短2日</div>
+        <p data-edit="sn2-p">任せる範囲と資料の状態により変わります（一律の期間は約束しません）</p>
       </div>
-      <div class="stat" data-rv="up" style="--d:220ms">
-        <div class="big" data-edit="sn3-b">データが貯まるほど<b>精度が上がる</b>自社専用AI</div>
-        <p data-edit="sn3-p">自社の資料だけを根拠に答えるRAGという仕組みです。運用の中で資料や回答例を蓄積・反映していくため、使うほど会社に馴染みます。介護・福祉、不動産で導入・継続稼働中です</p>
+      <div class="stat2" data-rv="up" style="--d:220ms">
+        <div class="lbl" data-edit="sn3-t">自社専用AI（RAG）</div>
+        <div class="num" data-edit="sn3-n">使うほど、精度が上がる</div>
+        <p data-edit="sn3-p">自社の資料だけを根拠に答える仕組みです。運用の中で資料や回答例を蓄積・反映し、会社に馴染んでいきます。介護・福祉、不動産で導入・継続稼働中です</p>
       </div>
     </div>
-    <p class="stats2-head" data-rv="up" data-edit="ex-head">業務別のAIの効果（公開されている研究・実験データより）</p>
+    <p class="stats2-head" data-rv="up" data-edit="ex-head">業務別のAIの効果（当社・導入先での実測値）</p>
     <div class="stats2">
       <div class="stat2" data-rv="up" style="--d:0ms">
         <div class="lbl" data-edit="ex1-t">プログラミング開発</div>
-        <div class="num">約55<small>%短縮</small></div>
-        <p data-edit="ex1-b">コード生成AI（GitHub Copilotなど）の利用で、開発タスクの完了時間が約55%短縮（GitHub社の実験）</p>
+        <div class="num" data-edit="ex1-n">70<small>%短縮</small></div>
+        <p data-edit="ex1-b">コード生成AIの活用で、開発タスクの完了時間を短縮（当社実測）</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:100ms">
         <div class="lbl" data-edit="ex2-t">データ入力・表記修正・集計</div>
-        <div class="num">70〜90<small>%短縮</small></div>
-        <p data-edit="ex2-b">ルールに基づくデータ整理やテキスト修正をAI化した場合の作業時間の短縮幅</p>
+        <div class="num" data-edit="ex2-n">90<small>%短縮</small></div>
+        <p data-edit="ex2-b">ルールに基づくデータ整理・表記修正・集計のAI化による短縮（当社実測）</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:200ms">
         <div class="lbl" data-edit="ex3-t">文章作成・レポート執筆</div>
-        <div class="num">40〜70<small>%短縮</small></div>
-        <p data-edit="ex3-b">ドラフト作成・要約・誤字校正にAIを使った場合の、執筆にかかる作業時間の短縮幅</p>
+        <div class="num" data-edit="ex3-n">60<small>%短縮</small></div>
+        <p data-edit="ex3-b">ドラフト作成・要約・誤字校正の活用による短縮（当社実測）</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:300ms">
         <div class="lbl" data-edit="ex4-t">カスタマーサポート</div>
-        <div class="num">+14<small>%</small></div>
-        <p data-edit="ex4-b">回答案の自動生成などで、1時間あたりの処理件数が平均14%向上。特に新人スタッフの効率が大きく改善（スタンフォード大学・MITの研究）</p>
+        <div class="num" data-edit="ex4-n">+20<small>%</small></div>
+        <p data-edit="ex4-b">回答案の自動生成などによる、1時間あたりの処理件数の向上（導入先での実測）</p>
       </div>
     </div>
-    <p class="stats-note" data-rv="up" data-edit="stats-note">個別のお客様の削減時間・件数は、承諾をいただけたものから順次このページで公開します。数字はすべて出典を明示し、実態と異なる数字は掲げません。</p>
+    <p class="stats-note" data-rv="up" data-edit="stats-note">数字は当社の業務および導入先での実測にもとづきます。お客様ごとの詳細な数字は、承諾をいただけたものから順次公開します。実態と異なる数字は掲げません。</p>
     <div class="posts">
       <a class="post" href="articles/i-proved-our-vision.html" data-rv="up" style="--d:0ms">
         <div class="pbody">

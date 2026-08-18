@@ -521,13 +521,14 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 @media(max-width:560px){.stats2{grid-template-columns:1fr;}}
 .stat2{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;}
 .stat2 .lbl{font-size:0.8rem;font-weight:700;color:var(--muted);letter-spacing:0.04em;min-height:2.6em;display:flex;align-items:flex-end;}
-.stat2 .num{font-family:var(--font-display);font-size:clamp(1.3rem,1.7vw,1.6rem);font-weight:900;color:var(--blue);line-height:1.45;margin:0.35rem 0 0.45rem;word-break:auto-phrase;min-height:2.9em;display:flex;align-items:center;}
-.stat2 .num small{font-size:0.95rem;font-weight:700;color:var(--ink);margin-left:0.15rem;}
+.stat2 .num{font-family:var(--font-display);font-size:clamp(2.2rem,3.1vw,3.2rem);font-weight:900;color:var(--blue);line-height:1.35;margin:0.35rem 0 0.45rem;word-break:auto-phrase;min-height:4.6rem;display:flex;flex-wrap:wrap;align-items:baseline;column-gap:0.12em;}
+/* 数字ではなく言葉が入るカードは一段落として、数字の強さを殺さない */
+.stat2 .num--text{font-size:clamp(1.35rem,1.9vw,1.9rem);}
+.stat2 .num small{font-size:0.44em;font-weight:700;color:var(--ink);margin-left:0.15rem;}
 .stat2 p{font-size:0.82rem;color:var(--muted);line-height:1.75;flex:1;}
 .stats2-head{font-size:0.86rem;font-weight:700;color:var(--ink-soft);margin:6px 0 12px;}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:34px;}
 .stats--4 .lbl{min-height:3.9em;}
-.stats--4 .num{align-items:flex-start;}
 @media(max-width:1000px){.stats{grid-template-columns:1fr 1fr;}}
 @media(max-width:560px){.stats{grid-template-columns:1fr;}}
 
@@ -974,7 +975,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     </div>
     <div class="mini-cards">
         <a class="mini-card" href="shindan.html"><span data-edit="tier1-mini1">1分でわかる無料AI活用度診断<small>8つの質問に答えるだけ。費用はかかりません</small></span><span class="arw">→</span></a>
-        <a class="mini-card" href="shiryo.html"><span data-edit="tier1-mini2">無料資料「AI導入はじめの一歩 チェックリスト20」<small>A4・全16ページ。メールアドレスだけでダウンロードできます</small></span><span class="arw">→</span></a>
+        <a class="mini-card" href="shiryo.html"><span data-edit="tier1-mini2">無料資料「AI導入はじめの一歩 チェックリスト20」<small>A4・全16ページ。メールアドレスだけで、次の画面ですぐ受け取れます</small></span><span class="arw">→</span></a>
       </div>
   </div>
 </section>
@@ -1085,12 +1086,12 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       </div>
       <div class="stat2" data-rv="up" style="--d:120ms">
         <div class="lbl" data-edit="lab-s2t">更新のペース</div>
-        <div class="num" data-edit="lab-s2n">毎日1本</div>
+        <div class="num" data-edit="lab-s2n"><small>毎日</small>1本</div>
         <p data-edit="lab-s2p">お題を決めて、その日のうちに動く形にするところまでを毎日続けています</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:240ms">
         <div class="lbl" data-edit="lab-s3t">開発の速さ</div>
-        <div class="num" data-edit="lab-s3n">デモなら最短1日</div>
+        <div class="num" data-edit="lab-s3n"><small>デモなら</small>最短1日</div>
         <p data-edit="lab-s3p">動くデモだけなら1日でお出しできます。毎日1本つくり続けているのが、その速さの中身です</p>
       </div>
     </div>
@@ -1196,22 +1197,22 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <div class="stats stats--4">
       <div class="stat2" data-rv="up" style="--d:0ms">
         <div class="lbl" data-edit="sn1-t">問い合わせ・内見予約の一次対応（導入先での実例）</div>
-        <div class="num" data-edit="sn1-n">90分 → <b style="color:inherit">約3分</b></div>
+        <div class="num" data-edit="sn1-n"><small>90分 →</small>約3分</div>
         <p data-edit="sn1-p">1件ごとに人が90分ほどかけていた対応が、AIで約3分に。時間にして約97%の削減です（当社計算）</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:80ms">
         <div class="lbl" data-edit="sn4-t">介護施設の検索・提案（導入先での実例）</div>
-        <div class="num" data-edit="sn4-n">8,543件 → 約1分</div>
+        <div class="num" data-edit="sn4-n"><small>8,543件 →</small>約1分</div>
         <p data-edit="sn4-p">条件に合う特別養護老人ホームを1件ずつ調べていた作業が、公的データベース×AIの検索で約1分になっています</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:110ms">
         <div class="lbl" data-edit="sn2-t">相談から稼働まで（当社実績）</div>
-        <div class="num" data-edit="sn2-n">最短2日</div>
+        <div class="num" data-edit="sn2-n"><small>最短</small>2日</div>
         <p data-edit="sn2-p">任せる範囲と資料の状態により変わります（一律の期間は約束しません）</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:220ms">
         <div class="lbl" data-edit="sn3-t">自社専用AI（RAG）</div>
-        <div class="num" data-edit="sn3-n">使うほど、精度が上がる</div>
+        <div class="num num--text" data-edit="sn3-n">使うほど、精度が上がる</div>
         <p data-edit="sn3-p">自社の資料だけを根拠に答える仕組みです。運用の中で資料や回答例を蓄積・反映し、会社に馴染んでいきます。介護・福祉、不動産で導入・継続稼働中です</p>
       </div>
     </div>

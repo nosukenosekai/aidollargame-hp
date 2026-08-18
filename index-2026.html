@@ -490,9 +490,9 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .mini-card .arw{color:var(--blue);font-weight:700;flex:none;}
 
 /* ---------- おすすめの始め方 ---------- */
-.start-first{display:flex;align-items:center;gap:1.6rem;flex-wrap:wrap;background:var(--band-blue);border:1.5px solid var(--blue);border-radius:var(--radius);padding:22px 26px;margin-bottom:22px;}
+.start-first{display:flex;align-items:center;gap:0.9rem 1.2rem;flex-wrap:wrap;background:var(--band-blue);border:1.5px solid var(--blue);border-radius:var(--radius);padding:16px 22px;margin-bottom:22px;}
 .start-first .sf-label{font-size:0.8rem;font-weight:700;color:#fff;background:var(--blue);border-radius:999px;padding:0.3rem 0.9rem;flex:none;}
-.start-first .sf-steps{font-size:1rem;font-weight:700;line-height:1.9;}
+.start-first .sf-steps{font-size:0.94rem;font-weight:700;line-height:1.8;}
 .start-first .sf-steps b{color:var(--blue);}
 .start-first .sf-btns{margin-left:auto;display:flex;gap:0.7rem;flex-wrap:wrap;}
 @media(max-width:900px){.start-first .sf-btns{margin-left:0;}}
@@ -521,8 +521,8 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 @media(max-width:1000px){.stats2{grid-template-columns:1fr 1fr;}}
 @media(max-width:560px){.stats2{grid-template-columns:1fr;}}
 .stat2{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;}
-.stat2 .lbl{font-size:0.8rem;font-weight:700;color:var(--muted);letter-spacing:0.04em;}
-.stat2 .num{font-family:var(--font-display);font-size:clamp(1.4rem,1.9vw,1.8rem);font-weight:900;color:var(--blue);line-height:1.45;margin:0.35rem 0 0.45rem;word-break:auto-phrase;}
+.stat2 .lbl{font-size:0.8rem;font-weight:700;color:var(--muted);letter-spacing:0.04em;min-height:2.6em;display:flex;align-items:flex-end;}
+.stat2 .num{font-family:var(--font-display);font-size:clamp(1.3rem,1.7vw,1.6rem);font-weight:900;color:var(--blue);line-height:1.45;margin:0.35rem 0 0.45rem;word-break:auto-phrase;min-height:2.9em;display:flex;align-items:center;}
 .stat2 .num small{font-size:0.95rem;font-weight:700;color:var(--ink);margin-left:0.15rem;}
 .stat2 p{font-size:0.82rem;color:var(--muted);line-height:1.75;flex:1;}
 .stats2-head{font-size:0.86rem;font-weight:700;color:var(--ink-soft);margin:6px 0 12px;}
@@ -597,7 +597,7 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .line-bubble.user-msg{background:linear-gradient(135deg,#b8eb6a,#a3e154);border-top-right-radius:4px;color:#1e2a1a;}
 .line-time{font-size:0.6rem;color:rgba(255,255,255,0.85);align-self:flex-end;padding:0 0.2rem 0.1rem;}
 .facility-cards{display:flex;gap:0.5rem;padding:0.4rem 0;overflow-x:hidden;opacity:0;animation:lineSlide 0.55s cubic-bezier(.2,.8,.2,1) forwards;}
-.facility-card{flex:0 0 145px;background:#fff;border-radius:8px;padding:0.7rem;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;flex-direction:column;gap:0.3rem;animation:cardPop 0.6s cubic-bezier(.2,.8,.2,1) backwards;}
+.facility-card{flex:0 0 calc(50% - 0.25rem);background:#fff;border-radius:8px;padding:0.7rem;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;flex-direction:column;gap:0.3rem;animation:cardPop 0.6s cubic-bezier(.2,.8,.2,1) backwards;}
 .facility-card:nth-child(1){animation-delay:0.1s;}
 .facility-card:nth-child(2){animation-delay:0.25s;}
 .facility-card:nth-child(3){animation-delay:0.4s;}
@@ -611,7 +611,7 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .fc-btn.primary{background:var(--line-green);color:#fff;}
 .fc-btn.secondary{background:#e8eaf0;color:#444;}
 .date-cards{display:flex;gap:0.5rem;padding:0.4rem 0;overflow-x:hidden;opacity:0;animation:lineSlide 0.55s cubic-bezier(.2,.8,.2,1) forwards;}
-.date-card{flex:0 0 110px;background:#fff;border-radius:8px;padding:0.6rem;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);animation:cardPop 0.6s cubic-bezier(.2,.8,.2,1) backwards;}
+.date-card{flex:0 0 calc(33.333% - 0.34rem);background:#fff;border-radius:8px;padding:0.6rem;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.08);animation:cardPop 0.6s cubic-bezier(.2,.8,.2,1) backwards;}
 .date-card:nth-child(1){animation-delay:0.1s;}
 .date-card:nth-child(2){animation-delay:0.22s;}
 .date-card:nth-child(3){animation-delay:0.34s;}
@@ -984,7 +984,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     </div>
     <div class="start-first" data-rv="up">
       <span class="sf-label" data-edit="sf-label">迷ったらここから</span>
-      <span class="sf-steps" data-edit="sf-steps"><b>① 3分の無料AI診断</b> → <b>② 30分の無料相談</b> → <b>③ 見積もり</b>。ここまで費用は一切かかりません</span>
+      <span class="sf-steps" data-edit="sf-steps"><b>① 3分の無料AI診断</b> → <b>② 30分の無料相談</b> → <b>③ 見積もり</b>（ここまで無料）</span>
       <span class="sf-btns"><a class="f" href="shindan.html">3分で無料AI診断</a><a class="o" href="#contact">無料相談を予約</a></span>
     </div>
     <div class="start-rows">
@@ -1123,7 +1123,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       </div>
       <div class="stat2" data-rv="up" style="--d:80ms">
         <div class="lbl" data-edit="sn4-t">介護施設の検索・提案（導入先での実例）</div>
-        <div class="num" data-edit="sn4-n">全国8,543件から 約1分</div>
+        <div class="num" data-edit="sn4-n">8,543件 → 約1分</div>
         <p data-edit="sn4-p">条件に合う特別養護老人ホームを1件ずつ調べていた作業が、公的データベース×AIの検索で約1分になっています</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:110ms">
@@ -1381,34 +1381,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec sec--white" id="shiryo">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-label" data-rv="up">Free Download</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="shiryo-title">まだ相談は早い、という方へ</h2>
-      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="shiryo-lead">「何から手をつけるか」を自分のペースで整理できる無料資料を用意しました。相談の前に、まずこちらだけでも。</p>
-    </div>
-    <div class="lead-mag" data-rv="up" style="--d:160ms">
-      <div>
-        <div class="eyebrow">A4・全16ページ／メールアドレスだけで無料</div>
-        <h3 data-edit="shiryo-name">AI導入はじめの一歩<br>チェックリスト20</h3>
-        <p data-edit="shiryo-desc">読む資料ではなく、書き込む資料です。20個の□と記入欄を埋めていくと、読み終わったときには自社のAI導入計画・社内ルール・90日計画が手元に残ります。ツール名は出てきません。</p>
-        <a href="shiryo.html" class="btn btn-navy">無料でダウンロード →</a>
-      </div>
-      <div>
-        <ul>
-          <li>最初にAI化すべき業務が分かる「業務の選び方マップ」</li>
-          <li>そのままコピーして使える「社内AIルールの雛形（全7条）」</li>
-          <li>やめる／続ける／広げるを決める「90日ロードマップ」</li>
-          <li>補助金・助成金で失敗しないための3原則</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="contact">
+<section class="sec sec--white" id="contact">
   <div class="wrap">
     <div class="sec-head">
       <div class="sec-label" data-rv="up">Contact</div>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>何時で止まる — 出発時刻を入れると、今日の打ち止めが先に見える</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .tag { display:inline-block; font-size:13px; font-weight:700; color:#2563eb;
+    background:#f0f5ff; border:1px solid #d5e2ff; border-radius:999px; padding:2px 12px; margin-bottom:8px; }
+  label.f { display:block; font-size:16px; font-weight:700; margin:16px 0 4px; }
+  label.f span { font-weight:400; color:#78746c; font-size:15px; }
+  select { font:inherit; font-size:19px; padding:12px 14px; width:100%; border:1.5px solid #e5e2db;
+    border-radius:12px; background:#fff; color:#1c1b19; }
+  input[type=range] { width:100%; height:34px; accent-color:#2563eb; margin:6px 0 0; }
+  .val { font-size:22px; font-weight:800; letter-spacing:-.02em; }
+  .chk { display:flex; align-items:center; gap:10px; margin-top:16px; font-size:16px; }
+  .chk input { width:22px; height:22px; accent-color:#2563eb; }
+  .big3 { display:grid; gap:12px; margin-top:6px; }
+  @media (min-width:560px){ .big3 { grid-template-columns:repeat(3,1fr); } }
+  .bbox { border:1.5px solid #e5e2db; border-radius:12px; padding:14px; background:#fbfaf7; }
+  .bbox.hi { border:2px solid #2563eb; background:#f0f5ff; }
+  .bbox h3 { margin:0; font-size:14px; color:#55524c; font-weight:600; }
+  .bbox .n { font-size:34px; font-weight:800; letter-spacing:-.03em; margin:2px 0 0; line-height:1.2; }
+  .bbox .n small { font-size:14px; font-weight:600; letter-spacing:0; color:#78746c; }
+  .barwrap { margin-top:18px; }
+  .barbox { position:relative; }
+  .bar { display:flex; height:44px; border-radius:9px; overflow:hidden; border:1.5px solid #e5e2db; background:#efece5; }
+  .bar i { display:block; height:100%; }
+  .mark13 { position:absolute; top:-4px; bottom:-4px; width:2px; background:#1c1b19; }
+  .s-tenko { background:#c9c3b6; }
+  .s-drive { background:#2563eb; }
+  .s-break { background:#fff; border-left:1px solid #cfd8ea; border-right:1px solid #cfd8ea; }
+  .s-wait  { background:#e0b062; }
+  .axis { display:flex; justify-content:space-between; gap:8px; margin-top:8px; }
+  .axis .m { font-size:13px; color:#78746c; line-height:1.5; }
+  .axis .m:nth-child(2) { text-align:center; }
+  .axis .m:last-child { text-align:right; }
+  .axis .m b { display:block; font-size:19px; color:#1c1b19; letter-spacing:-.02em; }
+  .axis .m.blue b { color:#2563eb; }
+  .legend { display:flex; flex-wrap:wrap; gap:14px; margin-top:8px; font-size:14px; color:#55524c; }
+  .legend span { display:flex; align-items:center; gap:6px; }
+  .legend em { width:15px; height:15px; border-radius:4px; display:block; font-style:normal; border:1px solid #ddd8cf; }
+  .warn { background:#fbf6ec; border:2px solid #e4d3ae; border-radius:12px; padding:14px 16px; margin-top:14px; font-size:16px; }
+  table { border-collapse:collapse; width:100%; font-size:15px; margin-top:8px; }
+  th,td { border-bottom:1px solid #eceae4; padding:8px 6px; text-align:left; vertical-align:top; }
+  td.num { text-align:right; font-weight:700; white-space:nowrap; }
+  .src { font-size:14px; color:#78746c; margin-top:10px; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:14px; font-size:16px; }
+  .note { font-size:15px; color:#78746c; }
+</style>
+</head>
+<body>
+<div class="demoflag">数値は厚生労働省「トラック運転者の改善基準告示（2024年4月1日適用）」に基づく試算です</div>
+<div class="wrap">
+
+  <h1>何時で止まる</h1>
+  <p class="lead">今日の点呼が何時か、荷待ちがどれくらい出そうか。その2つを入れると、今日どこで打ち止めになり、明日は何時から出られるかが先に出ます。</p>
+
+  <div class="card">
+    <span class="tag">今日の条件</span>
+    <label class="f">点呼・出勤の時刻</label>
+    <select id="startSel"></select>
+
+    <label class="f">荷待ち・荷役の合計見込み <span>（走っていないが拘束されている時間）</span></label>
+    <div class="val" id="waitVal">2時間0分</div>
+    <input type="range" id="waitRange" min="0" max="20" step="1" value="8">
+
+    <div class="chk">
+      <input type="checkbox" id="longRun">
+      <label for="longRun">長距離貨物運送の特例を使う（1週2回まで／拘束16時間・休息8時間）</label>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="tag">先に見えるもの</span>
+    <h2>今日はここで止まります</h2>
+    <div class="big3">
+      <div class="bbox hi"><h3>今日の打ち止め</h3><div class="n" id="endT">—</div></div>
+      <div class="bbox"><h3>最初に30分の中断が要る</h3><div class="n" id="breakT">—</div></div>
+      <div class="bbox"><h3>明日出られるのは</h3><div class="n" id="nextT">—</div></div>
+    </div>
+
+    <div class="barwrap">
+      <div class="barbox"><div class="bar" id="bar"></div><div class="mark13" id="mark13"></div></div>
+      <div class="axis" id="axis"></div>
+      <div class="legend">
+        <span><em class="s-tenko"></em>点呼・準備</span>
+        <span><em class="s-drive"></em>運転</span>
+        <span><em class="s-break"></em>中断（30分）</span>
+        <span><em class="s-wait"></em>荷待ち・荷役</span>
+        <span><em style="background:#1c1b19;width:3px;height:15px;border:0"></em>原則13時間の線</span>
+      </div>
+    </div>
+
+    <div class="warn" id="driveLine"></div>
+    <p class="note" id="genLine" style="margin-top:10px"></p>
+  </div>
+
+  <div class="card">
+    <span class="tag">計算に使った基準</span>
+    <h2>改善基準告示（2024年4月1日適用・トラック）</h2>
+    <table>
+      <tr><th>項目</th><th>基準</th></tr>
+      <tr><td>1日の拘束時間</td><td class="num">原則13時間以内／最大15時間<br>長距離は週2回まで16時間</td></tr>
+      <tr><td>14時間を超える回数</td><td class="num">できるだけ少なくするよう努める</td></tr>
+      <tr><td>休息期間</td><td class="num">継続11時間以上が基本<br>9時間を下回らない<br>長距離特例時は継続8時間以上</td></tr>
+      <tr><td>連続運転時間</td><td class="num">4時間以内</td></tr>
+      <tr><td>運転の中断</td><td class="num">1回おおむね10分以上<br>合計30分以上</td></tr>
+      <tr><td>運転時間</td><td class="num">2日平均で1日9時間以内<br>2週平均で1週44時間以内</td></tr>
+      <tr><td>1か月の拘束時間</td><td class="num">284時間以内<br>労使協定で年6か月まで310時間</td></tr>
+      <tr><td>1年の拘束時間</td><td class="num">3,300時間以内<br>労使協定で3,400時間</td></tr>
+    </table>
+    <p class="src">出典：厚生労働省「自動車運転者の長時間労働改善に向けたポータルサイト」トラック運転者の改善基準告示<br>
+      <a href="https://driver-roudou-jikan.mhlw.go.jp/truck/notice">https://driver-roudou-jikan.mhlw.go.jp/truck/notice</a><br>
+      解説資料（国土交通省近畿運輸局）<a href="https://wwwtb.mlit.go.jp/kinki/content/000306033.pdf">https://wwwtb.mlit.go.jp/kinki/content/000306033.pdf</a></p>
+    <p class="note">この画面の割り切り：点呼・洗車などに前後30分ずつ、合計1時間を置いています。荷待ち・荷役の時間は、条件を満たせば連続運転の中断として扱える場合がありますが、ここでは別に30分の休憩を取る前提で計算しています。事故・災害など予期し得ない事象があった場合の除外は入れていません。実際の運用は所属の労使協定と運行管理者の判断が優先します。</p>
+    <div class="field">
+      <b>中小企業の現場に置きかえると</b><br>
+      打ち止めの時刻は、荷主に荷待ちを頼んだ時点でもう決まっている。荷待ちが1時間増えれば、走れる距離ではなく明日の出発時刻が後ろにずれる。交渉のとき出すのは「無理です」ではなく、この1本の線。
+    </div>
+  </div>
+
+</div>
+<script>
+(function(){
+  var startSel = document.getElementById('startSel');
+  for(var m = 3*60; m <= 12*60; m += 15){
+    var o = document.createElement('option');
+    o.value = m; o.textContent = fmtClock(m);
+    if(m === 5*60) o.selected = true;
+    startSel.appendChild(o);
+  }
+
+  function pad(n){ return (n<10?'0':'') + n; }
+  function fmtClock(mins){
+    var d = Math.floor(mins/1440), r = ((mins % 1440) + 1440) % 1440;
+    var pre = d === 0 ? '' : (d === 1 ? '翌' : '翌々');
+    return pre + Math.floor(r/60) + ':' + pad(r%60);
+  }
+  function fmtDur(h){
+    var mins = Math.round(h*60);
+    return Math.floor(mins/60) + '時間' + pad(mins%60) + '分';
+  }
+
+  // 運転時間 D を解く: D + 0.5*max(0, ceil(D/4)-1) + W + 1.0 = limit
+  function solveDrive(limit, W){
+    var budget = limit - 1.0 - W;
+    if(budget <= 0) return { drive:0, breaks:0 };
+    var best = { drive:0, breaks:0 };
+    for(var d = 0; d <= budget + 0.001; d += 0.05){
+      var b = Math.max(0, Math.ceil(d/4 - 1e-9) - 1);
+      if(d + 0.5*b <= budget + 1e-9) best = { drive:d, breaks:b };
+    }
+    best.drive = Math.round(best.drive*20)/20;
+    return best;
+  }
+
+  function render(){
+    var start = parseInt(startSel.value,10);
+    var W = parseInt(document.getElementById('waitRange').value,10) * 0.25;
+    var isLong = document.getElementById('longRun').checked;
+    var limit = isLong ? 16 : 15;
+    var restMin = isLong ? 8 : 9;
+    var restBase = 11;
+
+    document.getElementById('waitVal').textContent = fmtDur(W);
+
+    var r = solveDrive(limit, W);
+    var endMin = start + limit*60;
+    var breakAt = start + 30 + 4*60;
+    if(r.drive < 4) breakAt = null;
+
+    document.getElementById('endT').innerHTML = fmtClock(endMin) +
+      ' <small>拘束' + limit + '時間</small>';
+    document.getElementById('breakT').innerHTML = breakAt === null
+      ? 'なし <small>連続4時間に届きません</small>'
+      : fmtClock(breakAt) + ' <small>運転開始から4時間</small>';
+    document.getElementById('nextT').innerHTML = fmtClock(endMin + restMin*60) +
+      ' <small>休息' + restMin + '時間の下限／基本の' + restBase + '時間なら ' + fmtClock(endMin + restBase*60) + '</small>';
+
+    // 帯
+    var segs = [];
+    segs.push({ cls:'s-tenko', h:0.5 });
+    var left = r.drive, placedWait = false, bl = r.breaks;
+    while(left > 0.001){
+      var chunk = Math.min(4, left);
+      segs.push({ cls:'s-drive', h:chunk });
+      left -= chunk;
+      if(!placedWait && W > 0 && left > 0.001){ segs.push({ cls:'s-wait', h:W }); placedWait = true; }
+      if(left > 0.001 && bl > 0){ segs.push({ cls:'s-break', h:0.5 }); bl--; }
+    }
+    if(!placedWait && W > 0) segs.push({ cls:'s-wait', h:W });
+    segs.push({ cls:'s-tenko', h:0.5 });
+
+    var bar = document.getElementById('bar');
+    bar.innerHTML = '';
+    segs.forEach(function(s){
+      var i = document.createElement('i');
+      i.className = s.cls;
+      i.style.width = (s.h / limit * 100) + '%';
+      bar.appendChild(i);
+    });
+
+    document.getElementById('mark13').style.left = (13 / limit * 100) + '%';
+    document.getElementById('axis').innerHTML =
+      '<div class="m">点呼<b>' + fmtClock(start) + '</b></div>' +
+      '<div class="m">原則13時間<b>' + fmtClock(start + 13*60) + '</b></div>' +
+      '<div class="m blue">打ち止め（拘束' + limit + '時間）<b>' + fmtClock(start + limit*60) + '</b></div>';
+
+    document.getElementById('driveLine').innerHTML =
+      '今日ハンドルを握れるのは <b>' + fmtDur(r.drive) + '</b>。' +
+      '荷待ち・荷役 ' + fmtDur(W) + '、点呼など1時間00分、中断 ' + fmtDur(r.breaks*0.5) + ' を差し引いた残りです。' +
+      (r.drive > 9 ? '<br>ただし運転時間は2日平均で1日9時間以内。今日 ' + fmtDur(r.drive) + ' 走るなら、明日は ' + fmtDur(Math.max(0, 18 - r.drive)) + ' までに収める必要があります。' : '');
+
+    var monthly = Math.round(limit * 20);
+    document.getElementById('genLine').textContent =
+      'この拘束' + limit + '時間の日が月に20日続くと ' + monthly + '時間。1か月の上限284時間（労使協定があれば年6か月まで310時間）に対して' +
+      (monthly > 310 ? '、協定を結んでも超えます。' : (monthly > 284 ? '、労使協定がなければ超えます。' : '、収まります。'));
+  }
+
+  startSel.addEventListener('change', render);
+  document.getElementById('waitRange').addEventListener('input', render);
+  document.getElementById('longRun').addEventListener('change', render);
+  render();
+})();
+</script>
+</body>
+</html>

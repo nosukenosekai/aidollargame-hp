@@ -731,6 +731,37 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 /* 3枚組(lab)は幅が狭くなっても2列にせず、3列→1列で切り替える。2列だと3枚目だけがあぶれるため */
 .stats--3{grid-template-columns:repeat(3,1fr);}
 @media(max-width:760px){.stats--3{grid-template-columns:1fr;}}
+
+/* ---- スマホの可読性: 本文まわりが12〜14pxで小さすぎたため底上げする ----
+   元の指定が .post .pdesc のような2クラス構成なので、こちらも同じ詳細度で書く ---- */
+@media(max-width:560px){
+  /* 1列なので横並び用に確保していた数字の箱の高さは不要 */
+  .stat2 .num{min-height:auto;margin:0.3rem 0 0.7rem;}
+  .sec-lead{font-size:1.04rem;line-height:1.95;}
+  .sec-label{font-size:0.82rem;}
+  .stat2 p{font-size:0.95rem;line-height:1.85;}
+  .stat2 .lbl{font-size:0.9rem;}
+  .post .pdesc{font-size:0.95rem;line-height:1.85;}
+  .post .ptitle{font-size:1.06rem;line-height:1.62;}
+  .post .cat{font-size:0.78rem;}
+  .post .date{font-size:0.82rem;}
+  .stats-note,.pnote{font-size:0.9rem;line-height:1.9;}
+  .step .you{font-size:0.9rem;}
+  .card p,.mini-card p,.f-row p,.trust p,.faq p,.faq-a{font-size:0.98rem;line-height:1.9;}
+  .card .kicker{font-size:0.8rem;}
+  .issues .no{font-size:0.86rem;}
+  .news .d{font-size:0.88rem;}
+  .news .t{font-size:1rem;line-height:1.8;}
+  .news .b{font-size:0.78rem;}
+  .diagram .swipe{font-size:0.86rem;}
+  .photo-pair figcaption{font-size:0.84rem;line-height:1.7;}
+  .start-first .sf-label{font-size:0.88rem;}
+  .notice .hb-badge{font-size:0.8rem;}
+  .badge-req,.badge-opt{font-size:0.78rem;}
+  .foot-links a{font-size:0.95rem;padding:0.5rem 0;}
+  .foot-copy{font-size:0.8rem;}
+  rt{font-size:0.62em;}
+}
 </style>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
 <!-- Google tag (gtag.js) -->
@@ -764,7 +795,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 
 <section class="hero" id="hero">
   <div class="hero-media" aria-hidden="true">
-    <video src="hero-night.mp4" muted autoplay loop playsinline preload="metadata"></video>
+    <video src="hero-night.mp4" muted autoplay loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture disableremoteplayback></video>
   </div>
   <div class="hero-body">
     <h1 data-rv="up" style="--d:160ms">A<span class="heart-i">ı</span>dollargame</h1>
@@ -1694,5 +1725,29 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 </script>
 <script defer src="./scripts/ga-events.js?v=20260806"></script>
 
+
+<script>
+/* ヒーロー動画: iOSで自動再生が弾かれて再生ボタンが出ることがあるため、
+   読み込み完了時と最初の操作時に再生を試みる。muted は属性だけでなく
+   プロパティでも立てる（属性のみだと弾かれる端末がある）。 */
+(function(){
+  var v = document.querySelector('.hero-media video');
+  if (!v) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  v.muted = true; v.defaultMuted = true; v.setAttribute('muted','');
+  v.playsInline = true;
+  function go(){
+    if (!v.paused) return;
+    var p = v.play();
+    if (p && p.catch) p.catch(function(){});
+  }
+  go();
+  ['loadeddata','canplay','canplaythrough','stalled'].forEach(function(e){ v.addEventListener(e, go); });
+  ['touchstart','pointerdown','click','keydown','scroll'].forEach(function(e){
+    window.addEventListener(e, go, { passive: true });
+  });
+  document.addEventListener('visibilitychange', function(){ if (!document.hidden) go(); });
+})();
+</script>
 </body>
 </html>

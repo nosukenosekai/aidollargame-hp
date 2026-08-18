@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIで雇用は減っていない｜ただし22〜25歳の入口だけがへこんでいる（給与データ数百万人分を読む） | AIdollargame</title>
+<meta name="description" content="スタンフォード大学が米ADPの給与記録・月350万〜500万人分を2026年6月まで追った分析です。全体では雇用の消失は見つからない一方、AIに近い職種の22〜25歳だけが19%低い水準にありました。逆の結論を出したニューヨーク連銀の分析も並べます。">
+<meta name="author" content="AIdollargame 編集部">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/articles/ai-jobs-payroll-2026.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://aidollargame.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "記事一覧",
+      "item": "https://aidollargame.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "AIで雇用は減っていない｜ただし22〜25歳の入口だけがへこんでいる（給与データ数百万人分を読む）",
+      "item": "https://aidollargame.com/articles/ai-jobs-payroll-2026.html"
+    }
+  ]
+}
+</script>
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="株式会社AIdollargame">
+<meta property="og:title" content="AIで雇用は減っていない">
+<meta property="og:description" content="全体は無事。減っているのは辞めた人ではなく、採らなかった人。逆の結論を出した分析も並べて読みます。">
+<meta property="og:url" content="https://aidollargame.com/articles/ai-jobs-payroll-2026.html">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-08-18">
+<meta property="article:author" content="AIdollargame 編集部">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AIで雇用は減っていない">
+<meta name="twitter:description" content="全体は無事。減っているのは辞めた人ではなく、採らなかった人。逆の結論を出した分析も並べて読みます。">
+<meta name="twitter:image" content="https://aidollargame.com/og-default.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "AIで雇用は減っていない｜ただし22〜25歳の入口だけがへこんでいる（給与データ数百万人分を読む）",
+  "description": "スタンフォード大学が米ADPの給与記録・月350万〜500万人分を2026年6月まで追った分析です。全体では雇用の消失は見つからない一方、AIに近い職種の22〜25歳だけが19%低い水準にありました。逆の結論を出したニューヨーク連銀の分析も並べます。",
+  "datePublished": "2026-08-18",
+  "author": {
+    "@type": "Organization",
+    "name": "AIdollargame 編集部"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AIdollargame",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://aidollargame.com/og-default.png"
+    }
+  },
+  "mainEntityOfPage": "https://aidollargame.com/articles/ai-jobs-payroll-2026.html",
+  "image": "https://aidollargame.com/og-default.png",
+  "inLanguage": "ja"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{--cyan:#00d8ff;--blue:#000;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#000);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;background:#0a1238;}
+  body{background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;overflow-x:hidden;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,9,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);} .logo .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;} .logo .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
+  .nav-back{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.78rem;letter-spacing:0.12em;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .hero{padding:8rem 2rem 2.6rem;max-width:800px;margin:0 auto;}
+  .tag{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.7rem;letter-spacing:0.4em;color:var(--cyan);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem;}
+  .tag::before{content:'';display:inline-block;width:30px;height:1px;background:var(--cyan);}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;word-break:auto-phrase;}
+  .meta{display:flex;gap:2rem;align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}
+  .body{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}
+  .body h2{font-size:1.4rem;font-weight:900;margin:2.6rem 0 1rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}
+  .body h3{font-size:1.12rem;font-weight:800;margin:2.2rem 0 0.8rem;line-height:1.5;}
+  .body p{font-size:1.06rem;color:rgba(238,243,255,0.85);line-height:1.72;margin-bottom:1.05rem;}
+  .body strong{color:#fff;font-weight:700;}
+  .body ul{padding-left:1.5rem;margin-bottom:1.4rem;}
+  .body li{font-size:1.02rem;color:rgba(238,243,255,0.85);line-height:1.65;margin-bottom:0.4rem;}
+  .body .src{font-size:0.82rem;color:var(--muted);margin:0.2rem 0 0.4rem;}
+  .body .src a{color:var(--cyan);}
+  .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
+  .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
+  .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
+  .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2rem;color:#001428;font-weight:700;font-size:0.9rem;border-radius:8px;background:linear-gradient(110deg,#00d8ff 0%,#000 50%,#00d8ff 100%);background-size:220% 100%;text-decoration:none;transition:transform 0.25s,box-shadow 0.4s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(0,216,255,0.6);}
+  .related{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+  .related h3{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;letter-spacing:0.3em;color:var(--muted);margin-bottom:1.5rem;}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .rcard{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.4rem;text-decoration:none;color:inherit;transition:all 0.3s;display:block;}
+  .rcard:hover{border-color:rgba(0,216,255,0.35);transform:translateY(-4px);}
+  .rcard .rt{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.65rem;color:var(--cyan);margin-bottom:0.5rem;}
+  .rcard .rttl{font-size:0.88rem;font-weight:700;line-height:1.5;}
+  footer{border-top:1px solid rgba(255,255,255,0.08);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:rgba(6,9,26,0.6);}
+  .fc{font-size:0.75rem;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.hero,.body,.related{padding-left:1.2rem;padding-right:1.2rem;}footer{padding:2rem 1.5rem;}}
+
+/* ============ LIGHT THEME OVERRIDE ============ */
+html { background:#ffffff !important; }
+body { background:#ffffff !important; color:#000 !important; }
+body::before { display:none !important; }
+nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.nav-home, .back-link, .nav-back { color:#000 !important; }
+.nav-home:hover, .back-link:hover { color:#000 !important; }
+.hero h1, h1, h2, h3 { color:#000 !important; }
+.hero p, p, .lead { color:#000 !important; }
+.tag { color:#000 !important; }
+.tag::before { background:#000 !important; }
+article, .article-body, .post-body, .post-content { color:#000 !important; }
+article p, .article-body p, .post-body p { color:#000 !important; }
+blockquote, .quote { background:#fafbfc !important; border-left-color:#000 !important; color:#000 !important; }
+.meta, .post-meta { color:#000 !important; }
+footer, .site-footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
+footer a { color:#000 !important; }
+.footer-copy, .fc { color:#000 !important; }
+a { color:#000; }
+.body p, .body li, .body blockquote p { color:#000 !important; }
+.body .src { color:#555 !important; }
+.body .src a { color:#2563eb !important; }
+.body blockquote { background:#fafbfc !important; color:#000 !important; }
+.body h2, .body h3 { color:#000 !important; }
+.body strong { color:#000 !important; font-weight:900 !important; }
+.cta { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.cta * { color:#000 !important; }
+.cta h2, .cta h3 { color:#000 !important; }
+.cta p { color:#000 !important; }
+.cta .btn, .btn { background:#000 !important; color:#fff !important; }
+.cta .btn:hover, .btn:hover { background:#222 !important; box-shadow:0 10px 30px -10px rgba(0,0,0,0.3) !important; }
+.related h3 { color:#000 !important; }
+.rcard { background:#fff !important; border:1px solid #e5e7eb !important; }
+.rcard:hover { border-color:#000 !important; box-shadow:0 14px 36px -16px rgba(0,0,0,0.18) !important; }
+.rcard .rt { color:#000 !important; }
+.rcard .rttl { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; }
+footer * { color:#000 !important; }
+.fc { color:#000 !important; opacity:0.6 !important; }
+</style>
+<!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Q45D6XVQZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8Q45D6XVQZ');
+</script>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
+  <a href="./index.html" class="nav-back">← ARTICLES</a>
+</nav>
+<div class="hero">
+  <div class="tag">RESEARCH</div>
+  <h1>AIで雇用は減っていない<br>ただし22〜25歳の入口だけがへこんでいる（給与データ数百万人分を読む）</h1>
+  <div class="meta"><span>2026 / 08 / 18</span><span>AIdollargame 編集部</span><span>読了 約7分</span></div>
+</div>
+<article class="body">
+
+<figure style="margin:0 0 2.6rem;">
+  <img src="https://assets.st-note.com/production/uploads/images/304605224/rectangle_large_type_2_b03cd9d53fc2ec6b7a8134455cd4c7e1.png?fit=bounds&amp;quality=85&amp;width=1280" alt="AIで雇用は減っていない" style="width:100%;height:auto;border-radius:14px;display:block;" loading="lazy">
+</figure>
+
+<p><strong>「AIで仕事がなくなる」</strong>という話は、もう3年ほど聞き続けています。<br>実際のところ、給与台帳の上では何が起きているのか。</p><p>今回読んだのは、アメリカの給与計算大手ADPの記録を使った分析です。<br>月あたり350万〜500万人分、2026年6月までのデータが入っています。<br>結論を先に書くと、全体では減っていません。<br>ただし1か所だけ、はっきりへこんでいる場所がありました。</p><p>そして、この結果に真っ向から反対する調査も同じ年に出ています。両方を並べて読みます。中小企業で若手を採ろうとしている方に向けた記事です。</p><h2 style="text-align: start;">何を調べた研究か</h2><p>スタンフォード大学デジタルエコノミー研究所のErik Brynjolfssonらが、2026年8月に公表したワーキングペーパーです。タイトルは「Canaries in the Coal Mine?（炭鉱のカナリア）」。2025年8月に出した同名の論文を、2026年6月までのデータで更新したものです。</p><p>使ったのはADPの匿名化された給与記録。同じ企業群を毎月追いかける形で、月350万〜500万人分。2021年1月から2026年6月まで。フルタイムで70歳未満の人に絞っています。</p><p>アンケートではなく、実際に給料が支払われた記録である点が大きい。「AIを導入しましたか」と聞いた回答ではなく、誰が何月まで在籍していたかの事実です。</p><p>一方で注意も要ります。査読前のワーキングペーパーであり、著者自身が「これは因果関係の推定ではなく、記述的な事実である」と本文で明記しています。</p><h2 style="text-align: start;">事実1と事実2：全体は無事。しかし、若い入口だけがへこんでいる</h2><p>論文は6つの事実を挙げています。</p><p>1つ目は、経済全体でAIによる雇用の消失は見つからなかった、というものでした。</p><p>問題は2つ目です。<strong>22歳から25歳の、AIに近い職種で働く人の雇用が、AIから遠い職種の同世代に追いついていた場合と比べて19%低い水準にありました。同じ職種でも、経験のある年代にはこの差が出ていません。</strong></p><p>実数で見ると、もっとはっきりします。AI露出が上位2割の職種にいる22〜25歳は、2022年11月から2026年6月までに約11%減りました。同じ期間、露出が下位3割の職種にいる同世代は約10%増えています。</p><p>しかもこの差は広がり続けています。2025年7月時点のデータでは15%でした。それが2026年6月時点で19%になっています。</p><h2 style="text-align: start;">事実3：減っているのは「辞めた人」ではなく「採らなかった人」</h2><p>経営の話として一番大事なのはここだと思いました。</p><p>在籍者数が減るとき、理由は2つあります。<br>辞めた人が増えたのか、採る人が減ったのか。<br>論文はこれを分けて測っています。</p><p>結果は明確でした。離職率は両方のグループで下がっており、若手に限ればAI露出の高い職種のほうがむしろ大きく下がっていた。<br>つまり、今いる人が押し出されたのではありません。</p><h3>差がついたのは採用のほうです。</h3><p>論文はこの状況を「低採用・低解雇」の労働市場と呼んでいます。<br><strong>誰も辞めないし、誰も採らない。<br>この状態がいちばん不利になるのは、これから入る人です。</strong></p><p>なお6つ目の事実として、この調整は人数で起きていて、基本給ではほとんど起きていないとも書かれています。給料を下げるのではなく、席を作らない形で調整されている。</p><h2 style="text-align: start;">逆の結果：求人データでは「AIのせいとは言えない」</h2><p>ここで反対側の調査を出します。ニューヨーク連邦準備銀行が2026年5月14日に公表した分析です。Lightcastの求人票データを2026年1月まで見ています。</p><p>こちらの結論は、AIによる労働需要の減少をはっきり示す証拠は見当たらない、というものでした。</p><p>理由が2つ挙げられています。<br>1つは、AI露出の高い職種と低い職種の求人の乖離が、2022年より前から始まっていたこと。ChatGPT公開のあとに新しい折れ目が見えない。</p><p>もう1つが、スタンフォードの結論と正面からぶつかります。AI露出の高い職種の中で、若手向けと上級者向けの求人需要は、だいたい並行して動いている、と書かれています。若手だけがへこむ形にはなっていない。</p><p>なぜ食い違うのか。私の読みでは、見ているものが違います。</p><p>給与台帳は「実際に働いた人」の記録で、求人票は「募集したという意思表示」です。しかも生成AIのおかげで求人票は書きやすくなりました。<br>スタンフォードの論文自身が脚注で、採用の意図が薄いまま求人が増える可能性に触れています。</p><p>どちらが正しいかは、まだ決着していません。それが正直な現在地です。</p><h2 style="text-align: start;">「代わりにやらせたか、隣でやらせたか」</h2><p>減った職種と減らなかった職種を分けたものは何か。<br>5つ目の事実がそれを扱っています。</p><p>著者らはAnthropicが公開している指標を使いました。AIに実際に来た質問を、人の作業の代わりをする使い方（代替的）と、人の作業を助ける使い方（補完的）に分類したものです。</p><p><strong>そのうえで職種を並べ替えると、雇用が減っていたのは、代替的な使われ方が多い職種に集中していました。補完的な使われ方が多い職種では、雇用は横ばいか増えています。とくに経験のある層で増えていました。</strong></p><p>差を作ったのは、AIを入れたかどうかではありません。<br>何をやらせたか、です。</p><h2 style="text-align: start;">企業として、明日からやれること</h2><p>研究の紹介で終わらせず、うちの規模に翻訳します。</p><p>1つ目。若手の仕事を、AIに渡す分と渡さない分に、紙の上で線を引く。<br><strong>渡してよいのは、転記、検算、下書き、議事録の整形あたりです。<br>渡さないのは、判断が要る場面と、人に直接会う場面。<br></strong>ここを混ぜたまま「AIで効率化」と言うと、渡してはいけないものまで渡ってしまいます。</p><p>2つ目。空いた時間を教育に回すことを、先に決めてカレンダーに置く。<br>時間が空いただけでは人は育ちません。事実3が示しているのは、入口が狭くなるのは解雇の判断ではなく採用の判断だということでした。<br>うちが採らない理由を「AIがあるから」で片づけないようにしたい。</p><p>3つ目。これは事実ではなく私の見立てです。<br><strong>大手が若手の入口を絞っているなら、中小にとっては採りやすい局面でもあります。</strong>3年前より、うちに来てくれる人の層は広がっているかもしれない。データがそう言っているのではなく、そう考えてもいい状況だという話です。</p><h2 style="text-align: start;">まとめ</h2><ul><li><strong>ADPの給与記録350万〜500万人分では、経済全体でAIによる雇用の消失は見つかっていない</strong></li><li><strong>ただし22〜25歳のAI露出の高い職種だけは、同世代の低露出職に追いついた場合と比べて19%低い。2025年7月時点の15%から広がっている</strong></li><li><strong>差の原因は解雇ではなく採用。今いる人が押し出されたのではなく、席が作られていない</strong></li><li><strong>求人票データを使ったニューヨーク連銀の分析は逆の結論で、若手と上級者の需要は並行して動いているとしている。決着はついていない</strong></li><li><strong>雇用が減ったのはAIを代替的に使う職種で、補完的に使う職種は横ばいか増加。分かれ目は導入の有無ではなく用途</strong></li><li><strong>中小企業の打ち手は、渡す仕事と渡さない仕事に線を引く、空いた時間を先に教育に割り当てる、の2つ</strong></li></ul><p>AIに任せれば、たしかに手は空きます。<br>空いた手で何をするかを決めていない会社では、その時間はただ消えます。</p><p>若手に振っていた作業をAIに渡すなら、代わりに何を経験させるのかまでを同時に決める。そこまでやって、はじめて楽になった意味が出ると思っています。</p><p>楽になった先に何をするか。私たちが考えたいのはそこです。</p><h2 style="text-align: start;">出典</h2><p>Brynjolfsson, E., Chandar, B., Chen, R.「Canaries in the Coal Mine? Six Facts about the Recent Employment Effects of Artificial Intelligence」Stanford Digital Economy Lab、2026年8月／査読前のワーキングペーパー（2025年8月版の更新）</p><p><a href="https://digitaleconomy.stanford.edu/app/uploads/2026/08/Canaries_August2026.pdf" target="_blank" rel="noopener">https://digitaleconomy.stanford.edu/app/uploads/2026/08/Canaries_August2026.pdf</a></p><p>Audoly, R., Guerin, M., Topa, G.「Do Job Postings Show Early Labor-Market Effects of AI?」ニューヨーク連邦準備銀行 Liberty Street Economics、2026年5月14日／中央銀行リサーチ部門のブログ記事（査読なし）</p><p><a href="https://libertystreeteconomics.newyorkfed.org/2026/05/do-job-postings-show-early-labor-market-effects-of-ai/" target="_blank" rel="noopener">https://libertystreeteconomics.newyorkfed.org/2026/05/do-job-postings-show-early-labor-market-effects-of-ai/</a></p><p>写真: Openverse（CC0）</p>
+
+<p class="note-cross" style="margin:2.4rem 0 0;padding:1.1rem 1.3rem;border-left:3px solid #000;background:#fafbfc;font-size:0.95rem;line-height:1.9;">この記事は公式noteにも公開しています。<br><a href="https://note.com/aidollargame/n/n37843927e437" target="_blank" rel="noopener">noteで読む →</a><br><a href="../note.html">公式noteの記事一覧を見る →</a></p>
+
+<div class="cta">
+  <h3>「若手の仕事のどこをAIに渡すか」を紙の上で線引きします</h3>
+  <p>転記や下書きは渡し、判断と対人は残す。空いた時間を教育に回す設計まで含めてご相談いただけます。初回のご相談は無料です。</p>
+  <a href="../index.html#contact" class="btn">無料相談を予約する →</a>
+</div>
+</article>
+<div class="related">
+  <h3>RELATED ARTICLES</h3>
+  <div class="rgrid">
+    <a href="./ai-job-loss-vs-shortage-2026.html" class="rcard"><div class="rt">INSIGHT</div><div class="rttl">「AIに仕事を奪われる」は本当か？</div></a>
+    <a href="./ai-jobs-misconception-2026.html" class="rcard"><div class="rt">BASICS</div><div class="rttl">「AIに任せたら社員がやることなくなる」の誤解</div></a>
+    <a href="./ai-teiten-2026-08.html" class="rcard"><div class="rt">SERIES</div><div class="rttl">定点観測 vol.2｜人手不足倒産は過去最多</div></a>
+    <a href="./ai-skill-gap-2026.html" class="rcard"><div class="rt">RESEARCH</div><div class="rttl">AIで差は縮むのか、広がるのか</div></a>
+  </div>
+</div>
+<div class="svc-links" style="max-width:820px;margin:0 auto 3rem;padding:1.5rem 1.6rem;background:#fafbfc;border:1px solid #e5e7eb;border-radius:12px;">
+  <div style="font-size:0.74rem;letter-spacing:0.18em;font-weight:700;color:#555;margin-bottom:0.6rem;">SERVICE &mdash; AIdollargameのサービス</div>
+  <p style="margin:0;font-size:0.92rem;color:#333 !important;line-height:2;">記事を読んで「うちでもできるか聞いてみたい」と思ったら
+    <a href="../ai-consulting.html" style="color:#2563eb !important;text-decoration:underline;">AI導入支援・コンサルティング</a> ／
+    <a href="../ai-training.html" style="color:#2563eb !important;text-decoration:underline;">社員リスキリング研修</a> ／
+    <a href="../manual-ai.html" style="color:#2563eb !important;text-decoration:underline;">社内ナレッジAI</a> ／
+    <a href="../shindan.html" style="color:#2563eb !important;text-decoration:underline;">2分でわかる無料AI診断</a>（初回相談は無料です）
+  </p>
+</div>
+<footer>
+  <a href="../index.html" class="logo">A<span class="heart-i">ı</span>dollargame</a>
+  <div class="fc">© <span class="cpy-y" data-since="2025">2025</span> 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
+</footer>
+<script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
+<script defer src="../scripts/ga-events.js?v=20260806"></script>
+</body>
+</html>

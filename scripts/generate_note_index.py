@@ -39,6 +39,12 @@ HP_COUNTERPART = {
     "n29bd8b4acd64": ("articles/ai-job-loss-vs-shortage-2026.html", "「AIに仕事を奪われる」は本当か？"),
     "nf4c86cbd6660": ("articles/ai-roi-cases-2026.html", "AI導入が「利益・コスト・時間」に効いた実例10選"),
     "nd8c8aad2400c": ("articles/ai-training-evidence-2026.html", "AIで研修すると人は育つのか"),
+    "nba5295a09b05": ("articles/ai-phone-seria-2026.html", "セリアが代表電話の約75%をAIに任せた"),
+    "n4c7244ca59ee": ("articles/ai-scam-2026.html", "その電話、AIかもしれません"),
+    "n121d1703a4c3": ("articles/ai-firm-survey-2026.html", "AIを使っている会社は69%、なのに9割が「変わっていない」"),
+    "n2406b93d2880": ("articles/ai-skill-gap-2026.html", "AIで差は縮むのか、広がるのか"),
+    "nfcaf9c186d8e": ("articles/ai-interview-2026.html", "AIに面接をやらせたら内定が12%増えた"),
+    "n37843927e437": ("articles/ai-jobs-payroll-2026.html", "AIで雇用は減っていない。ただし22〜25歳の入口だけがへこんでいる"),
 }
 
 # 絵文字・記号の装飾は自社サイト側では出さない(サイト全体の表記ルール)。

@@ -490,6 +490,16 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .mini-card .arw{color:var(--blue);font-weight:700;flex:none;}
 
 /* ---------- おすすめの始め方 ---------- */
+.start-first{display:flex;align-items:center;gap:1.6rem;flex-wrap:wrap;background:var(--band-blue);border:1.5px solid var(--blue);border-radius:var(--radius);padding:22px 26px;margin-bottom:22px;}
+.start-first .sf-label{font-size:0.8rem;font-weight:700;color:#fff;background:var(--blue);border-radius:999px;padding:0.3rem 0.9rem;flex:none;}
+.start-first .sf-steps{font-size:1rem;font-weight:700;line-height:1.9;}
+.start-first .sf-steps b{color:var(--blue);}
+.start-first .sf-btns{margin-left:auto;display:flex;gap:0.7rem;flex-wrap:wrap;}
+@media(max-width:900px){.start-first .sf-btns{margin-left:0;}}
+.start-first .sf-btns a{font-size:0.88rem;font-weight:700;padding:0.65rem 1.3rem;border-radius:999px;}
+.start-first .sf-btns a.f{background:var(--blue);color:#fff;}
+.start-first .sf-btns a.f:hover{background:#2446ad;}
+.start-first .sf-btns a.o{border:1px solid var(--blue);color:var(--blue);background:#fff;}
 .start-rows{display:grid;gap:14px;}
 .start-row{display:grid;grid-template-columns:1.1fr 0.9fr auto;gap:1.2rem;align-items:center;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:20px 24px;box-shadow:var(--shadow);transition:border-color 0.3s var(--ease),transform 0.3s var(--ease);}
 .start-row:hover{border-color:var(--blue);transform:translateY(-2px);}
@@ -969,6 +979,11 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
       <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="start-lead">どれから頼めばいいか迷ったら、この対応表からどうぞ。どの入口でも、初回相談は無料です。</p>
     </div>
+    <div class="start-first" data-rv="up">
+      <span class="sf-label" data-edit="sf-label">迷ったらここから</span>
+      <span class="sf-steps" data-edit="sf-steps"><b>① 3分の無料AI診断</b> → <b>② 30分の無料相談</b> → <b>③ 見積もり</b>。ここまで費用は一切かかりません</span>
+      <span class="sf-btns"><a class="f" href="shindan.html">3分で無料AI診断</a><a class="o" href="#contact">無料相談を予約</a></span>
+    </div>
     <div class="start-rows">
       <a class="start-row" href="ai-training.html" data-rv="up" style="--d:0ms">
         <span class="who" data-edit="st1-who">初めてAIを入れる会社</span>
@@ -1101,7 +1116,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="stat2" data-rv="up" style="--d:0ms">
         <div class="lbl" data-edit="sn1-t">問い合わせ・内見予約の一次対応（導入先での実例）</div>
         <div class="num" data-edit="sn1-n">90分 → <b style="color:inherit">約3分</b></div>
-        <p data-edit="sn1-p">1件ごとに人が90分ほどかけていた対応が、AIで約3分になっています</p>
+        <p data-edit="sn1-p">1件ごとに人が90分ほどかけていた対応が、AIで約3分に。時間にして約97%の削減です（当社計算）</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:110ms">
         <div class="lbl" data-edit="sn2-t">相談から稼働まで（当社実績）</div>
@@ -1214,6 +1229,15 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
           <li data-edit="tr4-3">社内に「使う担当者」が不在だと定着しません。導入時に運用の担当者を一緒に決めます</li>
         </ul>
       </div>
+    </div>
+    <div class="price-box" data-rv="up" style="margin-top:22px;">
+      <h3 data-edit="ringi-t">社内稟議・上申用の材料</h3>
+      <ul>
+        <li data-edit="ringi-1">投資対効果の考え方（試算例）: 1日1時間の削減なら月約20時間。時給2,000円換算で月4万円分の工数にあたります。導入費用（<a href="ryokin.html" style="color:var(--blue);text-decoration:underline;">20万円〜・範囲により個別見積もり</a>）と並べると、回収の目安を計算できます</li>
+        <li data-edit="ringi-2">無料相談の場で、貴社の業務量と時給で回収目安を一緒に計算し、稟議にそのまま使える形でお渡しします</li>
+        <li data-edit="ringi-3">データの取り扱い・契約・保守の条件は上のとおり事前開示。<a href="shiryo.html" style="color:var(--blue);text-decoration:underline;">無料資料（チェックリスト20）</a>も社内共有用にお使いいただけます</li>
+      </ul>
+      <p class="pnote" data-edit="ringi-note">※試算例は仮定の計算です。実際の削減時間は業務内容により異なるため、相談時に貴社の数字で計算し直します。</p>
     </div>
   </div>
 </section>

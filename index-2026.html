@@ -526,8 +526,10 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .stat2 .num small{font-size:0.95rem;font-weight:700;color:var(--ink);margin-left:0.15rem;}
 .stat2 p{font-size:0.82rem;color:var(--muted);line-height:1.75;flex:1;}
 .stats2-head{font-size:0.86rem;font-weight:700;color:var(--ink-soft);margin:6px 0 12px;}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:34px;}
-@media(max-width:860px){.stats{grid-template-columns:1fr;}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:34px;}
+@media(max-width:1000px){.stats{grid-template-columns:1fr 1fr;}}
+@media(max-width:560px){.stats{grid-template-columns:1fr;}}
+
 .stat{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);}
 .stat .big{font-family:var(--font-display);font-size:1.7rem;font-weight:900;line-height:1.4;color:var(--ink);}
 .stat .big b{color:var(--blue);}
@@ -1117,6 +1119,11 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <div class="lbl" data-edit="sn1-t">問い合わせ・内見予約の一次対応（導入先での実例）</div>
         <div class="num" data-edit="sn1-n">90分 → <b style="color:inherit">約3分</b></div>
         <p data-edit="sn1-p">1件ごとに人が90分ほどかけていた対応が、AIで約3分に。時間にして約97%の削減です（当社計算）</p>
+      </div>
+      <div class="stat2" data-rv="up" style="--d:80ms">
+        <div class="lbl" data-edit="sn4-t">介護施設の検索・提案（導入先での実例）</div>
+        <div class="num" data-edit="sn4-n">全国8,543件から 約1分</div>
+        <p data-edit="sn4-p">条件に合う特別養護老人ホームを1件ずつ調べていた作業が、公的データベース×AIの検索で約1分になっています</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:110ms">
         <div class="lbl" data-edit="sn2-t">相談から稼働まで（当社実績）</div>

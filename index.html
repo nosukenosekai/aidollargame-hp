@@ -526,6 +526,8 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .stat2 p{font-size:0.82rem;color:var(--muted);line-height:1.75;flex:1;}
 .stats2-head{font-size:0.86rem;font-weight:700;color:var(--ink-soft);margin:6px 0 12px;}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:34px;}
+.stats--4 .lbl{min-height:3.9em;}
+.stats--4 .num{align-items:flex-start;}
 @media(max-width:1000px){.stats{grid-template-columns:1fr 1fr;}}
 @media(max-width:560px){.stats{grid-template-columns:1fr;}}
 
@@ -727,6 +729,10 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 .foot-links a{font-size:0.85rem;color:#b9c0d0;padding:0.2rem 0;transition:color 0.3s var(--ease),padding-left 0.3s var(--ease);}
 .foot-links a:hover{color:#fff;padding-left:4px;}
 .foot-copy{border-top:1px solid rgba(255,255,255,0.12);margin-top:40px;padding-top:20px;font-size:0.75rem;color:#7c8497;letter-spacing:0.06em;}
+
+/* 3枚組(lab)は幅が狭くなっても2列にせず、3列→1列で切り替える。2列だと3枚目だけがあぶれるため */
+.stats--3{grid-template-columns:repeat(3,1fr);}
+@media(max-width:760px){.stats--3{grid-template-columns:1fr;}}
 </style>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
 <!-- Google tag (gtag.js) -->
@@ -1071,11 +1077,11 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
       <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="lab-lead">「1日1アプリ実験室」では、中小企業の現場にありそうな困りごとを、毎日1本ずつ動くアプリにして公開しています。登録もログインも不要で、その場で動かせます。つくれますという説明より、動いているものを触っていただくほうが早いと考えています。</p>
     </div>
-    <div class="stats">
+    <div class="stats stats--3">
       <div class="stat2" data-rv="up" style="--d:0ms">
-        <div class="lbl" data-edit="lab-s1t">公開中のアプリ</div>
+        <div class="lbl" data-edit="lab-s1t">累計の開発本数</div>
         <div class="num" data-edit="lab-s1n">87本</div>
-        <p data-edit="lab-s1p">すべて公開URLで、その場で動かせます。パスワードも登録も要りません</p>
+        <p data-edit="lab-s1p">これまでにつくって公開してきた本数です。すべて公開URLで、その場で動かせます</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:120ms">
         <div class="lbl" data-edit="lab-s2t">更新のペース</div>
@@ -1083,9 +1089,9 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <p data-edit="lab-s2p">お題を決めて、その日のうちに動く形にするところまでを毎日続けています</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:240ms">
-        <div class="lbl" data-edit="lab-s3t">つくり方</div>
-        <div class="num" data-edit="lab-s3n">自社で開発</div>
-        <p data-edit="lab-s3p">ここで試した作り方を、そのままお客様の現場向けの開発に持ち込んでいます</p>
+        <div class="lbl" data-edit="lab-s3t">開発の速さ</div>
+        <div class="num" data-edit="lab-s3n">デモなら最短1日</div>
+        <p data-edit="lab-s3p">動くデモだけなら1日でお出しできます。毎日1本つくり続けているのが、その速さの中身です</p>
       </div>
     </div>
     <div class="posts">
@@ -1187,7 +1193,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="case-title">導入事例・つくれるもの</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
     </div>
-        <div class="stats">
+        <div class="stats stats--4">
       <div class="stat2" data-rv="up" style="--d:0ms">
         <div class="lbl" data-edit="sn1-t">問い合わせ・内見予約の一次対応（導入先での実例）</div>
         <div class="num" data-edit="sn1-n">90分 → <b style="color:inherit">約3分</b></div>

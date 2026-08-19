@@ -279,7 +279,6 @@
     [ymin, (ymin+ymax)/2, ymax].forEach(function(v){
       s += '<text x="'+(L-8)+'" y="'+(Y(v)+5)+'" text-anchor="end" font-size="13" fill="#78746c">'+Math.round(v)+'</text>';
     });
-    s += '<text x="'+(L-8)+'" y="'+(T-4)+'" text-anchor="end" font-size="12" fill="#78746c">ms</text>';
     if (a !== null && b !== null){
       s += '<line x1="'+X(xs[0])+'" y1="'+Y(a+b*xs[0])+'" x2="'+X(xs[1])+'" y2="'+Y(a+b*xs[1])+'" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="6 5"/>';
     }
@@ -287,7 +286,7 @@
       s += '<circle cx="'+X(p.x)+'" cy="'+Y(p.y)+'" r="8" fill="#2563eb"/>';
       s += '<text x="'+X(p.x)+'" y="'+(H-B+26)+'" text-anchor="middle" font-size="14" fill="#55524c">'+p.n+'個</text>';
     });
-    s += '<text x="'+((L+W-R)/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="13" fill="#78746c">横は log2(候補数+1)（情報量）</text>';
+    s += '<text x="'+((L+W-R)/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="13" fill="#78746c">横は log2(候補数+1)（情報量）／縦はミリ秒</text>';
     svg.innerHTML = s;
   }
 

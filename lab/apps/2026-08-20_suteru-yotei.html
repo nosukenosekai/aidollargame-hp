@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>捨てる予定</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:44px;font-weight:700;letter-spacing:-.01em}
+.unit{font-size:17px;font-weight:400;color:#6b6b6b}
+.ctr{text-align:center}
+.mono{font-variant-numeric:tabular-nums}
+.chips{display:flex;gap:8px;margin-top:6px}
+.chips button{flex:1;padding:11px 2px;font-size:15px;font-family:inherit;background:#f5f4f0;border:1px solid #e8e5dd;border-radius:10px;cursor:pointer;color:#444}
+.chips button.on{background:#2563eb;color:#fff;border-color:#2563eb;font-weight:600}
+.item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #eeece6}
+.item:last-child{border-bottom:0}
+.item .nm{flex:1;min-width:0}
+.item .nm b{font-size:16px;font-weight:600;display:block}
+.item .nm span{font-size:13px;color:#6b6b6b}
+.item .pr{font-size:16px;font-weight:600;white-space:nowrap;text-align:right}
+.tg{width:82px;flex:none;padding:9px 0;font-size:13px;font-family:inherit;border-radius:9px;cursor:pointer;border:1px solid #e8e5dd;background:#f5f4f0;color:#555;font-weight:600}
+.tg.use{background:#2563eb;color:#fff;border-color:#2563eb}
+.tg.drop{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
+.due{display:inline-block;font-size:12px;padding:1px 7px;border-radius:999px;margin-left:6px}
+.d0{background:#fee2e2;color:#b91c1c}
+.d1{background:#fef3c7;color:#92400e}
+.d2{background:#eef2f7;color:#555}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td{padding:9px 0;border-bottom:1px solid #eeece6}
+td:last-child{text-align:right;font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.src{font-size:13px;color:#6b6b6b;margin-top:16px}
+.src a{color:#2563eb;word-break:break-all}
+.clock{font-size:15px;color:#b91c1c;font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（サンプルデータ・架空の店）</div>
+<h1>捨てる予定</h1>
+<p class="lead">冷蔵庫の中身は、放っておくと勝手に減ります。減った分は原価のまま出ていきます。<br>いま何円ぶんが「捨てる予定」になっているかを、時計と一緒に数えます。</p>
+
+<div class="card ctr">
+<div class="small">何もしなければ、これから24時間で確定する額</div>
+<div class="big mono"><span id="today">0</span><span class="unit"> 円</span></div>
+<div class="clock mono" id="next">-</div>
+<div class="small" style="margin-top:10px">同じ日が続いた場合</div>
+<div class="chips" id="chips">
+<button data-d="1" class="on">1日</button><button data-d="7">1週間</button><button data-d="30">1か月</button><button data-d="365">1年</button>
+</div>
+<div style="margin-top:10px"><span class="big mono" style="font-size:32px"><span id="acc">0</span></span><span class="unit" id="accu"> 円</span></div>
+</div>
+
+<div class="card">
+<h2>いま棚にあるもの</h2>
+<p class="small" style="margin-bottom:6px">「使う」を押した分は捨てる予定から外れます。押していない分が上の金額です。</p>
+<div id="list"></div>
+</div>
+
+<div class="card">
+<h2>数えた結果</h2>
+<table id="sum"></table>
+<div class="hl" id="verdict"></div>
+</div>
+
+<div class="src">
+店名・食材・金額はすべて架空のサンプルです。消費期限はこのページを開いた時刻から数えています。<br><br>
+背景の数字：農林水産省・環境省の推計で、2023（令和5）年度の食品ロスは全体464万トン、うち事業系231万トン。業種別では外食産業が66万トンで、前年度から6万トン増えています。<br>
+<a href="https://www.caa.go.jp/notice/entry/042653/">https://www.caa.go.jp/notice/entry/042653/</a><br>
+<a href="https://www.env.go.jp/content/000324503.pdf">https://www.env.go.jp/content/000324503.pdf</a><br><br>
+年換算は「きょうと同じ日が続いたら」の単純な掛け算です。実際の廃棄は日によって振れます。
+</div>
+</div>
+
+<script>
+var T0 = new Date().getTime();
+var ITEMS = [
+  {n:'大葉',        q:'3束',    p:210,   h:2,   use:false},
+  {n:'あさり',      q:'1.5kg',  p:2700,  h:3,   use:true},
+  {n:'鶏もも肉',    q:'2kg',    p:3400,  h:5,   use:true},
+  {n:'刺身用サーモン', q:'1.2kg', p:5040, h:6,  use:true},
+  {n:'絹ごし豆腐',  q:'12丁',   p:1440,  h:8,   use:true},
+  {n:'牛乳',        q:'4本',    p:960,   h:19,  use:true},
+  {n:'カットレタス', q:'5袋',   p:1250,  h:16,  use:false},
+  {n:'生クリーム',  q:'2本',    p:1300,  h:31,  use:true},
+  {n:'ヨーグルト',  q:'20個',   p:1600,  h:45,  use:true},
+  {n:'合いびき肉',  q:'3kg',    p:4200,  h:53,  use:true},
+  {n:'卵',          q:'6パック', p:1680, h:77,  use:true},
+  {n:'長ねぎ',      q:'4束',    p:720,   h:101, use:true}
+];
+var days = 1;
+
+function yen(n){ return Math.round(n).toLocaleString('ja-JP'); }
+function hoursLeft(it){ return it.h - (new Date().getTime()-T0)/3600000; }
+
+// 開いた時刻に結果が左右されないよう、日付の区切りではなく「これから24時間」で数える
+function windowH(){ return 24; }
+
+function renderList(){
+  var eod = windowH();
+  var h='';
+  ITEMS.forEach(function(it,i){
+    var hl = hoursLeft(it);
+    var cls = hl<=eod ? 'd0' : (hl<=eod+24 ? 'd1' : 'd2');
+    var lbl = hl<=0 ? '期限ぎれ' : (hl<=eod ? '24時間以内' : (hl<=eod+24 ? '48時間以内' : Math.floor(hl/24)+'日もつ'));
+    h += '<div class="item">'
+      + '<div class="nm"><b>'+it.n+'<span class="due '+cls+'">'+lbl+'</span></b>'
+      + '<span>'+it.q+'　残り '+(hl>0?hl.toFixed(1):'0.0')+' 時間</span></div>'
+      + '<div class="pr">'+yen(it.p)+' 円</div>'
+      + '<button class="tg '+(it.use?'use':'drop')+'" onclick="tg('+i+')">'+(it.use?'使う':'捨てる')+'</button>'
+      + '</div>';
+  });
+  document.getElementById('list').innerHTML = h;
+}
+function tg(i){ ITEMS[i].use = !ITEMS[i].use; renderList(); calc(); }
+
+function calc(){
+  var eod = windowH();
+  var todayDrop=0, todayPressure=0, allDrop=0, expired=0;
+  var nextItem=null, nextH=1e9;
+  ITEMS.forEach(function(it){
+    var hl = hoursLeft(it);
+    if(!it.use){ allDrop += it.p; if(hl<=eod) todayDrop += it.p; }
+    if(it.use && hl<=eod){ todayPressure += it.p; }
+    if(hl<=0) expired += it.p;
+    if(hl>0 && hl<nextH){ nextH=hl; nextItem=it; }
+  });
+
+  document.getElementById('today').textContent = yen(todayDrop);
+  var acc = todayDrop*days;
+  document.getElementById('acc').textContent = acc>=10000 ? (acc/10000).toFixed(1) : yen(acc);
+  document.getElementById('accu').textContent = acc>=10000 ? ' 万円' : ' 円';
+
+  if(nextItem){
+    var s = Math.max(0, Math.floor(nextH*3600));
+    var hh=Math.floor(s/3600), mm=Math.floor(s%3600/60), ss=s%60;
+    document.getElementById('next').textContent =
+      '次に落ちるのは「'+nextItem.n+'」まで '+hh+':'+('0'+mm).slice(-2)+':'+('0'+ss).slice(-2);
+  } else {
+    document.getElementById('next').textContent = '棚のものは全部期限を過ぎました';
+  }
+
+  document.getElementById('sum').innerHTML =
+    '<tr><td>24時間で捨てる予定<span class="small"><br>「捨てる」のままの分</span></td><td>'+yen(todayDrop)+' 円</td></tr>'
+   +'<tr><td>24時間で使い切る約束<span class="small"><br>「使う」にしたが期限が24時間以内の分</span></td><td>'+yen(todayPressure)+' 円</td></tr>'
+   +'<tr><td>棚ぜんぶで捨てる予定<span class="small"><br>期限が先のものも含む</span></td><td>'+yen(allDrop)+' 円</td></tr>'
+   +'<tr><td>すでに期限ぎれ</td><td>'+yen(expired)+' 円</td></tr>';
+
+  var year = todayDrop*365;
+  var v = '';
+  if(todayDrop===0){
+    v = '<p style="font-size:16px">いまは捨てる予定ゼロです。ただし「使う」にした '+yen(todayPressure)+' 円ぶんは、24時間のうちに本当に出し切らないと、この欄に移ります。</p>';
+  } else {
+    v = '<p style="font-size:16px">この24時間の '+yen(todayDrop)+' 円が毎日続くと、1年で<span class="mark">'+(year/10000).toFixed(0)+'万円</span>。'
+      + 'これは値引きでも人件費でもなく、<span class="mark">仕入れすぎた分だけ</span>です。</p>'
+      + '<p style="font-size:16px;margin-top:10px">あすの一手：あすの発注から '+yen(todayDrop)+' 円ぶん落とす。品目は上で「捨てる」のままになっているものです。</p>';
+  }
+  if(todayPressure>0){
+    v += '<p style="font-size:16px;margin-top:10px">24時間のうちに出し切る必要があるのは '+yen(todayPressure)+' 円ぶん。まかないか本日限りの一品に回す判断は、'+(nextItem? '「'+nextItem.n+'」の期限まで':'期限まで')+'です。</p>';
+  }
+  document.getElementById('verdict').innerHTML = v;
+}
+
+document.getElementById('chips').addEventListener('click', function(e){
+  if(e.target.tagName!=='BUTTON') return;
+  days = parseInt(e.target.getAttribute('data-d'),10);
+  Array.prototype.forEach.call(this.children, function(b){ b.className = (b===e.target)?'on':''; });
+  calc();
+});
+
+renderList(); calc();
+setInterval(function(){ renderList(); calc(); }, 1000);
+</script>
+</body>
+</html>

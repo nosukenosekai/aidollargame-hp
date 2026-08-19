@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>30秒のつもり</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:38px;font-weight:700}
+.unit{font-size:16px;font-weight:400;color:#6b6b6b}
+.bar{height:12px;background:#eeece6;border-radius:6px;overflow:hidden;margin:8px 0}
+.bar > i{display:block;height:100%;background:#2563eb}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td{padding:9px 0;border-bottom:1px solid #eeece6;vertical-align:top}
+td:last-child{text-align:right;white-space:nowrap;font-weight:600}
+tr:last-child td{border-bottom:0}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.src{font-size:13px;color:#6b6b6b;margin-top:16px}
+.src a{color:#2563eb;word-break:break-all}
+input[type=range]{width:100%;margin:10px 0;accent-color:#2563eb}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;margin:14px 0}
+.cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#f5f4f0;border:1px solid #e8e5dd;border-radius:9px;font-size:19px;font-weight:600;cursor:pointer;user-select:none}
+.cell.done{background:#2563eb;color:#fff;border-color:#2563eb}
+.cell.bad{background:#fee2e2;border-color:#fca5a5}
+.kana{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.kana button{flex:1 1 22%;min-width:64px;padding:16px 4px;font-size:21px;font-weight:600;background:#f5f4f0;border:1px solid #e8e5dd;border-radius:11px;cursor:pointer;font-family:inherit}
+.kana button.done{background:#2563eb;color:#fff;border-color:#2563eb}
+.kana button.bad{background:#fee2e2;border-color:#fca5a5}
+.clock{font-size:15px;color:#6b6b6b;text-align:center}
+.two{display:flex;gap:10px}.two>div{flex:1;background:#f5f4f0;border-radius:11px;padding:12px;text-align:center}
+.two .big{font-size:28px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">実験（あなたの回答がその場で数字になります）</div>
+<h1>30秒のつもり</h1>
+<p class="lead">これからやる作業に何秒かかるか、先に言ってもらいます。そのあと実際にやります。<br>あなたの見積もりが実際の何倍だったかが出ます。</p>
+<div id="app"></div>
+
+<div class="src" id="src" style="display:none">
+出典：Buehler, R., Griffin, D., &amp; Ross, M. (1994) <i>Exploring the "planning fallacy": Why people underestimate their task completion times.</i> Journal of Personality and Social Psychology, 67(3), 366-381.<br>
+<a href="https://web.mit.edu/curhan/www/docs/Articles/biases/67_J_Personality_and_Social_Psychology_366,_1994.pdf">https://web.mit.edu/curhan/www/docs/Articles/biases/67_J_Personality_and_Social_Psychology_366,_1994.pdf</a><br><br>
+原実験は卒業論文などの学業課題を対象に、日単位で予測と実績を取ったものです。本デモは秒単位の小さな作業に置き換えた1人ぶんの試行で、原実験の追試ではありません。あなたの倍率はあなたの2回の回答から計算しています。
+</div>
+</div>
+
+<script>
+var app = document.getElementById('app');
+var S = {step:0, tasks:[
+  {name:'数字さがし', desc:'6×6のマスの中から「7」を全部さがして押します。7は6個あります。', pred:20, worst:40, actual:null},
+  {name:'50音ならべ', desc:'ばらばらに並んだ12文字を、あいうえお順に押していきます。', pred:20, worst:40, actual:null}
+]};
+var t0=0, tick=null;
+
+function fmt(n){ return (Math.round(n*10)/10).toFixed(1); }
+
+function render(){
+  if(tick){clearInterval(tick);tick=null;}
+  var s = S.step;
+  if(s===0){
+    app.innerHTML = '<div class="card"><h2>やりかた</h2>'
+      + '<p style="font-size:16px;color:#444">作業は2つ。それぞれ先に「うまくいけば何秒」「最悪で何秒」を答えてから、実際にやります。</p>'
+      + '<p class="small" style="margin-top:10px">所要およそ2分。数字を先に言ってしまうところが要点なので、直感で決めてください。</p></div>'
+      + '<button class="btn" onclick="S.step=1;render()">はじめる</button>';
+    return;
+  }
+  if(s===1||s===4){
+    var i = (s===1)?0:1;
+    var t = S.tasks[i];
+    app.innerHTML = '<div class="card"><div class="small">作業'+(i+1)+' / 2</div><h2>'+t.name+'</h2>'
+      + '<p style="font-size:16px;color:#444">'+t.desc+'</p></div>'
+      + '<div class="card"><h2>先に見積もってください</h2>'
+      + '<p style="font-size:16px;color:#444">うまくいけば何秒で終わりますか</p>'
+      + '<div class="big" id="p1">'+t.pred+'<span class="unit"> 秒</span></div>'
+      + '<input type="range" min="3" max="120" value="'+t.pred+'" oninput="setP('+i+',this.value)">'
+      + '<p style="font-size:16px;color:#444;margin-top:16px">最悪の場合は何秒かかりますか</p>'
+      + '<div class="big" id="p2">'+t.worst+'<span class="unit"> 秒</span></div>'
+      + '<input type="range" min="3" max="180" value="'+t.worst+'" oninput="setW('+i+',this.value)">'
+      + '</div>'
+      + '<button class="btn" onclick="startTask('+i+')">この見積もりで始める</button>';
+    return;
+  }
+  if(s===2){ renderGrid(); return; }
+  if(s===3||s===6){
+    var i=(s===3)?0:1; var t=S.tasks[i];
+    var r = t.actual / t.pred;
+    app.innerHTML = '<div class="card"><h2>'+t.name+' 終わり</h2>'
+      + '<div class="two"><div><div class="small">言った見積もり</div><div class="big">'+t.pred+'<span class="unit">秒</span></div></div>'
+      + '<div><div class="small">実際</div><div class="big">'+fmt(t.actual)+'<span class="unit">秒</span></div></div></div>'
+      + '<p style="font-size:16px;margin-top:14px">見積もりの<span class="mark">'+fmt(r)+'倍</span>かかりました。'
+      + (t.actual > t.worst ? '「最悪でも'+t.worst+'秒」と言った、その最悪すら超えています。' : '最悪の見積もり('+t.worst+'秒)の内側には収まりました。')
+      + '</p></div>'
+      + '<button class="btn" onclick="S.step='+(s===3?4:7)+';render()">'+(s===3?'次の作業へ':'結果を見る')+'</button>';
+    return;
+  }
+  if(s===5){ renderKana(); return; }
+  if(s===7){ renderResult(); return; }
+}
+
+function setP(i,v){ S.tasks[i].pred=+v; document.getElementById('p1').innerHTML = v+'<span class="unit"> 秒</span>'; }
+function setW(i,v){ S.tasks[i].worst=+v; document.getElementById('p2').innerHTML = v+'<span class="unit"> 秒</span>'; }
+
+function startTask(i){ S.step = (i===0)?2:5; render(); }
+
+var gridData=null;
+function renderGrid(){
+  if(!gridData){
+    var cells=[]; for(var k=0;k<36;k++) cells.push(String(Math.floor(Math.random()*6)+1));
+    var pos=[]; while(pos.length<6){ var p=Math.floor(Math.random()*36); if(pos.indexOf(p)<0) pos.push(p); }
+    pos.forEach(function(p){ cells[p]='7'; });
+    for(var k=0;k<36;k++){ if(pos.indexOf(k)<0 && cells[k]==='7') cells[k]='3'; }
+    gridData={cells:cells, found:[], targets:pos};
+  }
+  var h='<div class="card"><div class="clock" id="clk">0.0 秒</div><h2 style="text-align:center;margin-top:6px">7 を全部おす（残り '+(6-gridData.found.length)+'）</h2><div class="grid">';
+  gridData.cells.forEach(function(c,idx){
+    var cls = gridData.found.indexOf(idx)>=0 ? ' done' : '';
+    h += '<div class="cell'+cls+'" id="c'+idx+'" onclick="hitCell('+idx+')">'+c+'</div>';
+  });
+  h += '</div></div>';
+  app.innerHTML=h;
+  if(!t0){ t0 = new Date().getTime(); }
+  tick = setInterval(function(){
+    var el=document.getElementById('clk');
+    if(el) el.textContent = fmt((new Date().getTime()-t0)/1000)+' 秒';
+  },100);
+}
+function hitCell(idx){
+  if(gridData.cells[idx]!=='7'){
+    var e=document.getElementById('c'+idx); e.className='cell bad';
+    setTimeout(function(){ if(e) e.className='cell'; },300); return;
+  }
+  if(gridData.found.indexOf(idx)>=0) return;
+  gridData.found.push(idx);
+  if(gridData.found.length>=6){
+    S.tasks[0].actual = (new Date().getTime()-t0)/1000;
+    clearInterval(tick); tick=null; t0=0; S.step=3; render(); return;
+  }
+  renderGrid();
+}
+
+var kanaData=null;
+var KANA = ['あ','か','さ','た','な','は','ま','や','ら','わ','い','き'];
+var ORDER = ['あ','い','か','き','さ','た','な','は','ま','や','ら','わ'];
+function renderKana(){
+  if(!kanaData){
+    var sh=KANA.slice(); for(var i=sh.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=sh[i];sh[i]=sh[j];sh[j]=t;}
+    kanaData={items:sh, next:0};
+  }
+  var h='<div class="card"><div class="clock" id="clk">0.0 秒</div><h2 style="text-align:center;margin-top:6px">あいうえお順におす（'+kanaData.next+' / 12）</h2><div class="kana">';
+  kanaData.items.forEach(function(c,idx){
+    var done = ORDER.indexOf(c) < kanaData.next;
+    h += '<button class="'+(done?'done':'')+'" id="k'+idx+'" onclick="hitKana('+idx+')">'+c+'</button>';
+  });
+  h += '</div><p class="small" style="text-align:center">次は「'+ORDER[kanaData.next]+'」</p></div>';
+  app.innerHTML=h;
+  if(!t0){ t0 = new Date().getTime(); }
+  tick = setInterval(function(){
+    var el=document.getElementById('clk');
+    if(el) el.textContent = fmt((new Date().getTime()-t0)/1000)+' 秒';
+  },100);
+}
+function hitKana(idx){
+  var c = kanaData.items[idx];
+  if(c !== ORDER[kanaData.next]){
+    var e=document.getElementById('k'+idx); e.className='bad';
+    setTimeout(function(){ if(e) e.className=''; },300); return;
+  }
+  kanaData.next++;
+  if(kanaData.next>=12){
+    S.tasks[1].actual = (new Date().getTime()-t0)/1000;
+    clearInterval(tick); tick=null; t0=0; S.step=6; render(); return;
+  }
+  renderKana();
+}
+
+function renderResult(){
+  var a=S.tasks[0], b=S.tasks[1];
+  var ra=a.actual/a.pred, rb=b.actual/b.pred;
+  var avg=(ra+rb)/2;
+  var overWorst = (a.actual>a.worst?1:0)+(b.actual>b.worst?1:0);
+  var h = '<div class="card"><h2>あなたの倍率</h2>'
+    + '<div class="big" style="text-align:center">'+fmt(avg)+'<span class="unit"> 倍</span></div>'
+    + '<p class="small" style="text-align:center">言った見積もりに対して、実際にかかった時間</p>'
+    + '<div class="bar" style="margin-top:14px"><i style="width:'+Math.min(100,Math.round(100/Math.max(1,avg)))+'%"></i></div>'
+    + '<p class="small">青いところが、あなたが最初に見えていた範囲です</p>'
+    + '<table style="margin-top:12px">'
+    + '<tr><td>数字さがし<span class="small"><br>見積もり '+a.pred+'秒 / 最悪 '+a.worst+'秒</span></td><td>'+fmt(a.actual)+'秒<br><span class="small">'+fmt(ra)+'倍</span></td></tr>'
+    + '<tr><td>50音ならべ<span class="small"><br>見積もり '+b.pred+'秒 / 最悪 '+b.worst+'秒</span></td><td>'+fmt(b.actual)+'秒<br><span class="small">'+fmt(rb)+'倍</span></td></tr>'
+    + '</table></div>';
+
+  h += '<div class="card"><h2>原実験の数字と並べる</h2><table>'
+    + '<tr><td>Buehler ら(1994) 学生の予測</td><td>33.9 日</td></tr>'
+    + '<tr><td>同 実際にかかった日数</td><td>55.5 日</td></tr>'
+    + '<tr><td>同 倍率</td><td>1.64 倍</td></tr>'
+    + '<tr><td>あなたの倍率</td><td>'+fmt(avg)+' 倍</td></tr>'
+    + '</table>'
+    + '<div class="hl"><p style="font-size:16px">'
+    + (avg>1 ? 'あなたも短く見積もりました（'+fmt(avg)+'倍）。' : '今回のあなたは見積もりの内側で終わりました（'+fmt(avg)+'倍）。原実験でも全員が超過するわけではありません。')
+    + '</p></div>'
+    + '<p style="font-size:16px;color:#444;margin-top:12px">原実験でもうひとつ効くのは、<span class="mark">最悪の場合の見積もりすら足りなかった</span>ことです。学生の「最悪で48.6日」に対し、実際の平均は55.5日でした。</p>'
+    + '<p style="font-size:16px;color:#444;margin-top:8px">'
+    + (overWorst>0 ? 'あなたも'+overWorst+'つの作業で、自分の言った最悪を超えました。' : '今回のあなたは、2つとも自分の言った最悪の内側でした。')
+    + '</p></div>';
+
+  var mikomi = Math.round(3*avg*10)/10;
+  h += '<div class="card"><h2>ここから中小企業の話を一行だけ</h2>'
+    + '<p style="font-size:16px;color:#444">見積もりを出すとき、直感で出した日数に<span class="mark">自分の倍率を掛ける</span>。あなたなら「3日で出します」は実測ベースで'+fmt(mikomi)+'日です。余裕を足すのではなく、過去の自分の倍率を掛けるほうが当たります。</p>'
+    + '</div>';
+  h += '<button class="btn sub" onclick="restart()">もう一度やる</button>';
+  app.innerHTML=h;
+  document.getElementById('src').style.display='block';
+  window.scrollTo(0,0);
+}
+
+function restart(){
+  S={step:0,tasks:[
+    {name:'数字さがし',desc:'6×6のマスの中から「7」を全部さがして押します。7は6個あります。',pred:20,worst:40,actual:null},
+    {name:'50音ならべ',desc:'ばらばらに並んだ12文字を、あいうえお順に押していきます。',pred:20,worst:40,actual:null}
+  ]};
+  gridData=null; kanaData=null; t0=0;
+  document.getElementById('src').style.display='none';
+  render(); window.scrollTo(0,0);
+}
+render();
+</script>
+</body>
+</html>

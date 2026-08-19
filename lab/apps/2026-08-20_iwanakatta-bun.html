@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>言わなかった分</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:38px;font-weight:700}
+.unit{font-size:16px;font-weight:400;color:#6b6b6b}
+input[type=range]{width:100%;margin:4px 0 2px;accent-color:#2563eb}
+.f{margin-bottom:16px}
+.f label{display:flex;justify-content:space-between;align-items:baseline;font-size:15px}
+.f b{font-size:19px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{font-size:13px;color:#6b6b6b;font-weight:400;text-align:right;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid #eeece6;text-align:right}
+td:first-child{text-align:left}
+tr:last-child td{border-bottom:0}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.neg{color:#b91c1c;font-weight:700}
+.src{font-size:13px;color:#6b6b6b;margin-top:16px}
+.src a{color:#2563eb;word-break:break-all}
+.lane{margin-bottom:16px}
+.lane .ttl{display:flex;justify-content:space-between;gap:8px;font-size:15px;font-weight:600;margin-bottom:6px}
+.lane .ttl span:last-child{white-space:nowrap;flex:none}
+.track{position:relative;height:26px;background:#f0eee8;border-radius:7px;overflow:hidden}
+.track .zero{position:absolute;top:0;bottom:0;width:1px;background:#c9c5bb}
+.track .fill{position:absolute;top:0;bottom:0;border-radius:5px}
+.pos{background:#2563eb}
+.negf{background:#dc2626}
+.yrs{display:flex;gap:6px;font-size:12px;color:#6b6b6b;margin-top:4px}
+.yrs span{flex:1;text-align:center}
+.assume{background:#f5f4f0;border-radius:10px;padding:12px;font-size:14px;color:#555;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（初期値はサンプル。自社の数字に変えられます）</div>
+<h1>言わなかった分</h1>
+<p class="lead">値上げを言う3年と、言わない3年を並べます。<br>言わなかったほうで消えていく金額が、その3年で手元に残らなかった額です。</p>
+
+<div class="card">
+<h2>自社の数字</h2>
+<div class="f"><label>年間売上<b><span id="v_u">8,000</span> 万円</b></label>
+<input type="range" id="s_u" min="1000" max="30000" step="500" value="8000"></div>
+<div class="f"><label>いまの営業利益率<b><span id="v_r">4.5</span> %</b></label>
+<input type="range" id="s_r" min="0" max="10" step="0.5" value="4.5"></div>
+<div class="f"><label>材料・仕入れの値上がり（年）<b><span id="v_m">3.0</span> %</b></label>
+<input type="range" id="s_m" min="0" max="10" step="0.5" value="3"></div>
+<div class="f"><label>自社の賃上げ（年）<b><span id="v_l">4.0</span> %</b></label>
+<input type="range" id="s_l" min="0" max="8" step="0.5" value="4"></div>
+<div class="f"><label>交渉の通り具合<b><span id="v_k">100</span></b></label>
+<input type="range" id="s_k" min="40" max="130" step="5" value="100">
+<p class="small">100 が全国平均どおり。強い取引先ばかりなら下げ、言えば通る相手が多いなら上げる。</p></div>
+<div class="assume">
+原価の構成は町工場の目安として、売上に対し 材料 40% / 労務費 30% / 電気・燃料 4% で置いています。電気・燃料の値上がりは年6%固定。
+</div>
+</div>
+
+<div class="card">
+<h2>3年後、どちらの帯にいるか</h2>
+<div id="lanes"></div>
+<div class="yrs"><span>いま</span><span>1年後</span><span>2年後</span><span>3年後</span></div>
+<p class="small" style="margin-top:8px">帯は各年の営業利益。赤は赤字です。</p>
+</div>
+
+<div class="card">
+<h2>言わなかった分</h2>
+<div class="big" style="text-align:center"><span id="gap">0</span><span class="unit"> 万円</span></div>
+<p class="small" style="text-align:center">3年の合計。言っていれば手元に残っていた額</p>
+<div class="hl" id="verdict"></div>
+</div>
+
+<div class="card">
+<h2>年ごとの内訳</h2>
+<table>
+<thead><tr><th>年</th><th>増えるコスト</th><th>通る転嫁</th><th>言わない利益</th><th>言う利益</th></tr></thead>
+<tbody id="tbl"></tbody>
+</table>
+<p class="small" style="margin-top:10px">金額はすべて万円。増えるコストは初年度からの累積です。</p>
+</div>
+
+<div class="card">
+<h2>コストの種類で通り方が違う</h2>
+<table id="elem"></table>
+<p class="small" style="margin-top:10px">いちばん通りにくいのが労務費です。賃上げしたぶんは、黙っていると全部自社の持ち出しになります。</p>
+<div class="hl">
+<p style="font-size:16px">明日の一手：労務費だけは、国が発注者側の行動を12項目にして示した指針があります。「賃上げ分を転嫁したい」と切り出すとき、この指針の名前を出すのが最短です。</p>
+</div>
+</div>
+
+<div class="src">
+出典：中小企業庁「価格交渉促進月間（2026年3月）フォローアップ調査結果」（令和8年6月26日公表）。価格転嫁率 54.2%、コスト要素別では原材料費 55.7%、労務費 50.0%、エネルギーコスト 48.9%。<br>
+<a href="https://www.meti.go.jp/press/2026/06/20260626003/20260626003.html">https://www.meti.go.jp/press/2026/06/20260626003/20260626003.html</a><br>
+<a href="https://www.chusho.meti.go.jp/keiei/torihiki/follow-up/index.html">https://www.chusho.meti.go.jp/keiei/torihiki/follow-up/index.html</a><br>
+内閣官房・公正取引委員会「労務費の適切な転嫁のための価格交渉に関する指針」（2023年11月29日公表、2025年12月26日改正）。発注者・受注者が採るべき12の行動。<br>
+<a href="https://www.jftc.go.jp/dk/guideline/unyoukijun/romuhitenka.html">https://www.jftc.go.jp/dk/guideline/unyoukijun/romuhitenka.html</a><br><br>
+転嫁率は全国の中小企業の平均値です。個社が同じ割合で通る保証はありません。原価構成と値上がり率は入力値にもとづく試算で、実績ではありません。
+</div>
+</div>
+
+<script>
+var R_M=0.557, R_L=0.500, R_E=0.489;
+var C_M=0.40, C_L=0.30, C_E=0.04, RISE_E=0.06;
+var ids=['u','r','m','l','k'];
+function val(id){ return parseFloat(document.getElementById('s_'+id).value); }
+function yen(n){ return Math.round(n).toLocaleString('ja-JP'); }
+
+function calc(){
+  var u=val('u'), r=val('r')/100, rm=val('m')/100, rl=val('l')/100, k=val('k')/100;
+  document.getElementById('v_u').textContent = u.toLocaleString('ja-JP');
+  document.getElementById('v_r').textContent = val('r').toFixed(1);
+  document.getElementById('v_m').textContent = val('m').toFixed(1);
+  document.getElementById('v_l').textContent = val('l').toFixed(1);
+  document.getElementById('v_k').textContent = val('k');
+
+  var p0 = u*r;
+  var bM=u*C_M, bL=u*C_L, bE=u*C_E;
+  var rows=[], gap=0, profNo=[p0], profYes=[p0];
+  for(var n=1;n<=3;n++){
+    var eM=bM*(Math.pow(1+rm,n)-1);
+    var eL=bL*(Math.pow(1+rl,n)-1);
+    var eE=bE*(Math.pow(1+RISE_E,n)-1);
+    var extra=eM+eL+eE;
+    var pass=(eM*R_M + eL*R_L + eE*R_E)*k;
+    gap += pass;
+    var pn=p0-extra, py=p0-extra+pass;
+    profNo.push(pn); profYes.push(py);
+    rows.push({n:n, extra:extra, pass:pass, pn:pn, py:py});
+  }
+
+  var tb='';
+  rows.forEach(function(x){
+    tb += '<tr><td>'+x.n+'年後</td><td>'+yen(x.extra)+'</td><td>'+yen(x.pass)+'</td>'
+       + '<td class="'+(x.pn<0?'neg':'')+'">'+yen(x.pn)+'</td>'
+       + '<td class="'+(x.py<0?'neg':'')+'">'+yen(x.py)+'</td></tr>';
+  });
+  document.getElementById('tbl').innerHTML = tb;
+
+  var scale = Math.max(Math.abs(p0), Math.abs(Math.min.apply(null,profNo)), Math.abs(Math.max.apply(null,profYes)), 1);
+  function lane(title, arr){
+    var h='<div class="lane"><div class="ttl"><span>'+title+'</span><span class="'+(arr[3]<0?'neg':'')+'">3年後 '+yen(arr[3])+' 万円</span></div>';
+    arr.forEach(function(v,i){
+      var w = Math.min(50, Math.abs(v)/scale*50);
+      var left = v>=0 ? 50 : 50-w;
+      h += '<div class="track" style="margin-bottom:3px"><div class="zero" style="left:50%"></div>'
+         + '<div class="fill '+(v>=0?'pos':'negf')+'" style="left:'+left+'%;width:'+w+'%"></div></div>';
+    });
+    h+='</div>'; return h;
+  }
+  document.getElementById('lanes').innerHTML =
+    lane('言わない（自社で飲む）', profNo) + lane('言う（平均どおり通る）', profYes);
+
+  document.getElementById('gap').textContent = yen(gap);
+
+  var akaNo=0, akaYes=0;
+  for(var i=1;i<=3;i++){ if(!akaNo && profNo[i]<0) akaNo=i; if(!akaYes && profYes[i]<0) akaYes=i; }
+  var v='';
+  if(akaNo && !akaYes){
+    v = '<p style="font-size:16px">言わないと<span class="mark">'+akaNo+'年後に赤字</span>に入ります。言った場合は3年後も黒字のままです。分かれ目は交渉そのものではなく、切り出したかどうかです。</p>';
+  } else if(akaNo && akaYes){
+    v = '<p style="font-size:16px">この条件では、言っても'+akaYes+'年後に赤字に入ります（言わない場合は'+akaNo+'年後）。値上げ交渉だけでは足りません。取引先の組み替えか、原価そのものを動かす必要があります。</p>';
+  } else {
+    v = '<p style="font-size:16px">この条件なら3年後もどちらも黒字ですが、言わなかった場合は'+yen(gap)+'万円ぶん薄い黒字です。利益率でいうと'+(gap/3/ (val('u')||1) *100).toFixed(1)+'ポイント違います。</p>';
+  }
+  document.getElementById('verdict').innerHTML = v;
+
+  var u2=val('u');
+  var eM1=u2*C_M*rm, eL1=u2*C_L*rl, eE1=u2*C_E*RISE_E;
+  document.getElementById('elem').innerHTML =
+    '<thead><tr><th>コスト</th><th>1年で増える額</th><th>通る割合</th><th>自社が飲む額</th></tr></thead><tbody>'
+    + '<tr><td>材料・仕入れ</td><td>'+yen(eM1)+'</td><td>'+Math.round(R_M*100*val('k')/100)+'%</td><td>'+yen(eM1*(1-R_M*val('k')/100))+'</td></tr>'
+    + '<tr><td>労務費（賃上げ）</td><td>'+yen(eL1)+'</td><td>'+Math.round(R_L*100*val('k')/100)+'%</td><td>'+yen(eL1*(1-R_L*val('k')/100))+'</td></tr>'
+    + '<tr><td>電気・燃料</td><td>'+yen(eE1)+'</td><td>'+Math.round(R_E*100*val('k')/100)+'%</td><td>'+yen(eE1*(1-R_E*val('k')/100))+'</td></tr>'
+    + '</tbody>';
+}
+ids.forEach(function(id){ document.getElementById('s_'+id).addEventListener('input', calc); });
+calc();
+</script>
+</body>
+</html>

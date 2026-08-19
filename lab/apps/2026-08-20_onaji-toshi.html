@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>同じ年をとる</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:34px;font-weight:700}
+.unit{font-size:16px;font-weight:400;color:#6b6b6b}
+input[type=range]{width:100%;margin:4px 0 2px;accent-color:#2563eb}
+.f{margin-bottom:15px}
+.f label{display:flex;justify-content:space-between;align-items:baseline;font-size:15px}
+.f b{font-size:19px}
+.seg{display:flex;gap:8px;margin-bottom:15px}
+.seg button{flex:1;padding:12px 0;font-size:16px;font-family:inherit;background:#f5f4f0;border:1px solid #e8e5dd;border-radius:10px;cursor:pointer;color:#444}
+.seg button.on{background:#2563eb;color:#fff;border-color:#2563eb;font-weight:600}
+.tl{margin-top:4px}
+.yr{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;margin-bottom:4px;font-size:15px;background:#faf9f6}
+.yr.care{background:#fff7ed;border:1px solid #fed7aa}
+.yr.both{background:#fef2f2;border:1px solid #fca5a5}
+.yr .w{width:66px;flex:none;font-size:13px;color:#6b6b6b}
+.yr .c{flex:1;min-width:0}
+.yr .c b{font-weight:600}
+.yr .c span{display:block;font-size:12px;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fff7ed;border-radius:10px;padding:14px;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td{padding:9px 0;border-bottom:1px solid #eeece6}
+td:last-child{text-align:right;font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.src{font-size:13px;color:#6b6b6b;margin-top:16px}
+.src a{color:#2563eb;word-break:break-all}
+.hd{display:flex;gap:8px;font-size:12px;color:#6b6b6b;padding:0 10px 4px}
+.hd .w{width:66px;flex:none}
+.hd .c{flex:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（初期値はサンプル。自分の数字に変えられます）</div>
+<h1>同じ年をとる</h1>
+<p class="lead">犬や猫は、飼い主より速く年をとります。<br>この子の介護がはじまる年、自分と親が何歳になっているかを、先に1本の帯にして出します。</p>
+
+<div class="card">
+<h2>いまの年齢</h2>
+<div class="seg" id="seg">
+<button data-k="dog" class="on">犬</button><button data-k="cat">猫</button>
+</div>
+<div class="f"><label>この子の年齢<b><span id="v_p">3</span> 歳</b></label>
+<input type="range" id="s_p" min="0" max="18" step="1" value="3"></div>
+<div class="f"><label>自分の年齢<b><span id="v_o">42</span> 歳</b></label>
+<input type="range" id="s_o" min="18" max="85" step="1" value="42"></div>
+<div class="f"><label>親の年齢<b><span id="v_f">73</span> 歳</b></label>
+<input type="range" id="s_f" min="45" max="100" step="1" value="73"></div>
+</div>
+
+<div class="card">
+<h2>先に進めてみる</h2>
+<div id="head"></div>
+<div class="hd"><div class="w"></div><div class="c">自分</div><div class="c">この子</div><div class="c">親</div></div>
+<div class="tl" id="tl"></div>
+<p class="small" style="margin-top:8px">オレンジはこの子の介護期、赤は親が85歳を超えて重なる年です。85歳は目安として引いた線で、公的な基準ではありません。</p>
+</div>
+
+<div class="card">
+<h2>お金のほう</h2>
+<table id="money"></table>
+<div class="warn" id="advice"></div>
+</div>
+
+<div class="card">
+<h2>この画面を誰が出すか</h2>
+<p style="font-size:16px;color:#444">診察台の横、ペット保険の窓口、ペット可の賃貸の内見。<span class="mark">「あと何年」を数字で見せられる相手</span>が、いま一番少ない場所です。飼い主が自分で気づくのは、たいてい歩けなくなってからになります。</p>
+</div>
+
+<div class="src">
+出典：一般社団法人ペットフード協会「2025年 全国犬猫飼育実態調査」。平均寿命は犬14.90歳・猫15.92歳、生涯必要経費は犬278万円・猫179万円、飼育頭数は犬682万頭・猫884万7千頭。<br>
+<a href="https://petfood.or.jp/data-chart/">https://petfood.or.jp/data-chart/</a><br><br>
+平均寿命は全国平均で、犬種や個体でおおきく変わります。介護期をここでは「平均寿命の2年前から」として置きました。これは協会の定義ではなく、このデモで引いた線です。残りの費用は生涯必要経費を年数で按分した概算で、通院や手術が増えれば上振れします。健康状態の判断はしません。かかりつけの獣医師にご相談ください。
+</div>
+</div>
+
+<script>
+var SPEC = {
+  dog: {name:'犬', life:14.90, cost:278, heads:'682万頭'},
+  cat: {name:'猫', life:15.92, cost:179, heads:'884万7千頭'}
+};
+var kind = 'dog';
+function val(id){ return parseInt(document.getElementById('s_'+id).value,10); }
+
+function calc(){
+  var sp = SPEC[kind];
+  var pa = val('p'), oa = val('o'), fa = val('f');
+  document.getElementById('v_p').textContent = pa;
+  document.getElementById('v_o').textContent = oa;
+  document.getElementById('v_f').textContent = fa;
+
+  var lifeR = Math.round(sp.life*10)/10;
+  var careStart = sp.life - 2;
+  var endAge = Math.max(pa+1, Math.ceil(sp.life));
+  var span = endAge - pa;
+  if(span > 20) span = 20;
+
+  var nowY = new Date().getFullYear();
+  var h='', careYear=null, bothYear=null, lastYear=null;
+  for(var i=0;i<=span;i++){
+    var p = pa+i, o = oa+i, f = fa+i;
+    var isCare = p >= careStart;
+    var isBoth = isCare && f >= 85;
+    if(isCare && careYear===null) careYear = i;
+    if(isBoth && bothYear===null) bothYear = i;
+    if(p >= sp.life && lastYear===null) lastYear = i;
+    var cls = isBoth ? 'both' : (isCare ? 'care' : '');
+    var stage = p<1 ? '子いぬ' : (p<7 ? 'おとな' : (isCare ? '介護期' : 'シニア'));
+    if(kind==='cat' && p<1) stage='子ねこ';
+    h += '<div class="yr '+cls+'">'
+      + '<div class="w">'+(i===0?'いま':(i+'年後'))+'<br>'+(nowY+i)+'</div>'
+      + '<div class="c"><b>'+o+'歳</b><span>'+(o>=65?'年金世代':(o>=60?'定年のころ':''))+'</span></div>'
+      + '<div class="c"><b>'+p+'歳</b><span>'+stage+'</span></div>'
+      + '<div class="c"><b>'+f+'歳</b><span>'+(f>=85?'85歳超':'')+'</span></div>'
+      + '</div>';
+  }
+  document.getElementById('tl').innerHTML = h;
+
+  var hd='';
+  if(careYear!==null){
+    hd = '<p style="font-size:17px;margin-bottom:12px">'
+       + (careYear===0 ? 'この子はもう介護期に入っています。' : '<span class="mark">'+careYear+'年後</span>、この子は'+(pa+careYear)+'歳で介護期に入ります。')
+       + (careYear===0 ? 'いまあなたは'+oa+'歳、親は'+fa+'歳です。' : 'そのときあなたは'+(oa+careYear)+'歳、親は'+(fa+careYear)+'歳です。') + '</p>';
+    if(bothYear!==null){
+      hd += '<p style="font-size:17px;margin-bottom:12px">'+(bothYear===0?'いますでに':(bothYear+'年後には'))
+         + '、この子の介護と、親が85歳を超える時期が<span class="mark">重なります</span>。</p>';
+    } else {
+      hd += '<p style="font-size:16px;color:#444;margin-bottom:12px">この帯のあいだ、親は85歳には届きません。重なりません。</p>';
+    }
+  } else {
+    hd = '<p style="font-size:16px;color:#444;margin-bottom:12px">この子はまだ介護期の手前です。</p>';
+  }
+  document.getElementById('head').innerHTML = hd;
+
+  var remain = Math.max(0, sp.life - pa);
+  var remainCost = sp.cost * (remain / sp.life);
+  var perYear = remain>0 ? remainCost/remain : 0;
+  document.getElementById('money').innerHTML =
+     '<tr><td>'+sp.name+'の平均寿命<span class="small"><br>2025年 全国調査</span></td><td>'+lifeR+' 歳</td></tr>'
+   + '<tr><td>平均までの残り</td><td>'+remain.toFixed(1)+' 年</td></tr>'
+   + '<tr><td>生涯必要経費<span class="small"><br>'+sp.name+'1頭あたり全国平均</span></td><td>'+sp.cost+' 万円</td></tr>'
+   + '<tr><td>これから出ていく概算<span class="small"><br>残り年数ぶんの按分</span></td><td>'+remainCost.toFixed(0)+' 万円</td></tr>'
+   + '<tr><td>ならすと1年あたり</td><td>'+(perYear>0?perYear.toFixed(1):'—')+' 万円</td></tr>';
+
+  var ad='';
+  if(remain<=0){
+    ad = '<p style="font-size:16px">この子はもう平均寿命を超えています。ここから先は平均の外側です。かかる費用も平均では読めません。</p>';
+  } else if(careYear!==null && careYear<=3){
+    ad = '<p style="font-size:16px">'+(careYear===0?'この子はもう介護期です。':'介護期は'+careYear+'年後です。')
+       + '<span class="mark">段差と床</span>から先に手を入れておくと、歩けなくなってからの負担がいちばん軽くなります。費用のほうは、残り'+remain.toFixed(0)+'年で'+remainCost.toFixed(0)+'万円を月ならしにすると、月およそ'+Math.round(perYear/12*10000/100)*100+'円です。</p>';
+  } else {
+    ad = '<p style="font-size:16px">介護期まではまだ'+(careYear===null?'間があります':careYear+'年あります')+'。いま決めておけるのは、'
+       + '<span class="mark">誰が留守番を代われるか</span>ひとつだけです。'+(bothYear!==null?'親の介護と重なる年が'+bothYear+'年後に来ます。':'')+'</p>';
+  }
+  document.getElementById('advice').innerHTML = ad;
+}
+
+document.getElementById('seg').addEventListener('click', function(e){
+  if(e.target.tagName!=='BUTTON') return;
+  kind = e.target.getAttribute('data-k');
+  Array.prototype.forEach.call(this.children, function(b){ b.className = (b===e.target)?'on':''; });
+  calc();
+});
+['p','o','f'].forEach(function(id){ document.getElementById('s_'+id).addEventListener('input', calc); });
+calc();
+</script>
+</body>
+</html>

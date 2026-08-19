@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>あったことば</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.row{display:flex;gap:10px}
+.row .btn{flex:1}
+.word{font-size:44px;font-weight:700;text-align:center;padding:56px 0;letter-spacing:.06em}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.bar{height:12px;background:#eeece6;border-radius:6px;overflow:hidden;margin:8px 0}
+.bar > i{display:block;height:100%;background:#2563eb}
+.big{font-size:38px;font-weight:700;letter-spacing:.01em}
+.unit{font-size:16px;font-weight:400;color:#6b6b6b}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td{padding:9px 0;border-bottom:1px solid #eeece6;vertical-align:top}
+td:last-child{text-align:right;white-space:nowrap;font-weight:600}
+tr:last-child td{border-bottom:0}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+h2{font-size:19px;margin-bottom:10px}
+.src{font-size:13px;color:#6b6b6b;margin-top:16px}
+.src a{color:#2563eb;word-break:break-all}
+.dot{display:flex;gap:5px;justify-content:center;margin-top:14px}
+.dot i{width:7px;height:7px;border-radius:50%;background:#dcd8cf}
+.dot i.on{background:#2563eb}
+.q{font-size:32px;font-weight:700;text-align:center;padding:34px 0}
+.cnt{font-size:14px;color:#6b6b6b;text-align:center;margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">実験（あなたの回答がその場で数字になります）</div>
+<h1>あったことば</h1>
+<p class="lead">12個のことばを3セット覚えます。そのあと「さっきあったか」を1語ずつ答えるだけ。<br>一度も出てこなかったのに、あなたが「あった」と答える語があります。</p>
+
+<div id="app"></div>
+
+<div class="src" id="src" style="display:none">
+出典：Roediger, H. L., &amp; McDermott, K. B. (1995) <i>Creating false memories: Remembering words not presented in lists.</i> Journal of Experimental Psychology: LMC, 21(4), 803-814.<br>
+<a href="https://psych.hanover.edu/classes/cognition/Papers/RoedigerMcDermott%201996%20DRM%20False.pdf">https://psych.hanover.edu/classes/cognition/Papers/RoedigerMcDermott 1996 DRM False.pdf</a><br>
+日本語リストの先行研究：宮地弥生・山祐嗣 (2002)「高い確率で虚記憶を生成するDRMパラダイムのための日本語リストの作成」基礎心理学研究 21(1), 21-26.<br>
+<a href="https://www.jstage.jst.go.jp/article/psychono/21/1/21_KJ00004414122/_article/-char/ja/">https://www.jstage.jst.go.jp/article/psychono/21/1/21_KJ00004414122/_article/-char/ja/</a><br><br>
+本デモの3リストは、上記2本の作り方（連想の中心にある1語を出さずに、その周辺語だけを並べる）に沿ってこのデモ用に組んだものです。宮地・山(2002)の実物リストは入っていません。数字はすべてあなたの回答から計算しています。
+</div>
+</div>
+
+<script>
+var LISTS = [
+  {lure:'ねむり', words:['ベッド','やすむ','つかれる','ゆめ','おきる','ひるね','まくら','いびき','よる','ふとん','まぶた','うとうと']},
+  {lure:'あまい', words:['さとう','はちみつ','ケーキ','チョコレート','あめ','おかし','ジュース','いちご','デザート','プリン','ミルク','むしば']},
+  {lure:'いしゃ', words:['びょういん','かんごし','ちゅうしゃ','くすり','びょうき','けが','ちりょう','ちょうしんき','はくい','しんさつ','カルテ','てじゅつ']}
+];
+var NEWWORDS = ['てつどう','ぼうし','みなと','せんたく','かいだん','てがみ'];
+
+var app = document.getElementById('app');
+var state = {phase:'intro', li:0, wi:0, test:[], ti:0, ans:[]};
+var timer = null;
+
+function shuffle(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
+
+function buildTest(){
+  var items = [];
+  LISTS.forEach(function(L,i){
+    // 各リストから提示語を3つ（先頭寄り・中程・後方から）
+    [L.words[1], L.words[5], L.words[9]].forEach(function(w){ items.push({w:w, type:'old', li:i}); });
+    items.push({w:L.lure, type:'lure', li:i});
+  });
+  NEWWORDS.forEach(function(w){ items.push({w:w, type:'new'}); });
+  return shuffle(items);
+}
+
+function render(){
+  if(timer){clearInterval(timer);clearTimeout(timer);timer=null;}
+  var h = '';
+  if(state.phase==='intro'){
+    h = '<div class="card">'
+      + '<h2>やりかた</h2>'
+      + '<p style="font-size:16px;color:#444">1. 12個のことばが1つずつ出ます。声に出さず、ただ見て覚えてください（3セット）。</p>'
+      + '<p style="font-size:16px;color:#444;margin-top:8px">2. あいだに簡単な計算をはさみます。</p>'
+      + '<p style="font-size:16px;color:#444;margin-top:8px">3. 最後に1語ずつ「あった / なかった」を答えます。</p>'
+      + '<p class="small" style="margin-top:12px">所要およそ2分。途中で止めると数字は出ません。</p>'
+      + '</div>'
+      + '<button class="btn" onclick="go(\'study\')">はじめる</button>';
+    app.innerHTML = h; return;
+  }
+  if(state.phase==='study'){
+    var L = LISTS[state.li];
+    var w = L.words[state.wi];
+    h = '<div class="card">'
+      + '<div class="cnt">'+(state.li+1)+'セット目 / 3　　'+(state.wi+1)+' / 12</div>'
+      + '<div class="bar"><i style="width:'+Math.round((state.wi+1)/12*100)+'%"></i></div>'
+      + '<div class="word">'+w+'</div>'
+      + '</div>';
+    app.innerHTML = h;
+    timer = setTimeout(function(){
+      state.wi++;
+      if(state.wi >= L.words.length){
+        state.wi = 0; state.li++;
+        if(state.li >= LISTS.length){ state.phase='filler'; state.fsec=12; }
+      }
+      render();
+    }, 1300);
+    return;
+  }
+  if(state.phase==='filler'){
+    h = '<div class="card">'
+      + '<div class="cnt">すこしだけ間をあけます</div>'
+      + '<div class="q">100 から 7 ずつ引く</div>'
+      + '<p class="small" style="text-align:center">頭のなかで数えてください</p>'
+      + '<div class="big" style="text-align:center;margin-top:18px">'+state.fsec+'<span class="unit"> 秒</span></div>'
+      + '</div>';
+    app.innerHTML = h;
+    timer = setInterval(function(){
+      state.fsec--;
+      if(state.fsec<=0){ clearInterval(timer); timer=null; state.phase='test'; state.test=buildTest(); state.ti=0; state.ans=[]; }
+      render();
+    }, 1000);
+    return;
+  }
+  if(state.phase==='test'){
+    var it = state.test[state.ti];
+    h = '<div class="card">'
+      + '<div class="cnt">'+(state.ti+1)+' / '+state.test.length+'</div>'
+      + '<div class="bar"><i style="width:'+Math.round((state.ti)/state.test.length*100)+'%"></i></div>'
+      + '<div class="word">'+it.w+'</div>'
+      + '<p class="small" style="text-align:center;margin-bottom:14px">さっき出てきましたか</p>'
+      + '<div class="row"><button class="btn" onclick="answer(true)">あった</button>'
+      + '<button class="btn sub" onclick="answer(false)">なかった</button></div>'
+      + '</div>';
+    app.innerHTML = h; return;
+  }
+  if(state.phase==='result'){ renderResult(); return; }
+}
+
+function answer(yes){
+  state.ans.push({item:state.test[state.ti], yes:yes});
+  state.ti++;
+  if(state.ti >= state.test.length){ state.phase='result'; }
+  render();
+}
+
+function go(p){ state.phase=p; render(); }
+
+function renderResult(){
+  var old_t=0, old_y=0, lure_t=0, lure_y=0, new_t=0, new_y=0;
+  var lureDetail = [];
+  state.ans.forEach(function(a){
+    if(a.item.type==='old'){ old_t++; if(a.yes) old_y++; }
+    if(a.item.type==='lure'){ lure_t++; if(a.yes) lure_y++; lureDetail.push({w:a.item.w, yes:a.yes}); }
+    if(a.item.type==='new'){ new_t++; if(a.yes) new_y++; }
+  });
+  var lurePct = Math.round(lure_y/lure_t*100);
+  var newPct = Math.round(new_y/new_t*100);
+  var oldPct = Math.round(old_y/old_t*100);
+
+  var h = '<div class="card">'
+    + '<h2>種明かし</h2>'
+    + '<p style="font-size:16px;color:#444">「ねむり」「あまい」「いしゃ」の3語は、<span class="mark">一度も画面に出していません</span>。まわりの語だけを見せて、まんなかの語は伏せてありました。</p>'
+    + '</div>';
+
+  h += '<div class="card">'
+    + '<div class="cnt">出していない3語のうち、あなたが「あった」と答えた数</div>'
+    + '<div class="big" style="text-align:center">'+lure_y+' <span class="unit">/ 3　（'+lurePct+'%）</span></div>'
+    + '<div class="bar"><i style="width:'+lurePct+'%"></i></div>'
+    + '<table style="margin-top:10px">';
+  lureDetail.forEach(function(d){
+    h += '<tr><td>'+d.w+'<span class="small">（出していない語）</span></td><td style="color:'+(d.yes?'#b45309':'#1a1a1a')+'">'+(d.yes?'あったと回答':'なかったと回答')+'</td></tr>';
+  });
+  h += '</table></div>';
+
+  h += '<div class="card"><h2>あなたの3種類の正誤</h2><table>'
+    + '<tr><td>実際に出した語を「あった」<span class="small"><br>正しく思い出せた分</span></td><td>'+old_y+' / '+old_t+'（'+oldPct+'%）</td></tr>'
+    + '<tr><td>出していない中心語を「あった」<span class="small"><br>作られた記憶</span></td><td>'+lure_y+' / '+lure_t+'（'+lurePct+'%）</td></tr>'
+    + '<tr><td>無関係な新しい語を「あった」<span class="small"><br>ただの見まちがい</span></td><td>'+new_y+' / '+new_t+'（'+newPct+'%）</td></tr>'
+    + '</table>'
+    + '<div class="hl"><p style="font-size:16px">'
+    + (lurePct > newPct
+       ? 'あなたも同じでした。無関係な語は'+newPct+'%しか「あった」と言っていないのに、出していない中心語には'+lurePct+'%「あった」と答えています。<span class="mark">見ていないものを、見たと感じています。</span>'
+       : '今回のあなたは、出していない中心語（'+lurePct+'%）が無関係な語（'+newPct+'%）を上回りませんでした。原実験でも全員が引っかかるわけではありません。人数を集めると平均で差が出ます。')
+    + '</p></div></div>';
+
+  h += '<div class="card"><h2>原実験の数字</h2>'
+    + '<p style="font-size:16px;color:#444">Roediger &amp; McDermott (1995) では、一度も提示していない中心語を、参加者は<span class="mark">リストの40%で思い出したと答え</span>、条件によっては再生率.55に達しました。実際に提示した語の再生率とほぼ並びます。半数近くの人が「たしかに聞こえた」と報告しています。</p>'
+    + '<p class="small" style="margin-top:10px">本デモは1人・3リストなので、原実験の平均と直接比べられる精度はありません。あなた個人の傾向を見るための1回です。</p>'
+    + '</div>';
+
+  h += '<div class="card"><h2>ここから中小企業の話を一行だけ</h2>'
+    + '<p style="font-size:16px;color:#444">口で伝えた指示は、<span class="mark">言っていないことまで相手の記憶に足されます</span>。「言ったはず・聞いたはず」の食い違いは不注意ではなく、この仕組みです。口頭で頼んだことは、その場で一行だけ書いて残す。</p>'
+    + '</div>';
+
+  h += '<button class="btn sub" onclick="restart()">もう一度やる</button>';
+  app.innerHTML = h;
+  document.getElementById('src').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function restart(){
+  state = {phase:'intro', li:0, wi:0, test:[], ti:0, ans:[]};
+  document.getElementById('src').style.display='none';
+  render(); window.scrollTo(0,0);
+}
+render();
+</script>
+</body>
+</html>

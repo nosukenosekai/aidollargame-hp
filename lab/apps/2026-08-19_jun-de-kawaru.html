@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>順でかわる — 保育園の希望順を並べ替えると、内定先が変わる</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .tag { display:inline-block; font-size:13px; font-weight:700; color:#2563eb;
+    background:#f0f5ff; border:1px solid #d5e2ff; border-radius:999px; padding:2px 12px; margin-bottom:8px; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:12px 16px; font:inherit; font-size:15px; cursor:pointer; }
+  button.ghost:hover { border-color:#2563eb; }
+  .segs { display:grid; gap:10px; margin-top:8px; }
+  .segs button { font:inherit; font-size:17px; text-align:left; padding:14px 16px; background:#fff;
+    border:2px solid #e5e2db; border-radius:12px; cursor:pointer; color:#1c1b19; line-height:1.6; }
+  .segs button.sel { border-color:#2563eb; background:#f0f5ff; }
+  .segs button b { display:block; font-size:18px; }
+  .segs button span { font-size:15px; color:#55524c; }
+  .row { display:flex; align-items:center; gap:10px; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:12px 12px; background:#fff; margin:8px 0; }
+  .row.off { background:#f3f1ec; opacity:.6; }
+  .rank { width:30px; flex:0 0 30px; text-align:center; font-weight:800; color:#2563eb; font-size:18px; }
+  .row.off .rank { color:#9a958c; }
+  .nm { flex:1 1 auto; min-width:0; }
+  .nm b { display:block; font-size:17px; line-height:1.5; }
+  .nm span { font-size:14px; color:#78746c; }
+  .ctl { display:flex; flex-direction:column; gap:4px; flex:0 0 auto; }
+  .ctl button { width:38px; height:26px; border:1.5px solid #e5e2db; background:#fff; border-radius:8px;
+    cursor:pointer; font-size:13px; line-height:1; color:#1c1b19; padding:0; }
+  .ctl button:hover { border-color:#2563eb; }
+  .drop { flex:0 0 auto; }
+  .drop button { border:1.5px solid #e5e2db; background:#fff; border-radius:8px; padding:6px 8px;
+    font:inherit; font-size:13px; cursor:pointer; color:#55524c; }
+  .verdict { text-align:center; padding:20px 14px; border:2px solid #2563eb; border-radius:12px;
+    background:#f0f5ff; margin-top:6px; }
+  .verdict .n { font-size:34px; font-weight:800; letter-spacing:-.03em; color:#2563eb; line-height:1.25; }
+  .verdict.no { border-color:#b4341f; background:#fdf1ee; }
+  .verdict.no .n { color:#b4341f; }
+  .sub { font-size:16px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; margin-top:10px; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  table { border-collapse:collapse; width:100%; font-size:15px; margin-top:8px; }
+  th,td { border-bottom:1px solid #eceae4; padding:8px 6px; text-align:left; vertical-align:top; }
+  td.num,th.num { text-align:right; }
+  td.num { font-weight:700; }
+  .ok { color:#1a7f4b; font-weight:800; }
+  .ng { color:#b4341f; font-weight:800; }
+  .hidden { display:none; }
+  .note { font-size:15px; color:#78746c; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+</style>
+</head>
+<body>
+<div class="demoflag">デモ（サンプルデータ）— 園名・世帯名・指数はすべて架空です</div>
+<div class="wrap">
+
+  <span class="tag">並べ替える</span>
+  <h1>順でかわる</h1>
+  <p class="lead">自治体の案内にはこう書いてあります。「希望順位は選考の優劣に影響しません」。本当です。それでも、5つの園を並べ替えるだけで内定先は変わります。25世帯ぶんの選考をその場で回して、変わるところを見てください。</p>
+
+  <div class="card">
+    <h2>1. あなたの指数を選ぶ</h2>
+    <p class="note">保育の必要性を点数にしたもの。共働きのフルタイムなら基準指数が高く、そこに加点・減点が乗ります。ここでは3通りだけ用意しました。</p>
+    <div class="segs" id="segs"></div>
+  </div>
+
+  <div class="card">
+    <h2>2. 希望順に並べ替える</h2>
+    <p class="note">上が第1希望。書かない園には内定しません。並べ替えても指数は1点も動きません。</p>
+    <div id="list"></div>
+    <div class="btns">
+      <button class="ghost" id="pre-pop">人気の2園だけ書く</button>
+      <button class="ghost" id="pre-all">5園ぜんぶ書く</button>
+      <button class="ghost" id="pre-near">近い順に書く</button>
+    </div>
+    <div class="btns"><button class="primary" id="run">この並びで選考する</button></div>
+  </div>
+
+  <div class="card hidden" id="c-res">
+    <h2>3. 結果</h2>
+    <div class="verdict" id="verdict"><p class="n" id="v-name">—</p><p class="sub" id="v-sub"></p></div>
+    <p class="note" id="v-why"></p>
+
+    <h2 style="margin-top:22px">その園に届いているか</h2>
+    <p class="note">それぞれの園を第1希望に置いた場合に、あなたが内定するかどうか。順番が効く園と、順番では動かない園が分かれます。</p>
+    <table>
+      <thead><tr><th>園</th><th class="num">定員</th><th class="num">最後に入った人の指数</th><th class="num">1位にしたら</th></tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+    <p class="note" id="cutnote"></p>
+  </div>
+
+  <div class="card">
+    <h2>なぜ、順位で優遇されないのに順番で変わるのか</h2>
+    <p>選考は園ごとに、申し込んだ人を指数の高い順に並べて定員まで取ります。<strong>第1希望だから点が付く、ということはありません。</strong>ここは自治体の案内の通りです。</p>
+    <p>変わるのは別のところです。ひとつ、<strong>書いていない園には内定しません</strong>。ふたつ、<strong>上から順に押さえていく</strong>ので、上に置いた園に届いてしまうと、その下は見られません。だから「入れる園のうち、いちばん上に書いたところ」に決まります。</p>
+    <p class="field">届いていない人気園を上に3つ並べても損はしません。損になるのは、届く園を<strong>書かなかった</strong>ときだけです。案内の「順位は影響しない」を「何園書いても同じ」と読んでしまうのが、いちばん高くつく読み違いです。</p>
+  </div>
+
+  <div class="card">
+    <h2>この一本のもと</h2>
+    <p class="note">同一指数のときの優先順位や、指数そのものの付け方は自治体ごとに違います。この画面は「指数の高い順に定員まで、希望は上から順に押さえる」という共通の骨だけを再現した簡略版です。実際の申し込みでは必ずお住まいの自治体の基準をご覧ください。</p>
+    <p class="src">
+      東京都大田区「利用調整方法・基準について」<br>
+      <a href="https://www.city.ota.tokyo.jp/seikatsu/kodomo/hoiku/hoikushisetsu_nyukibo/hoikuen/senkou_houhou-kijyun.html">https://www.city.ota.tokyo.jp/seikatsu/kodomo/hoiku/hoikushisetsu_nyukibo/hoikuen/senkou_houhou-kijyun.html</a><br>
+      東京都北区「保育園の入園申請（利用調整方法）」<br>
+      <a href="https://www.city.kita.lg.jp/children-edu/childcare/1002975/1002976/1002977/1002982.html">https://www.city.kita.lg.jp/children-edu/childcare/1002975/1002976/1002977/1002982.html</a><br>
+      東京都江戸川区「利用調整の基本」<br>
+      <a href="https://www.city.edogawa.tokyo.jp/e048/qa/kosodate/kosodate/hoiku/moushikomi/riyochosei/riyochoseikihon.html">https://www.city.edogawa.tokyo.jp/e048/qa/kosodate/kosodate/hoiku/moushikomi/riyochosei/riyochoseikihon.html</a>
+    </p>
+    <p class="note">このデモの同一指数のタイブレークは「申請番号の若い順」にしてあります。あなたは25番目、つまり同点なら負ける側です。実際は在園きょうだいの有無や就労時間などで決まります。</p>
+  </div>
+
+</div>
+<script>
+(function(){
+  var PARKS = [
+    {id:'A', name:'さくら台保育園',  cap:4, memo:'駅から徒歩4分・園庭あり'},
+    {id:'B', name:'みなと保育園',    cap:3, memo:'駅から徒歩6分・0歳から'},
+    {id:'C', name:'川辺こども園',    cap:5, memo:'徒歩12分・幼保連携型'},
+    {id:'D', name:'ひかり保育園',    cap:2, memo:'駅前・延長20時まで'},
+    {id:'E', name:'東台保育園',      cap:4, memo:'徒歩18分・バス送迎なし'}
+  ];
+  var NEAR = ['D','A','B','C','E'];
+  var POP  = ['D','B'];
+
+  var OTHERS = [
+    ['さとう',45,'DBA'],['すずき',44,'DBC'],['たかはし',44,'DAB'],['たなか',43,'BDA'],
+    ['いとう',43,'DBE'],['わたなべ',42,'BAC'],['やまもと',42,'BDA'],['なかむら',42,'ABC'],
+    ['こばやし',41,'BAC'],['かとう',41,'ACE'],['よしだ',41,'ABD'],['やまだ',40,'ACE'],
+    ['ささき',40,'ABC'],['やまぐち',39,'ACE'],['まつもと',39,'CAE'],['いのうえ',38,'CAE'],
+    ['きむら',38,'CE'],['はやし',37,'CE'],['しみず',37,'CB'],['やまざき',36,'EC'],
+    ['もり',36,'EA'],['あべ',35,'EC'],['いけだ',34,'E'],['はしもと',33,'CE']
+  ];
+
+  var IDXOPTS = [
+    {v:39, t:'指数 39', d:'片方が時短勤務。基準は満たすが加点は少ない世帯'},
+    {v:41, t:'指数 41', d:'夫婦ともフルタイム。育休明けの加点あり'},
+    {v:44, t:'指数 44', d:'夫婦ともフルタイム。認可外に預けて就労を継続中'}
+  ];
+
+  var myIdx = 41;
+  var order = ['D','A','B','C','E'];
+  var included = {A:true,B:true,C:true,D:true,E:true};
+
+  function capOf(id){ for (var i=0;i<PARKS.length;i++) if (PARKS[i].id===id) return PARKS[i].cap; return 0; }
+  function nameOf(id){ for (var i=0;i<PARKS.length;i++) if (PARKS[i].id===id) return PARKS[i].name; return id; }
+
+  function solve(uidx, uprefs){
+    var apps = OTHERS.map(function(o,i){ return {id:i, name:o[0], idx:o[1], pref:o[2].split(''), k:0}; });
+    apps.push({id:99, name:'あなた', idx:uidx, pref:uprefs.slice(), k:0});
+    var held = {}; PARKS.forEach(function(p){ held[p.id] = []; });
+    var free = apps.slice();
+    var guard = 0;
+    while (free.length && guard++ < 5000){
+      var a = free.pop();
+      if (a.k >= a.pref.length) continue;
+      var g = a.pref[a.k]; a.k++;
+      if (!held[g]) continue;
+      held[g].push(a);
+      held[g].sort(function(x,y){ return (y.idx - x.idx) || (x.id - y.id); });
+      if (held[g].length > capOf(g)) free.push(held[g].pop());
+    }
+    var mine = null;
+    Object.keys(held).forEach(function(g){
+      held[g].forEach(function(z){ if (z.id === 99) mine = g; });
+    });
+    var cut = {};
+    Object.keys(held).forEach(function(g){
+      var l = held[g];
+      cut[g] = (l.length >= capOf(g) && l.length) ? l[l.length-1].idx : null;
+    });
+    var applied = {};
+    PARKS.forEach(function(p){ applied[p.id] = 0; });
+    apps.forEach(function(a){ a.pref.forEach(function(g){ if (applied[g] !== undefined) applied[g]++; }); });
+    return {mine:mine, cut:cut, applied:applied};
+  }
+
+  function curPrefs(){ return order.filter(function(id){ return included[id]; }); }
+
+  function renderSegs(){
+    var h = IDXOPTS.map(function(o){
+      return '<button data-v="' + o.v + '" class="' + (o.v===myIdx?'sel':'') + '"><b>' + o.t + '</b><span>' + o.d + '</span></button>';
+    }).join('');
+    document.getElementById('segs').innerHTML = h;
+  }
+  document.getElementById('segs').addEventListener('click', function(e){
+    var b = e.target.closest('button'); if (!b) return;
+    myIdx = parseInt(b.dataset.v, 10);
+    renderSegs();
+    document.getElementById('c-res').classList.add('hidden');
+  });
+
+  function renderList(){
+    var n = 0;
+    var h = order.map(function(id, i){
+      var p = null; PARKS.forEach(function(q){ if (q.id===id) p=q; });
+      var on = included[id];
+      if (on) n++;
+      return '<div class="row' + (on?'':' off') + '">' +
+        '<div class="rank">' + (on ? n : '—') + '</div>' +
+        '<div class="nm"><b>' + p.name + '</b><span>定員 ' + p.cap + '人 / ' + p.memo + '</span></div>' +
+        '<div class="ctl">' +
+          '<button data-up="' + i + '"' + (i===0?' disabled':'') + '>上へ</button>' +
+          '<button data-dn="' + i + '"' + (i===order.length-1?' disabled':'') + '>下へ</button>' +
+        '</div>' +
+        '<div class="drop"><button data-tg="' + id + '">' + (on ? '外す' : '戻す') + '</button></div>' +
+      '</div>';
+    }).join('');
+    document.getElementById('list').innerHTML = h;
+  }
+  document.getElementById('list').addEventListener('click', function(e){
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.up !== undefined){
+      var i = +b.dataset.up; if (i>0){ var t=order[i]; order[i]=order[i-1]; order[i-1]=t; }
+    } else if (b.dataset.dn !== undefined){
+      var j = +b.dataset.dn; if (j<order.length-1){ var s=order[j]; order[j]=order[j+1]; order[j+1]=s; }
+    } else if (b.dataset.tg){
+      included[b.dataset.tg] = !included[b.dataset.tg];
+    }
+    renderList();
+    document.getElementById('c-res').classList.add('hidden');
+  });
+
+  document.getElementById('pre-pop').addEventListener('click', function(){
+    order = POP.concat(['A','C','E'].filter(function(x){ return POP.indexOf(x)<0; }));
+    PARKS.forEach(function(p){ included[p.id] = POP.indexOf(p.id) >= 0; });
+    renderList(); document.getElementById('c-res').classList.add('hidden');
+  });
+  document.getElementById('pre-all').addEventListener('click', function(){
+    order = ['D','B','A','C','E'];
+    PARKS.forEach(function(p){ included[p.id] = true; });
+    renderList(); document.getElementById('c-res').classList.add('hidden');
+  });
+  document.getElementById('pre-near').addEventListener('click', function(){
+    order = NEAR.slice();
+    PARKS.forEach(function(p){ included[p.id] = true; });
+    renderList(); document.getElementById('c-res').classList.add('hidden');
+  });
+
+  document.getElementById('run').addEventListener('click', function(){
+    var prefs = curPrefs();
+    var res = solve(myIdx, prefs);
+    document.getElementById('c-res').classList.remove('hidden');
+    var v = document.getElementById('verdict');
+    if (res.mine){
+      v.className = 'verdict';
+      document.getElementById('v-name').textContent = nameOf(res.mine) + ' に内定';
+      var pos = prefs.indexOf(res.mine) + 1;
+      document.getElementById('v-sub').textContent = 'あなたの書いた第' + pos + '希望です（指数 ' + myIdx + '・全25世帯で選考）';
+    } else {
+      v.className = 'verdict no';
+      document.getElementById('v-name').textContent = '不承諾';
+      document.getElementById('v-sub').textContent = prefs.length ?
+        '書いた ' + prefs.length + '園すべてで定員に届きませんでした（指数 ' + myIdx + '）' :
+        '1園も書いていないので、どこにも内定しません';
+    }
+
+    var whyParts = [];
+    if (res.mine){
+      var above = prefs.slice(0, prefs.indexOf(res.mine));
+      if (above.length){
+        whyParts.push('上に置いた ' + above.map(nameOf).join('・') + ' は指数が届かず、次に書いた ' + nameOf(res.mine) + ' で止まりました。');
+      } else {
+        whyParts.push('第1希望にそのまま届きました。');
+      }
+      var notWritten = PARKS.filter(function(p){ return !included[p.id]; });
+      if (notWritten.length){
+        whyParts.push('書かなかった ' + notWritten.map(function(p){return p.name;}).join('・') + ' は、届いていても内定しません。');
+      }
+    } else {
+      whyParts.push('書いた園の指数のボーダーが、いずれもあなたの ' + myIdx + ' より上でした。');
+    }
+    document.getElementById('v-why').textContent = whyParts.join('');
+
+    var rows = PARKS.map(function(p){
+      var rest = order.filter(function(x){ return x !== p.id && included[x]; });
+      var alt = solve(myIdx, [p.id].concat(rest));
+      var reach = (alt.mine === p.id);
+      var c = res.cut[p.id];
+      return '<tr><td><b>' + p.name + '</b><br><span class="note">申込 ' + res.applied[p.id] + '人</span></td>' +
+        '<td class="num">' + p.cap + '</td>' +
+        '<td class="num">' + (c === null ? '定員割れ' : c) + '</td>' +
+        '<td class="num ' + (reach?'ok':'ng') + '">' + (reach ? '入れる' : '入れない') + '</td></tr>';
+    }).join('');
+    document.getElementById('tb').innerHTML = rows;
+
+    var reachable = PARKS.filter(function(p){
+      var rest = order.filter(function(x){ return x !== p.id && included[x]; });
+      return solve(myIdx, [p.id].concat(rest)).mine === p.id;
+    });
+    document.getElementById('cutnote').textContent = reachable.length > 1 ?
+      '指数 ' + myIdx + ' で届く園は ' + reachable.length + 'つ。この中では、上に書いたところに決まります。並べ替えが効くのはここです。' :
+      (reachable.length === 1 ?
+        '指数 ' + myIdx + ' で届く園は ' + reachable[0].name + ' の1つだけ。この指数では、どう並べ替えても結論は動きません。動かせるのは指数のほうです。' :
+        '指数 ' + myIdx + ' では、どの園も定員に届きません。並べ替えでは変わりません。');
+  });
+
+  renderSegs();
+  renderList();
+})();
+</script>
+</body>
+</html>

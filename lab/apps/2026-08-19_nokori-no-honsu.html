@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>のこりの本数 — ない歯を押すだけで、同年代の平均と並ぶ</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .dataflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .tag { display:inline-block; font-size:13px; font-weight:700; color:#2563eb;
+    background:#f0f5ff; border:1px solid #d5e2ff; border-radius:999px; padding:2px 12px; margin-bottom:8px; }
+  .ages { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .ages button { font:inherit; font-size:16px; padding:12px 4px; background:#fff; border:2px solid #e5e2db;
+    border-radius:10px; cursor:pointer; color:#1c1b19; }
+  .ages button.sel { border-color:#2563eb; background:#f0f5ff; font-weight:800; color:#2563eb; }
+  .mouth { background:#fbfaf7; border:1.5px solid #e5e2db; border-radius:12px; padding:14px 8px; margin:12px 0 4px; }
+  .arch { display:grid; grid-template-columns:repeat(16,1fr); gap:2px; }
+  .arch + .archlab { margin-bottom:10px; }
+  .archlab { font-size:13px; color:#78746c; text-align:center; margin:4px 0 0; }
+  .tooth { height:40px; border-radius:6px 6px 9px 9px; border:1.5px solid #cfcabf; background:#fff;
+    cursor:pointer; padding:0; -webkit-tap-highlight-color:transparent; }
+  .arch.lower .tooth { border-radius:9px 9px 6px 6px; }
+  .tooth.gone { background:#1c1b19; border-color:#1c1b19; }
+  .tooth.wis { border-style:dashed; }
+  .hint { font-size:15px; color:#78746c; text-align:center; margin:2px 0 0; }
+  .verdict { text-align:center; padding:18px 14px; border:2px solid #2563eb; border-radius:12px;
+    background:#f0f5ff; margin-top:10px; }
+  .verdict .n { font-size:46px; font-weight:800; letter-spacing:-.04em; color:#2563eb; line-height:1.1; margin:0; }
+  .verdict .n small { font-size:18px; font-weight:700; letter-spacing:0; }
+  .sub { font-size:16px; color:#55524c; }
+  .bars { margin-top:14px; }
+  .barrow { margin:10px 0; }
+  .barrow .lab { display:flex; justify-content:space-between; font-size:15px; }
+  .barrow .lab b { font-weight:800; }
+  .track { height:16px; background:#efece5; border-radius:8px; overflow:hidden; margin-top:4px; position:relative; }
+  .track i { display:block; height:100%; background:#c9c4ba; }
+  .track i.me { background:#2563eb; }
+  .line20 { position:absolute; top:-4px; bottom:-4px; width:2px; background:#b4341f; }
+  .l20lab { font-size:13px; color:#b4341f; margin-top:2px; }
+  .res { display:grid; gap:12px; margin-top:14px; }
+  @media (min-width:520px){ .res { grid-template-columns:1fr 1fr; } }
+  .rbox { border:1.5px solid #e5e2db; border-radius:12px; padding:14px; background:#fbfaf7; }
+  .rbox h3 { margin:0; font-size:15px; color:#55524c; font-weight:600; }
+  .rbox .n { font-size:30px; font-weight:800; letter-spacing:-.03em; margin:2px 0 0; }
+  .rbox .n small { font-size:15px; font-weight:600; letter-spacing:0; }
+  .src { font-size:14px; color:#78746c; margin-top:10px; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .note { font-size:15px; color:#78746c; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:10px 16px; font:inherit; font-size:15px; cursor:pointer; }
+  button.ghost:hover { border-color:#2563eb; }
+  table { border-collapse:collapse; width:100%; font-size:15px; margin-top:8px; }
+  th,td { border-bottom:1px solid #eceae4; padding:7px 6px; text-align:left; }
+  td.num,th.num { text-align:right; }
+  td.num { font-weight:700; }
+  @media (max-width:480px){
+    .card { padding:20px 12px; }
+    .mouth { padding:12px 4px; margin-left:-4px; margin-right:-4px; }
+    .arch { gap:1px; }
+    .tooth { height:48px; }
+    .ages button { font-size:15px; padding:12px 2px; }
+  }
+</style>
+</head>
+<body>
+<div class="dataflag">数字は令和6年 歯科疾患実態調査（厚生労働省）の全国補正値です</div>
+<div class="wrap">
+
+  <span class="tag">1問だけ</span>
+  <h1>のこりの本数</h1>
+  <p class="lead">年齢を押して、ない歯を押す。それだけで、同じ年代の人の平均と自分が並びます。登録も入力欄もありません。</p>
+
+  <div class="card">
+    <h2>年齢</h2>
+    <div class="ages" id="ages"></div>
+
+    <h2 style="margin-top:20px">ない歯を押す</h2>
+    <div class="mouth">
+      <div class="arch upper" id="upper"></div>
+      <p class="archlab">上あご（両端の点線は親知らず）</p>
+      <div class="arch lower" id="lower"></div>
+      <p class="archlab">下あご</p>
+    </div>
+    <p class="hint">抜けている歯・抜いた歯を押して黒くしてください。差し歯やかぶせ物は「ある」ままで数えます。</p>
+    <div class="btns">
+      <button class="ghost" id="reset">全部あるに戻す</button>
+      <button class="ghost" id="nowis">親知らず4本をなしにする</button>
+    </div>
+
+    <div class="verdict"><p class="n" id="v-n">32<small> 本</small></p><p class="sub" id="v-sub"></p></div>
+
+    <div class="bars">
+      <div class="barrow">
+        <div class="lab"><span>あなた</span><b id="b-me">32 本</b></div>
+        <div class="track"><i class="me" id="i-me" style="width:100%"></i><span class="line20" id="l20a"></span></div>
+      </div>
+      <div class="barrow">
+        <div class="lab"><span id="b-agelab">同年代の平均</span><b id="b-avg">—</b></div>
+        <div class="track"><i id="i-avg" style="width:0%"></i><span class="line20" id="l20b"></span></div>
+        <p class="l20lab">赤い線が20本。ここを下回ると、食べられるものが目に見えて減ってくる目安です。</p>
+      </div>
+    </div>
+
+    <div class="res">
+      <div class="rbox"><h3>同年代の平均との差</h3><p class="n" id="r-diff">—</p></div>
+      <div class="rbox"><h3 id="r-plab">同年代で20本以上ある人</h3><p class="n" id="r-p">—<small> %</small></p></div>
+    </div>
+    <p class="note" id="r-msg"></p>
+  </div>
+
+  <div class="card">
+    <h2>年代別の平均（令和6年）</h2>
+    <table>
+      <thead><tr><th>年齢</th><th class="num">1人平均現在歯数</th><th class="num">20本以上ある人</th></tr></thead>
+      <tbody id="tbl"></tbody>
+    </table>
+    <p class="note">現在歯数は親知らずを含めた永久歯の本数です（全部そろっていれば32本）。数値は各都道府県の人口規模を反映させた全国補正値。</p>
+  </div>
+
+  <div class="card">
+    <h2>この一本のもと</h2>
+    <p class="note">80歳で20本以上の歯がある人の割合（8020達成者）は約61.5%と推計され、前回調査の51.6%より高くなりました。一方で1人平均現在歯数は、75歳以上の年齢階級では20本を下回っています。</p>
+    <p class="src">
+      厚生労働省「令和6年歯科疾患実態調査 結果の概要」表15・表16<br>
+      <a href="https://www.mhlw.go.jp/toukei/list/dl/62-17b_r06.pdf">https://www.mhlw.go.jp/toukei/list/dl/62-17b_r06.pdf</a><br>
+      報道発表: <a href="https://www.mhlw.go.jp/stf/newpage_59190.html">https://www.mhlw.go.jp/stf/newpage_59190.html</a>
+    </p>
+    <p class="note">この画面は統計と自分の本数を並べるだけのものです。診断ではありません。気になるところがあれば歯科医院で診てもらってください。</p>
+  </div>
+
+  <div class="card">
+    <h2>これが現場で効くところ</h2>
+    <p class="field">歯科医院の待合に1台置くと、定期検診の話が言葉ではなく1枚の絵で終わります。押した本人が「同年代より2本少ない」と自分で気づいた状態で診療室に入ってくる。説明のはじまりが変わります。</p>
+    <p class="note">介護施設なら、入所時の口腔チェックの記録画面としてそのまま使えます。20本を割った入所者が何人いるかは、食事形態の見直しに直結します。</p>
+  </div>
+
+</div>
+<script>
+(function(){
+  var DATA = [
+    ['15〜19', 28.1, 100.0], ['20〜24', 28.5, 100.0], ['25〜29', 28.4, 100.0],
+    ['30〜34', 28.1, 100.0], ['35〜39', 28.0, 99.2],  ['40〜44', 28.1, 99.0],
+    ['45〜49', 27.9, 99.7],  ['50〜54', 27.4, 97.8],  ['55〜59', 27.0, 97.3],
+    ['60〜64', 25.7, 91.5],  ['65〜69', 23.4, 82.7],  ['70〜74', 21.3, 72.1],
+    ['75〜79', 19.5, 61.6],  ['80〜84', 19.1, 61.4],  ['85〜',   14.5, 35.0]
+  ];
+  var age = 6;
+  var gone = {};
+  var MAX = 32;
+
+  function isWis(row, i){ return i === 0 || i === 15; }
+
+  function buildArch(el, row){
+    var h = '';
+    for (var i=0;i<16;i++){
+      h += '<button class="tooth' + (isWis(row,i) ? ' wis' : '') + '" data-k="' + row + '-' + i +
+           '" aria-label="' + (row===0?'上':'下') + (i+1) + '番目の歯"></button>';
+    }
+    el.innerHTML = h;
+  }
+  buildArch(document.getElementById('upper'), 0);
+  buildArch(document.getElementById('lower'), 1);
+
+  document.querySelectorAll('.arch').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var b = e.target.closest('.tooth'); if (!b) return;
+      var k = b.dataset.k;
+      gone[k] = !gone[k];
+      b.classList.toggle('gone', !!gone[k]);
+      render();
+    });
+  });
+
+  function renderAges(){
+    document.getElementById('ages').innerHTML = DATA.map(function(d,i){
+      return '<button data-i="' + i + '" class="' + (i===age?'sel':'') + '">' + d[0] + '</button>';
+    }).join('');
+  }
+  document.getElementById('ages').addEventListener('click', function(e){
+    var b = e.target.closest('button'); if (!b) return;
+    age = +b.dataset.i; renderAges(); render();
+  });
+
+  document.getElementById('reset').addEventListener('click', function(){
+    gone = {};
+    document.querySelectorAll('.tooth').forEach(function(t){ t.classList.remove('gone'); });
+    render();
+  });
+  document.getElementById('nowis').addEventListener('click', function(){
+    ['0-0','0-15','1-0','1-15'].forEach(function(k){
+      gone[k] = true;
+      var el = document.querySelector('.tooth[data-k="' + k + '"]');
+      if (el) el.classList.add('gone');
+    });
+    render();
+  });
+
+  function render(){
+    var n = 0;
+    Object.keys(gone).forEach(function(k){ if (gone[k]) n++; });
+    var mine = MAX - n;
+    var d = DATA[age];
+    var avg = d[1], pct = d[2];
+
+    document.getElementById('v-n').innerHTML = mine + '<small> 本</small>';
+    document.getElementById('v-sub').textContent = n === 0 ? '押した歯はまだありません' : 'ない歯を ' + n + ' 本押しました';
+    document.getElementById('b-me').textContent = mine + ' 本';
+    document.getElementById('b-avg').textContent = avg.toFixed(1) + ' 本';
+    document.getElementById('b-agelab').textContent = d[0] + '歳の平均';
+    document.getElementById('i-me').style.width = (mine/MAX*100) + '%';
+    document.getElementById('i-avg').style.width = (avg/MAX*100) + '%';
+    var lp = (20/MAX*100) + '%';
+    document.getElementById('l20a').style.left = lp;
+    document.getElementById('l20b').style.left = lp;
+
+    var diff = mine - avg;
+    var de = document.getElementById('r-diff');
+    de.innerHTML = (diff >= 0 ? '+' : '') + diff.toFixed(1) + '<small> 本</small>';
+    de.style.color = diff >= 0 ? '#1a7f4b' : '#b4341f';
+
+    document.getElementById('r-plab').textContent = d[0] + '歳で20本以上ある人';
+    document.getElementById('r-p').innerHTML = pct.toFixed(1) + '<small> %</small>';
+
+    var msg;
+    if (mine >= 20 && diff >= 0){
+      msg = d[0] + '歳の平均より ' + diff.toFixed(1) + ' 本多く、20本も保てています。この年代で20本以上ある人は ' + pct.toFixed(1) + '%です。';
+    } else if (mine >= 20){
+      msg = '20本は保てていますが、' + d[0] + '歳の平均より ' + Math.abs(diff).toFixed(1) + ' 本少ない状態です。';
+    } else {
+      msg = '20本を下回りました。' + d[0] + '歳で20本以上ある人は ' + pct.toFixed(1) + '%なので、' +
+            (pct >= 50 ? 'この年代では多数派から外れています。' : 'この年代では珍しくない状態です。') +
+            '噛める本数は食べられるものの幅に直結します。';
+    }
+    document.getElementById('r-msg').textContent = msg;
+    renderTable();
+  }
+
+  function renderTable(){
+    document.getElementById('tbl').innerHTML = DATA.map(function(d,i){
+      return '<tr' + (i===age?' style="background:#f0f5ff"':'') + '><td>' + d[0] + '歳</td><td class="num">' +
+        d[1].toFixed(1) + ' 本</td><td class="num">' + d[2].toFixed(1) + ' %</td></tr>';
+    }).join('');
+  }
+
+  renderAges();
+  render();
+})();
+</script>
+</body>
+</html>

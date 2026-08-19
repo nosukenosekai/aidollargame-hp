@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>かわりに言う — 親に運転の話を切り出す、その一文だけを渡す</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .dataflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .tag { display:inline-block; font-size:13px; font-weight:700; color:#2563eb;
+    background:#f0f5ff; border:1px solid #d5e2ff; border-radius:999px; padding:2px 12px; margin-bottom:8px; }
+  .opts { display:grid; gap:10px; margin-top:10px; }
+  .opts button { font:inherit; font-size:17px; text-align:left; padding:15px 16px; background:#fff;
+    border:2px solid #e5e2db; border-radius:12px; cursor:pointer; color:#1c1b19; line-height:1.65; }
+  .opts button:hover { border-color:#2563eb; }
+  .say { border:2px solid #2563eb; background:#f0f5ff; border-radius:14px; padding:22px 18px; margin:12px 0 6px; }
+  .say .cap { font-size:14px; color:#2563eb; font-weight:700; letter-spacing:.04em; }
+  .say p { font-size:23px; line-height:1.7; margin:6px 0 0; font-weight:700; }
+  .why { font-size:15px; color:#55524c; border-left:3px solid #d5e2ff; padding-left:12px; margin-top:12px; }
+  .step { font-size:14px; color:#78746c; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:12px 18px; font:inherit; font-size:16px; cursor:pointer; }
+  button.ghost:hover { border-color:#2563eb; }
+  .sheet { border:1.5px solid #e5e2db; border-radius:12px; background:#fbfaf7; padding:16px; margin-top:10px; }
+  .sheet ol { margin:0; padding-left:22px; }
+  .sheet li { font-size:18px; font-weight:700; margin:10px 0; line-height:1.7; }
+  .ng { border:1.5px solid #f0d4cd; background:#fdf6f4; border-radius:12px; padding:16px; margin-top:12px; }
+  .ng h3 { margin:0 0 6px; font-size:16px; color:#b4341f; }
+  .ng ul { margin:0; padding-left:20px; }
+  .ng li { font-size:16px; margin:4px 0; }
+  .figs { display:grid; gap:12px; margin-top:10px; }
+  @media (min-width:520px){ .figs { grid-template-columns:1fr 1fr; } }
+  .rbox { border:1.5px solid #e5e2db; border-radius:12px; padding:14px; background:#fbfaf7; }
+  .rbox h3 { margin:0; font-size:15px; color:#55524c; font-weight:600; }
+  .rbox .n { font-size:32px; font-weight:800; letter-spacing:-.03em; margin:2px 0 0; }
+  .rbox .n small { font-size:15px; font-weight:600; letter-spacing:0; }
+  .src { font-size:14px; color:#78746c; margin-top:10px; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .note { font-size:15px; color:#78746c; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<div class="dataflag">返納件数は警察庁「運転免許の申請取消（自主返納）件数」の実数値です</div>
+<div class="wrap">
+
+  <span class="tag">声に出す</span>
+  <h1>かわりに言う</h1>
+  <p class="lead">親の運転の話は、切り出す一文が出てこないまま何年も過ぎます。ここで渡すのは分析でも資料でもなく、そのまま声に出す一文だけです。相手の返事を選ぶと、次の一文が出ます。</p>
+
+  <div class="card" id="c-q1">
+    <p class="step">1 / 3</p>
+    <h2>いま、どこにいますか</h2>
+    <div class="opts" id="q1"></div>
+  </div>
+
+  <div class="card hidden" id="c-l1">
+    <p class="step">最初の一文</p>
+    <div class="say"><span class="cap">そのまま言う</span><p id="l1"></p></div>
+    <p class="why" id="w1"></p>
+    <h2 style="margin-top:20px">相手はどう返しましたか</h2>
+    <div class="opts" id="q2"></div>
+  </div>
+
+  <div class="card hidden" id="c-l2">
+    <p class="step">二つめの一文</p>
+    <div class="say"><span class="cap">そのまま言う</span><p id="l2"></p></div>
+    <p class="why" id="w2"></p>
+    <h2 style="margin-top:20px">そのあとは</h2>
+    <div class="opts" id="q3"></div>
+  </div>
+
+  <div class="card hidden" id="c-l3">
+    <p class="step">三つめの一文</p>
+    <div class="say"><span class="cap">そのまま言う</span><p id="l3"></p></div>
+    <p class="why" id="w3"></p>
+  </div>
+
+  <div class="card hidden" id="c-sheet">
+    <h2>この会話で使った三文</h2>
+    <div class="sheet"><ol id="sheet"></ol></div>
+    <div class="ng">
+      <h3>言わないほうがいい三つ</h3>
+      <ul>
+        <li>もう歳なんだから</li>
+        <li>事故を起こしてからでは遅い</li>
+        <li>危ないからやめて</li>
+      </ul>
+      <p class="note" style="margin-top:6px">どれも正しいのですが、相手の受け取りは「運転が危ない」ではなく「自分が否定された」になります。返ってくるのは反論で、話はそこで止まります。</p>
+    </div>
+    <div class="btns"><button class="ghost" id="again">別の場面でやり直す</button></div>
+  </div>
+
+  <div class="card">
+    <h2>数として珍しいことではない</h2>
+    <p>免許を自分から返す人は、令和6年（2024年）の1年間で全国42万7,914件。うち75歳以上が26万4,916件です。ピークは令和元年の60万1,022件（75歳以上35万428件）でした。</p>
+    <div class="figs">
+      <div class="rbox"><h3>令和6年の自主返納（全年齢）</h3><p class="n">427,914<small> 件</small></p></div>
+      <div class="rbox"><h3>うち75歳以上</h3><p class="n">264,916<small> 件</small></p></div>
+    </div>
+    <p class="note" style="margin-top:10px">「あなただけが言われている」ではなく「毎年これだけの人が通る道だ」という置き方ができます。数字は説得の材料ではなく、相手を孤立させないための材料として使ってください。</p>
+    <p class="src">
+      警察庁「運転免許の申請取消（自主返納）件数と運転経歴証明書交付件数の推移」<br>
+      <a href="https://www.npa.go.jp/policies/application/license_renewal/pdf/rdhtransition_r06.pdf">https://www.npa.go.jp/policies/application/license_renewal/pdf/rdhtransition_r06.pdf</a><br>
+      警察庁交通局運転免許課「運転免許統計 令和6年版」<br>
+      <a href="https://www.npa.go.jp/publications/statistics/koutsuu/r06main.pdf">https://www.npa.go.jp/publications/statistics/koutsuu/r06main.pdf</a>
+    </p>
+    <p class="note">返納するかどうかは本人が決めることです。この画面は決めさせるための道具ではなく、話をはじめるための道具です。認知機能や体調の判断は医療機関へ、手続きは最寄りの警察署・運転免許センターへどうぞ。</p>
+  </div>
+
+  <div class="card">
+    <h2>これが現場で効くところ</h2>
+    <p class="field">社用車を運転する高齢のベテランに、同じ話をしなければならない日が来ます。会社としての言い方は「規程が変わったので」で済ませられますが、相手が受け取るものは家庭の場合と同じです。ここの三文はそのまま社内でも使えます。</p>
+    <p class="note">介護施設の相談員なら、家族から「親の運転をどう止めればいいか」と聞かれる場面が年に何度もあります。答えの代わりにこの画面を一緒に見る、という渡し方ができます。</p>
+  </div>
+
+</div>
+<script>
+(function(){
+  var SITU = [
+    {k:'a', t:'まだ何も起きていない。ただ年齢が気になっている',
+     l:'この前、車の話をしていて思ったんだけど、あと何年くらい乗るつもり？',
+     w:'やめる話ではなく、期限の話から入ります。相手は答えを持っていないことが多く、そこで初めて自分で考えはじめます。'},
+    {k:'b', t:'車体のこすった跡や小さなへこみが増えた',
+     l:'左の後ろ、こすった跡ついてたけど、どこで当たった？',
+     w:'責めずに、事実だけを一つ聞きます。「増えている」ではなく「この一つ」に絞ると、隠さずに話が出ます。'},
+    {k:'c', t:'道を間違えた、逆走したという話を聞いた',
+     l:'この前ヒヤッとしたって聞いたんだけど、そのとき何が起きてた？',
+     w:'人づてで聞いたことを本人の口から語ってもらいます。自分で説明するほど、本人の中で出来事が具体的になります。'},
+    {k:'d', t:'本人が「そろそろかな」と口にした',
+     l:'さっき、そろそろかなって言ってたよね。どのへんでそう思った？',
+     w:'いちばん進んでいる場面です。ここで説得を足すと後戻りします。本人が言った言葉をそのまま拾い返すだけにします。'}
+  ];
+
+  var R1 = [
+    {k:'no', t:'「まだ大丈夫だ」と言われた',
+     l:'うん、いま危ないとは思ってない。ただ、やめどきは自分で決めたいでしょ。',
+     w:'否定に否定を返さず、いったん認めます。そのうえで、決めるのは本人だと明確に渡す。ここで主導権を返すと、話が続きます。'},
+    {k:'life', t:'「車がないと生活できない」と言われた',
+     l:'そうだよね。じゃあ先に、車なしでどう暮らすかのほうを一緒に調べていい？',
+     w:'反論ではなく、順番を入れ替えます。返納の是非を置いて、足の確保を先に片づける。ここが実際いちばん詰まる部分です。'},
+    {k:'yes', t:'「考えてはいる」と言われた',
+     l:'じゃあ、いつごろまでにって決めておかない？ 誕生日とか、車検のときとか。',
+     w:'ぼんやりした同意を、日付のある話に変えます。区切りは免許更新・車検・誕生日が使いやすいです。'}
+  ];
+
+  var R2 = [
+    {k:'worry', t:'「そんなに心配か」と返された',
+     l:'心配というより、そっちが決める前に周りが決めるのが嫌なだけ。',
+     w:'心配を認めると相手は反発します。「あなたの判断を守りたい」に言い換えると、同じ側に立てます。'},
+    {k:'foot', t:'「代わりの足がない」と返された',
+     l:'今週、市役所とタクシー会社の割引だけ調べてみる。それ見てから決めよう。',
+     w:'こちらが手を動かす約束を一つだけします。多くの自治体に返納者向けの割引や乗合の制度があります。調べる担当を引き受けると、話が止まりません。'},
+    {k:'when', t:'「いつまでに決めればいい」と返された',
+     l:'次の更新までにしよう。それまでは今までどおりでいい。',
+     w:'期限を決めて、それまでは変えないと約束します。取り上げられる感じがなくなると、当日までの抵抗が小さくなります。'}
+  ];
+
+  var pick1 = null, pick2 = null, pick3 = null;
+
+  function opts(el, arr, cb){
+    el.innerHTML = arr.map(function(o,i){ return '<button data-i="' + i + '">' + o.t + '</button>'; }).join('');
+    el.onclick = function(e){
+      var b = e.target.closest('button'); if (!b) return;
+      cb(arr[+b.dataset.i]);
+    };
+  }
+
+  function show(id){ document.getElementById(id).classList.remove('hidden'); }
+  function hide(id){ document.getElementById(id).classList.add('hidden'); }
+
+  function start(){
+    pick1 = pick2 = pick3 = null;
+    ['c-l1','c-l2','c-l3','c-sheet'].forEach(hide);
+    show('c-q1');
+    opts(document.getElementById('q1'), SITU, function(o){
+      pick1 = o;
+      document.getElementById('l1').textContent = o.l;
+      document.getElementById('w1').textContent = o.w;
+      hide('c-q1'); show('c-l1');
+      document.getElementById('c-l1').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    opts(document.getElementById('q2'), R1, function(o){
+      pick2 = o;
+      document.getElementById('l2').textContent = o.l;
+      document.getElementById('w2').textContent = o.w;
+      show('c-l2');
+      document.getElementById('c-l2').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+    opts(document.getElementById('q3'), R2, function(o){
+      pick3 = o;
+      document.getElementById('l3').textContent = o.l;
+      document.getElementById('w3').textContent = o.w;
+      show('c-l3');
+      document.getElementById('sheet').innerHTML =
+        [pick1.l, pick2.l, pick3.l].map(function(s){ return '<li>' + s + '</li>'; }).join('');
+      show('c-sheet');
+      document.getElementById('c-l3').scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  }
+
+  document.getElementById('again').addEventListener('click', function(){
+    start();
+    document.getElementById('c-q1').scrollIntoView({behavior:'smooth', block:'start'});
+  });
+
+  start();
+})();
+</script>
+</body>
+</html>

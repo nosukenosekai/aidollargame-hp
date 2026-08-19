@@ -38,4 +38,6 @@ build/
 .cache/
 
 # Claude
-.claude/
+.claude/*
+# ただし共有したいスラッシュコマンドだけは追跡する（設定・認証は上で除外されたまま）
+!.claude/commands/

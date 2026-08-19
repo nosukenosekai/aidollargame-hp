@@ -209,9 +209,6 @@ def build_html(items, css):
 {breadcrumb}
 </script>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 {css}
 <style>
 /* note一覧ページの上書き。カードは<a>ではなく<article>なので、

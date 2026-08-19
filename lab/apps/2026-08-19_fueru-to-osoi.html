@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ふえると遅い — 選択肢が2個・4個・8個のとき、自分は何ミリ秒遅くなるか</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .tag { display:inline-block; font-size:13px; font-weight:700; color:#2563eb;
+    background:#f0f5ff; border:1px solid #d5e2ff; border-radius:999px; padding:2px 12px; margin-bottom:8px; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  button.ghost { background:#fff; color:#1c1b19; border:1.5px solid #e5e2db; border-radius:12px;
+    padding:14px 22px; font:inherit; font-size:17px; cursor:pointer; }
+  .prog { display:flex; justify-content:space-between; font-size:14px; color:#78746c; }
+  .progbar { height:6px; background:#efece5; border-radius:3px; overflow:hidden; margin:6px 0 12px; }
+  .progbar i { display:block; height:100%; background:#2563eb; transition:width .2s; }
+  .stage { background:#fbfaf7; border:1.5px solid #e5e2db; border-radius:12px; padding:12px; margin:10px 0 6px; }
+  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .cell { aspect-ratio:1/1; border-radius:12px; border:2px solid #e9e6df; background:#f3f1ec;
+    cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .cell.on { border-color:#cfd8e8; background:#fff; }
+  .cell.lit { background:#2563eb; border-color:#2563eb; }
+  .msg { text-align:center; font-size:19px; font-weight:700; min-height:34px; margin:10px 0 2px; }
+  .msg.warn { color:#b4341f; }
+  .res { display:grid; gap:12px; margin-top:6px; }
+  @media (min-width:520px){ .res { grid-template-columns:1fr 1fr; } }
+  .rbox { border:1.5px solid #e5e2db; border-radius:12px; padding:14px; background:#fbfaf7; }
+  .rbox.hi { border-color:#2563eb; background:#f0f5ff; }
+  .rbox h3 { margin:0; font-size:15px; color:#55524c; font-weight:600; }
+  .rbox .n { font-size:34px; font-weight:800; letter-spacing:-.03em; margin:2px 0 0; }
+  .rbox .n small { font-size:15px; font-weight:600; letter-spacing:0; }
+  .gap { text-align:center; padding:18px 14px; border:2px solid #2563eb; border-radius:12px;
+    background:#f0f5ff; margin-top:14px; }
+  .gap .n { font-size:44px; font-weight:800; letter-spacing:-.04em; color:#2563eb; line-height:1.15; }
+  .sub { font-size:16px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; margin-top:10px; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+  table { border-collapse:collapse; width:100%; font-size:15px; margin-top:8px; }
+  th,td { border-bottom:1px solid #eceae4; padding:8px 6px; text-align:left; }
+  td.num,th.num { text-align:right; }
+  td.num { font-weight:700; }
+  .hidden { display:none; }
+  .note { font-size:15px; color:#78746c; }
+  .chartwrap { overflow-x:auto; }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="demoflag">実験室の一本 — 出てくるのは、あなた自身が今この画面で出した数字です</div>
+<div class="wrap">
+
+  <span class="tag">再現実験</span>
+  <h1>ふえると遅い</h1>
+  <p class="lead">選ぶものが2個から4個、4個から8個に増えると、人は決まった分だけ遅くなる。1952年に測られたその関係が、あなたの指でも出るかを24回で確かめます。</p>
+
+  <div class="card" id="c-intro">
+    <h2>やること</h2>
+    <p>四角が並びます。しばらくすると、そのうち1つが青く光ります。<strong>光った四角をできるだけ速く押してください。</strong></p>
+    <p>光る候補が2個の回・4個の回・8個の回が、順番をまぜて出てきます。候補は薄い色ではなく<strong>白い四角</strong>で示されます。灰色の四角は光りません。</p>
+    <p class="note">練習3回のあと本番24回。全部で1分ほど。押し間違えた回は平均から除きます。</p>
+    <div class="btns"><button class="primary" id="btn-start">はじめる</button></div>
+  </div>
+
+  <div class="card hidden" id="c-run">
+    <div class="prog"><span id="p-label">練習</span><span id="p-count"></span></div>
+    <div class="progbar"><i id="p-bar" style="width:0%"></i></div>
+    <div class="stage">
+      <div class="grid" id="grid"></div>
+    </div>
+    <div class="msg" id="msg">準備</div>
+  </div>
+
+  <div class="card hidden" id="c-res">
+    <h2>あなたの結果</h2>
+    <table>
+      <thead><tr><th>光る候補の数</th><th class="num">中央値</th><th class="num">有効回数</th></tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+    <div class="chartwrap"><svg id="chart" viewBox="0 0 640 300" role="img" aria-label="候補数の情報量と反応時間の関係"></svg></div>
+    <p class="note" id="fitnote"></p>
+    <div class="res">
+      <div class="rbox"><h3>候補が1ビット増えるごとに</h3><p class="n" id="r-slope">—<small> ミリ秒</small></p></div>
+      <div class="rbox hi"><h3>あなたの処理の速さ</h3><p class="n" id="r-bits">—<small> ビット/秒</small></p></div>
+    </div>
+    <p class="note" id="hicknote"></p>
+  </div>
+
+  <div class="card hidden" id="c-field">
+    <h2>これが現場で効くところ</h2>
+    <p>注文パネルやレジのボタンを<strong>4個から12個</strong>に増やすと、あなたの今の数字では1回あたり——</p>
+    <div class="gap"><p class="n" id="f-ms">—</p><p class="sub">ミリ秒 遅くなる（あなたの傾きからの推定）</p></div>
+    <p class="field" id="f-day"></p>
+    <p class="note">押す前の「探す・迷う」時間だけの話で、押しにいく指の動きは別勘定です。それは<a href="./2026-08-19_oshisokoneru-haba.html">押しそこねる幅</a>で測れます。</p>
+  </div>
+
+  <div class="card">
+    <h2>この一本のもと</h2>
+    <p class="note">反応時間は候補の数そのものではなく、その数の情報量（log2）に比例して伸びる、という関係。1952年のHickと1953年のHymanが別々に見つけたものです。Hickは情報が入ってくる速さを毎秒5ビット程度と報告しました。</p>
+    <p class="src">
+      W. E. Hick (1952) On the rate of gain of information. Quarterly Journal of Experimental Psychology 4(1):11-26<br>
+      <a href="https://journals.sagepub.com/doi/10.1080/17470215208416600">https://journals.sagepub.com/doi/10.1080/17470215208416600</a><br>
+      R. Hyman (1953) Stimulus information as a determinant of reaction time. Journal of Experimental Psychology 45(3):188-196<br>
+      レビュー: Proctor &amp; Schneider (2018) Hick's law for choice reaction time: A review. QJEP<br>
+      <a href="https://web.ics.purdue.edu/~dws/pubs/ProctorSchneider_2018_QJEP.pdf">https://web.ics.purdue.edu/~dws/pubs/ProctorSchneider_2018_QJEP.pdf</a>
+    </p>
+    <p class="note">元の実験は専用の装置で指をキーに置いたまま行われました。この画面は画面上の四角を目で探して押す簡略版なので、切片も傾きも原典より大きく出ます。関係の形が出るかどうかを見る作りです。</p>
+  </div>
+
+</div>
+<script>
+(function(){
+  var POS = {2:[1,6], 4:[0,3,4,7], 8:[0,1,2,3,4,5,6,7]};
+  var grid = document.getElementById('grid');
+  var cells = [];
+  for (var i=0;i<8;i++){
+    var d = document.createElement('div');
+    d.className = 'cell';
+    d.dataset.i = i;
+    grid.appendChild(d);
+    cells.push(d);
+  }
+
+  var seq = [], warm = [4,4,4];
+  [2,4,8].forEach(function(n){ for (var i=0;i<8;i++) seq.push(n); });
+  for (var i=seq.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=seq[i]; seq[i]=seq[j]; seq[j]=t; }
+  var plan = warm.concat(seq);
+
+  var idx = 0, target = -1, t0 = 0, waiting = false, timer = null;
+  var data = {2:[], 4:[], 8:[]}, errors = 0;
+
+  function paint(n, lit){
+    var act = POS[n];
+    cells.forEach(function(c,i){
+      c.className = 'cell' + (act.indexOf(i)>=0 ? ' on' : '') + (i===lit ? ' lit' : '');
+    });
+  }
+  function clearAll(){ cells.forEach(function(c){ c.className='cell'; }); }
+
+  function nextTrial(){
+    if (idx >= plan.length){ finish(); return; }
+    var n = plan[idx];
+    var isWarm = idx < warm.length;
+    document.getElementById('p-label').textContent = isWarm ? '練習' : '本番（候補 ' + n + '個）';
+    var done = Math.max(0, idx - warm.length);
+    document.getElementById('p-count').textContent = isWarm ? (idx+1) + ' / 3' : done + ' / ' + seq.length;
+    document.getElementById('p-bar').style.width = (isWarm ? 0 : done/seq.length*100) + '%';
+    document.getElementById('msg').textContent = '待つ';
+    document.getElementById('msg').className = 'msg';
+    paint(n, -1);
+    target = -1; waiting = true;
+    var delay = 700 + Math.random()*1100;
+    timer = setTimeout(function(){
+      var act = POS[n];
+      target = act[Math.floor(Math.random()*act.length)];
+      paint(n, target);
+      t0 = performance.now();
+      document.getElementById('msg').textContent = '押す';
+    }, delay);
+  }
+
+  function onTap(e){
+    var c = e.target.closest('.cell');
+    if (!c || !waiting) return;
+    var i = parseInt(c.dataset.i, 10);
+    var n = plan[idx];
+    var isWarm = idx < warm.length;
+    if (target < 0){
+      clearTimeout(timer);
+      document.getElementById('msg').textContent = '早すぎ。この回は数えません';
+      document.getElementById('msg').className = 'msg warn';
+      if (!isWarm) errors++;
+      waiting = false; clearAll();
+      idx++; setTimeout(nextTrial, 900);
+      return;
+    }
+    var rt = performance.now() - t0;
+    waiting = false; clearAll();
+    if (i !== target){
+      document.getElementById('msg').textContent = '押し間違い。この回は数えません';
+      document.getElementById('msg').className = 'msg warn';
+      if (!isWarm) errors++;
+    } else {
+      document.getElementById('msg').textContent = Math.round(rt) + ' ミリ秒';
+      document.getElementById('msg').className = 'msg';
+      if (!isWarm && rt > 120 && rt < 3000) data[n].push(rt);
+    }
+    idx++;
+    setTimeout(nextTrial, 700);
+  }
+  grid.addEventListener('click', onTap);
+
+  function median(a){
+    if (!a.length) return null;
+    var b = a.slice().sort(function(x,y){return x-y;});
+    var m = Math.floor(b.length/2);
+    return b.length % 2 ? b[m] : (b[m-1]+b[m])/2;
+  }
+
+  function finish(){
+    document.getElementById('c-run').classList.add('hidden');
+    document.getElementById('c-res').classList.remove('hidden');
+    document.getElementById('c-field').classList.remove('hidden');
+
+    var rows = [], pts = [];
+    [2,4,8].forEach(function(n){
+      var m = median(data[n]);
+      rows.push('<tr><td>' + n + '個</td><td class="num">' + (m===null?'—':Math.round(m) + ' ms') + '</td><td class="num">' + data[n].length + '</td></tr>');
+      if (m !== null) pts.push({x: Math.log(n+1)/Math.LN2, y: m, n: n});
+    });
+    document.getElementById('tb').innerHTML = rows.join('');
+
+    if (pts.length < 2){
+      document.getElementById('fitnote').textContent = '有効な回が足りず、傾きは出せませんでした。もう一度読み込んでやり直すと出ます。';
+      drawChart(pts, null, null);
+      return;
+    }
+    var sx=0, sy=0, sxx=0, sxy=0, k=pts.length;
+    pts.forEach(function(p){ sx+=p.x; sy+=p.y; sxx+=p.x*p.x; sxy+=p.x*p.y; });
+    var b = (k*sxy - sx*sy) / (k*sxx - sx*sx);
+    var a = (sy - b*sx) / k;
+
+    drawChart(pts, a, b);
+
+    if (b <= 0){
+      document.getElementById('fitnote').textContent = '今回は候補が増えても遅くならず、傾きが下向きに出ました。24回だと順番のあやでこうなることがあります。読み込み直してもう一度測ると形が出やすいです。';
+      document.getElementById('r-slope').innerHTML = '—';
+      document.getElementById('r-bits').innerHTML = '—';
+      document.getElementById('hicknote').textContent = '押し間違い・早押しで数えなかった回: ' + errors + ' 回';
+      document.getElementById('c-field').classList.add('hidden');
+      return;
+    }
+
+    var bits = 1000 / b;
+    document.getElementById('fitnote').textContent =
+      'あてはめた式: 反応時間 = ' + Math.round(a) + ' + ' + Math.round(b) + ' × log2(候補数+1) ミリ秒。' +
+      '押し間違い・早押しで数えなかった回: ' + errors + ' 回。';
+    document.getElementById('r-slope').innerHTML = Math.round(b) + '<small> ミリ秒</small>';
+    document.getElementById('r-bits').innerHTML = bits.toFixed(1) + '<small> ビット/秒</small>';
+    document.getElementById('hicknote').textContent =
+      'Hickが1952年に報告した値は毎秒5ビット程度。あなたは ' + bits.toFixed(1) + ' ビット/秒でした。' +
+      (bits >= 3 && bits <= 12 ? 'おおむね同じ桁に収まっています。' : '原典とは離れました。画面越しの簡略版なのでずれること自体はよくあります。');
+
+    var d = b * (Math.log(13)/Math.LN2 - Math.log(5)/Math.LN2);
+    document.getElementById('f-ms').textContent = Math.round(d);
+    var perDay = d * 200 / 1000;
+    document.getElementById('f-day').innerHTML =
+      '1日に200回押す持ち場なら <strong>' + perDay.toFixed(1) + ' 秒/日</strong>、20営業日で <strong>' +
+      (perDay*20/60).toFixed(1) + ' 分/月</strong>。数字としては小さい。効くのは時間より、押し間違いと「どれだっけ」の一瞬のほうです。' +
+      '<br>候補8個までしか測っていないので、12個ぶんは伸ばして当てた値です。';
+  }
+
+  function drawChart(pts, a, b){
+    var svg = document.getElementById('chart');
+    var W=640, H=300, L=64, R=18, T=18, B=48;
+    var xs = [Math.log(3)/Math.LN2, Math.log(9)/Math.LN2];
+    var ymax = 100, ymin = 1e9;
+    pts.forEach(function(p){ if(p.y>ymax) ymax=p.y; if(p.y<ymin) ymin=p.y; });
+    if (ymin > 1e8) { ymin = 0; }
+    ymin = Math.max(0, ymin - 120); ymax = ymax + 120;
+    function X(v){ return L + (v - xs[0]) / (xs[1]-xs[0]) * (W-L-R); }
+    function Y(v){ return T + (1 - (v - ymin)/(ymax-ymin)) * (H-T-B); }
+    var s = '';
+    s += '<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#fbfaf7"/>';
+    s += '<line x1="'+L+'" y1="'+Y(ymin)+'" x2="'+(W-R)+'" y2="'+Y(ymin)+'" stroke="#d9d5cc" stroke-width="1.5"/>';
+    s += '<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+Y(ymin)+'" stroke="#d9d5cc" stroke-width="1.5"/>';
+    [ymin, (ymin+ymax)/2, ymax].forEach(function(v){
+      s += '<text x="'+(L-8)+'" y="'+(Y(v)+5)+'" text-anchor="end" font-size="13" fill="#78746c">'+Math.round(v)+'</text>';
+    });
+    s += '<text x="'+(L-8)+'" y="'+(T-4)+'" text-anchor="end" font-size="12" fill="#78746c">ms</text>';
+    if (a !== null && b !== null){
+      s += '<line x1="'+X(xs[0])+'" y1="'+Y(a+b*xs[0])+'" x2="'+X(xs[1])+'" y2="'+Y(a+b*xs[1])+'" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="6 5"/>';
+    }
+    pts.forEach(function(p){
+      s += '<circle cx="'+X(p.x)+'" cy="'+Y(p.y)+'" r="8" fill="#2563eb"/>';
+      s += '<text x="'+X(p.x)+'" y="'+(H-B+26)+'" text-anchor="middle" font-size="14" fill="#55524c">'+p.n+'個</text>';
+    });
+    s += '<text x="'+((L+W-R)/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="13" fill="#78746c">横は log2(候補数+1)（情報量）</text>';
+    svg.innerHTML = s;
+  }
+
+  document.getElementById('btn-start').addEventListener('click', function(){
+    document.getElementById('c-intro').classList.add('hidden');
+    document.getElementById('c-run').classList.remove('hidden');
+    nextTrial();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>押しそこねる幅 — 的の大きさと距離を変えて、自分の指の速さを測る</title>
+<style>
+  * { box-sizing:border-box; -webkit-text-size-adjust:100%; }
+  body { margin:0; background:#f5f4f0; color:#1c1b19;
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    font-size:17px; line-height:1.8; }
+  .demoflag { background:#1c1b19; color:#fff; font-size:12px; text-align:center; padding:6px 12px; }
+  .wrap { max-width:680px; margin:0 auto; padding:24px 16px 72px; }
+  h1 { font-size:31px; line-height:1.3; margin:16px 0 10px; letter-spacing:-.02em; }
+  .lead { color:#55524c; font-size:17px; margin:0 0 20px; }
+  .card { background:#fff; border:1px solid #e5e2db; border-radius:14px; padding:20px; margin:14px 0; }
+  h2 { font-size:20px; margin:0 0 8px; }
+  .tag { display:inline-block; font-size:13px; font-weight:700; color:#2563eb;
+    background:#f0f5ff; border:1px solid #d5e2ff; border-radius:999px; padding:2px 12px; margin-bottom:8px; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  button.primary { background:#2563eb; color:#fff; border:0; border-radius:12px; padding:14px 22px;
+    font:inherit; font-size:17px; font-weight:700; cursor:pointer; }
+  button.primary:hover { background:#1d4fd0; }
+  .prog { display:flex; justify-content:space-between; font-size:14px; color:#78746c; }
+  .progbar { height:6px; background:#efece5; border-radius:3px; overflow:hidden; margin:6px 0 12px; }
+  .progbar i { display:block; height:100%; background:#2563eb; transition:width .2s; }
+  .arena { position:relative; height:170px; background:#fbfaf7; border:1.5px solid #e5e2db;
+    border-radius:12px; margin:10px 0 6px; overflow:hidden; -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation; user-select:none; }
+  .bar { position:absolute; top:22px; height:126px; border-radius:8px; background:#e7e3db; }
+  .bar.next { background:#2563eb; }
+  .msg { text-align:center; font-size:19px; font-weight:700; min-height:34px; margin:10px 0 2px; }
+  .msg.warn { color:#b4341f; }
+  .res { display:grid; gap:12px; margin-top:6px; }
+  @media (min-width:520px){ .res { grid-template-columns:1fr 1fr; } }
+  .rbox { border:1.5px solid #e5e2db; border-radius:12px; padding:14px; background:#fbfaf7; }
+  .rbox.hi { border-color:#2563eb; background:#f0f5ff; }
+  .rbox h3 { margin:0; font-size:15px; color:#55524c; font-weight:600; }
+  .rbox .n { font-size:34px; font-weight:800; letter-spacing:-.03em; margin:2px 0 0; }
+  .rbox .n small { font-size:15px; font-weight:600; letter-spacing:0; }
+  .gap { text-align:center; padding:18px 14px; border:2px solid #2563eb; border-radius:12px;
+    background:#f0f5ff; margin-top:14px; }
+  .gap .n { font-size:44px; font-weight:800; letter-spacing:-.04em; color:#2563eb; line-height:1.15; }
+  .sub { font-size:16px; color:#55524c; }
+  .src { font-size:14px; color:#78746c; margin-top:10px; }
+  .src a { color:#2563eb; overflow-wrap:anywhere; word-break:break-all; }
+  .field { border-left:3px solid #2563eb; padding-left:14px; margin-top:12px; font-size:16px; }
+  table { border-collapse:collapse; width:100%; font-size:15px; margin-top:8px; }
+  th,td { border-bottom:1px solid #eceae4; padding:8px 6px; text-align:left; }
+  td.num,th.num { text-align:right; }
+  td.num { font-weight:700; }
+  .hidden { display:none; }
+  .note { font-size:15px; color:#78746c; }
+  .chartwrap { overflow-x:auto; }
+  svg { display:block; width:100%; height:auto; }
+</style>
+</head>
+<body>
+<div class="demoflag">実験室の一本 — 出てくるのは、あなた自身が今この画面で出した数字です</div>
+<div class="wrap">
+
+  <span class="tag">実測する</span>
+  <h1>押しそこねる幅</h1>
+  <p class="lead">的が小さいほど、遠いほど、押すのに時間がかかる。どれくらいかかるかは1954年に式になっています。青い帯を左右交互に40回叩いて、自分の指が毎秒何ビット運べるかを出します。</p>
+
+  <div class="card" id="c-intro">
+    <h2>やること</h2>
+    <p>青くなっている帯を押してください。押すと反対側が青くなります。<strong>それを左右交互に、できるだけ速く、しかし外さないように叩き続けます。</strong></p>
+    <p>帯の幅と離れ方を変えた4通りを、各10回ずつ。外れた回は数えません。</p>
+    <p class="note">全部で40回、1分ほど。スマホなら親指1本で、パソコンならマウスでどうぞ。</p>
+    <div class="btns"><button class="primary" id="btn-start">はじめる</button></div>
+  </div>
+
+  <div class="card hidden" id="c-run">
+    <div class="prog"><span id="p-label"></span><span id="p-count"></span></div>
+    <div class="progbar"><i id="p-bar" style="width:0%"></i></div>
+    <div class="arena" id="arena">
+      <div class="bar" id="barL"></div>
+      <div class="bar" id="barR"></div>
+    </div>
+    <div class="msg" id="msg">青い帯を押す</div>
+  </div>
+
+  <div class="card hidden" id="c-res">
+    <h2>あなたの結果</h2>
+    <table>
+      <thead><tr><th>的の幅と距離</th><th class="num">難しさ</th><th class="num">平均</th></tr></thead>
+      <tbody id="tb"></tbody>
+    </table>
+    <p class="note">「難しさ」は log2(距離÷幅+1) で出したビット数。細くて遠いほど大きくなります。</p>
+    <div class="chartwrap"><svg id="chart" viewBox="0 0 640 300" role="img" aria-label="難しさと所要時間の関係"></svg></div>
+    <p class="note" id="fitnote"></p>
+    <div class="res">
+      <div class="rbox"><h3>難しさが1ビット増えるごとに</h3><p class="n" id="r-slope">—<small> ミリ秒</small></p></div>
+      <div class="rbox hi"><h3>あなたの指の情報の速さ</h3><p class="n" id="r-ip">—<small> ビット/秒</small></p></div>
+    </div>
+    <p class="note" id="ipnote"></p>
+  </div>
+
+  <div class="card hidden" id="c-field">
+    <h2>これが現場で効くところ</h2>
+    <p>タブレットのレジで、指から200ピクセル離れたボタンを<strong>24ピクセルから48ピクセル</strong>に太らせると、あなたの今の数字では1回あたり——</p>
+    <div class="gap"><p class="n" id="f-ms">—</p><p class="sub">ミリ秒 速くなる（あなたの傾きからの推定）</p></div>
+    <p class="field" id="f-day"></p>
+    <p class="note">効き目の本体は速さではなく、押し外しが減ることです。細いボタンは押し直しが起き、押し直しは1回あたり丸ごと1回ぶんの時間になります。</p>
+  </div>
+
+  <div class="card">
+    <h2>この一本のもと</h2>
+    <p class="note">狙って動かす時間は、距離と的の幅の比の対数（難しさ）に比例して伸びる、という関係。1954年のFittsが示し、画面上の操作に使う形はMacKenzieが1992年にまとめました。この画面はMacKenzie版の log2(距離÷幅+1) を使っています。</p>
+    <p class="src">
+      P. M. Fitts (1954) The information capacity of the human motor system in controlling the amplitude of movement. Journal of Experimental Psychology 47(6):381-391<br>
+      <a href="https://www.semanticscholar.org/paper/58debe2530f83e392074dd7abab6339bdd1cc5b4">https://www.semanticscholar.org/paper/58debe2530f83e392074dd7abab6339bdd1cc5b4</a><br>
+      I. S. MacKenzie (1992) Fitts' law as a research and design tool in human-computer interaction. Human-Computer Interaction 7(1):91-139<br>
+      <a href="https://www.cefns.nau.edu/~edo/Classes/CS477_WWW/Docs/TechArticles/Fitts-Law.pdf">https://www.cefns.nau.edu/~edo/Classes/CS477_WWW/Docs/TechArticles/Fitts-Law.pdf</a>
+    </p>
+    <p class="note">距離と幅は画面のピクセルで測っています。同じ端末で測り直すぶんには比べられますが、スマホとパソコンをまたぐと1ピクセルの実寸が違うので、そのままは比べられません。</p>
+  </div>
+
+</div>
+<script>
+(function(){
+  var arena = document.getElementById('arena');
+  var barL = document.getElementById('barL'), barR = document.getElementById('barR');
+  var CONDS = [
+    {aR:0.30, wR:0.24, label:'太い / 近い'},
+    {aR:0.62, wR:0.24, label:'太い / 遠い'},
+    {aR:0.62, wR:0.09, label:'細い / 遠い'},
+    {aR:0.85, wR:0.07, label:'とても細い / とても遠い'}
+  ];
+  var PER = 10, DROP = 2;
+  var ci = 0, taps = 0, side = 0, tPrev = 0, errs = 0;
+  var recs = [];
+  var geo = null;
+
+  function setupCond(){
+    var w = arena.clientWidth;
+    var c = CONDS[ci];
+    var W = Math.max(14, Math.round(w * c.wR));
+    var A = Math.round(w * c.aR);
+    if (A/2 + W/2 > w/2 - 4){ A = w - W - 8; }
+    geo = {A:A, W:W};
+    barL.style.width = W + 'px';
+    barR.style.width = W + 'px';
+    barL.style.left = Math.round(w/2 - A/2 - W/2) + 'px';
+    barR.style.left = Math.round(w/2 + A/2 - W/2) + 'px';
+    side = 0; taps = 0; tPrev = 0;
+    paint();
+    document.getElementById('p-label').textContent = (ci+1) + ' / 4 ' + c.label;
+    upd();
+  }
+  function paint(){
+    barL.className = 'bar' + (side===0 ? ' next' : '');
+    barR.className = 'bar' + (side===1 ? ' next' : '');
+  }
+  function upd(){
+    document.getElementById('p-count').textContent = taps + ' / ' + PER;
+    var total = CONDS.length * PER;
+    var done = ci*PER + taps;
+    document.getElementById('p-bar').style.width = (done/total*100) + '%';
+  }
+
+  arena.addEventListener('click', function(e){
+    var r = arena.getBoundingClientRect();
+    var x = e.clientX - r.left;
+    var want = side===0 ? barL : barR;
+    var wl = want.offsetLeft, wr = wl + want.offsetWidth;
+    var now = performance.now();
+    if (x < wl || x > wr){
+      errs++;
+      document.getElementById('msg').textContent = '外れ。この回は数えません';
+      document.getElementById('msg').className = 'msg warn';
+      tPrev = 0;
+      return;
+    }
+    if (tPrev > 0){
+      var mt = now - tPrev;
+      taps++;
+      if (taps > DROP && mt > 90 && mt < 4000){
+        recs.push({ci:ci, mt:mt});
+      }
+      document.getElementById('msg').textContent = Math.round(mt) + ' ミリ秒';
+      document.getElementById('msg').className = 'msg';
+    } else {
+      document.getElementById('msg').textContent = '計測開始';
+      document.getElementById('msg').className = 'msg';
+    }
+    tPrev = now;
+    side = 1 - side;
+    paint();
+    upd();
+    if (taps >= PER){
+      CONDS[ci].A = geo.A; CONDS[ci].W = geo.W;
+      ci++;
+      if (ci >= CONDS.length){ finish(); }
+      else { setTimeout(setupCond, 500); }
+    }
+  });
+
+  function finish(){
+    document.getElementById('c-run').classList.add('hidden');
+    document.getElementById('c-res').classList.remove('hidden');
+    var rows = [], pts = [];
+    CONDS.forEach(function(c, i){
+      var arr = recs.filter(function(r){ return r.ci===i; }).map(function(r){ return r.mt; });
+      var mean = arr.length ? arr.reduce(function(a,b){return a+b;},0)/arr.length : null;
+      var id = Math.log(c.A / c.W + 1) / Math.LN2;
+      rows.push('<tr><td>' + c.label + '<br><span class="note">幅' + c.W + 'px / 距離' + c.A + 'px</span></td>' +
+        '<td class="num">' + id.toFixed(2) + '</td>' +
+        '<td class="num">' + (mean===null ? '—' : Math.round(mean) + ' ms') + '</td></tr>');
+      if (mean !== null) pts.push({x:id, y:mean, label:c.label});
+    });
+    document.getElementById('tb').innerHTML = rows.join('');
+
+    if (pts.length < 2){
+      document.getElementById('fitnote').textContent = '有効な回が足りず、傾きは出せませんでした。読み込み直してやり直すと出ます。';
+      draw(pts, null, null);
+      return;
+    }
+    var sx=0,sy=0,sxx=0,sxy=0,k=pts.length;
+    pts.forEach(function(p){ sx+=p.x; sy+=p.y; sxx+=p.x*p.x; sxy+=p.x*p.y; });
+    var b = (k*sxy - sx*sy)/(k*sxx - sx*sx);
+    var a = (sy - b*sx)/k;
+    draw(pts, a, b);
+
+    if (b <= 0){
+      document.getElementById('fitnote').textContent = '今回は難しい的のほうが速く出て、傾きが下向きになりました。40回だと起こります。読み込み直してもう一度どうぞ。';
+      document.getElementById('ipnote').textContent = '外した回: ' + errs + ' 回';
+      return;
+    }
+    var ip = 1000/b;
+    document.getElementById('fitnote').textContent =
+      'あてはめた式: 所要時間 = ' + Math.round(a) + ' + ' + Math.round(b) + ' × 難しさ ミリ秒。外した回: ' + errs + ' 回。';
+    document.getElementById('r-slope').innerHTML = Math.round(b) + '<small> ミリ秒</small>';
+    document.getElementById('r-ip').innerHTML = ip.toFixed(1) + '<small> ビット/秒</small>';
+    document.getElementById('ipnote').textContent =
+      '画面を指やマウスで叩く課題では、だいたい毎秒4〜10ビットに収まります。あなたは ' + ip.toFixed(1) + ' ビット/秒でした。' +
+      (ip >= 3 && ip <= 14 ? '見慣れた範囲です。' : 'この範囲から外れました。押し方（連打ぎみ・慎重すぎ）でも動きます。');
+
+    var d = b * (Math.log(200/24+1)/Math.LN2 - Math.log(200/48+1)/Math.LN2);
+    document.getElementById('c-field').classList.remove('hidden');
+    document.getElementById('f-ms').textContent = Math.round(d);
+    var perDay = d*300/1000;
+    document.getElementById('f-day').innerHTML =
+      '1日に300回押すレジなら <strong>' + perDay.toFixed(1) + ' 秒/日</strong>。時間の得は小さいままです。' +
+      '同じ式の別の顔として、幅を半分にすると難しさが約1ビット増え、外す率がはっきり上がります。狙うべきはそちらです。';
+  }
+
+  function draw(pts, a, b){
+    var svg = document.getElementById('chart');
+    var W=640,H=300,L=64,R=18,T=18,B=48;
+    var xmin=0.8, xmax=4.6;
+    pts.forEach(function(p){ if(p.x<xmin)xmin=p.x-0.3; if(p.x>xmax)xmax=p.x+0.3; });
+    var ymin=1e9, ymax=0;
+    pts.forEach(function(p){ if(p.y<ymin)ymin=p.y; if(p.y>ymax)ymax=p.y; });
+    if (ymin>1e8){ ymin=0; ymax=600; }
+    ymin=Math.max(0,ymin-120); ymax=ymax+120;
+    function X(v){ return L + (v-xmin)/(xmax-xmin)*(W-L-R); }
+    function Y(v){ return T + (1-(v-ymin)/(ymax-ymin))*(H-T-B); }
+    var s='';
+    s+='<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#fbfaf7"/>';
+    s+='<line x1="'+L+'" y1="'+Y(ymin)+'" x2="'+(W-R)+'" y2="'+Y(ymin)+'" stroke="#d9d5cc" stroke-width="1.5"/>';
+    s+='<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+Y(ymin)+'" stroke="#d9d5cc" stroke-width="1.5"/>';
+    [ymin,(ymin+ymax)/2,ymax].forEach(function(v){
+      s+='<text x="'+(L-8)+'" y="'+(Y(v)+5)+'" text-anchor="end" font-size="13" fill="#78746c">'+Math.round(v)+'</text>';
+    });
+    s+='<text x="'+(L-8)+'" y="'+(T-4)+'" text-anchor="end" font-size="12" fill="#78746c">ms</text>';
+    if (a!==null&&b!==null){
+      s+='<line x1="'+X(xmin)+'" y1="'+Y(a+b*xmin)+'" x2="'+X(xmax)+'" y2="'+Y(a+b*xmax)+'" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="6 5"/>';
+    }
+    pts.forEach(function(p){
+      s+='<circle cx="'+X(p.x)+'" cy="'+Y(p.y)+'" r="8" fill="#2563eb"/>';
+      s+='<text x="'+X(p.x)+'" y="'+(H-B+26)+'" text-anchor="middle" font-size="13" fill="#55524c">'+p.x.toFixed(1)+'</text>';
+    });
+    s+='<text x="'+((L+W-R)/2)+'" y="'+(H-6)+'" text-anchor="middle" font-size="13" fill="#78746c">横は難しさ（ビット）</text>';
+    svg.innerHTML=s;
+  }
+
+  document.getElementById('btn-start').addEventListener('click', function(){
+    document.getElementById('c-intro').classList.add('hidden');
+    document.getElementById('c-run').classList.remove('hidden');
+    setupCond();
+  });
+})();
+</script>
+</body>
+</html>

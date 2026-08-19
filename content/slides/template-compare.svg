@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="-apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic Medium', Meiryo, sans-serif">
+  <!-- ============ 比較テンプレート（Before / After） 1920x1080 ============ -->
+  <defs>
+    <filter id="card2" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="9" flood-color="#141e46" flood-opacity="0.07"/>
+    </filter>
+  </defs>
+
+  <rect width="1920" height="1080" fill="#f7f8fa"/>
+
+  <text data-edit="kicker" x="120" y="128" font-size="24" fill="#2f56c9" letter-spacing="0.18em">02 ／ 導入前と導入後</text>
+  <text data-edit="title" x="120" y="204" font-size="60" font-weight="700" fill="#14161f">何がどう変わるのか</text>
+  <rect x="120" y="240" width="88" height="5" rx="2.5" fill="#ff5757"/>
+
+  <!-- 左：導入前 -->
+  <rect x="120" y="320" width="780" height="480" rx="20" fill="#ffffff" filter="url(#card2)"/>
+  <rect x="120" y="320" width="780" height="92" rx="20" fill="#eceef4"/>
+  <rect x="120" y="392" width="780" height="20" fill="#eceef4"/>
+  <text data-edit="left-head" x="176" y="380" font-size="34" font-weight="700" fill="#6b7080">導入前</text>
+  <g data-edit="left-items" font-size="28" fill="#3a3f4d">
+    <text x="176" y="486">・問い合わせは電話とLINEに分散</text>
+    <text x="176" y="566">・返信は担当者1人に依存</text>
+    <text x="176" y="646">・夜間と休日は対応できない</text>
+    <text x="176" y="726">・対応履歴が個人のスマホに残る</text>
+  </g>
+
+  <!-- 矢印 -->
+  <path d="M932 560 L 988 560 M 972 544 L 990 560 L 972 576" fill="none" stroke="#ff5757" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- 右：導入後 -->
+  <rect x="1020" y="320" width="780" height="480" rx="20" fill="#ffffff" filter="url(#card2)"/>
+  <rect x="1020" y="320" width="780" height="92" rx="20" fill="#2f56c9"/>
+  <rect x="1020" y="392" width="780" height="20" fill="#2f56c9"/>
+  <text data-edit="right-head" x="1076" y="380" font-size="34" font-weight="700" fill="#ffffff">導入後</text>
+  <g data-edit="right-items" font-size="28" fill="#14161f">
+    <text x="1076" y="486">・窓口をLINEに一本化</text>
+    <text x="1076" y="566">・一次対応はAIが24時間365日</text>
+    <text x="1076" y="646">・判断が要る案件だけ人へ引き継ぐ</text>
+    <text x="1076" y="726">・履歴は全社で共有・検索できる</text>
+  </g>
+
+  <text data-edit="note" x="120" y="908" font-size="24" fill="#9aa3bb">※ 導入は段階的に。まず問い合わせの一次対応から始めます。</text>
+
+  <line x1="120" y1="944" x2="1800" y2="944" stroke="#e6e8ef" stroke-width="1"/>
+  <text x="120" y="1000" font-size="22" fill="#9aa3bb">株式会社AIdollargame</text>
+  <text data-edit="pageno" x="1800" y="1000" font-size="22" fill="#9aa3bb" text-anchor="end">4</text>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="-apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic Medium', Meiryo, sans-serif">
+  <!-- ============ 表紙テンプレート 1920x1080 ============
+       色・フォントは index.html の :root トークンに準拠
+       編集するのは data-edit 付きの text だけ。背景の図形は触らない。 -->
+  <defs>
+    <linearGradient id="navy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1b2a55"/>
+      <stop offset="1" stop-color="#0d1733"/>
+    </linearGradient>
+    <linearGradient id="arc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2f56c9" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#2f56c9" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#navy)"/>
+  <circle cx="1660" cy="240" r="520" fill="url(#arc)"/>
+  <circle cx="1660" cy="240" r="360" fill="none" stroke="#7da4d2" stroke-opacity="0.22" stroke-width="1.5"/>
+
+  <!-- 左上：ブランドマーク -->
+  <g transform="translate(120,96)">
+    <text x="0" y="30" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="40" fill="#ffffff" letter-spacing="-1.5">Aı</text>
+    <path fill="#ff5757" transform="translate(-40.75,-27) scale(5)" d="M21.5 6.2 C 20.95 6.2 20.55 6.5 20.35 6.85 C 20.15 6.5 19.75 6.2 19.2 6.2 C 18.4 6.2 17.75 6.85 17.75 7.65 C 17.75 9 20.35 10.4 20.35 10.4 C 20.35 10.4 22.95 9 22.95 7.65 C 22.95 6.85 22.3 6.2 21.5 6.2 Z"/>
+    <text x="130" y="28" font-size="26" fill="#c9d7f7" letter-spacing="0.08em">株式会社AIdollargame</text>
+  </g>
+
+  <!-- 見出し -->
+  <rect x="120" y="470" width="96" height="6" rx="3" fill="#ff5757"/>
+  <text data-edit="kicker" x="120" y="430" font-size="28" fill="#7da4d2" letter-spacing="0.18em">AI導入のご提案</text>
+  <text data-edit="title1" x="120" y="600" font-size="96" font-weight="700" fill="#ffffff" letter-spacing="0.01em">現場の作業を、</text>
+  <text data-edit="title2" x="120" y="712" font-size="96" font-weight="700" fill="#ffffff" letter-spacing="0.01em">AIに任せるという選択</text>
+  <text data-edit="lead" x="120" y="800" font-size="34" fill="#c7d2ee" letter-spacing="0.02em">中小企業のための、無理のないAI活用</text>
+
+  <!-- 下部：日付・宛先 -->
+  <line x1="120" y1="920" x2="1800" y2="920" stroke="#ffffff" stroke-opacity="0.14" stroke-width="1"/>
+  <text data-edit="client" x="120" y="984" font-size="28" fill="#9aa3bb">〇〇株式会社 御中</text>
+  <text data-edit="date" x="1800" y="984" font-size="28" fill="#9aa3bb" text-anchor="end">2026.08.19</text>
+</svg>

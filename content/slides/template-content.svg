@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="-apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic Medium', Meiryo, sans-serif">
+  <!-- ============ 本文テンプレート（見出し＋箇条書き） 1920x1080 ============
+       SVGのtextは自動改行しない。1行 = 1つの<text>。行送りは56px。 -->
+  <defs>
+    <filter id="card" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="3" stdDeviation="9" flood-color="#141e46" flood-opacity="0.07"/>
+    </filter>
+  </defs>
+
+  <rect width="1920" height="1080" fill="#f7f8fa"/>
+
+  <!-- 見出し -->
+  <text data-edit="kicker" x="120" y="128" font-size="24" fill="#2f56c9" letter-spacing="0.18em">01 ／ 現状の課題</text>
+  <text data-edit="title" x="120" y="204" font-size="60" font-weight="700" fill="#14161f" letter-spacing="0.01em">問い合わせ対応に、時間が溶けている</text>
+  <rect x="120" y="240" width="88" height="5" rx="2.5" fill="#ff5757"/>
+
+  <!-- 本文（左カラム） -->
+  <g data-edit="bullets" font-size="30" fill="#3a3f4d">
+    <rect x="120" y="332" width="12" height="12" rx="2" fill="#2f56c9"/>
+    <text x="160" y="344">電話とLINEの一次対応に、1日あたり2〜3時間が取られている</text>
+    <rect x="120" y="412" width="12" height="12" rx="2" fill="#2f56c9"/>
+    <text x="160" y="424">担当者が不在だと止まる。休日と夜間は取りこぼしている</text>
+    <rect x="120" y="492" width="12" height="12" rx="2" fill="#2f56c9"/>
+    <text x="160" y="504">同じ質問への回答を、毎回ゼロから書いている</text>
+    <rect x="120" y="572" width="12" height="12" rx="2" fill="#2f56c9"/>
+    <text x="160" y="584">結果、本来やるべき提案・改善に手が回らない</text>
+  </g>
+
+  <!-- 強調ボックス（右） -->
+  <rect x="1180" y="300" width="620" height="330" rx="20" fill="#ffffff" filter="url(#card)"/>
+  <rect x="1180" y="300" width="8" height="330" rx="4" fill="#2f56c9"/>
+  <text data-edit="box-label" x="1236" y="372" font-size="24" fill="#6b7080" letter-spacing="0.14em">ここが効く</text>
+  <text data-edit="box-num" x="1236" y="480" font-size="86" font-weight="700" fill="#2f56c9">月 48 時間</text>
+  <text data-edit="box-note" x="1236" y="546" font-size="26" fill="#3a3f4d">一次対応の自動化で削減できる想定時間</text>
+  <text data-edit="box-sub" x="1236" y="590" font-size="22" fill="#9aa3bb">※ 1日2.5時間 × 稼働19日で試算</text>
+
+  <!-- 結論バンド -->
+  <rect x="120" y="720" width="1680" height="132" rx="18" fill="#eef2fc"/>
+  <text data-edit="conclusion" x="176" y="800" font-size="36" font-weight="700" fill="#1b2a55">作業はAIに。空いた時間を、人にしかできない仕事へ。</text>
+
+  <!-- フッター -->
+  <line x1="120" y1="944" x2="1800" y2="944" stroke="#e6e8ef" stroke-width="1"/>
+  <text x="120" y="1000" font-size="22" fill="#9aa3bb">株式会社AIdollargame</text>
+  <text data-edit="pageno" x="1800" y="1000" font-size="22" fill="#9aa3bb" text-anchor="end">3</text>
+</svg>

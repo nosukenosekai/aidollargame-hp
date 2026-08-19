@@ -348,7 +348,14 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 
 /* ---------- ヒーロー（alationと同構図の実写・暗トーン+押せるボタン） ---------- */
 .hero{position:relative;min-height:min(86vh,760px);display:flex;align-items:center;justify-content:center;background:#0c0f16;overflow:hidden;}
-.hero-media{position:absolute;inset:0;overflow:hidden;}
+.hero-media{position:absolute;inset:0;overflow:hidden;background:linear-gradient(180deg,#3c3a40 0%,#342c2a 45%,#171616 100%);}
+/* 背景として流しているだけなのでタップで全画面にしない */
+.hero-media video{pointer-events:none;}
+/* iOSが自動再生を弾いた時に出る中央の再生ボタンを隠す。   標準外の指定なので効かない端末もあるが、その場合も上の下地が出るso見た目は崩れない */
+.hero-media video::-webkit-media-controls,
+.hero-media video::-webkit-media-controls-panel,
+.hero-media video::-webkit-media-controls-start-playback-button,
+.hero-media video::-webkit-media-controls-overlay-play-button{display:none!important;-webkit-appearance:none;opacity:0;pointer-events:none;}
 .hero-media video{width:100%;height:100%;object-fit:cover;object-position:center;}
 .hero-media::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(8,10,16,0.3) 0%,rgba(8,10,16,0.66) 100%);}
 .hero-body{position:relative;max-width:1080px;margin:0 auto;padding:120px 24px 110px;width:100%;text-align:center;}
@@ -371,11 +378,12 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 @media(max-width:900px){.scroll-cue{display:none;}}
 @media(prefers-reduced-motion:reduce){.hero-media video{display:none;}}
 /* AI研修の告知はヒーローから出して細い帯に */
-.notice{background:#fff;border-bottom:1px solid var(--line);}
-.notice a{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:center;gap:0.8rem;font-size:0.86rem;color:var(--ink);flex-wrap:wrap;text-align:center;}
+.notice{background:var(--navy-deep);border-bottom:none;}
+.notice a{max-width:var(--maxw);margin:0 auto;padding:15px 24px;display:flex;align-items:center;justify-content:center;gap:0.7rem;font-size:1rem;font-weight:600;color:#fff;flex-wrap:wrap;text-align:center;}
 .notice a:hover .mk{text-decoration:underline;}
-.notice .hb-badge{background:var(--blue);color:#fff;font-weight:700;font-size:0.72rem;border-radius:999px;padding:0.15rem 0.7rem;flex:none;}
-.notice .mk{font-weight:700;color:var(--blue);}
+.notice .hb-badge{background:var(--orange);color:#1b2a55;font-weight:800;font-size:0.78rem;border-radius:999px;padding:0.2rem 0.8rem;flex:none;letter-spacing:0.02em;}
+.notice .hb-left{background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.28);color:#fff;font-weight:800;font-size:0.9rem;border-radius:999px;padding:0.2rem 0.8rem;flex:none;white-space:nowrap;}
+.notice .mk{font-weight:800;color:#ffcd77;}
 
 .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 1.7rem;border-radius:999px;font-size:0.93rem;font-weight:700;letter-spacing:0.04em;transition:transform 0.3s var(--ease),background 0.3s var(--ease),box-shadow 0.4s var(--ease),color 0.3s var(--ease),border-color 0.3s var(--ease);}
 .btn:hover{transform:translateY(-2px);}
@@ -735,6 +743,11 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 /* ---- スマホの可読性: 本文まわりが12〜14pxで小さすぎたため底上げする ----
    元の指定が .post .pdesc のような2クラス構成なので、こちらも同じ詳細度で書く ---- */
 @media(max-width:560px){
+  /* 帯は行数が増えると場所を食うので、スマホでは詰めて矢印を落とす */
+  .notice a{padding:11px 14px;gap:0.45rem;font-size:0.94rem;line-height:1.6;}
+  .notice .hb-badge{font-size:0.74rem;padding:0.15rem 0.62rem;}
+  .notice .hb-left{font-size:0.82rem;padding:0.15rem 0.62rem;}
+  .notice a > span[aria-hidden]{display:none;}
   /* 1列なので横並び用に確保していた数字の箱の高さは不要 */
   .stat2 .num{min-height:auto;margin:0.3rem 0 0.7rem;}
   .sec-lead{font-size:1.04rem;line-height:1.95;}
@@ -757,6 +770,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   .photo-pair figcaption{font-size:0.84rem;line-height:1.7;}
   .start-first .sf-label{font-size:0.88rem;}
   .notice .hb-badge{font-size:0.8rem;}
+.notice a:hover .mk{text-decoration:underline;}
   .badge-req,.badge-opt{font-size:0.78rem;}
   .foot-links a{font-size:0.95rem;padding:0.5rem 0;}
   .foot-copy{font-size:0.8rem;}
@@ -793,6 +807,9 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </header>
 
+<div class="notice">
+  <a href="ai-training.html"><span class="hb-badge">AI研修の助成金</span><span data-edit="hero-banner">訓練経費は<span class="mk">中小最大75%が助成対象</span>。この制度は<span class="mk">今年度で終了</span>します</span><span class="hb-left" id="hbLeft"></span><span aria-hidden="true">→</span></a>
+</div>
 <section class="hero" id="hero">
   <div class="hero-media" aria-hidden="true">
     <video src="hero-night.mp4" muted autoplay loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture disableremoteplayback></video>
@@ -808,9 +825,6 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   <div class="scroll-cue"><span>SCROLL</span><i></i></div>
 </section>
 
-<div class="notice">
-  <a href="ai-training.html"><span class="hb-badge">AI研修</span><span data-edit="hero-banner">訓練経費は<span class="mk">中小最大75%が助成対象</span>／この制度は今年度・2027年3月末で終了</span><span aria-hidden="true">→</span></a>
-</div>
 
 <div class="belt" aria-hidden="true">
   <div class="belt__track">
@@ -1747,6 +1761,20 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     window.addEventListener(e, go, { passive: true });
   });
   document.addEventListener('visibilitychange', function(){ if (!document.hidden) go(); });
+})();
+</script>
+
+<script>
+/* 助成コースの残り期間。訓練を2027年3月末までに終える必要があるため、
+   そこまでの残り月数を出す。手で書くと翌月には嘘になるので毎回計算する。 */
+(function(){
+  var el = document.getElementById('hbLeft');
+  if (!el) return;
+  var end = new Date(2027, 2, 31);
+  var now = new Date();
+  var m = (end.getFullYear() - now.getFullYear()) * 12 + (end.getMonth() - now.getMonth());
+  if (m < 0) { el.remove(); return; }
+  el.textContent = m > 0 ? '2027年3月末まで あと' + m + 'か月' : '2027年3月末まで 今月が最後';
 })();
 </script>
 </body>

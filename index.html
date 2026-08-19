@@ -1777,5 +1777,58 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   el.textContent = m > 0 ? '2027年3月末まで あと' + m + 'か月' : '2027年3月末まで 今月が最後';
 })();
 </script>
+
+<script>
+/* labの本数と業種数を lab/apps.json から実数で出す。手打ちだと増えても古いままになるため。
+   apps.json は約29KBあるので、labセクションが画面に入った時に一度だけ取りに行く。
+   取れなかった場合はHTMLに書いてある数字がそのまま残る（表示が壊れない）。
+   数字の部分だけを差し替えるので、「本」「業種」などの言い回しは編集画面の指定が生きる。 */
+(function(){
+  var sec = document.getElementById('lab');
+  if (!sec || !window.fetch) return;
+
+  function setNum(key, v){
+    var el = document.querySelector('[data-edit="' + key + '"]');
+    if (!el || v == null) return;
+    el.textContent = el.textContent.replace(/[0-9０-９,]+/, String(v));
+  }
+
+  var done = false;
+  function load(){
+    if (done) return;
+    done = true;
+    fetch('lab/apps.json', { cache: 'no-cache' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(list){
+        if (!Array.isArray(list) || !list.length) return;
+        /* お題は「技術 × 現場 × 人間の欲 × 型」。2番目が現場＝業種。
+           業種でないもの（自分・AI・toC）と、区切りに失敗した長い文字列は数えない。 */
+        var skip = { '自分': 1, 'AI': 1, 'toC': 1 }, seen = {}, n = 0;
+        list.forEach(function(x){
+          var parts = String(x.odai || '').split('×');
+          if (parts.length < 2) return;
+          var g = parts[1].trim();
+          if (!g || skip[g] || g.length > 12 || seen[g]) return;
+          seen[g] = 1; n++;
+        });
+        setNum('lab-s1n', list.length);
+        if (n) setNum('lab-s2n', n);
+        /* 3枚目の説明文にも本数が出てくるので合わせる */
+        var p3 = document.querySelector('[data-edit="lab-s3p"]');
+        if (p3) p3.textContent = p3.textContent.replace(/[0-9０-９,]+本/, list.length + '本');
+      })
+      .catch(function(){});
+  }
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting) { load(); io.disconnect(); } });
+    }, { rootMargin: '400px' });
+    io.observe(sec);
+  } else {
+    load();
+  }
+})();
+</script>
 </body>
 </html>

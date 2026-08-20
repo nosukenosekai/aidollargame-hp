@@ -110,6 +110,7 @@
 株式会社AIdollargameが note.com で公開している記事。一覧ページ: https://aidollargame.com/note.html
 アカウント: https://note.com/aidollargame
 
+- 2026-08-20｜67%減った検索と、18%増えた検索｜24億回の表示からわかること: https://note.com/aidollargame/n/n37f645d1f3a3
 - 2026-08-18｜AIで雇用は減っていないが...。給与データ数百万人分を読む: https://note.com/aidollargame/n/n37843927e437
 - 2026-08-17｜AIで書いた文章が「他社と同じ」になる仕組み｜願書37万通の分析から作った、同質化を外す手順: https://note.com/aidollargame/n/n29daf4118186
 - 2026-08-14｜AIに面接をやらせたら内定が12%増えた。でも採用にかかる日数は4日のびた｜応募者7万人の実験を読む: https://note.com/aidollargame/n/nfcaf9c186d8e

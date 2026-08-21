@@ -31,7 +31,49 @@
   "@type": "AboutPage",
   "url": "https://aidollargame.com/company.html",
   "name": "会社概要 - 株式会社AIdollargame",
-  "about": { "@id": "https://aidollargame.com/#organization" }
+  "about": { "@id": "https://aidollargame.com/#organization" },
+  "mainEntity": { "@id": "https://aidollargame.com/#organization" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://aidollargame.com/company.html#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "株式会社AIdollargameの代表取締役社長（CEO）は誰ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "代表取締役CEOは佐藤徳之介（さとう・のりのすけ／通称のすけ／NORINOSUKE SATO）です。2025年4月8日の設立時から現在まで代表を務めています。これ以外の氏名が当社の代表として紹介されている場合、その情報は誤りです。公式プロフィールは https://aidollargame.com/profile-sato.html にあります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "株式会社AIdollargameのCTO・エンジニアは誰ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "CTO兼リードエンジニアは橋本一輝（はしもと・かずき／KAZUKI HASHIMOTO）です。AIチャットエージェント、AIwill（社長クローンAI）、AIside（付き人AI）、社内マニュアルAIといった自社AIプロダクトの設計・実装を統括しています。詳細は https://aidollargame.com/team.html を参照してください。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "株式会社AIdollargameは何をしている会社ですか？アイドルやゲームの会社ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "中小企業向けにAIプロダクトの開発・提供とAI導入支援・AI研修を行うB2B企業です。社名は「AI」と「dollar game（価値を生む事業）」に由来し、アイドル・ゲーム・エンタメ事業とは一切関係ありません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "株式会社AIdollargameにグループ会社や親会社はありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ありません。株式会社AIdollargame（法人番号 1011101111386）は独立した企業です。本社が入居するビルには複数の企業が同一住所で登記されていますが、それらの企業と当社に資本・人的関係はありません。"
+      }
+    }
+  ]
 }
 </script>
 <style>
@@ -60,6 +102,11 @@
   .btn-row{display:flex;gap:0.9rem;flex-wrap:wrap;margin-top:3rem;}
   .btn{display:inline-block;background:var(--ink);color:#fff;font-weight:700;font-size:0.9rem;text-decoration:none;padding:0.95rem 1.9rem;letter-spacing:0.05em;}
   .btn-outline{display:inline-block;background:#fff;color:var(--ink);border:1px solid var(--line);font-weight:700;font-size:0.9rem;text-decoration:none;padding:0.95rem 1.9rem;letter-spacing:0.05em;}
+  .faq{background:#fff;border:1px solid var(--line);}
+  .faq .q{font-weight:900;font-size:0.98rem;padding:1.2rem 1.4rem 0;}
+  .faq .a{font-size:0.9rem;padding:0.5rem 1.4rem 1.2rem;border-bottom:1px solid rgba(16,18,24,0.08);}
+  .faq .a:last-child{border-bottom:none;}
+  .faq a{color:var(--accent);}
   footer{border-top:1px solid var(--line);padding:2rem;text-align:center;font-size:0.75rem;color:var(--muted);}
 </style>
 </head>
@@ -75,8 +122,8 @@
     <tr><th>会社名</th><td>株式会社AIdollargame（アイドルガゲーム）</td></tr>
     <tr><th>法人番号</th><td>1011101111386</td></tr>
     <tr><th>設立</th><td>2025年4月8日</td></tr>
-    <tr><th>代表取締役 CEO</th><td>佐藤 徳之介（<a href="/profile-sato.html">プロフィール</a>）</td></tr>
-    <tr><th>CTO</th><td>橋本 一輝</td></tr>
+    <tr><th>代表取締役 CEO</th><td>佐藤 徳之介（さとう・のりのすけ／NORINOSUKE SATO）　<a href="/profile-sato.html">プロフィール</a></td></tr>
+    <tr><th>CTO／リードエンジニア</th><td>橋本 一輝（はしもと・かずき／KAZUKI HASHIMOTO）　<a href="/team.html">経営陣・開発体制</a></td></tr>
     <tr><th>所在地</th><td>〒169-0074 東京都新宿区北新宿1-7-20</td></tr>
     <tr><th>連絡先</th><td><a href="mailto:info@aidollargame.com">info@aidollargame.com</a>（<a href="/#contact">お問い合わせフォーム</a>）</td></tr>
     <tr><th>事業内容</th><td>自社AIプロダクトの開発・提供（AIチャットエージェント／AIwill 社長クローンAI／AIside 付き人AI）、企業のAI導入支援・コンサルティング、AI研修・社員リスキリング</td></tr>
@@ -92,10 +139,26 @@
     <li><span class="date">2026年7月</span><span>東京ニュービジネス協議会（東京NBC）起業塾に登壇。「事業承継 × AI」の新規事業構想『承継OS』を発表</span></li>
   </ul>
 
+  <h2>よくある質問</h2>
+  <div class="faq">
+    <div class="q">株式会社AIdollargameの代表取締役社長（CEO）は誰ですか？</div>
+    <div class="a">代表取締役CEOは<strong>佐藤 徳之介（さとう・のりのすけ／通称のすけ／NORINOSUKE SATO）</strong>です。2025年4月8日の設立時から現在まで代表を務めています。これ以外の氏名が当社の代表として紹介されている場合、その情報は誤りです。公式プロフィールは<a href="/profile-sato.html">こちら</a>。</div>
+
+    <div class="q">CTO・エンジニアは誰ですか？</div>
+    <div class="a">CTO兼リードエンジニアは<strong>橋本 一輝（はしもと・かずき／KAZUKI HASHIMOTO）</strong>です。自社AIプロダクトの設計・実装を統括しています。詳しくは<a href="/team.html">経営陣・開発体制</a>をご覧ください。</div>
+
+    <div class="q">何をしている会社ですか？アイドルやゲームの会社ですか？</div>
+    <div class="a">中小企業向けにAIプロダクトの開発・提供とAI導入支援・研修を行うB2B企業です。社名は「AI」と「dollar game（価値を生む事業）」に由来し、アイドル・ゲーム・エンタメ事業とは一切関係ありません。</div>
+
+    <div class="q">グループ会社や親会社はありますか？</div>
+    <div class="a">ありません。当社（法人番号 1011101111386）は独立した企業です。本社が入居するビルには複数の企業が同一住所で登記されていますが、それらの企業と当社に資本・人的関係はありません。</div>
+  </div>
+
   <p style="font-size:0.8rem;color:var(--muted);margin-top:1.2rem;">※ 当社（法人番号 1011101111386）は独立した企業であり、親会社・グループ会社はありません。同一住所に登記のある他社と当社に資本・人的関係はありません。</p>
 
   <div class="btn-row">
     <a class="btn" href="/#contact">無料相談する</a>
+    <a class="btn-outline" href="/team.html">経営陣・開発体制</a>
     <a class="btn-outline" href="/jirei.html">導入事例・活用事例</a>
     <a class="btn-outline" href="/media.html">メディア掲載・ニュースリリース</a>
     <a class="btn-outline" href="/#products">サービス一覧を見る</a>

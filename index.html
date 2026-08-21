@@ -69,19 +69,33 @@
     "@type": "Person",
     "@id": "https://aidollargame.com/#founder",
     "name": "佐藤徳之介",
-    "alternateName": ["のすけ", "NORINOSUKE SATO"],
+    "givenName": "徳之介",
+    "familyName": "佐藤",
+    "alternateName": ["さとう のりのすけ", "のすけ", "NORINOSUKE SATO", "Norinosuke Sato"],
     "jobTitle": "代表取締役 CEO",
     "image": "https://aidollargame.com/aidollargame-ceo-sato-norinosuke.jpg",
     "url": "https://aidollargame.com/profile-sato.html",
+    "mainEntityOfPage": "https://aidollargame.com/profile-sato.html",
+    "description": "株式会社AIdollargameの代表取締役CEO。2025年4月8日の設立から現在まで代表を務める。慶應義塾大学在学中にAI開発会社を起業。",
     "worksFor": { "@id": "https://aidollargame.com/#organization" }
   },
+  "employee": [
+    { "@id": "https://aidollargame.com/#founder" },
+    { "@id": "https://aidollargame.com/#cto" }
+  ],
   "member": [
     { "@id": "https://aidollargame.com/#founder" },
     {
       "@type": "Person",
+      "@id": "https://aidollargame.com/#cto",
       "name": "橋本一輝",
-      "alternateName": ["KAZUKI HASHIMOTO"],
-      "jobTitle": "リードエンジニア / CTO",
+      "givenName": "一輝",
+      "familyName": "橋本",
+      "alternateName": ["はしもと かずき", "KAZUKI HASHIMOTO", "Kazuki Hashimoto"],
+      "jobTitle": "CTO / リードエンジニア",
+      "image": "https://aidollargame.com/aidollargame-cto-hashimoto-kazuki.png",
+      "url": "https://aidollargame.com/team.html#cto",
+      "description": "株式会社AIdollargameのCTO兼リードエンジニア。AIチャットエージェント・AIwill・AIside・社内マニュアルAIの設計・実装を統括。",
       "worksFor": { "@id": "https://aidollargame.com/#organization" }
     }
   ],
@@ -886,6 +900,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         </div>
         <div style="margin-top:2rem;" data-rv="up">
           <a href="company.html" class="arrow-link"><span class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>会社情報</a>
+          <a href="team.html" class="arrow-link"><span class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>経営陣・開発体制</a>
         </div>
       </div>
       <div class="photo-pair" data-rv="right" style="--d:200ms">
@@ -1567,6 +1582,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       </div>
       <div class="foot-links">
         <a href="company.html">会社概要</a>
+        <a href="team.html">経営陣・開発体制</a>
         <a href="ryokin.html">料金</a>
         <a href="donyu-flow.html">導入の流れ</a>
         <a href="jirei.html">導入事例</a>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9割のつもり</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn:active{opacity:.85}
+.btn:disabled{background:#c7c3ba;cursor:default}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:38px;font-weight:700}
+.unit{font-size:16px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.stim{background:#fbfaf7;border:1px solid #e8e5dd;border-radius:11px;padding:14px;margin:12px 0}
+.dots{position:relative;height:190px}
+.dot{position:absolute;width:11px;height:11px;border-radius:50%;background:#1a1a1a}
+.dot.b{background:#2563eb}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:3px}
+.gc{aspect-ratio:1;border-radius:2px;background:#eeece6}
+.gc.on{background:#2563eb}
+.nums{font-size:17px;letter-spacing:.06em;word-spacing:.35em;line-height:2}
+.bars{margin:6px 0}
+.bars i{display:block;height:16px;background:#2563eb;border-radius:8px;margin:10px 0}
+.bars i.g{background:#b9b5aa}
+.lines{display:flex;gap:5px;align-items:flex-end;height:90px;flex-wrap:wrap}
+.lines s{display:block;width:4px;height:100%;background:#2563eb;text-decoration:none;border-radius:2px}
+.rng{display:flex;gap:8px;align-items:center;margin-top:12px}
+.rng input{flex:1;min-width:0;font-size:19px;font-family:inherit;padding:12px 8px;border:1.5px solid #d8d5cc;border-radius:10px;text-align:center;background:#fff;color:#1a1a1a}
+.rng span{font-size:16px;color:#6b6b6b;flex:none}
+.prog{font-size:14px;color:#6b6b6b;margin-bottom:8px}
+.verdict{border-radius:11px;padding:14px;margin-top:12px;font-size:16px}
+.verdict.in{background:#eff6ff;border:1px solid #bfdbfe}
+.verdict.out{background:#fef2f2;border:1px solid #fecaca}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+td{padding:9px 0;border-bottom:1px solid #eeece6}
+td:last-child{text-align:right;white-space:nowrap;font-weight:600}
+tr:last-child td{border-bottom:0}
+.bar{height:14px;background:#eeece6;border-radius:7px;overflow:hidden;margin:10px 0}
+.bar > i{display:block;height:100%;background:#2563eb}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">実験（あなたの回答がその場で数字になります）</div>
+<h1>9割のつもり</h1>
+<p class="lead">8問すべて、答えを1つではなく<span class="mark">下限〜上限の幅</span>で答えてもらいます。<br>10問中9問が幅の中に入るくらいの、9割の自信の幅にしてください。</p>
+<div id="app"></div>
+
+<div class="src" id="src" style="display:none">
+出典：Alpert, M. &amp; Raiffa, H. (1969/1982) <i>A progress report on the training of probability assessors.</i> in Kahneman, Slovic &amp; Tversky (eds.) Judgment under Uncertainty: Heuristics and Biases, Cambridge University Press.<br>
+まとめと追試：Moore, D. A. &amp; Healy, P. J. (2008) <i>The trouble with overconfidence.</i> Psychological Review, 115(2), 502-517.<br>
+<a href="https://healy.econ.ohio-state.edu/papers/Moore_Healy-TroubleWithOverconfidence_WP.pdf">https://healy.econ.ohio-state.edu/papers/Moore_Healy-TroubleWithOverconfidence_WP.pdf</a><br><br>
+原実験は一般知識の数値（河川の長さ、企業の売上など）について90%の幅を答えさせるもので、的中は9割どころか5割を切ることが繰り返し報告されています。本デモはあなた1人ぶんの8問で、原実験の追試ではありません。出題はすべてこの画面の中で答え合わせができるものに置き換えてあり、正解はプログラムが作った時点の実数です。
+</div>
+</div>
+
+<script>
+var app = document.getElementById('app');
+function ri(a,b){ return a + Math.floor(Math.random()*(b-a+1)); }
+
+var P1 = 'この画面は、あなたが自分の見積もりにどれくらい幅を持たせているかだけを見ています。正解を当てる必要はありません。外れてもかまわない代わりに、外れない幅を出してください。';
+var P2 = 'ものの値段を決めるとき、私たちは同じものだけを見て決めているつもりでいて、実際には隣に何が置いてあったかで決めています。';
+
+function build(){
+  var qs = [];
+  // Q1 点の数
+  var n1 = ri(38, 92), d1 = [];
+  for(var i=0;i<n1;i++) d1.push([ri(2,94), ri(2,92)]);
+  qs.push({q:'この四角の中に、点はいくつありますか。', unit:'個', truth:n1,
+    html:'<div class="dots">'+d1.map(function(p){return '<div class="dot" style="left:'+p[0]+'%;top:'+p[1]+'%"></div>';}).join('')+'</div>'});
+  // Q2 文字数
+  qs.push({q:'この文は、句読点をふくめて何文字ありますか。', unit:'文字', truth:P1.length,
+    html:'<p style="font-size:16px">'+P1+'</p>'});
+  // Q3 塗られたマス
+  var n3 = ri(30, 96), on = {}, k = 0;
+  while(k < n3){ var c = ri(0,143); if(!on[c]){ on[c]=1; k++; } }
+  var cells = '';
+  for(var j=0;j<144;j++) cells += '<div class="gc'+(on[j]?' on':'')+'"></div>';
+  qs.push({q:'12×12のマスのうち、青く塗られているマスはいくつですか。', unit:'マス', truth:n3,
+    html:'<div class="grid">'+cells+'</div>'});
+  // Q4 合計
+  var ns = [], s4 = 0;
+  for(var m=0;m<16;m++){ var v = ri(11,98); ns.push(v); s4 += v; }
+  qs.push({q:'この16個の数を全部たすと、いくつになりますか。', unit:'', truth:s4,
+    html:'<p class="nums">'+ns.join(' ')+'</p>'});
+  // Q5 帯の比
+  var r5 = ri(28, 88);
+  qs.push({q:'下の青い帯は、上のはい色の帯の長さの何パーセントですか。', unit:'%', truth:r5,
+    html:'<div class="bars"><i class="g" style="width:100%"></i><i style="width:'+r5+'%"></i></div>'});
+  // Q6 「の」の数
+  var c6 = (P2.match(/の/g)||[]).length;
+  qs.push({q:'この文の中に、ひらがなの「の」は何回出てきますか。', unit:'回', truth:c6,
+    html:'<p style="font-size:16px">'+P2+'</p>'});
+  // Q7 青の割合
+  var t7 = ri(70,110), b7 = ri(Math.round(t7*0.15), Math.round(t7*0.6)), d7 = [];
+  for(var x=0;x<t7;x++) d7.push([ri(2,94), ri(2,92), x < b7]);
+  d7.sort(function(){ return Math.random()-0.5; });
+  qs.push({q:'この点のうち、青い点は全体の何パーセントですか。', unit:'%', truth:Math.round(b7/t7*100),
+    html:'<div class="dots">'+d7.map(function(p){return '<div class="dot'+(p[2]?' b':'')+'" style="left:'+p[0]+'%;top:'+p[1]+'%"></div>';}).join('')+'</div>'});
+  // Q8 線の本数
+  var n8 = ri(34, 78), ln = '';
+  for(var y=0;y<n8;y++) ln += '<s style="height:'+ri(45,100)+'%"></s>';
+  qs.push({q:'この線は何本ありますか。', unit:'本', truth:n8,
+    html:'<div class="lines">'+ln+'</div>'});
+  return qs;
+}
+
+var Q = build();
+var S = { step:0, i:0, ans:[] };
+
+function render(){
+  if(S.step === 0){
+    app.innerHTML = '<div class="card"><h2>やりかた</h2>'
+      + '<p style="font-size:16px;color:#444">出題は8問。すべて、この画面を見れば答え合わせができるものです。数えきる必要はありません。ぱっと見て、<span class="mark">下限と上限</span>を入れてください。</p>'
+      + '<p class="small" style="margin-top:10px">「9割の自信」とは、8問なら7問ちょっとが幅の中に入る、という意味です。広くすれば必ず入りますが、広すぎる幅は見積もりとして使えません。そこの折り合いを、自分がふだんどう付けているかを見ます。</p>'
+      + '<p class="small" style="margin-top:10px">所要およそ4分。</p></div>'
+      + '<button class="btn" onclick="S.step=1;render()">はじめる</button>';
+    return;
+  }
+  if(S.step === 1){
+    var q = Q[S.i];
+    app.innerHTML = '<div class="card"><div class="prog">'+(S.i+1)+' / 8 問目</div>'
+      + '<h2>'+q.q+'</h2>'
+      + '<div class="stim">'+q.html+'</div>'
+      + '<p class="small">9割の自信で、答えが入る幅を入れてください。'+(q.unit?'単位は'+q.unit+'。':'')+'</p>'
+      + '<div class="rng"><input id="lo" type="number" inputmode="numeric" placeholder="下限"><span>〜</span><input id="hi" type="number" inputmode="numeric" placeholder="上限"></div>'
+      + '<p class="small" id="err" style="color:#b91c1c;margin-top:8px;display:none"></p>'
+      + '</div><button class="btn" onclick="submit()">この幅で決める</button>';
+    return;
+  }
+  if(S.step === 2){
+    var q2 = Q[S.i], a = S.ans[S.i];
+    var ok = a.lo <= q2.truth && q2.truth <= a.hi;
+    app.innerHTML = '<div class="card"><div class="prog">'+(S.i+1)+' / 8 問目</div>'
+      + '<h2>'+q2.q+'</h2>'
+      + '<div class="verdict '+(ok?'in':'out')+'">'
+      + '<div>正解は <span style="font-size:26px;font-weight:700">'+q2.truth+'</span> '+q2.unit+'</div>'
+      + '<div style="margin-top:6px">あなたの幅は '+a.lo+' 〜 '+a.hi+' '+q2.unit+'</div>'
+      + '<div style="margin-top:8px;font-weight:700">'+(ok?'幅の中に入りました':'幅から外れました')+'</div>'
+      + '</div>'
+      + '</div><button class="btn" onclick="next()">'+(S.i===7?'結果を見る':'つぎの問題')+'</button>';
+    return;
+  }
+  result();
+}
+
+function submit(){
+  var lo = parseFloat(document.getElementById('lo').value);
+  var hi = parseFloat(document.getElementById('hi').value);
+  var err = document.getElementById('err');
+  if(isNaN(lo) || isNaN(hi)){ err.textContent='下限と上限の両方を入れてください。'; err.style.display='block'; return; }
+  if(lo > hi){ err.textContent='下限が上限より大きくなっています。'; err.style.display='block'; return; }
+  S.ans[S.i] = {lo:lo, hi:hi};
+  S.step = 2; render();
+}
+function next(){
+  if(S.i === 7){ S.step = 3; render(); return; }
+  S.i++; S.step = 1; render();
+}
+
+function result(){
+  var hit = 0, widths = [];
+  for(var i=0;i<8;i++){
+    var t = Q[i].truth, a = S.ans[i];
+    if(a.lo <= t && t <= a.hi) hit++;
+    if(t > 0) widths.push((a.hi - a.lo) / t * 100);
+  }
+  var avgW = Math.round(widths.reduce(function(x,y){return x+y;},0) / widths.length);
+  var rows = '';
+  for(var j=0;j<8;j++){
+    var q = Q[j], a2 = S.ans[j];
+    var ok = a2.lo <= q.truth && q.truth <= a2.hi;
+    rows += '<tr><td>'+(j+1)+'問目<br><span class="small">'+a2.lo+' 〜 '+a2.hi+' ／ 正解 '+q.truth+'</span></td><td style="color:'+(ok?'#2563eb':'#b91c1c')+'">'+(ok?'入った':'外れた')+'</td></tr>';
+  }
+  var pct = Math.round(hit/8*100);
+  var msg;
+  if(hit >= 7) msg = 'あなたは9割の幅を、ほぼ9割で当てています。これは少数派です。ふだんの見積もりでも、この幅の出し方を人に説明できるようにしておくと強い武器になります。';
+  else if(hit >= 5) msg = '9割のつもりの幅が、実際は8問中'+hit+'問（'+pct+'%）で止まりました。よくある形です。幅が狭いというより、外れる問題の種類が偏っているはずです。表で外れた問題を見返してください。';
+  else msg = '9割のつもりで出した幅が、実際は'+pct+'%しか当たっていません。原実験でも同じことが起きます。自信の高さではなく、幅の作り方の問題です。';
+
+  app.innerHTML = '<div class="card"><h2>あなたの結果</h2>'
+    + '<div style="text-align:center;margin:14px 0"><span class="big">'+hit+'</span><span class="unit"> / 8問が幅の中</span></div>'
+    + '<div class="bar"><i style="width:'+pct+'%"></i></div>'
+    + '<p class="small">9割の自信どおりなら、8問中7.2問が入るはずでした。</p>'
+    + '<div class="hl"><div style="font-size:16px">'+msg+'</div></div>'
+    + '</div>'
+    + '<div class="card"><h2>幅の広さ</h2>'
+    + '<div style="text-align:center;margin:10px 0"><span class="big">'+avgW+'</span><span class="unit">%</span></div>'
+    + '<p class="small">あなたの幅の広さは、正解の値に対して平均'+avgW+'%でした。たとえば正解が100なら、およそ'+Math.round(avgW)+'の開きを取っていたことになります。当てにいくと幅は狭くなり、狭い幅は当たりません。</p>'
+    + '</div>'
+    + '<div class="card"><h2>1問ずつ</h2><table>'+rows+'</table></div>'
+    + '<div class="card"><h2>ここから先の一行</h2>'
+    + '<p style="font-size:16px">見積もりを1つの数字で出すと、その数字は当たりません。<span class="mark">幅で出して、その幅は自分が思うより広く取る</span>。工期も原価も来月の売上も、当てるものではなく、外れない幅を約束するものとして書くと、あとで揉めなくなります。</p>'
+    + '</div>'
+    + '<button class="btn sub" onclick="location.reload()">もう一度（出題は毎回変わります）</button>';
+  document.getElementById('src').style.display = 'block';
+}
+
+render();
+</script>
+</body>
+</html>

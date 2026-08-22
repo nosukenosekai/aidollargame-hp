@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>区切ると入る</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:44px;font-weight:700;line-height:1.2}
+.unit{font-size:16px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.stage{background:#fbfaf7;border:1px solid #e8e5dd;border-radius:12px;min-height:150px;display:flex;align-items:center;justify-content:center;padding:18px 10px;margin:14px 0}
+.digits{font-size:36px;font-weight:700;letter-spacing:.10em;font-variant-numeric:tabular-nums;text-align:center;word-break:break-all;line-height:1.5}
+.digits.grp{letter-spacing:.06em;word-spacing:.9em}
+.wait{font-size:17px;color:#6b6b6b}
+input.ans{width:100%;font-size:30px;font-family:inherit;padding:14px 10px;border:1.5px solid #d8d5cc;border-radius:11px;text-align:center;background:#fff;color:#1a1a1a;letter-spacing:.10em;font-variant-numeric:tabular-nums}
+.prog{font-size:14px;color:#6b6b6b;margin-bottom:8px}
+.verdict{border-radius:11px;padding:13px;margin-top:12px;font-size:16px}
+.verdict.in{background:#eff6ff;border:1px solid #bfdbfe}
+.verdict.out{background:#fef2f2;border:1px solid #fecaca}
+.two{display:flex;gap:10px;margin:14px 0}
+.two>div{flex:1;background:#f5f4f0;border-radius:12px;padding:14px 8px;text-align:center}
+.two .big{font-size:36px}
+.two .lbl{font-size:14px;color:#6b6b6b}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+td{padding:9px 0;border-bottom:1px solid #eeece6}
+td:last-child{text-align:right;white-space:nowrap;font-weight:600}
+tr:last-child td{border-bottom:0}
+.arrow{font-size:22px;color:#6b6b6b;align-self:center;flex:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">実験（あなたの回答がその場で数字になります）</div>
+<h1>区切ると入る</h1>
+<p class="lead">数字の列が数秒だけ出て、消えます。消えたら、同じ順で打ち直してください。<br>できたら1桁のばします。<span class="mark">あなたが何桁まで入るか</span>を2通りのやり方で測ります。</p>
+<div id="app"></div>
+
+<div class="src" id="src" style="display:none">
+出典：Miller, G. A. (1956) <i>The magical number seven, plus or minus two: Some limits on our capacity for processing information.</i> Psychological Review, 63(2), 81-97.<br>
+<a href="https://psychclassics.yorku.ca/Miller/">https://psychclassics.yorku.ca/Miller/</a><br>
+本文PDF：<a href="https://labs.la.utexas.edu/gilden/files/2016/04/MagicNumberSeven-Miller1956.pdf">https://labs.la.utexas.edu/gilden/files/2016/04/MagicNumberSeven-Miller1956.pdf</a><br><br>
+Millerは、すぐに覚えていられる量が「情報の量（ビット）」ではなく「かたまりの数（チャンク）」で決まると述べ、中身の濃いかたまりに組み直せば、覚えていられる情報そのものは増やせると書いています。本デモはあなた1人ぶんの短い測定で、原論文の追試ではありません。1桁ずつ提示する方式ではなく列全体を一定時間見せる方式をとっているため、心理学で使う数唱スパン検査の値とは一致しません。
+</div>
+</div>
+
+<script>
+var app = document.getElementById('app');
+var S = { phase:0, len:4, trial:0, fail:0, seq:'', best:{a:0,b:0}, log:[], mode:'a' };
+var tmr = null;
+
+function rd(n){ var s=''; for(var i=0;i<n;i++) s += Math.floor(Math.random()*10); return s; }
+function group(s){ var o=[]; for(var i=0;i<s.length;i+=3) o.push(s.substr(i,3)); return o.join(' '); }
+
+function clearT(){ if(tmr){ clearTimeout(tmr); tmr=null; } }
+
+function render(){
+  clearT();
+  if(S.phase === 0){
+    app.innerHTML = '<div class="card"><h2>やりかた</h2>'
+      + '<p style="font-size:16px;color:#444">4桁から始めます。列が見えているあいだに覚えて、消えたら打ち込みます。同じ桁数で2回続けて間違えたら、そこで打ち止めです。</p>'
+      + '<p class="small" style="margin-top:10px">これを2回やります。2回目はやり方を少しだけ変えます。何を変えるかは、1回目が終わってから言います。</p>'
+      + '<p class="small" style="margin-top:10px">所要およそ4分。声に出して読むのも、指で押さえるのも自由です。ふだん電話番号を覚えるときと同じようにやってください。</p></div>'
+      + '<button class="btn" onclick="startPhase(1)">1回目をはじめる</button>';
+    return;
+  }
+  if(S.phase === 1 || S.phase === 3){
+    show();
+    return;
+  }
+  if(S.phase === 2){ midResult(); return; }
+  if(S.phase === 4){ finalResult(); return; }
+}
+
+function startPhase(p){
+  S.phase = p; S.len = 4; S.trial = 0; S.fail = 0;
+  S.mode = (p === 1) ? 'a' : 'b';
+  render();
+}
+
+function show(){
+  S.seq = rd(S.len);
+  var disp = (S.mode === 'b') ? group(S.seq) : S.seq;
+  var cls = (S.mode === 'b') ? 'digits grp' : 'digits';
+  var ms = S.len * 700 + 400;
+  app.innerHTML = '<div class="card"><div class="prog">'+(S.mode==='a'?'1回目':'2回目')+'　'+S.len+'桁</div>'
+    + '<div class="stage"><div class="'+cls+'">'+disp+'</div></div>'
+    + '<p class="small">よく見てください。あと少しで消えます。</p></div>';
+  tmr = setTimeout(ask, ms);
+}
+
+function ask(){
+  app.innerHTML = '<div class="card"><div class="prog">'+(S.mode==='a'?'1回目':'2回目')+'　'+S.len+'桁</div>'
+    + '<div class="stage"><div class="wait">出ていた数字を、同じ順で打ってください</div></div>'
+    + '<input class="ans" id="ans" type="text" inputmode="numeric" autocomplete="off" placeholder="">'
+    + '</div><button class="btn" onclick="judge()">これで決める</button>';
+  var el = document.getElementById('ans');
+  el.focus();
+  el.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ e.preventDefault(); judge(); } });
+}
+
+function judge(){
+  var el = document.getElementById('ans');
+  if(!el) return;
+  var v = (el.value || '').replace(/[^0-9]/g, '');
+  var ok = (v === S.seq);
+  S.log.push({mode:S.mode, len:S.len, ok:ok, seq:S.seq, ans:v});
+  if(ok){
+    if(S.mode === 'a'){ if(S.len > S.best.a) S.best.a = S.len; }
+    else { if(S.len > S.best.b) S.best.b = S.len; }
+  }
+  app.innerHTML = '<div class="card"><div class="prog">'+(S.mode==='a'?'1回目':'2回目')+'　'+S.len+'桁</div>'
+    + '<div class="verdict '+(ok?'in':'out')+'">'
+    + '<div style="font-size:15px;color:#444">出ていた数字</div><div class="digits" style="font-size:26px;text-align:left">'+((S.mode==='b')?group(S.seq):S.seq)+'</div>'
+    + '<div style="font-size:15px;color:#444;margin-top:10px">あなたの答え</div><div class="digits" style="font-size:26px;text-align:left">'+(v || '（なし）')+'</div>'
+    + '<div style="margin-top:10px;font-weight:700">'+(ok?'合っています':'ちがいます')+'</div>'
+    + '</div></div>'
+    + '<button class="btn" onclick="advance('+(ok?'true':'false')+')">つぎへ</button>';
+}
+
+function advance(ok){
+  if(ok){
+    S.len++; S.fail = 0;
+    if(S.len > 14){ endPhase(); return; }
+    render(); return;
+  }
+  S.fail++;
+  if(S.fail >= 2){ endPhase(); return; }
+  render();
+}
+
+function endPhase(){
+  if(S.phase === 1){ S.phase = 2; }
+  else { S.phase = 4; }
+  render();
+}
+
+function midResult(){
+  var a = S.best.a;
+  app.innerHTML = '<div class="card"><h2>1回目の結果</h2>'
+    + '<div style="text-align:center;margin:14px 0"><span class="big">'+a+'</span><span class="unit"> 桁まで入りました</span></div>'
+    + '<p class="small">ここまでは、ただの数字の列として出していました。</p>'
+    + '</div>'
+    + '<div class="card"><h2>2回目で変えること</h2>'
+    + '<p style="font-size:16px;color:#444">中身は同じ、でたらめな数字です。変えるのは<span class="mark">見せ方だけ</span>で、3桁ずつ空けて出します。</p>'
+    + '<div class="stage" style="min-height:0"><div class="digits grp" style="font-size:30px">482 9<span style="opacity:.35">…</span></div></div>'
+    + '<p class="small">覚える情報の量は1回目とまったく同じです。表示の時間も同じ計算で決めています。それでも桁数が変わるかどうかを見ます。</p>'
+    + '</div>'
+    + '<button class="btn" onclick="startPhase(3)">2回目をはじめる</button>';
+}
+
+function finalResult(){
+  var a = S.best.a, b = S.best.b, d = b - a;
+  var msg;
+  if(d > 0) msg = '見せ方を3桁ずつ区切っただけで、あなたが入れられる桁数が'+d+'桁ふえました。覚えた情報の量は同じで、かたまりの数が減っただけです。';
+  else if(d === 0) msg = '今回は、区切っても桁数は変わりませんでした。もともと自分で頭の中で区切って覚える人には差が出にくく、また1回ずつの測定なのでぶれもあります。';
+  else msg = '今回は、区切ったほうが'+(-d)+'桁少なくなりました。1回ずつの測定なので、この向きに出ることもあります。順番が後だったぶんの疲れも入っています。';
+
+  var rows = '';
+  S.log.forEach(function(l){
+    rows += '<tr><td>'+(l.mode==='a'?'1回目':'2回目')+'　'+l.len+'桁<br><span class="small">'+((l.mode==='b')?group(l.seq):l.seq)+' → '+(l.ans||'（なし）')+'</span></td><td style="color:'+(l.ok?'#2563eb':'#b91c1c')+'">'+(l.ok?'○':'×')+'</td></tr>';
+  });
+
+  app.innerHTML = '<div class="card"><h2>あなたの2つの数字</h2>'
+    + '<div class="two"><div><div class="big">'+a+'</div><div class="lbl">そのまま</div></div>'
+    + '<div class="arrow">→</div>'
+    + '<div><div class="big" style="color:#2563eb">'+b+'</div><div class="lbl">3桁ずつ区切る</div></div></div>'
+    + '<div class="hl"><div style="font-size:16px">'+msg+'</div></div>'
+    + '</div>'
+    + '<div class="card"><h2>種明かし</h2>'
+    + '<p style="font-size:16px;color:#444">1956年のMillerの論文が言ったのは「7つまでしか覚えられない」ではありません。<span class="mark">7つ前後までしか覚えられないのは、かたまりの数のほう</span>だ、という話です。ひとつのかたまりに詰められる中身を増やせば、覚えていられる情報そのものは増えます。</p>'
+    + '<p style="font-size:16px;color:#444;margin-top:10px">3桁ずつ区切ると、9桁の数字は9個ではなく3個になります。減らしたのは覚える量ではなく、置き場所の数です。</p>'
+    + '</div>'
+    + '<div class="card"><h2>ここから先の一行</h2>'
+    + '<p style="font-size:16px">電話で伝票番号を読み上げる、型番を紙に書く、パスワードを渡す。<span class="mark">3〜4桁ずつ空けて書くだけで、聞き間違いと打ち間違いは減らせます</span>。番号の桁数を減らせないなら、区切りを入れる。費用はゼロです。</p>'
+    + '</div>'
+    + '<div class="card"><h2>ぜんぶの記録</h2><table>'+rows+'</table></div>'
+    + '<button class="btn sub" onclick="location.reload()">もう一度</button>';
+  document.getElementById('src').style.display = 'block';
+}
+
+render();
+</script>
+</body>
+</html>

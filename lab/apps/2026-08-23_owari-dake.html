@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>終わりだけ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb;margin-bottom:10px}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:40px;font-weight:700;line-height:1.2}
+.unit{font-size:16px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.gauge{height:34px;background:#eeece6;border-radius:10px;overflow:hidden;position:relative;margin:12px 0}
+.gauge > i{display:block;height:100%;background:#2563eb;width:100%;transition:width .08s linear}
+.gauge > u{position:absolute;top:0;bottom:0;left:35%;width:2px;background:#b91c1c;text-decoration:none}
+.pad{width:100%;height:190px;border-radius:14px;background:#2563eb;color:#fff;font-size:22px;font-weight:700;border:0;font-family:inherit;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.pad:active{background:#1d4ed8}
+.pad.low{background:#b91c1c}
+.clock{font-size:16px;color:#6b6b6b;text-align:center;font-variant-numeric:tabular-nums}
+.scale{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0}
+.scale button{flex:1 1 17%;min-width:52px;padding:15px 2px;font-size:18px;font-weight:600;background:#f5f4f0;border:1px solid #e8e5dd;border-radius:10px;cursor:pointer;font-family:inherit;color:#1a1a1a}
+.scale button.on{background:#2563eb;color:#fff;border-color:#2563eb}
+.ends{display:flex;justify-content:space-between;font-size:13px;color:#6b6b6b}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+td{padding:10px 0;border-bottom:1px solid #eeece6}
+td:last-child{text-align:right;white-space:nowrap;font-weight:600}
+tr:last-child td{border-bottom:0}
+.two{display:flex;gap:10px;margin:14px 0}
+.two>div{flex:1;background:#f5f4f0;border-radius:12px;padding:14px 8px;text-align:center}
+.two .big{font-size:30px}
+.two .lbl{font-size:14px;color:#6b6b6b}
+.strip{display:flex;height:26px;border-radius:7px;overflow:hidden;margin:8px 0}
+.strip i{display:block;height:100%}
+.strip i.h{background:#2563eb}
+.strip i.e{background:#93b4f5}
+.legend{font-size:13px;color:#6b6b6b}
+.legend b{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">実験（あなたの選択がその場で数字になります）</div>
+<h1>終わりだけ</h1>
+<p class="lead">同じ作業を2回やってもらいます。<br>最後に、<span class="mark">もう一度やるならどちらか</span>を選んでもらいます。それだけです。</p>
+<div id="app"></div>
+
+<div class="src" id="src" style="display:none">
+出典：Kahneman, D., Fredrickson, B. L., Schreiber, C. A., &amp; Redelmeier, D. A. (1993) <i>When more pain is preferred to less: Adding a better end.</i> Psychological Science, 4(6), 401-405.<br>
+<a href="https://journals.sagepub.com/doi/10.1111/j.1467-9280.1993.tb00589.x">https://journals.sagepub.com/doi/10.1111/j.1467-9280.1993.tb00589.x</a><br><br>
+原実験は、14度の冷水に片手を60秒入れる短い試行と、同じ60秒のあとさらに30秒、水温を15度までゆっくり上げながら入れ続ける長い試行を比べたものです。長いほうは短いほうの不快をすべて含んだうえで30秒ぶん多いのに、もう一度やるならどちらかを選ばせると、多数が長いほうを選んだと報告されています。<br>
+当方はこの論文の本文PDFの数値（選んだ人数の内訳）まで確認できていません。ここでは「多数が長いほうを選んだ」という報告内容までにとどめ、割合の数字は書きません。<br><br>
+本デモは冷水ではなく、画面を押し続ける作業に置き換えています。時間も原実験の60秒・60秒+30秒ではなく、40秒・40秒+20秒に短くしてあります。出るのはあなた1人ぶんの1回の選択で、原実験の追試ではありません。
+</div>
+</div>
+
+<script>
+var app = document.getElementById('app');
+var HARD = 40, EASY = 20;           // 秒
+var DH = 18, DE = 6;                // 1秒あたりの減り
+var GAIN = 6;                       // 1回押すと増える量
+
+var S = { step:0, order:(Math.random() < 0.5 ? ['short','long'] : ['long','short']), cur:0,
+          data:{short:null, long:null}, rate:{short:null, long:null}, choice:null };
+
+var run = null;
+
+function label(k){ return k === 'short' ? 'A' : 'B'; }
+
+function render(){
+  stopRun();
+  if(S.step === 0){
+    app.innerHTML = '<div class="card"><h2>やりかた</h2>'
+      + '<p style="font-size:16px;color:#444">青いゲージがひとりでに減っていきます。下の四角を押すと少し戻ります。<span class="mark">赤い線より上を保つ</span>のが仕事です。</p>'
+      + '<div class="gauge"><i style="width:72%"></i><u></u></div>'
+      + '<p class="small">押す速さが足りないと赤い線を割ります。割っても失格にはなりませんが、ゲージは赤くなります。</p>'
+      + '<p class="small" style="margin-top:10px">これをAとBの2回やります。あいだに、今のがどれくらいつらかったかを聞きます。長さは先に言いません。</p>'
+      + '<p class="small" style="margin-top:10px">所要およそ3分。指が痛くならない範囲でやってください。途中でやめても画面は壊れません。</p></div>'
+      + '<button class="btn" onclick="S.step=1;render()">'+label(S.order[0])+'をはじめる</button>';
+    return;
+  }
+  if(S.step === 1){ trial(S.order[S.cur]); return; }
+  if(S.step === 2){ rating(S.order[S.cur]); return; }
+  if(S.step === 3){ choose(); return; }
+  if(S.step === 4){ result(); return; }
+}
+
+function stopRun(){ if(run){ clearInterval(run); run = null; } }
+
+function trial(kind){
+  var total = (kind === 'long') ? (HARD + EASY) : HARD;
+  var v = 100, taps = 0, t = 0, below = 0, samples = [];
+  app.innerHTML = '<div class="card"><h2>'+label(kind)+'</h2>'
+    + '<div class="clock" id="ck">はじめてください</div>'
+    + '<div class="gauge"><i id="gi" style="width:100%"></i><u></u></div>'
+    + '<button class="pad" id="pad">押す</button>'
+    + '<p class="small" style="margin-top:10px">終わりは自動で来ます。あと何秒かは出しません。</p></div>';
+  var gi = document.getElementById('gi'), pad = document.getElementById('pad'), ck = document.getElementById('ck');
+  var touched = false;
+  function tap(e){ e.preventDefault(); taps++; v = Math.min(100, v + GAIN); paint(); }
+  pad.addEventListener('touchstart', function(e){ touched = true; tap(e); }, {passive:false});
+  pad.addEventListener('mousedown', function(e){ if(touched) return; tap(e); });
+  function paint(){
+    gi.style.width = Math.max(0, v) + '%';
+    if(v < 35){ pad.classList.add('low'); gi.style.background = '#b91c1c'; }
+    else { pad.classList.remove('low'); gi.style.background = '#2563eb'; }
+  }
+  run = setInterval(function(){
+    t += 0.1;
+    var d = (kind === 'long' && t > HARD) ? DE : DH;
+    v = Math.max(0, v - d * 0.1);
+    if(v < 35) below += 0.1;
+    samples.push(v);
+    paint();
+    ck.textContent = '経過 ' + Math.floor(t) + ' 秒';
+    if(t >= total){
+      stopRun();
+      S.data[kind] = { total:total, taps:taps, below:Math.round(below*10)/10,
+                       avg: Math.round(samples.reduce(function(a,b){return a+b;},0)/samples.length) };
+      S.step = 2; render();
+    }
+  }, 100);
+}
+
+function rating(kind){
+  var btns = '';
+  for(var i=0;i<=10;i++) btns += '<button onclick="setRate(\''+kind+'\','+i+')" id="r'+i+'">'+i+'</button>';
+  app.innerHTML = '<div class="card"><h2>'+label(kind)+'は、どれくらいつらかったですか</h2>'
+    + '<p class="small">終わった今の感じで、ひとつ選んでください。</p>'
+    + '<div class="scale">'+btns+'</div>'
+    + '<div class="ends"><span>0　なんともない</span><span>10　かなりつらい</span></div>'
+    + '</div><button class="btn" id="nx" disabled onclick="afterRate()">つぎへ</button>';
+}
+function setRate(kind, v){
+  S.rate[kind] = v;
+  for(var i=0;i<=10;i++){ var b = document.getElementById('r'+i); if(b) b.className = (i===v ? 'on' : ''); }
+  document.getElementById('nx').disabled = false;
+}
+function afterRate(){
+  if(S.cur === 0){
+    S.cur = 1; S.step = 1;
+    app.innerHTML = '<div class="card"><h2>つぎは'+label(S.order[1])+'です</h2>'
+      + '<p style="font-size:16px;color:#444">やることは同じです。準備ができたら押してください。</p></div>'
+      + '<button class="btn" onclick="render()">'+label(S.order[1])+'をはじめる</button>';
+    return;
+  }
+  S.step = 3; render();
+}
+
+function choose(){
+  app.innerHTML = '<div class="card"><h2>もう一度やるなら、どちらをやりますか</h2>'
+    + '<p style="font-size:16px;color:#444">どちらか一方を、もう一度だけやることになったとします。<span class="mark">あなたが選んだほう</span>をそのままやります。</p>'
+    + '<p class="small" style="margin-top:10px">つらかったほうの理由を考えなくてかまいません。いま思い出して、やってもいいと思うほうを押してください。</p></div>'
+    + '<button class="btn sub" onclick="pick(\''+S.order[0]+'\')">'+label(S.order[0])+' をもう一度</button>'
+    + '<button class="btn sub" onclick="pick(\''+S.order[1]+'\')">'+label(S.order[1])+' をもう一度</button>';
+}
+function pick(k){ S.choice = k; S.step = 4; render(); }
+
+function result(){
+  var sh = S.data.short, lo = S.data.long;
+  var choseLong = (S.choice === 'long');
+  var wS = Math.round(HARD / (HARD+EASY) * 100);
+  var strip = '<div class="strip"><i class="h" style="width:100%"></i></div>';
+  var stripL = '<div class="strip"><i class="h" style="width:'+wS+'%"></i><i class="e" style="width:'+(100-wS)+'%"></i></div>';
+
+  var msg;
+  if(choseLong){
+    msg = 'あなたは<span class="mark">長いほう（'+label('long')+'）</span>を選びました。'+label('long')+'は'+label('short')+'のきつい'+HARD+'秒をそっくり含んだうえで、さらに'+EASY+'秒ぶん長い作業です。押した回数も'+lo.taps+'回と、'+label('short')+'の'+sh.taps+'回より多い。それでも、もう一度やるならこちらだった。';
+  } else {
+    msg = 'あなたは<span class="mark">短いほう（'+label('short')+'）</span>を選びました。作業量で見れば正しい選択です。原実験でも全員が長いほうを選んだわけではありません。ただ、'+label('long')+'を選ぶ人が多数だったと報告されています。';
+  }
+
+  app.innerHTML = '<div class="card"><h2>あなたの選択</h2>'
+    + '<div class="hl"><div style="font-size:16px">'+msg+'</div></div></div>'
+    + '<div class="card"><h2>2つは何がちがったか</h2>'
+    + '<p class="small">'+label('short')+'（'+HARD+'秒）</p>'+strip
+    + '<p class="small" style="margin-top:10px">'+label('long')+'（'+(HARD+EASY)+'秒）</p>'+stripL
+    + '<p class="legend" style="margin-top:8px"><b style="background:#2563eb"></b>減りが速い　<b style="background:#93b4f5;margin-left:10px"></b>減りがゆるい</p>'
+    + '<p style="font-size:16px;color:#444;margin-top:12px">'+label('long')+'は、きつい部分がまったく同じで、<span class="mark">終わりぎわだけが楽</span>になっています。減らしたのではなく、後ろに楽な時間を足しただけです。</p>'
+    + '</div>'
+    + '<div class="card"><h2>あなたの数字</h2><table>'
+    + '<tr><td>'+label('short')+'　長さ</td><td>'+sh.total+'秒</td></tr>'
+    + '<tr><td>'+label('short')+'　押した回数</td><td>'+sh.taps+'回</td></tr>'
+    + '<tr><td>'+label('short')+'　あとで付けたつらさ</td><td>'+S.rate.short+' / 10</td></tr>'
+    + '<tr><td>'+label('long')+'　長さ</td><td>'+lo.total+'秒</td></tr>'
+    + '<tr><td>'+label('long')+'　押した回数</td><td>'+lo.taps+'回</td></tr>'
+    + '<tr><td>'+label('long')+'　あとで付けたつらさ</td><td>'+S.rate.long+' / 10</td></tr>'
+    + '</table>'
+    + '<p class="small" style="margin-top:10px">'+(S.rate.long <= S.rate.short
+        ? 'あとから付けたつらさは、長いほうが同じか低くなっています。時間も作業量も多いほうが、記憶の上では軽くなりました。'
+        : 'あとから付けたつらさは、長いほうが高く出ました。作業量の差をそのまま感じ取った形です。')+'</p>'
+    + '<p class="small" style="margin-top:8px">'+(S.order[0]==='short'?label('short'):label('long'))+'が先、'+(S.order[0]==='short'?label('long'):label('short'))+'が後でした。順番は画面が毎回入れ替えています。</p>'
+    + '</div>'
+    + '<div class="card"><h2>何が起きているか</h2>'
+    + '<p style="font-size:16px;color:#444">つらかった体験をあとから思い出すとき、私たちは長さをほとんど数えていません。<span class="mark">いちばんきつかった瞬間と、終わりぎわ</span>の2点でだいたい決めています。だから、後ろに楽な時間を足すと、合計の苦労は増えているのに、記憶のほうは軽くなります。</p>'
+    + '</div>'
+    + '<div class="card"><h2>ここから先の一行</h2>'
+    + '<p style="font-size:16px">待たせる時間や、きつい施術や、長い工事。<span class="mark">全体を短くできないなら、終わりぎわだけを軽くする</span>。最後の5分に楽な工程を置くほうが、途中を1割詰めるより、次も頼むかどうかを動かします。</p>'
+    + '</div>'
+    + '<button class="btn sub" onclick="location.reload()">もう一度（A・Bの順番は毎回変わります）</button>';
+  document.getElementById('src').style.display = 'block';
+}
+
+render();
+</script>
+</body>
+</html>

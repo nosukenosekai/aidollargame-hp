@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>31度の線</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:36px;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums}
+.unit{font-size:15px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.chart{position:relative;height:170px;margin:10px 0 4px;border-bottom:1px solid #d8d5cc}
+.chart canvas{display:block;width:100%;height:170px}
+.chart .thr{position:absolute;left:0;right:0;border-top:2px dashed #b91c1c;font-size:12px;color:#b91c1c}
+.chart .thr span{background:#f5f4f0;padding:0 5px;position:relative;top:-11px}
+.chart .now{position:absolute;top:0;bottom:0;width:2px;background:#1a1a1a}
+.xax{display:flex;justify-content:space-between;font-size:12px;color:#6b6b6b;margin-bottom:12px}
+.clock{display:flex;align-items:baseline;justify-content:center;gap:10px;margin:6px 0 2px}
+.clock .t{font-size:44px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.clock .d{font-size:22px;font-weight:700;color:#2563eb}
+input[type=range]{width:100%;margin:8px 0;accent-color:#2563eb}
+.two{display:flex;gap:10px;margin:12px 0}
+.two>div{flex:1;background:#f5f4f0;border-radius:12px;padding:13px 8px;text-align:center}
+.two>div.hit{background:#fee2e2}
+.two .lbl{font-size:13px;color:#6b6b6b}
+.row{display:flex;gap:8px;align-items:center;margin:10px 0}
+.row label{font-size:15px;flex:none;width:106px;color:#444}
+.row select,.row input[type=number]{flex:1;font-size:16px;font-family:inherit;padding:10px;border:1.5px solid #d8d5cc;border-radius:10px;background:#fff;color:#1a1a1a}
+.chk{display:flex;gap:11px;align-items:flex-start;padding:13px 0;border-bottom:1px solid #eeece6;cursor:pointer}
+.chk:last-child{border-bottom:0}
+.chk input{width:24px;height:24px;flex:none;margin-top:3px;accent-color:#2563eb}
+.chk .tx{font-size:16px}
+.chk .tx em{display:block;font-style:normal;font-size:14px;color:#6b6b6b;margin-top:2px}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.pills{display:flex;gap:6px;margin:6px 0 2px}
+.pills button{flex:1;padding:11px 2px;font-size:14px;font-weight:600;background:#f5f4f0;border:1px solid #e8e5dd;border-radius:9px;cursor:pointer;font-family:inherit;color:#1a1a1a}
+.pills button.on{background:#2563eb;color:#fff;border-color:#2563eb}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">現場の1日を先に進めてみる画面</div>
+<h1>31度の線</h1>
+<p class="lead">2025年6月から、暑い中での作業は<span class="mark">罰則つきで対策が義務</span>になりました。<br>自分の現場が対象なのかどうかを、明日の1日を先に進めて確かめます。</p>
+
+<div class="card">
+<h2>明日の現場</h2>
+<div class="row"><label>最高気温</label><input type="number" id="tmax" value="34" min="24" max="42" step="1" oninput="redraw()"><span class="small">度</span></div>
+<div class="row"><label>作業の開始</label><select id="st" onchange="redraw()"></select></div>
+<div class="row"><label>作業の終わり</label><select id="en" onchange="redraw()"></select></div>
+<div class="row"><label>昼の休み</label><select id="lunch" onchange="redraw()">
+  <option value="60">12時から60分</option><option value="90">12時から90分</option><option value="0">とらない</option></select></div>
+<div class="row"><label>途中の休憩</label>
+  <div class="pills" style="flex:1">
+    <button id="bk0" onclick="setBreak(0)">なし</button>
+    <button id="bk1" onclick="setBreak(1)">午前午後に15分</button>
+    <button id="bk2" onclick="setBreak(2)">1時間ごとに10分</button>
+  </div></div>
+<p class="small">気温の時間ごとの動きは、最高気温から作った<span class="mark">仮の推移</span>です。実際の判定には、環境省が出している暑さ指数（WBGT）の実測値・予測値を使ってください。</p>
+</div>
+
+<div class="card">
+<h2>1日を進める</h2>
+<div class="chart" id="chart">
+  <canvas id="cv" width="1040" height="340"></canvas>
+  <div class="thr" id="thr"><span>31度</span></div>
+  <div class="now" id="now"></div>
+</div>
+<div class="xax"><span>5:00</span><span>8:30</span><span>12:00</span><span>15:30</span><span>19:00</span></div>
+<div class="clock"><div class="t" id="tt">5:00</div><div class="d" id="td">--</div></div>
+<input type="range" id="scrub" min="0" max="84" value="0" step="1" oninput="setT(this.value)">
+<button class="btn" id="play" onclick="play()">1日を進める</button>
+<div class="two">
+  <div id="cbox"><div class="big" id="cont">0</div><div class="lbl">連続のいちばん長いところ<br>（31度以上）</div></div>
+  <div id="tbox"><div class="big" id="acc">0</div><div class="lbl">その日の累計<br>（31度以上）</div></div>
+</div>
+<div id="verdict"></div>
+</div>
+
+<div class="card" id="dutycard">
+<h2>対象になったら、そろえていないといけないもの</h2>
+<p class="small">労働安全衛生規則 第612条の2 が事業者に求めているのは、次の3つです。設備投資ではなく、紙と周知の話です。</p>
+<label class="chk"><input type="checkbox" onchange="dutyCheck()" class="dt"><div class="tx">報告できる体制がある<em>本人が「おかしい」と思ったとき、他の人が異変に気づいたとき、誰にどう伝えるかが決まっていて、現場の全員がそれを知っている</em></div></label>
+<label class="chk"><input type="checkbox" onchange="dutyCheck()" class="dt"><div class="tx">悪化させないための手順が紙にある<em>涼しい場所へ移す、体を冷やす、水分と塩分をとらせる、といった措置の中身と順番をあらかじめ決めてある</em></div></label>
+<label class="chk"><input type="checkbox" onchange="dutyCheck()" class="dt"><div class="tx">搬送先と連絡網がある<em>近くの病院・診療所の場所と連絡先を把握し、緊急連絡網を作って関係者に周知してある</em></div></label>
+<div id="dutymsg"></div>
+</div>
+
+<div class="src">
+根拠：労働安全衛生規則の一部を改正する省令（令和7年4月15日公布、令和7年6月1日施行）により第612条の2を新設。WBGT値28度以上、または気温31度以上の場所で、連続1時間以上、または1日4時間を超えて行うことが見込まれる作業が対象で、事業者に「報告体制の整備」「悪化防止措置の内容と実施手順の作成」「関係労働者への周知」が罰則つきで義務づけられました。<br>
+厚生労働省労働基準局長通達 基発0520第6号（令和7年5月20日）<br>
+<a href="https://www.mhlw.go.jp/content/001490909.pdf">https://www.mhlw.go.jp/content/001490909.pdf</a><br><br>
+この画面が公的な数字として使っているのは、上の「28度・31度・連続1時間・1日4時間」だけです。気温の時間推移、作業時間、休憩の入れ方はあなたが入れた仮の値で、公的なデータではありません。<br><br>
+なお、対象かどうかは<span class="mark">その作業を行うことが見込まれるか</span>で決まります。休憩をこまめに入れて連続1時間を割ったから対象外になる、という読み方はできません。この画面は逃げ道を探すためではなく、自分の現場が最初から対象だと先に知るためのものです。判断に迷う現場は、所轄の労働基準監督署に確認してください。
+</div>
+</div>
+
+<script>
+var T0 = 5*60, T1 = 19*60, STEP = 10;   // 5:00-19:00 を10分刻み
+var N = (T1-T0)/STEP;                    // 84
+var brk = 0, cur = 0, timer = null;
+
+function fmt(m){ var h = Math.floor(m/60), mm = m%60; return h + ':' + (mm<10?'0':'') + mm; }
+function fmtDur(m){ var h = Math.floor(m/60), mm = m%60; return (h>0? h+'時間':'') + (mm>0||h===0 ? mm+'分' : ''); }
+
+(function(){
+  var s = document.getElementById('st'), e = document.getElementById('en');
+  for(var m=T0; m<=T1; m+=30){
+    s.innerHTML += '<option value="'+m+'"'+(m===8*60?' selected':'')+'>'+fmt(m)+'</option>';
+    e.innerHTML += '<option value="'+m+'"'+(m===17*60?' selected':'')+'>'+fmt(m)+'</option>';
+  }
+})();
+
+function setBreak(b){
+  brk = b;
+  for(var i=0;i<3;i++) document.getElementById('bk'+i).className = (i===b ? 'on' : '');
+  redraw();
+}
+
+function temp(m){
+  var tmax = parseFloat(document.getElementById('tmax').value) || 30;
+  var tmin = tmax - 8;
+  // 5時が最低、14時が最高、その後ゆるやかに下がる仮の推移
+  var peak = 14*60;
+  if(m <= peak){
+    var r = (m - T0) / (peak - T0);
+    return tmin + (tmax - tmin) * Math.sin(r * Math.PI / 2);
+  }
+  var r2 = (m - peak) / (T1 - peak);
+  return tmax - (tmax - tmin) * 0.55 * r2;
+}
+
+function working(m){
+  var s = parseInt(document.getElementById('st').value, 10);
+  var e = parseInt(document.getElementById('en').value, 10);
+  if(m < s || m >= e) return false;
+  var lu = parseInt(document.getElementById('lunch').value, 10);
+  if(lu > 0 && m >= 12*60 && m < 12*60 + lu) return false;
+  if(brk === 1){
+    if(m >= 10*60 && m < 10*60+15) return false;
+    if(m >= 15*60 && m < 15*60+15) return false;
+  }
+  if(brk === 2){
+    var off = (m - s) % 60;
+    if(off >= 50) return false;
+  }
+  return true;
+}
+
+function state(upto){
+  var contMax = 0, cont = 0, acc = 0, contNow = 0, firstHot = null;
+  for(var m=T0; m<upto; m+=STEP){
+    var hot = temp(m) >= 31;
+    if(hot && firstHot === null) firstHot = m;
+    if(hot && working(m)){ cont += STEP; acc += STEP; if(cont > contMax) contMax = cont; }
+    else { cont = 0; }
+  }
+  contNow = cont;
+  return {cont:contNow, contMax:contMax, acc:acc, firstHot:firstHot};
+}
+
+function draw(){
+  var cv = document.getElementById('cv'), g = cv.getContext('2d');
+  var W = cv.width, H = cv.height;
+  g.clearRect(0,0,W,H);
+  var tmax = parseFloat(document.getElementById('tmax').value) || 30;
+  var lo = Math.min(22, tmax-12), hi = Math.max(36, tmax+2);
+  function y(t){ return H - (t - lo) / (hi - lo) * H; }
+  function x(m){ return (m - T0) / (T1 - T0) * W; }
+
+  // 作業帯
+  g.fillStyle = '#e9e6dd';
+  for(var m=T0; m<T1; m+=STEP){ if(working(m)) g.fillRect(x(m), 0, x(m+STEP)-x(m)+1, H); }
+  // 31度以上かつ作業中
+  g.fillStyle = '#fadadb';
+  for(var m2=T0; m2<T1; m2+=STEP){ if(working(m2) && temp(m2) >= 31) g.fillRect(x(m2), 0, x(m2+STEP)-x(m2)+1, H); }
+  // 気温線
+  g.strokeStyle = '#2563eb'; g.lineWidth = 4; g.lineJoin='round'; g.beginPath();
+  for(var m3=T0; m3<=T1; m3+=STEP){
+    var px = x(m3), py = y(temp(m3));
+    if(m3===T0) g.moveTo(px,py); else g.lineTo(px,py);
+  }
+  g.stroke();
+  // 31度ライン位置
+  document.getElementById('thr').style.top = (y(31)/H*170) + 'px';
+}
+
+function redraw(){ draw(); setT(cur); }
+
+function setT(v){
+  cur = parseInt(v, 10);
+  document.getElementById('scrub').value = cur;
+  var m = T0 + cur*STEP;
+  var t = temp(m);
+  document.getElementById('tt').textContent = fmt(m);
+  document.getElementById('td').textContent = t.toFixed(1) + '度';
+  document.getElementById('td').style.color = (t >= 31 ? '#b91c1c' : '#2563eb');
+  document.getElementById('now').style.left = (cur / N * 100) + '%';
+
+  var s = state(m + STEP);
+  document.getElementById('cont').textContent = fmtDur(s.contMax) || '0分';
+  document.getElementById('acc').textContent = fmtDur(s.acc) || '0分';
+  document.getElementById('cbox').className = (s.contMax >= 60 ? 'hit' : '');
+  document.getElementById('tbox').className = (s.acc > 240 ? 'hit' : '');
+
+  var vd = document.getElementById('verdict');
+  var hitC = s.contMax >= 60, hitA = s.acc > 240;
+  if(hitC || hitA){
+    var why = [];
+    if(hitC) why.push('31度以上の中で連続 '+fmtDur(s.contMax)+' 作業した');
+    if(hitA) why.push('31度以上の中での作業が1日で '+fmtDur(s.acc)+' になった');
+    vd.innerHTML = '<div class="warn"><div style="font-size:16px"><span class="mark">この現場は義務の対象です。</span><br>'+why.join('。<br>')+'。<br>対象になるのは、連続1時間以上、または1日4時間を超えて行うことが見込まれるときです。</div></div>';
+  } else if(s.acc > 0){
+    var toC = 60 - s.contMax, toA = 241 - s.acc;
+    vd.innerHTML = '<div class="hl"><div style="font-size:16px">いまはまだ線の手前です。連続はあと '+fmtDur(toC)+'、累計はあと '+fmtDur(toA)+' で対象に入ります。このまま進めてください。</div></div>';
+  } else if(s.firstHot !== null && m >= s.firstHot){
+    vd.innerHTML = '<div class="hl"><div style="font-size:16px">'+fmt(s.firstHot)+' に31度を超えました。ここから作業時間が積み上がります。</div></div>';
+  } else {
+    vd.innerHTML = '<div class="hl"><div style="font-size:16px">まだ31度に届いていません。</div></div>';
+  }
+  dutyCheck();
+}
+
+function play(){
+  if(timer){ clearInterval(timer); timer = null; document.getElementById('play').textContent = '1日を進める'; return; }
+  if(cur >= N) cur = 0;
+  document.getElementById('play').textContent = '止める';
+  timer = setInterval(function(){
+    cur++;
+    if(cur >= N){ cur = N; setT(cur); clearInterval(timer); timer = null; document.getElementById('play').textContent = 'もう一度進める'; return; }
+    setT(cur);
+  }, 55);
+}
+
+function dutyCheck(){
+  var boxes = document.querySelectorAll('.dt');
+  var done = 0;
+  for(var i=0;i<boxes.length;i++) if(boxes[i].checked) done++;
+  var m = T0 + cur*STEP;
+  var s = state(m + STEP);
+  var target = (s.contMax >= 60 || s.acc > 240);
+  var el = document.getElementById('dutymsg');
+  if(done === 3){
+    el.innerHTML = '<div class="ok"><div style="font-size:16px">3つそろっています。あとは、現場が変わるたびに周知が届いているかだけを見てください。新しく入った人・応援に来た人に伝わっていないのが、いちばん抜けやすいところです。</div></div>';
+  } else if(target){
+    el.innerHTML = '<div class="warn"><div style="font-size:16px"><span class="mark">対象の現場で、'+(3-done)+'つ足りていません。</span>足りないのは設備ではなく、決めて紙にして伝えることです。今日のうちに埋められます。</div></div>';
+  } else {
+    el.innerHTML = '<div class="hl"><div style="font-size:16px">いまの条件では対象に届いていませんが、対象かどうかは「見込み」で決まります。夏のあいだ一度でも当たる現場があるなら、先にそろえておくほうが早いです。</div></div>';
+  }
+}
+
+setBreak(0);
+draw();
+setT(0);
+</script>
+</body>
+</html>

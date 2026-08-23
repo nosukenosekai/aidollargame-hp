@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>値ぶみ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.quit{background:#fff;color:#b91c1c;border:1.5px solid #e7b4b4}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:40px;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums}
+.unit{font-size:16px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.hand{background:#1a1a1a;color:#fff;border-radius:16px;padding:44px 20px;text-align:center;margin-bottom:14px}
+.hand .who{font-size:31px;font-weight:700;margin-bottom:10px;letter-spacing:.02em}
+.hand .sub{font-size:16px;opacity:.72;line-height:1.75}
+.role{display:inline-block;font-size:14px;font-weight:700;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+.role.s{background:#e5edff;color:#1d4ed8}
+.role.b{background:#f3ead9;color:#92600e}
+input.money{width:100%;font-size:34px;font-family:inherit;padding:16px 12px;border:1.5px solid #d8d5cc;border-radius:12px;text-align:center;background:#fff;color:#1a1a1a;font-variant-numeric:tabular-nums;font-weight:700}
+.err{font-size:15px;color:#b91c1c;margin-top:10px;display:none}
+.rd{font-size:14px;color:#6b6b6b;margin-bottom:8px}
+.picks{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.picks button{text-align:left;padding:15px 14px;font-size:16px;font-weight:600;background:#fff;border:1.5px solid #d8d5cc;border-radius:12px;cursor:pointer;font-family:inherit;color:#1a1a1a;line-height:1.5}
+.picks button span{display:block;font-size:14px;font-weight:400;color:#6b6b6b;margin-top:3px}
+.picks button.on{border-color:#2563eb;background:#eff4ff}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+td{padding:10px 0;border-bottom:1px solid #eeece6}
+td:last-child{text-align:right;white-space:nowrap;font-weight:600;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.axis{position:relative;height:92px;margin:16px 0 6px}
+.axis .line{position:absolute;left:0;right:0;top:44px;height:3px;background:#ddd9cf;border-radius:2px}
+.axis .zopa{position:absolute;top:38px;height:15px;background:#bfdbfe;border-radius:4px}
+.axis .pin{position:absolute;top:30px;width:3px;height:31px;background:#1a1a1a}
+.axis .lb{position:absolute;font-size:12px;color:#444;white-space:nowrap;transform:translateX(-50%)}
+.axis .lb.up{top:6px}
+.axis .lb.dn{top:66px}
+.hist{font-size:15px}
+.hist .r{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eeece6}
+.hist .r:last-child{border-bottom:0}
+.hist .r b{font-weight:600;font-variant-numeric:tabular-nums}
+.note{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">2人でやる画面（1台を渡し合います）</div>
+<h1>値ぶみ</h1>
+<p class="lead">売る人と買う人で、この端末を<span class="mark">渡し合いながら</span>値段を詰めます。<br>相手の手の内は最後まで見えません。ひとりでは動かない画面です。</p>
+<div id="app"></div>
+<div class="note" id="note" style="display:none">
+これは交渉の練習用の画面です。相場も適正額も出しません。出るのは、2人が入れた数字と、その結果だけです。<br><br>
+決裂したあとに双方の限界を開いて見せるのは、実際の交渉では起きないことです。ここでだけ、降りたあとに何が起きていたかが見えます。
+</div>
+</div>
+
+<script>
+var app = document.getElementById('app');
+var ITEMS = [
+  {n:'中古の工作機械 1台', s:'工場が入れ替えで手放す。買い手は同業'},
+  {n:'部品の年間発注 一式', s:'来期ぶんの単価をまとめて決める'},
+  {n:'内装工事 一式', s:'店舗の改装。工期は同じで金額だけを詰める'}
+];
+var ROUNDS = 3;
+
+var S = {step:0, item:0, limS:null, limB:null, r:0, hist:[], offS:null, offB:null,
+         done:null, dealAt:null, quitBy:null};
+
+function yen(v){ return v.toLocaleString('ja-JP'); }
+function roleTag(who){ return who==='s' ? '<span class="role s">売る人</span>' : '<span class="role b">買う人</span>'; }
+
+function render(){
+  var h = '';
+  if(S.step === 0){
+    h = '<div class="card"><h2>やりかた</h2>'
+      + '<p style="font-size:16px;color:#444">2人で1台を使います。片方が売る人、もう片方が買う人。順番に端末を受け取って、相手に見せずに金額を入れます。</p>'
+      + '<p style="font-size:16px;color:#444;margin-top:10px">最初に、それぞれ<span class="mark">これ以上は動けないという線</span>を1つ決めます。この線は最後まで相手に見えません。</p>'
+      + '<p style="font-size:16px;color:#444;margin-top:10px">そのあと'+ROUNDS+'回まで、交互に金額を出し合います。買う人の額が売る人の額に届けば成立。'+ROUNDS+'回で届かなければ決裂です。</p>'
+      + '<p class="small" style="margin-top:10px">単位は万円。所要およそ5分。声に出して駆け引きするほど面白くなります。</p></div>'
+      + '<div class="card"><h2>何を取引しますか</h2><div class="picks">'
+      + ITEMS.map(function(it,i){ return '<button class="'+(S.item===i?'on':'')+'" onclick="S.item='+i+';render()">'+it.n+'<span>'+it.s+'</span></button>'; }).join('')
+      + '</div></div>'
+      + '<button class="btn" onclick="go(1)">はじめる</button>';
+  }
+  else if(S.step === 1){ h = hand('売る人', '買う人には画面を見せないでください。<br>これ以上は安く売れない、という線を入れます。'); }
+  else if(S.step === 2){ h = limitForm('s'); }
+  else if(S.step === 3){ h = hand('買う人', '売る人には画面を見せないでください。<br>これ以上は高く出せない、という線を入れます。'); }
+  else if(S.step === 4){ h = limitForm('b'); }
+  else if(S.step === 5){ h = hand('売る人', (S.r===0 ? '' : (S.r+1)+'回目です。<br>') + '買う人にいくらで出すかを入れます。'); }
+  else if(S.step === 6){ h = offerForm('s'); }
+  else if(S.step === 7){ h = hand('買う人', '売る人がいくらで出したかは、あなたが額を入れたあとに出ます。<br>先に、自分がいくらまで出すかを入れてください。'); }
+  else if(S.step === 8){ h = offerForm('b'); }
+  else if(S.step === 9){ h = roundResult(); }
+  else if(S.step === 10){ h = final(); }
+  app.innerHTML = h;
+  var f = document.getElementById('money');
+  if(f){ f.focus(); f.addEventListener('keydown', function(e){ if(e.key==='Enter'){ e.preventDefault(); submit(); } }); }
+  document.getElementById('note').style.display = (S.step===10 ? 'block' : 'none');
+}
+
+function go(n){ S.step = n; render(); }
+
+function hand(who, sub){
+  return '<div class="hand"><div class="who">'+who+'に渡してください</div><div class="sub">'+sub+'</div></div>'
+    + '<button class="btn" onclick="go('+(S.step+1)+')">受け取りました</button>';
+}
+
+function limitForm(who){
+  var isS = (who==='s');
+  return '<div class="card">'+roleTag(who)
+    + '<h2>'+(isS ? 'これ以下では売らない額' : 'これ以上は出せない額')+'</h2>'
+    + '<p class="small">'+ITEMS[S.item].n+'。この数字は最後まで相手に見えません。'+(isS?'これを割るくらいなら売らない、という額を入れてください。':'これを超えるなら買わない、という額を入れてください。')+'</p>'
+    + '<input class="money" id="money" type="number" inputmode="numeric" placeholder="万円">'
+    + '<p class="err" id="err"></p></div>'
+    + '<button class="btn" onclick="submit()">決めた（画面を伏せます）</button>';
+}
+
+function offerForm(who){
+  var isS = (who==='s');
+  var prev = null;
+  for(var i=S.hist.length-1;i>=0;i--){ if(S.hist[i][isS?'s':'b'] != null){ prev = S.hist[i][isS?'s':'b']; break; } }
+  var guide = isS
+    ? '買う人に提示する額です。'+(prev!==null ? '前回は '+yen(prev)+' 万円でした。下げるか、据え置くかです。' : '')
+    : '売る人に提示する額です。'+(prev!==null ? '前回は '+yen(prev)+' 万円でした。上げるか、据え置くかです。' : '');
+  return '<div class="card">'+roleTag(who)
+    + '<div class="rd">'+(S.r+1)+' / '+ROUNDS+' 回目</div>'
+    + '<h2>'+(isS?'いくらで出しますか':'いくらまで出しますか')+'</h2>'
+    + '<p class="small">'+guide+'</p>'
+    + '<input class="money" id="money" type="number" inputmode="numeric" placeholder="万円">'
+    + '<p class="err" id="err"></p></div>'
+    + '<button class="btn" onclick="submit()">これで出す</button>'
+    + '<button class="btn quit" onclick="quit(\''+who+'\')">この話を降りる</button>';
+}
+
+function fail(m){ var e = document.getElementById('err'); e.textContent = m; e.style.display='block'; }
+
+function submit(){
+  var v = parseInt((document.getElementById('money').value||'').replace(/[^0-9-]/g,''), 10);
+  if(isNaN(v) || v <= 0){ fail('金額を入れてください（万円）。'); return; }
+
+  if(S.step === 2){ S.limS = v; go(3); return; }
+  if(S.step === 4){
+    if(v <= 0){ fail('金額を入れてください。'); return; }
+    S.limB = v; S.r = 0; go(5); return;
+  }
+  if(S.step === 6){
+    if(v < S.limS){ fail('自分で決めた線（'+yen(S.limS)+' 万円）を割っています。そこまでは下げられないはずです。'); return; }
+    var pS = null;
+    for(var i=S.hist.length-1;i>=0;i--){ if(S.hist[i].s != null){ pS = S.hist[i].s; break; } }
+    if(pS !== null && v > pS){ fail('前回の '+yen(pS)+' 万円より高くは出せません。'); return; }
+    S.offS = v; go(7); return;
+  }
+  if(S.step === 8){
+    if(v > S.limB){ fail('自分で決めた線（'+yen(S.limB)+' 万円）を超えています。そこまでは出せないはずです。'); return; }
+    var pB = null;
+    for(var j=S.hist.length-1;j>=0;j--){ if(S.hist[j].b != null){ pB = S.hist[j].b; break; } }
+    if(pB !== null && v < pB){ fail('前回の '+yen(pB)+' 万円より低くは出せません。'); return; }
+    S.offB = v;
+    S.hist.push({s:S.offS, b:S.offB});
+    if(S.offB >= S.offS){ S.done='deal'; S.dealAt = Math.round((S.offB + S.offS)/2); go(10); return; }
+    go(9); return;
+  }
+}
+
+function quit(who){
+  S.done = 'quit'; S.quitBy = who; go(10);
+}
+
+function roundResult(){
+  var last = S.hist[S.hist.length-1];
+  var gap = last.s - last.b;
+  var lastRound = (S.r + 1 >= ROUNDS);
+  var h = '<div class="card"><div class="rd">'+(S.r+1)+' / '+ROUNDS+' 回目の結果</div>'
+    + '<h2>まだ届いていません</h2>'
+    + '<div class="hist">'
+    + '<div class="r"><span>売る人が出した額</span><b>'+yen(last.s)+' 万円</b></div>'
+    + '<div class="r"><span>買う人が出した額</span><b>'+yen(last.b)+' 万円</b></div>'
+    + '<div class="r"><span>離れている幅</span><b>'+yen(gap)+' 万円</b></div>'
+    + '</div>'
+    + '<p class="small" style="margin-top:12px">この幅は2人とも見えています。見えていないのは、相手がどこまで動けるかのほうです。</p>'
+    + '</div>';
+  if(lastRound){
+    h += '<div class="card"><p style="font-size:16px;color:#444">'+ROUNDS+'回すべて終わりました。ここで決裂です。</p></div>'
+      + '<button class="btn" onclick="S.done=\'bust\';go(10)">結果を見る</button>';
+  } else {
+    h += '<button class="btn" onclick="S.r++;S.offS=null;S.offB=null;go(5)">つぎの回へ</button>';
+  }
+  return h;
+}
+
+function axis(){
+  var vals = [S.limS, S.limB];
+  S.hist.forEach(function(r){ if(r.s!=null) vals.push(r.s); if(r.b!=null) vals.push(r.b); });
+  if(S.dealAt) vals.push(S.dealAt);
+  var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+  var pad = Math.max(1, Math.round((hi-lo)*0.16));
+  lo -= pad; hi += pad;
+  function px(v){ return ((v-lo)/(hi-lo)*100); }
+  var h = '<div class="axis"><div class="line"></div>';
+  if(S.limB > S.limS){
+    h += '<div class="zopa" style="left:'+px(S.limS)+'%;width:'+(px(S.limB)-px(S.limS))+'%"></div>';
+  }
+  h += '<div class="pin" style="left:'+px(S.limS)+'%"></div>'
+     + '<div class="lb up" style="left:'+px(S.limS)+'%">売る人の線 '+yen(S.limS)+'</div>'
+     + '<div class="pin" style="left:'+px(S.limB)+'%"></div>'
+     + '<div class="lb dn" style="left:'+px(S.limB)+'%">買う人の線 '+yen(S.limB)+'</div>';
+  if(S.dealAt){
+    h += '<div class="pin" style="left:'+px(S.dealAt)+'%;background:#2563eb;height:41px;top:25px"></div>'
+       + '<div class="lb dn" style="left:'+px(S.dealAt)+'%;color:#2563eb;font-weight:700;top:70px">成立 '+yen(S.dealAt)+'</div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+function final(){
+  var zopa = S.limB - S.limS;
+  var h = '';
+  if(S.done === 'deal'){
+    h += '<div class="card"><h2>成立しました</h2>'
+      + '<div style="text-align:center;margin:12px 0"><span class="big">'+yen(S.dealAt)+'</span><span class="unit"> 万円</span></div>'
+      + '<p class="small">最後に出た2つの額のまん中で決めています。</p>'
+      + '<div class="ok"><div style="font-size:16px">売る人は線より '+yen(S.dealAt - S.limS)+' 万円ぶん上で、買う人は線より '+yen(S.limB - S.dealAt)+' 万円ぶん下で決まりました。'
+      + (Math.abs((S.dealAt-S.limS)-(S.limB-S.dealAt)) <= Math.max(1, Math.round(zopa*0.12))
+          ? 'ほぼ真ん中で分けています。'
+          : ((S.dealAt-S.limS) > (S.limB-S.dealAt) ? '取り分は売る人のほうが大きい。' : '取り分は買う人のほうが大きい。'))
+      + '</div></div></div>';
+  } else if(S.done === 'quit'){
+    h += '<div class="card"><h2>'+(S.quitBy==='s'?'売る人':'買う人')+'が降りました</h2>'
+      + '<div class="warn"><div style="font-size:16px">取引は成立しませんでした。</div></div></div>';
+  } else {
+    h += '<div class="card"><h2>決裂しました</h2>'
+      + '<div class="warn"><div style="font-size:16px">'+ROUNDS+'回出し合って、買う人の額が売る人の額に届きませんでした。</div></div></div>';
+  }
+
+  h += '<div class="card"><h2>ここで、お互いの線を開きます</h2>'
+    + axis()
+    + '<table>'
+    + '<tr><td>売る人の線（これ以下では売らない）</td><td>'+yen(S.limS)+' 万円</td></tr>'
+    + '<tr><td>買う人の線（これ以上は出せない）</td><td>'+yen(S.limB)+' 万円</td></tr>'
+    + '</table>';
+
+  if(zopa > 0){
+    if(S.done === 'deal'){
+      h += '<div class="hl"><div style="font-size:16px">2人の線のあいだには '+yen(zopa)+' 万円の幅がありました。そこに収まっています。</div></div>';
+    } else {
+      h += '<div class="warn"><div style="font-size:16px">2人の線のあいだには、<span class="mark">'+yen(zopa)+' 万円ぶんの重なりがありました。</span>'
+        + 'つまり、'+yen(S.limS)+' 万円から '+yen(S.limB)+' 万円のあいだで決めていれば、2人とも自分の線を割らずに済んでいました。'
+        + '条件が合わなかったのではありません。合う場所があったのに、そこに行き着く前に終わりました。</div></div>';
+    }
+  } else {
+    h += '<div class="hl"><div style="font-size:16px">2人の線は重なっていませんでした。買う人が出せる上限が、売る人が受けられる下限に '+yen(-zopa)+' 万円ぶん足りていません。'
+      + 'この取引は、どれだけ粘っても最初から成立しません。'+(S.done==='deal'?'':'早く降りたぶんだけ、お互いの時間が残ります。')+'</div></div>';
+  }
+  h += '</div>';
+
+  if(S.hist.length){
+    h += '<div class="card"><h2>出し合った記録</h2><div class="hist">';
+    S.hist.forEach(function(r,i){
+      h += '<div class="r"><span>'+(i+1)+'回目</span><b>売 '+yen(r.s)+' ／ 買 '+yen(r.b)+'</b></div>';
+    });
+    h += '</div></div>';
+  }
+
+  h += '<div class="card"><h2>ここから先の一行</h2>'
+    + '<p style="font-size:16px">仕入れも値上げも、決裂の多くは条件が合わないから起きるのではありません。'
+    + '<span class="mark">合う場所があるのに、先に動いたら損だと思って互いが待つ</span>あいだに終わります。'
+    + '自分の線を先に決めておくと、粘る場所と降りる場所が分かれます。決めていないと、その日の気分が線になります。</p></div>'
+    + '<button class="btn sub" onclick="location.reload()">もう一度やる</button>';
+  return h;
+}
+
+render();
+</script>
+</body>
+</html>

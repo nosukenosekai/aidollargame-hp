@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>間違える所</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px;margin-top:12px}
+.list button{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid #d8d5cc;border-radius:12px;padding:15px 14px;margin-bottom:9px;font-family:inherit;font-size:17px;font-weight:600;color:#1a1a1a;cursor:pointer;line-height:1.5}
+.list button span{display:block;font-size:14px;font-weight:400;color:#6b6b6b;margin-top:3px}
+label{display:block;font-size:16px;font-weight:600;margin-bottom:5px}
+label em{display:block;font-style:normal;font-size:14px;font-weight:400;color:#6b6b6b;line-height:1.6;margin-top:2px}
+textarea,input[type=text]{width:100%;font-family:inherit;font-size:16px;padding:12px;border:1.5px solid #d8d5cc;border-radius:10px;background:#fff;color:#1a1a1a;line-height:1.6;resize:vertical}
+.q{margin-bottom:20px}
+.eg{font-size:14px;color:#6b6b6b;background:#f7f6f2;border-radius:8px;padding:9px 11px;margin-top:7px}
+.qn{display:inline-block;background:#1a1a1a;color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;margin-bottom:6px}
+.hide{display:none}
+/* ここから紙 */
+.sheet{background:#fff;border:1px solid #d8d5cc;border-radius:6px;padding:16px;color:#000}
+.sheet .sh-top{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #000;padding-bottom:6px;margin-bottom:10px}
+.sheet .sh-name{font-size:24px;font-weight:700;letter-spacing:.04em}
+.sheet .sh-name small{font-size:13px;font-weight:400;margin-left:8px}
+.sheet .sh-ttl{font-size:12px;text-align:right;line-height:1.5}
+.sheet .g{display:grid;grid-template-columns:1fr;gap:8px}
+.sheet .it{border:1.5px solid #000;border-radius:4px;padding:8px 10px;break-inside:avoid}
+.sheet .it h3{font-size:12px;letter-spacing:.06em;margin-bottom:3px;font-weight:700}
+.sheet .it p{font-size:15px;line-height:1.55;white-space:pre-wrap;min-height:1.5em}
+.sheet .it.big{border-width:3px}
+.sheet .it.big h3{font-size:13px}
+.sheet .it.big p{font-size:17px;font-weight:700}
+.sheet .foot{margin-top:9px;font-size:11px;display:flex;justify-content:space-between;border-top:1px solid #000;padding-top:5px}
+@media(min-width:0px){.sheet .g{grid-template-columns:1fr}}
+@media print{
+  @page{size:A4 landscape;margin:9mm}
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .noprint{display:none !important}
+  .sheet{border:0;border-radius:0;padding:0}
+  .sheet .g{grid-template-columns:1fr 1fr;gap:6px}
+  .sheet .it.big{grid-column:1 / -1}
+  .sheet .it p{font-size:13.5pt}
+  .sheet .it.big p{font-size:15pt}
+}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="noprint" id="ui">
+<div class="tag">デモ（サンプルデータ）</div>
+<h1>間違える所</h1>
+<p class="lead">応援・派遣・夜勤の人に渡す、利用者ひとり1枚。書くのは経歴でも既往歴でもなく、<b>初めての人が必ず間違えるところ</b>だけです。画面で終わらせず、印刷して現場に置きます。</p>
+
+<div class="card" id="s0">
+  <h2>いまある紙</h2>
+  <div class="list" id="list"></div>
+  <button class="btn" id="new">新しく1枚つくる</button>
+  <div class="hl">
+    <b>なぜ「間違える所」だけなのか</b><br>
+    申し送りは長くなるほど読まれません。初日の人が知りたいのは全体像ではなく、<span class="mark">知らないと事故になる5つ</span>です。ここに書くのは、書いた人が「言い忘れて失敗した」ことだけにします。
+  </div>
+</div>
+
+<div class="card hide" id="s1">
+  <h2>5つだけ答えます</h2>
+  <div class="q"><span class="qn">名前</span>
+    <label>紙の見出しに出す呼び名<em>フルネームでなくて構いません。紙は現場に置かれます。</em></label>
+    <input type="text" id="f0" placeholder="例：佐々木さん（103号室）">
+  </div>
+  <div class="q"><span class="qn">Q1</span>
+    <label>何と呼べば通じますか<em>そして、どう呼ばれると不機嫌になりますか</em></label>
+    <textarea id="f1" rows="3"></textarea>
+    <div class="eg">例：「ハルさん」で通る。「おばあちゃん」と呼ぶと返事をしない。</div>
+  </div>
+  <div class="q"><span class="qn">Q2</span>
+    <label>順番を間違えると失敗することは<em>先にこれをやらないと、そのあと全部やり直しになる、というもの</em></label>
+    <textarea id="f2" rows="3"></textarea>
+    <div class="eg">例：眼鏡を渡してから話しかける。先に話しかけると人違いだと思って身構える。</div>
+  </div>
+  <div class="q"><span class="qn">Q3</span>
+    <label>「いやだ」と言わずに拒否するときの合図は<em>言葉にしない人ほど、ここを知らないと押し切ってしまいます</em></label>
+    <textarea id="f3" rows="3"></textarea>
+    <div class="eg">例：右手で毛布のふちを何度もつまむ。これが出たら5分あける。</div>
+  </div>
+  <div class="q"><span class="qn">Q4</span>
+    <label>この様子が出たら、ひとりで判断せず人を呼ぶ<em>その人だけに出る、まずい兆候</em></label>
+    <textarea id="f4" rows="3"></textarea>
+    <div class="eg">例：夕方に同じ質問を3回続けたあと、急に静かになる。</div>
+  </div>
+  <div class="q"><span class="qn">Q5</span>
+    <label>マニュアル通りにやると失敗すること<em>この人だけの例外。理由も一言</em></label>
+    <textarea id="f5" rows="3"></textarea>
+    <div class="eg">例：お茶は「熱いほう」を出す。ぬるいと飲まずに残し、水分量が足りなくなる。</div>
+  </div>
+  <div class="q"><span class="qn">任意</span>
+    <label>書いた人と日付<em>あとで聞ける相手を残しておきます</em></label>
+    <input type="text" id="f6" placeholder="例：夜勤 山口／2026年8月24日">
+  </div>
+  <button class="btn" id="mk">1枚にする</button>
+  <button class="btn gray" id="back">やめる</button>
+</div>
+
+<div class="card hide" id="s2">
+  <h2>この形で印刷されます</h2>
+  <p class="small" style="margin-bottom:10px">A4横・1枚。印刷すると、下の見出しと注意書きは出ません。</p>
+</div>
+</div>
+
+<div class="hide" id="paper">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<div class="noprint hide card" id="s3">
+  <button class="btn" id="prt">印刷する（A4横・1枚）</button>
+  <button class="btn sub" id="edit">書き直す</button>
+  <button class="btn gray" id="home">一覧に戻る</button>
+  <div class="ok">
+    <b>現場での置き方</b><br>
+    ラミネートしてベッドサイドの引き出しの内側に貼るか、申し送りバインダーの<span class="mark">一番上</span>に。ファイルの奥に入れると読まれません。書き足したい人が出たら、その場でペンで足してもらい、次に作り直すときに拾います。
+  </div>
+  <div class="warn">
+    <b>持ち出しについて</b><br>
+    これは利用者の個人情報が載る紙です。施設の外に持ち出さない、写真に撮らない、退勤時に決めた場所へ戻す、を先に決めてから配ってください。この画面に入力した内容はどこにも送信されず、ページを閉じると消えます。
+  </div>
+</div>
+
+<div class="noprint src">
+  サンプルの2名はすべて架空です。実在する人物・施設とは関係ありません。介護記録や個別援助計画の代わりになるものではなく、それらとは別に、初めて入る人へ手渡すための1枚です。
+</div>
+</div>
+
+<script>
+var SAMPLES=[
+ {n:'佐々木 ハルさん（仮名・103号室）',
+  a:'「ハルさん」で通ります。「おばあちゃん」と呼ぶと返事をしません。名字だけで呼ぶと、昔の職場だと思って敬語になります。',
+  b:'眼鏡を渡してから話しかける。先に声をかけると人違いだと思って身構え、そのあと10分は何も受けつけません。',
+  c:'右手で毛布のふちを何度もつまみます。これが出たら押さず、5分あけてから出直すと、たいてい通ります。',
+  d:'夕方に同じ質問を3回続けたあと、急に静かになるとき。そのあと立ち上がろうとして転びかけたことが2回あります。',
+  e:'お茶は熱いほうを出します。ぬるいと一口で残すので、マニュアル通りの温度だと1日の水分量が足りなくなります。',
+  w:'日勤 山口／2026年8月20日'},
+ {n:'前田 トシオさん（仮名・207号室）',
+  a:'「前田さん」。下の名前で呼ぶと、自分のことだと気づきません。耳は右のほうが聞こえます。右側から話してください。',
+  b:'車いすのブレーキを本人に見せてから動かす。黙って動かすと必ず手すりをつかみ、指を挟みかけます。',
+  c:'返事はするのに目線が窓のほうへ動きます。「はい」と言っていても、これが出ているときは伝わっていません。',
+  d:'朝食をほとんど残した日。その日の午後に37度台の熱が出たことが3回続きました。残食を見たら看護に一報を。',
+  e:'入浴は最後の順番にします。順番待ちが長いと帰宅願望が強く出て、そのまま入らずに終わります。',
+  w:'夜勤 川原／2026年8月18日'}
+];
+var cur=null;
+function $(i){return document.getElementById(i);}
+function show(i,v){$(i).classList[v?'remove':'add']('hide');}
+
+function renderList(){
+  var el=$('list');el.innerHTML='';
+  SAMPLES.forEach(function(s,i){
+    var b=document.createElement('button');
+    b.innerHTML=s.n+'<span>'+s.w+'　／　5項目そろっています</span>';
+    b.onclick=function(){cur=s;paint();};
+    el.appendChild(b);
+  });
+}
+renderList();
+
+$('new').onclick=function(){show('s0',false);show('s1',true);window.scrollTo(0,0);};
+$('back').onclick=function(){show('s1',false);show('s0',true);window.scrollTo(0,0);};
+$('edit').onclick=function(){show('s2',false);show('s3',false);show('paper',false);show('s1',true);window.scrollTo(0,0);};
+$('home').onclick=function(){show('s2',false);show('s3',false);show('paper',false);show('s0',true);window.scrollTo(0,0);};
+$('mk').onclick=function(){
+  cur={n:$('f0').value||'（名前が空です）',a:$('f1').value,b:$('f2').value,c:$('f3').value,d:$('f4').value,e:$('f5').value,w:$('f6').value||''};
+  paint();
+};
+$('prt').onclick=function(){window.print();};
+
+function esc(t){return (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');}
+function paint(){
+  var s=cur;
+  $('sheet').innerHTML=
+   '<div class="sh-top"><div class="sh-name">'+esc(s.n)+'</div>'+
+   '<div class="sh-ttl">初めて入る人へ　<b>間違える所だけ</b><br>この紙は施設外に持ち出さない</div></div>'+
+   '<div class="g">'+
+   '<div class="it big"><h3>1｜呼び方（これ以外だと通じない）</h3><p>'+esc(s.a)+'</p></div>'+
+   '<div class="it"><h3>2｜先にやること（順番を間違えるとやり直し）</h3><p>'+esc(s.b)+'</p></div>'+
+   '<div class="it"><h3>3｜口に出さない「いやだ」の合図</h3><p>'+esc(s.c)+'</p></div>'+
+   '<div class="it"><h3>4｜この様子が出たら人を呼ぶ</h3><p>'+esc(s.d)+'</p></div>'+
+   '<div class="it"><h3>5｜マニュアル通りだと失敗すること</h3><p>'+esc(s.e)+'</p></div>'+
+   '</div>'+
+   '<div class="foot"><span>書いた人：'+esc(s.w)+'</span><span>気づいたことはこの紙に直接書き足してください</span></div>';
+  show('s0',false);show('s1',false);show('s2',true);show('paper',true);show('s3',true);
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>立っていられる</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.stop{background:#1a1a1a;padding:34px 15px;font-size:24px}
+.btn:disabled{opacity:.4;cursor:default}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:64px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums;text-align:center}
+.big .unit{font-size:20px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;margin-bottom:16px}
+.picks button{padding:12px 14px;font-size:16px;font-weight:600;background:#fff;border:1.5px solid #d8d5cc;border-radius:12px;cursor:pointer;font-family:inherit;color:#1a1a1a}
+.picks button.on{border-color:#2563eb;background:#eff4ff;color:#1d4ed8}
+.scale{display:flex;gap:3px;margin:14px 0 6px}
+.scale div{flex:1;height:36px;border-radius:6px;background:#eeece6;position:relative;font-size:11px;color:#6b6b6b;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.25}
+.scale div.on{background:#2563eb;color:#fff;font-weight:700}
+.scale div.on.bad{background:#b91c1c}
+.scale div.on.mid{background:#c98a12}
+ol{padding-left:1.2em;font-size:16px}
+ol li{margin-bottom:7px}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.hide{display:none}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+td,th{padding:8px 4px;border-bottom:1px solid #eeece6;text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{font-size:12px;color:#6b6b6b;font-weight:600}
+tr.me td{background:#eff4ff;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">実際に立ちます。壁のそば・誰かがそばにいる場所で</div>
+<h1>立っていられる</h1>
+<p class="lead">開眼片足立ちと5メートル歩行を、その場で実際に測ります。出た秒数を、公表されている年齢階級別の基準値と並べます。</p>
+
+<div class="card" id="s0">
+  <h2>だれの数字を測りますか</h2>
+  <div class="picks" id="sex"></div>
+  <div class="picks" id="ageg"></div>
+  <div class="warn">
+    <b>先に読んでください</b><br>
+    ・壁や手すりのすぐ横で行い、いつでもつかまれるようにしてください。<br>
+    ・ひとりでは行わず、そばに人がいる状態で。<br>
+    ・ふらついたら、すぐ足をついてください。粘る必要はまったくありません。<br>
+    ・膝や腰に痛みがある方、めまいのある方、医師に運動を止められている方は行わないでください。
+  </div>
+  <button class="btn" id="go" disabled style="margin-top:14px">上を読んだ。1つ目を測る</button>
+</div>
+
+<div class="card hide" id="s1">
+  <h2>1つ目：開眼片足立ち</h2>
+  <ol>
+    <li>壁の横に立ち、腰に手をあてます。</li>
+    <li>目は開けたまま、前を見ます。</li>
+    <li>楽なほうの足を、床から5センチほど上げます。</li>
+    <li>「はじめる」を押した瞬間から数えます。</li>
+    <li>足が床についたら、大きな黒いボタンを押します。</li>
+  </ol>
+  <p class="small" style="margin-top:8px">120秒で自動的に終わります。それ以上は測りません。</p>
+  <button class="btn" id="b1start">はじめる</button>
+  <div class="hide" id="b1run">
+    <div class="big" id="t1">0.0<span class="unit"> 秒</span></div>
+    <button class="btn stop" id="b1stop">足がついた</button>
+  </div>
+</div>
+
+<div class="card hide" id="r1">
+  <h2>片足立ちの結果</h2>
+  <div class="big" id="v1"></div>
+  <div class="scale" id="sc1"></div>
+  <p class="small" id="lab1"></p>
+  <div class="hl" id="msg1"></div>
+  <button class="btn sub" id="go2" style="margin-top:14px">2つ目を測る（5メートル歩行）</button>
+</div>
+
+<div class="card hide" id="s2">
+  <h2>2つ目：5メートル歩行</h2>
+  <ol>
+    <li>床に5メートルの直線をとります。メジャーがなければ、床のタイルや廊下の継ぎ目など、長さの分かるもので測ってください。<b>目分量では測らないでください</b>（この項目は0.1秒で判定が変わります）。</li>
+    <li>スタート線の手前から歩き出し、線を越えた瞬間に「スタート」を押します。</li>
+    <li>ふだんの速さで歩きます。急がなくて構いません。</li>
+    <li>5メートル地点を越えたら「ゴール」を押します。</li>
+  </ol>
+  <button class="btn" id="b2start">スタート</button>
+  <div class="hide" id="b2run">
+    <div class="big" id="t2">0.0<span class="unit"> 秒</span></div>
+    <button class="btn stop" id="b2stop">ゴール</button>
+  </div>
+</div>
+
+<div class="card hide" id="r2">
+  <h2>5メートル歩行の結果</h2>
+  <div class="big" id="v2"></div>
+  <div class="scale" id="sc2"></div>
+  <p class="small" id="lab2"></p>
+  <div class="hl" id="msg2"></div>
+</div>
+
+<div class="card hide" id="r3">
+  <h2>同じ年齢階級の基準値（あなたの行を青くしています）</h2>
+  <div id="tbl"></div>
+  <div class="ok" style="margin-top:14px">
+    <b>中小企業の現場に置きかえると</b><br>
+    この2つは、器具がひとつも要らず、廊下と携帯だけで1分で終わります。<span class="mark">デイサービス・接骨院・整体院の体験会や、地域の健康イベントの入口</span>として、そのまま使える形です。数字が出ると人は自分の話をはじめるので、そこからが本題になります。
+  </div>
+</div>
+
+<div class="src">
+  <b>この画面で測れること・測れないこと</b><br>
+  ストップウォッチは、押した人の反応の速さのぶんだけずれます。0.2〜0.3秒の差は、意味のある差として読まないでください。判定は目安であり、転倒リスクの診断ではありません。ふらつきや転倒が続くときは、かかりつけ医や地域包括支援センターへ。<br><br>
+  <b>比べている基準値の出どころ</b><br>
+  握力・開眼片足立ち・5メートル歩行の年齢階級別基準値は「介護予防テキスト（転倒に関する体力テストの評価基準値）」によるもので、宮城県が「体力測定の年齢階級別基準値」として公表している表を書き写しています。60〜64歳から85歳以上まで、5歳きざみ・男女別に5段階（低い／やや低い／平均／やや高い／高い）で示されています。<br>
+  <a href="https://www.pref.miyagi.jp/documents/20047/54296_1.pdf" target="_blank" rel="noopener">https://www.pref.miyagi.jp/documents/20047/54296_1.pdf</a><br><br>
+  なお、国の「体力・運動能力調査」（スポーツ庁）でも開眼片足立ちは65〜79歳の新体力テスト項目として毎年調査され、年齢階級別の平均値が政府統計（e-Stat）で公表されています。<br>
+  <a href="https://www.e-stat.go.jp/dbview?sid=0003288734" target="_blank" rel="noopener">https://www.e-stat.go.jp/dbview?sid=0003288734</a><br><br>
+  60歳未満の年齢階級については、この基準値表に対応する行がありません。59歳以下を選べないのはそのためです。数字を作って埋めることはしていません。
+</div>
+</div>
+
+<script>
+var SEX=['男性','女性'],AG=['60〜64歳','65〜69歳','70〜74歳','75〜79歳','80〜84歳','85歳以上'];
+var LAB=['低い','やや低い','平均','やや高い','高い'];
+// 介護予防テキスト（転倒に関する体力テストの評価基準値）／宮城県公表資料より書き写し
+// 片足: [低いの上限, やや低いの上限, 平均の上限, やや高いの上限]（秒・大きいほど良い）
+var LEG={'男性':[[7,27,110,180],[7,20,100,180],[5,12,45,120],[3,9,26,99],[2,5,18,43],[2,3,13,33]],
+         '女性':[[9,28,84,120],[5,17,58,120],[3,10,29,90],[2,4,15,45],[1,3,13,35],[1,2,11,30]]};
+// 歩行: [低いの下限, やや低いの下限, 平均の下限, やや高いの下限]（秒・小さいほど良い）
+var WLK={'男性':[[4.2,3.4,2.5,1.7],[4.3,3.5,2.6,1.8],[4.6,3.7,2.7,1.8],[5.2,4.2,3.1,2.1],[5.8,4.7,3.5,2.4],[6.4,5.2,3.9,2.7]],
+         '女性':[[4.9,3.9,2.8,1.8],[5.0,4.1,3.0,2.1],[5.6,4.5,3.3,2.2],[6.5,5.2,3.9,2.6],[7.3,5.9,4.4,3.0],[8.2,6.6,5.0,3.4]]};
+var sex=null,ai=null,leg=0,wlk=0;
+
+function fill(el,arr,cb){arr.forEach(function(a,i){var b=document.createElement('button');b.textContent=a;
+  b.onclick=function(){[].forEach.call(el.children,function(c){c.classList.remove('on')});b.classList.add('on');cb(i);};el.appendChild(b);});}
+fill(document.getElementById('sex'),SEX,function(i){sex=SEX[i];chk();});
+fill(document.getElementById('ageg'),AG,function(i){ai=i;chk();});
+function chk(){document.getElementById('go').disabled=!(sex&&ai!==null);}
+
+function rank(v,th,higherBetter){
+  if(higherBetter){if(v<=th[0])return 0;if(v<=th[1])return 1;if(v<=th[2])return 2;if(v<=th[3])return 3;return 4;}
+  if(v>=th[0])return 0;if(v>=th[1])return 1;if(v>=th[2])return 2;if(v>=th[3])return 3;return 4;
+}
+function drawScale(el,r){el.innerHTML='';LAB.forEach(function(l,i){var d=document.createElement('div');d.textContent=l;
+  if(i===r){d.className='on'+(r===0?' bad':(r===1?' mid':''));}el.appendChild(d);});}
+
+document.getElementById('go').onclick=function(){show('s0',false);show('s1',true);};
+function show(id,v){document.getElementById(id).classList[v?'remove':'add']('hide');}
+
+var t0=0,tm=null;
+function startTimer(disp,cap,onCap){
+  t0=Date.now();
+  tm=setInterval(function(){
+    var s=(Date.now()-t0)/1000;
+    disp.innerHTML=s.toFixed(1)+'<span class="unit"> 秒</span>';
+    if(cap&&s>=cap){stopTimer();onCap(cap);}
+  },50);
+}
+function stopTimer(){if(tm){clearInterval(tm);tm=null;}}
+
+document.getElementById('b1start').onclick=function(){
+  this.classList.add('hide');show('b1run',true);
+  startTimer(document.getElementById('t1'),120,function(c){finish1(c);});
+};
+document.getElementById('b1stop').onclick=function(){stopTimer();finish1((Date.now()-t0)/1000);};
+function finish1(s){
+  stopTimer();leg=s;
+  show('s1',false);show('r1',true);
+  document.getElementById('v1').innerHTML=s.toFixed(1)+'<span class="unit"> 秒</span>';
+  var r=rank(s,LEG[sex][ai],true);
+  drawScale(document.getElementById('sc1'),r);
+  document.getElementById('lab1').textContent=sex+'・'+AG[ai]+'の基準値では「'+LAB[r]+'」の範囲です。';
+  var m;
+  if(r===0){m='この年齢階級で「低い」に入ります。転倒に関する体力テストでは、まずここが下がります。手すり・段差・夜間の照明を先に見直す価値があります。';}
+  else if(r===1){m='「やや低い」でした。1日1回、台所仕事の合間に壁の横で片足立ちをするだけでも、この項目は動きます。';}
+  else if(r===2){m='年齢階級の「平均」の範囲でした。この項目は幅が広く、平均のなかでも上と下では大きく違います。1か月後にもう一度測ると、自分の中での変化が見えます。';}
+  else{m='年齢階級の基準値では上のほうでした。この項目は落ちはじめると速いので、半年に一度の測り直しをおすすめします。';}
+  document.getElementById('msg1').innerHTML='<b>'+LAB[r]+'</b><br>'+m;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('go2').onclick=function(){show('s2',true);window.scrollTo({top:document.getElementById('s2').offsetTop-10,behavior:'smooth'});};
+document.getElementById('b2start').onclick=function(){
+  this.classList.add('hide');show('b2run',true);
+  startTimer(document.getElementById('t2'),60,function(c){finish2(c);});
+};
+document.getElementById('b2stop').onclick=function(){stopTimer();finish2((Date.now()-t0)/1000);};
+function finish2(s){
+  stopTimer();wlk=s;
+  show('s2',false);show('r2',true);show('r3',true);
+  document.getElementById('v2').innerHTML=s.toFixed(1)+'<span class="unit"> 秒</span>';
+  var r=rank(s,WLK[sex][ai],false);
+  drawScale(document.getElementById('sc2'),r);
+  document.getElementById('lab2').textContent=sex+'・'+AG[ai]+'の基準値では「'+LAB[r]+'」の範囲です。5メートルを'+s.toFixed(1)+'秒＝秒速'+(5/s).toFixed(2)+'メートルです。';
+  var m;
+  if(r<=1){m='歩く速さは、片足立ちより日常に直結します。青信号を渡りきれるか、駅の階段で人の流れに乗れるか。この数字が下がると外出が減り、外出が減るとさらに下がります。';}
+  else if(r===2){m='年齢階級の「平均」の範囲でした。ふだんの速さで測れていれば、この数字はしばらく安定します。';}
+  else{m='年齢階級の基準値では上のほうでした。急いで歩いてしまっていないかだけ、確認してみてください。ふだんの速さで測るのが決まりです。';}
+  document.getElementById('msg2').innerHTML='<b>'+LAB[r]+'</b><br>'+m;
+  buildTable();
+  window.scrollTo({top:document.getElementById('r2').offsetTop-10,behavior:'smooth'});
+}
+function buildTable(){
+  var L=LEG[sex],W=WLK[sex];
+  var h='<table><tr><th>年齢</th><th>片足立ち「平均」の範囲</th><th>5m歩行「平均」の範囲</th></tr>';
+  AG.forEach(function(a,i){
+    h+='<tr'+(i===ai?' class="me"':'')+'><td>'+a+'</td><td>'+(L[i][1]+1)+'〜'+L[i][2]+'秒</td><td>'+W[i][2].toFixed(1)+'〜'+(W[i][1]-0.1).toFixed(1)+'秒</td></tr>';
+  });
+  h+='</table><p class="small" style="margin-top:10px">出典：介護予防テキスト（転倒に関する体力テストの評価基準値）。'+sex+'の表です。</p>';
+  document.getElementById('tbl').innerHTML=h;
+}
+</script>
+</body>
+</html>

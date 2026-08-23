@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>まだ聞こえる</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.btn:disabled{opacity:.4;cursor:default}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:44px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.unit{font-size:17px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.row2{display:flex;gap:10px}
+.row2 .btn{margin-bottom:0}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.picks button{padding:12px 14px;font-size:16px;font-weight:600;background:#fff;border:1.5px solid #d8d5cc;border-radius:12px;cursor:pointer;font-family:inherit;color:#1a1a1a}
+.picks button.on{border-color:#2563eb;background:#eff4ff;color:#1d4ed8}
+.bars{margin-top:10px}
+.bars .b{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #eeece6;font-size:15px}
+.bars .b:last-child{border-bottom:0}
+.bars .b .f{width:74px;font-variant-numeric:tabular-nums;font-weight:600}
+.bars .b .g{flex:1;height:12px;background:#eeece6;border-radius:6px;overflow:hidden}
+.bars .b .g i{display:block;height:100%;background:#2563eb}
+.bars .b .v{width:64px;text-align:right;font-size:14px;color:#6b6b6b}
+.bars .b.no .g i{background:#d8d5cc}
+.wave{height:64px;display:flex;align-items:center;justify-content:center;gap:4px;margin:8px 0 14px}
+.wave i{display:block;width:5px;background:#c9d6f5;border-radius:3px;height:10px}
+.wave.on i{background:#2563eb}
+.step{font-size:14px;color:#6b6b6b;margin-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+td,th{padding:10px 0;border-bottom:1px solid #eeece6;text-align:left}
+th{font-size:13px;color:#6b6b6b;font-weight:600}
+td:last-child,th:last-child{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">音が鳴ります。静かな場所で、できればイヤホンで</div>
+<h1>まだ聞こえる</h1>
+<p class="lead">高い音から順に鳴らします。どこまで聞こえるかを自分で測って、論文の数字と並べます。</p>
+
+<div class="card" id="s0">
+  <h2>1. 年代を選ぶ</h2>
+  <p class="small" style="margin-bottom:10px">最後に比べるためだけに使います。どこにも送りません。</p>
+  <div class="picks" id="ages"></div>
+  <div style="height:16px"></div>
+  <h2>2. 音量を合わせる</h2>
+  <p class="small" style="margin-bottom:10px">1000Hz の基準音です。「小さいけれど、はっきり聞こえる」ところまで端末の音量を上げ下げしてください。ここで合わせた音量のまま最後まで測ります。</p>
+  <button class="btn sub" id="cal">基準音を鳴らす（1000Hz）</button>
+  <button class="btn" id="go" disabled>音量を合わせた。はじめる</button>
+</div>
+
+<div class="card hide" id="s1">
+  <div class="step" id="prog"></div>
+  <div class="wave" id="wv"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <p class="small" style="text-align:center;margin-bottom:12px" id="hint">再生中です</p>
+  <div class="row2">
+    <button class="btn gray" id="ansNo">聞こえない</button>
+    <button class="btn" id="ansYes">聞こえた</button>
+  </div>
+  <button class="btn sub" id="replay" style="margin-top:10px">もう一度鳴らす</button>
+</div>
+
+<div class="card hide" id="s2">
+  <h2>あなたの上限</h2>
+  <div class="big" id="top">—<span class="unit"> kHz</span></div>
+  <p class="small" id="topsub"></p>
+  <div class="bars" id="bars"></div>
+  <div id="catchbox"></div>
+  <div class="hl" id="cmp"></div>
+</div>
+
+<div class="card hide" id="s3">
+  <h2>もうひとつだけ</h2>
+  <p class="small" style="margin-bottom:12px">加齢でまず落ちるのは、耳の限界近くの音ではなく <b>4000Hz あたり</b>です。呼び出し音を2種類鳴らします。同じ音量ですが、聞こえ方が違うはずです。</p>
+  <div class="row2">
+    <button class="btn sub" id="t1">1000Hz のチャイム</button>
+    <button class="btn sub" id="t4">4000Hz のチャイム</button>
+  </div>
+  <div class="ok" style="margin-top:14px">
+    <b>中小企業の現場に置きかえると</b><br>
+    事務所の呼び出し音・受付のチャイム・機械の警報を高い音にすると、年配のスタッフにだけ届かない。<span class="mark">呼び出し音は1000Hz前後の低めに、音の長さは長めに。</span>「呼んだのに来ない」は、やる気ではなく周波数の話であることがある。
+  </div>
+</div>
+
+<div class="src">
+  <b>この画面で測れること・測れないこと</b><br>
+  端末のスピーカーや音量は校正できないため、<b>デシベル（聴力の絶対値）は測れません</b>。測っているのは「この端末・この音量で、どの高さまで聞こえたか」だけです。医学的な聴力検査の代わりにはなりません。聞こえに不安があるときは耳鼻咽喉科へ。<br><br>
+  <b>比べている一次資料</b><br>
+  ・松秀雄ほか「モスキート音の聴取能とDPOAE」<i>Audiology Japan</i> 58巻4号 233〜238ページ（2015年）。聴力正常者14名で、12.5kHz は14名全員が聴取可能、16kHz は7名が聴取可・7名が聴取不能（聴取できた群の平均年齢が有意に低い、p&lt;0.01）、20kHz は14名全員が聴取不能。<span class="small">※対象14名と小規模な研究です。年代別の代表値ではありません。</span><br>
+  <a href="https://www.jstage.jst.go.jp/article/audiology/58/4/58_233/_pdf" target="_blank" rel="noopener">https://www.jstage.jst.go.jp/article/audiology/58/4/58_233/_pdf</a><br><br>
+  ・和佐野浩一郎・加我君孝・小川郁「10代から90代までの男女別聴力変化パターン」<i>The Lancet Regional Health – Western Pacific</i>（2021年、DOI: 10.1016/j.lanwpc.2021.100131）。約7万件の聴力検査から10,681人を抽出した年代別・男女別の平均聴力。男性は女性より4000Hzの低下が速いこと、40代以下で4000Hzの聴力が20年かけて徐々に悪化していることを報告。<br>
+  <a href="https://tokyo-mc.hosp.go.jp/wp-content/uploads/2022/04/000151558.pdf" target="_blank" rel="noopener">https://tokyo-mc.hosp.go.jp/wp-content/uploads/2022/04/000151558.pdf</a><br><br>
+  年代別の「上限周波数」の全国代表値は、公表された一次資料に当たれませんでした。上の比較は14名の研究との突き合わせであり、平均との比較ではありません。
+</div>
+</div>
+
+<script>
+var AGES=['10代','20代','30代','40代','50代','60代','70代以上'];
+var age=null,ac=null,trials=[],idx=0,answers=[],catchHit=0,catchTotal=0;
+var FREQS=[8000,10000,12000,14000,15000,16000,17000,18000];
+
+var agesEl=document.getElementById('ages');
+AGES.forEach(function(a){
+  var b=document.createElement('button');b.textContent=a;
+  b.onclick=function(){age=a;[].forEach.call(agesEl.children,function(c){c.classList.remove('on')});b.classList.add('on');check();};
+  agesEl.appendChild(b);
+});
+var calDone=false;
+function check(){document.getElementById('go').disabled=!(age&&calDone);}
+
+function ctx(){if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();}if(ac.state==='suspended'){ac.resume();}return ac;}
+function tone(f,dur,vol){
+  var c=ctx();var o=c.createOscillator(),g=c.createGain();
+  o.type='sine';o.frequency.value=f;
+  var t=c.currentTime;
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(vol,t+0.05);
+  g.gain.setValueAtTime(vol,t+dur-0.06);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+dur+0.02);
+}
+function chime(f){
+  var c=ctx();
+  [0,0.28].forEach(function(d){
+    var o=c.createOscillator(),g=c.createGain();
+    o.type='sine';o.frequency.value=f;
+    var t=c.currentTime+d;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(0.18,t+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+0.24);
+    o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+0.26);
+  });
+}
+document.getElementById('cal').onclick=function(){tone(1000,1.4,0.10);calDone=true;check();};
+
+document.getElementById('go').onclick=function(){
+  trials=FREQS.map(function(f){return {f:f,silent:false};});
+  // 「聞こえたつもり」を弾くため、無音の回を2つまぜる
+  var p1=2+Math.floor(Math.random()*3), p2=6+Math.floor(Math.random()*3);
+  trials.splice(p2,0,{f:0,silent:true});
+  trials.splice(p1,0,{f:0,silent:true});
+  catchTotal=2;idx=0;answers=[];
+  document.getElementById('s0').classList.add('hide');
+  document.getElementById('s1').classList.remove('hide');
+  play();
+};
+function play(){
+  var t=trials[idx];
+  document.getElementById('prog').textContent=(idx+1)+' / '+trials.length+' 回目';
+  document.getElementById('hint').textContent='いま鳴らしました。聞こえましたか';
+  var wv=document.getElementById('wv');wv.classList.add('on');
+  setTimeout(function(){wv.classList.remove('on');},1500);
+  if(!t.silent){tone(t.f,1.4,0.14);}
+}
+document.getElementById('replay').onclick=play;
+document.getElementById('ansYes').onclick=function(){ans(true);};
+document.getElementById('ansNo').onclick=function(){ans(false);};
+function ans(v){
+  var t=trials[idx];
+  if(t.silent){if(v)catchHit++;}else{answers.push({f:t.f,heard:v});}
+  idx++;
+  if(idx<trials.length){play();}else{result();}
+}
+function result(){
+  document.getElementById('s1').classList.add('hide');
+  document.getElementById('s2').classList.remove('hide');
+  document.getElementById('s3').classList.remove('hide');
+  var top=0;
+  answers.forEach(function(a){if(a.heard&&a.f>top)top=a.f;});
+  document.getElementById('top').innerHTML=(top?(top/1000).toFixed(0):'8未満')+'<span class="unit"> kHz</span>';
+  document.getElementById('topsub').textContent=top?('この端末・この音量では、'+(top/1000)+'kHz までは聞こえて、'+(top>=18000?'そこで測定は終わりです（18kHzが上限です）。':'その上は聞こえませんでした。')):'8kHz も聞こえませんでした。端末の音量が小さすぎた可能性があります。もう一度、音量を上げてから測ってください。';
+  var bars=document.getElementById('bars');bars.innerHTML='';
+  answers.forEach(function(a){
+    var d=document.createElement('div');d.className='b'+(a.heard?'':' no');
+    var w=Math.round(((a.f-7000)/12000)*100);
+    d.innerHTML='<span class="f">'+(a.f/1000)+' kHz</span><span class="g"><i style="width:'+w+'%"></i></span><span class="v">'+(a.heard?'聞こえた':'—')+'</span>';
+    bars.appendChild(d);
+  });
+  var cb=document.getElementById('catchbox');
+  if(catchHit>0){
+    cb.innerHTML='<div class="warn"><b>無音の回に「聞こえた」と答えた回数：'+catchHit+' / '+catchTotal+'</b><br>この'+catchTotal+'回は、実際には何も鳴らしていません。上の結果は、その分だけ高めに出ていると考えてください。</div>';
+  }else{
+    cb.innerHTML='<div class="ok"><b>無音の回（'+catchTotal+'回）は、どちらも「聞こえない」と答えました。</b><br>上の結果は素直に読んで大丈夫です。</div>';
+  }
+  var s='';
+  if(top>=16000){s='16kHz が聞こえています。2015年の研究（14名）では、16kHz を聴取できたのは半数で、聴取できた人の平均年齢は聴取できなかった人より有意に低い、という結果でした。';}
+  else if(top>=14000){s='14〜15kHz まで。2015年の研究（14名）で全員が聴取できた 12.5kHz は超えていて、半々に分かれた 16kHz には届かなかった、ちょうどその間です。';}
+  else if(top>=12000){s='12kHz あたりまで。2015年の研究（14名）では 12.5kHz は全員が聴取可能でした。その線の上に、かろうじて乗っている位置です。';}
+  else{s='12kHz より下でした。ただし、この画面は端末の音量とスピーカーの性能に大きく左右されます。イヤホンでもう一度やると結果が変わることがあります。';}
+  s+='<br><br>なお 20kHz は、同じ研究で14名全員が聴取不能でした。「20kHz が聞こえる」と出る測定は、たいてい端末側のノイズを聞いています。';
+  document.getElementById('cmp').innerHTML='<b>'+age+'のあなた</b><br>'+s;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('t1').onclick=function(){chime(1000);};
+document.getElementById('t4').onclick=function(){chime(4000);};
+</script>
+</body>
+</html>

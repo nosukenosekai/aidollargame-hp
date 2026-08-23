@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>出すか持つか</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.hold{background:#fff;color:#92600e;border:1.5px solid #e0c58a}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.btn:disabled{opacity:.35;cursor:default}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px;margin-top:12px}
+.day{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid #e8e5dd;padding-bottom:8px;margin-bottom:12px}
+.day b{font-size:20px}
+.price{font-size:42px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.15}
+.price .u{font-size:16px;font-weight:400;color:#6b6b6b}
+.delta{font-size:16px;font-weight:600;margin-left:8px}
+.up{color:#166534}.dn{color:#b91c1c}
+.chart{height:120px;display:flex;align-items:flex-end;gap:4px;margin:14px 0 4px;border-bottom:1px solid #ddd9cf;padding-bottom:2px}
+.chart .c{flex:1;background:#c9d6f5;border-radius:3px 3px 0 0;position:relative;min-height:3px}
+.chart .c.now{background:#2563eb}
+.chart .c.sold::after{content:'';position:absolute;left:50%;transform:translateX(-50%);bottom:-1px;width:7px;height:7px;background:#1a1a1a;border-radius:50%}
+.cx{display:flex;gap:4px;font-size:11px;color:#6b6b6b;margin-bottom:14px}
+.cx span{flex:1;text-align:center}
+.stat{display:flex;gap:10px;margin:12px 0}
+.stat div{flex:1;background:#f7f6f2;border-radius:10px;padding:11px 10px;text-align:center}
+.stat b{display:block;font-size:22px;font-variant-numeric:tabular-nums;line-height:1.3}
+.stat span{font-size:12px;color:#6b6b6b}
+.stat div.alert{background:#fef2f2}
+.log{font-size:15px;margin-top:8px}
+.log .r{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eeece6;gap:10px}
+.log .r:last-child{border-bottom:0}
+.log .r b{font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600}
+.log .r i{font-style:normal;color:#6b6b6b;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:16px;margin-top:8px}
+td{padding:11px 0;border-bottom:1px solid #eeece6}
+td:last-child{text-align:right;white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.rec{font-size:15px;margin-top:6px}
+.rec .r{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eeece6}
+.rec .r:last-child{border-bottom:0}
+.rec .r b{font-variant-numeric:tabular-nums}
+.badge{display:inline-block;font-size:13px;font-weight:700;border-radius:999px;padding:2px 11px}
+.badge.w{background:#dcfce7;color:#166534}
+.badge.l{background:#fee2e2;color:#b91c1c}
+.badge.d{background:#eeece6;color:#444}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（サンプルデータ）／相場の値動きは架空です</div>
+<h1>出すか持つか</h1>
+<p class="lead">解体と加工で毎日たまる鉄スクラップ（H2）。相場は毎日動きます。10日間、出すか持つかを自分で決めます。降りても粘っても、結果は最後に残ります。</p>
+
+<div class="card" id="s0">
+  <h2>ルール</h2>
+  <table>
+    <tr><td>期間</td><td>10日</td></tr>
+    <tr><td>毎日たまる量</td><td>3〜8 トン</td></tr>
+    <tr><td>ヤードに置ける量</td><td>40 トンまで</td></tr>
+    <tr><td>置ける量を超えたぶん</td><td>1トン1日 1,500円</td></tr>
+    <tr><td>配車代（10トン車1台ごと）</td><td>20,000円</td></tr>
+    <tr><td>10日目に残った在庫</td><td>その日の建値で強制的に出します</td></tr>
+  </table>
+  <div class="hl">
+    出せばその日の値段で確定します。持てば上がるかもしれませんが、下がるかもしれません。<span class="mark">「あのとき出しておけば」は、最後に金額で出ます。</span>
+  </div>
+  <button class="btn" id="start" style="margin-top:14px">1日目をはじめる</button>
+  <div id="record"></div>
+</div>
+
+<div class="card hide" id="s1">
+  <div class="day"><b id="dnum"></b><span class="small" id="dsub"></span></div>
+  <div class="small">今日の建値（H2・1トンあたり）</div>
+  <div class="price" id="pr"></div>
+  <div class="chart" id="ch"></div>
+  <div class="cx" id="cx"></div>
+  <div class="stat">
+    <div><b id="stk"></b><span>ヤード在庫（トン）</span></div>
+    <div><b id="val"></b><span>いま出したら（万円）</span></div>
+    <div id="ovbox"><b id="ov"></b><span>置き場超過（トン）</span></div>
+  </div>
+  <button class="btn" id="allin">全部出す</button>
+  <button class="btn sub" id="half">半分だけ出す</button>
+  <button class="btn hold" id="hold">今日は持つ</button>
+  <div class="log" id="log"></div>
+</div>
+
+<div class="card hide" id="s2">
+  <h2 id="verdict"></h2>
+  <table id="fin"></table>
+  <div id="cmpbox"></div>
+  <div class="hl" id="lesson"></div>
+  <button class="btn" id="again" style="margin-top:14px">もう10日やる</button>
+  <div id="record2"></div>
+</div>
+
+<div class="card hide" id="s3">
+  <div class="ok">
+    <b>この画面が測っているもの</b><br>
+    当てるのは相場ではありません。測っているのは<span class="mark">「持ち続けた回数」と「その代金」</span>です。持つ判断には配車代が浮くという理由がありますが、値下がりと置き場超過はそれを簡単に飲み込みます。10日ぶんの記録を見て、自分が下がり局面でどれだけ粘ったかを数えてください。実際の現場では、その癖が毎月くり返されています。
+  </div>
+</div>
+
+<div class="src">
+  <b>数字について</b><br>
+  値動き・発生量・配車代はすべてこの画面のための架空の設定です。実在の相場・実在の事業者の取引条件ではありません。出発点の建値だけは、現実からかけ離れないよう次の公開情報を参考に置いています。東京製鐵が2026年7月に適用した国内鉄スクラップ購入価格は、電炉特Aで田原工場56,500円／トン、宇都宮工場53,500円／トン。H2はこれより下の価格帯で建てられます。<br>
+  ・東京製鐵 購買情報　<a href="https://www.tokyosteel.co.jp/scrapprice/" target="_blank" rel="noopener">https://www.tokyosteel.co.jp/scrapprice/</a><br>
+  ・一般社団法人日本鉄リサイクル工業会 価格推移表　<a href="https://www.jisri.or.jp/kakaku" target="_blank" rel="noopener">https://www.jisri.or.jp/kakaku</a><br><br>
+  実際に売買の判断をするときは、必ずその日の建値と自社の引き渡し条件で計算してください。この画面の結果を根拠にしないでください。
+</div>
+</div>
+
+<script>
+var DAYS=10,CAP=40,OVER=1500,TRUCK=20000,BASE=46000;
+var day,price,stock,cash,hist,soldDays,gen,holdCount,downHold,running=false;
+var wins=0,losses=0,plays=[];
+function $(i){return document.getElementById(i);}
+function show(i,v){$(i).classList[v?'remove':'add']('hide');}
+function man(y){return (y/10000).toFixed(1);}
+function yen(y){return (y<0?'−':'')+Math.abs(Math.round(y)).toLocaleString('ja-JP');}
+
+function init(){
+  day=0;price=BASE+Math.round((Math.random()-0.5)*4000/500)*500;
+  stock=0;cash=0;hist=[];soldDays=[];gen=[];holdCount=0;downHold=0;running=true;
+  // 10日ぶんの値動きを先に決める（あとから最善手を出すため）
+  var p=price,trend=(Math.random()-0.5)*260;
+  for(var i=0;i<DAYS;i++){
+    hist.push(p);
+    gen.push(3+Math.floor(Math.random()*6));
+    var step=Math.round((trend+(Math.random()-0.5)*2600)/250)*250;
+    p=Math.max(34000,Math.min(60000,p+step));
+    if(Math.random()<0.25)trend=(Math.random()-0.5)*260;
+  }
+  nextDay();
+}
+function nextDay(){
+  price=hist[day];
+  stock+=gen[day];
+  render();
+}
+function render(){
+  $('dnum').textContent=(day+1)+'日目 / '+DAYS;
+  $('dsub').textContent='今日の入荷 '+gen[day]+' トン';
+  var d=day>0?price-hist[day-1]:0;
+  $('pr').innerHTML=price.toLocaleString('ja-JP')+'<span class="u"> 円/t</span>'+
+    (day>0?'<span class="delta '+(d>=0?'up':'dn')+'">'+(d>=0?'+':'−')+Math.abs(d).toLocaleString('ja-JP')+'</span>':'');
+  var mx=Math.max.apply(null,hist),mn=Math.min.apply(null,hist);
+  var ch=$('ch');ch.innerHTML='';var cx=$('cx');cx.innerHTML='';
+  for(var i=0;i<DAYS;i++){
+    var c=document.createElement('div');c.className='c'+(i===day?' now':'')+(soldDays.indexOf(i)>=0?' sold':'');
+    if(i<=day){c.style.height=(14+((hist[i]-mn)/Math.max(1,mx-mn))*100)+'%';}
+    else{c.style.height='3px';c.style.background='#eeece6';}
+    ch.appendChild(c);
+    var s=document.createElement('span');s.textContent=(i+1);cx.appendChild(s);
+  }
+  var over=Math.max(0,stock-CAP);
+  $('stk').textContent=stock;
+  $('val').textContent=man(stock*price-trucks(stock)*TRUCK);
+  $('ov').textContent=over;
+  $('ovbox').className=over>0?'alert':'';
+  $('allin').disabled=stock<=0;$('half').disabled=stock<2;
+  $('allin').textContent='全部出す（'+stock+'トン・車'+trucks(stock)+'台）';
+  $('half').textContent='半分だけ出す（'+Math.floor(stock/2)+'トン）';
+  drawLog();
+}
+function trucks(t){return Math.ceil(t/10);}
+function drawLog(){
+  var el=$('log');if(!el.dataset.rows)el.dataset.rows='';
+  el.innerHTML=el.dataset.rows;
+}
+function addLog(html){var el=$('log');el.dataset.rows=html+(el.dataset.rows||'');drawLog();}
+
+function sell(t){
+  var tr=trucks(t),rev=t*price-tr*TRUCK;
+  cash+=rev;stock-=t;soldDays.push(day);
+  addLog('<div class="r"><span>'+(day+1)+'日目　'+t+'トン出した <i>@'+price.toLocaleString('ja-JP')+'</i></span><b>'+yen(rev)+'円</b></div>');
+  endOfDay();
+}
+function keep(){
+  holdCount++;
+  var fut=day<DAYS-1?hist[day+1]:price;
+  if(fut<price)downHold++;
+  addLog('<div class="r"><span>'+(day+1)+'日目　持った <i>在庫'+stock+'トン</i></span><b>—</b></div>');
+  endOfDay();
+}
+function endOfDay(){
+  var over=Math.max(0,stock-CAP);
+  if(over>0){var c=over*OVER;cash-=c;
+    addLog('<div class="r"><span>　置き場超過 '+over+'トン</span><b>'+yen(-c)+'円</b></div>');}
+  day++;
+  if(day>=DAYS){finish();}else{nextDay();}
+}
+$('allin').onclick=function(){sell(stock);};
+$('half').onclick=function(){sell(Math.floor(stock/2));};
+$('hold').onclick=keep;
+
+function finish(){
+  running=false;
+  var last=hist[DAYS-1];
+  if(stock>0){
+    var tr=trucks(stock),rev=stock*last-tr*TRUCK;cash+=rev;
+    addLog('<div class="r"><span>10日目終了　残り'+stock+'トンを強制的に出した <i>@'+last.toLocaleString('ja-JP')+'</i></span><b>'+yen(rev)+'円</b></div>');
+    stock=0;
+  }
+  // 比較1: 毎日その日の分をそのまま出す
+  var a=0;for(var i=0;i<DAYS;i++){a+=gen[i]*hist[i]-trucks(gen[i])*TRUCK;}
+  // 比較2: あとから見た最善（各日の在庫を最高値の日にまとめて出す。置き場超過は払う）
+  var bestDay=0;for(var i=1;i<DAYS;i++){if(hist[i]>hist[bestDay])bestDay=i;}
+  var b=0,st=0;
+  for(var i=0;i<DAYS;i++){st+=gen[i];
+    if(i===bestDay){b+=st*hist[i]-trucks(st)*TRUCK;st=0;}
+    else{b-=Math.max(0,st-CAP)*OVER;}
+  }
+  if(st>0){b+=st*hist[DAYS-1]-trucks(st)*TRUCK;}
+  var draw=Math.round(cash)===Math.round(a),win=cash>a;
+  if(draw){}else if(win)wins++;else losses++;
+  plays.push({me:cash,base:a,best:b,hold:holdCount,down:downHold,win:win,draw:draw});
+
+  show('s1',false);show('s2',true);show('s3',true);
+  $('verdict').innerHTML=draw?'<span class="badge d">引き分け</span>　毎日そのまま出したのと同じ':(win?'<span class="badge w">勝ち</span>　毎日そのまま出すより多く残った':'<span class="badge l">負け</span>　毎日そのまま出したほうが多かった');
+  $('fin').innerHTML=
+   '<tr><td>あなたの手取り</td><td>'+yen(cash)+' 円</td></tr>'+
+   '<tr><td>毎日そのまま出していたら</td><td>'+yen(a)+' 円</td></tr>'+
+   '<tr><td>差</td><td>'+(cash-a>=0?'+':'')+yen(cash-a)+' 円</td></tr>'+
+   '<tr><td>いちばん高い日（'+(bestDay+1)+'日目）にまとめて出していたら</td><td>'+yen(b)+' 円</td></tr>'+
+   '<tr><td>その差</td><td>'+(cash-b>=0?'+':'')+yen(cash-b)+' 円</td></tr>';
+  var box='';
+  if(draw){box='<div class="hl"><b>一度も持ちませんでした。</b>下がる相場では正解ですが、'+(b>a?('いちばん高い日にまとめて出していれば '+yen(b-a)+'円 多く残っていました。'):'この10日は、それでほぼ最善でした。')+'配車代を毎日払っている分、上がる局面の取り分は最初から捨てています。</div>';}
+  else if(cash>a){box='<div class="ok"><b>粘りが効きました。</b>'+(b>cash?('ただし、あとから見ていちばん高い日にまとめて出していれば、さらに '+yen(b-cash)+'円 多く残っていました。これは相場を外した代金ではなく、<span class="mark">当てられないのに持った回数の代金</span>です。'):'今回は、あとから見ていちばん高い日にまとめて出すより多く残りました。配車をまとめた分が効いています。ただし次も同じ値動きとはかぎりません。')+'</div>';}
+  else{box='<div class="warn"><b>'+(holdCount>0?'持ったことが裏目に出ました。':'出し方が裏目に出ました。')+'</b>毎日そのまま出していれば '+yen(a-cash)+'円 多く残っていました。'+(holdCount>0?'配車代を惜しんで持つと、値下がりと置き場超過でその何倍も出ていきます。':'半端な量で出すと、10トンに満たない車を何度も呼ぶことになり、配車代だけが増えます。')+'</div>';}
+  $('cmpbox').innerHTML=box;
+  $('lesson').innerHTML='<b>今回の内訳</b><br>持った日：'+holdCount+'日 / '+DAYS+'日。<br>そのうち、翌日に値が下がった日：<b>'+downHold+'日</b>。<br>'+
+    (holdCount===0?'一度も持ちませんでした。':(downHold>=holdCount-1?'下がる日にほぼ全部粘っています。これは運ではなく、判断の癖として残ります。':'下がる日と上がる日で、粘り方が分かれています。'))+
+    '<br><br>通算 '+wins+'勝 '+losses+'敗。';
+  $('record2').innerHTML=recHtml();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function recHtml(){
+  if(!plays.length)return '';
+  var h='<h2 style="margin-top:22px">残っている成績</h2><div class="rec">';
+  plays.forEach(function(p,i){
+    h+='<div class="r"><span>'+(i+1)+'回目　'+(p.draw?'<span class="badge d">分</span>':(p.win?'<span class="badge w">勝</span>':'<span class="badge l">負</span>'))+'　持った'+p.hold+'日</span><b>'+(p.me-p.base>=0?'+':'')+yen(p.me-p.base)+'円</b></div>';
+  });
+  return h+'</div>';
+}
+$('start').onclick=function(){show('s0',false);show('s1',true);$('log').dataset.rows='';init();window.scrollTo(0,0);};
+$('again').onclick=function(){show('s2',false);show('s3',false);show('s1',true);$('log').dataset.rows='';init();window.scrollTo(0,0);};
+</script>
+</body>
+</html>

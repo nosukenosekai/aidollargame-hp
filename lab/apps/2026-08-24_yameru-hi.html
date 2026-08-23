@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>やめる日</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.btn:disabled{opacity:.35;cursor:default}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px;margin-top:12px}
+.env{border:1.5px solid #d8d5cc;background:#fff;border-radius:12px;padding:15px 14px;margin-bottom:10px;position:relative}
+.env.ready{border-color:#1a1a1a;border-width:2px}
+.env.locked{background:#faf9f6;border-style:dashed}
+.env .ttl{font-size:17px;font-weight:700;line-height:1.5}
+.env .meta{font-size:14px;color:#6b6b6b;margin-top:3px}
+.env .st{position:absolute;top:13px;right:13px;font-size:12px;font-weight:700;border-radius:999px;padding:2px 10px}
+.env .st.r{background:#1a1a1a;color:#fff}
+.env .st.l{background:#eeece6;color:#6b6b6b}
+.env .st.d{background:#dcfce7;color:#166534}
+.env button{margin-top:11px;width:100%;background:#1a1a1a;color:#fff;border:0;border-radius:10px;padding:12px;font-size:16px;font-weight:600;font-family:inherit;cursor:pointer}
+.env button:disabled{background:#eeece6;color:#9b9b9b;cursor:default}
+.seal{background:#1a1a1a;color:#fff;border-radius:16px;padding:40px 20px;text-align:center;margin-bottom:14px}
+.seal .n{font-size:44px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.seal .s{font-size:16px;opacity:.72;margin-top:8px;line-height:1.7}
+.quote{border-left:4px solid #1a1a1a;padding:2px 0 2px 14px;margin:12px 0;font-size:17px;line-height:1.75;white-space:pre-wrap}
+label{display:block;font-size:16px;font-weight:600;margin-bottom:5px}
+label em{display:block;font-style:normal;font-size:14px;font-weight:400;color:#6b6b6b;line-height:1.6;margin-top:2px}
+textarea,input[type=text],input[type=number],select{width:100%;font-family:inherit;font-size:16px;padding:12px;border:1.5px solid #d8d5cc;border-radius:10px;background:#fff;color:#1a1a1a;line-height:1.6}
+input[type=number]{font-size:28px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
+.q{margin-bottom:18px}
+.eg{font-size:14px;color:#6b6b6b;background:#f7f6f2;border-radius:8px;padding:9px 11px;margin-top:7px}
+.big{font-size:34px;font-weight:700;line-height:1.25}
+.big.no{color:#b91c1c}.big.yes{color:#166534}
+table{width:100%;border-collapse:collapse;font-size:16px;margin-top:8px}
+td{padding:11px 0;border-bottom:1px solid #eeece6}
+td:last-child{text-align:right;white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（サンプルデータ）／今日その場では答えが出ません</div>
+<h1>やめる日</h1>
+<p class="lead">始めるときに、やめる条件を書いて封をします。封は決めた日まで開きません。開いた日に今の数字を入れると、当時の自分が書いた条件で、続けるかやめるかが決まります。</p>
+
+<div class="card" id="s0">
+  <h2>封の一覧</h2>
+  <div id="list"></div>
+  <button class="btn" id="new" style="margin-top:6px">新しく封をする</button>
+  <div class="hl">
+    <b>なぜ始める日に書くのか</b><br>
+    やめる話は、いつも「もう少しだけ」で先送りされます。判断が鈍るのは意志の問題ではなく、<span class="mark">払ったお金と手間が視界に入っている</span>からです。始めた日の自分は、まだそれを払っていません。判断はその人にさせます。
+  </div>
+</div>
+
+<div class="card hide" id="s1">
+  <h2 id="opTtl"></h2>
+  <p class="small" id="opMeta"></p>
+  <div class="quote" id="opWord"></div>
+  <div class="q" style="margin-top:16px">
+    <label id="opAsk"></label>
+    <input type="number" id="opVal" inputmode="numeric" placeholder="0">
+  </div>
+  <div class="q">
+    <label>言いたいことがあれば<em>記録には残ります。判定には使いません。</em></label>
+    <textarea id="opNote" rows="3" placeholder="例：担当が替わって、途中2か月は誰も見ていなかった"></textarea>
+  </div>
+  <button class="btn" id="judge">当時の条件で判定する</button>
+  <button class="btn gray" id="opBack">戻る</button>
+</div>
+
+<div class="card hide" id="s2">
+  <div class="big" id="vd"></div>
+  <p class="small" id="vdsub" style="margin-top:6px"></p>
+  <table id="vdtbl"></table>
+  <div id="vdbox"></div>
+  <div id="vdnote"></div>
+  <button class="btn gray" id="home" style="margin-top:14px">一覧に戻る</button>
+</div>
+
+<div class="card hide" id="s3">
+  <h2>新しく封をする</h2>
+  <div class="q">
+    <label>これから始めるもの<em>お金か時間が毎月出ていくものだけを入れてください</em></label>
+    <input type="text" id="n1" placeholder="例：予約サイトの有料プラン（月1.2万円）">
+  </div>
+  <div class="q">
+    <label>何が増えれば続けますか<em>数えられるものをひとつだけ。売上でなくて構いません</em></label>
+    <input type="text" id="n2" placeholder="例：このサイト経由の予約件数（月あたり）">
+  </div>
+  <div class="q">
+    <label>その数がいくつ以上なら続けますか</label>
+    <input type="number" id="n3" inputmode="numeric" placeholder="10">
+  </div>
+  <div class="q">
+    <label>何か月後に開きますか</label>
+    <select id="n4"><option value="1">1か月後</option><option value="2">2か月後</option><option value="3" selected>3か月後</option><option value="6">6か月後</option><option value="12">12か月後</option></select>
+  </div>
+  <div class="q">
+    <label>開ける日の自分へ、一言<em>そのまま読み上げられます</em></label>
+    <textarea id="n5" rows="3" placeholder="例：ここまで来ていないなら、惜しくても切る。切った金は次に回す。"></textarea>
+    <div class="eg">「もう少し様子を見る」と書かないでください。それは条件ではありません。</div>
+  </div>
+  <button class="btn" id="seal">封をする</button>
+  <button class="btn gray" id="nBack">やめる</button>
+</div>
+
+<div class="card hide" id="s4">
+  <div class="seal">
+    <div class="n" id="sealN"></div>
+    <div class="s" id="sealS"></div>
+  </div>
+  <div class="warn">
+    <b>今日はここで終わりです。</b>この画面では答えは出ません。出るのは開封日です。<br>
+    実際に使うときは、開封日をカレンダーに入れて、当日に自分へリマインドが飛ぶようにしてください。封をしても、開く日を忘れたら、封をしなかったのと同じです。
+  </div>
+  <button class="btn gray" id="home2" style="margin-top:12px">一覧に戻る</button>
+</div>
+
+<div class="card" id="s9">
+  <div class="ok">
+    <b>中小企業の現場に置きかえると</b><br>
+    毎月引き落とされているツール・広告・保守のうち、<span class="mark">始めた日にやめる条件を決めたもの</span>がいくつあるか数えてみてください。ゼロなら、いま払っている月額の中に、もう誰も見ていないものが混ざっています。新しく契約するときに1枚封をするのは、5分で終わります。
+  </div>
+</div>
+
+<div class="src">
+  サンプルの3件と、そこに出てくる店名・金額・件数はすべて架空です。実在の事業者・サービスとは関係ありません。この画面に入力した内容はどこにも送信されず、ページを閉じると消えます。
+</div>
+</div>
+
+<script>
+function $(i){return document.getElementById(i);}
+function show(i,v){$(i).classList[v?'remove':'add']('hide');}
+var TODAY=new Date();TODAY.setHours(0,0,0,0);
+function d(y,m,dd){var x=new Date(y,m-1,dd);x.setHours(0,0,0,0);return x;}
+function fmt(x){return x.getFullYear()+'年'+(x.getMonth()+1)+'月'+x.getDate()+'日';}
+function diffDays(a,b){return Math.round((a-b)/86400000);}
+function addM(x,m){var y=new Date(x.getTime());y.setMonth(y.getMonth()+m);return y;}
+
+var ENV=[
+ {t:'予約フォームの有料プラン（月1.2万円）',sealed:d(2026,5,24),open:d(2026,8,24),
+  metric:'フォーム経由の問い合わせ件数（直近1か月）',need:10,
+  word:'3か月で月10件に届かないなら切る。無料版に戻して、その1.2万円はチラシの紙代に回す。\n「あと1か月」と言い出したら、それはもう答えが出ている。',
+  cost:'3か月で36,000円を払っています。'},
+ {t:'地元情報誌の広告（1回8万円・月1回）',sealed:d(2026,4,15),open:d(2026,8,15),
+  metric:'「広告を見た」と言われた件数（4か月の合計）',need:6,
+  word:'4か月で6件。1件あたり5万円を超えるなら、広告ではなく寄付だ。\n付き合いで続けたくなるだろうが、付き合いなら額を減らして続ける方法があるはずだ。',
+  cost:'4か月で320,000円を払っています。'},
+ {t:'土曜営業の試験導入（人件費 月9万円）',sealed:d(2026,8,10),open:addM(d(2026,8,10),3),
+  metric:'土曜だけの売上（直近1か月）',need:22,
+  word:'土曜の売上が月22万円に届かないなら戻す。スタッフの土曜を返す。\n「常連さんが喜んでいる」は数字ではない。数字は22万円だ。',
+  cost:'3か月で270,000円を払う予定です。'}
+];
+var done={},cur=null;
+
+function draw(){
+  var el=$('list');el.innerHTML='';
+  ENV.forEach(function(e,i){
+    var left=diffDays(e.open,TODAY);
+    var ready=left<=0;
+    var div=document.createElement('div');
+    div.className='env '+(done[i]?'':(ready?'ready':'locked'));
+    var st=done[i]?'<span class="st d">開封ずみ</span>':(ready?'<span class="st r">開けられます</span>':'<span class="st l">封のまま</span>');
+    div.innerHTML=st+'<div class="ttl">'+e.t+'</div>'+
+      '<div class="meta">封をした日：'+fmt(e.sealed)+'　／　開ける日：'+fmt(e.open)+'</div>'+
+      '<div class="meta">'+(ready?(left===0?'今日が開ける日です。':'開ける日から '+(-left)+' 日たっています。'):'あと '+left+' 日。まだ開けられません。')+'</div>';
+    var b=document.createElement('button');
+    b.textContent=done[i]?('判定：'+done[i]):(ready?'開ける':'あと'+left+'日');
+    b.disabled=!ready||!!done[i];
+    b.onclick=function(){openEnv(i);};
+    div.appendChild(b);
+    el.appendChild(div);
+  });
+}
+draw();
+
+function openEnv(i){
+  cur=i;var e=ENV[i];
+  $('opTtl').textContent=e.t;
+  $('opMeta').textContent='封をした日：'+fmt(e.sealed)+'　／　'+e.cost;
+  $('opWord').textContent=e.word;
+  $('opAsk').innerHTML=e.metric+'<em>当時のあなたは「'+e.need+'以上なら続ける」と書いています。</em>';
+  $('opVal').value='';$('opNote').value='';
+  show('s0',false);show('s9',false);show('s1',true);window.scrollTo(0,0);
+}
+$('opBack').onclick=function(){show('s1',false);show('s0',true);show('s9',true);window.scrollTo(0,0);};
+$('home').onclick=function(){show('s2',false);show('s0',true);show('s9',true);draw();window.scrollTo(0,0);};
+$('home2').onclick=function(){show('s4',false);show('s0',true);show('s9',true);draw();window.scrollTo(0,0);};
+
+$('judge').onclick=function(){
+  var e=ENV[cur];
+  var v=parseFloat($('opVal').value);
+  if(isNaN(v)){$('opVal').focus();return;}
+  var go=v>=e.need;
+  done[cur]=go?'続ける':'やめる';
+  show('s1',false);show('s2',true);
+  $('vd').className='big '+(go?'yes':'no');
+  $('vd').textContent=go?'続ける':'やめる';
+  $('vdsub').textContent=go?'当時のあなたが決めた条件を満たしました。':'当時のあなたが決めた条件を満たしませんでした。';
+  $('vdtbl').innerHTML=
+   '<tr><td>続けるための条件</td><td>'+e.need+' 以上</td></tr>'+
+   '<tr><td>実際の数字</td><td>'+v+'</td></tr>'+
+   '<tr><td>差</td><td>'+(v-e.need>=0?'+':'−')+(Math.abs(Math.round((v-e.need)*10)/10))+'</td></tr>';
+  $('vdbox').innerHTML=go
+   ? '<div class="ok"><b>続けます。</b>ただし、これで終わりにせず、いまこの場でもう一度封をしてください。続ける理由が今日あるということは、なくなる日も来るということです。</div>'
+   : '<div class="warn"><b>やめます。</b>ここで「もう少し」と思ったなら、その気持ちは、まだ払っていなかった'+fmt(e.sealed)+'のあなたには無かったものです。<span class="mark">払った分は、続けても戻りません。</span></div>';
+  var note=$('opNote').value.trim();
+  $('vdnote').innerHTML=note?'<div class="hl"><b>あなたが今日書いたこと（記録に残しました）</b><br>'+note.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'<br><br><span class="small">これは判定には使っていません。次に封をするとき、条件の書き方を直すために読んでください。</span></div>':'';
+  window.scrollTo(0,0);
+};
+
+$('new').onclick=function(){show('s0',false);show('s9',false);show('s3',true);window.scrollTo(0,0);};
+$('nBack').onclick=function(){show('s3',false);show('s0',true);show('s9',true);window.scrollTo(0,0);};
+$('seal').onclick=function(){
+  var t=$('n1').value.trim()||'（名前のない取り組み）';
+  var m=$('n2').value.trim()||'（数えるものが決まっていません）';
+  var need=parseFloat($('n3').value);
+  var months=parseInt($('n4').value,10);
+  var word=$('n5').value.trim();
+  if(isNaN(need)){$('n3').focus();return;}
+  var od=addM(TODAY,months);
+  ENV.push({t:t,sealed:new Date(TODAY.getTime()),open:od,metric:m,need:need,
+    word:word||'（開ける日の自分へは、何も書きませんでした）',
+    cost:months+'か月ぶんの費用を払うことになります。'});
+  $('sealN').textContent=fmt(od)+' に開きます';
+  $('sealS').innerHTML='あと '+diffDays(od,TODAY)+' 日。<br>'+t+'<br>条件：'+m+' が '+need+' 以上';
+  show('s3',false);show('s4',true);
+  ['n1','n2','n3','n5'].forEach(function(i){$(i).value='';});
+  window.scrollTo(0,0);
+};
+</script>
+</body>
+</html>

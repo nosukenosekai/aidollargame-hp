@@ -3,12 +3,19 @@
    shindan_click          : 無料AI診断への導線クリック
    contact_submit_attempt : 人の入力と判定して実際にFormspreeへ送った
    contact_submit_blocked : 自動投稿と判定して送らなかった(reasonに判定理由)
+   contact_submit_recovered : 自動投稿と判定したが、本人が確認して送信を続行した
    contact_submit_error   : 送ったがFormspreeがエラーを返した
    ※ 受理された件数は thanks.html 側の contact_submit で数える。
 
    2026-08-06追記: 8/4-8/5は attempt 4件に対しFormspreeからのメールは1件。
    Formspreeは受理(200)を返しつつスパム判定で3件を捨てていた。
-   受理件数=届いた件数ではないため、自動投稿は自前でFormspreeに渡す前に止める。 */
+   受理件数=届いた件数ではないため、自動投稿は自前でFormspreeに渡す前に止める。
+
+   2026-08-24追記: 8/17-8/23の週次点検で blocked 10件(5ユーザー)を観測したが、
+   GA4のカスタム定義が0件で reason パラメータがディメンションとして
+   登録されておらず、内訳がレポートにもデータ探索にも一切出てこなかった。
+   管理画面の設定に依存しないよう、reasonをイベント名にも展開する。
+   あわせて、タイミング判定で本物の人を行き止まりにしない導線を入れた。 */
 (function () {
   function track(name, params) {
     if (typeof gtag === 'function') {
@@ -39,10 +46,7 @@
   var MIN_DWELL_MS = 5000;      /* ページを開いてから送信までの最短時間 */
   var MIN_FILL_MS = 2000;       /* 最初の入力から送信までの最短時間 */
 
-  var forms = document.querySelectorAll('form[action*="formspree"]');
-  for (var i = 0; i < forms.length; i++) {
-    var form = forms[i];
-
+  function setupForm(form) {
     /* 2つめのハニーポット。HTMLに書かずJSで差し込むので、
        静的にHTMLを読むタイプの収集botの目に触れない。
        全項目を機械的に埋めるbotだけがここに値を入れる。 */
@@ -58,17 +62,21 @@
     /* 人が触った証拠を記録する。プログラムから value を代入しただけでは
        input も keydown も発生しないため、機械的な投稿と区別できる。 */
     form._firstTouch = 0;
-    ['keydown', 'input', 'paste', 'pointerdown'].forEach(function (type) {
+    ['keydown', 'input', 'paste', 'pointerdown', 'change'].forEach(function (type) {
       form.addEventListener(type, function (ev) {
-        if (!form._firstTouch && ev.isTrusted) form._firstTouch = Date.now();
+        /* keydown と pointerdown は実操作のみ採用する。
+           input / paste / change はパスワードマネージャや自動入力が
+           isTrusted=false で発火させることがあるため信頼フラグを問わない。
+           値を直接代入するbotはどのイベントも発火させないので判定は保てる。 */
+        var human = (type === 'keydown' || type === 'pointerdown') ? ev.isTrusted : true;
+        if (!form._firstTouch && human) form._firstTouch = Date.now();
       }, true);
     });
 
     form.addEventListener('submit', function (e) {
-      var form = e.target;
       e.preventDefault();
 
-      /* --- 自動投稿の判定。ここを通さないものは送信もGA4計上もしない --- */
+      /* --- 自動投稿の判定 --- */
       var gotcha = form.querySelector('[name="_gotcha"]');
       var reason = '';
       if (gotcha && gotcha.value) reason = 'honeypot_gotcha';
@@ -79,11 +87,21 @@
 
       if (reason) {
         track('contact_submit_blocked', { reason: reason });
-        /* 万一これが本物の人だった場合の逃げ道を必ず出す */
-        if (reason !== 'honeypot_gotcha' && reason !== 'honeypot_injected') {
-          alert('送信を確認できませんでした。お手数ですが info@aidollargame.com までご連絡ください。');
-        }
-        return;
+        /* カスタムディメンション未登録でも内訳が読めるよう、
+           イベント名そのものにreasonを持たせる。 */
+        track('contact_submit_blocked_' + reason, { reason: reason });
+
+        /* ハニーポットは人には見えず触れない項目なので確実に自動投稿。ここは通さない。 */
+        if (reason === 'honeypot_gotcha' || reason === 'honeypot_injected') return;
+
+        /* タイミング系の3つは本物の人を巻き込みうる。
+           行き止まりにせず、本人の意思で送り直せる逃げ道を残す。 */
+        if (!window.confirm(
+          '自動送信の可能性がある操作として検出されました。\n' +
+          'ご本人でしたら、このまま送信できます。送信しますか？\n\n' +
+          'うまくいかない場合は info@aidollargame.com までご連絡ください。'
+        )) return;
+        track('contact_submit_recovered', { reason: reason });
       }
 
       var next = form.querySelector('[name="_next"]');
@@ -94,7 +112,10 @@
 
       track('contact_submit_attempt', {
         form_id: (form.getAttribute('action') || '').split('/').pop(),
-        fill_seconds: Math.round((Date.now() - form._firstTouch) / 1000)
+        /* _firstTouch が無いまま本人確認で通った場合は経過秒を出せないので -1 を入れる。
+           0起点で引くとエポック秒がそのまま入るため。 */
+        fill_seconds: form._firstTouch ? Math.round((Date.now() - form._firstTouch) / 1000) : -1,
+        blocked_reason: reason || 'none'
       });
 
       var payload = new FormData(form);
@@ -117,4 +138,7 @@
       });
     });
   }
+
+  var forms = document.querySelectorAll('form[action*="formspree"]');
+  for (var i = 0; i < forms.length; i++) setupForm(forms[i]);
 })();

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>重なった日</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.btn:disabled{opacity:.4;cursor:default}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.hand{background:#1a1a1a;color:#fff;border-radius:14px;padding:26px 18px;text-align:center;margin-bottom:14px}
+.hand h2{color:#fff;font-size:22px}
+.hand p{color:#c9c9c9;font-size:15px}
+.day{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #eeece6}
+.day:last-child{border-bottom:0}
+.day .d{width:64px;flex:0 0 64px;font-size:16px;font-weight:600}
+.day .d span{display:block;font-size:12px;color:#6b6b6b;font-weight:400}
+.opts{display:flex;gap:6px;flex:1}
+.opts button{flex:1;padding:10px 4px;font-size:14px;font-weight:600;background:#fff;border:1.5px solid #d8d5cc;border-radius:10px;cursor:pointer;font-family:inherit;color:#444;line-height:1.3}
+.opts button.on{border-color:#2563eb;background:#eff4ff;color:#1d4ed8}
+.opts button.on.warn{border-color:#b45309;background:#fdf5ec;color:#b45309}
+.res{margin-top:6px}
+.res .r{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #eeece6}
+.res .r:last-child{border-bottom:0}
+.res .r .d{width:52px;flex:0 0 52px;font-size:16px;font-weight:700}
+.res .r .body{flex:1}
+.res .r .st{font-size:16px;font-weight:600}
+.res .r .who{font-size:14px;color:#6b6b6b}
+.st.fix{color:#2f6b34}
+.st.talk{color:#b45309}
+.st.hole{color:#b03a2e}
+.st.none{color:#8a8a8a}
+.pill{display:inline-block;font-size:12px;border-radius:999px;padding:2px 9px;margin:2px 4px 2px 0;background:#f0eee8;color:#555}
+.pill.y{background:#eaf3ea;color:#2f6b34}
+.pill.m{background:#fdf5ec;color:#b45309}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.warnbox{background:#fef8ef;border:1px solid #f0dcc0;border-radius:10px;padding:14px;margin-top:12px}
+.name{width:100%;padding:13px;font-size:16px;border:1.5px solid #d8d5cc;border-radius:10px;font-family:inherit;background:#fff}
+.hide{display:none}
+.foot{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.who-list{font-size:14px;color:#6b6b6b;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（サンプルデータ・入力はこの端末の中だけ）</div>
+<h1>重なった日</h1>
+<p class="lead">来週のシフト。院長が先に「この日入れる？」と聞くと、断りにくくなります。先に聞かず、両方が別々に入れて、重なったところだけを開きます。</p>
+
+<div class="card" id="s0">
+  <h2>使いかた</h2>
+  <p>1台の端末を渡し合います。</p>
+  <p style="margin-top:8px">1. 院長が、来週7日それぞれに<span class="mark">人がいる／できれば／休診</span>を入れる<br>
+  2. 画面を伏せて、スタッフに端末を渡す<br>
+  3. スタッフが<span class="mark">入れる／頼まれれば／無理</span>を入れる<br>
+  4. 全員ぶん入れたら、重なった日だけが開く</p>
+  <div class="warnbox small">スタッフが「無理」と入れた理由は、この画面のどこにも出ません。院長に見えるのは「合わなかった」だけです。理由を出さないことが、この道具の中身です。</div>
+  <button class="btn" id="go" style="margin-top:14px">院長の入力からはじめる</button>
+</div>
+
+<div class="card hide" id="sBoss">
+  <h2>院長：来週、人が必要な日</h2>
+  <p class="small" style="margin-bottom:10px">診療の入り具合で決めてください。まだ誰にも聞いていない状態で入れます。</p>
+  <div id="bossDays"></div>
+  <button class="btn" id="bossDone" style="margin-top:14px" disabled>入れ終わった。端末を伏せる</button>
+</div>
+
+<div class="card hide" id="sStaffName">
+  <h2>スタッフ：お名前</h2>
+  <p class="small" style="margin-bottom:10px">呼び名で構いません。院長の入力はこの先も表示されません。</p>
+  <input class="name" id="nm" placeholder="例：受付 ミドリ" maxlength="12">
+  <button class="btn" id="nmDone" style="margin-top:12px">次へ</button>
+  <p class="who-list" id="already"></p>
+</div>
+
+<div class="card hide" id="sStaff">
+  <h2 id="stTitle">スタッフ：入れる日</h2>
+  <p class="small" style="margin-bottom:10px">院長がどの日を必要としているかは、まだ見えていません。自分の都合だけで入れてください。</p>
+  <div id="staffDays"></div>
+  <button class="btn" id="staffDone" style="margin-top:14px" disabled>入れ終わった</button>
+</div>
+
+<div class="hand hide" id="sHand">
+  <h2 id="handT">端末を渡してください</h2>
+  <p id="handB">受け取った人だけが、次の画面を見ます。</p>
+  <button class="btn sub" id="handGo" style="margin-top:16px">受け取った</button>
+</div>
+
+<div class="card hide" id="sMore">
+  <h2>次の人に渡しますか</h2>
+  <p class="small">入れ終わった人：<span id="doneList"></span></p>
+  <button class="btn sub" id="more" style="margin-top:12px">もう一人ぶん入れる</button>
+  <button class="btn" id="finish">これで開く</button>
+</div>
+
+<div class="card hide" id="sRes">
+  <h2>重なった日</h2>
+  <div class="res" id="res"></div>
+  <div class="hl" id="sum"></div>
+  <div class="warnbox" id="hole"></div>
+  <div style="margin-top:18px">
+    <h2>この画面が言いたいこと</h2>
+    <p>シフトの相談がしんどいのは、<span class="mark">先に聞いたほうが強くなるから</span>です。院長が先に言えばスタッフは断りにくく、スタッフが先に出せば院長は詰めにくい。両方が見えないまま入れて、重なったところだけ開けば、その力関係はそもそも発生しません。</p>
+    <p style="margin-top:10px">開くのは重なった日だけ。合わなかった日は「合わなかった」としか出ないので、誰が何を我慢したかは残りません。</p>
+  </div>
+  <button class="btn sub" id="again" style="margin-top:16px">はじめから</button>
+</div>
+
+<div class="foot">
+  この画面は歯科医院を想定したデモです。入力はこの端末の中だけで処理され、どこにも送信されません。氏名はすべて架空です。
+</div>
+</div>
+<script>
+(function(){
+var DAYS=[{d:'月',n:'来週'},{d:'火',n:''},{d:'水',n:''},{d:'木',n:''},{d:'金',n:''},{d:'土',n:''},{d:'日',n:''}];
+var BOSS=[{k:2,t:'人がいる'},{k:1,t:'できれば'},{k:0,t:'休診'}];
+var STAFF=[{k:2,t:'入れる'},{k:1,t:'頼まれれば'},{k:0,t:'無理'}];
+var boss=[null,null,null,null,null,null,null];
+var staff=[]; // {name, v:[...]}
+var cur=null;
+
+function show(id){
+  var ids=['s0','sBoss','sStaffName','sStaff','sHand','sMore','sRes'];
+  for(var i=0;i<ids.length;i++) document.getElementById(ids[i]).classList.add('hide');
+  document.getElementById(id).classList.remove('hide');
+  window.scrollTo(0,0);
+}
+
+function renderDays(el, opts, vals, cb){
+  var h='';
+  for(var i=0;i<DAYS.length;i++){
+    h+='<div class="day"><div class="d">'+DAYS[i].d+'曜<span>'+(i<5?'診療日':'（例：土は午前）')+'</span></div><div class="opts">';
+    for(var k=0;k<opts.length;k++){
+      var on = vals[i]===opts[k].k;
+      var w = (opts[k].k===0)?' warn':'';
+      h+='<button data-i="'+i+'" data-k="'+opts[k].k+'" class="'+(on?'on'+w:'')+'">'+opts[k].t+'</button>';
+    }
+    h+='</div></div>';
+  }
+  el.innerHTML=h;
+  var bs=el.querySelectorAll('button');
+  for(var b=0;b<bs.length;b++){
+    bs[b].onclick=function(){
+      vals[+this.getAttribute('data-i')]=+this.getAttribute('data-k');
+      renderDays(el,opts,vals,cb);
+      cb();
+    };
+  }
+}
+
+function filled(v){ for(var i=0;i<v.length;i++) if(v[i]===null) return false; return true; }
+
+document.getElementById('go').onclick=function(){
+  renderDays(document.getElementById('bossDays'),BOSS,boss,function(){
+    document.getElementById('bossDone').disabled=!filled(boss);
+  });
+  show('sBoss');
+};
+document.getElementById('bossDone').onclick=function(){
+  hand('端末をスタッフに渡してください','院長の入力はもう表示されません。','sStaffName');
+};
+
+function hand(t,b,next){
+  document.getElementById('handT').textContent=t;
+  document.getElementById('handB').textContent=b;
+  document.getElementById('handGo').onclick=function(){
+    if(next==='sStaffName'){
+      var a=[];
+      for(var i=0;i<staff.length;i++) a.push(staff[i].name);
+      document.getElementById('already').textContent = a.length?('入れ終わった人：'+a.join('、')):'';
+      document.getElementById('nm').value='';
+      show('sStaffName');
+    } else show(next);
+  };
+  show('sHand');
+}
+
+document.getElementById('nmDone').onclick=function(){
+  var v=document.getElementById('nm').value.trim();
+  if(!v) v='スタッフ'+(staff.length+1);
+  cur={name:v, v:[null,null,null,null,null,null,null]};
+  document.getElementById('stTitle').textContent=v+'：入れる日';
+  renderDays(document.getElementById('staffDays'),STAFF,cur.v,function(){
+    document.getElementById('staffDone').disabled=!filled(cur.v);
+  });
+  show('sStaff');
+};
+
+document.getElementById('staffDone').onclick=function(){
+  staff.push(cur); cur=null;
+  var a=[];
+  for(var i=0;i<staff.length;i++) a.push(staff[i].name);
+  document.getElementById('doneList').textContent=a.join('、');
+  show('sMore');
+};
+document.getElementById('more').onclick=function(){
+  hand('次の人に渡してください','前の人の入力は表示されません。','sStaffName');
+};
+document.getElementById('finish').onclick=function(){ result(); };
+
+function result(){
+  var h='', fix=0, talk=0, hole=0, holeDays=[];
+  for(var i=0;i<DAYS.length;i++){
+    var b=boss[i];
+    var yes=[], may=[];
+    for(var s=0;s<staff.length;s++){
+      if(staff[s].v[i]===2) yes.push(staff[s].name);
+      else if(staff[s].v[i]===1) may.push(staff[s].name);
+    }
+    var st, cls, who;
+    if(b===0){ st='休診'; cls='none'; who='誰にも聞きません'; }
+    else if(yes.length>0){ st=(b===2?'確定':'余力あり'); cls='fix'; who=''; if(b===2) fix++; }
+    else if(may.length>0){ st=(b===2?'1人に声をかける':'頼めば埋まる'); cls='talk'; who=''; if(b===2) talk++; }
+    else { st=(b===2?'穴':'空き'); cls=(b===2?'hole':'none'); who='重なりませんでした'; if(b===2){hole++; holeDays.push(DAYS[i].d+'曜');} }
+    var pills='';
+    for(var k=0;k<yes.length;k++) pills+='<span class="pill y">'+yes[k]+'　入れる</span>';
+    for(var k=0;k<may.length;k++) pills+='<span class="pill m">'+may[k]+'　頼まれれば</span>';
+    h+='<div class="r"><div class="d">'+DAYS[i].d+'</div><div class="body">'
+      +'<div class="st '+cls+'">'+st+'</div>'
+      +(pills?('<div>'+pills+'</div>'):('<div class="who">'+who+'</div>'))
+      +'<div class="who">'+(b===2?'院長：人がいる':(b===1?'院長：できれば':'院長：休診'))+'</div>'
+      +'</div></div>';
+  }
+  document.getElementById('res').innerHTML=h;
+  document.getElementById('sum').innerHTML='人がいる日のうち、<strong>'+fix+'日</strong>はもう埋まっています。<strong>'+talk+'日</strong>は1人に声をかければ決まります。'
+    +'<br><span class="small">この'+fix+'日は、誰にも「入れる？」と聞かずに決まりました。断りにくさが生まれる場面がその分なくなっています。</span>';
+  var hb=document.getElementById('hole');
+  if(hole>0) hb.innerHTML='<strong>'+holeDays.join('・')+'は重なりませんでした。</strong>理由はこの画面には出ません。埋めるなら、この日だけを外に探すことになります。';
+  else hb.innerHTML='<strong>穴はありません。</strong>人がいる日はすべて誰かと重なりました。';
+  show('sRes');
+}
+document.getElementById('again').onclick=function(){ location.reload(); };
+})();
+</script>
+</body>
+</html>

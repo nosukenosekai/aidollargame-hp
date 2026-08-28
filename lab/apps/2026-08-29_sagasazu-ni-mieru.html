@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>探さずに見える</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.btn:disabled{opacity:.4;cursor:default}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:44px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.unit{font-size:17px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef8ef;border:1px solid #f0dcc0;border-radius:10px;padding:14px;margin-top:12px}
+.row2{display:flex;gap:10px}
+.row2 .btn{margin-bottom:0}
+.step{font-size:14px;color:#6b6b6b;margin-bottom:8px;display:flex;justify-content:space-between}
+.field{position:relative;width:100%;padding-top:100%;background:#fbfaf7;border:1px solid #e8e5dd;border-radius:12px;overflow:hidden;margin-bottom:12px}
+.field .in{position:absolute;inset:0}
+.it{position:absolute;width:9%;height:9%}
+.it.sq{border-radius:2px}
+.it.ci{border-radius:50%}
+.fx{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:22px;color:#8a8a8a}
+.sample{display:flex;gap:14px;align-items:center;margin:10px 0}
+.sample .sw{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:13px;color:#6b6b6b}
+.sample .sw i{display:block;width:24px;height:24px}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+td,th{padding:10px 0;border-bottom:1px solid #eeece6;text-align:left}
+th{font-size:13px;color:#6b6b6b;font-weight:600}
+td:last-child,th:last-child,td:nth-child(2),th:nth-child(2){text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.bars .b{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:15px}
+.bars .b .f{width:56px;font-variant-numeric:tabular-nums;font-weight:600}
+.bars .b .g{flex:1;height:12px;background:#eeece6;border-radius:6px;overflow:hidden}
+.bars .b .g i{display:block;height:100%;background:#2563eb}
+.bars .b.c2 .g i{background:#b45309}
+.bars .b .v{width:72px;text-align:right;font-size:14px;color:#6b6b6b;font-variant-numeric:tabular-nums}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.hide{display:none}
+.legend{font-size:13px;color:#6b6b6b;margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">実データ（1980年の論文の数字と並べます）</div>
+<h1>探さずに見える</h1>
+<p class="lead">同じ「さがす」でも、色だけを手がかりにするときは、数が増えても時間が変わりません。色と形の組み合わせになった途端、1個増えるごとに時間が積み上がります。自分の画面で何ミリ秒ずつ増えるかを測ります。</p>
+
+<div class="card" id="s0">
+  <h2>やること</h2>
+  <p>四角と丸がばらまかれます。<span class="mark">青い四角</span>が入っているかどうかだけを、できるだけ速く答えてください。</p>
+  <div class="sample">
+    <div class="sw"><i style="background:#2563eb;border-radius:2px"></i>これが標的</div>
+    <div class="sw"><i style="background:#c0392b;border-radius:2px"></i>じゃま</div>
+    <div class="sw"><i style="background:#2563eb;border-radius:50%"></i>じゃま</div>
+  </div>
+  <p class="small">前半は赤い四角だけがじゃまです。後半は赤い四角と青い丸の両方がじゃまになります。<br>ぜんぶで36回、2〜3分ほど。速さを測るので、指を画面の近くに置いたまま進めてください。</p>
+  <div class="warn small">画面が小さいほど有利・不利が出ます。途中で端末を持ち替えたり、拡大したりしないでください。</div>
+  <button class="btn" id="go" style="margin-top:14px">練習をはじめる（4回）</button>
+</div>
+
+<div class="card hide" id="s1">
+  <div class="step"><span id="phase"></span><span id="prog"></span></div>
+  <div class="field"><div class="in" id="fld"></div></div>
+  <div class="row2">
+    <button class="btn gray" id="bNo">ない</button>
+    <button class="btn" id="bYes">ある</button>
+  </div>
+  <p class="small" id="fb" style="text-align:center;margin-top:10px;min-height:22px"></p>
+</div>
+
+<div class="card hide" id="s2">
+  <h2 id="brTitle"></h2>
+  <p id="brBody" class="small"></p>
+  <div class="sample" id="brSample"></div>
+  <button class="btn" id="brGo">つづける</button>
+</div>
+
+<div class="card hide" id="s3">
+  <h2>あなたの傾き</h2>
+  <p class="small">「じゃまが1個増えるごとに、何ミリ秒おそくなったか」です。標的があった回だけ、正解した回だけで計算しています。</p>
+
+  <div class="hl">
+    <p class="small" style="margin-bottom:2px">色だけがちがうとき</p>
+    <p class="big"><span id="sl1">–</span><span class="unit"> ms／1個</span></p>
+    <p class="small" style="margin-top:10px;margin-bottom:2px">色と形の組み合わせのとき</p>
+    <p class="big" style="color:#b45309"><span id="sl2">–</span><span class="unit"> ms／1個</span></p>
+  </div>
+
+  <div style="margin-top:16px">
+    <p class="small" style="margin-bottom:4px">個数ごとの平均時間（青＝色だけ／茶＝組み合わせ）</p>
+    <div class="bars" id="bars"></div>
+    <p class="legend">横棒の長さは反応時間。上下2本ずつが同じ個数のペアです。</p>
+  </div>
+
+  <div style="margin-top:18px">
+    <h2>1980年の実験と並べる</h2>
+    <table>
+      <tr><th>条件</th><th>あなた</th><th>Treisman &amp; Gelade (1980)</th></tr>
+      <tr><td>色だけがちがう</td><td id="c1">–</td><td>約 3.1 ms／1個</td></tr>
+      <tr><td>色と形の組み合わせ</td><td id="c2">–</td><td>約 60 ms／1個</td></tr>
+    </table>
+    <p class="small" style="margin-top:10px">論文の値は、標的があった試行の探索率として報告されているものです。1回きり・36試行の自己計測なので、数字そのものより<span class="mark">2つの条件の差</span>を見てください。</p>
+  </div>
+
+  <div class="ok" id="verdict"></div>
+
+  <div style="margin-top:18px">
+    <h2>現場に置きかえると1行</h2>
+    <p>棚・ラベル・帳票・警告灯は、<span class="mark">色だけ、または形だけで分ける。</span>「赤い丸は至急、青い四角は保留」のように色と形を組み合わせた瞬間、探す時間は品目数に比例して伸びる。</p>
+  </div>
+
+  <div class="src">
+    出典：Treisman A, Gelade G. <em>A Feature-Integration Theory of Attention.</em> Cognitive Psychology 12, 97–136 (1980).<br>
+    <a href="https://www.cse.psu.edu/~rtc12/CSE597E/papers/treismanFeatIntegration.pdf">https://www.cse.psu.edu/~rtc12/CSE597E/papers/treismanFeatIntegration.pdf</a><br>
+    引用した数値は、結合条件の探索率が約60ms／項目、特徴条件の傾きが平均3.1msという同論文の報告値です。刺激の種類・提示方法は本アプリと同一ではありません。
+  </div>
+  <button class="btn sub" id="again" style="margin-top:16px">もう一度やる</button>
+</div>
+
+</div>
+<script>
+(function(){
+var SIZES=[6,12,24];
+var fld=document.getElementById('fld');
+var trials=[], ti=0, practice=true, t0=0, cur=null, locked=true;
+var data=[];
+
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+function buildBlock(cond){
+  var out=[];
+  for(var s=0;s<SIZES.length;s++){
+    for(var k=0;k<6;k++) out.push({cond:cond,n:SIZES[s],present:k<3});
+  }
+  return shuffle(out);
+}
+function buildPractice(){
+  return shuffle([{cond:1,n:6,present:true,p:1},{cond:1,n:12,present:false,p:1},{cond:2,n:6,present:true,p:1},{cond:2,n:12,present:false,p:1}]);
+}
+
+// 6x6 のセルに配置し、セル内でわずかにずらす
+function draw(tr){
+  fld.innerHTML='';
+  var cells=[];
+  for(var r=0;r<6;r++)for(var c=0;c<6;c++)cells.push([r,c]);
+  shuffle(cells);
+  var items=[];
+  if(tr.present) items.push({color:'#2563eb',shape:'sq'});
+  var rest=tr.n-items.length;
+  if(tr.cond===1){
+    for(var i=0;i<rest;i++) items.push({color:'#c0392b',shape:'sq'});
+  }else{
+    for(var i=0;i<rest;i++) items.push(i%2===0?{color:'#c0392b',shape:'sq'}:{color:'#2563eb',shape:'ci'});
+  }
+  shuffle(items);
+  for(var i=0;i<items.length;i++){
+    var cell=cells[i];
+    var d=document.createElement('div');
+    d.className='it '+items[i].shape;
+    d.style.background=items[i].color;
+    var jx=(Math.random()-0.5)*4, jy=(Math.random()-0.5)*4;
+    d.style.left=(cell[1]*16.6+3.8+jx)+'%';
+    d.style.top=(cell[0]*16.6+3.8+jy)+'%';
+    fld.appendChild(d);
+  }
+}
+
+function showFix(cb){
+  fld.innerHTML='<div class="fx">＋</div>';
+  locked=true;
+  setTimeout(cb, 600+Math.random()*400);
+}
+
+function nextTrial(){
+  if(ti>=trials.length){ endPhase(); return; }
+  cur=trials[ti];
+  document.getElementById('prog').textContent=(ti+1)+' / '+trials.length;
+  document.getElementById('phase').textContent = practice?'練習':(cur.cond===1?'前半：色だけ':'後半：色と形');
+  showFix(function(){
+    draw(cur);
+    t0=performance.now();
+    locked=false;
+  });
+}
+
+function answer(said){
+  if(locked) return;
+  var rt=performance.now()-t0;
+  locked=true;
+  var correct=(said===cur.present);
+  if(practice){
+    document.getElementById('fb').textContent = correct?'正解':'ちがいます。青い四角だけが標的です';
+    document.getElementById('fb').style.color = correct?'#2563eb':'#b45309';
+  }else{
+    data.push({cond:cur.cond,n:cur.n,present:cur.present,rt:rt,correct:correct});
+    document.getElementById('fb').textContent='';
+  }
+  ti++;
+  fld.innerHTML='';
+  setTimeout(function(){ document.getElementById('fb').textContent=''; nextTrial(); }, practice?900:350);
+}
+
+document.getElementById('bYes').onclick=function(){answer(true);};
+document.getElementById('bNo').onclick=function(){answer(false);};
+
+var stage=0; // 0:practice 1:block1 2:block2
+function endPhase(){
+  document.getElementById('s1').classList.add('hide');
+  if(stage===0){
+    practice=false; stage=1;
+    brief('前半：じゃまは赤い四角だけ','この18回は、じゃまが赤い四角だけです。青い四角が「ある」か「ない」かを、できるだけ速く。',
+      [['#2563eb','sq','標的'],['#c0392b','sq','じゃま']], function(){ trials=buildBlock(1); ti=0; run(); });
+  }else if(stage===1){
+    stage=2;
+    brief('後半：じゃまが2種類になります','ここからは、赤い四角と青い丸の両方がじゃまです。標的は変わらず青い四角。色だけでも形だけでも決められません。',
+      [['#2563eb','sq','標的'],['#c0392b','sq','じゃま'],['#2563eb','ci','じゃま']], function(){ trials=buildBlock(2); ti=0; run(); });
+  }else{
+    result();
+  }
+}
+function brief(t,b,sw,cb){
+  document.getElementById('brTitle').textContent=t;
+  document.getElementById('brBody').textContent=b;
+  var h='';
+  for(var i=0;i<sw.length;i++){
+    h+='<div class="sw"><i style="background:'+sw[i][0]+';border-radius:'+(sw[i][1]==='ci'?'50%':'2px')+'"></i>'+sw[i][2]+'</div>';
+  }
+  document.getElementById('brSample').innerHTML=h;
+  document.getElementById('s2').classList.remove('hide');
+  document.getElementById('brGo').onclick=function(){ document.getElementById('s2').classList.add('hide'); cb(); };
+}
+function run(){ document.getElementById('s1').classList.remove('hide'); nextTrial(); }
+
+function slope(cond){
+  var xs=[],ys=[];
+  for(var s=0;s<SIZES.length;s++){
+    var n=SIZES[s], sum=0, c=0;
+    for(var i=0;i<data.length;i++){
+      var d=data[i];
+      if(d.cond===cond&&d.n===n&&d.present&&d.correct){sum+=d.rt;c++;}
+    }
+    if(c>0){xs.push(n);ys.push(sum/c);}
+  }
+  if(xs.length<2) return null;
+  var mx=0,my=0;
+  for(var i=0;i<xs.length;i++){mx+=xs[i];my+=ys[i];}
+  mx/=xs.length; my/=ys.length;
+  var num=0,den=0;
+  for(var i=0;i<xs.length;i++){num+=(xs[i]-mx)*(ys[i]-my);den+=(xs[i]-mx)*(xs[i]-mx);}
+  if(den===0) return null;
+  return {b:num/den, xs:xs, ys:ys};
+}
+
+function result(){
+  var a=slope(1), b=slope(2);
+  var f=function(v){return v===null?'測れず':(v.b>=0?'+':'')+v.b.toFixed(1);};
+  document.getElementById('sl1').textContent=a?f(a):'–';
+  document.getElementById('sl2').textContent=b?f(b):'–';
+  document.getElementById('c1').textContent=a?f(a)+' ms／1個':'測れず';
+  document.getElementById('c2').textContent=b?f(b)+' ms／1個':'測れず';
+
+  var all=[];
+  if(a) for(var i=0;i<a.xs.length;i++) all.push(a.ys[i]);
+  if(b) for(var i=0;i<b.xs.length;i++) all.push(b.ys[i]);
+  var max=Math.max.apply(null, all.concat([1]));
+  var h='';
+  for(var s=0;s<SIZES.length;s++){
+    var n=SIZES[s];
+    var y1=a?a.ys[a.xs.indexOf(n)]:null, y2=b?b.ys[b.xs.indexOf(n)]:null;
+    if(y1!=null) h+='<div class="b"><div class="f">'+n+'個</div><div class="g"><i style="width:'+(y1/max*100)+'%"></i></div><div class="v">'+Math.round(y1)+' ms</div></div>';
+    if(y2!=null) h+='<div class="b c2"><div class="f"></div><div class="g"><i style="width:'+(y2/max*100)+'%"></i></div><div class="v">'+Math.round(y2)+' ms</div></div>';
+  }
+  document.getElementById('bars').innerHTML=h;
+
+  var err=0; for(var i=0;i<data.length;i++) if(!data[i].correct) err++;
+  var v='';
+  if(a&&b){
+    var d=b.b-a.b;
+    if(d>=20) v='<strong>差が出ました。</strong>組み合わせを探すほうが、1個あたり約'+d.toFixed(1)+'ms 余分にかかっています。色だけのときは、個数がほとんど効いていません。これが論文の言う「色は勝手に目に入る／組み合わせは1つずつ確かめている」です。';
+    else if(d>=3) v='<strong>同じ向きの差は出ましたが、小さめです。</strong>組み合わせのほうが1個あたり'+d.toFixed(1)+'ms 多くかかりました。36回だとぶれます。もう一度やると差が開くことが多いです。';
+    else v='<strong>今回は差が出ませんでした。</strong>途中でボタンを連打した回や、当てずっぽうが混ざると傾きは消えます。間違いは'+err+'回でした。落ち着いてもう一度やってみてください。';
+  }else{
+    v='正解した「標的あり」の回が足りず、傾きを計算できませんでした。もう一度やってみてください。';
+  }
+  document.getElementById('verdict').innerHTML=v;
+  document.getElementById('s3').classList.remove('hide');
+  window.scrollTo(0,0);
+}
+
+document.getElementById('go').onclick=function(){
+  document.getElementById('s0').classList.add('hide');
+  trials=buildPractice(); ti=0; practice=true; stage=0;
+  run();
+};
+document.getElementById('again').onclick=function(){ location.reload(); };
+})();
+</script>
+</body>
+</html>

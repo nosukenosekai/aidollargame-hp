@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>さいごの一軒</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:14px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.hud{position:sticky;top:0;z-index:5;background:#fff;border:1px solid #e8e5dd;border-radius:14px;padding:14px 16px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.hud .m{display:flex;align-items:baseline;gap:10px}
+.hud .m b{font-size:38px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.hud .m .lb{font-size:14px;color:#6b6b6b}
+.hud .sub{display:flex;gap:14px;flex-wrap:wrap;font-size:14px;color:#6b6b6b;margin-top:6px;font-variant-numeric:tabular-nums}
+.hud.late .m b{color:#b45309}
+.hud .badge{display:inline-block;font-size:13px;font-weight:600;border-radius:999px;padding:2px 10px;margin-top:8px}
+.hud .badge.ok{background:#eaf3ea;color:#2f6b34}
+.hud .badge.ng{background:#fdeeea;color:#b03a2e}
+.map{position:relative;width:100%;padding-top:78%;background:#fbfaf7;border:1px solid #e8e5dd;border-radius:12px;margin-bottom:14px;overflow:hidden}
+.map .pin{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:#2563eb;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.map .pin.bad{background:#b45309}
+.map .base{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:8px;background:#1a1a1a;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.stop{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid #eeece6}
+.stop:last-child{border-bottom:0}
+.stop .no{width:24px;height:24px;flex:0 0 24px;border-radius:50%;background:#eff4ff;color:#1d4ed8;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:3px}
+.stop.bad .no{background:#fdeeea;color:#b03a2e}
+.stop .body{flex:1;min-width:0}
+.stop .nm{font-size:16px;font-weight:600}
+.stop .dt{font-size:13px;color:#6b6b6b;font-variant-numeric:tabular-nums}
+.stop .cond{font-size:13px;color:#b45309;font-weight:600}
+.stop .arrows{display:flex;flex-direction:column;gap:4px}
+.stop .arrows button{width:38px;height:26px;border:1.5px solid #d8d5cc;background:#fff;border-radius:8px;cursor:pointer;font-size:13px;color:#444;font-family:inherit;padding:0}
+.stop .arrows button:disabled{opacity:.3}
+.legend{font-size:13px;color:#6b6b6b;margin-top:10px}
+.hide{display:none}
+.foot{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（サンプルデータ・架空の地区と氏名）</div>
+<h1>さいごの一軒</h1>
+<p class="lead">9件の訪問。距離は変わらないのに、回る順を入れ替えるだけで庁舎に戻る時刻が5時間動きます。近い順に回るのが正しいとはかぎりません。</p>
+
+<div class="hud" id="hud">
+  <div class="m"><b id="ret">–:–</b><span class="lb">に庁舎へ戻る（定時 17:15）</span></div>
+  <div class="sub">
+    <span>移動 <b id="mv">–</b>分</span>
+    <span>待ち <b id="wt">–</b>分</span>
+    <span>訪問 <b id="st">–</b>分</span>
+    <span>休憩 45分</span>
+  </div>
+  <span class="badge" id="bd"></span>
+</div>
+
+<div class="card">
+  <div class="map" id="map"></div>
+  <p class="legend">黒い四角が庁舎。9:00に出て、全部回って戻ります。線は今の回り順です。</p>
+</div>
+
+<div class="card">
+  <h2>回る順</h2>
+  <p class="small" style="margin-bottom:6px">▲▼で入れ替えると、上の時刻がその場で動きます。</p>
+  <div id="list"></div>
+</div>
+
+<div class="card">
+  <button class="btn sub" id="bNear">近い順にする（次にいちばん近い家へ）</button>
+  <button class="btn gray" id="bSeq">台帳に並んでいる順にもどす</button>
+  <button class="btn" id="bBest">いちばん早く帰れる順をさがす</button>
+  <p class="small" id="msg" style="min-height:22px;margin-top:4px"></p>
+</div>
+
+<div class="card">
+  <h2>この画面が言いたいこと</h2>
+  <p>訪問の順番は、たいてい担当者の頭の中にしかありません。<span class="mark">近い順に回ると、時間指定のある家に早く着きすぎて、車の中で待つ時間が積み上がります。</span>移動の合計はほとんど変わらないのに、帰庁時刻だけが何時間も動く。残業になっているのは距離ではなく順番です。</p>
+  <p style="margin-top:10px">この画面の数字はすべて架空のサンプルです。実際の地区でやるなら、必要なのは訪問先の座標と滞在時間、そして「何時以降・何時まで」の条件だけです。</p>
+</div>
+
+<div class="foot">
+  数字はデモ用に作った架空のデータです。移動時間は地図上の直線距離から機械的に計算しており、実際の道路事情は含んでいません。氏名・地区名はすべて架空です。
+</div>
+</div>
+<script>
+(function(){
+var BASE={x:50,y:50};
+var V=[
+ {n:'佐々木さん',a:'東町',x:20,y:30,s:20,ok:null,by:null},
+ {n:'高橋さん',a:'西野',x:18,y:62,s:25,ok:600,by:null,c:'10:00以降（デイの送り出し後）'},
+ {n:'小林さん',a:'中央',x:46,y:42,s:20,ok:null,by:null},
+ {n:'田口さん',a:'南が丘',x:62,y:84,s:25,ok:810,by:null,c:'13:30以降（訪問看護と重ねない）'},
+ {n:'岡さん',a:'北原',x:55,y:14,s:20,ok:null,by:690,c:'11:30まで（午後は通院）'},
+ {n:'上田さん',a:'川端',x:82,y:55,s:25,ok:null,by:null},
+ {n:'森さん',a:'緑ヶ丘',x:30,y:80,s:25,ok:null,by:900,c:'15:00まで（家族が同席できる時間）'},
+ {n:'内海さん',a:'港',x:88,y:28,s:20,ok:null,by:null},
+ {n:'三宅さん',a:'旭',x:12,y:48,s:20,ok:960,by:null,c:'16:00以降（本人が仕事から戻る）'}
+];
+var START=540, LUNCH=45, LUNCH_AT=720, CLOSE=1035;
+var order=[0,1,2,3,4,5,6,7,8];
+
+function tt(a,b){return Math.round(Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y))*0.85);}
+function hm(m){var h=Math.floor(m/60),k=m%60;return (h<10?'0':'')+h+':'+(k<10?'0':'')+k;}
+
+function sim(o){
+  var t=START, cur=BASE, move=0, wait=0, stay=0, lunched=false, rows=[], viol=0;
+  for(var i=0;i<o.length;i++){
+    var v=V[o[i]];
+    if(!lunched && t>=LUNCH_AT){ t+=LUNCH; lunched=true; }
+    var m=tt(cur,v); move+=m; t+=m;
+    if(!lunched && t>=LUNCH_AT){ t+=LUNCH; lunched=true; }
+    var arr=t, w=0;
+    if(v.ok!=null && t<v.ok){ w=v.ok-t; wait+=w; t=v.ok; }
+    var s=t, bad=(v.by!=null && s>v.by);
+    if(bad) viol++;
+    t+=v.s; stay+=v.s;
+    rows.push({i:o[i],arr:arr,st:s,end:t,m:m,w:w,bad:bad});
+    cur=v;
+  }
+  if(!lunched){ t+=LUNCH; }
+  move+=tt(cur,BASE); t+=tt(cur,BASE);
+  return {end:t,move:move,wait:wait,stay:stay,viol:viol,rows:rows};
+}
+
+function render(){
+  var r=sim(order);
+  document.getElementById('ret').textContent=hm(r.end);
+  document.getElementById('mv').textContent=r.move;
+  document.getElementById('wt').textContent=r.wait;
+  document.getElementById('st').textContent=r.stay;
+  var hud=document.getElementById('hud'), bd=document.getElementById('bd');
+  if(r.end>CLOSE) hud.classList.add('late'); else hud.classList.remove('late');
+  if(r.viol>0){ bd.className='badge ng'; bd.textContent='時間の約束を守れない訪問が '+r.viol+' 件'; }
+  else if(r.end>CLOSE){ bd.className='badge ng'; bd.textContent='定時から '+(r.end-CLOSE)+' 分の超過'; }
+  else { bd.className='badge ok'; bd.textContent='約束も定時も守れています（定時まで '+(CLOSE-r.end)+' 分）'; }
+
+  var h='';
+  for(var i=0;i<r.rows.length;i++){
+    var row=r.rows[i], v=V[row.i];
+    h+='<div class="stop'+(row.bad?' bad':'')+'">'
+      +'<div class="no">'+(i+1)+'</div>'
+      +'<div class="body"><div class="nm">'+v.a+'　'+v.n+'</div>'
+      +'<div class="dt">'+hm(row.st)+'〜'+hm(row.end)+'　移動'+row.m+'分'+(row.w>0?'／車で待機'+row.w+'分':'')+'</div>'
+      +(v.c?'<div class="cond">'+v.c+(row.bad?'　← 守れていません':'')+'</div>':'')
+      +'</div>'
+      +'<div class="arrows"><button data-up="'+i+'"'+(i===0?' disabled':'')+'>▲</button>'
+      +'<button data-dn="'+i+'"'+(i===r.rows.length-1?' disabled':'')+'>▼</button></div>'
+      +'</div>';
+  }
+  var list=document.getElementById('list');
+  list.innerHTML=h;
+  var bs=list.querySelectorAll('button');
+  for(var k=0;k<bs.length;k++){
+    bs[k].onclick=function(){
+      var u=this.getAttribute('data-up'), d=this.getAttribute('data-dn');
+      if(u!==null){ var i=+u; var t=order[i]; order[i]=order[i-1]; order[i-1]=t; }
+      else { var i=+d; var t=order[i]; order[i]=order[i+1]; order[i+1]=t; }
+      document.getElementById('msg').textContent='';
+      render();
+    };
+  }
+
+  var map=document.getElementById('map');
+  var pts=[[BASE.x,BASE.y]];
+  for(var i=0;i<order.length;i++) pts.push([V[order[i]].x, V[order[i]].y]);
+  pts.push([BASE.x,BASE.y]);
+  var d='';
+  for(var i=0;i<pts.length;i++) d+=(i?' L ':'M ')+pts[i][0].toFixed(2)+' '+(pts[i][1]*0.78).toFixed(2);
+  var mh='<svg viewBox="0 0 100 78" preserveAspectRatio="none"><path d="'+d+'" fill="none" stroke="#c9d6f5" stroke-width="1.2"/></svg>';
+  mh+='<div class="base" style="left:'+BASE.x+'%;top:'+BASE.y+'%">庁舎</div>';
+  for(var i=0;i<r.rows.length;i++){
+    var v=V[r.rows[i].i];
+    mh+='<div class="pin'+(r.rows[i].bad?' bad':'')+'" style="left:'+v.x+'%;top:'+v.y+'%">'+(i+1)+'</div>';
+  }
+  map.innerHTML=mh;
+}
+
+document.getElementById('bSeq').onclick=function(){
+  order=[0,1,2,3,4,5,6,7,8];
+  document.getElementById('msg').textContent='台帳に並んでいる順にもどしました。';
+  render();
+};
+document.getElementById('bNear').onclick=function(){
+  var cur=BASE, rest=[], o=[];
+  for(var i=0;i<V.length;i++) rest.push(i);
+  while(rest.length){
+    var b=rest[0], bd=1e9;
+    for(var k=0;k<rest.length;k++){ var dd=tt(cur,V[rest[k]]); if(dd<bd){bd=dd;b=rest[k];} }
+    o.push(b);
+    var nr=[]; for(var k=0;k<rest.length;k++) if(rest[k]!==b) nr.push(rest[k]);
+    rest=nr; cur=V[b];
+  }
+  order=o;
+  document.getElementById('msg').textContent='次にいちばん近い家へ、を9回くり返した順です。移動の合計は短いのに、帰る時刻を見てください。';
+  render();
+};
+function cost(o){ var r=sim(o); return r.end + r.viol*240; }
+document.getElementById('bBest').onclick=function(){
+  var best=order.slice(), bc=cost(best);
+  for(var k=0;k<400;k++){
+    var o=[0,1,2,3,4,5,6,7,8];
+    for(var i=o.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=o[i]; o[i]=o[j]; o[j]=t; }
+    var imp=true;
+    while(imp){
+      imp=false;
+      var c0=cost(o);
+      for(var a=0;a<o.length-1;a++) for(var b=a+1;b<o.length;b++){
+        var p=o.slice(), seg=p.slice(a,b+1).reverse();
+        for(var q=0;q<seg.length;q++) p[a+q]=seg[q];
+        var c1=cost(p);
+        if(c1<c0){ o=p; c0=c1; imp=true; }
+      }
+    }
+    var c=cost(o);
+    if(c<bc){ bc=c; best=o; }
+  }
+  order=best;
+  var r=sim(order);
+  document.getElementById('msg').textContent='この9件でいちばん早く帰れる並びです。移動の合計は'+r.move+'分。近い順のときとほとんど変わりません。変わったのは待ち時間です。';
+  render();
+};
+render();
+})();
+</script>
+</body>
+</html>

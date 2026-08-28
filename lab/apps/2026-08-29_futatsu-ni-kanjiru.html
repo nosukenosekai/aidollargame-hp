@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>二つに感じる</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:44px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.unit{font-size:17px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef8ef;border:1px solid #f0dcc0;border-radius:10px;padding:14px;margin-top:12px}
+.row2{display:flex;gap:10px}
+.row2 .btn{margin-bottom:0}
+.step{font-size:14px;color:#6b6b6b;margin-bottom:10px;display:flex;justify-content:space-between}
+.calbox{background:#fff;border:2px solid #2563eb;border-radius:8px;height:54px;margin:14px auto 6px;position:relative}
+.calbox:after{content:'カードの横幅に合わせる';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:12px;color:#6b6b6b;white-space:nowrap}
+.slider{width:100%;margin:6px 0 2px}
+.gapbox{background:#fbfaf7;border:1px solid #e8e5dd;border-radius:12px;padding:26px 12px;margin:12px 0;display:flex;justify-content:center;align-items:center;overflow-x:auto}
+.gapinner{position:relative;height:52px;flex:0 0 auto}
+.gapinner i{position:absolute;top:0;width:2px;height:52px;background:#2563eb}
+.gapinner b{position:absolute;top:-20px;font-size:12px;color:#6b6b6b;font-weight:600;white-space:nowrap}
+.secret{background:#1a1a1a;color:#fff;border-radius:12px;padding:18px;text-align:center;font-size:22px;font-weight:700;margin:12px 0}
+.secret span{display:block;font-size:13px;font-weight:400;color:#b9b9b9;margin-top:4px}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.picks button{flex:1;padding:12px 10px;font-size:16px;font-weight:600;background:#fff;border:1.5px solid #d8d5cc;border-radius:12px;cursor:pointer;font-family:inherit;color:#1a1a1a}
+.picks button.on{border-color:#2563eb;background:#eff4ff;color:#1d4ed8}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+td,th{padding:10px 0;border-bottom:1px solid #eeece6;text-align:left}
+th{font-size:13px;color:#6b6b6b;font-weight:600}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.bars .b{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:15px}
+.bars .b .f{width:78px;font-weight:600}
+.bars .b .g{flex:1;height:12px;background:#eeece6;border-radius:6px;overflow:hidden}
+.bars .b .g i{display:block;height:100%;background:#2563eb}
+.bars .b .v{width:66px;text-align:right;font-size:14px;color:#6b6b6b;font-variant-numeric:tabular-nums}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.hide{display:none}
+.note{font-size:13px;color:#6b6b6b;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">実測（2014年の論文と並べます）</div>
+<h1>二つに感じる</h1>
+<p class="lead">先の細いものを2本、肌に同時に当てます。近づけていくと、あるところで2本が1本に感じられます。その境目が体の場所ごとにどれだけ違うかを、いま自分の腕で測ります。</p>
+
+<div class="card" id="s0">
+  <h2>用意するもの</h2>
+  <p>つまようじ2本、またはヘアピンやゼムクリップを伸ばしたもの。先が同じ長さになるように持ってください。</p>
+  <p style="margin-top:10px">できれば2人。<span class="mark">当てる人と、目を閉じて答える人</span>に分かれます。1人でもできますが、自分で当てると「今2本だ」と分かってしまうので、数字は甘めに出ます。</p>
+  <div class="warn small">強く刺さないでください。皮膚に軽く触れる程度で十分です。痛みを感じる強さは必要ありません。</div>
+  <button class="btn" id="toCal" style="margin-top:14px">画面のものさしを合わせる</button>
+</div>
+
+<div class="card hide" id="s1">
+  <h2>画面をミリに合わせる</h2>
+  <p class="small">端末によって1ピクセルの大きさが違うので、実物で合わせます。<span class="mark">クレジットカードや交通系ICカード</span>を画面に当てて、下の青い枠の横幅がカードの横幅（85.6mm）とぴったり同じになるまでスライダーを動かしてください。</p>
+  <div class="calbox" id="calbox"></div>
+  <input class="slider" type="range" id="cal" min="120" max="520" value="300">
+  <p class="small" id="calv"></p>
+  <p class="note">カードが手元にないときは、1円玉の直径が20.0mmです。枠の高さではなく<strong>横幅</strong>を合わせてください。</p>
+  <button class="btn" id="toSite" style="margin-top:12px">合った。次へ</button>
+</div>
+
+<div class="card hide" id="s2">
+  <div class="step"><span id="siteName"></span><span id="prog"></span></div>
+  <h2 id="tTitle">この間隔に合わせる</h2>
+  <p class="small">つまようじ2本の先を、下の2本の線にぴったり合わせて持ってください。</p>
+  <div class="gapbox"><div class="gapinner" id="gap"></div></div>
+  <div class="secret" id="secret">2本で当てる<span>答える人には見せないでください</span></div>
+  <p class="small" id="where"></p>
+  <button class="btn" id="did">当てた。答えを聞く</button>
+  <div class="hide" id="ansBox">
+    <p class="small" style="margin-bottom:6px">答える人はどう感じましたか</p>
+    <div class="picks">
+      <button id="a1">1点</button>
+      <button id="a2">2点</button>
+    </div>
+  </div>
+</div>
+
+<div class="card hide" id="s3">
+  <h2>あなたの境目</h2>
+  <p class="small">「2本だと分かる、いちばん狭い間隔」です。狭いほど、その場所の感覚がこまかいことになります。</p>
+  <div class="bars" id="bars" style="margin-top:12px"></div>
+  <div class="hl" id="rank"></div>
+
+  <div style="margin-top:18px">
+    <h2>論文と並べる</h2>
+    <table>
+      <tr><th>場所</th><th>あなた</th><th>Mancini 2014</th></tr>
+      <tr><td>指先</td><td id="r0">–</td><td>約 2 mm</td></tr>
+      <tr><td>手の甲</td><td id="r1">–</td><td>本文で数値を確認できず</td></tr>
+      <tr><td>前腕</td><td id="r2">–</td><td>本文で数値を確認できず</td></tr>
+    </table>
+    <p class="small" style="margin-top:10px">論文で本文から数値を読み取れたのは<span class="mark">指先が約0.2cm、手のひらが約0.8cm</span>（続けて当てる方式）の2か所だけでした。手の甲と前腕の具体的な数値は図に載っており、本文の記述からは確定できなかったため、ここには書いていません。論文が明確に述べているのは「<strong>指先がもっとも細かく、手のひら、手の甲、前腕、肩の順に粗くなる</strong>」という並び順です。あなたの並び順がそれと合うかを見てください。</p>
+  </div>
+
+  <div class="ok" id="verdict"></div>
+
+  <div style="margin-top:18px">
+    <h2>現場に置きかえると1行</h2>
+    <p>「触れば分かる」は指先だけの話。<span class="mark">腕や背中に付ける振動アラート・タグ・パッド類は、数センチずらしても本人には同じ場所に感じられる</span>ので、位置で意味を分けても伝わらない。</p>
+  </div>
+
+  <div class="src">
+    出典：Mancini F, Bauleo A, Cole J, Lui F, Porro CA, Haggard P, Iannetti GD. <em>Whole-body mapping of spatial acuity for pain and touch.</em> Annals of Neurology 75(6):917–924 (2014).<br>
+    <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4143958/">https://pmc.ncbi.nlm.nih.gov/articles/PMC4143958/</a><br>
+    測定方法は論文と同一ではありません（本アプリは同時に2点を当てる簡易法・試行数も少数）。医学的な検査ではなく、診断には使えません。
+  </div>
+  <button class="btn sub" id="again" style="margin-top:16px">もう一度やる</button>
+</div>
+
+</div>
+<script>
+(function(){
+var CARD_MM=85.6;
+var pxmm=300/CARD_MM;
+var SITES=[
+  {name:'指先',start:6,where:'答える人の人さし指の腹に、軽く当ててください。'},
+  {name:'手の甲',start:22,where:'答える人の手の甲（親指と人さし指の骨のあいだ）に、軽く当ててください。'},
+  {name:'前腕',start:34,where:'答える人の前腕の内側（手首とひじの中間）に、軽く当ててください。'}
+];
+var si=0, ti=0, gap=0, log=[], results=[];
+var TRIALS=6; // うち2回は1点のひっかけ
+var plan=[];
+
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+var calbox=document.getElementById('calbox'), cal=document.getElementById('cal');
+function updCal(){
+  calbox.style.width=cal.value+'px';
+  pxmm=parseFloat(cal.value)/CARD_MM;
+  document.getElementById('calv').textContent='いまの設定：1mm = '+pxmm.toFixed(2)+' ピクセル';
+}
+cal.oninput=updCal; updCal();
+
+document.getElementById('toCal').onclick=function(){
+  document.getElementById('s0').classList.add('hide');
+  document.getElementById('s1').classList.remove('hide');
+};
+document.getElementById('toSite').onclick=function(){
+  document.getElementById('s1').classList.add('hide');
+  startSite(0);
+};
+
+function startSite(i){
+  si=i; ti=0; log=[];
+  gap=SITES[i].start;
+  plan=shuffle([2,2,2,2,1,1]); // 1 = ひっかけ（1点で当てる）
+  document.getElementById('s2').classList.remove('hide');
+  document.getElementById('where').textContent=SITES[i].where;
+  render();
+  window.scrollTo(0,0);
+}
+
+function drawGap(mm, one){
+  var el=document.getElementById('gap');
+  var w=Math.max(mm*pxmm, 2);
+  el.style.width=(w+2)+'px';
+  if(one){
+    el.innerHTML='<b style="left:0">1本だけ</b><i style="left:0"></i>';
+    el.style.width='40px';
+  }else{
+    el.innerHTML='<b style="left:0">'+mm.toFixed(0)+' mm</b><i style="left:0"></i><i style="left:'+w+'px"></i>';
+  }
+}
+
+function render(){
+  var one = plan[ti]===1;
+  document.getElementById('siteName').textContent=SITES[si].name;
+  document.getElementById('prog').textContent=(ti+1)+' / '+TRIALS+'（場所 '+(si+1)+'/3）';
+  drawGap(gap, one);
+  document.getElementById('secret').innerHTML=(one?'1本だけで当てる':'2本で当てる')+'<span>答える人には見せないでください</span>';
+  document.getElementById('did').classList.remove('hide');
+  document.getElementById('ansBox').classList.add('hide');
+}
+
+document.getElementById('did').onclick=function(){
+  this.classList.add('hide');
+  document.getElementById('ansBox').classList.remove('hide');
+};
+
+function answer(said2){
+  var one=plan[ti]===1;
+  log.push({gap:gap, one:one, said2:said2});
+  if(!one){
+    if(said2) gap=Math.max(2, gap*0.7);
+    else gap=Math.min(70, gap*1.45);
+  }
+  ti++;
+  if(ti>=TRIALS){
+    results.push(summarize(SITES[si].name, log));
+    if(si+1<SITES.length){ startSite(si+1); }
+    else { document.getElementById('s2').classList.add('hide'); result(); }
+  }else{
+    render();
+  }
+}
+document.getElementById('a1').onclick=function(){answer(false);};
+document.getElementById('a2').onclick=function(){answer(true);};
+
+function summarize(name, l){
+  var minYes=null, maxNo=null, falseAlarm=0, catches=0;
+  for(var i=0;i<l.length;i++){
+    var d=l[i];
+    if(d.one){ catches++; if(d.said2) falseAlarm++; continue; }
+    if(d.said2){ if(minYes===null||d.gap<minYes) minYes=d.gap; }
+    else { if(maxNo===null||d.gap>maxNo) maxNo=d.gap; }
+  }
+  var th=null;
+  if(minYes!==null&&maxNo!==null&&maxNo<minYes) th=(minYes+maxNo)/2;
+  else if(minYes!==null) th=minYes;
+  else if(maxNo!==null) th=maxNo;
+  return {name:name, th:th, minYes:minYes, maxNo:maxNo, falseAlarm:falseAlarm, catches:catches};
+}
+
+function result(){
+  var max=1;
+  for(var i=0;i<results.length;i++) if(results[i].th) max=Math.max(max, results[i].th);
+  var h='';
+  for(var i=0;i<results.length;i++){
+    var r=results[i];
+    var v=r.th===null?'–':r.th.toFixed(0)+' mm';
+    h+='<div class="b"><div class="f">'+r.name+'</div><div class="g"><i style="width:'+(r.th?r.th/max*100:0)+'%"></i></div><div class="v">'+v+'</div></div>';
+    var cell=document.getElementById('r'+i);
+    if(cell) cell.textContent=v;
+  }
+  document.getElementById('bars').innerHTML=h;
+
+  var order=[], ok=true;
+  for(var i=0;i<results.length;i++) order.push(results[i].th===null?999:results[i].th);
+  for(var i=1;i<order.length;i++) if(order[i]<order[i-1]) ok=false;
+  document.getElementById('rank').innerHTML = ok
+    ? '<strong>並び順は論文どおりでした。</strong>指先がいちばん細かく、手の甲、前腕の順に粗くなっています。'
+    : '<strong>並び順が論文とずれました。</strong>指先→手の甲→前腕の順に粗くなるのが報告されている形です。1人でやった・当てる強さが場所ごとに違った・試行数が少ない、あたりが効きます。';
+
+  var fa=0, ct=0;
+  for(var i=0;i<results.length;i++){ fa+=results[i].falseAlarm; ct+=results[i].catches; }
+  var v='';
+  if(fa===0) v='<strong>ひっかけは全部見抜けました。</strong>1本だけで当てた'+ct+'回を、1回も「2点」と答えていません。上の数字は信用してよさそうです。';
+  else v='<strong>1本だけで当てた'+ct+'回のうち'+fa+'回、「2点」と答えました。</strong>感じたつもりが混ざっているので、上の数字は実際より狭め（良すぎる）に出ています。当てる強さを弱めて、もう一度やってみてください。';
+  document.getElementById('verdict').innerHTML=v;
+
+  document.getElementById('s3').classList.remove('hide');
+  window.scrollTo(0,0);
+}
+document.getElementById('again').onclick=function(){ location.reload(); };
+})();
+</script>
+</body>
+</html>

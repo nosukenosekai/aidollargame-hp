@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>まだ売れない</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;border:1px solid #e8e5dd}
+.q{font-size:15px;font-weight:600;margin-bottom:8px}
+.q em{font-style:normal;color:#6b6b6b;font-weight:400;font-size:13px;display:block}
+.opts{display:flex;gap:7px;margin-bottom:16px}
+.opts button{flex:1;padding:13px 6px;font-size:15px;font-weight:600;background:#fff;border:1.5px solid #d8d5cc;border-radius:11px;cursor:pointer;font-family:inherit;color:#444;line-height:1.35}
+.opts button.on{border-color:#2563eb;background:#eff4ff;color:#1d4ed8}
+.opts button small{display:block;font-size:11px;font-weight:400;color:#8a8a8a;margin-top:2px}
+.opts button.on small{color:#5b7fd0}
+.ans{border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd;background:#fff}
+.ans.grn{background:#f2f7f2;border-color:#cfe2cf}
+.ans.amb{background:#fef8ef;border-color:#f0dcc0}
+.ans.red{background:#fdf1ef;border-color:#f3cdc6}
+.ans .head{font-size:24px;font-weight:700;line-height:1.3;margin-bottom:8px}
+.ans .head.grn{color:#2f6b34}
+.ans .head.amb{color:#b45309}
+.ans .head.red{color:#b03a2e}
+.ans p{font-size:16px}
+.ans ul{margin:10px 0 0 18px;font-size:15px}
+.ans li{margin-bottom:5px}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.small{font-size:14px;color:#6b6b6b}
+.law{background:#fbfaf7;border-left:3px solid #d8d5cc;padding:12px 14px;margin-top:14px;font-size:14px;color:#444}
+.law b{display:block;font-size:13px;color:#6b6b6b;margin-bottom:4px}
+.foot{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.foot a{color:#2563eb;word-break:break-all}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">押すだけ・入力欄なし。法令の条文にもとづく一般的な説明です</div>
+<h1>まだ売れない</h1>
+<p class="lead">親が施設に入る。空いた実家を売って費用にあてよう。そう思ってから、売れないと分かるまでが長い。3つ押せば、いま何が足りないかだけ出ます。</p>
+
+<div class="card">
+  <div class="q">実家の名義は誰ですか<em>登記簿の所有者です</em></div>
+  <div class="opts" id="q1">
+    <button data-v="0">親ひとり</button>
+    <button data-v="1">親と子の共有</button>
+    <button data-v="2">すでに子</button>
+  </div>
+
+  <div class="q">親の判断能力はいまどうですか<em>売買の意味を自分で理解して決められるか</em></div>
+  <div class="opts" id="q2">
+    <button data-v="0">はっきりしている</button>
+    <button data-v="1">不安がある</button>
+    <button data-v="2">意思確認は難しい</button>
+  </div>
+
+  <div class="q">その家は、親が住んでいた家ですか<em>生活の本拠だったかどうか</em></div>
+  <div class="opts" id="q3">
+    <button data-v="0">入所の直前まで住んでいた</button>
+    <button data-v="1">別荘・投資用など、住んでいない</button>
+  </div>
+</div>
+
+<div id="out"></div>
+
+<div class="foot" id="foot">
+  出典：民法 第859条の3（成年被後見人の居住用不動産の処分についての許可）<br>
+  <a href="https://laws.e-gov.go.jp/law/129AC0000000089">https://laws.e-gov.go.jp/law/129AC0000000089</a><br>
+  条文は「成年後見人は、成年被後見人に代わって、その居住の用に供する建物又はその敷地について、売却、賃貸、賃貸借の解除又は抵当権の設定その他これらに準ずる処分をするには、家庭裁判所の許可を得なければならない。」と定めています。<br><br>
+  この画面は制度の一般的な説明であり、個別の事案の判断ではありません。実際に動くときは司法書士・弁護士に確認してください。金額・費用・期間には触れていません。
+</div>
+</div>
+<script>
+(function(){
+var v=[null,null,null];
+function bind(id,i){
+  var el=document.getElementById(id);
+  var bs=el.querySelectorAll('button');
+  for(var k=0;k<bs.length;k++){
+    bs[k].onclick=function(){
+      v[i]=+this.getAttribute('data-v');
+      for(var j=0;j<bs.length;j++) bs[j].className='';
+      this.className='on';
+      render();
+    };
+  }
+}
+bind('q1',0); bind('q2',1); bind('q3',2);
+
+function box(cls,head,body,list,law){
+  var h='<div class="ans '+cls+'"><div class="head '+cls+'">'+head+'</div><p>'+body+'</p>';
+  if(list&&list.length){ h+='<ul>'; for(var i=0;i<list.length;i++) h+='<li>'+list[i]+'</li>'; h+='</ul>'; }
+  if(law) h+='<div class="law"><b>根拠</b>'+law+'</div>';
+  return h+'</div>';
+}
+
+function render(){
+  var out=document.getElementById('out');
+  if(v[0]===null||v[1]===null||v[2]===null){
+    out.innerHTML='<div class="ans"><p class="small">3つとも押すと、ここに出ます。</p></div>';
+    return;
+  }
+  var name=v[0], mind=v[1], home=v[2];
+  var h='';
+
+  if(name===2){
+    h=box('grn','子の名義なら、子が売れます',
+      '所有者が子である以上、売却に親の同意は法律上いりません。止まるとすれば、名義を子に移した経緯のほうです。',
+      ['贈与で移していれば贈与税、相続で移していれば相続登記が済んでいるかを先に確認する',
+       '親が住み続けている・戻る話が残っているなら、売る前に住まいの話を先に片づける'],
+      null);
+  } else if(mind===0){
+    h=box('grn','いま親本人が売れます。動くなら今です',
+      '判断能力がはっきりしているうちは、親本人が売主として契約できます。子が代わりに手続きするなら委任状で足ります。'+(name===1?'共有名義なので、子の側も売主として一緒に契約します。':''),
+      ['後見の申立ても、家庭裁判所の許可もいりません',
+       'この状態は続く保証がありません。判断能力が落ちてから同じことをやると、下の「意思確認が難しい」欄の手順になります',
+       '将来に備えるなら、任意後見契約や家族信託を「いま」なら選べます'],
+      null);
+  } else if(mind===1){
+    h=box('amb','ここが分かれ目。先に意思確認を取りにいく',
+      '売買の場では、司法書士や公証人が本人と面談して意思を確認します。'+(name===1?'共有名義でも、親の持分については同じ確認が必要です。':'')+'そこで確認が取れれば本人名義のまま売れます。取れなければ、成年後見に進むしかありません。',
+      ['先に不動産を探すより、意思確認が取れるかどうかを先に確かめる',
+       '取れるうちなら、任意後見契約という選択肢がまだ残っている',
+       '「本人はうなずいた」では足りません。確認するのは第三者です'],
+      null);
+  } else {
+    if(home===0){
+      h=box('red','後見人を立てても、まだ売れません',
+        '成年後見の申立てをして後見人が決まっても、それだけでは売却できません。親が生活の本拠にしていた家は<span class="mark">居住用不動産</span>にあたり、売るには家庭裁判所の許可が別に必要です。'+(name===1?'共有名義でも、親の持分の処分について同じ許可が要ります。':''),
+        ['許可を取らずにした売買は無効になります',
+         '施設に入っていても、戻る可能性が残っていれば居住用として扱われます。空き家だから対象外、とは限りません',
+         '順番は「後見の申立て」→「後見人の選任」→「居住用不動産処分許可の申立て」→「売買」。それぞれに時間がかかります',
+         '裁判所は、売る必要性と本人の生活・住まいの見通しを見て判断します'],
+        '民法 第859条の3。成年後見人が本人の居住用の建物・敷地を売却、賃貸、賃貸借の解除、抵当権の設定などの処分をするには、家庭裁判所の許可を得なければならない。');
+    } else {
+      h=box('amb','後見人が決まれば売れます。許可は要りません',
+        '別荘や投資用など、生活の本拠でない不動産は居住用不動産にあたらないため、家庭裁判所の許可までは求められません。'+(name===1?'共有名義なので、子の側も一緒に売主になります。':'')+'ただし、後見人を立てるところは避けて通れません。',
+        ['まず成年後見の申立てから。後見人が親族になるとは限りません',
+         '後見が始まると、財産の管理はその後ずっと家庭裁判所の監督下に入ります。この家を売るためだけの手続きでは終わりません',
+         '「生活の本拠だったか」の線引きは事案ごとです。迷うなら許可を取る前提で動くほうが安全です'],
+        '民法 第859条の3が許可を求めているのは「居住の用に供する建物又はその敷地」です。');
+    }
+  }
+  out.innerHTML=h;
+}
+render();
+})();
+</script>
+</body>
+</html>

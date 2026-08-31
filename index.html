@@ -455,10 +455,22 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 
 /* ---------- 循環図 ---------- */
 .diagram{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px 16px 14px;box-shadow:var(--shadow);}
-.diagram .dg-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-.diagram svg{width:100%;height:auto;margin:0 auto;}
-.diagram .swipe{display:none;text-align:center;font-size:0.74rem;color:var(--muted);margin-top:0.6rem;}
-@media(max-width:760px){.diagram{padding:24px 14px 20px;}.diagram svg{min-width:700px;}.diagram .swipe{display:block;}}
+.diagram .dg-wide svg{width:100%;height:auto;margin:0 auto;}
+.dg-mobile{display:none;}
+@media(max-width:760px){.diagram{padding:20px 16px;}.diagram .dg-wide{display:none;}.dg-mobile{display:block;}}
+.dgm-node{border:1px solid var(--line);border-radius:16px;padding:18px 14px;text-align:center;background:#fff;}
+.dgm-node--main{background:var(--band-blue);border-color:#c9d7f7;}
+.dgm-node .dgm-ic{display:block;width:34px;height:34px;margin:0 auto 0.55rem;stroke:var(--blue);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.dgm-node .dgm-ttl{font-size:1.08rem;font-weight:700;color:var(--ink);line-height:1.5;}
+.dgm-node--main .dgm-ttl{font-size:1.3rem;}
+.dgm-node .dgm-sub{font-size:0.94rem;color:var(--muted);line-height:1.75;margin-top:0.35rem;}
+.dgm-node .dgm-tag{margin-top:0.8rem;padding-top:0.8rem;border-top:1px solid #c9d7f7;font-size:0.94rem;font-weight:700;color:var(--blue);}
+.dgm-step{position:relative;text-align:center;padding:17px 0;}
+.dgm-step::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1.6px;margin-left:-0.8px;background:var(--blue);opacity:0.4;}
+.dgm-step::after{content:"";position:absolute;left:50%;bottom:0;width:0;height:0;transform:translate(-50%,45%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--blue);opacity:0.55;}
+.dgm-step span{position:relative;display:inline-block;background:#fff;padding:0 12px;font-size:0.94rem;font-weight:700;color:var(--blue);}
+.dgm-loop{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;padding:12px 8px;border:1.4px dashed #c9d7f7;border-radius:12px;font-size:0.9rem;font-weight:700;color:var(--blue);line-height:1.6;text-align:center;}
+.dgm-loop svg{width:16px;height:16px;flex:none;stroke:var(--blue);stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
 .diagram .cap{text-align:center;color:var(--muted);font-size:0.84rem;margin-top:1rem;}
 .dg-line{stroke:var(--blue);stroke-width:1.6;fill:none;}
 .dg-arrow{fill:var(--blue);}
@@ -776,7 +788,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   .news .d{font-size:0.88rem;}
   .news .t{font-size:1rem;line-height:1.8;}
   .news .b{font-size:0.78rem;}
-  .diagram .swipe{font-size:0.86rem;}
+  .dgm-step span,.dgm-node .dgm-sub,.dgm-node .dgm-tag{font-size:0.98rem;}
   .photo-pair figcaption{font-size:0.84rem;line-height:1.7;}
   .start-first .sf-label{font-size:0.88rem;}
   .notice .hb-badge{font-size:0.8rem;}
@@ -921,7 +933,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="service-lead">最新のAIをまず自社プロダクトで使い込み、成果が出たものだけを現場にお届けします。<br>現場で見つかった課題は、次のプロダクト開発に反映します。</p>
     </div>
     <div class="diagram" data-rv="up" style="--d:120ms">
-      <div class="dg-scroll">
+      <div class="dg-wide">
       <svg viewBox="0 0 1000 330" role="img" aria-label="AIの最前線とAIdollargameと中小企業の現場が循環する関係図">
         <circle class="dg-circle" cx="150" cy="165" r="112"></circle>
         <g transform="translate(132,66)">
@@ -965,7 +977,43 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <text class="dg-flow" x="315" y="300" text-anchor="middle">次の開発に反映</text>
       </svg>
       </div>
-      <p class="swipe">横にスクロールできます</p>
+
+      <div class="dg-mobile">
+        <div class="dgm-node">
+          <svg class="dgm-ic" viewBox="0 0 36 36" aria-hidden="true">
+            <rect x="6" y="6" width="24" height="24" rx="4"></rect>
+            <rect x="13" y="13" width="10" height="10" rx="2"></rect>
+            <path d="M18 1v5M18 30v5M1 18h5M30 18h5M11 1v5M25 1v5M11 30v5M25 30v5M1 11h5M1 25h5M30 11h5M30 25h5"></path>
+          </svg>
+          <div class="dgm-ttl">AIの最前線</div>
+          <div class="dgm-sub">最新モデル・研究・論文</div>
+        </div>
+
+        <div class="dgm-step"><span>試して、選ぶ</span></div>
+
+        <div class="dgm-node dgm-node--main">
+          <div class="dgm-ttl">AIdollargame</div>
+          <div class="dgm-sub">自社で開発して、自社で運用<br>AIプロダクト／AI研修／導入支援</div>
+          <div class="dgm-tag">実装と運用まで担当</div>
+        </div>
+
+        <div class="dgm-step"><span>使える形で届ける</span></div>
+
+        <div class="dgm-node">
+          <svg class="dgm-ic" viewBox="0 0 34 38" aria-hidden="true">
+            <path d="M4 34V9a2.5 2.5 0 0 1 2.5-2.5h11A2.5 2.5 0 0 1 20 9v25"></path>
+            <path d="M20 16h7.5a2.5 2.5 0 0 1 2.5 2.5V34"></path>
+            <path d="M9 13h6M9 19h6M9 25h6M24 22h2.5M24 28h2.5"></path>
+          </svg>
+          <div class="dgm-ttl">中小企業の現場</div>
+          <div class="dgm-sub">問い合わせ・ナレッジ・判断</div>
+        </div>
+
+        <p class="dgm-loop">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V5"></path><path d="M6 11l6-6 6 6"></path></svg>
+          <span>現場の課題とデータを次の開発に反映</span>
+        </p>
+      </div>
     </div>
   </div>
 </section>

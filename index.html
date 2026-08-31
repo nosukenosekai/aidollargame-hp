@@ -335,8 +335,9 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .brand{font-family:var(--font-display);font-size:1.26rem;font-weight:800;letter-spacing:-0.01em;display:inline-flex;align-items:center;}
 .brand .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757;}
 .brand .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757;}
-.site-nav{margin-left:auto;display:flex;align-items:center;gap:20px;}
-.site-nav a{font-size:0.9rem;font-weight:500;color:var(--ink-soft);position:relative;padding:0.2rem 0;}
+.site-nav{margin-left:auto;display:flex;align-items:center;gap:30px;}
+@media(min-width:1001px) and (max-width:1150px){.site-nav{gap:20px;}}
+.site-nav a{font-size:0.95rem;font-weight:700;color:var(--ink);position:relative;padding:0.2rem 0;}
 .site-nav a:not(.pill)::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--blue);scale:0 1;transform-origin:left center;transition:scale 0.35s var(--ease);}
 .site-nav a:not(.pill):hover{color:var(--blue);}
 .site-nav a:not(.pill):hover::after{scale:1 1;}
@@ -349,7 +350,7 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 @media(max-width:1000px){
   .site-nav{position:fixed;inset:70px 0 auto;flex-direction:column;align-items:flex-start;gap:0;background:#fff;border-bottom:1px solid var(--line);padding:0.5rem 24px 1.4rem;display:none;}
   .site-nav.open{display:flex;}
-  .site-nav a{padding:0.75rem 0;width:100%;border-bottom:1px solid var(--line);font-size:1rem;}
+  .site-nav a{padding:1.05rem 0;width:100%;border-bottom:1px solid var(--line);font-size:1.05rem;}
   .site-nav a.hbtn{margin-top:1rem;border-bottom:0;justify-content:center;}
   .nav-toggle{display:block;}
 }
@@ -818,7 +819,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false">メニュー</button>
     <nav class="site-nav" id="siteNav">
       <a href="#products">事業内容</a>
-      <a href="#lab">動くもの</a>
+      <a href="#lab">デモ</a>
       <a href="#flow">導入の流れ</a>
       <a href="#case">事例</a>
       <a href="#column">記事</a>

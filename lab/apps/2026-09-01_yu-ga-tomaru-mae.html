@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>湯がとまる前</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:44px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.unit{font-size:17px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef8ef;border:1px solid #f0dcc0;border-radius:10px;padding:14px;margin-top:12px}
+.row2{display:flex;gap:10px}
+.row2 .btn{margin-bottom:0}
+.step{font-size:14px;color:#6b6b6b;margin-bottom:10px;display:flex;justify-content:space-between}
+.slider{width:100%;margin:6px 0 2px}
+.secret{background:#1a1a1a;color:#fff;border-radius:12px;padding:18px;text-align:center;font-size:22px;font-weight:700;margin:12px 0}
+.secret span{display:block;font-size:13px;font-weight:400;color:#b9b9b9;margin-top:4px}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.picks button{flex:1;padding:12px 10px;font-size:16px;font-weight:600;background:#fff;border:1.5px solid #d8d5cc;border-radius:12px;cursor:pointer;font-family:inherit;color:#1a1a1a}
+.picks button.on{border-color:#2563eb;background:#eff4ff;color:#1d4ed8}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+td,th{padding:10px 0;border-bottom:1px solid #eeece6;text-align:left}
+th{font-size:13px;color:#6b6b6b;font-weight:600}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.bars .b{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:15px}
+.bars .b .f{width:96px;font-weight:600}
+.bars .b .g{flex:1;height:12px;background:#eeece6;border-radius:6px;overflow:hidden}
+.bars .b .g i{display:block;height:100%;background:#2563eb}
+.bars .b .v{width:70px;text-align:right;font-size:14px;color:#6b6b6b;font-variant-numeric:tabular-nums}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.hide{display:none}
+.note{font-size:13px;color:#6b6b6b;margin-top:8px}
+.play{display:flex;align-items:center;justify-content:center;gap:10px;background:#1a1a1a;color:#fff;border:0;border-radius:12px;padding:18px;width:100%;font-size:18px;font-weight:600;font-family:inherit;cursor:pointer;margin-bottom:12px}
+.play:disabled{opacity:.5}
+.play .ic{display:inline-block;width:0;height:0;border-left:14px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent}
+.play.on .ic{width:14px;height:16px;border:0;background:linear-gradient(90deg,#fff 0 5px,transparent 5px 9px,#fff 9px 14px)}
+canvas{width:100%;height:168px;display:block;background:#fbfaf7;border:1px solid #e8e5dd;border-radius:10px}
+.q{font-size:13px;color:#6b6b6b;margin-bottom:8px}
+.dots{display:flex;gap:4px;margin-bottom:12px}
+.dots i{flex:1;height:5px;border-radius:3px;background:#e2ded4}
+.dots i.on{background:#2563eb}
+.dots i.ng{background:#c0392b}
+.sc{font-size:52px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.pill{display:inline-block;font-size:13px;border-radius:999px;padding:2px 10px;background:#eff4ff;color:#1d4ed8;margin-left:6px}
+.pill.ng{background:#fdecea;color:#b91c1c}
+.hz{display:flex;justify-content:space-between;font-size:12px;color:#9a9a9a;margin-top:4px}
+.eq{background:#fbfaf7;border:1px solid #e8e5dd;border-radius:10px;padding:12px 14px;font-size:15px;margin-top:10px;font-variant-numeric:tabular-nums}
+.eq b{color:#2563eb}
+input[type=number]{width:100%;font-size:17px;padding:12px;border:1.5px solid #d8d5cc;border-radius:12px;font-family:inherit}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（音は合成したものです）</div>
+<h1>湯がとまる前</h1>
+<p class="lead">ろ過機の循環ポンプが止まれば、その日は湯を落とすことになる。壊れる前に音が変わる、とはよく言われる。<span class="mark">では本当に、耳で聞き分けられるのか。</span>6回聞いて、自分の正解数を出す。</p>
+
+<div class="card" id="c0">
+<h2>先に一言</h2>
+<p>この画面で鳴るのは<b>合成した音</b>です。実機の録音ではありません。ただし音の作り方は、回転機械の振動診断でふつうに使われる形に合わせてあります。</p>
+<ul style="margin-left:18px;font-size:16px">
+<li><b>正常</b>　回転の音とその倍音がなだらかに出る</li>
+<li><b>軸のずれ</b>　回転数の<b>2倍</b>の成分が強く出る</li>
+<li><b>軸受けの傷</b>　高い音の帯が、決まった間隔で細かく叩かれる</li>
+</ul>
+<div class="warn">実機の回転音は数十Hzが中心で、スマホのスピーカーではまず聞こえません。この画面では<b>周波数を8倍に上げて</b>鳴らしています。倍の関係と叩く間隔はそのままです。<br><b>イヤホンを推奨します。</b></div>
+<button class="btn" id="b0">6回、聞き分けてみる</button>
+</div>
+
+<div class="card hide" id="c1">
+<div class="dots" id="dots"></div>
+<div class="q" id="qn">1問目 / 6問</div>
+<h2>このポンプはどれ</h2>
+<button class="play" id="pl"><span class="ic"></span><span>音を鳴らす</span></button>
+<div class="picks" id="picks" style="flex-direction:column">
+<button data-a="0">正常</button>
+<button data-a="1">軸のずれ</button>
+<button data-a="2">軸受けの傷</button>
+</div>
+<div id="fb"></div>
+<button class="btn hide" id="nx">次へ</button>
+<p class="note">同じ音は何度でも鳴らせます。答えを選ぶまで正解は出ません。</p>
+</div>
+
+<div class="card hide" id="c2">
+<h2>あなたの正解数</h2>
+<p class="sc" id="score">—</p>
+<div id="verdict"></div>
+</div>
+
+<div class="card hide" id="c3">
+<h2>目で見ると、はっきり違う</h2>
+<p class="small">同じ音を、周波数ごとの強さに分けたものです。耳で迷ったところが、線としては離れています。</p>
+<div class="picks" id="sp">
+<button data-s="0" class="on">正常</button>
+<button data-s="1">軸のずれ</button>
+<button data-s="2">軸受けの傷</button>
+</div>
+<canvas id="cv"></canvas>
+<div id="spNote" class="hl"></div>
+<button class="btn sub" id="plS" style="margin-top:12px">この音を鳴らす</button>
+</div>
+
+<div class="card hide" id="c4">
+<h2>見張る場所は、回転数から計算できる</h2>
+<p class="small">ポンプの回転数を入れると、どの周波数を見ればいいかが出ます。銘板に書いてある値でかまいません。</p>
+<input type="number" id="rpm" value="1750" min="300" max="4000" step="10">
+<div class="eq" id="eq"></div>
+<p class="note">軸受けの式は転動体の数8個・転動体径/ピッチ円径=0.35・接触角0度で計算しています。実機では軸受けの型番ごとに数字が違うので、メーカーの表を見てください。</p>
+<div class="ok"><b>耳でわかる頃には、もう進んでいる。</b>人が聞き分けられなかったものを、決まった周波数の見張りなら拾える。休業の日を選べるかどうかは、その差で決まる。</div>
+</div>
+
+<div class="src">
+<b>この画面の作りについて</b><br>
+音はすべてブラウザ内で合成した波形で、実機の録音ではありません。回転数の2倍成分がミスアライメントで大きくなること、外輪傷が高周波帯の周期的な衝撃として現れることは、回転機械の振動診断で広く使われている見方です。転がり軸受けの外輪傷の繰り返し周波数はふつう次の式で計算します。<br>
+<b>BPFO ＝ (n/2)×(1 − (d/D)cosφ)×fr</b>　（n=転動体の数、d=転動体の直径、D=ピッチ円径、φ=接触角、fr=回転の周波数）<br><br>
+この画面は点検の代わりにはなりません。実際の判断は、振動計での測定とポンプメーカー・保守業者の点検によります。
+</div>
+</div>
+<script>
+var ctx=null,src=null,bufs=[null,null,null],curSp=0;
+var FR=29.17*8, F2=FR*2, BPFO=4*0.65*29.17*8, RES=3000;
+var $=function(i){return document.getElementById(i)};
+function show(i,on){$(i).classList[on?'remove':'add']('hide')}
+function rnd(){return Math.random()*2-1}
+function gen(type){
+ var ac=ctx,sr=ac.sampleRate,n=Math.floor(sr*2.6),b=ac.createBuffer(1,n,sr),d=b.getChannelData(0);
+ var lp=0,lp2=0,per=sr/BPFO;
+ var a1=type===1?0.075:0.10, a2=type===1?0.135:0.028, a3=0.020;
+ for(var i=0;i<n;i++){
+  var t=i/sr,s=0;
+  s+=a1*Math.sin(2*Math.PI*FR*t)+a2*Math.sin(2*Math.PI*F2*t)+a3*Math.sin(2*Math.PI*FR*3*t);
+  var w=rnd();lp+=0.06*(w-lp);lp2+=0.30*(w-lp2);
+  s+=0.075*lp+0.012*lp2;
+  if(type===2){var te=(i%per)/sr;s+=0.30*Math.exp(-te/0.0016)*Math.sin(2*Math.PI*RES*te)}
+  var env=Math.min(1,t/0.06,(n/sr-t)/0.06);
+  d[i]=s*env*0.9}
+ return b}
+function play(type){
+ if(!ctx)ctx=new (window.AudioContext||window.webkitAudioContext)();
+ if(src){try{src.stop()}catch(e){}}
+ if(!bufs[type])bufs[type]=gen(type);
+ src=ctx.createBufferSource();src.buffer=bufs[type];
+ var g=ctx.createGain();g.gain.value=0.9;
+ src.connect(g);g.connect(ctx.destination);src.start();
+ return src}
+var ORDER=[1,2,0,2,1,0],qi=0,ok=0,marks=[];
+$('b0').onclick=function(){show('c0',0);show('c1',1);qUpd()};
+function dots(){var h='';for(var i=0;i<6;i++){var c=marks[i]===undefined?'':(marks[i]?'on':'ng');h+='<i class="'+c+'"></i>'}$('dots').innerHTML=h}
+function qUpd(){$('qn').textContent=(qi+1)+'問目 / 6問';$('fb').innerHTML='';show('nx',0);
+ [].forEach.call($('picks').children,function(b){b.classList.remove('on');b.disabled=false});dots()}
+$('pl').onclick=function(){var s=play(ORDER[qi]);$('pl').classList.add('on');
+ s.onended=function(){$('pl').classList.remove('on')}};
+[].forEach.call($('picks').children,function(b){b.onclick=function(){
+ if(b.disabled)return;
+ var a=+b.getAttribute('data-a'),c=ORDER[qi],good=a===c;
+ [].forEach.call($('picks').children,function(x){x.disabled=true});
+ b.classList.add('on');
+ marks[qi]=good; if(good)ok++;
+ var nm=['正常','軸のずれ','軸受けの傷'];
+ $('fb').innerHTML='<div class="'+(good?'ok':'warn')+'">'+(good?'正解。':'はずれ。')+'正しくは<b>'+nm[c]+'</b>でした。</div>';
+ dots();show('nx',1);
+ $('nx').textContent=qi===5?'結果を見る':'次へ'}});
+$('nx').onclick=function(){if(qi===5){res()}else{qi++;qUpd()}};
+function res(){show('c1',0);show('c2',1);show('c3',1);show('c4',1);
+ $('score').innerHTML=ok+'<span class="unit"> / 6問</span>';
+ var v;
+ if(ok<=2)v='<div class="warn">当てずっぽう（6問中2問）と変わらないか、それ以下です。この3つは、耳では分けきれません。</div>';
+ else if(ok<=4)v='<div class="hl">当てずっぽうよりは当たっていますが、外れも残りました。毎日ちがう人が聞く現場では、これでは基準になりません。</div>';
+ else v='<div class="ok">よく聞き分けています。ただしこれは、3つの違いを先に教わったうえで、静かな場所で聞いた場合の数字です。湯気と水音の中では別の話になります。</div>';
+ $('verdict').innerHTML=v;
+ drawSp(0);rpmUpd()}
+var SPN=['正常','軸のずれ','軸受けの傷'];
+[].forEach.call($('sp').children,function(b){b.onclick=function(){
+ [].forEach.call($('sp').children,function(x){x.classList.remove('on')});b.classList.add('on');
+ drawSp(+b.getAttribute('data-s'))}});
+$('plS').onclick=function(){var s=0;[].forEach.call($('sp').children,function(x){if(x.classList.contains('on'))s=+x.getAttribute('data-s')});play(s)};
+function fft(re,im){var n=re.length;for(var i=1,j=0;i<n;i++){var bit=n>>1;for(;j&bit;bit>>=1)j^=bit;j^=bit;
+ if(i<j){var t=re[i];re[i]=re[j];re[j]=t;t=im[i];im[i]=im[j];im[j]=t}}
+ for(var len=2;len<=n;len<<=1){var ang=-2*Math.PI/len,wr=Math.cos(ang),wi=Math.sin(ang);
+  for(var i2=0;i2<n;i2+=len){var cr=1,ci=0;
+   for(var k=0;k<len/2;k++){var ur=re[i2+k],ui=im[i2+k],
+    vr=re[i2+k+len/2]*cr-im[i2+k+len/2]*ci, vi=re[i2+k+len/2]*ci+im[i2+k+len/2]*cr;
+    re[i2+k]=ur+vr;im[i2+k]=ui+vi;re[i2+k+len/2]=ur-vr;im[i2+k+len/2]=ui-vi;
+    var nr=cr*wr-ci*wi;ci=cr*wi+ci*wr;cr=nr}}}}
+function drawSp(type){
+ if(!ctx)ctx=new (window.AudioContext||window.webkitAudioContext)();
+ if(!bufs[type])bufs[type]=gen(type);
+ var d=bufs[type].getChannelData(0),sr=ctx.sampleRate,N=8192,off=Math.floor(sr*0.8);
+ var re=new Float64Array(N),im=new Float64Array(N);
+ for(var i=0;i<N;i++){var w=0.5-0.5*Math.cos(2*Math.PI*i/(N-1));re[i]=d[off+i]*w}
+ fft(re,im);
+ curSp=type;
+ var cv=$('cv'),dpr=Math.min(2,window.devicePixelRatio||1);
+ var W=cv.clientWidth||520,H=168;
+ cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+ var g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);
+ g.clearRect(0,0,W,H);
+ var maxHz=4000,binHz=sr/N,bins=Math.floor(maxHz/binHz),mx=0,mag=new Float64Array(bins);
+ for(var k=1;k<bins;k++){mag[k]=Math.sqrt(re[k]*re[k]+im[k]*im[k]);if(mag[k]>mx)mx=mag[k]}
+ var BASE=H-18;
+ g.strokeStyle='#e2ded4';g.lineWidth=1;
+ for(var hz=1000;hz<maxHz;hz+=1000){var x=hz/maxHz*W;g.beginPath();g.moveTo(x,0);g.lineTo(x,BASE);g.stroke()}
+ g.beginPath();g.moveTo(0,BASE+.5);g.lineTo(W,BASE+.5);g.stroke();
+ g.fillStyle='#2563eb';
+ for(var k=1;k<bins;k++){var x=k*binHz/maxHz*W,h=Math.pow(mag[k]/mx,0.55)*(BASE-42);
+  g.fillRect(x,BASE-h,Math.max(1,W/bins),h)}
+ g.font='11px -apple-system,sans-serif';g.fillStyle='#9a9a9a';
+ for(var hz=0;hz<=maxHz;hz+=1000){var x=hz/maxHz*W;
+  g.textAlign=hz===0?'left':(hz===maxHz?'right':'center');
+  g.fillText(hz===0?'0 Hz':(hz===maxHz?(hz+' Hz'):''+hz),x,H-4)}
+ var lab=[[FR,'回転 f',0]];
+ if(type===2)lab.push([BPFO,'叩く間隔',1]);
+ lab.push([F2,'2f',2],[RES,'高い帯',0]);
+ g.font='700 12px -apple-system,sans-serif';
+ lab.forEach(function(L){var x=L[0]/maxHz*W,y=12+L[2]*15;g.strokeStyle='#c0392b';g.lineWidth=1.5;
+  g.beginPath();g.moveTo(x,y+2);g.lineTo(x,BASE);g.stroke();
+  g.fillStyle='#c0392b';g.textAlign=x>W-70?'right':'left';g.fillText(L[1],x+(x>W-70?-5:5),y)});
+ var nt=['なだらかに落ちる山。回転の音 f が一番高く、2f はその下にいます。',
+  '<b>2f が f を追い越しています。</b>これが軸のずれの形。耳では「少しうなる」くらいの差にしか聞こえません。',
+  '<b>3000Hz あたりに山ができています。</b>低いところは正常と同じなのに、高い帯だけが決まった間隔で叩かれている。ここが軸受けの傷です。'][type];
+ $('spNote').innerHTML='<b>'+SPN[type]+'</b>　'+nt}
+function rpmUpd(){var r=+$('rpm').value||1750,fr=r/60;
+ var bpfo=4*0.65*fr, bpfi=4*1.35*fr, ftf=0.5*(1-0.35)*fr;
+ $('eq').innerHTML='回転の周波数 fr ＝ '+r+' ÷ 60 ＝ <b>'+fr.toFixed(1)+' Hz</b><br>'
+  +'軸のずれ　2×fr ＝ <b>'+(fr*2).toFixed(1)+' Hz</b><br>'
+  +'外輪の傷　BPFO ＝ <b>'+bpfo.toFixed(1)+' Hz</b><br>'
+  +'内輪の傷　BPFI ＝ <b>'+bpfi.toFixed(1)+' Hz</b><br>'
+  +'保持器　　FTF ＝ <b>'+ftf.toFixed(1)+' Hz</b>'}
+$('rpm').oninput=rpmUpd;
+window.addEventListener('resize',function(){if(!$('c3').classList.contains('hide'))drawSp(curSp)});
+</script>
+</body>
+</html>

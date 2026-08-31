@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>置きっぱなし</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:44px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.unit{font-size:17px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef8ef;border:1px solid #f0dcc0;border-radius:10px;padding:14px;margin-top:12px}
+.row2{display:flex;gap:10px}
+.row2 .btn{margin-bottom:0}
+.step{font-size:14px;color:#6b6b6b;margin-bottom:10px;display:flex;justify-content:space-between}
+.slider{width:100%;margin:6px 0 2px}
+.secret{background:#1a1a1a;color:#fff;border-radius:12px;padding:18px;text-align:center;font-size:22px;font-weight:700;margin:12px 0}
+.secret span{display:block;font-size:13px;font-weight:400;color:#b9b9b9;margin-top:4px}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.picks button{flex:1;padding:12px 10px;font-size:16px;font-weight:600;background:#fff;border:1.5px solid #d8d5cc;border-radius:12px;cursor:pointer;font-family:inherit;color:#1a1a1a}
+.picks button.on{border-color:#2563eb;background:#eff4ff;color:#1d4ed8}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+td,th{padding:10px 0;border-bottom:1px solid #eeece6;text-align:left}
+th{font-size:13px;color:#6b6b6b;font-weight:600}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.bars .b{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:15px}
+.bars .b .f{width:96px;font-weight:600}
+.bars .b .g{flex:1;height:12px;background:#eeece6;border-radius:6px;overflow:hidden}
+.bars .b .g i{display:block;height:100%;background:#2563eb}
+.bars .b .v{width:70px;text-align:right;font-size:14px;color:#6b6b6b;font-variant-numeric:tabular-nums}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.hide{display:none}
+.note{font-size:13px;color:#6b6b6b;margin-top:8px}
+.today{display:flex;justify-content:space-between;align-items:center;background:#1a1a1a;color:#fff;border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:15px}
+.today b{font-size:19px;font-variant-numeric:tabular-nums}
+.shelf{margin:6px 0 2px}
+.shelf .g{height:22px;background:#eeece6;border-radius:6px;overflow:hidden;display:flex}
+.shelf .g i{display:block;height:100%}
+.shelf .g i.a{background:#2563eb}
+.shelf .g i.b{background:#e8a33d}
+.shelf .g i.c{background:#c0392b}
+.lgd{display:flex;gap:12px;font-size:13px;color:#6b6b6b;margin-top:6px;flex-wrap:wrap}
+.lgd span:before{content:'';display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.lgd .a:before{background:#2563eb}.lgd .b:before{background:#e8a33d}.lgd .c:before{background:#c0392b}
+.item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #eeece6;cursor:pointer}
+.item:last-child{border-bottom:0}
+.item .d{width:66px;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:17px}
+.item .d.b{color:#b5771f}.item .d.c{color:#c0392b}
+.item .t{flex:1;font-size:15px}
+.item .t small{display:block;color:#6b6b6b;font-size:13px}
+.item .ar{color:#b9b9b9}
+.qr{display:grid;width:126px;height:126px;margin:0 auto 10px;border:6px solid #fff;background:#fff}
+.qr i{display:block}
+.tk{background:#fbfaf7;border:1px dashed #cfcabb;border-radius:12px;padding:16px;text-align:center}
+.ctr{font-size:52px;font-weight:700;line-height:1.05;font-variant-numeric:tabular-nums}
+.day{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（サンプルデータ）</div>
+<h1>置きっぱなし</h1>
+<p class="lead">仕上がったのに取りに来ない服が、棚の奥に少しずつ増える。捨てるとは言えないし、催促もしにくい。だから<span class="mark">「棚がいつ満杯になるか」だけを数えて見張る</span>。出てくるのは日付ひとつ。</p>
+
+<div class="today">
+<span>いまの日付</span><b id="dToday">—</b>
+</div>
+
+<div class="card">
+<h2>受け渡し棚</h2>
+<p class="small">上限 <b id="cap">40</b>点／いま <b id="cnt">—</b>点</p>
+<div class="shelf"><div class="g" id="bar"></div></div>
+<div class="lgd"><span class="a">60日まで</span><span class="b">61〜120日</span><span class="c">121日以上</span></div>
+<div class="hl" id="fore"></div>
+<div class="row2" style="margin-top:12px">
+<button class="btn sub" id="w1">1週間すすめる</button>
+<button class="btn sub" id="m1">1か月すすめる</button>
+</div>
+<button class="btn gray" id="rs" style="margin-top:10px">最初に戻す</button>
+</div>
+
+<div class="card">
+<h2>いつ声をかけ始めるか</h2>
+<div class="tk">
+<p class="small">この日を過ぎると、棚が埋まる前に手が打てなくなります</p>
+<p class="day" id="callDay">—</p>
+<p class="small" id="callSub">—</p>
+</div>
+<p class="note">日付は「満杯の30日前」と「121日以上のものが10点を超える日」の、早いほうです。文面は出しません。誰に何を言うかは店の関係で決まるので、出すのは日付と点数だけにしています。</p>
+</div>
+
+<div class="card">
+<h2>置きっぱなしの上位</h2>
+<div id="list"></div>
+<p class="note" id="more"></p>
+</div>
+
+<div class="card hide" id="det">
+<h2>預かり札</h2>
+<div id="detIn"></div>
+<button class="btn gray" id="dc">閉じる</button>
+</div>
+
+<div class="card">
+<h2>数えると何が変わるか</h2>
+<p>棚は一気に埋まらない。週に3点ほど、静かに埋まる。だから満杯になった日にはじめて困る。<b>埋まる日を先に出しておけば、催促ではなく「ついでの一声」で片づく。</b></p>
+<div class="ok">放っておくと増えるものは、金額でなく<b>点数と日数</b>で見張る。増え方が一定なら、満杯の日は今日わかる。</div>
+</div>
+
+<div class="src">
+<b>この画面の数字について</b><br>
+すべて架空のサンプルです。お客さまの名前・品目・札番号は実在しません。棚の上限40点、新たに置きっぱなしになる点数（週あたり3点ほど）、引き取られる割合はデモ用に置いた値で、実店舗の統計ではありません。<br><br>
+自分の店で使うときは、この3つを実際の数字に置き換えてください。<br>
+1. 受け渡し棚に置ける点数<br>
+2. 直近3か月で、90日を超えて残った点数<br>
+3. その3か月に新しく受けた点数<br><br>
+二次元コードは見本の絵で、読み取れるコードではありません。
+</div>
+</div>
+<script>
+var CAP=40, START=new Date(2026,8,1), day=0;
+var NAMES=['田村','小坂','西野','岡部','三上','宮下','早川','三好','戸田','桑野','浅井','南','嶋田','有馬','広瀬','葉山'];
+var ITEMS=['スーツ上下','コート','ダウン','制服 2点','ワイシャツ 5枚','スカート','礼服','ブラウス 3枚','ジャケット','セーター 2点','学生服','作業着 3点'];
+var seedN=0;
+function mul(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296}}
+var items=[],nextId=0;
+function reset(){day=0;nextId=0;items=[];var r=mul(20260901);
+ var base=[212,178,151,133,118,96,84,71,58,44,33,26];
+ for(var i=0;i<base.length;i++){items.push(mk(-base[i],r))}
+}
+function mk(d,r){nextId++;
+ return {id:nextId,in:d,name:NAMES[Math.floor(r()*NAMES.length)],item:ITEMS[Math.floor(r()*ITEMS.length)],tag:'T-'+(4100+nextId*7),calls:0}}
+function dateOf(off){var x=new Date(START.getTime());x.setDate(x.getDate()+off);return x}
+function fmtD(x){return x.getFullYear()+'年'+(x.getMonth()+1)+'月'+x.getDate()+'日'}
+function age(it){return day-it.in}
+function simTo(target){var r=mul(77000+day);
+ while(day<target){day++;
+  var kept=[];
+  for(var i=0;i<items.length;i++){var a=age(items[i]);
+   var p=0.055*Math.exp(-a/38);
+   if(r()<p){}else{kept.push(items[i])}}
+  items=kept;
+  var add=(day%3===0)?1:0; if(day%7===0)add++;
+  for(var k=0;k<add;k++)items.push(mk(day,r));
+ }}
+function counts(){var a=0,b=0,c=0;items.forEach(function(x){var g=age(x);if(g<=60)a++;else if(g<=120)b++;else c++});return {a:a,b:b,c:c,n:items.length}}
+function project(){
+ var snap=items.map(function(x){return {in:x.in}}),d=day,r=mul(31337),fullAt=null,tenAt=null;
+ var now=0;snap.forEach(function(x){if(day-x.in>120)now++});
+ if(now>10)tenAt=day; if(snap.length>=CAP)fullAt=day;
+ for(var s=1;s<=900;s++){d++;
+  var kept=[];
+  for(var i=0;i<snap.length;i++){var a=d-snap[i].in;var p=0.055*Math.exp(-a/38);if(r()>=p)kept.push(snap[i])}
+  snap=kept;
+  var add=(d%3===0)?1:0; if(d%7===0)add++;
+  for(var k=0;k<add;k++)snap.push({in:d});
+  var over=0;snap.forEach(function(x){if(d-x.in>120)over++});
+  if(tenAt===null&&over>10)tenAt=d;
+  if(fullAt===null&&snap.length>=CAP)fullAt=d;
+  if(fullAt!==null&&tenAt!==null)break}
+ return {full:fullAt,ten:tenAt}}
+function render(){
+ var c=counts();
+ document.getElementById('dToday').textContent=fmtD(dateOf(day));
+ document.getElementById('cnt').textContent=c.n;
+ document.getElementById('cap').textContent=CAP;
+ var w=function(v){return (v/CAP*100)+'%'};
+ document.getElementById('bar').innerHTML='<i class="a" style="width:'+w(c.a)+'"></i><i class="b" style="width:'+w(c.b)+'"></i><i class="c" style="width:'+w(c.c)+'"></i>';
+ var pj=project();
+ var fh='';
+ if(c.n>=CAP){fh='<b>もう満杯です。</b>'+c.c+'点が121日以上そのままです。'}
+ else if(pj.full){var dd=pj.full-day;fh='このペースなら <b>'+fmtD(dateOf(pj.full))+'</b>（あと'+dd+'日）に棚が満杯になります。<br><span class="small">いま '+c.n+'点。うち121日以上が '+c.c+'点。</span>'}
+ else{fh='このペースなら、当面は満杯になりません。<span class="small">いま '+c.n+'点。うち121日以上が '+c.c+'点。</span>'}
+ document.getElementById('fore').innerHTML=fh;
+ var cand=[];
+ if(pj.full)cand.push({d:pj.full-30,why:'満杯（'+fmtD(dateOf(pj.full))+'）の30日前'});
+ if(pj.ten)cand.push({d:pj.ten,why:'121日以上が10点を超える日'});
+ if(cand.length){cand.sort(function(x,y){return x.d-y.d});var pick=cand[0];
+  var dd=pick.d-day;
+  document.getElementById('callDay').textContent=dd<=0?'今日':fmtD(dateOf(pick.d));
+  document.getElementById('callSub').textContent=(dd<=0?'すでに過ぎています。理由：':'あと'+dd+'日。理由：')+pick.why;
+ }else{document.getElementById('callDay').textContent='まだ先';document.getElementById('callSub').textContent='いまのペースでは、当面その日は来ません'}
+ var s=items.slice().sort(function(x,y){return age(y)-age(x)});
+ var h='';
+ s.slice(0,8).forEach(function(x){var a=age(x),cl=a>120?'c':(a>60?'b':'');
+  h+='<div class="item" data-id="'+x.id+'"><div class="d '+cl+'">'+a+'<span class="unit" style="font-size:12px">日</span></div>'
+   +'<div class="t">'+x.name+'さま　'+x.item+'<small>札 '+x.tag+'／'+fmtD(dateOf(x.in))+' 預かり</small></div><div class="ar">›</div></div>'});
+ document.getElementById('list').innerHTML=h;
+ document.getElementById('more').textContent=s.length>8?'ほか '+(s.length-8)+'点':'';
+ [].forEach.call(document.querySelectorAll('.item'),function(el){el.onclick=function(){detail(+el.getAttribute('data-id'))}})}
+function detail(id){var x=null;items.forEach(function(y){if(y.id===id)x=y});if(!x)return;
+ var a=age(x);
+ var g='',r=mul(id*9176+3);
+ for(var i=0;i<441;i++){var rr=Math.floor(i/21),cc=i%21;
+  var fin=(rr<7&&cc<7)||(rr<7&&cc>13)||(rr>13&&cc<7);
+  var on;
+  if(fin){var lr=rr%14,lc=cc%14;lr=rr>13?rr-14:rr;lc=cc>13?cc-14:cc;
+   on=(lr===0||lr===6||lc===0||lc===6||(lr>1&&lr<5&&lc>1&&lc<5))}
+  else on=r()<0.48;
+  g+='<i style="background:'+(on?'#1a1a1a':'#fff')+'"></i>'}
+ document.getElementById('detIn').innerHTML=
+  '<div class="qr" style="grid-template-columns:repeat(21,1fr);grid-template-rows:repeat(21,1fr)">'+g+'</div>'
+  +'<p class="small" style="text-align:center">札 '+x.tag+'（見本の絵です）</p>'
+  +'<table><tr><td>お客さま</td><td>'+x.name+'さま</td></tr>'
+  +'<tr><td>品目</td><td>'+x.item+'</td></tr>'
+  +'<tr><td>預かり</td><td>'+fmtD(dateOf(x.in))+'</td></tr>'
+  +'<tr><td>経過</td><td><b>'+a+'日</b></td></tr>'
+  +'<tr><td>声かけ</td><td>'+x.calls+'回</td></tr></table>'
+  +'<div class="'+(a>120?'warn':'hl')+'">'+(a>120
+   ?'121日を超えています。棚の場所を一番長く使っている一群です。'
+   :'まだ動く可能性がある期間です。')+'</div>';
+ document.getElementById('det').classList.remove('hide');
+ document.getElementById('det').scrollIntoView({behavior:'smooth',block:'start'})}
+document.getElementById('dc').onclick=function(){document.getElementById('det').classList.add('hide')};
+document.getElementById('w1').onclick=function(){simTo(day+7);render()};
+document.getElementById('m1').onclick=function(){simTo(day+30);render()};
+document.getElementById('rs').onclick=function(){reset();render();document.getElementById('det').classList.add('hide')};
+reset();render();
+</script>
+</body>
+</html>

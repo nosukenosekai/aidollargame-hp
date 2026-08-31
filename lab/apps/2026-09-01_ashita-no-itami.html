@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>あしたの痛み</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:44px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.unit{font-size:17px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef8ef;border:1px solid #f0dcc0;border-radius:10px;padding:14px;margin-top:12px}
+.row2{display:flex;gap:10px}
+.row2 .btn{margin-bottom:0}
+.step{font-size:14px;color:#6b6b6b;margin-bottom:10px;display:flex;justify-content:space-between}
+.slider{width:100%;margin:6px 0 2px}
+.secret{background:#1a1a1a;color:#fff;border-radius:12px;padding:18px;text-align:center;font-size:22px;font-weight:700;margin:12px 0}
+.secret span{display:block;font-size:13px;font-weight:400;color:#b9b9b9;margin-top:4px}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.picks button{flex:1;padding:12px 10px;font-size:16px;font-weight:600;background:#fff;border:1.5px solid #d8d5cc;border-radius:12px;cursor:pointer;font-family:inherit;color:#1a1a1a}
+.picks button.on{border-color:#2563eb;background:#eff4ff;color:#1d4ed8}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+td,th{padding:10px 0;border-bottom:1px solid #eeece6;text-align:left}
+th{font-size:13px;color:#6b6b6b;font-weight:600}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.bars .b{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:15px}
+.bars .b .f{width:96px;font-weight:600}
+.bars .b .g{flex:1;height:12px;background:#eeece6;border-radius:6px;overflow:hidden}
+.bars .b .g i{display:block;height:100%;background:#2563eb}
+.bars .b .v{width:70px;text-align:right;font-size:14px;color:#6b6b6b;font-variant-numeric:tabular-nums}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.hide{display:none}
+.note{font-size:13px;color:#6b6b6b;margin-top:8px}
+.hd{display:flex;justify-content:space-between;align-items:center;background:#1a1a1a;color:#fff;border-radius:12px;padding:12px 16px;margin-bottom:14px;font-size:15px}
+.hd b{font-size:18px;font-variant-numeric:tabular-nums}
+.sl{width:100%;margin:10px 0 2px}
+.pv{font-size:56px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;line-height:1.05}
+.pv small{display:block;font-size:15px;font-weight:400;color:#6b6b6b}
+.lock{text-align:center;padding:22px 8px}
+.lock .m{font-size:19px;font-weight:700;margin-bottom:6px}
+.moon{width:78px;height:78px;border-radius:50%;margin:0 auto 14px;background:#1a1a1a;position:relative;overflow:hidden}
+.moon i{position:absolute;inset:0;border-radius:50%;background:#f0ede4;transform:translateX(-58%)}
+.spark{display:flex;align-items:flex-end;gap:6px;height:96px;margin:14px 0 4px}
+.spark div{flex:1;background:#e2ded4;border-radius:4px 4px 0 0;position:relative;min-height:4px}
+.spark div.on{background:#2563eb}
+.spark div b{position:absolute;top:-20px;left:50%;transform:translateX(-50%);font-size:13px;font-variant-numeric:tabular-nums;color:#444}
+.sdays{display:flex;gap:6px;font-size:12px;color:#9a9a9a;text-align:center}
+.sdays div{flex:1}
+.chg{font-size:40px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.chg.dn{color:#1d4ed8}.chg.up{color:#c0392b}.chg.sm{color:#6b6b6b}
+.rec{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eeece6;font-size:15px}
+.rec:last-child{border-bottom:0}
+.rec span:last-child{font-variant-numeric:tabular-nums;color:#6b6b6b}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（歩数はサンプル値です）</div>
+<h1>あしたの痛み</h1>
+<p class="lead">施術の効きめは、その日の帰り道ではわからない。わかるのは<span class="mark">翌朝の起き上がり方</span>。だからこのアプリは、今日入れても今日は何も答えない。ひらくのは明日。</p>
+
+<div class="hd"><span id="dLbl">—</span><b id="dNum">—</b></div>
+
+<div class="card hide" id="cIn">
+<h2>今日のことを3つ</h2>
+<p class="small">1　いま、痛みはどれくらい</p>
+<p class="pv"><span id="pv">5</span><small>0＝まったくない　10＝これまでで一番</small></p>
+<input class="sl" type="range" id="pr" min="0" max="10" value="5">
+<p class="small" style="margin-top:16px">2　いちばんつらい動き</p>
+<div class="picks" id="mv">
+<button data-m="前かがみ">前かがみ</button>
+<button data-m="立ち上がり">立ち上がり</button>
+<button data-m="振り向き">振り向き</button>
+<button data-m="長く座る">長く座る</button>
+</div>
+<p class="small" style="margin-top:16px">3　教わった体操をやったか</p>
+<div class="picks" id="ex">
+<button data-e="1">やった</button>
+<button data-e="0">やらなかった</button>
+</div>
+<div class="hl" style="margin-top:16px">今日の歩数　<b id="steps">—</b> 歩　<span class="small">（時計から自動で入る想定。この画面ではサンプル値です）</span></div>
+<button class="btn" id="save" style="margin-top:14px" disabled>入れる</button>
+<p class="note">入れても、今日は何も出ません。</p>
+</div>
+
+<div class="card hide" id="cLock">
+<div class="lock">
+<div class="moon"><i></i></div>
+<p class="m">入りました。</p>
+<p class="small">答えが出るのは <b id="openDay">—</b> の朝です。<br>今日はここまで見えません。</p>
+</div>
+<button class="btn sub" id="fwd">（デモ）1日すすめる</button>
+</div>
+
+<div class="card hide" id="cOpen">
+<h2 id="openTitle">きのうと、くらべる</h2>
+<div id="openBody"></div>
+<button class="btn" id="goIn" style="margin-top:14px">今日のぶんを入れる</button>
+</div>
+
+<div class="card hide" id="cHist">
+<h2>これまで</h2>
+<div class="spark" id="spark"></div>
+<div class="sdays" id="sdays"></div>
+<div id="recs" style="margin-top:14px"></div>
+</div>
+
+<div class="card hide" id="cFind">
+<h2>ひとつだけ、わかったこと</h2>
+<div id="find"></div>
+</div>
+
+<div class="card">
+<h2>なぜ、その日に答えないのか</h2>
+<p>施術直後は誰でも軽く感じる。効いたかどうかが出るのは翌朝で、そこを見ないまま「よくならない」と思って来なくなる人がいる。<b>翌朝ひらく約束があるだけで、翌朝の自分を見る。</b>院にとっては、それがそのまま次に来る理由になる。</p>
+<div class="warn"><b>これは診断ではありません。</b>痛みが強くなる、しびれる、力が入らない、夜も眠れない。そういうときは、この画面ではなく医療機関へ。</div>
+<button class="btn gray" id="clr" style="margin-top:12px">記録を全部消す</button>
+</div>
+
+<div class="src">
+<b>この画面について</b><br>
+入れた記録は、この端末のブラウザの中だけに残ります。どこにも送っていません。「記録を全部消す」でいつでも消せます。<br><br>
+歩数はサンプル値です。実際にはスマートウォッチや歩数計から入る想定です。<br><br>
+「効いた／効かなかった」の判定は、あなたが入れた数日ぶんの平均を引き算しているだけです。日数が少ないうちは偶然で動きます。医学的な効果の証明ではありません。
+</div>
+</div>
+<script>
+var K='ashita-no-itami-v1';
+var S={off:0,days:[]};
+var $=function(i){return document.getElementById(i)};
+function show(i,on){$(i).classList[on?'remove':'add']('hide')}
+function load(){try{var v=localStorage.getItem(K);if(v)S=JSON.parse(v)}catch(e){}}
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+function today(){var x=new Date();x.setHours(0,0,0,0);x.setDate(x.getDate()+S.off);return x}
+function key(x){return x.getFullYear()+'-'+(x.getMonth()+1)+'-'+x.getDate()}
+function fmt(x){var w=['日','月','火','水','木','金','土'][x.getDay()];return (x.getMonth()+1)+'月'+x.getDate()+'日('+w+')'}
+function stepsFor(k){var h=2166136261;
+ for(var i=0;i<k.length;i++){h^=k.charCodeAt(i);h=Math.imul(h,16777619)}
+ h^=h>>>15;h=Math.imul(h,2246822507);h^=h>>>13;h=Math.imul(h,3266489909);h^=h>>>16;
+ return 100*(32+(h>>>0)%56)}
+var pain=5,mv=null,ex=null;
+$('pr').oninput=function(){pain=+this.value;$('pv').textContent=pain;chk()};
+[].forEach.call($('mv').children,function(b){b.onclick=function(){
+ [].forEach.call($('mv').children,function(x){x.classList.remove('on')});b.classList.add('on');mv=b.getAttribute('data-m');chk()}});
+[].forEach.call($('ex').children,function(b){b.onclick=function(){
+ [].forEach.call($('ex').children,function(x){x.classList.remove('on')});b.classList.add('on');ex=+b.getAttribute('data-e');chk()}});
+function chk(){$('save').disabled=!(mv!==null&&ex!==null)}
+$('save').onclick=function(){var t=today(),k=key(t);
+ S.days.push({k:k,t:t.getTime(),p:pain,m:mv,e:ex,s:stepsFor(k)});save();render()};
+$('fwd').onclick=function(){S.off++;save();render()};
+$('goIn').onclick=function(){show('cOpen',0);show('cIn',1);$('cIn').scrollIntoView({behavior:'smooth'})};
+$('clr').onclick=function(){S={off:0,days:[]};save();render()};
+function last(){return S.days.length?S.days[S.days.length-1]:null}
+function render(){
+ var t=today(),k=key(t);
+ $('dLbl').textContent='いまの日付';$('dNum').textContent=fmt(t);
+ $('steps').textContent=stepsFor(k).toLocaleString('ja-JP');
+ var done=S.days.some(function(d){return d.k===k});
+ var L=last();
+ show('cIn',0);show('cLock',0);show('cOpen',0);show('cHist',S.days.length>0);show('cFind',0);
+ if(done){show('cLock',1);var n=new Date(t.getTime());n.setDate(n.getDate()+1);$('openDay').textContent=fmt(n)}
+ else if(S.days.length>=1){openView(L);show('cOpen',1)}
+ else{show('cIn',1);reset()}
+ hist();find()}
+function reset(){pain=5;mv=null;ex=null;$('pr').value=5;$('pv').textContent='5';
+ [].forEach.call($('mv').children,function(x){x.classList.remove('on')});
+ [].forEach.call($('ex').children,function(x){x.classList.remove('on')});chk()}
+function openView(L){
+ var t=today(),gap=Math.round((t.getTime()-L.t)/86400000);
+ $('openTitle').textContent=gap===1?'きのうと、くらべる':gap+'日前と、くらべる';
+ var h='<p class="small">前にひらいたのは '+fmt(new Date(L.t))+'。そのとき入れたのは、これでした。</p>'
+ +'<div class="hl">痛み <b>'+L.p+'</b>／つらい動き <b>'+L.m+'</b>／体操 <b>'+(L.e?'やった':'やらなかった')+'</b>／歩数 <b>'+L.s.toLocaleString('ja-JP')+'</b> 歩</div>'
+ +'<p style="margin-top:14px">けさは、どうですか。<b>下の「今日のぶんを入れる」を押してから</b>、いまの痛みを入れてください。差はそのあと出ます。</p>';
+ if(S.days.length>=2){var P=S.days[S.days.length-2],d=L.p-P.p;
+  h+='<div style="margin-top:16px"><p class="small">その前の日から、痛みは</p>'
+   +'<p class="chg '+(d<0?'dn':(d>0?'up':'sm'))+'">'+(d>0?'+':'')+d+'<span class="unit"> 目盛り</span></p>'
+   +'<p class="small">'+(d<0?Math.abs(d)+'目盛り軽くなっていました。':(d>0?d+'目盛り重くなっていました。':'変わりませんでした。'))+'</p></div>'}
+ $('openBody').innerHTML=h}
+function hist(){
+ if(!S.days.length)return;
+ var d=S.days.slice(-7),mx=10,h='',s='';
+ d.forEach(function(x){var hgt=Math.max(4,x.p/mx*90);
+  h+='<div class="'+(x.e?'on':'')+'" style="height:'+hgt+'px"><b>'+x.p+'</b></div>';
+  s+='<div>'+fmt(new Date(x.t)).replace(/\(.\)/,'').replace('月','/').replace('日','')+'</div>'});
+ $('spark').innerHTML=h;$('sdays').innerHTML=s;
+ var r='';S.days.slice().reverse().slice(0,8).forEach(function(x){
+  r+='<div class="rec"><span>'+fmt(new Date(x.t))+'　'+x.m+'</span><span>痛み '+x.p+'／'+(x.e?'体操○':'体操—')+'／'+x.s.toLocaleString('ja-JP')+'歩</span></div>'});
+ $('recs').innerHTML='<p class="small">青い棒は、その日に体操をやった日です。</p>'+r}
+function find(){
+ if(S.days.length<4)return;
+ var A=[],B=[];
+ for(var i=0;i<S.days.length-1;i++){var dlt=S.days[i+1].p-S.days[i].p;
+  if(S.days[i].e)A.push(dlt);else B.push(dlt)}
+ if(A.length<2||B.length<2)return;
+ var m=function(a){return a.reduce(function(x,y){return x+y},0)/a.length};
+ var a=m(A),b=m(B),diff=b-a;
+ show('cFind',1);
+ var msg;
+ if(Math.abs(diff)<0.5)msg='あなたの'+S.days.length+'日ぶんでは、体操をやった翌日とやらなかった翌日で、痛みの動き方に差が出ていません。';
+ else if(diff>0)msg='あなたの'+S.days.length+'日ぶんでは、<b>体操をやった翌日のほうが '+diff.toFixed(1)+' ぶん軽い</b>。';
+ else msg='あなたの'+S.days.length+'日ぶんでは、体操をやった翌日のほうが '+Math.abs(diff).toFixed(1)+' ぶん重く出ています。順番が逆かもしれません（つらい日ほどやっている、など）。';
+ $('find').innerHTML='<div class="ok" style="font-size:17px">'+msg+'</div>'
+  +'<table><tr><th>　</th><th>翌日の痛みの動き</th></tr>'
+  +'<tr><td>体操をやった翌日</td><td>'+(a>0?'+':'')+a.toFixed(1)+'</td></tr>'
+  +'<tr><td>やらなかった翌日</td><td>'+(b>0?'+':'')+b.toFixed(1)+'</td></tr></table>'
+  +'<p class="note">'+A.length+'日と'+B.length+'日の平均を引き算しただけです。日数が少ないうちは偶然で動きます。次に院へ行ったとき、この2行だけ見せてください。</p>'}
+load();render();
+</script>
+</body>
+</html>

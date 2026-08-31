@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>二倍の重さ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:44px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.unit{font-size:17px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef8ef;border:1px solid #f0dcc0;border-radius:10px;padding:14px;margin-top:12px}
+.row2{display:flex;gap:10px}
+.row2 .btn{margin-bottom:0}
+.step{font-size:14px;color:#6b6b6b;margin-bottom:10px;display:flex;justify-content:space-between}
+.slider{width:100%;margin:6px 0 2px}
+.secret{background:#1a1a1a;color:#fff;border-radius:12px;padding:18px;text-align:center;font-size:22px;font-weight:700;margin:12px 0}
+.secret span{display:block;font-size:13px;font-weight:400;color:#b9b9b9;margin-top:4px}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.picks button{flex:1;padding:12px 10px;font-size:16px;font-weight:600;background:#fff;border:1.5px solid #d8d5cc;border-radius:12px;cursor:pointer;font-family:inherit;color:#1a1a1a}
+.picks button.on{border-color:#2563eb;background:#eff4ff;color:#1d4ed8}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+td,th{padding:10px 0;border-bottom:1px solid #eeece6;text-align:left}
+th{font-size:13px;color:#6b6b6b;font-weight:600}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.bars .b{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:15px}
+.bars .b .f{width:96px;font-weight:600}
+.bars .b .g{flex:1;height:12px;background:#eeece6;border-radius:6px;overflow:hidden}
+.bars .b .g i{display:block;height:100%;background:#2563eb}
+.bars .b .v{width:70px;text-align:right;font-size:14px;color:#6b6b6b;font-variant-numeric:tabular-nums}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.hide{display:none}
+.note{font-size:13px;color:#6b6b6b;margin-top:8px}
+.bal{display:flex;justify-content:space-between;align-items:baseline;background:#1a1a1a;color:#fff;border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.bal .n{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums}
+.bal .n.dn{color:#fca5a5}
+.bal .n.up{color:#86efac}
+.bet{display:flex;gap:10px;margin:14px 0}
+.bet div{flex:1;border-radius:12px;padding:14px 10px;text-align:center}
+.bet .up{background:#eff6ff;border:1px solid #bfdbfe}
+.bet .dn{background:#fef2f2;border:1px solid #fecaca}
+.bet b{display:block;font-size:24px;font-variant-numeric:tabular-nums;margin-top:2px}
+.bet .up b{color:#1d4ed8}
+.bet .dn b{color:#b91c1c}
+.coin{text-align:center;font-size:22px;font-weight:700;padding:16px;border-radius:12px;margin:10px 0}
+.coin.win{background:#eff6ff;color:#1d4ed8}
+.coin.lose{background:#fef2f2;color:#b91c1c}
+.coin.pass{background:#f3f2ee;color:#555}
+.log{font-size:14px;max-height:230px;overflow-y:auto;margin-top:8px}
+.log div{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eeece6}
+.log .r{font-variant-numeric:tabular-nums}
+.log .r.m{color:#b91c1c}
+.log .r.p{color:#1d4ed8}
+.log .r.g{color:#8a8a8a}
+.dots{display:flex;gap:4px;margin-bottom:12px}
+.dots i{flex:1;height:5px;border-radius:3px;background:#e2ded4}
+.dots i.on{background:#2563eb}
+.scale{position:relative;height:64px;margin:16px 0 6px}
+.scale .ln{position:absolute;top:34px;left:0;right:0;height:3px;background:#e2ded4;border-radius:2px}
+.scale .pin{position:absolute;top:22px;width:3px;height:27px;background:#8a8a8a;transform:translateX(-50%)}
+.scale .pin.me{background:#2563eb;height:40px;top:12px;width:4px}
+.scale .lb{position:absolute;top:0;font-size:12px;color:#6b6b6b;transform:translateX(-50%);white-space:nowrap}
+.scale .lb.me{color:#2563eb;font-weight:700}
+.scale .ax{position:absolute;top:44px;font-size:12px;color:#9a9a9a;transform:translateX(-50%)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">実測（1992年の原典と2024年のメタ分析に並べます）</div>
+<h1>二倍の重さ</h1>
+<p class="lead">1万円を失う痛みは、1万円もらう嬉しさの何倍か。行動経済学ではこれをλ（ラムダ）と呼ぶ。<span class="mark">あなたのλを、12回の賭けで測る。</span>仮のお金だが、受けた賭けはその場でコインを投げて、負けは残高から本当に引かれる。</p>
+
+<div class="card" id="c0">
+<h2>やること</h2>
+<p>持ち金は<b>20万円</b>から。毎回ひとつ、こういう賭けが出る。</p>
+<div class="bet"><div class="up">表（50%）<b>+3.0万円</b></div><div class="dn">裏（50%）<b>−1.0万円</b></div></div>
+<p><b>受ける</b>と、コインが投げられて残高が動く。<b>受けない</b>と何も起きない。<br>受けるか受けないかの境目にある倍率が、あなたのλになる。</p>
+<div class="warn"><b>仮のお金です。</b>実際のお金は動きません。これは心理の実験で、投資の助言ではありません。</div>
+<button class="btn" id="b0">はじめる</button>
+</div>
+
+<div class="card hide" id="c1">
+<div class="bal"><span>持ち金</span><span class="n" id="bal">20.0<span class="unit" style="color:#b9b9b9"> 万円</span></span></div>
+<div class="dots" id="dots"></div>
+<div class="step"><span id="tn">1回目 / 12回</span><span>コイン投げ・表裏は半々</span></div>
+<h2>この賭け、受けますか</h2>
+<div class="bet"><div class="up">表（50%）<b id="gU">+3.0万円</b></div><div class="dn">裏（50%）<b id="gD">−1.0万円</b></div></div>
+<div id="coin"></div>
+<div class="row2" id="btns"><button class="btn" id="bY">受ける</button><button class="btn gray" id="bN">受けない</button></div>
+<button class="btn sub hide" id="bNext">次へ</button>
+</div>
+
+<div class="card hide" id="c2">
+<h2>あなたのλ</h2>
+<div id="res"></div>
+</div>
+
+<div class="card hide" id="c3">
+<h2>やった賭けの記録</h2>
+<div class="log" id="log"></div>
+</div>
+
+<div class="card hide" id="c4">
+<h2>これを商売に置きかえると</h2>
+<p>λが2なら、お客さまは<b>1万円ぶんの損を、2万円ぶんの得でないと相殺しない</b>。だから「1万円値引き」より「気に入らなければ全額返金」のほうが効くことがある。返品無料・初期費用ゼロ・お試し期間は、得を足しているのではなく<b>損の目を消している</b>。</p>
+<div class="ok">値引きの前に、相手が何を失うと感じているかを1つ書き出す。消せるならそれを消すほうが、たいてい安く済む。</div>
+<p class="note">ただし2024年のメタ分析は、λが1.31（95%信頼区間 1.10〜1.53）と、原典の2.25よりずっと小さいと報告している。人によっても場面によっても大きく変わる、というのがいまの一次資料の言い方です。</p>
+</div>
+
+<div class="src">
+<b>数字の出どころ</b><br>
+λ=2.25：Tversky A, Kahneman D (1992)「Advances in Prospect Theory: Cumulative Representation of Uncertainty」<i>Journal of Risk and Uncertainty</i> 5:297-323。損失は同じ大きさの利得の2.25倍に重く効く、と推定した原典。<br><br>
+λ=1.31, 95%CI[1.10,1.53]：Walasek L, Mullett TL, Stewart N (2024)「A meta-analysis of loss aversion in risky contexts」<i>Journal of Economic Psychology</i> 103:102740（オープンアクセス, CC BY）。混合ギャンブルの個人選択からλを推定した研究を集めたランダム効果メタ分析。研究の数がとても少なく、データの質も高くないと明記している。<br>
+<a href="https://www.sciencedirect.com/science/article/pii/S0167487024000485">https://www.sciencedirect.com/science/article/pii/S0167487024000485</a><br><br>
+測り方はこの画面の簡易版（12回の階段法）で、論文のようにモデルを当てはめた推定ではありません。回数が少ないので、日を変えると値は動きます。
+</div>
+</div>
+<script>
+var N=12,t=0,bal=20,m=2.0,f=1.5,hist=[],log=[],missed=0,ans=null,loss=1;
+var $=function(i){return document.getElementById(i)};
+function show(i,on){$(i).classList[on?'remove':'add']('hide')}
+function fmt(x){return (Math.round(x*10)/10).toFixed(1)}
+$('b0').onclick=function(){show('c0',0);show('c1',1);dots();draw()};
+function dots(){var h='';for(var i=0;i<N;i++)h+='<i class="'+(i<t?'on':'')+'"></i>';$('dots').innerHTML=h}
+function draw(){loss=(t%3===2)?2:1;
+ var gain=Math.round(m*loss*10)/10;
+ $('gU').textContent='+'+fmt(gain)+'万円';$('gD').textContent='−'+fmt(loss)+'万円';
+ $('tn').textContent=(t+1)+'回目 / '+N+'回';
+ $('coin').innerHTML='';show('btns',1);show('bNext',0);dots()}
+function bar(){var c=bal>=20?'up':'dn';$('bal').className='n '+c;
+ $('bal').innerHTML=fmt(bal)+'<span class="unit" style="color:#b9b9b9"> 万円</span>'}
+function step(acc){
+ var gain=Math.round(m*loss*10)/10;
+ hist.push({m:m,acc:acc});
+ show('btns',0);
+ if(acc){var win=Math.random()<0.5;bal+=win?gain:-loss;
+  $('coin').innerHTML='<div class="coin '+(win?'win':'lose')+'">'+(win?'表　+'+fmt(gain)+'万円':'裏　−'+fmt(loss)+'万円')+'</div>';
+  log.push({t:t+1,m:m,g:gain,l:loss,acc:1,win:win});
+ }else{
+  $('coin').innerHTML='<div class="coin pass">受けなかった</div>';
+  missed+=(gain-loss)/2;
+  log.push({t:t+1,m:m,g:gain,l:loss,acc:0});
+ }
+ bar();
+ m=acc?m/f:m*f; m=Math.max(1.0,Math.min(6.0,m));
+ f=1+(f-1)*0.62; if(f<1.06)f=1.06;
+ t++;
+ if(t>=N){show('bNext',1);$('bNext').textContent='結果を見る'}else{show('bNext',1);$('bNext').textContent='次へ'}
+ dots()}
+$('bY').onclick=function(){step(true)};
+$('bN').onclick=function(){step(false)};
+$('bNext').onclick=function(){if(t>=N){result()}else{draw()}};
+function gmean(a){return Math.exp(a.reduce(function(x,y){return x+Math.log(y)},0)/a.length)}
+function result(){show('c1',0);show('c2',1);show('c3',1);show('c4',1);
+ var lastM=hist.slice(-6).map(function(x){return x.m});
+ var lam=gmean(lastM);
+ var accCnt=hist.filter(function(x){return x.acc}).length;
+ var h='<p class="big" style="color:#2563eb">'+lam.toFixed(2)+'<span class="unit"> 倍</span></p>'
+  +'<p>1万円の損を受け入れるのに、あなたは<b>'+fmt(lam)+'万円</b>の得を求めました。</p>';
+ h+=scale(lam);
+ h+='<table><tr><th>　</th><th>λ</th></tr>'
+  +'<tr><td>あなた（12回）</td><td>'+lam.toFixed(2)+'</td></tr>'
+  +'<tr><td>Tversky &amp; Kahneman 1992</td><td>2.25</td></tr>'
+  +'<tr><td>2024年メタ分析（平均）</td><td>1.31</td></tr>'
+  +'<tr><td>損得を同じに扱う人</td><td>1.00</td></tr></table>';
+ var v;
+ if(lam<1.10)v='あなたは、この場では損をほとんど重く見ていません。メタ分析の信頼区間（1.10〜1.53）より下です。';
+ else if(lam<=1.53)v='2024年のメタ分析の信頼区間（1.10〜1.53）の中に入りました。いまの研究の平均的なところです。';
+ else if(lam<2.6)v='メタ分析の平均より損を重く見ています。1992年の原典の2.25に近いあたりです。';
+ else v='かなり強い損失回避です。原典の2.25よりさらに損を重く見ています。';
+ h+='<div class="hl">'+v+'</div>';
+ h+='<div class="'+(bal>=20?'ok':'warn')+'"><b>持ち金は '+fmt(bal)+'万円</b>（はじめは20.0万円、'+accCnt+'回受けました）<br>'
+  +'受けなかった賭けで見送った期待値の合計は <b>'+fmt(missed)+'万円</b>。出た賭けはどれも、平均すれば損はしない側でした。'
+  +'それでも降りたくなるのが、この'+lam.toFixed(2)+'倍の重さです。</div>';
+ $('res').innerHTML=h;
+ var lg='';log.forEach(function(x){
+  var r=x.acc?(x.win?'<span class="r p">+'+fmt(x.g)+'</span>':'<span class="r m">−'+fmt(x.l)+'</span>'):'<span class="r g">見送り</span>';
+  lg+='<div><span>'+x.t+'回目　+'+fmt(x.g)+' / −'+fmt(x.l)+'（'+ (x.g/x.l).toFixed(2) +'倍）</span>'+r+'</div>'});
+ $('log').innerHTML=lg}
+function scale(lam){var lo=0.8,hi=3.2,p=function(v){return Math.max(2,Math.min(98,(v-lo)/(hi-lo)*100))};
+ return '<div class="scale"><div class="ln"></div>'
+ +'<div class="pin" style="left:'+p(1)+'%"></div><div class="ax" style="left:'+p(1)+'%">1.00</div>'
+ +'<div class="pin" style="left:'+p(1.31)+'%"></div><div class="ax" style="left:'+p(1.31)+'%">1.31</div>'
+ +'<div class="pin" style="left:'+p(2.25)+'%"></div><div class="ax" style="left:'+p(2.25)+'%">2.25</div>'
+ +'<div class="pin me" style="left:'+p(lam)+'%"></div><div class="lb me" style="left:'+p(lam)+'%">あなた '+lam.toFixed(2)+'</div>'
+ +'</div><p class="note" style="text-align:center">左が1.00（損得を同じに扱う）、目盛りは 1.31＝2024年メタ分析、2.25＝1992年の原典。</p>'}
+</script>
+</body>
+</html>

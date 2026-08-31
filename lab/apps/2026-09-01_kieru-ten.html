@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>消える点</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit;margin-bottom:10px}
+.btn:active{opacity:.85}
+.btn:disabled{opacity:.4;cursor:default}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#444;border:1.5px solid #d8d5cc}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:44px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.unit{font-size:17px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px}
+.ok{background:#f2f7f2;border:1px solid #cfe2cf;border-radius:10px;padding:14px;margin-top:12px}
+.warn{background:#fef8ef;border:1px solid #f0dcc0;border-radius:10px;padding:14px;margin-top:12px}
+.row2{display:flex;gap:10px}
+.row2 .btn{margin-bottom:0}
+.step{font-size:14px;color:#6b6b6b;margin-bottom:10px;display:flex;justify-content:space-between}
+.slider{width:100%;margin:6px 0 2px}
+.secret{background:#1a1a1a;color:#fff;border-radius:12px;padding:18px;text-align:center;font-size:22px;font-weight:700;margin:12px 0}
+.secret span{display:block;font-size:13px;font-weight:400;color:#b9b9b9;margin-top:4px}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.picks button{flex:1;padding:12px 10px;font-size:16px;font-weight:600;background:#fff;border:1.5px solid #d8d5cc;border-radius:12px;cursor:pointer;font-family:inherit;color:#1a1a1a}
+.picks button.on{border-color:#2563eb;background:#eff4ff;color:#1d4ed8}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+td,th{padding:10px 0;border-bottom:1px solid #eeece6;text-align:left}
+th{font-size:13px;color:#6b6b6b;font-weight:600}
+td:not(:first-child),th:not(:first-child){text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.bars .b{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:15px}
+.bars .b .f{width:64px;font-weight:600}
+.bars .b .g{flex:1;height:12px;background:#eeece6;border-radius:6px;overflow:hidden}
+.bars .b .g i{display:block;height:100%;background:#2563eb}
+.bars .b .v{width:70px;text-align:right;font-size:14px;color:#6b6b6b;font-variant-numeric:tabular-nums}
+.src{font-size:13px;color:#6b6b6b;margin-top:20px;border-top:1px solid #e2ded4;padding-top:14px}
+.src a{color:#2563eb;word-break:break-all}
+.hide{display:none}
+.note{font-size:13px;color:#6b6b6b;margin-top:8px}
+.stage{position:relative;background:#fbfaf7;border:1px solid #e8e5dd;border-radius:12px;height:190px;margin:12px -18px;overflow:hidden}
+.stage .fix{position:absolute;top:50%;transform:translate(-50%,-50%);font-size:26px;color:#1a1a1a;font-weight:700;line-height:1}
+.stage .dot{position:absolute;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#2563eb}
+.stage.stripe{background:repeating-linear-gradient(90deg,#e6e2d8 0 14px,#fbfaf7 14px 28px)}
+.calbox{background:#fff;border:2px solid #2563eb;border-radius:8px;height:54px;margin:14px 0 6px;position:relative}
+.calbox:after{content:'カードの横幅に合わせる';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:12px;color:#6b6b6b;white-space:nowrap}
+.tapbar{position:sticky;bottom:0;padding-top:8px}
+.deg{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">実測（2014年の論文と並べます）</div>
+<h1>消える点</h1>
+<p class="lead">だれの目にも、まったく見えない穴がある。視神経が出ていくところに光を受ける細胞がないからで、片目を閉じるとその穴に入った点は消える。<span class="mark">その穴が自分の目のどこに、どれくらいの大きさであるか</span>を測って、論文の数字と並べる。</p>
+
+<div class="card" id="c0">
+<h2>用意するもの</h2>
+<ul style="margin-left:18px;font-size:16px">
+<li>クレジットカードか診察券（大きさの基準にします）</li>
+<li>目と画面の距離をはかるもの（定規・メジャー・A4の長辺29.7cmなど）</li>
+</ul>
+<div class="warn">スマホは<b>横向き</b>にしてください。画面が横に広いほど、離れて測れます。</div>
+<button class="btn" id="b0">はじめる</button>
+</div>
+
+<div class="card hide" id="c1">
+<div class="step"><span>1 / 3</span><span>画面の大きさを合わせる</span></div>
+<h2>カードの横幅に合わせる</h2>
+<p class="small">青い枠の横幅が、手元のカードの長い辺とぴったり同じになるまで動かします。</p>
+<div class="calbox" id="cal"></div>
+<input class="slider" type="range" id="calR" min="140" max="460" value="240">
+<p class="small">いまの幅：<b id="calMm">—</b></p>
+<button class="btn" id="b1">合った</button>
+</div>
+
+<div class="card hide" id="c2">
+<div class="step"><span>2 / 3</span><span>目と画面の距離</span></div>
+<h2>いま何cm離れていますか</h2>
+<p class="small">画面を置いた（または持った）まま、目から画面までを実際にはかって入れてください。ここが違うと角度がまるごとずれます。</p>
+<input class="slider" type="range" id="dR" min="12" max="60" value="30">
+<p class="big"><span id="dV">30</span><span class="unit"> cm</span></p>
+<div class="hl" id="reach"></div>
+<button class="btn" id="b2">この距離で測る</button>
+</div>
+
+<div class="card hide" id="c3">
+<div class="step"><span>3 / 3</span><span id="eyeLbl">右目</span></div>
+<h2 id="mTitle">右目で測る</h2>
+<p class="small" id="mHow"></p>
+<div class="stage" id="stage"><div class="fix" id="fix">＋</div><div class="dot" id="dot"></div></div>
+<p class="small">いまの角度：<b class="deg" id="curDeg">—</b>　<span id="trialLbl"></span></p>
+<div class="tapbar">
+<button class="btn" id="bStart">点を動かす</button>
+<button class="btn hide" id="bGone">いま消えた</button>
+<button class="btn sub hide" id="bBack">また見えた</button>
+<button class="btn gray" id="bSkip">この目はとばす</button>
+</div>
+<div class="warn hide" id="miss">端まで動かしましたが「消えた」がありませんでした。もう少し画面に近づく（距離を短くする）と、盲点まで届きます。</div>
+</div>
+
+<div class="card hide" id="c4">
+<h2>あなたの盲点</h2>
+<div id="res"></div>
+</div>
+
+<div class="card hide" id="c5">
+<h2>穴が空いて見えないのはなぜか</h2>
+<p class="small">下の縞の上で、さっきと同じように片目で「＋」を見つめたまま、青い点を盲点まで動かします。点が消えたとき、そこは黒い穴にならず<b>縞がつながって</b>見えるはずです。脳がまわりの模様で埋めています。</p>
+<div class="stage stripe" id="stage2"><div class="fix" id="fix2">＋</div><div class="dot" id="dot2"></div></div>
+<input class="slider" type="range" id="fillR" min="0" max="100" value="10">
+<p class="small">角度：<b class="deg" id="fillDeg">—</b></p>
+<div class="ok"><b>見えないことに、気づけない。</b>穴があるのに、まわりの色で埋まって「全部見えている」と感じる。<br><span class="small">中小企業でも同じことが起きる。棚卸しの抜け、請求の漏れ、点検の未実施は、まわりが埋まっているぶん「無い」ように見える。数えて突き合わせる仕組みだけが、埋まりを剥がせる。</span></p>
+</div>
+
+<div class="src">
+<b>数字の出どころ</b><br>
+盲点の位置と大きさ：Li H, Luo J, Lu W, Kan J, Spillmann L, Wang W (2014)「Asymmetrical color filling-in from the nasal to the temporal side of the blind spot」<i>Frontiers in Human Neuroscience</i>。盲点の中心は視野の耳側およそ15度、視角にして6×8度。論文の被験者の平均は横7.6度（中心から13.6度〜21.2度）、たて8.3度。<br>
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4103407/">https://pmc.ncbi.nlm.nih.gov/articles/PMC4103407/</a><br><br>
+盲点の大きさが視神経乳頭の形で変わること：Meyer JH, Guhlmann M, Funk J (1997)『British Journal of Ophthalmology』81(5):355-359。<br>
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC1722173/">https://pmc.ncbi.nlm.nih.gov/articles/PMC1722173/</a><br><br>
+これは視力や病気の検査ではありません。見え方に気になることがあれば眼科へ。
+</div>
+</div>
+<script>
+var pxPerMm=1, distMm=300, eye='R', trial=0, sweeping=false, ang=4, gone=null, raf=0, last=0;
+var data={R:[],L:[]};
+var $=function(i){return document.getElementById(i)};
+function show(i,on){$(i).classList[on?'remove':'add']('hide')}
+var CARD=85.6;
+function calUpd(){var w=+$('calR').value;$('cal').style.width=w+'px';pxPerMm=w/CARD;$('calMm').textContent=w+' px（1mm = '+pxPerMm.toFixed(2)+' px）'}
+$('calR').oninput=calUpd; calUpd();
+$('b0').onclick=function(){show('c0',0);show('c1',1)};
+$('b1').onclick=function(){show('c1',0);show('c2',1);dUpd()};
+function stageW(){var s=$('stage');if(s.clientWidth>10)return s.clientWidth;
+ var c=$('c2');if(c.clientWidth>10)return c.clientWidth-2;
+ return Math.min(560,window.innerWidth)-32}
+function travelPx(){return Math.max(60,stageW()-46)}
+function maxAng(){return Math.atan((travelPx()/pxPerMm)/distMm)*180/Math.PI}
+function dUpd(){distMm=(+$('dR').value)*10;$('dV').textContent=$('dR').value;
+ var m=maxAng();
+ $('reach').innerHTML=m>=24?'この画面と距離なら<b>最大 '+m.toFixed(0)+'度</b>まで動かせます。盲点は15度あたりなので届きます。':'この画面と距離だと<b>最大 '+m.toFixed(0)+'度</b>までしか動かせません。盲点（15度前後、外側は21度あたりまで）に届かないおそれがあります。<b>'+Math.ceil((travelPx()/pxPerMm)/Math.tan(26*Math.PI/180)/10)+'cm以下</b>まで近づくか、画面を横向きにしてください。'}
+$('dR').oninput=dUpd;
+$('b2').onclick=function(){show('c2',0);show('c3',1);setEye('R')};
+function setEye(e){eye=e;trial=0;show('miss',0);
+ $('eyeLbl').textContent=e==='R'?'右目':'左目';
+ $('mTitle').textContent=(e==='R'?'右目':'左目')+'で測る';
+ $('mHow').innerHTML=e==='R'
+  ?'<b>左目を閉じて</b>、右目だけで左はしの「＋」をじっと見つめます。目を動かさないまま、青い点が右へ動いていきます。点が<b>消えた瞬間</b>と<b>また見えた瞬間</b>にボタンを押してください。3回くり返します。'
+  :'こんどは<b>右目を閉じて</b>、左目だけで右はしの「＋」を見つめます。青い点は左へ動きます。同じように2回押します。';
+ layout();next()}
+function layout(){var w=$('stage').clientWidth;
+ if(eye==='R'){$('fix').style.left='22px'}else{$('fix').style.left=(w-22)+'px'}}
+function dotPos(a){var w=$('stage').clientWidth,px=distMm*Math.tan(a*Math.PI/180)*pxPerMm;
+ return eye==='R'?22+px:w-22-px}
+function next(){sweeping=false;cancelAnimationFrame(raf);ang=4;gone=null;
+ $('dot').style.left=dotPos(4)+'px';$('curDeg').textContent='—';
+ $('trialLbl').textContent=(trial+1)+'回目 / 3回';
+ show('bStart',1);show('bGone',0);show('bBack',0)}
+$('bStart').onclick=function(){show('bStart',0);show('bGone',1);show('miss',0);sweeping=true;last=performance.now();raf=requestAnimationFrame(tick)};
+function tick(t){if(!sweeping)return;var dt=(t-last)/1000;last=t;ang+=2.2*dt;
+ var m=maxAng();
+ if(ang>m){sweeping=false;if(gone===null){show('miss',1);next();return}else{finish(gone,m);return}}
+ $('dot').style.left=dotPos(ang)+'px';$('curDeg').textContent=ang.toFixed(1)+'度';
+ raf=requestAnimationFrame(tick)}
+$('bGone').onclick=function(){gone=ang;show('bGone',0);show('bBack',1)};
+$('bBack').onclick=function(){sweeping=false;finish(gone,ang)};
+function finish(g,r){cancelAnimationFrame(raf);data[eye].push({g:g,r:r});trial++;
+ if(trial>=3){if(eye==='R'){setEye('L')}else{result()}}else{next()}}
+$('bSkip').onclick=function(){cancelAnimationFrame(raf);if(eye==='R'){setEye('L')}else{result()}};
+function mean(a){return a.reduce(function(x,y){return x+y},0)/a.length}
+function result(){show('c3',0);show('c4',1);show('c5',1);fillUpd();
+ var h='',any=false;
+ ['R','L'].forEach(function(e){var d=data[e];if(!d.length)return;any=true;
+  var g=mean(d.map(function(x){return x.g})),r=mean(d.map(function(x){return x.r}));
+  var c=(g+r)/2,w=r-g;
+  h+='<div class="hl"><b>'+(e==='R'?'右目':'左目')+'</b>'
+   +'<table><tr><td>穴の中心</td><td><b>'+c.toFixed(1)+' 度</b></td></tr>'
+   +'<tr><td>穴の幅</td><td><b>'+w.toFixed(1)+' 度</b></td></tr></table>'
+   +'<p class="small">視線から外へ '+g.toFixed(1)+'度で消えはじめ、'+r.toFixed(1)+'度でまた見えました（'+d.length+'回の平均）。</p></div>'});
+ if(!any){$('res').innerHTML='<p>測定できたものがありませんでした。距離を短くしてやり直してください。</p>';return}
+ var all=[].concat(data.R,data.L);
+ var C=mean(all.map(function(x){return (x.g+x.r)/2})),W=mean(all.map(function(x){return x.r-x.g}));
+ h+='<h2 style="margin-top:16px">論文と並べる</h2><div class="bars">'
+  +'<p class="small">穴の中心の位置</p>'+bar('あなた',C,26)+bar('論文',15,26)
+  +'</div><div class="bars" style="margin-top:14px"><p class="small">穴の幅</p>'
+  +bar('あなた',W,12)+bar('論文',7.6,12)+'</div>'
+  +'<p class="note">論文（Li et al. 2014）の被験者の平均は、中心が耳側15度あたり、横幅7.6度。ひとりずつ違い、視神経乳頭の形で変わることも報告されています（Meyer et al. 1997）。ずれが大きいときは、距離のはかり方かカード合わせを疑ってください。</p>';
+ var diff=Math.abs(C-15);
+ h+='<div class="'+(diff<4?'ok':'warn')+'">'+(diff<4
+  ?'論文の値に近いところに出ました。手元の画面と定規だけで、目の中の穴の場所が測れています。'
+  :'論文の値から'+diff.toFixed(1)+'度ずれました。距離かカードの合わせがずれている可能性が高いです。もう一度、目と画面の距離を実際にはかってみてください。')+'</div>';
+ $('res').innerHTML=h}
+function bar(l,v,mx){return '<div class="b"><div class="f">'+l+'</div><div class="g"><i style="width:'+Math.min(100,v/mx*100)+'%"></i></div><div class="v">'+v.toFixed(1)+'度</div></div>'}
+function fillUpd(){var w=$('stage2').clientWidth;$('fix2').style.left='22px';
+ var a=4+(+$('fillR').value)/100*22;
+ $('dot2').style.left=Math.min(w-10,22+distMm*Math.tan(a*Math.PI/180)*pxPerMm)+'px';
+ $('fillDeg').textContent=a.toFixed(1)+'度'}
+$('fillR').oninput=fillUpd;
+window.addEventListener('resize',function(){layout();if(!$('c2').classList.contains('hide'))dUpd()});
+</script>
+</body>
+</html>

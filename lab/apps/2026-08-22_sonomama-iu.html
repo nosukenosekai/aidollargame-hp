@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>そのまま言う</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#555;border:1.5px solid #d8d5cc}
+.row{display:flex;gap:10px}
+.row .btn{flex:1}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px;font-size:16px}
+.call{background:#1a1a1a;color:#fff;border-radius:14px;padding:22px 18px;margin-bottom:14px;text-align:center}
+.call .num{font-size:26px;font-weight:700;letter-spacing:.06em}
+.call .sub{font-size:14px;color:#9a9a9a;margin-top:4px}
+.raw{background:#faf9f6;border-left:3px solid #d8d5cc;border-radius:0 10px 10px 0;padding:14px;font-size:16px;color:#333;margin-bottom:6px}
+.say{font-size:22px;font-weight:700;line-height:1.85;letter-spacing:.01em}
+.say em{font-style:normal;background:linear-gradient(transparent 62%,#dbeafe 62%)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{background:#fff;border:1.5px solid #d8d5cc;border-radius:999px;padding:9px 14px;font-size:15px;cursor:pointer;font-family:inherit;color:#1a1a1a}
+.chip.on{border-color:#2563eb;color:#2563eb;font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:16px}
+td{padding:10px 0;border-bottom:1px solid #eeece6;vertical-align:top}
+td:first-child{color:#6b6b6b;font-size:14px;width:88px}
+td:last-child{font-weight:600}
+tr:last-child td{border-bottom:0}
+.ok{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:16px;margin-top:12px}
+.dot{display:flex;gap:6px;margin-bottom:12px}
+.dot i{flex:1;height:4px;border-radius:2px;background:#e0ddd4}
+.dot i.on{background:#2563eb}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（サンプルデータ）</div>
+<h1>そのまま言う</h1>
+<p class="lead">運転代行の受注は、運転中の電話1本で決まります。聞き取ったことを、そのまま読み上げる一文にして返すだけの道具です。</p>
+
+<div id="app"></div>
+
+<div class="card" style="background:#faf9f6">
+<h2>なぜ復唱なのか</h2>
+<p>迎車先を1本間違えると、深夜に空車で20分走ります。メモを書く手も、画面を見る目も、運転中にはありません。<span class="mark">口で言って、耳で直す</span>形にだけ寄せています。</p>
+<p class="small" style="margin-top:10px">このデモの通話・店名・住所・氏名はすべて架空です。読み上げはお使いのブラウザの音声機能を使います（対応していない場合はボタンが出ません）。</p>
+</div>
+</div>
+
+<script>
+var CALLS = [
+ {
+  num:'090-****-1182', when:'23:41 着信',
+  raw:'あーもしもし、あのー今ね、西口の、鳥貴じゃなくてその隣の居酒屋、えーと「とり多楽」の前におるんですけど、車は白のセレナで、家は野方の方なんですわ。人は3人。',
+  slots:{
+    from:{label:'お迎え', val:'新宿駅西口・居酒屋「とり多楽」前', alts:['新宿駅西口・鳥貴族前','新宿駅東口・居酒屋「とり多楽」前','新宿区西新宿1丁目・交番前']},
+    car:{label:'お車', val:'白のセレナ', alts:['白のセレナ（ワンボックス）','シルバーのセレナ','白のヴォクシー']},
+    to:{label:'行き先', val:'中野区野方', alts:['中野区野方','中野区新井','練馬区野方町（該当なし）']},
+    people:{label:'ご乗車', val:'3名', alts:['2名','3名','4名']}
+  }
+ },
+ {
+  num:'080-****-4407', when:'00:12 着信',
+  raw:'すいません、代行おねがいします。場所は、高円寺の南口出てすぐの、ガード下の方の駐車場です。時計屋の裏っかわ。車はプリウスの黒。行き先は阿佐ケ谷の駅の近くまで。ふたりです。',
+  slots:{
+    from:{label:'お迎え', val:'高円寺駅南口・ガード下コインパーキング（時計店裏）', alts:['高円寺駅南口・ガード下コインパーキング（時計店裏）','高円寺駅北口・駅前ロータリー','高円寺駅南口・パル商店街入口']},
+    car:{label:'お車', val:'黒のプリウス', alts:['黒のプリウス','紺のプリウス','黒のアクア']},
+    to:{label:'行き先', val:'JR阿佐ケ谷駅周辺', alts:['JR阿佐ケ谷駅周辺','東京メトロ南阿佐ケ谷駅周辺','阿佐ケ谷北3丁目']},
+    people:{label:'ご乗車', val:'2名', alts:['1名','2名','3名']}
+  }
+ },
+ {
+  num:'070-****-9330', when:'01:26 着信',
+  raw:'あ、どうも。えー、社長がもう出るって言ってるんで。場所はいつものとこ、大久保通り沿いの、ほら、あのビルの1階のスナック。車は社用車のアルファードです。行きは、社長のご自宅で、練馬。あと私も一緒なんで、ええと2人。',
+  slots:{
+    from:{label:'お迎え', val:'大久保通り沿い・ヤマトビル1階スナック前', alts:['大久保通り沿い・ヤマトビル1階スナック前','大久保通り沿い・ヤマトビル裏口','職安通り沿い・同名店（別店舗）']},
+    car:{label:'お車', val:'社用車・黒のアルファード', alts:['社用車・黒のアルファード','社用車・白のアルファード','社長個人車・黒のクラウン']},
+    to:{label:'行き先', val:'練馬区（社長ご自宅／登録済み）', alts:['練馬区（社長ご自宅／登録済み）','練馬区（会社名義の寮）','板橋区（前回の行き先）']},
+    people:{label:'ご乗車', val:'2名', alts:['1名','2名','3名']}
+  }
+ }
+];
+
+var idx = 0, cur = null, step = 0;
+var app = document.getElementById('app');
+var KEYS = ['from','car','to','people'];
+
+function clone(c){
+  var s = {};
+  for (var k in c.slots) s[k] = {label:c.slots[k].label, val:c.slots[k].val, alts:c.slots[k].alts.slice()};
+  return {num:c.num, when:c.when, raw:c.raw, slots:s};
+}
+
+function dots(n){
+  var h = '<div class="dot">';
+  for (var i=0;i<3;i++) h += '<i class="'+(i<=n?'on':'')+'"></i>';
+  return h + '</div>';
+}
+
+function sentence(){
+  var s = cur.slots;
+  return '復唱します。お迎えは、<em>'+s.from.val+'</em>。お車は<em>'+s.car.val+'</em>。行き先は<em>'+s.to.val+'</em>。ご乗車<em>'+s.people.val+'</em>。以上でお間違いないですか。';
+}
+function plain(){
+  return sentence().replace(/<[^>]+>/g,'');
+}
+
+function screenCall(){
+  cur = clone(CALLS[idx]);
+  app.innerHTML =
+    dots(0) +
+    '<div class="call"><div class="num">'+cur.num+'</div><div class="sub">'+cur.when+'　運転中</div></div>'+
+    '<div class="card">'+
+    '<h2>聞き取り</h2>'+
+    '<div class="raw">'+cur.raw+'</div>'+
+    '<p class="small">走りながら聞いた、そのままの言葉です。</p>'+
+    '<div style="height:14px"></div>'+
+    '<button class="btn" id="mk">復唱をつくる</button>'+
+    '</div>'+
+    '<div class="row"><button class="btn gray" id="nx">別の電話を見る</button></div>';
+  document.getElementById('mk').onclick = screenSay;
+  document.getElementById('nx').onclick = function(){ idx = (idx+1) % CALLS.length; screenCall(); };
+}
+
+function screenSay(){
+  var canSpeak = ('speechSynthesis' in window);
+  app.innerHTML =
+    dots(1) +
+    '<div class="card">'+
+    '<p class="small">お客さまに、これをそのまま言ってください</p>'+
+    '<p class="say" style="margin-top:8px">'+ sentence() +'</p>'+
+    (canSpeak ? '<div style="height:14px"></div><button class="btn sub" id="sp">読み上げる</button>' : '')+
+    '</div>'+
+    '<div class="row">'+
+    '<button class="btn" id="yes">合ってる</button>'+
+    '<button class="btn gray" id="no">ちがう</button>'+
+    '</div>';
+  if (canSpeak){
+    document.getElementById('sp').onclick = function(){
+      try{
+        window.speechSynthesis.cancel();
+        var u = new SpeechSynthesisUtterance(plain());
+        u.lang = 'ja-JP'; u.rate = 0.95;
+        window.speechSynthesis.speak(u);
+      }catch(e){}
+    };
+  }
+  document.getElementById('yes').onclick = screenFix0;
+  document.getElementById('no').onclick = screenPick;
+}
+function screenFix0(){ screenDone(); }
+
+function screenPick(){
+  var h = dots(1) + '<div class="card"><h2>どこが違いましたか</h2><p class="small">1か所だけ押してください。ほかは聞き直しません。</p><div class="chips">';
+  for (var i=0;i<KEYS.length;i++){
+    var k = KEYS[i], s = cur.slots[k];
+    h += '<button class="chip" data-k="'+k+'">'+s.label+'：'+s.val+'</button>';
+  }
+  h += '</div></div><div class="row"><button class="btn gray" id="back">やっぱり合ってる</button></div>';
+  app.innerHTML = h;
+  var cs = app.querySelectorAll('.chip');
+  for (var j=0;j<cs.length;j++){
+    cs[j].onclick = function(){ screenAlt(this.getAttribute('data-k')); };
+  }
+  document.getElementById('back').onclick = screenSay;
+}
+
+function screenAlt(k){
+  var s = cur.slots[k];
+  var h = dots(2) + '<div class="card"><h2>'+s.label+'は、どれですか</h2><div class="chips">';
+  for (var i=0;i<s.alts.length;i++){
+    h += '<button class="chip'+(s.alts[i]===s.val?' on':'')+'" data-v="'+s.alts[i]+'">'+s.alts[i]+'</button>';
+  }
+  h += '</div><p class="small" style="margin-top:12px">近い名前の店・駅の出口・車種は、ここで潰しておきます。</p></div>';
+  app.innerHTML = h;
+  var cs = app.querySelectorAll('.chip');
+  for (var j=0;j<cs.length;j++){
+    cs[j].onclick = function(){
+      cur.slots[k].val = this.getAttribute('data-v');
+      screenSay();
+    };
+  }
+}
+
+function screenDone(){
+  var s = cur.slots;
+  app.innerHTML =
+    dots(2) +
+    '<div class="card">'+
+    '<h2>配車票ができました</h2>'+
+    '<table>'+
+    '<tr><td>お迎え</td><td>'+s.from.val+'</td></tr>'+
+    '<tr><td>お車</td><td>'+s.car.val+'</td></tr>'+
+    '<tr><td>行き先</td><td>'+s.to.val+'</td></tr>'+
+    '<tr><td>ご乗車</td><td>'+s.people.val+'</td></tr>'+
+    '<tr><td>受注</td><td>'+cur.when+'　'+cur.num+'</td></tr>'+
+    '</table>'+
+    '<div class="ok"><p class="small" style="margin-bottom:6px">随伴車のドライバーへ、この一行だけ送ります</p>'+
+    '<p style="font-size:17px;font-weight:600">'+s.from.val+' / '+s.car.val+' / '+s.people.val+' → '+s.to.val+'</p></div>'+
+    '<div class="hl">お客さまの耳で1回確認が通ったので、着いてから直すことがありません。</div>'+
+    '</div>'+
+    '<div class="row"><button class="btn sub" id="nx">次の電話</button></div>';
+  document.getElementById('nx').onclick = function(){ idx = (idx+1) % CALLS.length; screenCall(); };
+}
+
+screenCall();
+</script>
+</body>
+</html>

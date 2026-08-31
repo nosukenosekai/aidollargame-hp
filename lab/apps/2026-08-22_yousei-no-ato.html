@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>陽性のあと</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb;font-size:15px;padding:11px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.row .btn{flex:1;min-width:140px}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.big{font-size:46px;font-weight:700;letter-spacing:.01em}
+.unit{font-size:17px;font-weight:400;color:#6b6b6b}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px;font-size:16px}
+.src{font-size:13px;color:#6b6b6b;margin-top:16px}
+.src a{color:#2563eb;word-break:break-all}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td{padding:9px 0;border-bottom:1px solid #eeece6;vertical-align:top}
+td:last-child{text-align:right;white-space:nowrap;font-weight:600}
+tr:last-child td{border-bottom:0}
+input[type=range]{width:100%;margin:6px 0 2px;accent-color:#2563eb}
+.slab{display:flex;justify-content:space-between;font-size:15px;font-weight:600;margin-top:14px}
+.slab b{color:#2563eb}
+canvas{width:100%;max-width:330px;display:block;margin:6px auto 4px;image-rendering:pixelated}
+.leg{display:flex;gap:14px;justify-content:center;font-size:13px;color:#555;flex-wrap:wrap;margin-top:6px}
+.leg i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.guess{font-size:40px;font-weight:700;text-align:center;color:#2563eb}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">実験（先にあなたが答えます）</div>
+<h1>陽性のあと</h1>
+<p class="lead">検査で陽性が出ました。では、その人が本当に病気である確率は何パーセントでしょう。<br>まずあなたの答えを決めてから、1万人ぶんの点を見てください。</p>
+
+<div id="app"></div>
+
+<div class="src" id="src" style="display:none">
+出典：Gigerenzer, G. 「Helping Physicians Understand Screening Tests Will Improve Health Care」 Association for Psychological Science, Observer。2007年に産婦人科医160人に同じ問題（有病率1%・感度80%・偽陽性率9.6%）を出し、正答（約7.7%）を選べたのは21%。1時間の講義のあとは87%に上がった。<br>
+<a href="https://www.psychologicalscience.org/observer/helping-physicians-understand-screening-tests-will-improve-health-care">https://www.psychologicalscience.org/observer/helping-physicians-understand-screening-tests-will-improve-health-care</a><br>
+関連：Gigerenzer, G., Gaissmaier, W., Kurz-Milcke, E., Schwartz, L. M., &amp; Woloshin, S. (2007) <i>Helping Doctors and Patients Make Sense of Health Statistics.</i> Psychological Science in the Public Interest, 8(2), 53-96.<br>
+<a href="https://www.stat.berkeley.edu/~aldous/157/Papers/health_stats.pdf">https://www.stat.berkeley.edu/~aldous/157/Papers/health_stats.pdf</a><br><br>
+画面の人数と確率は、上の3つの数字からその場で計算しています（1万人あたり）。スライダーを動かした後の数字は、その設定での計算値であって、実際の検査の性能ではありません。
+</div>
+</div>
+
+<script>
+var P = {prev:1.0, sens:80, fpr:9.6};
+var guess = 30, answered = false;
+var app = document.getElementById('app');
+
+function calc(){
+  var n = 10000;
+  var sick = n * P.prev/100;
+  var tp = sick * P.sens/100;
+  var well = n - sick;
+  var fp = well * P.fpr/100;
+  var pos = tp + fp;
+  return {n:n, sick:sick, tp:tp, well:well, fp:fp, pos:pos, ppv: pos>0 ? tp/pos*100 : 0};
+}
+
+function ask(){
+  app.innerHTML =
+    '<div class="card">'+
+    '<h2>問題</h2>'+
+    '<table>'+
+    '<tr><td>この病気にかかっている人</td><td>100人に1人</td></tr>'+
+    '<tr><td>かかっている人が陽性と出る</td><td>80%</td></tr>'+
+    '<tr><td>かかっていない人も陽性と出る</td><td>9.6%</td></tr>'+
+    '</table>'+
+    '<p style="margin-top:14px;font-size:17px">陽性と出た人のうち、<span class="mark">本当にかかっているのは何%</span>だと思いますか。</p>'+
+    '<div class="guess" id="gv">30%</div>'+
+    '<input type="range" id="g" min="0" max="100" step="1" value="30">'+
+    '<div class="small" style="display:flex;justify-content:space-between"><span>0%</span><span>100%</span></div>'+
+    '<div style="height:16px"></div>'+
+    '<button class="btn" id="go">この答えで見る</button>'+
+    '<p class="small" style="margin-top:10px">計算しないで、思った数字で構いません。そこが見どころです。</p>'+
+    '</div>';
+  var g = document.getElementById('g');
+  g.oninput = function(){ guess = +g.value; document.getElementById('gv').textContent = guess + '%'; };
+  document.getElementById('go').onclick = function(){ answered = true; result(); };
+}
+
+function draw(){
+  var c = document.getElementById('cv');
+  if (!c) return;
+  var ctx = c.getContext('2d');
+  var r = calc();
+  var side = 100, cell = 6;
+  c.width = side*cell; c.height = side*cell;
+  ctx.fillStyle = '#f5f4f0'; ctx.fillRect(0,0,c.width,c.height);
+  var tp = Math.round(r.tp), fp = Math.round(r.fp);
+  for (var i=0;i<10000;i++){
+    var col;
+    if (i < tp) col = '#2563eb';
+    else if (i < tp+fp) col = '#f59e0b';
+    else col = '#ddd9d0';
+    var x = (i % side) * cell, y = Math.floor(i/side) * cell;
+    ctx.fillStyle = col;
+    ctx.fillRect(x, y, cell-1, cell-1);
+  }
+}
+
+function result(){
+  var r = calc();
+  app.innerHTML =
+    '<div class="card">'+
+    '<div class="small">陽性と出た人のうち、本当にかかっている人</div>'+
+    '<div class="big" id="ppv">'+ r.ppv.toFixed(1) +'<span class="unit">%</span></div>'+
+    '<p class="small" id="cmp"></p>'+
+    '<canvas id="cv"></canvas>'+
+    '<div class="leg">'+
+    '<span><i style="background:#2563eb"></i>陽性＋本当にかかっている</span>'+
+    '<span><i style="background:#f59e0b"></i>陽性だが元気</span>'+
+    '<span><i style="background:#ddd9d0"></i>陰性</span>'+
+    '</div>'+
+    '<table style="margin-top:12px" id="tbl"></table>'+
+    '</div>'+
+
+    '<div class="card">'+
+    '<h2>産婦人科医160人でも、正答は21%</h2>'+
+    '<p>同じ数字（100人に1人・感度80%・空振り9.6%）を出された産婦人科医160人のうち、正しい答えを選べたのは21%でした。いちばん多かった外れ方は「90%くらい」。<span class="mark">感度の数字を、そのまま的中率だと読んでしまう</span>ためです。</p>'+
+    '<div class="hl">陽性の中身は、検査の出来より「もともと何人いるか」で決まる。</div>'+
+    '</div>'+
+
+    '<div class="card">'+
+    '<h2>うちのアラートに置き換える</h2>'+
+    '<p class="small">不正検知、与信の警告、設備の異常検知、採用の適性検査。すべて同じ形です。3つを動かすと、上の数字と点が変わります。</p>'+
+    '<div class="slab"><span>もともと該当する割合</span><b id="l1"></b></div>'+
+    '<input type="range" id="s1" min="0.1" max="30" step="0.1">'+
+    '<div class="slab"><span>本物を拾える率（感度）</span><b id="l2"></b></div>'+
+    '<input type="range" id="s2" min="10" max="100" step="1">'+
+    '<div class="slab"><span>空振りで鳴る率（偽陽性）</span><b id="l3"></b></div>'+
+    '<input type="range" id="s3" min="0.1" max="30" step="0.1">'+
+    '<div style="height:14px"></div>'+
+    '<div class="row">'+
+    '<button class="btn sub" id="b1">感度を99%に上げる</button>'+
+    '<button class="btn sub" id="b2">空振りを2%に下げる</button>'+
+    '<button class="btn sub" id="b3">最初に戻す</button>'+
+    '</div>'+
+    '<div class="hl" id="advice"></div>'+
+    '</div>';
+
+  var s1=document.getElementById('s1'), s2=document.getElementById('s2'), s3=document.getElementById('s3');
+  s1.value=P.prev; s2.value=P.sens; s3.value=P.fpr;
+  function sync(){
+    P.prev=+s1.value; P.sens=+s2.value; P.fpr=+s3.value;
+    var r=calc();
+    document.getElementById('ppv').innerHTML = r.ppv.toFixed(1)+'<span class="unit">%</span>';
+    document.getElementById('l1').textContent = P.prev.toFixed(1)+'%';
+    document.getElementById('l2').textContent = P.sens+'%';
+    document.getElementById('l3').textContent = P.fpr.toFixed(1)+'%';
+    document.getElementById('tbl').innerHTML =
+      '<tr><td>1万人のうち、実際に該当する人</td><td>'+Math.round(r.sick).toLocaleString()+'人</td></tr>'+
+      '<tr><td>そのうち陽性と出る</td><td>'+Math.round(r.tp).toLocaleString()+'人</td></tr>'+
+      '<tr><td>元気なのに陽性と出る</td><td>'+Math.round(r.fp).toLocaleString()+'人</td></tr>'+
+      '<tr><td>陽性と出た人の合計</td><td>'+Math.round(r.pos).toLocaleString()+'人</td></tr>';
+    document.getElementById('cmp').textContent =
+      'あなたの答えは'+guess+'%でした。差は'+Math.abs(guess-r.ppv).toFixed(1)+'ポイントです。（最初の設定：100人に1人・感度80%・空振り9.6%のとき7.8%）';
+    // 感度をめいっぱい上げた場合と、空振りを半分にした場合の比較
+    var upSens = (P.prev/100*10000*1.0) / ((P.prev/100*10000*1.0) + ((10000-P.prev/100*10000)*P.fpr/100)) * 100;
+    var halfFp = (r.tp) / (r.tp + (10000-P.prev/100*10000)*(P.fpr/2)/100) * 100;
+    document.getElementById('advice').innerHTML =
+      'いまの的中率 '+r.ppv.toFixed(1)+'%。<br>'+
+      '感度を100%まで上げても → '+upSens.toFixed(1)+'%<br>'+
+      '空振りを半分（'+(P.fpr/2).toFixed(1)+'%）にすると → '+halfFp.toFixed(1)+'%<br>'+
+      '<span class="mark">見逃しを潰すより、空振りを半分にする方が効く。</span>';
+    draw();
+  }
+  s1.oninput=sync; s2.oninput=sync; s3.oninput=sync;
+  document.getElementById('b1').onclick=function(){ s2.value=99; sync(); };
+  document.getElementById('b2').onclick=function(){ s3.value=2; sync(); };
+  document.getElementById('b3').onclick=function(){ s1.value=1; s2.value=80; s3.value=9.6; sync(); };
+  sync();
+  document.getElementById('src').style.display='block';
+}
+
+ask();
+</script>
+</body>
+</html>

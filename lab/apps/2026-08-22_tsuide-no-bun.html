@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ついでの分</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.7;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:18px 16px 64px}
+.tag{display:inline-block;font-size:12px;color:#6b6b6b;border:1px solid #d8d5cc;border-radius:999px;padding:3px 10px;margin-bottom:14px}
+h1{font-size:27px;letter-spacing:.02em;margin-bottom:6px}
+h2{font-size:19px;margin-bottom:10px}
+.lead{font-size:17px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;border:1px solid #e8e5dd}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:17px;font-size:18px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.gray{background:#fff;color:#555;border:1.5px solid #d8d5cc;font-size:16px;padding:14px}
+.row{display:flex;gap:10px}
+.row .btn{flex:1}
+.small{font-size:14px;color:#6b6b6b}
+.mark{background:linear-gradient(transparent 62%,#fde68a 62%);font-weight:700}
+.hl{background:#eff4ff;border-radius:10px;padding:14px;margin-top:12px;font-size:16px}
+.chips{display:flex;flex-direction:column;gap:9px;margin-top:12px}
+.chip{background:#fff;border:1.5px solid #d8d5cc;border-radius:12px;padding:14px;font-size:17px;cursor:pointer;font-family:inherit;color:#1a1a1a;text-align:left;line-height:1.5}
+.chip b{display:block;font-size:14px;color:#6b6b6b;font-weight:400;margin-top:2px}
+.owner{background:#fff;border:2px solid #2563eb;border-radius:16px;padding:24px 20px;margin-bottom:14px}
+.owner .site{font-size:13px;color:#6b6b6b}
+.owner .what{font-size:25px;font-weight:700;line-height:1.5;margin:8px 0 16px}
+.money{font-size:40px;font-weight:700;color:#1a1a1a}
+.money .unit{font-size:17px;font-weight:400;color:#6b6b6b}
+table{width:100%;border-collapse:collapse;font-size:16px}
+td{padding:10px 0;border-bottom:1px solid #eeece6;vertical-align:top}
+td:first-child{color:#6b6b6b;font-size:14px;width:96px}
+td:last-child{text-align:right;font-weight:600}
+tr:last-child td{border-bottom:0}
+.stamp{background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:16px;margin-top:12px}
+.stamp.no{background:#faf9f6;border-color:#e0ddd4}
+.sum{font-size:15px;color:#444;background:#fff;border:1px solid #e8e5dd;border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.sum b{font-size:20px;color:#2563eb}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tag">デモ（サンプルデータ）</div>
+<h1>ついでの分</h1>
+<p class="lead">現場で「ついでにこれもお願い」と言われた、その場の10秒。<br>施主に見せる画面は、いつも1問だけです。入力欄はありません。</p>
+
+<div id="sum" class="sum"></div>
+<div id="app"></div>
+
+<div class="card" style="background:#faf9f6">
+<h2>断りにくい人のための道具</h2>
+<p>追加工事は、断るのが難しいから飲むのではありません。<span class="mark">その場で金額を言う手立てがない</span>から飲むことになります。金額と時間が先に画面に出ていれば、言わずに済みます。</p>
+<p class="small" style="margin-top:10px">単価・所要時間はこのデモ用の仮の数字です。実際は自社の単価表を入れて使います。現場名・氏名は架空です。</p>
+</div>
+</div>
+
+<script>
+var ITEMS = [
+ {name:'コンセントを1口ふやす', where:'2階 洋室（南側）', min:40, yen:11000, effect:'当日中に終わります'},
+ {name:'吊り棚を1段たす', where:'1階 キッチン', min:90, yen:24000, effect:'材料の取り寄せで、引き渡しが1日ずれます'},
+ {name:'壁の穴をふさぐ', where:'1階 廊下（エアコン跡）', min:60, yen:16000, effect:'当日中に終わります。塗り仕上げは翌日'},
+ {name:'物置の中も塗る', where:'外部 北側 物置', min:150, yen:38000, effect:'足場をもう1日残します（引き渡しが2日ずれます）'},
+ {name:'玄関扉の建て付けを直す', where:'1階 玄関', min:30, yen:8000, effect:'当日中に終わります'}
+];
+var log = [];
+var app = document.getElementById('app');
+var sumEl = document.getElementById('sum');
+
+function yen(n){ return n.toLocaleString(); }
+function now(){
+  var d = new Date();
+  var p = function(x){ return ('0'+x).slice(-2); };
+  return (d.getMonth()+1)+'月'+d.getDate()+'日 '+p(d.getHours())+':'+p(d.getMinutes());
+}
+
+function renderSum(){
+  var yes = 0, no = 0, total = 0, mins = 0;
+  for (var i=0;i<log.length;i++){
+    if (log[i].ok){ yes++; total += log[i].item.yen; mins += log[i].item.min; } else { no++; }
+  }
+  if (log.length === 0){
+    sumEl.innerHTML = '<span class="small">現場：新宿区北新宿・佐々木様邸　改修　／　本日の追加：まだありません</span>';
+  } else {
+    sumEl.innerHTML = '現場：新宿区北新宿・佐々木様邸　改修<br>本日の追加 <b>'+yes+'件</b>　合計 <b>'+yen(total)+'円</b>（'+Math.floor(mins/60)+'時間'+(mins%60)+'分）／ 見送り '+no+'件';
+  }
+}
+
+function pick(){
+  var h = '<div class="card"><h2>いま、言われたことは</h2><p class="small">職人が押します。ここだけが入力です。</p><div class="chips">';
+  for (var i=0;i<ITEMS.length;i++){
+    h += '<button class="chip" data-i="'+i+'">'+ITEMS[i].name+'<b>'+ITEMS[i].where+'</b></button>';
+  }
+  h += '</div></div>';
+  app.innerHTML = h;
+  var cs = app.querySelectorAll('.chip');
+  for (var j=0;j<cs.length;j++) cs[j].onclick = function(){ ask(+this.getAttribute('data-i')); };
+  renderSum();
+}
+
+function ask(i){
+  var it = ITEMS[i];
+  app.innerHTML =
+    '<p class="small" style="text-align:center;margin-bottom:8px">この画面を、施主にそのまま渡します</p>'+
+    '<div class="owner">'+
+    '<div class="site">新宿区北新宿・佐々木様邸　改修</div>'+
+    '<div class="what">'+it.name+'</div>'+
+    '<table>'+
+    '<tr><td>場所</td><td>'+it.where+'</td></tr>'+
+    '<tr><td>かかる時間</td><td>'+(it.min>=60 ? Math.floor(it.min/60)+'時間'+(it.min%60?it.min%60+'分':'') : it.min+'分')+'</td></tr>'+
+    '<tr><td>引き渡し</td><td style="font-weight:400;font-size:15px;text-align:left">'+it.effect+'</td></tr>'+
+    '</table>'+
+    '<div style="height:18px"></div>'+
+    '<div class="small">追加になる金額（税込）</div>'+
+    '<div class="money">'+yen(it.yen)+'<span class="unit">円</span></div>'+
+    '<div style="height:20px"></div>'+
+    '<button class="btn" id="y">お願いします</button>'+
+    '<div style="height:10px"></div>'+
+    '<button class="btn gray" id="n">今回はやめておく</button>'+
+    '</div>';
+  document.getElementById('y').onclick = function(){ done(it, true); };
+  document.getElementById('n').onclick = function(){ done(it, false); };
+}
+
+function done(it, ok){
+  log.push({item:it, ok:ok, at:now()});
+  renderSum();
+  app.innerHTML =
+    '<div class="card">'+
+    '<h2>'+(ok ? '承りました' : '見送りとして残しました')+'</h2>'+
+    '<div class="stamp'+(ok?'':' no')+'">'+
+    '<table>'+
+    '<tr><td>内容</td><td>'+it.name+'</td></tr>'+
+    '<tr><td>場所</td><td>'+it.where+'</td></tr>'+
+    '<tr><td>金額</td><td>'+(ok ? yen(it.yen)+'円' : '—（実施せず）')+'</td></tr>'+
+    '<tr><td>返事</td><td>'+(ok ? 'お願いします' : '今回はやめておく')+'</td></tr>'+
+    '<tr><td>日時</td><td>'+now()+'</td></tr>'+
+    '</table></div>'+
+    (ok
+      ? '<div class="hl">この1枚があるので、月末の請求で説明が要りません。<span class="mark">「聞いてない」が起きるのは、金額を口で言った時だけ</span>です。</div>'
+      : '<div class="hl">断られた分も残します。あとで「あの時やってくれると言った」が来たときに、出せるのはこちら側の記録だけです。</div>')+
+    '<div style="height:14px"></div>'+
+    '<button class="btn sub" id="b">現場に戻る</button>'+
+    '</div>';
+  document.getElementById('b').onclick = pick;
+}
+
+pick();
+</script>
+</body>
+</html>

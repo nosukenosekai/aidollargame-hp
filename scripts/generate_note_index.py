@@ -45,6 +45,7 @@ HP_COUNTERPART = {
     "n2406b93d2880": ("articles/ai-skill-gap-2026.html", "AIで差は縮むのか、広がるのか"),
     "nfcaf9c186d8e": ("articles/ai-interview-2026.html", "AIに面接をやらせたら内定が12%増えた"),
     "n37843927e437": ("articles/ai-jobs-payroll-2026.html", "AIで雇用は減っていない。ただし22〜25歳の入口だけがへこんでいる"),
+    "n8ede6e400fda": ("articles/ai-bousai-2026.html", "防災の日、AIで家の備えを30分で整える"),
 }
 
 # 絵文字・記号の装飾は自社サイト側では出さない(サイト全体の表記ルール)。

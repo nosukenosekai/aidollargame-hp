@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下穴ダイヤル</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+ul{margin:8px 0 0 18px;font-size:15px}li{margin-bottom:6px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:12px;font-family:inherit}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.sizes{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.sz{border:1.5px solid #d8d4cb;background:#fff;color:#1a1a1a;border-radius:9px;padding:8px 0;width:calc(25% - 6px);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+.sz.on{background:#2563eb;border-color:#2563eb;color:#fff}
+.dialbox{background:#f0eee8;border-radius:12px;padding:10px;margin-top:12px}
+.readout{display:flex;gap:10px;margin-top:12px}
+.ro{flex:1;background:#eaf1fe;border-radius:11px;padding:12px 8px;text-align:center}
+.ro .k{font-size:12px;color:#2563eb;font-weight:700}
+.ro .v{font-size:28px;font-weight:700;letter-spacing:-.02em}
+.ro .u{font-size:12px;color:#6b6b6b}
+.src{font-size:12px;color:#6b6b6b;margin-top:14px;word-break:break-all}
+.src a{color:#2563eb}.src div{margin-bottom:5px}
+.warn{background:#fdf6e3;border-radius:10px;padding:12px;font-size:14px;color:#5a4a1f;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th,td{text-align:left;padding:6px 3px;border-bottom:1px solid #eeece6}
+th{color:#6b6b6b;font-weight:600;font-size:12px}
+td.r,th.r{text-align:right}
+.printonly{display:none}
+@media print{
+  body{background:#fff;padding:0}
+  .noprint{display:none!important}
+  .printonly{display:block}
+  @page{size:A4;margin:8mm}
+}
+</style>
+</head>
+<body>
+<div class="wrap noprint">
+<div class="note">画面で回して確かめてから、紙に出して現場に置くための道具です。</div>
+<h1>下穴ダイヤル</h1>
+<p class="lead">ねじの呼び径を合わせると、ピッチと下穴径が窓に出る紙の早見盤。印刷して切って、中心を留めれば回ります。手が油まみれでも、壁に貼ってあれば読めます。</p>
+
+<div class="card">
+  <h2>回してみる</h2>
+  <div class="sizes" id="szs"></div>
+  <div class="dialbox"><div id="dial"></div></div>
+  <div class="readout">
+    <div class="ro"><div class="k">ピッチ</div><div class="v" id="rp">1.0</div><div class="u">mm（並目）</div></div>
+    <div class="ro"><div class="k">下穴径</div><div class="v" id="rt">5.0</div><div class="u">mm</div></div>
+  </div>
+  <p style="font-size:14px;color:#444;margin-top:12px" id="rdrill"></p>
+</div>
+
+<div class="card">
+  <h2>紙に出す</h2>
+  <p>A4に2枚の円盤が出ます。切って重ね、中心を画鋲か割ピンで留めてください。</p>
+  <ul>
+    <li>大きい方が下、小さい方が上</li>
+    <li>上の盤のとがった先を、外周のM表示に合わせる</li>
+    <li>窓にピッチと下穴径が出る</li>
+  </ul>
+  <div class="warn">印刷したら、紙にある20mmの円に1円玉を置いてください。ぴったりなら実寸で出ています。はみ出す・余るときは、印刷設定の「用紙に合わせる」を切って100%で刷り直してください。</div>
+  <button class="btn" onclick="window.print()">A4に印刷する</button>
+</div>
+
+<div class="card">
+  <h2>どう出している数字か</h2>
+  <p>ピッチはJIS B 0205-2のメートル並目ねじの値。下穴径は「呼び径 − ピッチ」で出しています。JIS B 1004の下穴径表の値と突き合わせると、次のように合います。</p>
+  <table>
+    <thead><tr><th>呼び</th><th class="r">呼び−ピッチ</th><th class="r">JIS B 1004の表</th></tr></thead>
+    <tbody>
+      <tr><td>M1</td><td class="r">0.75</td><td class="r">0.75</td></tr>
+      <tr><td>M3</td><td class="r">2.5</td><td class="r">2.52</td></tr>
+      <tr><td>M6</td><td class="r">5.0</td><td class="r">5.02</td></tr>
+      <tr><td>M10</td><td class="r">8.5</td><td class="r">8.50</td></tr>
+      <tr><td>M20</td><td class="r">17.5</td><td class="r">17.50</td></tr>
+    </tbody>
+  </table>
+  <div class="warn">この盤はいちばん普通に使う一本ぶんしか載せていません。JIS B 1004はひっかかり率ごとに複数の系列を決めていて、材質や要求で選ぶ値は変わります。図面や社内標準に指定があるときは、そちらが優先です。</div>
+</div>
+
+<div class="card">
+  <h2>ここから、仕事の話を一行だけ</h2>
+  <p>新人が先輩に聞けないのは、聞くのが怖いからだけではありません。手が塞がっているからです。壁に貼ってあれば、誰にも聞かずに済みます。</p>
+</div>
+
+<div class="card">
+  <h2>出典</h2>
+  <div class="src">
+    <div>メートル並目ねじのピッチ：JIS B 0205-2:2001 一般用メートルねじ 第2部 全体系<br><a href="https://kikakurui.com/b0/B0205-2-2001-01.html">https://kikakurui.com/b0/B0205-2-2001-01.html</a></div>
+    <div>ねじ下穴径の規格：JIS B 1004:2009 ねじ下穴径<br><a href="https://kikakurui.com/b1/B1004-2009-01.html">https://kikakurui.com/b1/B1004-2009-01.html</a></div>
+    <div>下穴径表の狙い値（M1 0.75 / M3 2.52 / M6 5.02 / M10 8.50 / M20 17.50）の突き合わせ元<br><a href="https://www.takayama-industry.com/technology/undertap/">https://www.takayama-industry.com/technology/undertap/</a></div>
+    <div>1円玉の直径20mm（印刷の実寸確認用）：造幣局<br><a href="https://www.mint.go.jp/operations/production/operations_coin_presently-minted.html">https://www.mint.go.jp/operations/production/operations_coin_presently-minted.html</a></div>
+  </div>
+</div>
+</div>
+
+<div class="printonly" id="sheet"></div>
+
+<script>
+var S=[{d:2,p:0.4},{d:2.5,p:0.45},{d:3,p:0.5},{d:4,p:0.7},{d:5,p:0.8},{d:6,p:1},{d:8,p:1.25},{d:10,p:1.5},{d:12,p:1.75},{d:14,p:2},{d:16,p:2},{d:18,p:2.5},{d:20,p:2.5}];
+S.forEach(function(s){s.t=Math.round((s.d-s.p)*100)/100;});
+var N=S.length,STEP=360/N,sel=5;
+function fmt(v){return (Math.round(v*100)/100).toString();}
+function pt(cx,cy,r,a){var t=(a-90)*Math.PI/180;return [cx+r*Math.cos(t),cy+r*Math.sin(t)];}
+function arc(cx,cy,r,a0,a1){var p0=pt(cx,cy,r,a0),p1=pt(cx,cy,r,a1);var big=(a1-a0)%360>180?1:0;return 'L'+p1[0].toFixed(2)+' '+p1[1].toFixed(2);}
+function sectorHole(cx,cy,r0,r1,a0,a1){
+  var A=pt(cx,cy,r1,a0),B=pt(cx,cy,r1,a1),C=pt(cx,cy,r0,a1),D=pt(cx,cy,r0,a0);
+  return 'M'+A[0].toFixed(2)+' '+A[1].toFixed(2)+
+    'A'+r1+' '+r1+' 0 0 1 '+B[0].toFixed(2)+' '+B[1].toFixed(2)+
+    'L'+C[0].toFixed(2)+' '+C[1].toFixed(2)+
+    'A'+r0+' '+r0+' 0 0 0 '+D[0].toFixed(2)+' '+D[1].toFixed(2)+'Z';
+}
+function bottomDisc(cx,cy,R,scale){
+  var g='',rNam=R*0.885,rVal=R*0.58,rVal2=R*0.44;
+  g+='<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="#ffffff" stroke="#1a1a1a" stroke-width="'+(0.4*scale)+'"/>';
+  g+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(R*0.755)+'" fill="none" stroke="#d8d4cb" stroke-width="'+(0.3*scale)+'"/>';
+  S.forEach(function(s,i){
+    var a=i*STEP, ae=a+STEP/2, as=a-STEP/2;
+    var p1=pt(cx,cy,R,as),p2=pt(cx,cy,R*0.755,as);
+    g+='<line x1="'+p1[0].toFixed(2)+'" y1="'+p1[1].toFixed(2)+'" x2="'+p2[0].toFixed(2)+'" y2="'+p2[1].toFixed(2)+'" stroke="#d8d4cb" stroke-width="'+(0.3*scale)+'"/>';
+    var n=pt(cx,cy,rNam,a);
+    g+='<text x="'+n[0].toFixed(2)+'" y="'+n[1].toFixed(2)+'" transform="rotate('+a+' '+n[0].toFixed(2)+' '+n[1].toFixed(2)+')" text-anchor="middle" dominant-baseline="central" font-size="'+(7*scale)+'" font-weight="700" fill="#1a1a1a" font-family="sans-serif">M'+fmt(s.d)+'</text>';
+    var v=pt(cx,cy,rVal,a);
+    g+='<text x="'+v[0].toFixed(2)+'" y="'+v[1].toFixed(2)+'" transform="rotate('+a+' '+v[0].toFixed(2)+' '+v[1].toFixed(2)+')" text-anchor="middle" dominant-baseline="central" font-size="'+(7.6*scale)+'" font-weight="700" fill="#2563eb" font-family="sans-serif">'+fmt(s.t)+'</text>';
+    var v2=pt(cx,cy,rVal2,a);
+    g+='<text x="'+v2[0].toFixed(2)+'" y="'+v2[1].toFixed(2)+'" transform="rotate('+a+' '+v2[0].toFixed(2)+' '+v2[1].toFixed(2)+')" text-anchor="middle" dominant-baseline="central" font-size="'+(4.2*scale)+'" fill="#6b6b6b" font-family="sans-serif">P'+fmt(s.p)+'</text>';
+  });
+  g+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(1.2*scale)+'" fill="none" stroke="#1a1a1a" stroke-width="'+(0.3*scale)+'"/>';
+  g+='<line x1="'+(cx-2.5*scale)+'" y1="'+cy+'" x2="'+(cx+2.5*scale)+'" y2="'+cy+'" stroke="#1a1a1a" stroke-width="'+(0.25*scale)+'"/>';
+  g+='<line x1="'+cx+'" y1="'+(cy-2.5*scale)+'" x2="'+cx+'" y2="'+(cy+2.5*scale)+'" stroke="#1a1a1a" stroke-width="'+(0.25*scale)+'"/>';
+  return g;
+}
+function topDisc(cx,cy,R,scale,rot){
+  var r0=R*0.52,r1=R*0.86,w=STEP*0.86;
+  var outer='M'+(cx-R)+' '+cy+'A'+R+' '+R+' 0 1 0 '+(cx+R)+' '+cy+'A'+R+' '+R+' 0 1 0 '+(cx-R)+' '+cy+'Z';
+  var hole=sectorHole(cx,cy,r0,r1,-w/2,w/2);
+  var g='<g transform="rotate('+rot+' '+cx+' '+cy+')" style="transition:transform .45s ease">';
+  g+='<path d="'+outer+' '+hole+'" fill="#f0eee8" fill-rule="evenodd" stroke="#1a1a1a" stroke-width="'+(0.4*scale)+'"/>';
+  var a=pt(cx,cy,R+3.2*scale,0),b=pt(cx,cy,R-1.2*scale,-3),c=pt(cx,cy,R-1.2*scale,3);
+  g+='<path d="M'+a[0].toFixed(2)+' '+a[1].toFixed(2)+'L'+b[0].toFixed(2)+' '+b[1].toFixed(2)+'L'+c[0].toFixed(2)+' '+c[1].toFixed(2)+'Z" fill="#2563eb"/>';
+  var lb=pt(cx,cy,R*0.93,0);
+  g+='<text x="'+lb[0].toFixed(2)+'" y="'+lb[1].toFixed(2)+'" text-anchor="middle" dominant-baseline="central" font-size="'+(3.4*scale)+'" fill="#2563eb" font-weight="700" font-family="sans-serif">ここに合わせる</text>';
+  var t1=pt(cx,cy,r1+2.4*scale,0);
+  g+='<text x="'+t1[0].toFixed(2)+'" y="'+t1[1].toFixed(2)+'" text-anchor="middle" dominant-baseline="central" font-size="'+(3.4*scale)+'" fill="#6b6b6b" font-family="sans-serif">下穴径 mm</text>';
+  var t2=pt(cx,cy,r0-2.4*scale,0);
+  g+='<text x="'+t2[0].toFixed(2)+'" y="'+t2[1].toFixed(2)+'" text-anchor="middle" dominant-baseline="central" font-size="'+(3.4*scale)+'" fill="#6b6b6b" font-family="sans-serif">ピッチ</text>';
+  g+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(1.2*scale)+'" fill="none" stroke="#1a1a1a" stroke-width="'+(0.3*scale)+'"/>';
+  g+='<line x1="'+(cx-2.5*scale)+'" y1="'+cy+'" x2="'+(cx+2.5*scale)+'" y2="'+cy+'" stroke="#1a1a1a" stroke-width="'+(0.25*scale)+'"/>';
+  g+='<line x1="'+cx+'" y1="'+(cy-2.5*scale)+'" x2="'+cx+'" y2="'+(cy+2.5*scale)+'" stroke="#1a1a1a" stroke-width="'+(0.25*scale)+'"/>';
+  g+='</g>';
+  return g;
+}
+function drawScreen(){
+  var R=60,cx=80,cy=80,sc=1.35;
+  var svg='<svg viewBox="0 0 160 160" width="100%" style="display:block" xmlns="http://www.w3.org/2000/svg">';
+  svg+=bottomDisc(cx,cy,R,sc);
+  svg+=topDisc(cx,cy,R*0.755,sc,sel*STEP);
+  svg+='</svg>';
+  document.getElementById('dial').innerHTML=svg;
+  var s=S[sel];
+  document.getElementById('rp').textContent=fmt(s.p);
+  document.getElementById('rt').textContent=fmt(s.t);
+  var near=Math.ceil(s.t*10)/10;
+  document.getElementById('rdrill').textContent=(near!==s.t)
+    ? 'ドリルは0.1mm刻みで揃っていることが多いので、'+fmt(s.t)+'mm ちょうどが無ければ '+fmt(near)+'mm を使うことになります。'
+    : 'この径はドリルの標準寸法にそのままあります。';
+  var bs=document.querySelectorAll('.sz');
+  for(var i=0;i<bs.length;i++)bs[i].className='sz'+(i===sel?' on':'');
+}
+function drawSheet(){
+  var W=194,H=281;
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'mm" height="'+H+'mm" xmlns="http://www.w3.org/2000/svg">';
+  svg+='<text x="'+(W/2)+'" y="7" text-anchor="middle" font-size="6" font-weight="700" font-family="sans-serif">下穴ダイヤル（メートル並目ねじ）</text>';
+  svg+='<text x="'+(W/2)+'" y="13" text-anchor="middle" font-size="3.2" fill="#6b6b6b" font-family="sans-serif">2枚とも切り抜いて重ね、中心の十字を画鋲か割ピンで留める。大きい方が下。</text>';
+  svg+='<circle cx="'+(W/2)+'" cy="90" r="75" fill="none" stroke="#b9b3a6" stroke-width="0.3" stroke-dasharray="2 1.5"/>';
+  svg+=bottomDisc(W/2,90,74,1);
+  svg+='<text x="'+(W/2)+'" y="176" text-anchor="middle" font-size="3.2" fill="#6b6b6b" font-family="sans-serif">下の盤（大きい方）</text>';
+  svg+='<circle cx="'+(W/2)+'" cy="228" r="57" fill="none" stroke="#b9b3a6" stroke-width="0.3" stroke-dasharray="2 1.5"/>';
+  svg+=topDisc(W/2,228,56,1,0);
+  svg+='<text x="'+(W/2)+'" y="290" text-anchor="middle" font-size="3.2" fill="#6b6b6b" font-family="sans-serif">上の盤（小さい方）。窓の部分も切り抜く。</text>';
+  svg+='<circle cx="18" cy="272" r="10" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>';
+  svg+='<text x="32" y="270" font-size="3" font-family="sans-serif">直径20mm。1円玉を置いて</text>';
+  svg+='<text x="32" y="274.5" font-size="3" font-family="sans-serif">ぴったりなら実寸で刷れています。</text>';
+  svg+='<text x="'+(W-2)+'" y="278" text-anchor="end" font-size="2.6" fill="#6b6b6b" font-family="sans-serif">下穴径＝呼び径−ピッチ / JIS B 0205-2・JIS B 1004 / aidollargame.com/lab/</text>';
+  svg+='</svg>';
+  document.getElementById('sheet').innerHTML=svg;
+}
+var h='';
+S.forEach(function(s,i){h+='<button class="sz" onclick="sel='+i+';drawScreen()">M'+fmt(s.d)+'</button>';});
+document.getElementById('szs').innerHTML=h;
+drawScreen();drawSheet();
+</script>
+</body>
+</html>

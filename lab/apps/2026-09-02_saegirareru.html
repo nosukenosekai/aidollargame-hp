@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>さえぎられる</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+ul{margin:8px 0 0 18px;font-size:15px}li{margin-bottom:6px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:16px;font-size:17px;font-weight:600;cursor:pointer;margin-top:12px;font-family:inherit}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.stop{background:#1a1a1a}
+.hide{display:none}
+.kicker{font-size:13px;color:#2563eb;font-weight:700;letter-spacing:.06em;margin-bottom:4px}
+.them{background:#f0eee8;border-radius:12px;padding:14px;font-size:16px;position:relative;margin-bottom:14px}
+.them .who{font-size:12px;color:#6b6b6b;margin-bottom:3px}
+.you{background:#eaf1fe;border-radius:12px;padding:16px;margin-bottom:6px}
+.you .who{font-size:12px;color:#2563eb;font-weight:700;margin-bottom:6px}
+.you .line{font-size:20px;font-weight:600;line-height:1.75;letter-spacing:.01em}
+.meta{font-size:12px;color:#6b6b6b;margin-top:8px}
+.timer{font-size:52px;font-weight:700;text-align:center;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin:6px 0}
+.tbar{height:8px;background:#e5e3dd;border-radius:4px;overflow:hidden;margin-bottom:6px}
+.tbar i{display:block;height:100%;background:#2563eb;width:0}
+.tbar.hot i{background:#c2410c}
+.cut{background:#fdecec;border-radius:12px;padding:14px;font-size:16px;color:#8a1f1f;margin-bottom:14px}
+.cut .who{font-size:12px;color:#8a1f1f;font-weight:700;margin-bottom:3px}
+.prog{font-size:13px;color:#6b6b6b;margin-bottom:10px}
+.big{font-size:34px;font-weight:700;letter-spacing:-.02em;margin:6px 0}
+.stats{display:flex;gap:10px;margin-top:12px}
+.st{flex:1;background:#f0eee8;border-radius:11px;padding:12px 8px;text-align:center}
+.st .k{font-size:12px;color:#6b6b6b}
+.st .v{font-size:26px;font-weight:700;letter-spacing:-.02em}
+.warn{background:#fdf6e3;border-radius:10px;padding:12px;font-size:14px;color:#5a4a1f;margin-top:12px}
+.log{font-size:14px;margin-top:8px}
+.log div{padding:7px 0;border-bottom:1px solid #eeece6;display:flex;gap:8px}
+.log .t{width:56px;flex:none;color:#6b6b6b;font-variant-numeric:tabular-nums}
+.src{font-size:12px;color:#6b6b6b;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。会社名・金額はすべて架空です。</div>
+<h1>さえぎられる</h1>
+<p class="lead">警備の単価を上げてもらう電話を、声に出して1本かけます。長くしゃべると、相手は最後まで聞いてくれません。</p>
+
+<div id="s0">
+  <div class="card">
+    <h2>設定</h2>
+    <ul>
+      <li>あなたは警備会社の営業所長</li>
+      <li>相手は常駐している商業施設の管理会社の担当者</li>
+      <li>用件は来期の警備単価の見直し</li>
+      <li>相手は忙しく、長い話は途中で切ります</li>
+    </ul>
+    <div class="warn">画面の台本は、黙読ではなく声に出して読んでください。読み終えたらボタンを押します。かかった秒数で相手の反応が変わります。</div>
+    <button class="btn" onclick="start()">電話をかける</button>
+  </div>
+  <div class="card">
+    <h2>この秒数の根拠について</h2>
+    <p class="src">人が相手の話を何秒で遮るかを実測した資料には、今回当たれませんでした。ここで使っている制限秒数は、こちらで決めた値です。1秒に5文字読める長さに1.5秒を足しています。ふつうに読めば間に合い、言い直したり足したりすると超えます。実測にもとづく基準ではありません。</p>
+  </div>
+</div>
+
+<div id="s1" class="hide">
+  <div class="card">
+    <div class="prog" id="pg"></div>
+    <div id="cut"></div>
+    <div class="them"><div class="who">相手</div><div id="tline"></div></div>
+    <div class="you">
+      <div class="who">あなたが言うこと</div>
+      <div class="line" id="yline"></div>
+      <div class="meta" id="ymeta"></div>
+    </div>
+    <div id="ready">
+      <button class="btn" onclick="go()">読み始める</button>
+    </div>
+    <div id="running" class="hide">
+      <div class="timer" id="tm">0.0</div>
+      <div class="tbar" id="tb"><i></i></div>
+      <button class="btn stop" onclick="done()">言い終えた</button>
+    </div>
+  </div>
+</div>
+
+<div id="s2" class="hide">
+  <div class="card">
+    <div class="kicker">通話終了</div>
+    <div class="big" id="endt"></div>
+    <p id="endd" style="font-size:15px;color:#444"></p>
+    <div class="stats">
+      <div class="st"><div class="k">しゃべった時間</div><div class="v" id="vsec"></div></div>
+      <div class="st"><div class="k">遮られた回数</div><div class="v" id="vcut"></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>通話の記録</h2>
+    <div class="log" id="log"></div>
+  </div>
+  <div class="card">
+    <h2>ここから、仕事の話を一行だけ</h2>
+    <p>値上げの電話で切られるのは、値上げだからではありません。一息で終わらない話だからです。理由は1つ、金額は幅、決めるのは会って。それ以上を電話に載せると、その場で持ち帰りになります。</p>
+    <button class="btn sub" onclick="location.reload()">もう一度かける</button>
+  </div>
+</div>
+</div>
+
+<script>
+var SC=[
+ {t:'はい、お世話になっております。どうされました。',
+  y:'来期の警備単価のご相談で、10分だけお時間いただけますか。'},
+ {t:'値上げってことですよね。うちも予算厳しいんですよ。',
+  y:'はい。最低賃金の改定で、夜勤の人件費が上がりました。理由はそこ一つです。'},
+ {t:'でも他の警備会社さんは、据え置きでやってるって聞きますけど。',
+  y:'よその話は分かりません。ただ、いまの単価だと夜勤の欠員が埋まりません。'},
+ {t:'いくら上がるんですか。',
+  y:'1時間あたり100円から150円の幅です。どこに落とすかは、会って決めさせてください。'},
+ {t:'私の一存では決められないんで、本社に上げますけど。',
+  y:'助かります。本社に出す紙はこちらで用意します。来週、伺ってよいですか。'}
+];
+var CUTLINE=[
+ 'すみません、ちょっと今バタバタしてまして。',
+ 'ああ、はいはい、それはもう聞きました。',
+ 'いや、そういう話じゃなくて。',
+ 'で、結局いくらなんですか。',
+ 'とりあえず、書面でもらえますか。'
+];
+var idx=0,gw=2,cuts=0,total=0,t0=0,tick=null,limit=0,log=[];
+function limitOf(s){return Math.round((s.length/5.0+1.5)*10)/10;}
+function start(){idx=0;gw=2;cuts=0;total=0;log=[];document.getElementById('s0').className='hide';document.getElementById('s1').className='';render();}
+function render(){
+  var s=SC[idx];
+  limit=limitOf(s.y);
+  document.getElementById('pg').textContent=(idx+1)+' / '+SC.length;
+  document.getElementById('tline').textContent=s.t;
+  document.getElementById('yline').textContent=s.y;
+  document.getElementById('ymeta').textContent=s.y.length+'文字。'+limit.toFixed(1)+'秒を超えると遮られます。';
+  document.getElementById('cut').innerHTML='';
+  document.getElementById('ready').className='';
+  document.getElementById('running').className='hide';
+  document.getElementById('tm').textContent='0.0';
+  document.getElementById('tb').className='tbar';
+  document.getElementById('tb').firstChild.style.width='0';
+  window.scrollTo(0,0);
+}
+function go(){
+  document.getElementById('ready').className='hide';
+  document.getElementById('running').className='';
+  t0=Date.now();
+  tick=setInterval(function(){
+    var e=(Date.now()-t0)/1000;
+    document.getElementById('tm').textContent=e.toFixed(1);
+    var w=Math.min(100,e/limit*100);
+    document.getElementById('tb').firstChild.style.width=w+'%';
+    document.getElementById('tb').className='tbar'+(e>limit?' hot':'');
+    if(e>limit+3.5){done(true);}
+  },100);
+}
+function done(auto){
+  clearInterval(tick);
+  var e=(Date.now()-t0)/1000;
+  total+=e;
+  var over=e>limit;
+  if(over){cuts++;gw--;}
+  log.push({n:idx+1,sec:e,over:over});
+  var next=function(){
+    idx++;
+    if(idx>=SC.length){finish();return;}
+    render();
+  };
+  if(over){
+    document.getElementById('running').className='hide';
+    document.getElementById('ready').className='';
+    document.getElementById('ready').innerHTML='<div class="cut"><div class="who">遮られました（'+e.toFixed(1)+'秒）</div>'+CUTLINE[idx]+'</div><button class="btn" onclick="cont()">続ける</button>';
+  }else{
+    document.getElementById('running').className='hide';
+    document.getElementById('ready').className='';
+    document.getElementById('ready').innerHTML='<p style="font-size:15px;color:#444">'+e.toFixed(1)+'秒。最後まで聞いてもらえました。</p><button class="btn" onclick="cont()">続ける</button>';
+  }
+  window._next=next;
+}
+function cont(){
+  document.getElementById('ready').innerHTML='<button class="btn" onclick="go()">読み始める</button>';
+  window._next();
+}
+function finish(){
+  document.getElementById('s1').className='hide';
+  document.getElementById('s2').className='';
+  var t,d;
+  if(gw>=2){t='来週の席が取れた';d='最後まで聞いてもらえました。単価そのものは決まっていませんが、決める場所が電話から打ち合わせに移りました。この電話でやれることは、ここまでです。';}
+  else if(gw===1){t='書面で、と言われた';d='途中で切られた回があります。相手はまだ話の中身に入っていません。書面は出せますが、金額の幅を紙で先に見せることになります。';}
+  else{t='持ち帰りにもならなかった';d='何度も遮られました。相手の頭には「長い電話だった」しか残っていません。次にかけると、出るまでの時間が長くなります。';}
+  document.getElementById('endt').textContent=t;
+  document.getElementById('endd').textContent=d;
+  document.getElementById('vsec').textContent=total.toFixed(1)+'秒';
+  document.getElementById('vcut').textContent=cuts+'回';
+  var h='';
+  log.forEach(function(l){
+    h+='<div><span class="t">'+l.sec.toFixed(1)+'秒</span><span>'+l.n+'つめ　'+(l.over?'遮られた':'最後まで聞かれた')+'</span></div>';
+  });
+  document.getElementById('log').innerHTML=h;
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>今日組めるか</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+.site{font-size:14px;color:#6b6b6b}
+.verdict{background:#fff;border-radius:14px;padding:26px 18px 20px;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:14px;text-align:center}
+.verdict .v{font-size:64px;font-weight:700;letter-spacing:-.04em;line-height:1.1;margin:6px 0 8px}
+.verdict .r{font-size:17px;color:#1a1a1a;font-weight:600}
+.verdict .r2{font-size:14px;color:#6b6b6b;margin-top:6px}
+.ok .v{color:#15803d}
+.part .v{color:#b45309}
+.no .v{color:#b91c1c}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.chart{margin-top:10px}
+.hrow{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.hrow .hh{width:34px;flex:none;font-size:12px;color:#6b6b6b;font-variant-numeric:tabular-nums;text-align:right}
+.hrow .hb{flex:1;height:15px;background:#f0eee8;border-radius:3px;position:relative}
+.hrow .hb i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:#8aa3c9}
+.hrow .hb i.over{background:#b91c1c}
+.hrow .hb .lim{position:absolute;top:-2px;bottom:-2px;width:2px;background:#1a1a1a;opacity:.55}
+.hrow .hv{width:44px;flex:none;font-size:12px;text-align:right;font-variant-numeric:tabular-nums;color:#444}
+.hrow.now .hh{color:#2563eb;font-weight:700}
+.hrow.now .hb{outline:2px solid #2563eb;outline-offset:1px}
+.legend{font-size:12px;color:#6b6b6b;margin-top:8px}
+.win{background:#eaf1fe;border-radius:11px;padding:13px;font-size:16px;font-weight:600;margin-top:12px}
+.win.none{background:#fdecec;color:#8a1f1f}
+.rows div{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-bottom:1px solid #eeece6}
+.rows div span:last-child{font-weight:700}
+.rows div.hit span:last-child{color:#b91c1c}
+.btn{display:block;width:100%;background:#fff;color:#2563eb;border:1.5px solid #2563eb;border-radius:12px;padding:14px;font-size:16px;font-weight:600;cursor:pointer;margin-top:12px;font-family:inherit}
+.law{font-size:14px;color:#444;background:#f0eee8;border-radius:10px;padding:13px;margin-top:10px}
+.warn{background:#fdf6e3;border-radius:10px;padding:12px;font-size:14px;color:#5a4a1f;margin-top:12px}
+.src{font-size:12px;color:#6b6b6b;margin-top:12px;word-break:break-all}
+.src a{color:#2563eb}.src div{margin-bottom:5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。現場名と気象の数値は架空です。実際の判断は、現場の実測と気象情報で行ってください。</div>
+
+<div class="verdict" id="vd">
+  <div class="site" id="sname"></div>
+  <div class="v" id="vv"></div>
+  <div class="r" id="vr"></div>
+  <div class="r2" id="vr2"></div>
+</div>
+
+<div class="card">
+  <h2>今日の風</h2>
+  <div class="chart" id="chart"></div>
+  <div class="legend">横棒は10分間平均風速（m/s）。縦の黒い線が10m/s。青枠がいまの時刻です。</div>
+  <div id="win"></div>
+</div>
+
+<div class="card">
+  <h2>ほかに見ているもの</h2>
+  <div class="rows" id="rows"></div>
+</div>
+
+<div class="card">
+  <h2>根拠</h2>
+  <div class="law">労働安全衛生規則 第564条<br>つり足場、張出し足場または高さ2m以上の足場の組立て・解体・変更の作業では、強風・大雨・大雪等の悪天候のため危険が予想されるときは、作業を中止しなければならない。</div>
+  <p style="margin-top:10px">通達で示されている悪天候の目安は、強風＝10分間の平均風速が毎秒10m以上、大雨＝1回の降雨量が50mm以上、大雪＝1回の降雪量が25cm以上です。実際にそうなった場合だけでなく、注意報等が出てそうなることが予想される場合も含まれます。</p>
+  <div class="warn">この画面は目安を並べているだけです。危険が予想されるかどうかを決めるのは事業者で、条文にあてはまらなくても中止すべき場面はあります。逆に、この画面が「組める」と出しても、現場で危ないと感じたら止めてください。</div>
+</div>
+
+<div class="card">
+  <button class="btn" onclick="nextSite()">別の現場を見る</button>
+</div>
+
+<div class="card">
+  <h2>出典</h2>
+  <div class="src">
+    <div>労働安全衛生規則 第564条〜第568条<br><a href="https://www.rodo.co.jp/laws/117222/">https://www.rodo.co.jp/laws/117222/</a></div>
+    <div>悪天候（強風10m/s以上・大雨50mm以上・大雪25cm以上）の定義と、作業を中止しなければならない作業の一覧：鳥取労働局「労働安全衛生法関係法令において、悪天候時、地震等の発生時及びその後において講じなければならない措置」<br><a href="https://jsite.mhlw.go.jp/tottori-roudoukyoku/content/contents/a_sa_sochi202396.pdf">https://jsite.mhlw.go.jp/tottori-roudoukyoku/content/contents/a_sa_sochi202396.pdf</a></div>
+    <div>高さ2m以上の箇所での作業についての第522条：富山労働局「悪天候時における労働災害防止対策の徹底について」<br><a href="https://jsite.mhlw.go.jp/toyama-roudoukyoku/library/toyama-roudoukyoku/topics/topics377/akutenkoutopics377-5.pdf">https://jsite.mhlw.go.jp/toyama-roudoukyoku/library/toyama-roudoukyoku/topics/topics377/akutenkoutopics377-5.pdf</a></div>
+  </div>
+</div>
+</div>
+
+<script>
+var SITES=[
+ {name:'第一現場（仮称）　外壁改修・枠組足場 4層',
+  wind:[3,3,2,2,3,4,4,5,5,6,7,9,11,13,14,13,12,11,9,7,6,5,4,4],
+  rain:12,snow:0},
+ {name:'第二現場（仮称）　倉庫増築・くさび式足場 3層',
+  wind:[2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,5,5,4,4,3,3,3,2,2],
+  rain:0,snow:0},
+ {name:'第三現場（仮称）　解体・張出し足場',
+  wind:[6,6,7,7,8,8,9,9,8,8,7,7,8,8,9,9,8,7,7,6,6,5,5,5],
+  rain:62,snow:0}
+];
+var LIMW=10,LIMR=50,LIMS=25,si=0;
+function work(h){return h>=6&&h<=17;}
+function draw(){
+  var s=SITES[si];
+  document.getElementById('sname').textContent=s.name;
+  var now=new Date().getHours();
+  var okh=[];
+  for(var h=6;h<=17;h++){if(s.wind[h]<LIMW)okh.push(h);}
+  var rainNG=s.rain>=LIMR,snowNG=s.snow>=LIMS;
+  var vd=document.getElementById('vd'),vv=document.getElementById('vv'),vr=document.getElementById('vr'),vr2=document.getElementById('vr2');
+  if(rainNG||snowNG||okh.length===0){
+    vd.className='verdict no';vv.textContent='やめる';
+    vr.textContent=rainNG?('降雨量 '+s.rain+'mm の予想。大雨の目安50mmを超えています。')
+      :snowNG?('降雪量 '+s.snow+'cm の予想。大雪の目安25cmを超えています。')
+      :'作業時間帯はずっと10m/s以上の予想です。';
+    vr2.textContent='安衛則564条の悪天候にあたります。組立て・解体・変更は中止。';
+  }else if(okh.length>=12){
+    vd.className='verdict ok';vv.textContent='組める';
+    vr.textContent='作業時間帯の最大風速は '+Math.max.apply(null,s.wind.slice(6,18))+'m/s の予想。';
+    vr2.textContent='10m/s に届きません。降雨も降雪も目安以下です。';
+  }else{
+    vd.className='verdict part';vv.textContent='時間を選ぶ';
+    vr.textContent='朝のうちだけです。昼から '+Math.max.apply(null,s.wind.slice(6,18))+'m/s まで上がる予想。';
+    vr2.textContent='10m/s を超える前に、上に人がいない状態にしてください。';
+  }
+  var c='';
+  for(var h=0;h<24;h++){
+    var w=s.wind[h],over=w>=LIMW;
+    var pct=Math.min(100,w/18*100),limpct=LIMW/18*100;
+    c+='<div class="hrow'+(h===now?' now':'')+'" style="opacity:'+(work(h)?1:.4)+'">'+
+       '<div class="hh">'+h+'時</div>'+
+       '<div class="hb"><i class="'+(over?'over':'')+'" style="width:'+pct+'%"></i><div class="lim" style="left:'+limpct+'%"></div></div>'+
+       '<div class="hv">'+w+'</div></div>';
+  }
+  document.getElementById('chart').innerHTML=c;
+  var wb=document.getElementById('win');
+  if(okh.length===0||rainNG||snowNG){
+    wb.className='win none';wb.textContent='今日、組める時間はありません。';
+  }else{
+    var runs=[],st=okh[0],pv=okh[0];
+    for(var i=1;i<okh.length;i++){if(okh[i]!==pv+1){runs.push([st,pv]);st=okh[i];}pv=okh[i];}
+    runs.push([st,pv]);
+    wb.className='win';
+    wb.textContent='組めるのは '+runs.map(function(r){return r[0]+':00 から '+(r[1]+1)+':00';}).join(' と ')+' のあいだ。';
+  }
+  var rw=[
+    {k:'10分間平均風速（作業時間帯の最大）',v:Math.max.apply(null,s.wind.slice(6,18))+' m/s',hit:Math.max.apply(null,s.wind.slice(6,18))>=LIMW,lim:'10m/s以上で中止'},
+    {k:'1回の降雨量',v:s.rain+' mm',hit:rainNG,lim:'50mm以上で中止'},
+    {k:'1回の降雪量',v:s.snow+' cm',hit:snowNG,lim:'25cm以上で中止'}
+  ];
+  document.getElementById('rows').innerHTML=rw.map(function(r){
+    return '<div class="'+(r.hit?'hit':'')+'"><span>'+r.k+'<br><span style="font-size:12px;color:#6b6b6b">'+r.lim+'</span></span><span>'+r.v+'</span></div>';
+  }).join('');
+}
+function nextSite(){si=(si+1)%SITES.length;draw();window.scrollTo(0,0);}
+draw();
+</script>
+</body>
+</html>

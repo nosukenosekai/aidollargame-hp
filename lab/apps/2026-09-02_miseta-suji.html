@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>見せた数字</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+ul{margin:8px 0 0 18px;font-size:15px}li{margin-bottom:6px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:12px;font-family:inherit}
+.btn:disabled{background:#c9c6be;cursor:default}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.half{display:inline-block;width:calc(50% - 5px)}
+.hide{display:none}
+.kicker{font-size:13px;color:#2563eb;font-weight:700;letter-spacing:.06em;margin-bottom:4px}
+.qbox{background:#eaf1fe;border-radius:12px;padding:16px;margin:12px 0}
+.qbox .qt{font-size:17px;font-weight:600;line-height:1.6}
+.anch{font-size:44px;font-weight:700;letter-spacing:-.03em;color:#2563eb;text-align:center;margin:6px 0}
+.sl{width:100%;margin:18px 0 4px;accent-color:#2563eb}
+.slv{font-size:44px;font-weight:700;text-align:center;letter-spacing:-.03em}
+.slr{display:flex;justify-content:space-between;font-size:12px;color:#6b6b6b}
+.hand{text-align:center;padding:26px 10px}
+.hand .h1{font-size:22px;font-weight:700;margin-bottom:8px}
+.hand .h2{font-size:15px;color:#444}
+.cnt{font-size:13px;color:#6b6b6b;margin-top:10px}
+.rowb{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:14px}
+.rowb .lb{width:96px;flex:none;color:#444}
+.rowb .tr{flex:1;height:24px;background:#efece6;border-radius:5px;position:relative}
+.rowb .tr i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.rowb .vv{width:44px;flex:none;text-align:right;font-weight:700}
+.src{font-size:12px;color:#6b6b6b;margin-top:14px;word-break:break-all}
+.src a{color:#2563eb}.src div{margin-bottom:5px}
+.warn{background:#fdf6e3;border-radius:10px;padding:12px;font-size:14px;color:#5a4a1f;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th,td{text-align:left;padding:7px 4px;border-bottom:1px solid #eeece6}
+th{color:#6b6b6b;font-weight:600;font-size:13px}
+td.r,th.r{text-align:right}
+.pill{display:inline-block;font-size:12px;padding:2px 8px;border-radius:9px;background:#eaf1fe;color:#2563eb;font-weight:700}
+.pill.b{background:#f0eee8;color:#6b6b6b}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">この画面はデモではありません。答えるのは、いまここにいる人たちです。</div>
+<h1>見せた数字</h1>
+<p class="lead">同じ質問を、3人以上に順番に答えてもらいます。ただし全員が同じものを見ているわけではありません。何が違ったかは、最後に出ます。</p>
+
+<div id="s0">
+  <div class="card">
+    <h2>やり方</h2>
+    <ul>
+      <li>この端末を、ひとりずつ順番に渡す</li>
+      <li>渡された人は2つ答えて、端末を返す</li>
+      <li>前の人の答えは表示されないので、見えても大丈夫</li>
+      <li>4人以上そろうと、答え合わせが押せる</li>
+    </ul>
+    <div class="warn">配る人（あなた）は、いま何が起きているかを最後まで言わないでください。言うと成立しません。</div>
+    <button class="btn" onclick="toHand()">1人目に渡す</button>
+  </div>
+</div>
+
+<div id="shand" class="hide">
+  <div class="card">
+    <div class="hand">
+      <div class="h1" id="handn">1人目のかたへ</div>
+      <div class="h2">この端末を受け取ったら、下を押してください。</div>
+    </div>
+    <button class="btn" onclick="toQ1()">受け取りました</button>
+  </div>
+</div>
+
+<div id="s1" class="hide">
+  <div class="card">
+    <div class="kicker">1つめ</div>
+    <div class="qbox">
+      <div class="qt">国連に加盟している国のうち、アフリカの国が占める割合は、</div>
+      <div class="anch" id="anv">10%</div>
+      <div class="qt" style="text-align:center">より多いですか、少ないですか。</div>
+    </div>
+    <button class="btn half" onclick="q1(1)">多い</button>
+    <button class="btn half sub" style="margin-left:8px" onclick="q1(0)">少ない</button>
+  </div>
+</div>
+
+<div id="s2" class="hide">
+  <div class="card">
+    <div class="kicker">2つめ</div>
+    <p style="font-size:17px;font-weight:600">では、実際には何%だと思いますか。</p>
+    <div class="slv" id="slv">30%</div>
+    <input class="sl" type="range" min="0" max="100" value="30" id="sl" oninput="document.getElementById('slv').textContent=this.value+'%'">
+    <div class="slr"><span>0%</span><span>100%</span></div>
+    <button class="btn" onclick="q2()">これで決定</button>
+  </div>
+</div>
+
+<div id="s3" class="hide">
+  <div class="card">
+    <div class="hand">
+      <div class="h1">ありがとうございました</div>
+      <div class="h2">端末を、配っている人に返してください。</div>
+    </div>
+  </div>
+  <div class="card">
+    <p class="cnt" id="cnt"></p>
+    <button class="btn" onclick="toHand()">次の人に渡す</button>
+    <button class="btn sub" id="fin" disabled onclick="finish()">答え合わせをする</button>
+  </div>
+</div>
+
+<div id="s4" class="hide">
+  <div class="card">
+    <div class="kicker">種明かし</div>
+    <h2 style="font-size:20px">見せた数字は、こちらが交互に配っていました</h2>
+    <p>ひとりおきに「10%より多いか少ないか」と「65%より多いか少ないか」を出していました。あとの質問は全員まったく同じです。</p>
+  </div>
+  <div class="card">
+    <h2>この場の結果</h2>
+    <div id="bars"></div>
+    <p style="font-size:14px;color:#444;margin-top:8px" id="gap"></p>
+  </div>
+  <div class="card">
+    <h2>1974年の実験</h2>
+    <p>同じ質問を、0から100の数字が出るルーレットのあとに聞いた実験があります。ルーレットは10か65でしか止まらないよう仕込まれていました。</p>
+    <table>
+      <thead><tr><th>見せた数字</th><th class="r">回答の中央値</th></tr></thead>
+      <tbody>
+        <tr><td>10</td><td class="r">25%</td></tr>
+        <tr><td>65</td><td class="r">45%</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:14px;color:#444;margin-top:10px">目の前で回した、明らかに無関係なルーレットの数字で、答えが20ポイント動いています。</p>
+  </div>
+  <div class="card">
+    <h2>本当の割合</h2>
+    <p>国連加盟国は193か国、うち国連のアフリカ・グループは54か国。<span class="pill">54 ÷ 193 = 28.0%</span></p>
+  </div>
+  <div class="card">
+    <h2>ぜんぶの回答</h2>
+    <table id="tbl"><thead><tr><th>順番</th><th>見せた数字</th><th class="r">答え</th></tr></thead><tbody></tbody></table>
+  </div>
+  <div class="card">
+    <h2>ここから、仕事の話を一行だけ</h2>
+    <p>見積書のいちばん上に書いた数字は、相手の頭のなかの相場になります。あとから理屈で下げても、そこからしか動きません。</p>
+    <button class="btn sub" onclick="location.reload()">最初からやる</button>
+  </div>
+  <div class="card">
+    <h2>出典</h2>
+    <div class="src">
+      <div>アンカリング（係留と調整）の原典：Tversky, A. &amp; Kahneman, D. (1974) "Judgment under Uncertainty: Heuristics and Biases", Science 185(4157). ルーレットが10のとき中央値25%、65のとき45%。<br><a href="https://www.simplypsychology.org/what-is-the-anchoring-bias.html">https://www.simplypsychology.org/what-is-the-anchoring-bias.html</a></div>
+      <div>国連加盟国193か国・アフリカ・グループ54か国（全加盟国の28%）：国連 Department for General Assembly and Conference Management「Regional groups of Member States」<br><a href="https://www.un.org/dgacm/en/content/regional-groups">https://www.un.org/dgacm/en/content/regional-groups</a></div>
+      <div>この画面の人数は数人です。原典は被験者を多数集めて中央値を比べています。数人で逆向きの結果が出ることは普通にあります。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+var ppl=[],cur=null,n=0;
+function toHand(){
+  n=ppl.length+1;cur={anchor:(n%2===1?10:65),n:n};
+  document.getElementById('handn').textContent=n+'人目のかたへ';
+  show('shand');
+}
+function toQ1(){document.getElementById('anv').textContent=cur.anchor+'%';show('s1');}
+function q1(v){cur.hl=v;document.getElementById('sl').value=30;document.getElementById('slv').textContent='30%';show('s2');}
+function q2(){
+  cur.est=parseInt(document.getElementById('sl').value,10);
+  ppl.push(cur);
+  document.getElementById('cnt').textContent='ここまで '+ppl.length+' 人。あと '+Math.max(0,4-ppl.length)+' 人で答え合わせができます。';
+  document.getElementById('fin').disabled=ppl.length<4;
+  show('s3');
+}
+function show(id){['s0','shand','s1','s2','s3','s4'].forEach(function(x){document.getElementById(x).className=(x===id?'':'hide');});window.scrollTo(0,0);}
+function med(a){if(!a.length)return null;var b=a.slice().sort(function(x,y){return x-y;});var m=Math.floor(b.length/2);return b.length%2?b[m]:Math.round((b[m-1]+b[m])*10/2)/10;}
+function finish(){
+  show('s4');
+  var lo=ppl.filter(function(p){return p.anchor===10;}).map(function(p){return p.est;});
+  var hi=ppl.filter(function(p){return p.anchor===65;}).map(function(p){return p.est;});
+  var ml=med(lo),mh=med(hi);
+  var rows=[
+    {l:'10を見た人',v:ml,c:'#8aa3c9',n:lo.length},
+    {l:'65を見た人',v:mh,c:'#2563eb',n:hi.length},
+    {l:'本当の割合',v:28.0,c:'#b9b3a6',n:null}
+  ];
+  var html='';
+  rows.forEach(function(r){
+    if(r.v===null){html+='<div class="rowb"><div class="lb">'+r.l+'</div><div class="tr"></div><div class="vv">—</div></div>';return;}
+    html+='<div class="rowb"><div class="lb">'+r.l+(r.n!==null?' <span class="pill b">'+r.n+'人</span>':'')+'</div><div class="tr"><i style="width:'+r.v+'%;background:'+r.c+'"></i></div><div class="vv">'+r.v+'%</div></div>';
+  });
+  document.getElementById('bars').innerHTML=html;
+  var g=document.getElementById('gap');
+  if(ml===null||mh===null){g.textContent='片方の組しか答えがありません。人数を増やしてください。';}
+  else{
+    var d=Math.round((mh-ml)*10)/10;
+    if(d>0){g.textContent='65を見た組のほうが '+d+' ポイント高く出ました。1974年の実験では20ポイントでした。';}
+    else if(d===0){g.textContent='2つの組の中央値は同じでした。人数が少ないと、こうなることもよくあります。';}
+    else{g.textContent='今回は10を見た組のほうが '+Math.abs(d)+' ポイント高く出ました。数人だと逆に出ることもあります。人数を増やすと、たいてい向きがそろいます。';}
+  }
+  var t='';
+  ppl.forEach(function(p){t+='<tr><td>'+p.n+'人目</td><td>'+p.anchor+'</td><td class="r">'+p.est+'%</td></tr>';});
+  document.querySelector('#tbl tbody').innerHTML=t;
+}
+</script>
+</body>
+</html>

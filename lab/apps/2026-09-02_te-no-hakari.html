@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>手のはかり</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+ul{margin:8px 0 0 18px;font-size:15px}
+li{margin-bottom:6px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:12px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+.cups{display:flex;gap:12px;margin:14px 0}
+.cup{flex:1;background:#f5f4f0;border-radius:12px;padding:14px 8px;text-align:center}
+.cup .nm{font-size:13px;color:#6b6b6b}
+.cup .n{font-size:30px;font-weight:700;letter-spacing:-.02em}
+.cup .u{font-size:13px;color:#6b6b6b}
+.cup.b{background:#eaf1fe}
+.prog{font-size:13px;color:#6b6b6b;margin-bottom:4px}
+.bar{height:5px;background:#e5e3dd;border-radius:3px;overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;background:#2563eb;border-radius:3px;transition:width .3s}
+.q{font-size:16px;font-weight:600;margin-top:14px}
+.step{font-size:14px;color:#444;margin-top:10px}
+.step b{display:inline-block;background:#2563eb;color:#fff;width:20px;height:20px;border-radius:10px;text-align:center;font-size:12px;line-height:20px;margin-right:6px;font-weight:700}
+.big{font-size:38px;font-weight:700;letter-spacing:-.02em;margin:6px 0}
+.rowb{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:14px}
+.rowb .lb{width:104px;flex:none;color:#444}
+.rowb .tr{flex:1;height:22px;background:#efece6;border-radius:5px;position:relative;overflow:hidden}
+.rowb .tr i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.rowb .vv{width:48px;flex:none;text-align:right;font-weight:700}
+.src{font-size:12px;color:#6b6b6b;margin-top:14px;word-break:break-all}
+.src a{color:#2563eb}
+.src div{margin-bottom:5px}
+.kicker{font-size:13px;color:#2563eb;font-weight:700;letter-spacing:.06em;margin-bottom:4px}
+.warn{background:#fdf6e3;border-radius:10px;padding:12px;font-size:14px;color:#5a4a1f;margin-top:12px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th,td{text-align:left;padding:7px 4px;border-bottom:1px solid #eeece6}
+th{color:#6b6b6b;font-weight:600;font-size:13px}
+td.r,th.r{text-align:right}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">自分の手で測ります。並べる数字の出典はいちばん下にあります。</div>
+<h1>手のはかり</h1>
+<p class="lead">1円玉を50枚。そこに何枚足したら、手で「重くなった」と分かるか。自分のウェーバー比を測って、教科書の値と並べます。</p>
+
+<div id="s0">
+  <div class="card">
+    <h2>用意するもの</h2>
+    <ul>
+      <li>同じ紙コップ、または同じ封筒を2つ</li>
+      <li>1円玉を60枚ほど（1枚ちょうど1.00g）</li>
+    </ul>
+    <p class="step"><b>1</b>片方のコップの底に、鉛筆で点をひとつ描く。これがA。</p>
+    <p class="step"><b>2</b>Aに1円玉を50枚入れる。</p>
+    <p class="step"><b>3</b>もう片方（B）に、画面が言う枚数を入れる。</p>
+    <p class="step"><b>4</b>2つを机の下で入れ替えて、どっちがどっちか分からなくする。</p>
+    <p class="step"><b>5</b>持ち比べて、重いと思った方の底を見る。点がなければBで、正解。</p>
+    <div class="warn">1円玉の量目は1.0gと決まっています（造幣局）。だから50枚はぴったり50g、1枚足すと2%増えます。</div>
+    <button class="btn" onclick="start()">はじめる</button>
+  </div>
+</div>
+
+<div id="s1" class="hide">
+  <div class="card">
+    <div class="prog" id="pg"></div>
+    <div class="bar"><i id="pb" style="width:0"></i></div>
+    <div class="cups">
+      <div class="cup"><div class="nm">A（底に点）</div><div class="n">50</div><div class="u">枚 / 50g</div></div>
+      <div class="cup b"><div class="nm">B</div><div class="n" id="nb">56</div><div class="u" id="ub">枚 / 56g</div></div>
+    </div>
+    <div id="mkrow" class="step"><b>1</b>Bを<span id="nb2">56</span>枚に作り直す。<span id="samecnt"></span></div>
+    <div class="step"><b>2</b>机の下で2つを入れ替えて、どっちか分からなくする。</div>
+    <div class="step"><b>3</b>片手ずつ持ち上げて、重い方を決める。</div>
+    <div class="q">重いと思った方の底に、点はありましたか。</div>
+    <button class="btn" onclick="ans(true)">点はなかった</button>
+    <button class="btn sub" onclick="ans(false)">点があった</button>
+    <p class="src" style="margin-top:16px">点がない方がBで、Bのほうが重い側です。当たったかどうかは、いま自動で記録しています。</p>
+  </div>
+</div>
+
+<div id="s2" class="hide">
+  <div class="card">
+    <div class="kicker">あなたの結果</div>
+    <div id="rhead"></div>
+    <div class="big" id="rbig"></div>
+    <p id="rsub" style="font-size:15px;color:#444"></p>
+  </div>
+  <div class="card">
+    <h2>並べてみる</h2>
+    <div id="bars"></div>
+    <p class="src" style="margin-top:12px">横棒は「基準の重さの何%ぶん足せば気づくか」。短いほど手が敏感ということです。</p>
+  </div>
+  <div class="card">
+    <h2>ぜんぶの記録</h2>
+    <table id="tbl"><thead><tr><th>足した枚数</th><th class="r">基準比</th><th class="r">2回の正解</th></tr></thead><tbody></tbody></table>
+    <div class="warn">50gは、この手の実験としては軽いほうです。ウェーバーの法則は極端に軽いところ・重いところでは崩れることが知られていて、軽い基準では比が大きめに出やすい。あなたの値が教科書より大きくても、それだけで鈍いとは言えません。</div>
+  </div>
+  <div class="card">
+    <h2>ここから、仕事の話を一行だけ</h2>
+    <p>原価が2%動いても、手では分かりません。勘で回している工程には秤を置く。それだけの話です。</p>
+    <button class="btn sub" onclick="location.reload()">もう一度やる</button>
+  </div>
+  <div class="card">
+    <h2>出典</h2>
+    <div class="src">
+      <div>1円玉の量目 1.0g・直径20mm：造幣局「現在製造している貨幣」<br><a href="https://www.mint.go.jp/operations/production/operations_coin_presently-minted.html">https://www.mint.go.jp/operations/production/operations_coin_presently-minted.html</a></div>
+      <div>持ち上げた重さの弁別閾（ウェーバー比）の教科書的な値 1/50＝2%、およびウェーバー本人が1830年代に得た約1/30＝3.3%：Just-noticeable difference の解説<br><a href="https://en.wikipedia.org/wiki/Just-noticeable_difference">https://en.wikipedia.org/wiki/Just-noticeable_difference</a> / <a href="https://www.cis.rit.edu/people/faculty/montag/vandplite/pages/chap_3/ch3p1.html">https://www.cis.rit.edu/people/faculty/montag/vandplite/pages/chap_3/ch3p1.html</a></div>
+      <div>この画面は12回ぶんの結果しか使いません。本来の心理物理実験は数百回の試行と統計処理をします。ここで出る値は、その簡略版です。</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+var KS=[6,5,4,3,2,1],PER=2;
+var seq=[],idx=0,rec={};
+function start(){
+  seq=[];KS.forEach(function(k){for(var i=0;i<PER;i++)seq.push(k);});
+  KS.forEach(function(k){rec[k]=[];});
+  idx=0;document.getElementById('s0').className='hide';document.getElementById('s1').className='';render();
+}
+function render(){
+  var k=seq[idx],n=50+k;
+  document.getElementById('nb').textContent=n;
+  document.getElementById('ub').textContent=n+' 枚 / '+n+'g';
+  document.getElementById('nb2').textContent=n;
+  var same=(idx>0&&seq[idx-1]===k);
+  document.getElementById('samecnt').textContent=same?'（前回と同じ枚数。作り直さなくて大丈夫）':'';
+  document.getElementById('pg').textContent=(idx+1)+' / '+seq.length+' 回目　差は '+k+'g（基準の '+(k*2)+'%）';
+  document.getElementById('pb').style.width=(idx/seq.length*100)+'%';
+}
+function ans(ok){
+  rec[seq[idx]].push(ok);idx++;
+  if(idx>=seq.length){finish();return;}
+  render();
+}
+function finish(){
+  document.getElementById('s1').className='hide';document.getElementById('s2').className='';
+  var th=null;
+  for(var i=KS.length-1;i>=0;i--){var k=KS[i];if(rec[k].filter(Boolean).length===PER){th=k;}else{break;}}
+  var mine=th?th*2:null;
+  var h=document.getElementById('rhead'),b=document.getElementById('rbig'),s=document.getElementById('rsub');
+  if(th===null){
+    h.innerHTML='<p style="font-size:15px;color:#444">いちばん大きい差（6g・12%）でも、2回そろって当てられませんでした。</p>';
+    b.textContent='12%でも不明';
+    s.textContent='コップの持ち方が毎回変わっていた、机が傾いていた、手が冷えていた。どれでも起こります。持ち方をそろえてもう一度やると、たいてい下がります。';
+  }else{
+    h.innerHTML='<p style="font-size:15px;color:#444">2回とも当てられた、いちばん小さい差は '+th+'g でした。50gに対して、</p>';
+    b.textContent=mine+'%';
+    s.textContent='これがあなたのウェーバー比です。50gのものが '+mine+'% 重くなると気づく、という意味になります。';
+  }
+  var rows=[{l:'あなた',v:mine,c:'#2563eb'},{l:'教科書の値',v:2,c:'#8aa3c9'},{l:'ウェーバー1830年代',v:3.3,c:'#b9b3a6'}];
+  var max=Math.max(4,mine||12);
+  var html='';
+  rows.forEach(function(r){
+    if(r.v===null){html+='<div class="rowb"><div class="lb">'+r.l+'</div><div class="tr"></div><div class="vv">—</div></div>';return;}
+    html+='<div class="rowb"><div class="lb">'+r.l+'</div><div class="tr"><i style="width:'+(r.v/max*100)+'%;background:'+r.c+'"></i></div><div class="vv">'+r.v+'%</div></div>';
+  });
+  document.getElementById('bars').innerHTML=html;
+  var tb=document.querySelector('#tbl tbody'),t='';
+  KS.forEach(function(k){
+    var c=rec[k].filter(Boolean).length;
+    t+='<tr><td>'+k+'枚（'+k+'g）</td><td class="r">'+(k*2)+'%</td><td class="r">'+c+' / '+PER+'</td></tr>';
+  });
+  tb.innerHTML=t;
+}
+</script>
+</body>
+</html>

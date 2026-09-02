@@ -181,16 +181,17 @@ function drawSheet(){
   var svg='<svg viewBox="0 0 '+W+' '+H+'" width="'+W+'mm" height="'+H+'mm" xmlns="http://www.w3.org/2000/svg">';
   svg+='<text x="'+(W/2)+'" y="7" text-anchor="middle" font-size="6" font-weight="700" font-family="sans-serif">下穴ダイヤル（メートル並目ねじ）</text>';
   svg+='<text x="'+(W/2)+'" y="13" text-anchor="middle" font-size="3.2" fill="#6b6b6b" font-family="sans-serif">2枚とも切り抜いて重ね、中心の十字を画鋲か割ピンで留める。大きい方が下。</text>';
-  svg+='<circle cx="'+(W/2)+'" cy="90" r="75" fill="none" stroke="#b9b3a6" stroke-width="0.3" stroke-dasharray="2 1.5"/>';
-  svg+=bottomDisc(W/2,90,74,1);
-  svg+='<text x="'+(W/2)+'" y="176" text-anchor="middle" font-size="3.2" fill="#6b6b6b" font-family="sans-serif">下の盤（大きい方）</text>';
-  svg+='<circle cx="'+(W/2)+'" cy="228" r="57" fill="none" stroke="#b9b3a6" stroke-width="0.3" stroke-dasharray="2 1.5"/>';
-  svg+=topDisc(W/2,228,56,1,0);
-  svg+='<text x="'+(W/2)+'" y="290" text-anchor="middle" font-size="3.2" fill="#6b6b6b" font-family="sans-serif">上の盤（小さい方）。窓の部分も切り抜く。</text>';
-  svg+='<circle cx="18" cy="272" r="10" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>';
-  svg+='<text x="32" y="270" font-size="3" font-family="sans-serif">直径20mm。1円玉を置いて</text>';
-  svg+='<text x="32" y="274.5" font-size="3" font-family="sans-serif">ぴったりなら実寸で刷れています。</text>';
-  svg+='<text x="'+(W-2)+'" y="278" text-anchor="end" font-size="2.6" fill="#6b6b6b" font-family="sans-serif">下穴径＝呼び径−ピッチ / JIS B 0205-2・JIS B 1004 / aidollargame.com/lab/</text>';
+  svg+='<text x="'+(W/2)+'" y="18" text-anchor="middle" font-size="2.6" fill="#6b6b6b" font-family="sans-serif">下穴径＝呼び径−ピッチ / ピッチはJIS B 0205-2、下穴径はJIS B 1004と照合 / aidollargame.com/lab/</text>';
+  var RB=68,CB=88,RT=RB*0.755,CT=218;
+  svg+='<circle cx="'+(W/2)+'" cy="'+CB+'" r="'+(RB+1)+'" fill="none" stroke="#b9b3a6" stroke-width="0.3" stroke-dasharray="2 1.5"/>';
+  svg+=bottomDisc(W/2,CB,RB,1);
+  svg+='<text x="'+(W/2)+'" y="161" text-anchor="middle" font-size="3.2" fill="#6b6b6b" font-family="sans-serif">下の盤（大きい方）</text>';
+  svg+='<circle cx="'+(W/2)+'" cy="'+CT+'" r="'+(RT+1)+'" fill="none" stroke="#b9b3a6" stroke-width="0.3" stroke-dasharray="2 1.5"/>';
+  svg+=topDisc(W/2,CT,RT,1,0);
+  svg+='<text x="'+(W/2)+'" y="275" text-anchor="middle" font-size="3.2" fill="#6b6b6b" font-family="sans-serif">上の盤（小さい方）。窓の部分も切り抜く。</text>';
+  svg+='<circle cx="18" cy="265" r="10" fill="none" stroke="#1a1a1a" stroke-width="0.3"/>';
+  svg+='<text x="32" y="263" font-size="3" font-family="sans-serif">直径20mm。1円玉を置いて</text>';
+  svg+='<text x="32" y="267.5" font-size="3" font-family="sans-serif">ぴったりなら実寸で刷れています。</text>';
   svg+='</svg>';
   document.getElementById('sheet').innerHTML=svg;
 }

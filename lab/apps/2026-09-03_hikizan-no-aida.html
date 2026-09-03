@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>引き算のあいだ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+ul{margin:8px 0 0 18px;font-size:15px}
+li{margin-bottom:6px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:12px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.ng{background:#fff;color:#8a3a3a;border:1.5px solid #d8b4b4}
+.hide{display:none}
+.step{font-size:14px;color:#444;margin-top:10px}
+.step b{display:inline-block;background:#2563eb;color:#fff;width:20px;height:20px;border-radius:10px;text-align:center;font-size:12px;line-height:20px;margin-right:6px;font-weight:700}
+.prog{font-size:13px;color:#6b6b6b;margin-bottom:4px}
+.bar{height:5px;background:#e5e3dd;border-radius:3px;overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;background:#2563eb;border-radius:3px;transition:width .3s}
+.stage{background:#fff;border-radius:14px;padding:26px 16px;text-align:center;min-height:262px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.tri{font-size:64px;font-weight:700;letter-spacing:.16em;font-variant-numeric:tabular-nums}
+.num{font-size:56px;font-weight:700;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.sub{font-size:15px;color:#6b6b6b;margin-top:8px}
+.tick{display:flex;gap:9px;justify-content:center;margin-top:18px}
+.tick i{width:13px;height:13px;border-radius:7px;background:#e0ddd6}
+.tick i.on{background:#2563eb}
+.signal{width:96px;height:96px;border-radius:50px;background:#c0392b;margin:0 auto 12px}
+.say{font-size:22px;font-weight:700}
+.big{font-size:38px;font-weight:700;letter-spacing:-.02em;margin:6px 0}
+.rowb{display:flex;align-items:center;gap:10px;margin-bottom:11px;font-size:14px}
+.rowb .lb{width:70px;flex:none;color:#444}
+.rowb .tr{flex:1;height:24px;background:#efece6;border-radius:5px;position:relative;overflow:hidden}
+.rowb .tr i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.rowb .tr i.me{background:#2563eb}
+.rowb .tr i.pp{background:#b9b3a6}
+.rowb .vv{width:46px;flex:none;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.lgd{font-size:13px;color:#6b6b6b;margin-bottom:10px}
+.lgd span{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th,td{text-align:left;padding:7px 4px;border-bottom:1px solid #eeece6}
+th{color:#6b6b6b;font-weight:600;font-size:13px}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+.src{font-size:12px;color:#6b6b6b;margin-top:14px;word-break:break-all}
+.src a{color:#2563eb}
+.src div{margin-bottom:6px}
+.kicker{font-size:13px;color:#2563eb;font-weight:700;letter-spacing:.06em;margin-bottom:4px}
+.warn{background:#fdf6e3;border-radius:10px;padding:12px;font-size:14px;color:#5a4a1f;margin-top:12px}
+.hl{background:linear-gradient(transparent 62%,#ffe9a8 62%);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">自分で測ります。並べる数字は1959年の原論文の実測値です。出典はいちばん下。</div>
+<h1>引き算のあいだ</h1>
+<p class="lead">3つの文字を見たあと、数字を声に出して引き算する。18秒たってから思い出そうとすると、たいてい出てこない。自分の残り方を、原典の .60 / .25 / .14 と並べます。</p>
+
+<div id="s0">
+  <div class="card">
+    <h2>やること</h2>
+    <p class="step"><b>1</b>3文字が2秒だけ出る。覚える。</p>
+    <p class="step"><b>2</b>すぐ3桁の数字が出る。<b style="background:none;color:#1a1a1a;width:auto;font-weight:700;margin:0">声に出して</b>そこから引き続ける。点が2回ついたら1つ引く。</p>
+    <p class="step"><b>3</b>赤い丸が出たら引き算をやめ、<b style="background:none;color:#1a1a1a;width:auto;font-weight:700;margin:0">3文字を声に出して言う</b>。</p>
+    <p class="step"><b>4</b>言ってから画面を押す。答えが出るので、合っていたかを自分で押す。</p>
+    <div class="warn">声を出さないと成立しません。頭の中で唱えると、それが復唱になって文字が残ってしまい、この実験の形になりません。まわりに人がいない場所でどうぞ。</div>
+    <p class="step" style="margin-top:14px">全12回。3秒・9秒・18秒が4回ずつ、順番はばらばらに出ます。7分ほど。</p>
+    <button class="btn" onclick="start()">はじめる</button>
+    <button class="btn sub" onclick="show('sX')">先に、これが何の実験か読む</button>
+  </div>
+</div>
+
+<div id="sX" class="hide">
+  <div class="card">
+    <div class="kicker">1959年</div>
+    <h2>18秒でなくなる、と言われた実験</h2>
+    <p>インディアナ大学のロイド・ピーターソンとマーガレット・ジーン・ピーターソンが、意味のない子音3文字を1回だけ聞かせ、3〜18秒後に思い出させました。ただし、あいだに3桁の数字から3ずつ（または4ずつ）引き算させて、頭の中で復唱できないようにしています。</p>
+    <p style="margin-top:10px">実験1は24人。各人が3・6・9・12・15・18秒のそれぞれで8回ずつ。原論文には、試行を4ブロックに分けたときの正答率が数字で載っています。3秒と6秒をまとめたブロックが .57 → .66 → .70 → .74、15秒と18秒をまとめたブロックが .08 → .15 → .09 → .12。<span class="hl">短い側は6割から7割、長い側は1割前後</span>で、練習しても長い側は上がっていません。</p>
+    <p style="margin-top:10px">実験2（48人）の表1には、復唱の時間を0秒・1秒・3秒と変えた条件別の正答率があります。この画面が並べるのは、そのうち「声に出す群・復唱0秒」の行です。3秒 .60、9秒 .25、18秒 .14。</p>
+    <button class="btn" onclick="start()">はじめる</button>
+  </div>
+</div>
+
+<div id="s1" class="hide">
+  <div class="prog" id="pg">1 / 12</div>
+  <div class="bar"><i id="pb" style="width:0"></i></div>
+  <div class="stage" id="stage"></div>
+  <div id="ans" class="hide">
+    <button class="btn" onclick="grade(1)">合っていた</button>
+    <button class="btn ng" onclick="grade(0)">違っていた／出てこなかった</button>
+  </div>
+  <p class="note" style="margin-top:12px">思い出せなかったときは「違っていた」。ここを甘くすると、自分の数字が意味を持たなくなります。</p>
+</div>
+
+<div id="s2" class="hide">
+  <div class="card">
+    <div class="kicker">あなたの結果</div>
+    <h2 id="hd">残り方</h2>
+    <div class="lgd"><span style="background:#2563eb"></span>あなた（各4回）　<span style="background:#b9b3a6"></span>原典 実験2・声に出す群・復唱0秒</div>
+    <div id="bars"></div>
+    <p style="margin-top:14px;font-size:15px" id="verdict"></p>
+    <div class="warn" id="lat"></div>
+  </div>
+
+  <div class="card">
+    <h2>原典の数字</h2>
+    <p style="font-size:14px;color:#444">Peterson &amp; Peterson (1959) 実験2・表1。48人。「声に出す群」は、文字を聞いたあと引き算が始まるまでのあいだ、指示どおり声に出して復唱した人たち。</p>
+    <table>
+      <tr><th>復唱の時間</th><th class="r">3秒後</th><th class="r">9秒後</th><th class="r">18秒後</th></tr>
+      <tr><td>3秒</td><td class="r">.80</td><td class="r">.48</td><td class="r">.34</td></tr>
+      <tr><td>1秒</td><td class="r">.68</td><td class="r">.34</td><td class="r">.21</td></tr>
+      <tr><td>0秒（この画面）</td><td class="r">.60</td><td class="r">.25</td><td class="r">.14</td></tr>
+    </table>
+    <p style="margin-top:12px;font-size:14px;color:#444">3秒だけ口に出して繰り返せた人は、18秒後でも .34 残っています。復唱0秒の .14 との差が、この実験がいちばん言いたかったところです。</p>
+  </div>
+
+  <div class="card">
+    <h2>この画面と原典で違うところ</h2>
+    <ul style="font-size:14px;color:#444">
+      <li>原典は実験者が声で文字を読み上げます。この画面は文字を2秒表示します。</li>
+      <li>原典はメトロノームが毎秒2回鳴り、被験者もその速さに合わせて数えます。この画面は点の明滅で同じ速さを出しています。</li>
+      <li>正解・不正解を自分で押しています。原典は実験者が別室で判定しています。</li>
+      <li>あなたは12回、原典は1人あたり48回（実験1）です。4回ぶんの正答率は .00 / .25 / .50 / .75 / 1.00 の5段階しか取れません。ぴったり一致しなくて当たり前です。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="kicker">現場に置きかえると</div>
+    <p style="font-size:16px">電話口で聞いた番号や部屋番号を、そのまま書かずに一つでも別の作業をはさむと、18秒で消える。口頭で伝えた指示を「復唱させる」のは礼儀ではなく、<span class="hl">.14 を .34 に上げる作業</span>です。</p>
+    <p style="margin-top:10px;font-size:14px;color:#444">3秒の復唱でここまで変わる、という実測値が原典の表1に載っています。</p>
+  </div>
+
+  <div class="card">
+    <h2>もう一度</h2>
+    <p style="font-size:14px;color:#444">2回目は文字も数字も変わります。同じ人が2回やると、たいてい少し上がります。原典の実験1でも、ブロックが進むほど短い側が .57 から .74 へ上がっています。</p>
+    <button class="btn" onclick="location.reload()">もう一度やる</button>
+  </div>
+
+  <div class="card src">
+    <div><b>出典</b></div>
+    <div>Peterson, L. R., &amp; Peterson, M. J. (1959). Short-term retention of individual verbal items. Journal of Experimental Psychology, 58(3), 193–198. 実験1の被験者24人・回収間隔3〜18秒・メトロノーム毎秒2回、実験2の表1（.60 / .25 / .14 ほか）、実験1のブロック別正答率（.57 .66 .70 .74 ／ .08 .15 .09 .12）は、いずれもこの論文本文から取りました。<br>本文PDF: https://labs.la.utexas.edu/gilden/files/2016/03/1545ca4cdad4f480f2fab8fd505a5b7f7603.pdf<br>書誌: https://pubmed.ncbi.nlm.nih.gov/14432252/</div>
+    <div>この画面が出す数字はすべて、あなたの12回の判定から計算しています。事前に用意した値はありません。</div>
+  </div>
+</div>
+</div>
+
+<script>
+var CONS="BCDFGHJKLMNPQRSTVWXYZ".split("");
+var BAD={"CIA":1,"FBI":1,"BBC":1,"NHK":1,"JFK":1,"DVD":1,"CD":1,"TV":1,"PDF":1,"HTML":1,"JR":1,"NTT":1,"KDDI":1,"USB":1,"GPS":1,"PTA":1,"WWW":1,"XYZ":1,"ABC":1};
+var trials=[],idx=0,timers=[],t0=0;
+
+function show(id){["s0","sX","s1","s2"].forEach(function(x){document.getElementById(x).classList.add("hide")});document.getElementById(id).classList.remove("hide");window.scrollTo(0,0)}
+
+function mkTri(){
+  for(var k=0;k<200;k++){
+    var a=[],pool=CONS.slice();
+    for(var i=0;i<3;i++){a.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0])}
+    var s=a.join("");
+    if(!BAD[s]) return s;
+  }
+  return "QJZ";
+}
+function build(){
+  var used={},out=[];
+  // 3・9・18秒を1ブロック3回として4ブロック。ブロック内の順はばらばら。
+  for(var b=0;b<4;b++){
+    var blk=[3,9,18];
+    for(var i=blk.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=blk[i];blk[i]=blk[j];blk[j]=t}
+    for(var m=0;m<blk.length;m++){
+      var tri;do{tri=mkTri()}while(used[tri]);used[tri]=1;
+      out.push({sec:blk[m],tri:tri,num:100+Math.floor(Math.random()*900),step:(out.length%2===0?3:4),ok:null,lat:null});
+    }
+  }
+  // 引き算の3と4は半々。順番だけ混ぜる。
+  for(var i=out.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var s=out[i].step;out[i].step=out[j].step;out[j].step=s}
+  return out;
+}
+function clearT(){timers.forEach(clearTimeout);timers.forEach(clearInterval);timers=[]}
+function start(){trials=build();idx=0;show("s1");runTrial()}
+
+function runTrial(){
+  clearT();
+  var t=trials[idx],st=document.getElementById("stage"),ans=document.getElementById("ans");
+  ans.classList.add("hide");
+  document.getElementById("pg").textContent=(idx+1)+" / 12";
+  document.getElementById("pb").style.width=(idx/12*100)+"%";
+  st.innerHTML='<div class="sub">よく見て覚える</div><div class="tri">'+t.tri+'</div>';
+  timers.push(setTimeout(function(){countPhase(t)},2000));
+}
+
+function countPhase(t){
+  var st=document.getElementById("stage");
+  st.innerHTML='<div class="sub">この数から '+t.step+' ずつ引く。声に出す。</div>'
+    +'<div class="num" id="nm">'+t.num+'</div>'
+    +'<div class="sub">点が2つついたら1つ引く</div>'
+    +'<div class="tick"><i id="k0"></i><i id="k1"></i></div>';
+  var beat=0;
+  var iv=setInterval(function(){
+    document.getElementById("k0").className=(beat%2===0)?"on":"";
+    document.getElementById("k1").className=(beat%2===1)?"on":"";
+    beat++;
+  },500);
+  timers.push(iv);
+  timers.push(setTimeout(function(){clearInterval(iv);signalPhase(t)},t.sec*1000));
+}
+
+function signalPhase(t){
+  var st=document.getElementById("stage");
+  st.innerHTML='<div class="signal"></div><div class="say">3文字を声に出して言う</div><div class="sub">言ってから下を押す</div>';
+  t0=Date.now();
+  revealed=false;
+  var b=document.createElement("button");
+  b.className="btn";b.textContent="言った。答えを見る";b.onclick=reveal;
+  st.appendChild(b);
+}
+
+var revealed=false;
+function reveal(){
+  if(revealed)return;
+  revealed=true;
+  var t=trials[idx],st=document.getElementById("stage");
+  t.lat=(Date.now()-t0)/1000;
+  st.innerHTML='<div class="sub">正解は</div><div class="tri">'+t.tri+'</div><div class="sub">'+t.sec+'秒あけました</div>';
+  document.getElementById("ans").classList.remove("hide");
+}
+
+function grade(ok){
+  trials[idx].ok=ok;
+  idx++;
+  if(idx>=trials.length){finish()}else{runTrial()}
+}
+
+function finish(){
+  clearT();
+  var secs=[3,9,18],PP={3:.60,9:.25,18:.14},mine={},html="";
+  secs.forEach(function(s){
+    var g=trials.filter(function(t){return t.sec===s});
+    mine[s]=g.reduce(function(a,t){return a+t.ok},0)/g.length;
+  });
+  secs.forEach(function(s){
+    html+='<div class="rowb"><div class="lb">'+s+'秒後</div><div class="tr"><i class="me" style="width:'+(mine[s]*100)+'%"></i></div><div class="vv">'+mine[s].toFixed(2)+'</div></div>';
+    html+='<div class="rowb"><div class="lb" style="color:#8a8578;font-size:13px">原典</div><div class="tr"><i class="pp" style="width:'+(PP[s]*100)+'%"></i></div><div class="vv" style="color:#8a8578">'+PP[s].toFixed(2)+'</div></div>';
+  });
+  document.getElementById("bars").innerHTML=html;
+
+  var drop=mine[3]-mine[18];
+  var v="";
+  if(mine[18]<=mine[3]&&drop>=0.25){
+    v="3秒後に "+mine[3].toFixed(2)+"、18秒後に "+mine[18].toFixed(2)+"。15秒のあいだに "+(drop*100).toFixed(0)+" ポイント落ちました。原典と同じ向きに落ちています。";
+  }else if(drop>0){
+    v="3秒後 "+mine[3].toFixed(2)+"、18秒後 "+mine[18].toFixed(2)+"。落ちてはいますが差は "+(drop*100).toFixed(0)+" ポイントで、原典の46ポイントより小さい。12回だと、この幅はふつうに出ます。";
+  }else{
+    v="18秒後のほうが同じか高く出ました（3秒 "+mine[3].toFixed(2)+" / 18秒 "+mine[18].toFixed(2)+"）。4回では起こります。引き算の声が途中で止まっていなかったか、思い当たるなら、もう一度。";
+  }
+  document.getElementById("verdict").textContent=v;
+
+  var oks=trials.filter(function(t){return t.ok===1});
+  var lt=oks.length?oks.reduce(function(a,t){return a+t.lat},0)/oks.length:null;
+  document.getElementById("lat").innerHTML= lt===null
+    ? "12回とも思い出せませんでした。原典でも18秒条件は .14 です。ただ3秒条件まで0なら、文字を見る2秒が短すぎたか、引き算の声が大きすぎて文字を追い出しています。"
+    : "合っていた回の、赤い丸が出てから押すまでの平均は <b>"+lt.toFixed(2)+" 秒</b>。原典で報告されている正答の平均潜時は <b>2.83 秒</b>です。ただしこの画面は「声に出して言い終わってから押す」ので、押すまでの手間ぶん長く出ます。";
+  show("s2");
+}
+</script>
+</body>
+</html>

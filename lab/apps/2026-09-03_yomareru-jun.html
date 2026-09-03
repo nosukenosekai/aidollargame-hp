@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>読まれる順</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+ul{margin:8px 0 0 18px;font-size:15px}
+li{margin-bottom:6px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:12px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+.step{font-size:14px;color:#444;margin-top:10px}
+.step b{display:inline-block;background:#2563eb;color:#fff;width:20px;height:20px;border-radius:10px;text-align:center;font-size:12px;line-height:20px;margin-right:6px;font-weight:700}
+.prog{font-size:13px;color:#6b6b6b;margin-bottom:4px}
+.bar{height:5px;background:#e5e3dd;border-radius:3px;overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;background:#2563eb;border-radius:3px;transition:width .25s}
+.pts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:6px}
+.pts button{background:#fff;border:1.5px solid #e0ddd6;border-radius:13px;padding:17px 10px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;color:#1a1a1a;text-align:left;line-height:1.4}
+.pts button:active{background:#eaf1fe}
+.pts button span{display:block;font-size:12px;color:#6b6b6b;font-weight:400}
+.pts button.wide{grid-column:1 / -1}
+.sealed{background:#1a1a1a;color:#fff;border-radius:12px;padding:13px;text-align:center;font-size:14px;margin-bottom:12px;letter-spacing:.04em}
+.sealed.hit{background:#9b2c2c}
+.sealed.miss{background:#3d6b4a}
+.hist{display:flex;flex-wrap:wrap;gap:4px;margin-top:12px}
+.hist i{width:19px;height:19px;border-radius:5px;font-style:normal;font-size:11px;color:#fff;text-align:center;line-height:19px;background:#c9c4b8}
+.hist i.hit{background:#c0392b}
+.big{font-size:46px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.big small{font-size:18px;font-weight:400;color:#6b6b6b;margin-left:2px}
+.rowb{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:14px}
+.rowb .lb{width:118px;flex:none;color:#444;font-size:13px}
+.rowb .tr{flex:1;height:24px;background:#efece6;border-radius:5px;position:relative;overflow:hidden}
+.rowb .tr i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.rowb .tr i.me{background:#c0392b}
+.rowb .tr i.rnd{background:#b9b3a6}
+.rowb .vv{width:48px;flex:none;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th,td{text-align:left;padding:7px 4px;border-bottom:1px solid #eeece6}
+th{color:#6b6b6b;font-weight:600;font-size:13px}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+.kicker{font-size:13px;color:#2563eb;font-weight:700;letter-spacing:.06em;margin-bottom:4px}
+.warn{background:#fdf6e3;border-radius:10px;padding:12px;font-size:14px;color:#5a4a1f;margin-top:12px}
+.hl{background:linear-gradient(transparent 62%,#ffe9a8 62%);font-weight:700}
+.sheet{background:#f7f6f2;border-radius:12px;padding:14px;margin-top:10px;font-variant-numeric:tabular-nums}
+.sheet div{font-size:15px;padding:5px 0;border-bottom:1px dashed #ddd8cd}
+.sheet div:last-child{border:0}
+.sheet b{display:inline-block;width:64px;color:#6b6b6b;font-weight:400;font-size:14px}
+.src{font-size:12px;color:#6b6b6b;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。施設名は架空です。</div>
+<h1>読まれる順</h1>
+<p class="lead">巡回の順番を、読まれないように自分で決めてください。30回ぶん。こちらは毎回、次にどこへ行くかを先に封をしてから当てにいきます。</p>
+
+<div id="s0">
+  <div class="card">
+    <div class="kicker">サンプル</div>
+    <h2>中野テクノセンター（架空）の夜間巡回</h2>
+    <p style="font-size:14px;color:#444">見回る場所は5か所。順番も回数も決まっていません。あなたが「読まれない」と思う順に押していきます。</p>
+    <p class="step"><b>1</b>押す前に、こちらの予測を封をした札で先に出します。</p>
+    <p class="step"><b>2</b>あなたが押すと、札がめくれて当たり外れが出ます。</p>
+    <p class="step"><b>3</b>30回。最初の5回は様子見なので当てにいきません。</p>
+    <div class="warn">当てずっぽうなら5か所のうち1つ、つまり20%しか当たりません。それを超えたら、あなたの順番には癖があります。</div>
+    <button class="btn" onclick="show('s1')">はじめる</button>
+  </div>
+</div>
+
+<div id="s1" class="hide">
+  <div class="prog" id="pg">1 / 30</div>
+  <div class="bar"><i id="pb" style="width:0"></i></div>
+  <div class="card">
+    <div class="sealed" id="seal">まだ様子を見ています</div>
+    <p style="font-size:14px;color:#444;margin-bottom:8px">次はどこを見回りますか</p>
+    <div class="pts" id="pts"></div>
+    <div class="hist" id="hist"></div>
+    <p class="note" style="margin-top:10px">赤は当てられた回です。</p>
+  </div>
+</div>
+
+<div id="s2" class="hide">
+  <div class="card">
+    <div class="kicker">結果</div>
+    <h2>25回のうち</h2>
+    <div class="big" id="hitn">—<small>回 当てられました</small></div>
+    <p style="margin-top:10px;font-size:15px" id="verdict"></p>
+    <div style="margin-top:16px">
+      <div class="rowb"><div class="lb">あなたの順番</div><div class="tr"><i class="me" id="bme" style="width:0"></i></div><div class="vv" id="vme">—</div></div>
+      <div class="rowb"><div class="lb">くじ引きの順番</div><div class="tr"><i class="rnd" id="brd" style="width:0"></i></div><div class="vv" id="vrd">—</div></div>
+      <div class="rowb"><div class="lb">当てずっぽう</div><div class="tr"><i class="rnd" style="width:20%"></i></div><div class="vv">20%</div></div>
+    </div>
+    <p class="note" style="margin-top:10px">くじ引きの行は、同じ当て方を、本物の乱数で作った30回の巡回に200通りかけた平均です。</p>
+  </div>
+
+  <div class="card">
+    <h2>種明かし</h2>
+    <p>当てているのは、あなたが押した履歴だけです。<span class="hl">直前の2か所から次を予想する表</span>を作り、いちばん多かった行き先を出しているだけ。読心術でも学習でもありません。</p>
+    <p style="margin-top:10px">それでも当たるのは、人が「ばらばらに」作る順番に、決まった癖が出るからです。</p>
+    <ul style="color:#444">
+      <li id="b1"></li>
+      <li id="b2"></li>
+      <li id="b3"></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>あなたの癖</h2>
+    <p style="font-size:14px;color:#444">押した場所の回数と、同じ場所を続けて押した回数です。5か所を30回なら、くじ引きなら1か所6回前後、連続は6回前後になります。</p>
+    <table id="tb"></table>
+  </div>
+
+  <div class="card">
+    <div class="kicker">現場に置きかえると</div>
+    <p style="font-size:16px">巡回の順を人の頭で決めているかぎり、外から何日か見ていれば次が読めます。守る側が困るのは、<span class="hl">その癖が本人には見えない</span>ことです。</p>
+    <p style="margin-top:10px;font-size:14px;color:#444">直し方は道具でなく手続きです。順番を人が決めるのをやめて、毎回くじで引く。下は、この5か所ぶんのくじです。押すたびに引き直します。紙に写して持って出れば、そのまま使えます。</p>
+    <div class="sheet" id="sheet"></div>
+    <button class="btn sub" onclick="draw()">引き直す</button>
+    <div class="warn">この画面は、人が作る順番に癖が出ることを見せるためのものです。実際の警備計画は、法令や契約で決まった巡回回数・時間帯の条件が先にあります。くじで決めていいのは、その条件を満たした中の順番だけです。</div>
+  </div>
+
+  <div class="card">
+    <button class="btn" onclick="location.reload()">もう一度やる</button>
+  </div>
+
+  <div class="card src">
+    <div>この画面の当て方は、直前2か所の組み合わせごとに次の行き先を数えるだけの表です（該当が無ければ直前1か所、それも無ければ全体の多い順）。事前に用意した予測は入っていません。数字はすべて、あなたが押した30回から計算しています。</div>
+  </div>
+</div>
+</div>
+
+<script>
+var P=[["正門","車両ゲートと守衛室"],["駐輪場","北棟の裏"],["機械室","地下1階"],["屋上扉","5階の階段から"],["搬入口","南側シャッター"]];
+var N=5,TOTAL=30,WARM=5;
+var seq=[],hits=[],pred=null;
+
+function show(id){["s0","s1","s2"].forEach(function(x){document.getElementById(x).classList.add("hide")});document.getElementById(id).classList.remove("hide");window.scrollTo(0,0);if(id==="s1")turn()}
+
+function predict(h){
+  if(h.length<WARM)return null;
+  var c2={},c1={},c0=new Array(N).fill(0);
+  for(var i=0;i<h.length;i++){
+    c0[h[i]]++;
+    if(i>=1){var k1=h[i-1];c1[k1]=c1[k1]||new Array(N).fill(0);c1[k1][h[i]]++}
+    if(i>=2){var k2=h[i-2]+"-"+h[i-1];c2[k2]=c2[k2]||new Array(N).fill(0);c2[k2][h[i]]++}
+  }
+  var key2=h[h.length-2]+"-"+h[h.length-1],key1=h[h.length-1];
+  var row=null;
+  if(c2[key2]&&c2[key2].reduce(function(a,b){return a+b},0)>0)row=c2[key2];
+  else if(c1[key1]&&c1[key1].reduce(function(a,b){return a+b},0)>0)row=c1[key1];
+  else row=c0;
+  var best=0;for(var j=1;j<N;j++)if(row[j]>row[best])best=j;
+  return best;
+}
+
+function turn(){
+  document.getElementById("pg").textContent=(seq.length+1)+" / "+TOTAL;
+  document.getElementById("pb").style.width=(seq.length/TOTAL*100)+"%";
+  pred=predict(seq);
+  var s=document.getElementById("seal");
+  s.className="sealed";
+  s.textContent=(pred===null)?"まだ様子を見ています（"+(WARM-seq.length)+"回あと から当てにいきます）":"次を予測して封をしました";
+  var h="";
+  P.forEach(function(p,i){h+='<button onclick="tap('+i+')">'+p[0]+'<span>'+p[1]+'</span></button>'});
+  document.getElementById("pts").innerHTML=h;
+  document.getElementById("hist").innerHTML=hits.map(function(x,i){return '<i class="'+(x?"hit":"")+'">'+(i+1)+'</i>'}).join("");
+}
+
+var locked=false;
+function tap(i){
+  if(locked)return;
+  var s=document.getElementById("seal");
+  if(pred!==null){
+    var ok=(pred===i);
+    hits.push(ok?1:0);
+    s.className="sealed "+(ok?"hit":"miss");
+    s.textContent=ok?("封の中は「"+P[pred][0]+"」。当たりました。"):("封の中は「"+P[pred][0]+"」。外れました。");
+  }
+  seq.push(i);
+  document.getElementById("hist").innerHTML=hits.map(function(x,k){return '<i class="'+(x?"hit":"")+'">'+(k+1)+'</i>'}).join("");
+  // 当たり外れを読む間だけ、次の場所を押せないようにする
+  locked=true;
+  Array.prototype.forEach.call(document.getElementById("pts").children,function(b){b.disabled=true});
+  if(seq.length>=TOTAL){setTimeout(finish,1400);return}
+  setTimeout(function(){locked=false;turn()},pred===null?450:1400);
+}
+
+function simRandom(){
+  var tot=0;
+  for(var r=0;r<200;r++){
+    var h=[],hit=0;
+    for(var t=0;t<TOTAL;t++){
+      var p=predict(h);
+      var c=Math.floor(Math.random()*N);
+      if(p!==null){if(p===c)hit++}
+      h.push(c);
+    }
+    tot+=hit/(TOTAL-WARM);
+  }
+  return tot/200;
+}
+
+function finish(){
+  var hit=hits.reduce(function(a,b){return a+b},0),n=hits.length;
+  var me=hit/n, rd=simRandom();
+  document.getElementById("hitn").innerHTML=hit+'<small> / '+n+' 回 当てられました</small>';
+  document.getElementById("bme").style.width=(me*100)+"%";
+  document.getElementById("vme").textContent=(me*100).toFixed(0)+"%";
+  document.getElementById("brd").style.width=(rd*100)+"%";
+  document.getElementById("vrd").textContent=(rd*100).toFixed(0)+"%";
+
+  var v;
+  if(me>=rd+0.10){v="当てずっぽうの20%も、くじ引きの"+(rd*100).toFixed(0)+"%も超えました。あなたの順番には、はっきり読める形があります。";}
+  else if(me>=rd){v="くじ引きと同じか、少し上です。よく散らしていますが、25回では差が出きらない範囲でもあります。";}
+  else{v="くじ引きより低く出ました。25回だとこれは起こります。もう一度やると、たいてい上がります。";}
+  document.getElementById("verdict").textContent=v;
+
+  var cnt=new Array(N).fill(0),rep=0,back=0;
+  seq.forEach(function(x,i){cnt[x]++;if(i>0&&seq[i-1]===x)rep++;if(i>1&&seq[i-2]===x&&seq[i-1]!==x)back++});
+  var th='<tr><th>場所</th><th class="r">回数</th><th class="r">くじ引きなら</th></tr>';
+  P.forEach(function(p,i){th+='<tr><td>'+p[0]+'</td><td class="r">'+cnt[i]+'</td><td class="r">6</td></tr>'});
+  th+='<tr><td>同じ所を続けて</td><td class="r">'+rep+'</td><td class="r">約6</td></tr>';
+  th+='<tr><td>1つ飛ばしで戻る</td><td class="r">'+back+'</td><td class="r">約5</td></tr>';
+  document.getElementById("tb").innerHTML=th;
+
+  document.getElementById("b1").textContent="同じ場所を続けて押したのは"+rep+"回。くじ引きなら30回中6回ほど続きます。人はこれを「ランダムに見えない」と感じて避けます。";
+  var mx=0;for(var i=1;i<N;i++)if(cnt[i]>cnt[mx])mx=i;
+  var mn=0;for(var i=1;i<N;i++)if(cnt[i]<cnt[mn])mn=i;
+  document.getElementById("b2").textContent="いちばん多いのは"+P[mx][0]+"の"+cnt[mx]+"回、いちばん少ないのは"+P[mn][0]+"の"+cnt[mn]+"回。均そうとすると、逆に「まだ行っていない所」が読めるようになります。";
+  document.getElementById("b3").textContent="人は5か所を順ぐりに使い切ってから次の周に入りがちです。すると残り1か所は確実に当てられます。";
+
+  draw();
+  show("s2");
+}
+
+function draw(){
+  var o=[0,1,2,3,4,0,1,2,3,4];
+  for(var i=o.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=o[i];o[i]=o[j];o[j]=t}
+  var h="",t0=22*60;
+  o.forEach(function(x,i){
+    var m=t0+i*24+Math.floor(Math.random()*7)-3;
+    h+='<div><b>'+(Math.floor(m/60)%24)+":"+("0"+(m%60)).slice(-2)+'</b>'+P[x][0]+'</div>';
+  });
+  document.getElementById("sheet").innerHTML=h;
+}
+</script>
+</body>
+</html>

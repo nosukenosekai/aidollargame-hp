@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>腰にくる距離</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+ul{margin:8px 0 0 18px;font-size:15px}
+li{margin-bottom:6px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:12px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+.step{font-size:14px;color:#444;margin-top:10px}
+.step b{display:inline-block;background:#2563eb;color:#fff;width:20px;height:20px;border-radius:10px;text-align:center;font-size:12px;line-height:20px;margin-right:6px;font-weight:700}
+label{display:block;font-size:14px;color:#444;margin-top:16px;margin-bottom:2px;font-weight:600}
+.hint{font-size:13px;color:#6b6b6b;margin-bottom:6px}
+input[type=range]{width:100%;accent-color:#2563eb;height:30px}
+.val{font-size:30px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.val small{font-size:15px;font-weight:400;color:#6b6b6b;margin-left:3px}
+.segs{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.segs button{flex:1 1 auto;min-width:64px;background:#f2f0ea;border:1.5px solid #e5e3dd;border-radius:10px;padding:10px 6px;font-size:13px;cursor:pointer;font-family:inherit;color:#444}
+.segs button.on{background:#eaf1fe;border-color:#2563eb;color:#2563eb;font-weight:700}
+.res{background:#fff;border-radius:14px;padding:20px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.big{font-size:46px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.big small{font-size:18px;font-weight:400;color:#6b6b6b;margin-left:4px}
+.li{display:inline-block;border-radius:9px;padding:5px 11px;font-size:14px;font-weight:700;margin-top:8px}
+.li.a{background:#e7f2e9;color:#2c6b3c}
+.li.b{background:#fdf6e3;color:#7a5f16}
+.li.c{background:#fbeaea;color:#9b2c2c}
+.rowb{display:flex;align-items:center;gap:9px;margin-bottom:8px;font-size:14px}
+.rowb .lb{width:126px;flex:none;color:#444;font-size:13px}
+.rowb .tr{flex:1;height:20px;background:#efece6;border-radius:5px;position:relative;overflow:hidden}
+.rowb .tr i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:#2563eb}
+.rowb .tr i.w{background:#c0392b}
+.rowb .vv{width:42px;flex:none;text-align:right;font-weight:700;font-variant-numeric:tabular-nums;font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th,td{text-align:left;padding:8px 4px;border-bottom:1px solid #eeece6}
+th{color:#6b6b6b;font-weight:600;font-size:13px}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+tr.now td{background:#eaf1fe;font-weight:700}
+.src{font-size:12px;color:#6b6b6b;margin-top:14px;word-break:break-all}
+.src div{margin-bottom:6px}
+.kicker{font-size:13px;color:#2563eb;font-weight:700;letter-spacing:.06em;margin-bottom:4px}
+.warn{background:#fdf6e3;border-radius:10px;padding:12px;font-size:14px;color:#5a4a1f;margin-top:12px}
+.hl{background:linear-gradient(transparent 62%,#ffe9a8 62%);font-weight:700}
+.fig{background:#f2f0ea;border-radius:12px;padding:14px;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">実際に荷物を持って測ります。計算式は米国NIOSHの持ち上げ式そのままで、数値は改変していません。出典はいちばん下。</div>
+<h1>腰にくる距離</h1>
+<p class="lead">同じ箱でも、体から手が離れるほど「持っていい重さ」は落ちます。どれくらい落ちるかを、いま部屋にある物で測ります。</p>
+
+<div class="card">
+  <h2>まず、実際に持つ</h2>
+  <p class="step"><b>1</b>ふだん持つ荷物をひとつ用意する。段ボール、米袋、飲料のケース、洗濯かご。</p>
+  <p class="step"><b>2</b>床に置いて、<b style="background:none;color:#1a1a1a;width:auto;font-weight:700;margin:0">体にぴったり付けて</b>持ち上げる。</p>
+  <p class="step"><b>3</b>もう一度置いて、今度は<b style="background:none;color:#1a1a1a;width:auto;font-weight:700;margin:0">腕を軽く伸ばした位置で</b>持ち上げる。</p>
+  <p class="step"><b>4</b>2回目のほうが重く感じたはず。その感じが何キロぶんなのかを、下で出します。</p>
+  <div class="fig">
+    <p style="font-size:14px;color:#444"><b>測るのは1本の水平距離</b>だけです。両足のくるぶしを結んだ線の真ん中から、握った手の真下の床までを、まっすぐ水平に測ります。メジャーがなければ、A4の長辺が29.7cm、1000円札の長辺が15cm。</p>
+  </div>
+</div>
+
+<div class="card">
+  <label>荷物の重さ</label>
+  <div class="hint">はかりがなければ、袋や箱の表示でかまいません</div>
+  <div class="val" id="vW">12<small>kg</small></div>
+  <input type="range" id="rW" min="1" max="40" step="1" value="12">
+
+  <label>手が体から離れている水平距離</label>
+  <div class="hint">くるぶしの真ん中から、手の真下まで。体に付けると25cm、腕を軽く伸ばすと45〜55cmあたり</div>
+  <div class="val" id="vH">25<small>cm</small></div>
+  <input type="range" id="rH" min="25" max="70" step="1" value="25">
+
+  <label>持ち上げはじめの手の高さ</label>
+  <div class="hint">床に置いた物なら15〜25cm。腰の棚なら75cm前後</div>
+  <div class="val" id="vV">20<small>cm</small></div>
+  <input type="range" id="rV" min="0" max="175" step="5" value="20">
+
+  <label>持ち上げる高さの差</label>
+  <div class="hint">床から台へなら、その高さの差。25cm未満は25cmとして扱われます</div>
+  <div class="val" id="vD">75<small>cm</small></div>
+  <input type="range" id="rD" min="25" max="175" step="5" value="75">
+
+  <label>体をひねる角度</label>
+  <div class="hint">正面で持って正面で下ろすなら0度。真横なら90度</div>
+  <div class="val" id="vA">0<small>度</small></div>
+  <input type="range" id="rA" min="0" max="135" step="15" value="0">
+
+  <label>1分あたり何回持つか</label>
+  <div class="segs" id="segF"></div>
+
+  <label>続けて持つ時間</label>
+  <div class="segs" id="segT"></div>
+
+  <label>持ち手</label>
+  <div class="segs" id="segC"></div>
+</div>
+
+<div class="res">
+  <div class="kicker">この持ち方で薦められる上限</div>
+  <div class="big" id="rwl">—<small>kg</small></div>
+  <div id="badge"></div>
+  <p style="margin-top:12px;font-size:15px" id="msg"></p>
+</div>
+
+<div class="card">
+  <h2>何が効いているか</h2>
+  <p style="font-size:14px;color:#444">23kgに、下の6つを全部かけた答えが上の数字です。短い棒ほど、そこで削られています。</p>
+  <div id="bars" style="margin-top:12px"></div>
+</div>
+
+<div class="card">
+  <div class="kicker">距離だけ動かすと</div>
+  <h2>手を体に近づけた場合</h2>
+  <p style="font-size:14px;color:#444">重さも高さもひねりもそのまま。水平距離だけを変えたときの上限です。</p>
+  <table id="tblH"></table>
+  <p style="margin-top:12px;font-size:15px" id="hmsg"></p>
+</div>
+
+<div class="card">
+  <div class="kicker">現場に置きかえると</div>
+  <p style="font-size:16px" id="biz"></p>
+  <p style="margin-top:10px;font-size:14px;color:#444">介護のベッド移乗、物流のパレット積み、建設の資材運び。どれも「重い物を軽くする」より、<span class="hl">体と荷物のあいだの数十センチを消すほうが安く効きます</span>。台車の高さ、パレットの向き、棚の奥行き。買うのは道具ではなく配置です。</p>
+</div>
+
+<div class="card">
+  <h2>この式が使えない場合</h2>
+  <p style="font-size:14px;color:#444">原典が「適用しない」と明記している持ち方です。当てはまるなら、上の数字は根拠になりません。</p>
+  <ul style="font-size:14px;color:#444">
+    <li>片手で持つ</li>
+    <li>座ったまま、ひざをついたまま持つ</li>
+    <li>持ったまま歩く、押す、引く</li>
+    <li>形が定まらない物（中身が動く袋、暴れる物）</li>
+    <li>1日8時間を超えて持ち続ける</li>
+    <li>狭くて姿勢が取れない場所、床がすべる場所</li>
+    <li>気温が19〜26度から大きく外れる場所</li>
+    <li>スコップや一輪車を使う作業</li>
+  </ul>
+  <div class="warn">これは職場の作業設計のための目安です。個人の腰痛の診断や治療の判断には使えません。痛みがあるなら医療機関へ。原典も「ある人にとっての危険の大きさを予測することはできない」と書いています。</div>
+</div>
+
+<div class="card src">
+  <div><b>出典</b></div>
+  <div>Waters, T. R., Putz-Anderson, V., &amp; Garg, A. (1994). Applications Manual for the Revised NIOSH Lifting Equation. DHHS (NIOSH) Publication No. 94-110. 米国国立労働安全衛生研究所。<br>本文PDF: https://stacks.cdc.gov/view/cdc/110725/cdc_110725_DS1.pdf</div>
+  <div>この画面が使っている値は、すべて同マニュアルのメートル法の欄そのままです。基準重量 23kg。水平係数 25/H（Hが25cm以下なら1.00、63cm超なら0）。垂直係数 1−0.003|V−75|（V175cm超なら0）。距離係数 0.82+4.5/D（Dは25cm以上175cm以下）。ひねり係数 1−0.0032A（135度超なら0）。頻度係数は表5、持ち手の係数は表7から引いています。</div>
+  <div>持ち上げ指数（重さ÷上限）の見方も同マニュアル1.4節によります。指数が大きいほど安全に続けられる人の割合が小さくなる、という相対的な指標で、危険度の絶対値ではありません。</div>
+</div>
+</div>
+
+<script>
+var FM={
+ "1":{"0.2":[1.00,1.00],"1":[0.94,0.94],"2":[0.91,0.91],"4":[0.84,0.84],"6":[0.75,0.75],"9":[0.52,0.52],"12":[0.37,0.37]},
+ "2":{"0.2":[0.95,0.95],"1":[0.88,0.88],"2":[0.84,0.84],"4":[0.72,0.72],"6":[0.50,0.50],"9":[0.30,0.30],"12":[0.00,0.21]},
+ "8":{"0.2":[0.85,0.85],"1":[0.75,0.75],"2":[0.65,0.65],"4":[0.45,0.45],"6":[0.27,0.27],"9":[0.00,0.15],"12":[0.00,0.00]}
+};
+var FLAB=[["0.2","5分に1回"],["1","1分に1回"],["2","1分に2回"],["4","1分に4回"],["6","1分に6回"],["9","1分に9回"],["12","1分に12回"]];
+var TLAB=[["1","1時間まで"],["2","1〜2時間"],["8","2〜8時間"]];
+var CLAB=[["good","取っ手がある"],["fair","縁をつかむ"],["poor","つかむ所がない"]];
+var st={F:"1",T:"1",C:"good"};
+
+function segs(id,arr,key){
+  var el=document.getElementById(id),h="";
+  arr.forEach(function(a){h+='<button data-v="'+a[0]+'">'+a[1]+'</button>'});
+  el.innerHTML=h;
+  Array.prototype.forEach.call(el.children,function(b){
+    b.onclick=function(){st[key]=b.dataset.v;paint();calc()};
+  });
+}
+function paint(){
+  [["segF","F"],["segT","T"],["segC","C"]].forEach(function(p){
+    Array.prototype.forEach.call(document.getElementById(p[0]).children,function(b){
+      b.className=(b.dataset.v===st[p[1]])?"on":"";
+    });
+  });
+}
+segs("segF",FLAB,"F");segs("segT",TLAB,"T");segs("segC",CLAB,"C");paint();
+
+function g(id){return document.getElementById(id)}
+["W","H","V","D","A"].forEach(function(k){
+  g("r"+k).oninput=function(){calc()};
+});
+
+function mult(W,H,V,D,A){
+  var Hc=Math.max(H,25);
+  var HM=(H>63)?0:(25/Hc); if(HM>1)HM=1;
+  var VM=(V>175)?0:(1-0.003*Math.abs(V-75));
+  var Dc=Math.max(D,25);
+  var DM=(D>175)?0:(0.82+4.5/Dc); if(DM>1)DM=1;
+  var AM=(A>135)?0:(1-0.0032*A);
+  var col=(V>=75)?1:0;
+  var fm=FM[st.T][st.F][col];
+  var cm;
+  if(st.C==="good")cm=1.00;
+  else if(st.C==="fair")cm=(V>=75)?1.00:0.95;
+  else cm=0.90;
+  return {HM:HM,VM:VM,DM:DM,AM:AM,FM:fm,CM:cm,RWL:23*HM*VM*DM*AM*fm*cm};
+}
+
+function calc(){
+  var W=+g("rW").value,H=+g("rH").value,V=+g("rV").value,D=+g("rD").value,A=+g("rA").value;
+  g("vW").innerHTML=W+'<small>kg</small>';
+  g("vH").innerHTML=H+'<small>cm</small>';
+  g("vV").innerHTML=V+'<small>cm</small>';
+  g("vD").innerHTML=D+'<small>cm</small>';
+  g("vA").innerHTML=A+'<small>度</small>';
+
+  var m=mult(W,H,V,D,A);
+  g("rwl").innerHTML=(m.RWL>0?m.RWL.toFixed(1):"0")+'<small>kg</small>';
+
+  var li=m.RWL>0?(W/m.RWL):999;
+  var b=g("badge"),msg=g("msg");
+  if(m.RWL<=0){
+    b.innerHTML='<span class="li c">この持ち方は式の外</span>';
+    msg.textContent=(H>63?"水平距離が63cmを超えています。ここまで離すと体勢が崩れるため、原典は上限を0としています。距離を縮めるか、道具を使う前提の作業です。":"高さが175cmを超えています。原典はこの高さの持ち上げを扱いません。");
+  }else if(li<=1){
+    b.innerHTML='<span class="li a">持ち上げ指数 '+li.toFixed(2)+'</span>';
+    msg.textContent="いまの荷物 "+W+"kg は上限の中に収まっています。";
+  }else if(li<=3){
+    b.innerHTML='<span class="li b">持ち上げ指数 '+li.toFixed(2)+'</span>';
+    msg.textContent="いまの荷物 "+W+"kg は上限を "+(W-m.RWL).toFixed(1)+"kg 超えています。指数が1を超えるほど、この作業を安全に続けられる人の割合は小さくなります。";
+  }else{
+    b.innerHTML='<span class="li c">持ち上げ指数 '+li.toFixed(2)+'</span>';
+    msg.textContent="上限の3倍を超えています。原典は、指数の高い作業から順に配置を直すことを薦めています。この作業は先頭に来ます。";
+  }
+
+  var rows=[["水平距離 "+H+"cm","HM",m.HM],["手の高さ "+V+"cm","VM",m.VM],["上げ下げ "+D+"cm","DM",m.DM],["ひねり "+A+"度","AM",m.AM],["持つ回数","FM",m.FM],["持ち手","CM",m.CM]];
+  var worst=rows.reduce(function(a,r){return r[2]<a[2]?r:a},rows[0]);
+  g("bars").innerHTML=rows.map(function(r){
+    return '<div class="rowb"><div class="lb">'+r[0]+'</div><div class="tr"><i class="'+(r===worst?"w":"")+'" style="width:'+(r[2]*100)+'%"></i></div><div class="vv">'+r[2].toFixed(2)+'</div></div>';
+  }).join("");
+
+  var hs=[25,35,45,55,63],th='<tr><th>水平距離</th><th class="r">上限</th><th class="r">いまの差</th></tr>';
+  hs.forEach(function(h){
+    var mm=mult(W,h,V,D,A);
+    var diff=mm.RWL-m.RWL;
+    th+='<tr class="'+(Math.abs(h-H)<=4?"now":"")+'"><td>'+h+'cm</td><td class="r">'+mm.RWL.toFixed(1)+'kg</td><td class="r">'+(diff>=0?"+":"")+diff.toFixed(1)+'kg</td></tr>';
+  });
+  g("tblH").innerHTML=th;
+
+  var near=mult(W,25,V,D,A),far=mult(W,50,V,D,A);
+  g("hmsg").innerHTML='体に付けて持つ（25cm）と <b>'+near.RWL.toFixed(1)+'kg</b>、腕を伸ばして持つ（50cm）と <b>'+far.RWL.toFixed(1)+'kg</b>。'
+    +'荷物も高さもひねりも同じで、<span class="hl">'+(near.RWL-far.RWL).toFixed(1)+'kg ぶん変わりました</span>。水平係数は 25÷距離なので、距離が倍になれば上限は半分になります。';
+
+  g("biz").innerHTML='いま持っている '+W+'kg を '+H+'cm の位置で扱っているなら、荷物を軽くしなくても、手を体に近づけるだけで上限は '+near.RWL.toFixed(1)+'kg まで上がります。';
+}
+calc();
+</script>
+</body>
+</html>

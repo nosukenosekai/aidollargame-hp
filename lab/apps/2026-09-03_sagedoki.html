@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下げどき</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:12px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn:disabled{opacity:.4}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.kicker{font-size:13px;color:#2563eb;font-weight:700;letter-spacing:.06em;margin-bottom:4px}
+label{display:block;font-size:14px;color:#444;margin-top:16px;margin-bottom:2px;font-weight:600}
+.hint{font-size:13px;color:#6b6b6b;margin-bottom:6px}
+input[type=range]{width:100%;accent-color:#2563eb;height:30px}
+.val{font-size:28px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.val small{font-size:15px;font-weight:400;color:#6b6b6b;margin-left:3px}
+.segs{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.segs button{flex:1 1 auto;min-width:52px;background:#f2f0ea;border:1.5px solid #e5e3dd;border-radius:10px;padding:10px 4px;font-size:13px;cursor:pointer;font-family:inherit;color:#444}
+.segs button.on{background:#eaf1fe;border-color:#2563eb;color:#2563eb;font-weight:700}
+.clock{text-align:center;padding:6px 0 2px}
+.clock .t{font-size:52px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.clock .p{font-size:15px;color:#6b6b6b}
+.stack{display:flex;height:34px;border-radius:8px;overflow:hidden;margin:12px 0 4px;background:#efece6}
+.stack i{display:block;height:100%}
+.stack i.sold{background:#2563eb}
+.stack i.cut{background:#8fb0ee}
+.stack i.left{background:#e0ddd6}
+.legend{font-size:12.5px;color:#6b6b6b}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.hours{display:flex;gap:2px;align-items:flex-end;height:76px;margin-top:12px}
+.hours div{flex:1;position:relative}
+.hours i{display:block;background:#2563eb;border-radius:3px 3px 0 0;width:100%}
+.hours i.after{background:#8fb0ee}
+.hours span{position:absolute;bottom:-18px;left:0;right:0;text-align:center;font-size:10px;color:#9a958a}
+.kpi{display:flex;gap:9px;margin-top:26px}
+.kpi div{flex:1;background:#f7f6f2;border-radius:12px;padding:13px 8px;text-align:center}
+.kpi .lb{font-size:12px;color:#6b6b6b;line-height:1.4}
+.kpi .v{font-size:24px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:13px;font-weight:400;color:#6b6b6b}
+.kpi .best{background:#e7f2e9}
+.kpi .best .v{color:#2c6b3c}
+.answer{background:#1a1a1a;color:#fff;border-radius:14px;padding:22px 18px;margin-bottom:14px}
+.answer .k{font-size:12.5px;color:#a8a49a;letter-spacing:.08em;margin-bottom:6px}
+.answer .a{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.35}
+.answer .s{font-size:14px;color:#c8c4ba;margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:8px}
+th,td{text-align:left;padding:6px 3px;border-bottom:1px solid #eeece6}
+th{color:#6b6b6b;font-weight:600;font-size:12.5px}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+tr.win td{background:#e7f2e9;font-weight:700}
+tr.you td{background:#eaf1fe;font-weight:700}
+.warn{background:#fdf6e3;border-radius:10px;padding:12px;font-size:14px;color:#5a4a1f;margin-top:12px}
+.hl{background:linear-gradient(transparent 62%,#ffe9a8 62%);font-weight:700}
+.src{font-size:12px;color:#6b6b6b;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。店名は架空で、来客の形と値段への反応は、この画面が置いた仮の値です。実測データではありません。</div>
+<h1>下げどき</h1>
+<p class="lead">朝いちばんに並べた野菜を、何時に何円へ下げるか。決めるのはその一点だけ。決めたら1日を閉店まで早送りして、残りと手取りを見ます。</p>
+
+<div class="card">
+  <div class="kicker">サンプル</div>
+  <h2>道の駅なかしお（架空）の直売コーナー</h2>
+  <p style="font-size:14px;color:#444">出荷者は個人の農家。朝9時に並べ、18時に閉店。売れ残りは自分で引き取ります。値下げの札は1日1回しか替えられません。</p>
+</div>
+
+<div class="card">
+  <label>並べた数</label>
+  <div class="val" id="vQ">80<small>袋</small></div>
+  <input type="range" id="rQ" min="20" max="300" step="10" value="80">
+
+  <label>ふだんの値段</label>
+  <div class="val" id="vP">150<small>円</small></div>
+  <input type="range" id="rP" min="80" max="500" step="10" value="150">
+
+  <label>今日の来客</label>
+  <div class="hint">直売コーナーの前を通る人の1日の合計</div>
+  <div class="val" id="vV">600<small>人</small></div>
+  <input type="range" id="rV" min="60" max="800" step="20" value="600">
+
+  <label>値段が下がると、どれくらい手が伸びるか</label>
+  <div class="hint">左は「安くしても数はあまり変わらない」、右は「安くすればすぐ動く」</div>
+  <div class="val" id="vE">ふつう</div>
+  <input type="range" id="rE" min="5" max="30" step="1" value="12">
+
+  <label>直売所に払う手数料</label>
+  <div class="val" id="vF">15<small>%</small></div>
+  <input type="range" id="rF" min="0" max="30" step="1" value="15">
+</div>
+
+<div class="card">
+  <h2>あなたの決め</h2>
+  <label style="margin-top:4px">下げる時刻</label>
+  <div class="segs" id="segH"></div>
+  <label>下げ幅</label>
+  <div class="segs" id="segD"></div>
+  <button class="btn" id="go" onclick="run()">この決めで1日を進める</button>
+</div>
+
+<div class="card">
+  <div class="clock"><div class="t" id="clk">9:00</div><div class="p" id="pri">150円</div></div>
+  <div class="stack"><i class="sold" id="bs" style="width:0"></i><i class="cut" id="bc" style="width:0"></i><i class="left" id="bl" style="width:100%"></i></div>
+  <div class="legend"><i style="background:#2563eb"></i>下げる前に売れた　<i style="background:#8fb0ee"></i>下げてから売れた　<i style="background:#e0ddd6"></i>残り</div>
+  <div class="hours" id="hrs"></div>
+  <div class="kpi">
+    <div><div class="lb">閉店時の<br>残り</div><div class="v" id="k1">—</div></div>
+    <div><div class="lb">手取り</div><div class="v" id="k2">—</div></div>
+    <div class="best"><div class="lb">いちばん良い<br>決めなら</div><div class="v" id="k3">—</div></div>
+  </div>
+  <p style="margin-top:14px;font-size:15px" id="verdict"></p>
+</div>
+
+<div class="answer">
+  <div class="k">この条件での答え</div>
+  <div class="a" id="ans">—</div>
+  <div class="s" id="ans2"></div>
+</div>
+
+<div class="card">
+  <h2>下げる時刻を変えると</h2>
+  <p style="font-size:13.5px;color:#6b6b6b">下げ幅は、いちばん良かった幅に固定して、時刻だけ動かしたときの手取りです。</p>
+  <table id="tb"></table>
+</div>
+
+<div class="card">
+  <div class="kicker">この画面が出さないもの</div>
+  <p style="font-size:15px">在庫表も、売上ランキングも、明日の発注書も出しません。出すのは<span class="hl">何時に何円へ下げるか</span>の1点だけです。朝の時点で決められて、その日のうちに結果が出るのはそこだけだからです。</p>
+  <p style="margin-top:10px;font-size:14px;color:#444">早く下げると数は出ますが、定価で買ってくれたはずの人にも安く売ることになります。遅く下げると単価は守れますが、残ります。この2つがぶつかる時刻が、条件ごとに1点だけあります。</p>
+</div>
+
+<div class="card">
+  <h2>この計算の前提</h2>
+  <p style="font-size:14px;color:#444">数字を信じる前に、ここを読んでください。</p>
+  <ul style="font-size:14px;color:#444;margin-left:18px">
+    <li>来客の時間帯の形は、午前が厚く夕方に減る山を仮に置いています（9時から順に 14, 16, 15, 12, 10, 9, 8, 7, 5 の割合）。実際の形は施設ごとに違います。</li>
+    <li>値段への反応は「値段が半分になると手に取る人が何倍になるか」という単純な式で置いています。実際の売れ方はこれより複雑です。</li>
+    <li>値下げを待つ客、他の出荷者との競合、天気、曜日は入っていません。</li>
+    <li>本気で使うなら、自分の店のPOSから、時間帯別の販売数を2週間ぶん取って、上の割合を入れ替えてください。この画面はその前の、考え方を見るためのものです。</li>
+  </ul>
+  <div class="warn">売り切れると、そのあと来た客には何も売れません。この画面はそこも数えています。「完売した日＝いちばん儲かった日」とは限りません。</div>
+</div>
+
+<div class="card src">
+  <div>この画面の数字はすべて、上のつまみの値からその場で計算しています。あらかじめ入れておいた売上データはありません。時刻9通り×下げ幅6通りを全部計算して、いちばん手取りの多い1点を選んでいます。</div>
+</div>
+</div>
+
+<script>
+var SHAPE=[14,16,15,12,10,9,8,7,5];      // 9時〜17時台の来客割合（仮の値）
+var HRS=[9,10,11,12,13,14,15,16,17];
+var CUTS=[0,10,20,30,40,50];
+var st={h:15,d:30};
+var anim=null;
+
+function g(id){return document.getElementById(id)}
+function yen(n){return Math.round(n).toLocaleString("ja-JP")+"円"}
+
+function segs(id,arr,key,fmt){
+  var el=g(id),h="";
+  arr.forEach(function(a){h+='<button data-v="'+a+'">'+fmt(a)+'</button>'});
+  el.innerHTML=h;
+  Array.prototype.forEach.call(el.children,function(b){
+    b.onclick=function(){st[key]=+b.dataset.v;paint();recalc()};
+  });
+}
+function paint(){
+  Array.prototype.forEach.call(g("segH").children,function(b){b.className=(+b.dataset.v===st.h)?"on":""});
+  Array.prototype.forEach.call(g("segD").children,function(b){b.className=(+b.dataset.v===st.d)?"on":""});
+}
+segs("segH",HRS,"h",function(v){return v+"時"});
+segs("segD",CUTS,"d",function(v){return v===0?"下げない":v+"%引"});
+paint();
+
+["Q","P","V","E","F"].forEach(function(k){g("r"+k).oninput=function(){recalc()}});
+
+function params(){
+  return {Q:+g("rQ").value,P:+g("rP").value,V:+g("rV").value,e:(+g("rE").value)/10,fee:(+g("rF").value)/100};
+}
+
+// 1日を1時間ずつ進める。戻り値は時間帯ごとの販売数と手取り。
+function day(pm,cutH,cutD){
+  var tot=SHAPE.reduce(function(a,b){return a+b},0);
+  var left=pm.Q, base=0.10, rows=[], gross=0, soldBefore=0, soldAfter=0;
+  for(var i=0;i<HRS.length;i++){
+    var price=(HRS[i]>=cutH)?pm.P*(1-cutD/100):pm.P;
+    var rate=base*Math.pow(pm.P/price,pm.e);
+    if(rate>0.9)rate=0.9;
+    var visitors=pm.V*SHAPE[i]/tot;
+    var want=Math.round(visitors*rate);
+    var sold=Math.min(want,left);
+    left-=sold;gross+=sold*price;
+    if(HRS[i]>=cutH&&cutD>0)soldAfter+=sold;else soldBefore+=sold;
+    rows.push({h:HRS[i],sold:sold,price:price,left:left,cut:(HRS[i]>=cutH&&cutD>0)});
+  }
+  return {rows:rows,left:left,net:gross*(1-pm.fee),soldBefore:soldBefore,soldAfter:soldAfter};
+}
+
+function best(pm){
+  var b=null;
+  HRS.forEach(function(h){
+    CUTS.forEach(function(d){
+      var r=day(pm,d===0?99:h,d);
+      if(!b||r.net>b.r.net)b={h:h,d:d,r:r};
+    });
+  });
+  return b;
+}
+
+function recalc(){
+  var pm=params();
+  g("vQ").innerHTML=pm.Q+'<small>袋</small>';
+  g("vP").innerHTML=pm.P+'<small>円</small>';
+  g("vV").innerHTML=pm.V+'<small>人</small>';
+  g("vF").innerHTML=(pm.fee*100).toFixed(0)+'<small>%</small>';
+  g("vE").textContent=(pm.e<1.0?"にぶい":pm.e<1.8?"ふつう":pm.e<2.4?"よく動く":"すぐ動く");
+
+  var mine=day(pm,st.d===0?99:st.h,st.d);
+  var bb=best(pm);
+
+  g("k1").innerHTML=mine.left+'<small>袋</small>';
+  g("k2").innerHTML=Math.round(mine.net).toLocaleString("ja-JP")+'<small>円</small>';
+  g("k3").innerHTML=Math.round(bb.r.net).toLocaleString("ja-JP")+'<small>円</small>';
+
+  var diff=bb.r.net-mine.net;
+  g("verdict").innerHTML= diff<1
+    ? "いまの決めが、この条件ではいちばんです。"
+    : 'いまの決めだと、いちばん良い決めより <span class="hl">'+yen(diff)+' 少ない</span>手取りになります。'+(mine.left>0?("閉店時に "+mine.left+"袋 残ります。"):"完売はしていますが、早く売り切れたぶん単価を落としています。");
+
+  g("ans").textContent=(bb.d===0)?"今日は下げない":(bb.h+"時に "+bb.d+"%引き（"+Math.round(pm.P*(1-bb.d/100))+"円）へ");
+  g("ans2").textContent=(bb.d===0)
+    ? "この条件では、定価のまま置いておくのが手取りで勝ちます。残り "+bb.r.left+"袋、手取り "+yen(bb.r.net)+"。"
+    : "手取り "+yen(bb.r.net)+"。下げる前に "+bb.r.soldBefore+"袋、下げてから "+bb.r.soldAfter+"袋。閉店時の残り "+bb.r.left+"袋。";
+
+  var th='<tr><th>下げる時刻</th><th class="r">手取り</th><th class="r">残り</th></tr>';
+  th+='<tr class="'+(st.d===0?"you":"")+'"><td>下げない</td><td class="r">'+yen(day(pm,99,0).net)+'</td><td class="r">'+day(pm,99,0).left+'袋</td></tr>';
+  HRS.forEach(function(h){
+    var d=(bb.d===0)?30:bb.d;
+    var r=day(pm,h,d);
+    var cls=(h===bb.h&&bb.d!==0)?"win":((h===st.h&&st.d!==0)?"you":"");
+    th+='<tr class="'+cls+'"><td>'+h+'時に '+d+'%引</td><td class="r">'+yen(r.net)+'</td><td class="r">'+r.left+'袋</td></tr>';
+  });
+  g("tb").innerHTML=th;
+
+  drawStatic(mine,pm);
+}
+
+function drawStatic(mine,pm){
+  var mx=Math.max.apply(null,mine.rows.map(function(r){return r.sold}))||1;
+  g("hrs").innerHTML=mine.rows.map(function(r){
+    return '<div><i class="'+(r.cut?"after":"")+'" style="height:'+(r.sold/mx*70)+'px"></i><span>'+r.h+'</span></div>';
+  }).join("");
+  var sb=mine.soldBefore/pm.Q*100, sa=mine.soldAfter/pm.Q*100;
+  g("bs").style.width=sb+"%";g("bc").style.width=sa+"%";g("bl").style.width=(100-sb-sa)+"%";
+  g("clk").textContent="18:00";
+  g("pri").textContent=(st.d===0?pm.P:Math.round(pm.P*(1-st.d/100)))+"円 で終了";
+}
+
+function run(){
+  if(anim)clearInterval(anim);
+  var pm=params(),mine=day(pm,st.d===0?99:st.h,st.d),i=0;
+  var mx=Math.max.apply(null,mine.rows.map(function(r){return r.sold}))||1;
+  g("go").disabled=true;
+  g("hrs").innerHTML=mine.rows.map(function(){return '<div><i style="height:0"></i><span></span></div>'}).join("");
+  var sb=0,sa=0;
+  anim=setInterval(function(){
+    if(i>=mine.rows.length){clearInterval(anim);anim=null;g("go").disabled=false;g("clk").textContent="18:00";g("pri").textContent="閉店";return}
+    var r=mine.rows[i];
+    g("clk").textContent=r.h+":00";
+    g("pri").textContent=Math.round(r.price)+"円"+(r.cut?"（下げた）":"");
+    if(r.cut)sa+=r.sold;else sb+=r.sold;
+    g("bs").style.width=(sb/pm.Q*100)+"%";
+    g("bc").style.width=(sa/pm.Q*100)+"%";
+    g("bl").style.width=(100-(sb+sa)/pm.Q*100)+"%";
+    var d=g("hrs").children[i];
+    d.children[0].style.height=(r.sold/mx*70)+"px";
+    if(r.cut)d.children[0].className="after";
+    d.children[1].textContent=r.h;
+    i++;
+  },420);
+}
+recalc();
+</script>
+</body>
+</html>

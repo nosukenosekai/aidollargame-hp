@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>座れる時間</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:14px;font-size:15px;font-weight:600;cursor:pointer;margin-top:10px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.kicker{font-size:13px;color:#2563eb;font-weight:700;letter-spacing:.06em;margin-bottom:4px}
+.row{display:flex;align-items:center;gap:8px;background:#f7f6f2;border-radius:12px;padding:10px 10px;margin-bottom:7px}
+.row .ord{width:22px;flex:none;text-align:center;font-weight:700;color:#9a958a;font-size:14px}
+.row .nm{flex:1;min-width:0}
+.row .nm b{font-size:15px;display:block}
+.row .nm span{font-size:12.5px;color:#6b6b6b;display:block;line-height:1.5}
+.row .mv{display:flex;flex-direction:column;gap:3px;flex:none}
+.row .mv button{width:36px;height:24px;border:1.5px solid #d9d5cc;background:#fff;border-radius:7px;font-size:12px;cursor:pointer;color:#444;line-height:1;font-family:inherit}
+.row .mv button:disabled{opacity:.3}
+.kpi{display:flex;gap:9px;margin-bottom:12px}
+.kpi div{flex:1;background:#f7f6f2;border-radius:12px;padding:13px 9px;text-align:center}
+.kpi .lb{font-size:12px;color:#6b6b6b;line-height:1.4}
+.kpi .v{font-size:27px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:400;color:#6b6b6b}
+.kpi .hot{background:#fbeaea}
+.kpi .hot .v{color:#9b2c2c}
+.kpi .cool{background:#e7f2e9}
+.kpi .cool .v{color:#2c6b3c}
+.tl{margin-top:6px}
+.tl .lane{position:relative;height:26px;background:#efece6;border-radius:6px;margin-bottom:6px;overflow:hidden}
+.tl .lane i{position:absolute;top:0;bottom:0;font-size:10px;color:#fff;line-height:26px;text-align:center;overflow:hidden;white-space:nowrap}
+.tl .lane i.work{background:#2563eb}
+.tl .lane i.wait{background:#c9d7f5}
+.tl .lane.st i.work{background:#1a1a1a}
+.tl .lane.st i.rest{background:#7fbf8f}
+.tl .lab{font-size:12px;color:#6b6b6b;margin-bottom:3px}
+.axis{display:flex;font-size:11px;color:#9a958a;margin-top:2px}
+.axis span{flex:1;text-align:left}
+.lgd{font-size:12.5px;color:#6b6b6b;margin-top:10px;line-height:1.9}
+.lgd i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.warn{background:#fdf6e3;border-radius:10px;padding:12px;font-size:14px;color:#5a4a1f;margin-top:12px}
+.hl{background:linear-gradient(transparent 62%,#ffe9a8 62%);font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+th,td{text-align:left;padding:7px 4px;border-bottom:1px solid #eeece6}
+th{color:#6b6b6b;font-weight:600;font-size:13px}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+.src{font-size:12px;color:#6b6b6b;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。店名・客名はすべて架空です。</div>
+<h1>座れる時間</h1>
+<p class="lead">今日の8人は動かせない。動かせるのは順番だけ。並べ替えても売上は1円も変わりませんが、立ちっぱなしの最長時間は変わります。それだけを出します。</p>
+
+<div class="card">
+  <div class="kicker">サンプル</div>
+  <h2>ヘアサロン ことね（架空）</h2>
+  <p style="font-size:14px;color:#444">セット面2つ、スタイリスト1人。9時開店。予約は時刻指定でなく「今日中」の当日枠8件。カラーとパーマの放置時間は手が空きますが、そこに次の人を入れれば空きません。</p>
+</div>
+
+<div class="card">
+  <h2>順番</h2>
+  <p style="font-size:13.5px;color:#6b6b6b;margin-bottom:10px">上から順に案内します。矢印で入れ替えてください。</p>
+  <div id="list"></div>
+  <button class="btn sub" onclick="setOrder([0,1,2,3,4,5,6,7])">受付が来た順に戻す</button>
+  <button class="btn" onclick="search()">いちばん座れる順をさがす</button>
+  <p class="note" id="searched" style="margin-top:8px"></p>
+</div>
+
+<div class="card">
+  <div class="kicker">この順番だと</div>
+  <div class="kpi">
+    <div class="hot"><div class="lb">立ちっぱなしの<br>最長</div><div class="v" id="k1">—</div></div>
+    <div class="cool"><div class="lb">はじめて<br>座れる時刻</div><div class="v" id="k2">—</div></div>
+    <div><div class="lb">終わる<br>時刻</div><div class="v" id="k3">—</div></div>
+  </div>
+  <p style="font-size:15px" id="verdict"></p>
+  <div class="warn" id="tip"></div>
+</div>
+
+<div class="card">
+  <h2>一日の中身</h2>
+  <div class="tl" id="tl"></div>
+  <div class="lgd">
+    <i style="background:#1a1a1a"></i>手が動いている（立っている）　<i style="background:#7fbf8f"></i>10分以上まとまって手が空く（座れる）<br>
+    <i style="background:#2563eb"></i>その席で施術中　<i style="background:#c9d7f5"></i>その席で放置中（薬剤を置いている）
+  </div>
+</div>
+
+<div class="card">
+  <h2>順番ごとの比べ</h2>
+  <p style="font-size:13.5px;color:#6b6b6b">売上も客数も同じまま、最長の立ちっぱなしだけが動きます。</p>
+  <table id="cmp"></table>
+</div>
+
+<div class="card">
+  <div class="kicker">この画面が出さないもの</div>
+  <p style="font-size:15px">空き枠も、客単価も、次回予約の案内文も出しません。出すのは<span class="hl">今日いつ座れるか</span>だけです。売上を1円も動かさずに変えられるのは、そこだけだからです。</p>
+  <p style="margin-top:10px;font-size:14px;color:#444">同じ考え方は、放置時間や乾燥時間がある仕事なら全部当てはまります。歯科の印象材、クリーニングの乾燥、塗装の乾き待ち、整体の温め。手が空く時間が決まっている仕事は、順番だけで疲れが変わります。</p>
+</div>
+
+<div class="card src">
+  <div>この画面の数字は、下のサンプル8件を1分きざみで並べて計算した結果です。実在の店舗のデータは使っていません。放置時間の長さは一般的な施術時間として置いた仮の値で、実際のメニュー時間は店ごとに違います。</div>
+</div>
+</div>
+
+<script>
+// 施術は [手を動かす分, 放置分, 手を動かす分, ...] の交互。先頭は必ず手を動かす。
+var CUS=[
+ {n:"井上 さん",m:"カット",seg:[45]},
+ {n:"岸本 さん",m:"カラー",seg:[20,30,20]},
+ {n:"大村 さん",m:"カット＋カラー",seg:[25,30,35]},
+ {n:"白石 さん",m:"パーマ",seg:[30,25,15,10,20]},
+ {n:"藤堂 さん",m:"カット",seg:[40]},
+ {n:"望月 さん",m:"縮毛矯正",seg:[35,25,40,15,20]},
+ {n:"山際 さん",m:"トリートメント",seg:[15,15,10]},
+ {n:"六車 さん",m:"カット＋パーマ",seg:[15,10,25]}
+];
+var CHAIRS=2, OPEN=9*60, HORIZON=14*60, REST=10;
+var order=[0,1,2,3,4,5,6,7];
+
+function total(c){return c.seg.reduce(function(a,b){return a+b},0)}
+function hhmm(m){var t=OPEN+m;return Math.floor(t/60)+":"+("0"+(t%60)).slice(-2)}
+
+function sim(ord){
+  var busy=new Uint8Array(HORIZON);            // スタイリストの手
+  var chair=[];for(var i=0;i<CHAIRS;i++)chair.push(new Uint8Array(HORIZON));
+  var plan=[];
+  for(var k=0;k<ord.length;k++){
+    var c=CUS[ord[k]],len=total(c),placed=false;
+    for(var s=0;s<HORIZON-len&&!placed;s++){
+      for(var ch=0;ch<CHAIRS&&!placed;ch++){
+        var ok=true;
+        for(var t=s;t<s+len;t++){if(chair[ch][t]){ok=false;break}}
+        if(!ok)continue;
+        var off=0;
+        for(var g=0;g<c.seg.length&&ok;g++){
+          if(g%2===0){for(var t2=s+off;t2<s+off+c.seg[g];t2++){if(busy[t2]){ok=false;break}}}
+          off+=c.seg[g];
+        }
+        if(!ok)continue;
+        for(var t3=s;t3<s+len;t3++)chair[ch][t3]=1;
+        off=0;
+        for(var g2=0;g2<c.seg.length;g2++){
+          if(g2%2===0){for(var t4=s+off;t4<s+off+c.seg[g2];t4++)busy[t4]=1}
+          off+=c.seg[g2];
+        }
+        plan.push({i:ord[k],ch:ch,s:s,len:len,seg:c.seg});
+        placed=true;
+      }
+    }
+    if(!placed)return null;
+  }
+  var end=0;plan.forEach(function(p){if(p.s+p.len>end)end=p.s+p.len});
+  // 10分以上まとまって空く時間だけを「座れる」とみなす
+  var rest=new Uint8Array(HORIZON),run=0;
+  for(var t=0;t<=end;t++){
+    if(!busy[t]){run++}else{
+      if(run>=REST){for(var u=t-run;u<t;u++)rest[u]=1}
+      run=0;
+    }
+  }
+  if(run>=REST){for(var u2=end+1-run;u2<=end;u2++)rest[u2]=1}
+  var first=null,maxStand=0,cur=0;
+  for(var t=0;t<=end;t++){
+    if(rest[t]){if(first===null)first=t;if(cur>maxStand)maxStand=cur;cur=0}
+    else{cur++}
+  }
+  if(cur>maxStand)maxStand=cur;
+  var stand=0;for(var t=0;t<=end;t++)if(!rest[t])stand++;
+  return {plan:plan,end:end,maxStand:maxStand,first:first,stand:stand,busy:busy,rest:rest};
+}
+
+function render(){
+  var h="";
+  order.forEach(function(ci,i){
+    var c=CUS[ci];
+    h+='<div class="row"><div class="ord">'+(i+1)+'</div><div class="nm"><b>'+c.n+'</b><span>'+c.m+'・'+total(c)+'分（うち手を動かすのは'+c.seg.filter(function(_,j){return j%2===0}).reduce(function(a,b){return a+b},0)+'分）</span></div>'
+      +'<div class="mv"><button onclick="mv('+i+',-1)" '+(i===0?"disabled":"")+'>&#9650;</button><button onclick="mv('+i+',1)" '+(i===order.length-1?"disabled":"")+'>&#9660;</button></div></div>';
+  });
+  document.getElementById("list").innerHTML=h;
+
+  var r=sim(order);
+  document.getElementById("k1").innerHTML=Math.floor(r.maxStand/60)+'<small>時間</small>'+(r.maxStand%60)+'<small>分</small>';
+  document.getElementById("k2").textContent=(r.first===null?"なし":hhmm(r.first));
+  document.getElementById("k3").textContent=hhmm(r.end);
+
+  var base=sim([0,1,2,3,4,5,6,7]);
+  var d=base.maxStand-r.maxStand;
+  var v;
+  if(d>0){v="受付が来た順にやるより、立ちっぱなしの最長が <b>"+d+"分短く</b>なりました。終わる時刻は "+hhmm(base.end)+" から "+hhmm(r.end)+"。";}
+  else if(d<0){v="受付が来た順より <b>"+(-d)+"分長く</b>立ちっぱなしになります。";}
+  else{v="受付が来た順と同じです。";}
+  document.getElementById("verdict").innerHTML=v;
+
+  var tip;
+  if(r.first===null){tip="この順番だと、10分以上まとまって手が空く時間が一度もありません。放置時間のある人が連続で並ぶと、その空きが次の人の施術で全部埋まります。";}
+  else if(r.first>180){tip="最初に座れるのは "+hhmm(r.first)+"。開店から "+Math.floor(r.first/60)+"時間"+(r.first%60)+"分たっています。放置時間の長い人（縮毛矯正・パーマ）を前に出すと、その空きが早い時間に来ます。";}
+  else{tip="最初に座れるのは "+hhmm(r.first)+"。立ち時間の合計は "+Math.floor(r.stand/60)+"時間"+(r.stand%60)+"分です。";}
+  document.getElementById("tip").textContent=tip;
+
+  // 帯
+  var W=r.end||1,h2="";
+  h2+='<div class="lab">スタイリストの手</div><div class="lane st">';
+  var seg=[],st=0;
+  for(var t=0;t<=r.end;t++){
+    var cls=r.rest[t]?"rest":"work";
+    if(t===0){st=0}
+    else if((r.rest[t]?"rest":"work")!==(r.rest[t-1]?"rest":"work")){seg.push([st,t,(r.rest[t-1]?"rest":"work")]);st=t}
+  }
+  seg.push([st,r.end+1,(r.rest[r.end]?"rest":"work")]);
+  seg.forEach(function(s){
+    h2+='<i class="'+s[2]+'" style="left:'+(s[0]/W*100)+'%;width:'+((s[1]-s[0])/W*100)+'%"></i>';
+  });
+  h2+='</div>';
+  for(var ch=0;ch<CHAIRS;ch++){
+    h2+='<div class="lab">セット面 '+(ch+1)+'</div><div class="lane">';
+    r.plan.filter(function(p){return p.ch===ch}).forEach(function(p){
+      var off=0;
+      p.seg.forEach(function(len,g){
+        h2+='<i class="'+(g%2===0?"work":"wait")+'" style="left:'+((p.s+off)/W*100)+'%;width:'+(len/W*100)+'%">'+(g===0?CUS[p.i].n.split(" ")[0]:"")+'</i>';
+        off+=len;
+      });
+    });
+    h2+='</div>';
+  }
+  var ax='<div class="axis">';
+  for(var hh=0;hh<=Math.floor(r.end/60);hh+=2){ax+='<span>'+hhmm(hh*60)+'</span>'}
+  ax+='</div>';
+  document.getElementById("tl").innerHTML=h2+ax;
+
+  var rows=[["受付が来た順",[0,1,2,3,4,5,6,7]],["いま並べている順",order.slice()],["短い施術から順",[4,6,0,7,1,2,3,5]],["長い施術から順",[5,3,2,1,7,0,4,6]]];
+  var th='<tr><th>順番</th><th class="r">立ちっぱなし最長</th><th class="r">終わる時刻</th></tr>';
+  rows.forEach(function(x){
+    var s2=sim(x[1]);
+    th+='<tr><td>'+x[0]+'</td><td class="r">'+Math.floor(s2.maxStand/60)+'時間'+(s2.maxStand%60)+'分</td><td class="r">'+hhmm(s2.end)+'</td></tr>';
+  });
+  document.getElementById("cmp").innerHTML=th;
+}
+
+function mv(i,d){
+  var j=i+d;if(j<0||j>=order.length)return;
+  var t=order[i];order[i]=order[j];order[j]=t;
+  document.getElementById("searched").textContent="";
+  render();
+}
+function setOrder(o){order=o.slice();document.getElementById("searched").textContent="";render()}
+
+function search(){
+  function score(r){return r.maxStand*1000+r.end}
+  var best=order.slice(),bv=score(sim(best)),tries=1;
+  // ばらばらの出発点から、2つ入れ替えで下がらなくなるまで詰める。これを何度かやり直す。
+  for(var rs=0;rs<12;rs++){
+    var cur=[0,1,2,3,4,5,6,7];
+    if(rs>0){for(var i=cur.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=cur[i];cur[i]=cur[j];cur[j]=t}}
+    var cv=score(sim(cur));tries++;
+    var improved=true;
+    while(improved){
+      improved=false;
+      for(var a=0;a<8;a++)for(var b=a+1;b<8;b++){
+        var c2=cur.slice();var t2=c2[a];c2[a]=c2[b];c2[b]=t2;
+        var r2=sim(c2);tries++;
+        if(r2&&score(r2)<cv){cv=score(r2);cur=c2;improved=true}
+      }
+    }
+    if(cv<bv){bv=cv;best=cur.slice()}
+  }
+  order=best;
+  document.getElementById("searched").textContent=tries+"通り試した中でいちばん座れた順です。全部（40,320通り）は試していません。座れる時間を優先しているので、終わる時刻はうしろにずれることがあります。";
+  render();
+}
+render();
+</script>
+</body>
+</html>

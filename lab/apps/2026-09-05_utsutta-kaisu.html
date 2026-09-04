@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>うつった回数</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+.prog{font-size:13px;color:#6b6b6b;margin-bottom:4px;display:flex;justify-content:space-between}
+.bar{height:5px;background:#e5e3dd;border-radius:3px;overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;background:#2563eb;border-radius:3px;transition:width .2s}
+.photo{background:#fbfaf7;border:1px solid #e8e5de;border-radius:12px;padding:16px 14px;min-height:196px}
+.photo .meta{font-size:13px;color:#6b6b6b;margin-bottom:12px}
+.photo .frame{background:#eeece6;border-radius:8px;padding:16px 12px;display:flex;flex-wrap:wrap;gap:7px;justify-content:center;align-items:center;min-height:112px}
+.tag{background:#fff;border:1px solid #ddd9d0;border-radius:20px;padding:5px 13px;font-size:15px}
+.two{display:flex;gap:10px;margin-top:12px}
+.two button{flex:1;border-radius:12px;padding:14px;font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;border:1.5px solid #2563eb;background:#fff;color:#2563eb}
+.two button.yes{background:#2563eb;color:#fff}
+.tally{text-align:center;font-size:14px;color:#6b6b6b;margin-top:12px}
+.tally b{font-size:24px;color:#1a1a1a}
+.big{font-size:34px;font-weight:700;line-height:1.25}
+.big small{font-size:16px;font-weight:600;color:#6b6b6b;margin-left:3px}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.sub2{font-size:13px;color:#6b6b6b}
+input[type=range]{width:100%;margin:14px 0 4px;accent-color:#2563eb}
+.rank{margin-top:10px}
+.rw{display:flex;align-items:center;gap:8px;font-size:14px;padding:3px 0}
+.rw .n{width:52px;flex:none}
+.rw .b{flex:1;height:14px;background:#e5e3dd;border-radius:3px;overflow:hidden}
+.rw .b i{display:block;height:100%;background:#c3c0b7;border-radius:3px}
+.rw.me .b i{background:#2563eb}
+.rw.zero .b i{background:#b04a3a}
+.rw .c{width:34px;text-align:right;flex:none;font-weight:700}
+.rw.me .n,.rw.me .c{color:#1d4ed8}
+.warn{background:#faf3ef;border-radius:12px;padding:14px;margin-top:14px;font-size:14px}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.tabs{display:flex;gap:8px;margin:14px 0 6px}
+.tabs button{flex:1;border:1.5px solid #2563eb;background:#fff;color:#2563eb;border-radius:10px;padding:9px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer}
+.tabs button.on{background:#2563eb;color:#fff}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。園名・園児名・写真はすべて架空です。実際の写真は使っていないので、誰が写っているかを名前の札で表しています。</div>
+<h1>うつった回数</h1>
+<p class="lead">にじいろ保育園 ひまわり組（18人）の6月。園だよりに載った20枚を、1枚ずつめくります。あなたは「ゆうと」の保護者です。</p>
+
+<div class="card" id="intro">
+  <h2>やること</h2>
+  <p>園だよりの写真を1枚ずつ見て、<b>うちの子（ゆうと）が写っていたか</b>だけ答えてください。20枚です。数えるのはこちらでやります。</p>
+  <p style="margin-top:10px" class="sub2">保護者が実際にやっていることを、そのままなぞります。</p>
+  <button class="btn" onclick="start()">園だよりを開く</button>
+</div>
+
+<div class="card hide" id="flip">
+  <div class="prog"><span id="pn"></span><span>数えた回数 <b id="tal">0</b></span></div>
+  <div class="bar"><i id="bi" style="width:0%"></i></div>
+  <div class="photo">
+    <div class="meta" id="meta"></div>
+    <div class="frame" id="frame"></div>
+  </div>
+  <div class="two">
+    <button class="yes" onclick="ans(1)">ゆうとが いた</button>
+    <button onclick="ans(0)">いなかった</button>
+  </div>
+</div>
+
+<div class="card hide" id="guess">
+  <h2>20枚めくり終わりました</h2>
+  <div class="res">
+    <div class="sub2">園だより20枚のうち、ゆうとが写っていたのは</div>
+    <div class="big" id="myct"></div>
+    <div class="sub2" id="acc"></div>
+  </div>
+  <p style="margin-top:16px">ここで質問です。この月、先生は全部で<b>120枚</b>撮っていました。園だよりに載ったのは、そのうちの20枚です。</p>
+  <p style="margin-top:8px"><b>120枚ぜんぶだと、ゆうとは何回写っていたと思いますか。</b></p>
+  <input type="range" id="g" min="0" max="50" step="1" value="6">
+  <div class="big" id="gv">6<small>回</small></div>
+  <button class="btn" onclick="reveal()">答えを見る</button>
+</div>
+
+<div class="card hide" id="ans">
+  <h2>ゆうとは、21回 写っていました</h2>
+  <div class="res">
+    <div class="sub2">あなたの予想</div>
+    <div class="big" id="gshow"></div>
+    <div class="sub2" style="margin-top:10px">実際（全120枚）</div>
+    <div class="big">21<small>回</small></div>
+    <div class="sub2">18人中10位。ちょうど真ん中です。</div>
+  </div>
+  <p style="margin-top:14px">撮られてはいたのです。落ちていたのは、<b>載せる20枚を選ぶところ</b>でした。園だより20枚では1回、18人中14位。</p>
+
+  <div class="tabs">
+    <button id="tb1" class="on" onclick="tab(1)">全120枚</button>
+    <button id="tb2" onclick="tab(2)">園だより20枚</button>
+  </div>
+  <div class="rank" id="rank"></div>
+  <p class="sub2" id="rnote"></p>
+
+  <div class="warn" id="zero"></div>
+
+  <p style="margin-top:16px"><b>保育園にとっての意味。</b>保護者は数えています。口には出しませんが、園だよりが届いた日に数えています。撮影が均等でも、選ぶ段階でこれだけ偏る。写真販売やクレームの手前で止めるなら、載せる前に「この20枚で0回の子は誰か」を一度出すだけで足ります。</p>
+  <p style="margin-top:10px" class="sub2">この画面がやっているのは、その一度です。撮影データの集計そのものは園の管理システムが持っているので、あとは載せる直前に通すだけになります。</p>
+  <button class="btn sub" onclick="location.reload()">もう一度</button>
+</div>
+
+<div class="src">
+デモ（サンプルデータ）。園児名・写真・登場回数はすべてこの画面の中で生成した架空のものです。実在の保育園・園児とは関係ありません。
+</div>
+</div>
+
+<script>
+var KIDS=['ゆうと','はると','みなと','そうた','りく','かなた','あおい','ひまり','いちか','つむぎ','さな','ゆい','こはる','りお','かえで','そら','なぎ','ひなた'];
+var W=[1.0,1.5,0.7,1.2,0.9,0.5,1.8,1.4,0.8,0.6,1.1,1.0,0.7,1.6,0.9,0.5,1.3,0.8];
+var SEL=[0.6,1.9,0.5,1.0,0.8,0.4,2.4,1.7,0.7,0.4,1.0,0.9,0.5,2.0,0.8,0.35,1.2,0.7];
+var SCENE=['あさのおあつまり','どろんこあそび','おひるごはん','絵本のじかん','園庭であそぶ','お昼寝のまえ','うたのれんしゅう','水あそび','おやつのじかん','おえかき','散歩（さくら公園）','たなばたのかざり'];
+var s=987654321;
+function rnd(){s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff;}
+function pickW(w,ex){var t=0,i;for(i=0;i<w.length;i++)if(ex.indexOf(i)<0)t+=w[i];
+  var r=rnd()*t,c=0;for(i=0;i<w.length;i++){if(ex.indexOf(i)>=0)continue;c+=w[i];if(r<=c)return i;}return -1;}
+var photos=[],full=new Array(18).fill(0),news=new Array(18).fill(0),pick=[];
+(function(){
+  for(var p=0;p<120;p++){
+    var n=2+Math.floor(rnd()*4),ex=[],k;
+    for(var j=0;j<n;j++){k=pickW(W,ex);if(k<0)break;ex.push(k);}
+    ex.sort(function(a,b){return a-b;});
+    photos.push({d:1+Math.floor(rnd()*30),sc:SCENE[Math.floor(rnd()*SCENE.length)],k:ex});
+  }
+  photos.forEach(function(ph){ph.k.forEach(function(i){full[i]++;});});
+  var scored=photos.map(function(ph,idx){var sc=0;ph.k.forEach(function(i){sc+=SEL[i];});
+    return {idx:idx,sc:sc/Math.sqrt(ph.k.length)+rnd()*0.9};});
+  scored.sort(function(a,b){return b.sc-a.sc;});
+  pick=scored.slice(0,20).map(function(x){return x.idx;}).sort(function(a,b){return a-b;});
+  pick.forEach(function(i){photos[i].k.forEach(function(j){news[j]++;});});
+})();
+var idx=0,tally=0;
+function show(id){var e=document.getElementById(id);e.classList.remove('hide');e.scrollIntoView({behavior:'smooth',block:'start'});}
+function start(){document.getElementById('intro').classList.add('hide');show('flip');draw();}
+function draw(){
+  var ph=photos[pick[idx]];
+  document.getElementById('pn').textContent=(idx+1)+' / 20枚目';
+  document.getElementById('bi').style.width=(idx/20*100)+'%';
+  document.getElementById('meta').textContent='6月'+ph.d+'日　'+ph.sc;
+  var h='';
+  for(var i=0;i<ph.k.length;i++)h+='<span class="tag">'+KIDS[ph.k[i]]+'</span>';
+  document.getElementById('frame').innerHTML=h;
+}
+function ans(v){
+  if(v)tally++;
+  document.getElementById('tal').textContent=tally;
+  idx++;
+  if(idx>=20){
+    document.getElementById('flip').classList.add('hide');
+    document.getElementById('myct').innerHTML=tally+'<small>回</small>';
+    document.getElementById('acc').textContent=(tally===news[0])?'数え間違いなし。実際も1回です。':'実際は'+news[0]+'回でした。';
+    show('guess');
+  }else draw();
+}
+var g=document.getElementById('g');
+g.addEventListener('input',function(){document.getElementById('gv').innerHTML=g.value+'<small>回</small>';});
+function reveal(){
+  document.getElementById('gshow').innerHTML=g.value+'<small>回</small>';
+  document.getElementById('guess').classList.add('hide');
+  tab(1);
+  var z=[];for(var i=0;i<18;i++)if(news[i]===0)z.push(KIDS[i]);
+  document.getElementById('zero').innerHTML='<b>園だより20枚に、一度も出てこなかった子が'+z.length+'人います。</b>'+z.join('・')+
+    '。この2人は120枚のほうにも'+full[KIDS.indexOf(z[0])]+'回・'+full[KIDS.indexOf(z[1])]+'回しか写っていません。撮る段階と選ぶ段階、両方で落ちています。';
+  show('ans');
+}
+function tab(n){
+  document.getElementById('tb1').className=(n===1)?'on':'';
+  document.getElementById('tb2').className=(n===2)?'on':'';
+  var arr=(n===1)?full:news;
+  var rows=KIDS.map(function(nm,i){return {n:nm,c:arr[i],i:i};});
+  rows.sort(function(a,b){return b.c-a.c;});
+  var mx=rows[0].c||1,h='';
+  for(var i=0;i<rows.length;i++){
+    var cls=(rows[i].i===0)?'rw me':(rows[i].c===0?'rw zero':'rw');
+    h+='<div class="'+cls+'"><span class="n">'+rows[i].n+'</span><span class="b"><i style="width:'+
+       (rows[i].c/mx*100)+'%"></i></span><span class="c">'+rows[i].c+'</span></div>';
+  }
+  document.getElementById('rank').innerHTML=h;
+  document.getElementById('rnote').textContent=(n===1)
+    ?'先生が撮った120枚ぜんぶ。最多のあおいは41回、最少のかなたは7回。ゆうと（青）は21回で10位。'
+    :'園だよりに載った20枚。最多のあおいは15回、ゆうと（青）は1回で14位。0回の子が2人（赤）。';
+}
+</script>
+</body>
+</html>

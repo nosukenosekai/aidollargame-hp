@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>まんなかの人</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+input[type=range]{width:100%;margin:14px 0 4px;accent-color:#2563eb}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.big small{font-size:16px;font-weight:600;color:#6b6b6b;margin-left:3px}
+.mid{font-size:22px;font-weight:700}
+.sub2{font-size:13px;color:#6b6b6b}
+.chart{margin:14px 0 6px;position:relative}
+.row{display:flex;align-items:flex-end;height:120px;gap:2px}
+.row i{flex:1;background:#d8d5cc;border-radius:2px 2px 0 0;min-height:2px;position:relative}
+.row i.me{background:#2563eb}
+.row i.med{background:#9aa7bd}
+.axis{display:flex;justify-content:space-between;font-size:11px;color:#8a8a8a;margin-top:5px}
+.mark{border-left:2px dashed #b04a3a;position:absolute;top:-6px;bottom:0;font-size:11px;color:#b04a3a;padding-left:4px;white-space:nowrap}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src a{color:#2563eb}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+td{padding:7px 0;border-bottom:1px solid #eeece6}
+td:last-child{text-align:right;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">厚生労働省「2025（令和7）年 国民生活基礎調査の概況」の実データを使っています。デモの作り話ではありません。</div>
+<h1>まんなかの人</h1>
+<p class="lead">日本の世帯の年間所得。まんなかの人はいくらもらっているか。先に当ててから、実際の分布に自分を置きます。</p>
+
+<div class="card" id="q1">
+  <h2>1／3　まず当ててください</h2>
+  <p>全国の世帯を所得の低い順に並べて、ちょうど真ん中に立っている世帯。その年間所得（税や社会保険料を引く前、世帯全員の合計）は、いくらだと思いますか。</p>
+  <input type="range" id="g1" min="100" max="1200" step="10" value="600">
+  <div class="big" id="g1v">600<small>万円</small></div>
+  <button class="btn" onclick="ans1()">これで答える</button>
+</div>
+
+<div class="card hide" id="a1">
+  <h2>実際は451万円でした</h2>
+  <div class="res">
+    <div class="sub2">あなたの予想</div>
+    <div class="mid" id="myg1"></div>
+    <div class="sub2" style="margin-top:10px">実際の中央値（2024年の所得）</div>
+    <div class="big">451<small>万円</small></div>
+  </div>
+  <div class="gap" id="gap1"></div>
+  <p style="margin-top:14px">よく引かれる「平均所得」は<b>575万2千円</b>です。中央値より124万円ほど高い。上のほうに離れて多い世帯がいるので、平均は上に引っぱられます。</p>
+  <p style="margin-top:8px">実際、<b>平均所得金額に届かない世帯が61.5%</b>。「平均以下」は、少数派どころか多数派です。</p>
+  <button class="btn" onclick="show('q2')">自分の位置を見る</button>
+</div>
+
+<div class="card hide" id="q2">
+  <h2>2／3　あなたの世帯はどこか</h2>
+  <p>世帯全員の年間所得の合計を、だいたいで入れてください。この画面の中だけで計算し、どこにも送りません。</p>
+  <input type="range" id="g2" min="50" max="2000" step="10" value="500">
+  <div class="big" id="g2v">500<small>万円</small></div>
+  <button class="btn" onclick="ans2()">分布に置く</button>
+</div>
+
+<div class="card hide" id="a2">
+  <h2>所得の分布と、あなた</h2>
+  <div class="chart">
+    <div class="row" id="bars"></div>
+    <div class="axis"><span>0</span><span>500万</span><span>1000万</span><span>1500万</span><span>2000万〜</span></div>
+  </div>
+  <div class="res">
+    <div class="sub2">あなたより所得が低い世帯</div>
+    <div class="big" id="pct"><span></span></div>
+    <div class="sub2" id="pctsub"></div>
+  </div>
+  <p class="sub2" style="margin-top:10px">※ 公表されている100万円きざみの分布から、その階級の中で均等に散らばっていると仮定して置いた概算です。中央値451万円と平均575万2千円は公表値そのものです。</p>
+  <button class="btn" onclick="show('q3')">貯蓄でも同じことをする</button>
+</div>
+
+<div class="card hide" id="q3">
+  <h2>3／3　貯蓄はもっと開いています</h2>
+  <p>1世帯あたりの平均貯蓄額は<b>1414万8千円</b>。この数字だけ見ると、みんなそれなりに持っているように見えます。</p>
+  <p style="margin-top:8px">同じ調査の内訳はこうです。</p>
+  <table>
+    <tr><td>貯蓄がない</td><td>10.7%</td></tr>
+    <tr><td>100万円未満（貯蓄なしを含む）</td><td>18.9%</td></tr>
+    <tr><td>3000万円以上</td><td>13.0%</td></tr>
+  </table>
+  <p style="margin-top:12px">「持っていない世帯」と「3000万円以上の世帯」がほぼ同じ数だけいて、その平均が1414万円です。</p>
+  <input type="range" id="g3" min="0" max="3000" step="10" value="300">
+  <div class="big" id="g3v">300<small>万円</small></div>
+  <p class="sub2">あなたの世帯の貯蓄額（概算で結構です）</p>
+  <button class="btn" onclick="ans3()">置いてみる</button>
+</div>
+
+<div class="card hide" id="a3">
+  <h2>貯蓄でのあなたの位置</h2>
+  <div class="res">
+    <div class="sub2">あなたより貯蓄が少ない世帯</div>
+    <div class="big" id="pct3"></div>
+    <div class="sub2" id="pct3sub"></div>
+  </div>
+  <p class="sub2" style="margin-top:10px">※ 貯蓄額が分かっている世帯（全体の89.7%）の中での位置。階級の中は均等と仮定した概算です。</p>
+  <div class="gap" style="margin-top:16px">
+    <b>ここまでで分かること</b><br>
+    平均は「まんなか」ではありません。所得も貯蓄も、上に長く伸びた分布なので、平均を基準に自分を測ると、多数派が「自分は下」だと感じることになります。
+  </div>
+  <p style="margin-top:14px"><b>中小企業の値づけにそのまま効く話。</b>「世帯平均575万円」を前提に商品の価格帯を決めると、実際の来店客の真ん中（451万円）を外します。狙う客層の真ん中を見るなら、平均ではなく中央値を使ってください。</p>
+  <button class="btn sub" onclick="location.reload()">もう一度</button>
+</div>
+
+<div class="src">
+出典：厚生労働省「2025（令和7）年 国民生活基礎調査の概況」（2026年7月15日公表）。所得は2024年1年間のもの。<br>
+<a href="https://www.mhlw.go.jp/toukei/saikin/hw/k-tyosa/k-tyosa25/dl/14.pdf" target="_blank" rel="noopener">https://www.mhlw.go.jp/toukei/saikin/hw/k-tyosa/k-tyosa25/dl/14.pdf</a><br>
+使った数値：所得の中央値451万円／1世帯当たり平均所得金額575万2千円／平均所得金額以下の世帯61.5%／所得金額階級別の相対度数分布（図9）／1世帯当たり平均貯蓄額1414万8千円・貯蓄額階級別構成割合（表9）。
+</div>
+</div>
+
+<script>
+var INC=[[0,100,5.8],[100,200,12.2],[200,300,13.5],[300,400,13.0],[400,500,9.6],[500,600,9.1],[600,700,7.5],[700,800,6.2],[800,900,4.9],[900,1000,4.3],[1000,1100,3.1],[1100,1200,2.3],[1200,1300,1.9],[1300,1400,1.4],[1400,1500,1.0],[1500,1600,0.7],[1600,1700,0.7],[1700,1800,0.3],[1800,1900,0.5],[1900,2000,0.3],[2000,2600,1.6]];
+var SAV=[[0,0,10.7],[0,50,4.6],[50,100,3.6],[100,200,6.8],[200,300,5.1],[300,400,5.6],[400,500,2.7],[500,700,9.0],[700,1000,5.9],[1000,1500,9.6],[1500,2000,5.0],[2000,3000,8.1],[3000,5000,13.0]];
+function show(id){document.getElementById(id).classList.remove('hide');document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});}
+function bind(sid,vid){var s=document.getElementById(sid),v=document.getElementById(vid);
+  s.addEventListener('input',function(){v.innerHTML=Number(s.value).toLocaleString()+'<small>万円</small>';});}
+bind('g1','g1v');bind('g2','g2v');bind('g3','g3v');
+
+function pctBelow(x,tbl,base){
+  var c=0;
+  for(var i=0;i<tbl.length;i++){
+    var lo=tbl[i][0],hi=tbl[i][1],p=tbl[i][2];
+    if(x>=hi){c+=p;}
+    else if(x>lo){ c+= (hi>lo)? p*(x-lo)/(hi-lo) : p; break;}
+    else break;
+  }
+  return c/base*100;
+}
+function ans1(){
+  var g=Number(document.getElementById('g1').value);
+  document.getElementById('myg1').innerHTML=g.toLocaleString()+'<small>万円</small>';
+  var d=g-451, t;
+  if(Math.abs(d)<=30) t='ほぼ当たりです。451万円との差は'+Math.abs(d)+'万円。';
+  else if(d>0) t='実際より<b>'+d+'万円 高く</b>見ていました。真ん中の人は、思っているより下にいます。';
+  else t='実際より<b>'+(-d)+'万円 低く</b>見ていました。';
+  document.getElementById('gap1').innerHTML=t;
+  document.getElementById('q1').classList.add('hide');show('a1');
+}
+function ans2(){
+  var x=Number(document.getElementById('g2').value);
+  var bars=document.getElementById('bars');bars.innerHTML='';
+  var max=13.5;
+  for(var i=0;i<INC.length;i++){
+    var b=document.createElement('i');
+    b.style.height=Math.max(2,INC[i][2]/max*100)+'%';
+    if(x>=INC[i][0]&&x<INC[i][1])b.className='me';
+    else if(451>=INC[i][0]&&451<INC[i][1])b.className='med';
+    bars.appendChild(b);
+  }
+  var p=pctBelow(x,INC,99.9);
+  document.getElementById('pct').innerHTML=p.toFixed(0)+'<small>%</small>';
+  var msg='青があなたの階級、灰青が中央値451万円の階級です。';
+  if(Math.abs(x-451)<=15) msg+='　ちょうど真ん中あたりです。上にも下にも、ほぼ同じ数の世帯がいます。';
+  else if(x<451) msg+='　真ん中の451万円には届いていません。ここより低い世帯が'+p.toFixed(0)+'%、高い世帯が'+(100-p).toFixed(0)+'%です。';
+  else if(x<575) msg+='　中央値は超えていますが、平均575万2千円には届いていません。ここが一番人数の多い帯です。';
+  else msg+='　平均575万2千円を超えています。この時点で上位'+(100-p).toFixed(0)+'%です。';
+  document.getElementById('pctsub').innerHTML=msg;
+  document.getElementById('q2').classList.add('hide');show('a2');
+}
+function ans3(){
+  var x=Number(document.getElementById('g3').value);
+  var p=pctBelow(x,SAV,89.7);
+  if(x===0)p=0;
+  document.getElementById('pct3').innerHTML=Math.min(100,p).toFixed(0)+'<small>%</small>';
+  var s;
+  if(x<100) s='貯蓄100万円未満は18.9%。5世帯に1世帯近くがこの帯にいます。';
+  else if(x<1414) s='平均貯蓄額1414万8千円には届いていませんが、それでも下から'+p.toFixed(0)+'%の位置です。平均が真ん中でない、というのはこういうことです。';
+  else s='平均貯蓄額1414万8千円を超えています。3000万円以上の世帯が13.0%いる、その手前の帯です。';
+  document.getElementById('pct3sub').innerHTML=s;
+  document.getElementById('q3').classList.add('hide');show('a3');
+}
+</script>
+</body>
+</html>

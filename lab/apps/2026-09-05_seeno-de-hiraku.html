@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>せーので開く</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn:disabled{background:#c6cbd4;cursor:not-allowed}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+.turn{background:#1a1a1a;color:#fff;border-radius:14px;padding:40px 18px;text-align:center;margin-bottom:14px}
+.turn .who{font-size:28px;font-weight:700;margin:10px 0}
+.turn p{color:#c9c7c1;font-size:14px}
+.item{border-bottom:1px solid #eeece6;padding:12px 0}
+.item:last-of-type{border-bottom:0}
+.item .nm{display:flex;justify-content:space-between;align-items:baseline;font-size:15px}
+.item .nm b{font-size:18px}
+.item input{width:100%;margin-top:6px;accent-color:#2563eb}
+.meter{position:sticky;top:0;background:#fff;padding:10px 0 12px;z-index:5;border-bottom:1px solid #eeece6;margin-bottom:4px}
+.meter .t{display:flex;justify-content:space-between;font-size:14px}
+.meter .t b{font-size:18px}
+.bar{height:8px;background:#e5e3dd;border-radius:4px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:#2563eb;border-radius:4px;transition:width .15s}
+.bar i.over{background:#b04a3a}
+.chip{display:inline-block;background:#eef2fb;color:#1d4ed8;border-radius:20px;padding:6px 14px;font-size:14px;font-weight:600;margin:0 6px 6px 0;border:0;font-family:inherit;cursor:pointer}
+.chip.on{background:#2563eb;color:#fff}
+.diff{padding:13px 0;border-bottom:1px solid #eeece6}
+.diff .h{display:flex;justify-content:space-between;align-items:baseline}
+.diff .h b{font-size:16px}
+.diff .h span{font-size:15px;font-weight:700}
+.diff .g{display:flex;height:10px;margin-top:8px;border-radius:5px;overflow:hidden;background:#f0eee9}
+.diff .g i{display:block}
+.diff .g .a{background:#2563eb}
+.diff .g .b{background:#c9a227}
+.diff .n{font-size:13px;color:#6b6b6b;margin-top:5px}
+.big3{background:#eef2fb;border-radius:12px;padding:14px;margin-top:14px}
+.big3 ol{margin:8px 0 0 20px;font-size:15px}
+.big3 li{margin-bottom:5px}
+.legend{font-size:13px;color:#6b6b6b;margin-bottom:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px}
+.warn{background:#faf3ef;border-radius:12px;padding:14px;margin-top:14px;font-size:14px}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。式場名・金額はすべて架空です。入力した内容はこの画面の中だけにあり、どこにも送りません。</div>
+<h1>せーので開く</h1>
+<p class="lead">結婚式の予算を、ふたりが相手に見せずに配ります。同時に開いて、いちばんズレた項目から話す。1台を交互に渡して使います。</p>
+
+<div class="card" id="setup">
+  <h2>総額を決めます</h2>
+  <p>まず、ふたりで出せる総額だけ先に合わせます。ここは唯一、最初から見せ合う数字です。</p>
+  <div style="margin:12px 0 4px">
+    <button class="chip" onclick="setT(250,this)">250万円</button>
+    <button class="chip on" onclick="setT(320,this)">320万円</button>
+    <button class="chip" onclick="setT(400,this)">400万円</button>
+  </div>
+  <p class="note" style="margin:8px 0 0">1台のスマホを、ひとりずつ順番に持ちます。入力が終わったら画面が黒くなるので、そこで相手に渡してください。</p>
+  <button class="btn" onclick="startA()">はじめる</button>
+</div>
+
+<div class="card hide" id="alloc">
+  <div class="meter">
+    <div class="t"><span id="whoLbl"></span><span>残り <b id="left"></b>万円</span></div>
+    <div class="bar"><i id="barI" style="width:0%"></i></div>
+  </div>
+  <div id="items"></div>
+  <button class="btn" id="doneBtn" onclick="doneTurn()">入れ終わった</button>
+</div>
+
+<div class="turn hide" id="pass">
+  <p>ここから先は見ないでください</p>
+  <div class="who">相手に渡す</div>
+  <p id="passSub"></p>
+  <button class="btn" onclick="startB()" style="margin-top:20px">受け取った</button>
+</div>
+
+<div class="turn hide" id="ready">
+  <p>ふたりぶん、入りました</p>
+  <div class="who">せーの</div>
+  <p>ふたりで画面を見てから押してください</p>
+  <button class="btn" onclick="reveal()" style="margin-top:20px">開く</button>
+</div>
+
+<div class="card hide" id="result">
+  <h2>開いた結果</h2>
+  <div class="legend"><i style="background:#2563eb"></i>Aさん　<i style="background:#c9a227"></i>Bさん　ズレの大きい順</div>
+  <div id="diffs"></div>
+  <div class="big3">
+    <b>話すのは、この3つだけでいい</b>
+    <ol id="top3"></ol>
+  </div>
+  <div class="warn" id="agree"></div>
+  <p style="margin-top:16px"><b>式場のプランナーが商談で使う道具として。</b>見積もりを1枚ずつ説明していくと、ふたりの意見の違いが商談中に表に出て、その場が止まります。先にこれを2分やらせて、揃っている項目は説明を飛ばし、ズレた3項目だけに時間を使う。追加のご提案が通るのも、たいていこの3項目です。</p>
+  <button class="btn sub" onclick="location.reload()">もう一度</button>
+</div>
+
+<div class="src">
+架空の式場を想定したデモです。金額の妥当性を保証するものではありません。実際の見積もりは式場ごとに異なります。
+</div>
+</div>
+
+<script>
+var ITEMS=['料理・飲みもの','衣裳（ふたりぶん）','写真・映像','装花','会場費・席次','引き出物','演出（音響・映像）','招待状・小物'];
+var TOTAL=320, A=null, B=null, cur=null, turn='A';
+function setT(v,el){TOTAL=v;var c=el.parentNode.children;for(var i=0;i<c.length;i++)c[i].classList.remove('on');el.classList.add('on');}
+function show(id){var e=document.getElementById(id);e.classList.remove('hide');e.scrollIntoView({behavior:'smooth',block:'start'});}
+function hide(id){document.getElementById(id).classList.add('hide');}
+
+function buildItems(){
+  cur=new Array(ITEMS.length).fill(0);
+  var h='';
+  var mx=Math.round(TOTAL*0.6/5)*5;
+  for(var i=0;i<ITEMS.length;i++){
+    h+='<div class="item"><div class="nm"><span>'+ITEMS[i]+'</span><b><span id="v'+i+'">0</span>万円</b></div>'+
+       '<input type="range" min="0" max="'+mx+'" step="5" value="0" oninput="setV('+i+',this.value)"></div>';
+  }
+  document.getElementById('items').innerHTML=h;
+  upd();
+}
+function setV(i,v){cur[i]=Number(v);document.getElementById('v'+i).textContent=v;upd();}
+function upd(){
+  var s=cur.reduce(function(a,b){return a+b;},0);
+  var left=TOTAL-s;
+  document.getElementById('left').textContent=left;
+  var pc=Math.min(100,s/TOTAL*100);
+  var bi=document.getElementById('barI');
+  bi.style.width=pc+'%';
+  bi.className=(s>TOTAL)?'over':'';
+  var btn=document.getElementById('doneBtn');
+  if(s>TOTAL){btn.disabled=true;btn.textContent='総額を'+(s-TOTAL)+'万円 超えています';}
+  else if(s<TOTAL*0.6){btn.disabled=true;btn.textContent='あと'+Math.ceil(TOTAL*0.6-s)+'万円ぶん配ってください';}
+  else{btn.disabled=false;btn.textContent='入れ終わった';}
+}
+function startA(){turn='A';hide('setup');document.getElementById('whoLbl').textContent='Aさんの番';buildItems();show('alloc');}
+function startB(){turn='B';hide('pass');document.getElementById('whoLbl').textContent='Bさんの番';buildItems();show('alloc');}
+function doneTurn(){
+  if(turn==='A'){A=cur.slice();hide('alloc');
+    document.getElementById('passSub').textContent='Aさんの配分は伏せました。Bさんが同じことをします。';
+    show('pass');}
+  else{B=cur.slice();hide('alloc');show('ready');}
+}
+function reveal(){
+  hide('ready');
+  var rows=[];
+  for(var i=0;i<ITEMS.length;i++)rows.push({n:ITEMS[i],a:A[i],b:B[i],d:Math.abs(A[i]-B[i])});
+  rows.sort(function(x,y){return y.d-x.d;});
+  var mx=Math.max.apply(null,rows.map(function(r){return Math.max(r.a,r.b);}))||1;
+  var h='';
+  for(var i=0;i<rows.length;i++){
+    var r=rows[i];
+    var who=r.a>r.b?'Aさんのほうが'+r.d+'万円 多い':(r.b>r.a?'Bさんのほうが'+r.d+'万円 多い':'ぴったり同じ');
+    h+='<div class="diff"><div class="h"><b>'+r.n+'</b><span>'+(r.d===0?'差なし':'差 '+r.d+'万円')+'</span></div>'+
+       '<div class="g"><i class="a" style="width:'+(r.a/mx*50)+'%"></i><i class="b" style="width:'+(r.b/mx*50)+'%"></i></div>'+
+       '<div class="n">Aさん '+r.a+'万円／Bさん '+r.b+'万円　'+who+'</div></div>';
+  }
+  document.getElementById('diffs').innerHTML=h;
+  var t3='';
+  for(var i=0;i<3;i++){
+    if(rows[i].d===0){t3+='<li>ズレはここまで。3項目もありませんでした</li>';break;}
+    t3+='<li><b>'+rows[i].n+'</b>（'+rows[i].d+'万円ぶん）</li>';
+  }
+  document.getElementById('top3').innerHTML=t3;
+  var same=rows.filter(function(r){return r.d<=5;}).length;
+  var tot=rows.reduce(function(a,r){return a+r.d;},0);
+  var move=Math.round(tot/2), rate=move/TOTAL*100;
+  document.getElementById('agree').innerHTML='8項目のうち<b>'+same+'項目</b>は5万円以内で揃っていました。ふたりの案を1つにするには<b>'+move+'万円</b>（総額の'+rate.toFixed(0)+'%）を項目のあいだで動かすことになります。'+
+    (rate<=10?'　優先順位はほぼ同じです。見積もりを1枚ずつ確認する時間は要りません。'
+    :(rate<=25?'　ふつうのズレ方です。上の3項目だけ先に決めれば、残りは揃っています。'
+    :'　かなり離れています。総額の話をする前に、上の3項目でどちらを立てるかを決めたほうが早いです。'));
+  show('result');
+}
+</script>
+</body>
+</html>

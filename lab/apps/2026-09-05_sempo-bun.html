@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>千歩ぶん</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+input[type=range]{width:100%;margin:14px 0 4px;accent-color:#2563eb}
+.big{font-size:34px;font-weight:700;line-height:1.25}
+.big small{font-size:16px;font-weight:600;color:#6b6b6b;margin-left:3px}
+.sub2{font-size:13px;color:#6b6b6b}
+.line{position:relative;height:64px;margin:22px 0 10px}
+.line .track{position:absolute;left:0;right:0;top:30px;height:6px;background:#e5e3dd;border-radius:3px}
+.line .fill{position:absolute;top:30px;height:6px;background:#2563eb;border-radius:3px}
+.line .dot{position:absolute;top:24px;width:10px;height:10px;margin-left:-5px;background:#9aa7bd;border:3px solid #f5f4f0;border-radius:50%}
+.line .lab{position:absolute;top:44px;font-size:11px;color:#8a8a8a;transform:translateX(-50%);white-space:nowrap}
+.line .you{position:absolute;top:18px;width:14px;height:14px;margin-left:-7px;background:#2563eb;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 1px #2563eb}
+.line .youlab{position:absolute;top:-2px;font-size:11px;color:#2563eb;font-weight:700;transform:translateX(-50%);white-space:nowrap}
+.line .goal{position:absolute;top:22px;width:14px;height:14px;margin-left:-7px;background:#fff;border:3px solid #2563eb;border-radius:50%}
+.two{display:flex;gap:10px;margin-top:6px}
+.two>div{flex:1;border-radius:12px;padding:14px 12px}
+.do{background:#eef2fb}
+.dont{background:#f2f1ec}
+.two h3{font-size:14px;margin-bottom:8px}
+.two .n{font-size:24px;font-weight:700;line-height:1.3}
+.two .do .n{color:#1d4ed8}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+td{padding:8px 0;border-bottom:1px solid #eeece6}
+td:last-child{text-align:right;font-weight:700;color:#1d4ed8;white-space:nowrap}
+.warn{background:#faf3ef;border-radius:12px;padding:14px;margin-top:14px;font-size:14px}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src a{color:#2563eb;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">2025年7月にThe Lancet Public Healthに載った、57研究のまとめ（用量反応メタ解析）の公表値を使っています。デモの作り話ではありません。</div>
+<h1>千歩ぶん</h1>
+<p class="lead">1日にあと1000歩だけ足す。足す場合と足さない場合の先を、並べて見ます。</p>
+
+<div class="card" id="q1">
+  <h2>1／3　いま、1日に何歩ですか</h2>
+  <p>スマホの歩数計のここ1週間の平均で結構です。分からなければ感覚で。</p>
+  <input type="range" id="s1" min="1000" max="15000" step="250" value="5000">
+  <div class="big" id="s1v">5,000<small>歩</small></div>
+  <button class="btn" onclick="go2()">次へ</button>
+</div>
+
+<div class="card hide" id="q2">
+  <h2>2／3　その1000歩は、何分ぶんか</h2>
+  <p>足す前に、重さを見ておきます。あなたの歩幅を入れてください（身長の約45%が目安。170cmなら約77cm）。</p>
+  <input type="range" id="s2" min="50" max="90" step="1" value="70">
+  <div class="big" id="s2v">70<small>cm</small></div>
+  <div class="warn" id="cost"></div>
+  <button class="btn" onclick="go3()">やる／やらないを並べる</button>
+</div>
+
+<div class="card hide" id="a1">
+  <h2>3／3　足した場合と、足さなかった場合</h2>
+  <div class="line" id="line"></div>
+  <p class="sub2" id="posmsg"></p>
+
+  <div class="two">
+    <div class="do">
+      <h3>足す（+1000歩）</h3>
+      <div class="n" id="doN"></div>
+      <div class="sub2" id="doS"></div>
+    </div>
+    <div class="dont">
+      <h3>足さない</h3>
+      <div class="n" id="dontN"></div>
+      <div class="sub2" id="dontS"></div>
+    </div>
+  </div>
+
+  <div id="reach"></div>
+
+  <h2 style="margin-top:22px">論文が出している数字は、これだけです</h2>
+  <p class="sub2">1日2000歩の人を基準にしたときの、7000歩の人のリスク。</p>
+  <table>
+    <tr><td>亡くなるリスク（全死因）</td><td>47%低い</td></tr>
+    <tr><td>心臓・血管の病気で亡くなる</td><td>47%低い</td></tr>
+    <tr><td>認知症になる</td><td>38%低い</td></tr>
+    <tr><td>転ぶ</td><td>28%低い</td></tr>
+    <tr><td>心臓・血管の病気になる</td><td>25%低い</td></tr>
+    <tr><td>うつの症状が出る</td><td>22%低い</td></tr>
+    <tr><td>2型糖尿病になる</td><td>14%低い</td></tr>
+    <tr><td>がんになる</td><td>6%低い</td></tr>
+  </table>
+  <p class="sub2" style="margin-top:10px">10000歩まで増やしても、亡くなるリスクの下がり方は7000歩とほぼ同じでした。認知症はさらに7ポイント下がるだけ。一方、2型糖尿病だけは10000歩で22%低下、12000歩で27%低下と、増やすほど下がり続けています。</p>
+
+  <div class="warn">
+    <b>この数字の限界も、論文がそう書いています。</b><br>
+    がんや認知症については研究の本数が少なく、確からしさは低い（low certainty）。年齢や虚弱さといった条件を調整していない研究も含まれています。歩けば必ずこうなる、という話ではありません。<br>
+    また、5500歩や6250歩といった「あなたの歩数ちょうど」の値は論文に公表がないので、この画面では出していません。言えるのは、7000歩に届くかどうかです。
+  </div>
+
+  <p style="margin-top:16px"><b>会社でやるなら、これだけ。</b>昼休みに片道<span id="onew"></span>だけ歩いて戻る。それで1000歩です。健康経営の施策を増やすより、この距離のどこかに用事を作るほうが続きます。</p>
+  <button class="btn sub" onclick="location.reload()">もう一度</button>
+</div>
+
+<div class="src">
+出典：Daily steps and health outcomes in adults: a systematic review and dose-response meta-analysis. The Lancet Public Health, 2025年7月23日公開。57研究（うち31研究をメタ解析）。DOI: 10.1016/S2468-2667(25)00164-1<br>
+<a href="https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(25)00164-1/fulltext" target="_blank" rel="noopener">https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(25)00164-1/fulltext</a><br>
+数値は同論文の報道発表（2025年7月23日）に記載された公表値から。歩幅・距離・時間の換算は単純計算で、論文とは関係ありません。分速80mで計算しています。
+</div>
+</div>
+
+<script>
+function show(id){var e=document.getElementById(id);e.classList.remove('hide');e.scrollIntoView({behavior:'smooth',block:'start'});}
+var s1=document.getElementById('s1'),s2=document.getElementById('s2');
+s1.addEventListener('input',function(){document.getElementById('s1v').innerHTML=Number(s1.value).toLocaleString()+'<small>歩</small>';});
+s2.addEventListener('input',function(){document.getElementById('s2v').innerHTML=s2.value+'<small>cm</small>';cost();});
+function cost(){
+  var st=Number(s2.value)/100, m=Math.round(1000*st), mins=Math.round(m/80);
+  document.getElementById('cost').innerHTML='1000歩は約<b>'+m.toLocaleString()+'m</b>。ふつうの速さ（分速80m）で歩いて約<b>'+mins+'分</b>。片道にすれば'+Math.round(m/2).toLocaleString()+'m、'+Math.round(mins/2)+'分の場所です。';
+}
+function go2(){document.getElementById('q1').classList.add('hide');cost();show('q2');}
+function go3(){
+  var now=Number(s1.value), after=now+1000;
+  var st=Number(s2.value)/100, m=Math.round(1000*st), mins=Math.round(m/80);
+  var MAX=13000, pos=function(v){return Math.min(100,Math.max(0,(v/MAX)*100));};
+  var L=document.getElementById('line');
+  var pts=[[2000,'2000'],[4000,'4000'],[7000,'7000'],[10000,'10000'],[12000,'12000']];
+  var h='<div class="track"></div><div class="fill" style="left:'+pos(now)+'%;width:'+(pos(Math.min(after,MAX))-pos(now))+'%"></div>';
+  for(var i=0;i<pts.length;i++){h+='<div class="dot" style="left:'+pos(pts[i][0])+'%"></div><div class="lab" style="left:'+pos(pts[i][0])+'%">'+pts[i][1]+'</div>';}
+  h+='<div class="you" style="left:'+pos(now)+'%"></div><div class="youlab" style="left:'+pos(now)+'%">いま</div>';
+  h+='<div class="goal" style="left:'+pos(Math.min(after,MAX))+'%"></div>';
+  L.innerHTML=h;
+  document.getElementById('posmsg').textContent='灰色の点は、論文が数字を公表している歩数です。青い丸がいまのあなた、白抜きの丸が+1000歩の位置。';
+
+  var d=7000-now;
+  if(now>=7000){
+    document.getElementById('doN').textContent='もう届いている';
+    document.getElementById('doS').textContent='7000歩に届いています。ここから増やしても、亡くなるリスクの下がり方はほぼ変わりません。';
+    document.getElementById('dontN').textContent='それでも十分';
+    document.getElementById('dontS').textContent='2型糖尿病だけは増やすほど下がり続けます（10000歩で22%低下）。';
+    document.getElementById('reach').innerHTML='<div class="warn">いま'+now.toLocaleString()+'歩。この場合、足す価値があるのは糖尿病の一点だけです。無理に10000歩を目指す根拠は、この論文からは出てきません。</div>';
+  }else if(after>=7000){
+    document.getElementById('doN').textContent='届く';
+    document.getElementById('doS').textContent='+1000歩で7000歩の帯に入ります。上の表の数字が、そこから言えるようになります。';
+    document.getElementById('dontN').textContent='届かない';
+    document.getElementById('dontS').textContent='あと'+d.toLocaleString()+'歩、'+Math.round(d*st/80)+'分ぶん手前で止まります。';
+    document.getElementById('reach').innerHTML='<div class="warn"><b>1日'+mins+'分で、線をまたぎます。</b>いま'+now.toLocaleString()+'歩、あと'+d.toLocaleString()+'歩。この1000歩がちょうど分かれ目に当たっています。</div>';
+  }else{
+    var need=Math.ceil(d/1000);
+    document.getElementById('doN').textContent=after.toLocaleString()+'歩';
+    document.getElementById('doS').textContent='まだ7000歩には'+(7000-after).toLocaleString()+'歩足りません。この段階では、論文の数字は当てはめられません。';
+    document.getElementById('dontN').textContent=now.toLocaleString()+'歩';
+    document.getElementById('dontS').textContent=(now>2000)?'2000歩よりは多いので、論文が言う「わずかでも増やせば良い」側にはいます。':'論文の基準点である2000歩を下回っています。ここは、増やす効果がいちばん大きいとされる位置です。';
+    document.getElementById('reach').innerHTML='<div class="warn"><b>1000歩では足りません。</b>7000歩まであと'+d.toLocaleString()+'歩、'+need+'回ぶんの「+1000歩」が要ります。時間にして1日'+Math.round(d*st/80)+'分。ここを見ずに「まず1000歩」と決めると、線をまたがないまま終わります。</div>';
+  }
+  document.getElementById('onew').textContent=Math.round(m/2).toLocaleString()+'m（約'+Math.max(1,Math.round(mins/2))+'分）';
+  document.getElementById('q2').classList.add('hide');show('a1');
+}
+</script>
+</body>
+</html>

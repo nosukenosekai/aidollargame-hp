@@ -46,6 +46,7 @@ HP_COUNTERPART = {
     "nfcaf9c186d8e": ("articles/ai-interview-2026.html", "AIに面接をやらせたら内定が12%増えた"),
     "n37843927e437": ("articles/ai-jobs-payroll-2026.html", "AIで雇用は減っていない。ただし22〜25歳の入口だけがへこんでいる"),
     "n8ede6e400fda": ("articles/ai-bousai-2026.html", "防災の日、AIで家の備えを30分で整える"),
+    "n37f645d1f3a3": ("articles/ai-overview-click-2026.html", "検索からの流入は本当に減ったのか"),
 }
 
 # 絵文字・記号の装飾は自社サイト側では出さない(サイト全体の表記ルール)。
@@ -160,6 +161,18 @@ def build_html(items, css):
                 "position": i + 1,
                 "url": it.get("noteUrl") or "https://note.com/{}/n/{}".format(NOTE_USER, it["key"]),
                 "name": clean_text(it["name"]),
+                # 各記事の公開日を明示する。日付が無いと検索側は一覧の鮮度を判断できず、
+                # 古い記事のほうを新着より優先して出してしまう(2026-09-08の観測で実際に発生)。
+                "item": {
+                    "@type": "BlogPosting",
+                    "@id": it.get("noteUrl") or "https://note.com/{}/n/{}".format(NOTE_USER, it["key"]),
+                    "url": it.get("noteUrl") or "https://note.com/{}/n/{}".format(NOTE_USER, it["key"]),
+                    "headline": clean_text(it["name"]),
+                    "datePublished": datetime.fromisoformat(it["publishAt"]).astimezone(JST).isoformat(),
+                    "inLanguage": "ja",
+                    "author": {"@type": "Organization", "name": "株式会社AIdollargame", "url": SITE + "/"},
+                    "publisher": {"@type": "Organization", "name": "株式会社AIdollargame", "url": SITE + "/"},
+                },
             }
             for i, it in enumerate(items)
         ],

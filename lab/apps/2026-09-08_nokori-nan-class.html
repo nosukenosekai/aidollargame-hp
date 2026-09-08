@@ -148,7 +148,8 @@ function render(i){
   document.getElementById('oname').textContent=s.n;
   document.getElementById('odesc').textContent=s.d;
   document.getElementById('v6').innerHTML=series[6]+'<small>学級</small>';
-  document.getElementById('s6').textContent='いまは'+series[0]+'学級。6年で'+(series[6]-series[0]>0?'+':'')+(series[6]-series[0])+'学級。';
+  var dc=series[6]-series[0];
+  document.getElementById('s6').textContent='いまは'+series[0]+'学級。6年で'+(dc>0?dc+'学級ふえます。':dc<0?(-dc)+'学級へります。':'学級の数は変わりません。');
   document.getElementById('tnow').textContent=totals[0]+'人';
   document.getElementById('t6').textContent=totals[6]+'人';
   var diff=totals[6]-totals[0];

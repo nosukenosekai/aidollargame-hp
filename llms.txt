@@ -111,6 +111,7 @@
 - 人が辞めても、ノウハウが辞めない会社のつくり方｜介護事業所の65.2%が人手不足。退職とともに消える手順と判断を会社に残す: https://aidollargame.com/articles/knowledge-stays-2026.html
 - 運送の人手不足、「採る」の前に「早く一人前にする」という一手｜トラック運転手の有効求人倍率2.61倍のなかで新人の立ち上がりを早める: https://aidollargame.com/articles/unso-knowledge-2026.html
 - 個人は15%速くなり、会社は0.29%しか動かなかった｜個人のAI利用は1時間あたりの成果を15%増やしたが、約6,000社の幹部が答えた過去3年の生産性への影響は平均0.29%。会社の数字を動かすのはスキルではなく、どの業務のどこにAIを置くかという配置: https://aidollargame.com/articles/ai-productivity-gap-2026.html
+- AIは準備に使ってよく、判断には使わない｜ニューヨーク市が2026-27年度に出したAI方針は全面禁止ではなく用途ごとの書き分け。教職員は授業準備と事務には使ってよく、採点・行動監視・進級や卒業の判断には使えない。社内AIルールに移せる6項目: https://aidollargame.com/articles/shanai-ai-rule-2026.html
 
 ## 連絡先 (Contact)
 - メール: nosuke@aidollargame.com

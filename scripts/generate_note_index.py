@@ -48,6 +48,7 @@ HP_COUNTERPART = {
     "n8ede6e400fda": ("articles/ai-bousai-2026.html", "防災の日、AIで家の備えを30分で整える"),
     "n37f645d1f3a3": ("articles/ai-overview-click-2026.html", "検索からの流入は本当に減ったのか"),
     "na2694c4836d4": ("articles/ai-productivity-gap-2026.html", "個人は15%速くなり、会社は0.29%しか動かなかった"),
+    "n3379463ecd76": ("articles/shanai-ai-rule-2026.html", "AIは準備に使ってよく、判断には使わない"),
 }
 
 # 絵文字・記号の装飾は自社サイト側では出さない(サイト全体の表記ルール)。

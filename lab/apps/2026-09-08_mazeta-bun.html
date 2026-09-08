@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>まぜた分</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.big small{font-size:16px;font-weight:600;color:#6b6b6b;margin-left:3px}
+.sub2{font-size:13px;color:#6b6b6b}
+.stim{background:#101218;color:#fff;border-radius:14px;padding:34px 16px;text-align:center;font-size:64px;font-weight:700;letter-spacing:.04em;line-height:1;margin:6px 0 4px;font-variant-numeric:tabular-nums}
+.tag{text-align:center;font-size:13px;color:#6b6b6b;margin-bottom:12px;min-height:20px}
+.pair{display:flex;gap:10px}
+.pair button{flex:1;background:#fff;color:#1a1a1a;border:1.5px solid #cfcbc2;border-radius:12px;padding:18px 6px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer}
+.pair button:active{background:#eef2fb;border-color:#2563eb}
+.prog{height:6px;background:#eeece6;border-radius:3px;overflow:hidden;margin-top:14px}
+.prog i{display:block;height:100%;background:#2563eb;width:0;transition:width .15s linear}
+.bar{margin-bottom:10px}
+.bar .lbl{font-size:13px;color:#555;margin-bottom:4px;display:flex;justify-content:space-between}
+.bar .track{background:#eeece6;border-radius:6px;height:26px;overflow:hidden}
+.bar .fill{height:100%;border-radius:6px;transition:width .6s ease}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src a{color:#2563eb;word-break:break-all}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+input[type=range]{width:100%;margin:14px 0 4px;accent-color:#2563eb}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+td{padding:7px 0;border-bottom:1px solid #eeece6}
+td:last-child{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">あなた自身の反応時間をその場で測ります。表示される秒数は、あなたが今この画面で出した実測値です。</div>
+<h1>まぜた分</h1>
+<p class="lead">同じ20問を、まとめて解いた場合と、交互に混ぜた場合。かかる時間がどれだけ変わるかを、自分の手で測ります。</p>
+
+<div class="card" id="intro">
+  <h2>やること</h2>
+  <p>画面に「数字」か「ひらがな」がひとつずつ出ます。</p>
+  <p style="margin-top:8px">数字なら、<b>偶数か奇数か</b>を押す。<br>ひらがななら、<b>母音（あいうえお）かそれ以外か</b>を押す。</p>
+  <p style="margin-top:8px">これを2回やります。1回目は数字10問のあとにひらがな10問。2回目は数字とひらがなが1問ごとに入れ替わります。問題の中身も数も同じです。</p>
+  <div class="warn">静かな場所で、片手で押せる状態にしてから始めてください。途中で手を止めると測定になりません。</div>
+  <button class="btn" onclick="startBlock(0)">1回目（まとめて）を始める</button>
+</div>
+
+<div class="card hide" id="play">
+  <div class="step" id="blockName"></div>
+  <div class="stim" id="stim">-</div>
+  <div class="tag" id="tag"></div>
+  <div class="pair">
+    <button onclick="hit(0)" id="btnL">左</button>
+    <button onclick="hit(1)" id="btnR">右</button>
+  </div>
+  <div class="prog"><i id="prog"></i></div>
+</div>
+
+<div class="card hide" id="mid">
+  <h2>1回目が終わりました</h2>
+  <div class="res"><div class="sub2">1問あたり</div><div class="big" id="midv">-</div><div class="sub2" id="midsub"></div></div>
+  <p style="margin-top:12px">次は同じ20問を、数字とひらがなを1問ごとに入れ替えて解きます。</p>
+  <button class="btn" onclick="startBlock(1)">2回目（交互）を始める</button>
+</div>
+
+<div class="card hide" id="done">
+  <h2>あなたの切り替えコスト</h2>
+  <div class="bar"><div class="lbl"><span>まとめて解いたとき</span><b id="bA">-</b></div><div class="track"><div class="fill" id="fA" style="width:0%;background:#9aa7bd"></div></div></div>
+  <div class="bar"><div class="lbl"><span>交互に解いたとき</span><b id="bB">-</b></div><div class="track"><div class="fill" id="fB" style="width:0%;background:#2563eb"></div></div></div>
+  <div class="res">
+    <div class="sub2">1回切り替えるたびに、あなたが余計に使った時間</div>
+    <div class="big" id="cost">-</div>
+    <div class="sub2" id="costsub"></div>
+  </div>
+  <table>
+    <tr><td>まとめて 20問の合計</td><td id="tA">-</td></tr>
+    <tr><td>交互 20問の合計</td><td id="tB">-</td></tr>
+    <tr><td>押し間違い（まとめて / 交互）</td><td id="errs">-</td></tr>
+  </table>
+  <div class="warn" id="warnbox"></div>
+  <button class="btn" onclick="toDay()">1日ぶんに換算する</button>
+</div>
+
+<div class="card hide" id="day">
+  <h2>1日ぶんに直す</h2>
+  <p>仕事中、別の作業に頭を移す回数は1日に何回ありますか。メールを開いた、電話が鳴った、話しかけられた、チャットを見た。全部1回です。</p>
+  <input type="range" id="n" min="10" max="300" step="5" value="80">
+  <div class="big" id="nv">80<small>回</small></div>
+  <div class="res">
+    <div class="sub2">あなたの実測値でかけ算すると、1日あたり</div>
+    <div class="big" id="dayv">-</div>
+    <div class="sub2">これは切り替えの直後に遅くなる分だけです。中断で作業をやり直す時間は入っていません。</div>
+  </div>
+  <div class="gap">この実験のもとになった研究では、切り替え1回のコストは「数十分の1秒から数分の1秒」とされ、それが積み上がると生産的な時間の最大4割に達しうる、と著者のMeyerは述べています。1回が小さいから無視できる、が成り立たないのがこの現象です。</div>
+  <button class="btn sub" onclick="location.reload()">もう一度測る</button>
+</div>
+
+<div class="card">
+  <h2>仕事に一行だけ翻訳する</h2>
+  <p>見積、請求、シフト、問い合わせ対応を1日中まぜている人ほど、この画面で出た差が毎日効いています。種類ごとに時間をまとめる。それだけで戻ってくる時間があります。</p>
+</div>
+
+<div class="src">
+  出典<br>
+  Rubinstein, J. S., Meyer, D. E., &amp; Evans, J. E. (2001). Executive Control of Cognitive Processes in Task Switching. <i>Journal of Experimental Psychology: Human Perception and Performance</i>, 27(4), 763-797.<br>
+  <a href="https://www.apa.org/pubs/journals/releases/xhp274763.pdf">https://www.apa.org/pubs/journals/releases/xhp274763.pdf</a><br><br>
+  American Psychological Association「Multitasking: Switching costs」（切り替え1回のコストと、最大4割という数字の出どころ）<br>
+  <a href="https://www.apa.org/topics/research/multitasking">https://www.apa.org/topics/research/multitasking</a><br><br>
+  この画面はもとの実験の課題そのものではなく、同じ構造（まとめる／交互に切り替える）を1画面に縮めた簡易版です。出る秒数はあなたの実測値ですが、論文の数値と直接くらべられるものではありません。
+</div>
+</div>
+<script>
+var NUMS=[3,8,4,7,2,9,6,1,5,0];
+var KANA=['か','あ','む','え','ち','お','ぬ','い','ら','う'];
+var VOW='あいうえお';
+var blocks=[[],[]];
+(function(){
+  var i;
+  for(i=0;i<10;i++)blocks[0].push({t:'n',v:NUMS[i]});
+  for(i=0;i<10;i++)blocks[0].push({t:'k',v:KANA[i]});
+  for(i=0;i<10;i++){blocks[1].push({t:'n',v:NUMS[i]});blocks[1].push({t:'k',v:KANA[i]});}
+})();
+var cur=0,idx=0,t0=0,times=[[],[]],errors=[0,0],startAt=0;
+function startBlock(b){
+  cur=b;idx=0;times[b]=[];errors[b]=0;
+  document.getElementById('intro').classList.add('hide');
+  document.getElementById('mid').classList.add('hide');
+  document.getElementById('play').classList.remove('hide');
+  document.getElementById('blockName').textContent=(b===0?'1回目・まとめて':'2回目・交互')+'　20問';
+  document.getElementById('play').scrollIntoView({behavior:'smooth',block:'start'});
+  next();
+}
+function next(){
+  var q=blocks[cur][idx];
+  document.getElementById('stim').textContent=q.v;
+  if(q.t==='n'){document.getElementById('tag').textContent='数字：偶数か奇数か';document.getElementById('btnL').textContent='偶数';document.getElementById('btnR').textContent='奇数';}
+  else{document.getElementById('tag').textContent='ひらがな：母音かそれ以外か';document.getElementById('btnL').textContent='あいうえお';document.getElementById('btnR').textContent='それ以外';}
+  document.getElementById('prog').style.width=(idx/20*100)+'%';
+  t0=performance.now();
+  if(idx===0)startAt=t0;
+}
+function hit(side){
+  var q=blocks[cur][idx];
+  var correct;
+  if(q.t==='n')correct=(q.v%2===0)?0:1;
+  else correct=(VOW.indexOf(q.v)>=0)?0:1;
+  if(side!==correct)errors[cur]++;
+  times[cur].push(performance.now()-t0);
+  idx++;
+  if(idx<20){next();}
+  else{
+    document.getElementById('prog').style.width='100%';
+    document.getElementById('play').classList.add('hide');
+    if(cur===0){
+      var m=mean(times[0]);
+      document.getElementById('midv').innerHTML=(m/1000).toFixed(2)+'<small>秒</small>';
+      document.getElementById('midsub').textContent='20問の合計 '+(sum(times[0])/1000).toFixed(1)+'秒。押し間違い '+errors[0]+'回。';
+      document.getElementById('mid').classList.remove('hide');
+      document.getElementById('mid').scrollIntoView({behavior:'smooth',block:'start'});
+    }else{finish();}
+  }
+}
+function sum(a){var s=0;for(var i=0;i<a.length;i++)s+=a[i];return s;}
+function mean(a){return sum(a)/a.length;}
+function finish(){
+  var mA=mean(times[0]),mB=mean(times[1]);
+  var maxm=Math.max(mA,mB);
+  document.getElementById('bA').textContent=(mA/1000).toFixed(2)+'秒';
+  document.getElementById('bB').textContent=(mB/1000).toFixed(2)+'秒';
+  document.getElementById('fA').style.width=(mA/maxm*100)+'%';
+  document.getElementById('fB').style.width=(mB/maxm*100)+'%';
+  var cost=mB-mA;
+  document.getElementById('cost').innerHTML=(cost>=0?'':'-')+Math.abs(cost/1000).toFixed(2)+'<small>秒</small>';
+  document.getElementById('tA').textContent=(sum(times[0])/1000).toFixed(1)+'秒';
+  document.getElementById('tB').textContent=(sum(times[1])/1000).toFixed(1)+'秒';
+  document.getElementById('errs').textContent=errors[0]+'回 / '+errors[1]+'回';
+  var w='';
+  if(cost<=0){
+    document.getElementById('costsub').textContent='今回は交互のほうが速く出ました。切り替えコストは測れていません。';
+    w='2回目のほうが速いのは、1回目でやり方に慣れたぶんが切り替えコストを上回ったときに起きます。少し間をあけて、もう一度測ってみてください。';
+  }else{
+    document.getElementById('costsub').textContent='まとめて解いたときより1問あたりこれだけ遅くなりました。';
+    if(errors[0]+errors[1]>6)w='押し間違いが多いので、この数字は速さより雑さを測っています。落ち着いてもう一度どうぞ。';
+    else w='この差には、切り替えのコストと、2回目で慣れた分が両方入っています。慣れは差を小さくする側に働くので、本当のコストはこれより大きいはずです。';
+  }
+  document.getElementById('warnbox').textContent=w;
+  window.__cost=Math.max(0,cost);
+  document.getElementById('done').classList.remove('hide');
+  document.getElementById('done').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function toDay(){
+  document.getElementById('day').classList.remove('hide');
+  calcDay();
+  document.getElementById('day').scrollIntoView({behavior:'smooth',block:'start'});
+}
+var n=document.getElementById('n');
+n.oninput=function(){document.getElementById('nv').innerHTML=n.value+'<small>回</small>';calcDay();};
+function calcDay(){
+  var c=window.__cost||0;
+  var total=c*Number(n.value)/1000;
+  var out;
+  if(total<60)out=total.toFixed(0)+'<small>秒</small>';
+  else out=Math.floor(total/60)+'<small>分</small>'+Math.round(total%60)+'<small>秒</small>';
+  document.getElementById('dayv').innerHTML=out;
+}
+</script>
+</body>
+</html>

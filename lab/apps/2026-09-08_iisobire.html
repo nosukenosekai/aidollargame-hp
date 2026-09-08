@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>言いそびれ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn:disabled{background:#c9cdd6;cursor:default}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.rec{background:#b04a3a}
+.hide{display:none}
+.sub2{font-size:13px;color:#6b6b6b}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chips button{background:#fff;border:1.5px solid #cfcbc2;border-radius:999px;padding:9px 13px;font-size:14px;font-family:inherit;cursor:pointer;text-align:left}
+.chips button:active{background:#eef2fb;border-color:#2563eb}
+.chips button.used{opacity:.4}
+textarea{width:100%;border:1.5px solid #ddd;border-radius:10px;padding:12px;font-size:16px;font-family:inherit;margin-top:10px;resize:vertical;min-height:64px;line-height:1.6}
+.said{margin-top:12px}
+.said .it{background:#f7f6f2;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:14px;display:flex;gap:8px;align-items:flex-start}
+.said .it span{flex:1}
+.said .it b{font-size:11px;color:#2563eb;background:#eef2fb;border-radius:6px;padding:2px 7px;white-space:nowrap;font-weight:700}
+.said .it i{color:#b04a3a;cursor:pointer;font-style:normal;font-weight:700;padding:0 2px}
+.paper{background:#fff;border:1px solid #d9d5cc;border-radius:8px;padding:22px 20px;margin-top:14px;font-size:15px;line-height:1.85}
+.paper h3{font-size:19px;border-bottom:2px solid #1a1a1a;padding-bottom:8px;margin-bottom:14px;letter-spacing:.04em}
+.paper .sec{margin-bottom:14px}
+.paper .sec .t{font-size:12px;color:#555;letter-spacing:.1em;border-left:3px solid #2563eb;padding-left:8px;margin-bottom:5px;font-weight:700}
+.paper .sec ul{margin:0 0 0 20px}
+.paper .sec li{margin-bottom:3px}
+.paper .sec .empty{color:#9a9a9a;font-size:14px}
+.paper .foot{border-top:1px solid #ddd;margin-top:16px;padding-top:10px;font-size:12px;color:#666}
+.paper .chk{font-size:14px}
+.paper .chk div{margin-bottom:4px}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.live{font-size:14px;color:#b04a3a;min-height:22px;margin-top:8px}
+@media print{
+  body{background:#fff;padding:0}
+  .wrap>*:not(#printarea){display:none!important}
+  #printarea{display:block!important}
+  #printarea>*:not(.paper){display:none!important}
+  .paper{border:0;padding:0;margin:0;box-shadow:none}
+  .paper h3{font-size:20px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。診察の内容や薬の判断はしません。話したことを1枚にまとめるだけの画面です。</div>
+<h1>言いそびれ</h1>
+<p class="lead">待合室で、独り言のように話す。診察室に持って入る紙が1枚できます。言い忘れも、聞きそびれも、紙の上にはもう書いてあります。</p>
+
+<div class="card" id="talk">
+  <h2>1　待っているあいだに話す</h2>
+  <button class="btn hide" id="mic" onclick="toggleRec()">押しながら話す</button>
+  <div class="live" id="live"></div>
+  <p class="sub2" id="micnote"></p>
+  <p style="margin-top:10px">タップで足せます。実際の場面のつもりで、思いつく順に。</p>
+  <div class="chips" id="chips"></div>
+  <textarea id="free" placeholder="自分の言葉で足す（例：夜中に足がつって3回起きた）"></textarea>
+  <button class="btn sub" onclick="addFree()">これを足す</button>
+  <div class="said" id="said"></div>
+  <button class="btn" id="make" onclick="make()" disabled>紙にする</button>
+</div>
+
+<div id="printarea" class="hide">
+<div class="card">
+  <h2>2　できた紙</h2>
+  <p class="sub2">この紙を受付で渡すか、診察室で机に置いてください。読む側は30秒で全部わかります。</p>
+</div>
+<div class="paper" id="paper"></div>
+<div class="card">
+  <button class="btn" onclick="window.print()">印刷する</button>
+  <button class="btn sub" onclick="back()">話したことに戻る</button>
+  <div class="gap">紙にする意味は、順番が固定されることです。口で言うと、いちばん気になっていることが最後に回って、時間切れになります。紙は上から読まれます。</div>
+</div>
+</div>
+
+<div class="card">
+  <h2>誰が払うか</h2>
+  <p>患者ではなく、クリニックが払います。待合の数分で問診が終わっている状態は、診察時間そのものを短くします。とくに、同じ話を毎回ゼロから聞き直している内科と整形外科で効きます。</p>
+</div>
+
+<div class="src">
+  この画面の仕分けは、言葉のパターンで振り分けているだけの簡易版です。医学的な判断は一切していません。<br>
+  登場する症状や薬の名前は、画面を動かすためのサンプルで、特定の人のものではありません。体調の相談は必ず医療機関へ。
+</div>
+</div>
+<script>
+var SAMPLES=[
+ {t:'先月の終わりごろから、朝起きると腰が痛い',c:'いつから'},
+ {t:'3週間くらい前から、階段をのぼると息が切れる',c:'いつから'},
+ {t:'座っているときは平気で、立ち上がる時にいちばん痛い',c:'どんなとき'},
+ {t:'夕方になると足がむくんで靴がきつい',c:'どんなとき'},
+ {t:'いちばん困っているのは、夜に眠れないこと',c:'いちばん困ること'},
+ {t:'孫を抱っこできないのがつらい',c:'いちばん困ること'},
+ {t:'この薬はいつまで飲むのか聞きたい',c:'聞きたいこと'},
+ {t:'旅行に行っても大丈夫か知りたい',c:'聞きたいこと'},
+ {t:'血圧の薬を朝に1錠飲んでいる',c:'飲んでいる薬'},
+ {t:'市販の胃薬を、たまに寝る前に飲む',c:'飲んでいる薬'},
+ {t:'前の病院でレントゲンを撮った',c:'これまでの経過'},
+ {t:'湿布を貼ってみたけど変わらなかった',c:'これまでの経過'}
+];
+var ORDER=['いつから','どんなとき','いちばん困ること','これまでの経過','飲んでいる薬','聞きたいこと'];
+var items=[];
+function classify(t){
+  if(/(いつから|前から|ごろから|くらい前|日前|週間|ヶ月|か月|年前|月から|日から|から続|去年|先月|今朝)/.test(t))return 'いつから';
+  if(/(聞きたい|知りたい|大丈夫か|いいのか|でしょうか|していい|やめて|教えて)/.test(t))return '聞きたいこと';
+  if(/(飲んで|飲む|服用|薬|錠|貼っている|処方|サプリ)/.test(t))return '飲んでいる薬';
+  if(/(困っ|つらい|しんどい|きつくて|できない|眠れな)/.test(t))return 'いちばん困ること';
+  if(/(撮った|受けた|通って|効かな|変わらなか|治らな|前の病院|検査を)/.test(t))return 'これまでの経過';
+  if(/(とき|時に|すると|なると|の日|朝|夜|夕方|歩く|立つ|座|階段)/.test(t))return 'どんなとき';
+  return 'そのほか';
+}
+var chips=document.getElementById('chips');
+SAMPLES.forEach(function(s,i){
+  var b=document.createElement('button');b.textContent=s.t;
+  b.onclick=function(){if(b.classList.contains('used'))return;b.classList.add('used');add(s.t);};
+  chips.appendChild(b);
+});
+function add(t){
+  t=t.trim();if(!t)return;
+  items.push({t:t,c:classify(t)});
+  draw();
+}
+function draw(){
+  var box=document.getElementById('said');box.innerHTML='';
+  items.forEach(function(it,i){
+    var d=document.createElement('div');d.className='it';
+    d.innerHTML='<b>'+it.c+'</b><span></span><i>×</i>';
+    d.querySelector('span').textContent=it.t;
+    d.querySelector('i').onclick=function(){items.splice(i,1);draw();};
+    box.appendChild(d);
+  });
+  document.getElementById('make').disabled=items.length<2;
+  document.getElementById('make').textContent=items.length<2?'あと'+(2-items.length)+'つ話すと紙になります':'紙にする（'+items.length+'つ）';
+}
+function addFree(){
+  var f=document.getElementById('free');
+  add(f.value);f.value='';
+}
+function make(){
+  var by={};ORDER.concat(['そのほか']).forEach(function(k){by[k]=[];});
+  items.forEach(function(it){by[it.c].push(it.t);});
+  var h='<h3>診察で伝えること</h3>';
+  ORDER.concat(['そのほか']).forEach(function(k){
+    if(k==='そのほか'&&by[k].length===0)return;
+    h+='<div class="sec"><div class="t">'+k+'</div>';
+    if(by[k].length===0)h+='<div class="empty">（話していません）</div>';
+    else{h+='<ul>';by[k].forEach(function(x){h+='<li>'+esc(x)+'</li>';});h+='</ul>';}
+    h+='</div>';
+  });
+  h+='<div class="sec"><div class="t">帰る前に確かめる</div><div class="chk"><div>□ 次はいつ来ればいいか</div><div>□ 薬はいつまで飲むか</div><div>□ 悪くなったらどうするか</div></div></div>';
+  var d=new Date();
+  h+='<div class="foot">'+d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日　待合室で作成　※この紙は本人が話した内容をならべたものです。診断ではありません。</div>';
+  document.getElementById('paper').innerHTML=h;
+  document.getElementById('talk').classList.add('hide');
+  document.getElementById('printarea').classList.remove('hide');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function back(){
+  document.getElementById('printarea').classList.add('hide');
+  document.getElementById('talk').classList.remove('hide');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition,rec=null,on=false;
+if(SR){
+  document.getElementById('mic').classList.remove('hide');
+  document.getElementById('micnote').textContent='このブラウザは音声入力に対応しています。話し終えるとそのまま行が増えます。';
+  rec=new SR();rec.lang='ja-JP';rec.interimResults=true;rec.continuous=false;
+  rec.onresult=function(e){
+    var fin='',mid='';
+    for(var i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal)fin+=e.results[i][0].transcript;else mid+=e.results[i][0].transcript;
+    }
+    document.getElementById('live').textContent=mid;
+    if(fin){document.getElementById('live').textContent='';add(fin);}
+  };
+  rec.onend=function(){on=false;document.getElementById('mic').textContent='押しながら話す';document.getElementById('mic').classList.remove('rec');};
+  rec.onerror=function(){document.getElementById('live').textContent='うまく聞き取れませんでした。下のタップか自由入力を使ってください。';};
+}else{
+  document.getElementById('micnote').textContent='このブラウザは音声入力に対応していないので、タップと自由入力で試してください。';
+}
+function toggleRec(){
+  if(!rec)return;
+  if(on){rec.stop();}
+  else{on=true;document.getElementById('mic').textContent='聞いています（もう一度押すと止まります）';document.getElementById('mic').classList.add('rec');try{rec.start();}catch(e){}}
+}
+draw();
+</script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>盛れない魚</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn:disabled{background:#c9cdd6;cursor:default}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.danger{background:#fff;color:#b04a3a;border:1.5px solid #b04a3a}
+.hide{display:none}
+.sub2{font-size:13px;color:#6b6b6b}
+canvas{width:100%;height:auto;display:block;background:#eceae4;border-radius:12px}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.big small{font-size:16px;font-weight:600;color:#6b6b6b;margin-left:3px}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.alert{background:#faf0ee;border-radius:12px;padding:14px;margin-top:12px;font-size:14px;color:#7a3226}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+td{padding:8px 0;border-bottom:1px solid #eeece6}
+td.r{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;width:82px}
+td.n{width:34px;color:#8a8a8a;font-size:13px}
+tr.me td{color:#1d4ed8}
+tr.me td.n{color:#1d4ed8}
+tr.up td.r::after{content:' 更新';font-size:11px;color:#b04a3a;font-weight:700}
+.meta{display:flex;gap:10px;margin-top:10px}
+.meta div{flex:1;background:#f7f6f2;border-radius:10px;padding:10px;text-align:center}
+.meta b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.meta span{font-size:12px;color:#6b6b6b}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。並んでいる名前はすべて架空のハンドルネームです。実在の人・実在の釣果ではありません。</div>
+<h1>盛れない魚</h1>
+<p class="lead">釣った魚を計測板に置いて撮る。長さを決めるのは自分ではなく、隣に置いた500mlのペットボトルです。手を伸ばして大きく見せることはできません。</p>
+
+<div class="card">
+  <h2 id="phase">今日の堤防・3投まで</h2>
+  <p class="sub2" style="margin-bottom:10px">登録できるのは、最後に計測した1匹だけです。今日いちばん大きかった魚を選んで載せることはできません。</p>
+  <canvas id="cv" width="700" height="330"></canvas>
+  <div class="meta">
+    <div><b id="mCast">0</b><span>投げた回数</span></div>
+    <div><b id="mBest">-</b><span>登録中の1匹</span></div>
+    <div><b id="mRank">-</b><span>いまの順位</span></div>
+  </div>
+  <div id="stage"></div>
+</div>
+
+<div class="card">
+  <h2 id="bTitle">今日の堤防</h2>
+  <table id="board"></table>
+  <p class="sub2" id="btime"></p>
+</div>
+
+<div class="card hide" id="endcard">
+  <h2 id="endh">-</h2>
+  <div class="res"><div class="sub2">確定した順位</div><div class="big" id="endrank">-</div><div class="sub2" id="endsub"></div></div>
+  <div id="regret"></div>
+  <button class="btn sub" onclick="location.reload()">もう一度、今日をやり直す</button>
+</div>
+
+<div class="card">
+  <h2>なぜ盛れないのか</h2>
+  <p>計測板に置いたペットボトルの高さは21cm。画面はその1点だけを基準に、魚の口から尾の先までを測ります。数字を手で書き換える欄はどこにもありません。</p>
+  <p style="margin-top:8px">釣果の写真が信用されないのは、腕を伸ばして手前に持つだけで魚が2割大きく写るからです。基準物を一緒に写す、それだけで写真は記録になります。</p>
+</div>
+
+<div class="card">
+  <h2>誰が払うか</h2>
+  <p>釣り人ではなく、遊漁船と釣具店が払います。今日の堤防で何が何cm釣れているかは、店にとってその日の仕掛けの売れ筋そのものです。盛られた釣果は在庫を狂わせます。</p>
+</div>
+
+<div class="src">
+  デモです。魚のサイズ、参加者、順位の動きはすべてこの画面のなかで生成した架空の値です。実際の釣果統計ではありません。<br>
+  ペットボトル21cmは、日本国内で流通する500mlの円筒ボトルとしてよくある高さを基準物として置いたものです。
+</div>
+</div>
+<script>
+var CM2PX=13, BOARD=46;
+var NAMES=['あじ太郎','夜光虫','ぬしさん','みなと','カサゴ番長','しおどき','ひとりでいく','朝マヅメ','たろ','ぼうず王'];
+var rivals=[],me={cur:0,casts:0,fish:[]},time=17*60,over=false,rankIfQuit=[];
+var cv=document.getElementById('cv'),ctx=cv.getContext('2d');
+function rnd(a,b){return a+Math.random()*(b-a);}
+function fishSize(cast){
+  // 投げるほど日が暮れて時合いに入る。少しだけ大きい魚が出やすくなる。
+  var b=(cast-1)*0.09;
+  var r=Math.random();
+  if(r<0.10-b*0.6)return rnd(11,15);
+  if(r<0.50-b)return rnd(15,21);
+  if(r<0.82-b*0.5)return rnd(21,26);
+  if(r<0.95+b*0.2)return rnd(26,31);
+  return rnd(31,37);
+}
+function kindOf(cm){return cm<16?'小アジ':cm<22?'アジ':cm<27?'メバル':cm<32?'良型メバル':'尺メバル';}
+(function initRivals(){
+  for(var i=0;i<NAMES.length;i++)rivals.push({n:NAMES[i],c:Math.round(rnd(14,30)*10)/10,up:false});
+})();
+function drawScene(cm,label){
+  ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle='#eceae4';ctx.fillRect(0,0,cv.width,cv.height);
+  var ox=25,oy=250;
+  // 計測板
+  ctx.fillStyle='#dcd8cf';ctx.fillRect(ox-10,oy-190,BOARD*CM2PX+20,215);
+  ctx.strokeStyle='#b8b2a6';ctx.lineWidth=2;ctx.strokeRect(ox-10,oy-190,BOARD*CM2PX+20,215);
+  // 目盛
+  ctx.strokeStyle='#8f8878';ctx.lineWidth=1;ctx.fillStyle='#6b6455';ctx.font='11px sans-serif';
+  for(var c=0;c<=BOARD;c++){
+    var x=ox+c*CM2PX,h=(c%10===0)?16:(c%5===0)?10:5;
+    ctx.beginPath();ctx.moveTo(x,oy);ctx.lineTo(x,oy-h);ctx.stroke();
+    if(c%10===0&&c>0){ctx.fillText(c,x-6,oy+14);}
+  }
+  // ペットボトル（高さ21cm・基準物）
+  var bx=ox+BOARD*CM2PX-46,bh=21*CM2PX,bw=22;
+  ctx.fillStyle='#cfe3ef';ctx.strokeStyle='#7fa3b5';ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(bx,oy);ctx.lineTo(bx,oy-bh+34);ctx.lineTo(bx+bw/2-5,oy-bh+16);
+  ctx.lineTo(bx+bw/2-5,oy-bh);ctx.lineTo(bx+bw/2+5,oy-bh);ctx.lineTo(bx+bw/2+5,oy-bh+16);
+  ctx.lineTo(bx+bw,oy-bh+34);ctx.lineTo(bx+bw,oy);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle='#4a6b7a';ctx.font='bold 11px sans-serif';
+  ctx.fillText('21cm',bx-4,oy-bh-6);
+  ctx.font='10px sans-serif';ctx.fillText('基準物',bx-2,oy+14);
+  if(cm>0){
+    drawFish(ox,oy-56,cm);
+    // キャリパー
+    ctx.strokeStyle='#b04a3a';ctx.lineWidth=2;ctx.setLineDash([5,4]);
+    ctx.beginPath();ctx.moveTo(ox,oy-190);ctx.lineTo(ox,oy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(ox+cm*CM2PX,oy-190);ctx.lineTo(ox+cm*CM2PX,oy);ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#b04a3a';ctx.font='bold 22px sans-serif';
+    ctx.fillText(cm.toFixed(1)+' cm',ox+6,oy-166);
+  }
+  if(label){ctx.fillStyle='#1a1a1a';ctx.font='bold 15px sans-serif';ctx.fillText(label,ox-6,30);}
+}
+function drawFish(x,y,cm){
+  var L=cm*CM2PX,H=L*0.30;
+  ctx.save();ctx.translate(x,y);
+  var g=ctx.createLinearGradient(0,-H/2,0,H/2);
+  g.addColorStop(0,'#8fa3b8');g.addColorStop(.45,'#c9d4de');g.addColorStop(1,'#eef2f5');
+  ctx.fillStyle=g;ctx.strokeStyle='#6f8296';ctx.lineWidth=1.5;
+  ctx.beginPath();
+  ctx.moveTo(0,0);
+  ctx.bezierCurveTo(L*0.22,-H*0.92,L*0.58,-H*0.80,L*0.80,-H*0.14);
+  ctx.lineTo(L*0.80,H*0.14);
+  ctx.bezierCurveTo(L*0.58,H*0.80,L*0.22,H*0.92,0,0);
+  ctx.closePath();ctx.fill();ctx.stroke();
+  // 尾
+  ctx.beginPath();
+  ctx.moveTo(L*0.80,-H*0.14);ctx.lineTo(L,-H*0.62);ctx.lineTo(L*0.90,0);ctx.lineTo(L,H*0.62);ctx.lineTo(L*0.80,H*0.14);
+  ctx.closePath();ctx.fill();ctx.stroke();
+  // 背びれ
+  ctx.beginPath();ctx.moveTo(L*0.30,-H*0.62);ctx.lineTo(L*0.44,-H*1.02);ctx.lineTo(L*0.56,-H*0.55);ctx.closePath();ctx.fill();ctx.stroke();
+  // 胸びれ
+  ctx.beginPath();ctx.moveTo(L*0.28,H*0.16);ctx.lineTo(L*0.42,H*0.72);ctx.lineTo(L*0.46,H*0.14);ctx.closePath();ctx.fill();ctx.stroke();
+  // えら
+  ctx.beginPath();ctx.moveTo(L*0.20,-H*0.66);ctx.quadraticCurveTo(L*0.15,0,L*0.20,H*0.62);ctx.stroke();
+  // 目
+  ctx.fillStyle='#2b2b2b';ctx.beginPath();ctx.arc(L*0.115,-H*0.16,Math.max(2.4,H*0.10),0,7);ctx.fill();
+  ctx.restore();
+}
+function board(){
+  var all=rivals.map(function(r){return {n:r.n,c:r.c,me:false,up:r.up};});
+  if(me.cur>0)all.push({n:'あなた',c:me.cur,me:true,up:false});
+  all.sort(function(a,b){return b.c-a.c;});
+  var t=document.getElementById('board');t.innerHTML='';
+  all.forEach(function(r,i){
+    var tr=document.createElement('tr');
+    if(r.me)tr.className='me';else if(r.up)tr.className='up';
+    tr.innerHTML='<td class="n">'+(i+1)+'</td><td></td><td class="r">'+r.c.toFixed(1)+'cm</td>';
+    tr.children[1].textContent=r.n;
+    t.appendChild(tr);
+  });
+  var rank=0;all.forEach(function(r,i){if(r.me)rank=i+1;});
+  document.getElementById('mRank').textContent=rank?rank+'位':'-';
+  document.getElementById('mBest').textContent=me.cur?me.cur.toFixed(1)+'cm':'-';
+  document.getElementById('mCast').textContent=me.casts;
+  var hh=Math.floor(time/60),mm=time%60;
+  document.getElementById('btime').textContent='いま '+hh+':'+(mm<10?'0':'')+mm+'　参加'+all.length+'人。潮どまりは19:40。';
+  return rank;
+}
+function stage(html){document.getElementById('stage').innerHTML=html;}
+function cast(){
+  if(over)return;
+  me.casts++;
+  var cm=Math.round(fishSize(me.casts)*10)/10;
+  me.fish.push(cm);
+  var prev=me.cur;
+  me.cur=cm;
+  drawScene(cm,kindOf(cm)+'　'+me.casts+'投目');
+  var rank=board();
+  rankIfQuit.push(rank);
+  var msg='<div class="res"><div class="sub2">'+kindOf(cm)+'　自動計測</div><div class="big">'+cm.toFixed(1)+'<small>cm</small></div><div class="sub2">'+
+    (prev===0?'登録しました。いま'+rank+'位です。':(cm>prev?'さっきの'+prev.toFixed(1)+'cmと差し替わりました。いま'+rank+'位です。':'さっきの'+prev.toFixed(1)+'cmは消えました。登録は'+cm.toFixed(1)+'cm、いま'+rank+'位です。'))+'</div></div>';
+  if(me.casts>=3){
+    msg+='<div class="gap">3投使い切りました。ここで確定します。</div>';
+    stage(msg+'<button class="btn" onclick="quit(true)">確定する</button>');
+  }else{
+    msg+='<div class="gap">ここで降りれば'+rank+'位で確定します。粘れば、あと'+(3-me.casts)+'投。ただし登録できるのは最後に釣った1匹だけです。次が小さければ、この'+cm.toFixed(1)+'cmは消えます。</div>';
+    stage(msg+'<button class="btn danger" onclick="quit(false)">この1匹で締める（'+rank+'位で確定）</button><button class="btn" onclick="pull()">もう1投、粘る</button>');
+  }
+}
+function pull(){
+  // 時間が進み、1〜2人が更新する
+  time+=Math.round(rnd(18,34));
+  var upd=Math.random()<0.45?2:1;
+  rivals.forEach(function(r){r.up=false;});
+  for(var i=0;i<upd;i++){
+    var r=rivals[Math.floor(Math.random()*rivals.length)];
+    var add=rnd(0.4,2.6);
+    if(r.c+add>36)add=rnd(0.1,0.6);
+    r.c=Math.round((r.c+add)*10)/10;r.up=true;
+  }
+  board();
+  cast();
+}
+function quit(forced){
+  over=true;
+  var all=rivals.map(function(r){return {c:r.c,me:false};});
+  all.push({c:me.cur,me:true});
+  all.sort(function(a,b){return b.c-a.c;});
+  var rank=0;all.forEach(function(r,i){if(r.me)rank=i+1;});
+  document.getElementById('phase').textContent='今日は終わり';
+  stage('');
+  document.getElementById('endcard').classList.remove('hide');
+  document.getElementById('endh').textContent=forced?'3投、使い切りました':'ここで締めました';
+  document.getElementById('endrank').innerHTML=rank+'<small>位</small>';
+  document.getElementById('endsub').textContent='登録した1匹 '+me.cur.toFixed(1)+'cm　（今日釣った魚：'+me.fish.map(function(x){return x.toFixed(1);}).join(' / ')+'）';
+  var best=Math.min.apply(null,rankIfQuit);
+  var bestAt=rankIfQuit.indexOf(best)+1;
+  var h='';
+  if(best<rank){
+    h='<div class="alert">'+bestAt+'投目で降りていれば'+best+'位でした。粘ったぶん、'+(rank-best)+'位ぶん落ちています。魚は大きくならず、周りだけが伸びた時間です。</div>';
+  }else if(rankIfQuit.length>1&&rank<rankIfQuit[0]){
+    h='<div class="gap">1投目で降りていれば'+rankIfQuit[0]+'位。粘って'+(rankIfQuit[0]-rank)+'位ぶん上げました。今日は粘りが正解でした。</div>';
+  }else{
+    h='<div class="gap">どこで降りても同じ順位でした。今日は降りどきを間違えようがない日です。</div>';
+  }
+  document.getElementById('endcard').insertBefore(document.createRange().createContextualFragment(h),document.getElementById('regret'));
+  document.getElementById('endcard').scrollIntoView({behavior:'smooth',block:'start'});
+}
+drawScene(0,'計測板とペットボトル。ここに魚を置きます');
+board();
+stage('<button class="btn" onclick="cast()">1投目を投げる</button>');
+</script>
+</body>
+</html>

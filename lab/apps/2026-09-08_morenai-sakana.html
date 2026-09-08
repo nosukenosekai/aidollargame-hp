@@ -51,7 +51,7 @@ tr.up td.r::after{content:' 更新';font-size:11px;color:#b04a3a;font-weight:700
 <div class="card">
   <h2 id="phase">今日の堤防・3投まで</h2>
   <p class="sub2" style="margin-bottom:10px">登録できるのは、最後に計測した1匹だけです。今日いちばん大きかった魚を選んで載せることはできません。</p>
-  <canvas id="cv" width="700" height="330"></canvas>
+  <canvas id="cv" width="700" height="392"></canvas>
   <div class="meta">
     <div><b id="mCast">0</b><span>投げた回数</span></div>
     <div><b id="mBest">-</b><span>登録中の1匹</span></div>
@@ -112,10 +112,10 @@ function kindOf(cm){return cm<16?'小アジ':cm<22?'アジ':cm<27?'メバル':cm
 function drawScene(cm,label){
   ctx.clearRect(0,0,cv.width,cv.height);
   ctx.fillStyle='#eceae4';ctx.fillRect(0,0,cv.width,cv.height);
-  var ox=25,oy=250;
+  var ox=25,oy=352;
   // 計測板
-  ctx.fillStyle='#dcd8cf';ctx.fillRect(ox-10,oy-190,BOARD*CM2PX+20,215);
-  ctx.strokeStyle='#b8b2a6';ctx.lineWidth=2;ctx.strokeRect(ox-10,oy-190,BOARD*CM2PX+20,215);
+  ctx.fillStyle='#dcd8cf';ctx.fillRect(ox-10,oy-302,BOARD*CM2PX+20,327);
+  ctx.strokeStyle='#b8b2a6';ctx.lineWidth=2;ctx.strokeRect(ox-10,oy-302,BOARD*CM2PX+20,327);
   // 目盛
   ctx.strokeStyle='#8f8878';ctx.lineWidth=1;ctx.fillStyle='#6b6455';ctx.font='11px sans-serif';
   for(var c=0;c<=BOARD;c++){
@@ -134,19 +134,19 @@ function drawScene(cm,label){
   ctx.fillText('21cm',bx-4,oy-bh-6);
   ctx.font='10px sans-serif';ctx.fillText('基準物',bx-2,oy+14);
   if(cm>0){
-    drawFish(ox,oy-56,cm);
+    drawFish(ox,oy-24-(cm*CM2PX*0.26)*0.92,cm);
     // キャリパー
     ctx.strokeStyle='#b04a3a';ctx.lineWidth=2;ctx.setLineDash([5,4]);
-    ctx.beginPath();ctx.moveTo(ox,oy-190);ctx.lineTo(ox,oy);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(ox+cm*CM2PX,oy-190);ctx.lineTo(ox+cm*CM2PX,oy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(ox,oy-302);ctx.lineTo(ox,oy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(ox+cm*CM2PX,oy-302);ctx.lineTo(ox+cm*CM2PX,oy);ctx.stroke();
     ctx.setLineDash([]);
     ctx.fillStyle='#b04a3a';ctx.font='bold 22px sans-serif';
-    ctx.fillText(cm.toFixed(1)+' cm',ox+6,oy-166);
+    ctx.fillText(cm.toFixed(1)+' cm',ox+6,oy-272);
   }
   if(label){ctx.fillStyle='#1a1a1a';ctx.font='bold 15px sans-serif';ctx.fillText(label,ox-6,30);}
 }
 function drawFish(x,y,cm){
-  var L=cm*CM2PX,H=L*0.30;
+  var L=cm*CM2PX,H=L*0.26;
   ctx.save();ctx.translate(x,y);
   var g=ctx.createLinearGradient(0,-H/2,0,H/2);
   g.addColorStop(0,'#8fa3b8');g.addColorStop(.45,'#c9d4de');g.addColorStop(1,'#eef2f5');

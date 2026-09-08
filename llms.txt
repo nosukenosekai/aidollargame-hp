@@ -101,6 +101,16 @@
 - 定点観測 vol.2: https://aidollargame.com/articles/ai-teiten-2026-08.html
 - AIで研修すると人は育つのか: https://aidollargame.com/articles/ai-training-evidence-2026.html
 
+- 検索からの流入は本当に減ったのか｜AIの要約がクリックをどれだけ削ったか、24億3,000万回の表示を調べた集計ほか実測4本: https://aidollargame.com/articles/ai-overview-click-2026.html
+- AIに「いい会社ですか」と23日間聞き続けた記録｜自社サイトを直しても評価は動かず、第三者媒体に載った2日後に変わった自社1社分の一次データ: https://aidollargame.com/articles/ai-overview-observation-2026.html
+- 海も宿も飯もあったが、、、伊豆下田で気づいた「情報」の重要性｜資源ではなく情報で選ばれなくなる構造: https://aidollargame.com/articles/shimoda-joho-2026.html
+- 防災の日、AIで家の備えを30分で整える｜内閣府調査で家族の安否確認の方法を決めている人は15.1%。AIに任せていいことと絶対に任せてはいけないことを分ける: https://aidollargame.com/articles/ai-bousai-2026.html
+- AI研修に使える助成金は今年度で終わります｜人材開発支援助成金・事業展開等リスキリング支援コース(中小企業なら訓練経費の最大75%、令和8年度が最終年度)の使い方: https://aidollargame.com/articles/ai-training-jyoseikin-2026.html
+- 「AIに仕事を奪われる」は本当か？｜正社員不足51.6%・2030年644万人不足という日本の現実と並べて、煽らず整理する: https://aidollargame.com/articles/ai-job-loss-vs-shortage-2026.html
+- 社内ナレッジAIが効く会社・効かない会社の見分け方｜多スタッフ・高離職・マニュアル過多という4つのサイン: https://aidollargame.com/articles/knowledge-ai-who-2026.html
+- 人が辞めても、ノウハウが辞めない会社のつくり方｜介護事業所の65.2%が人手不足。退職とともに消える手順と判断を会社に残す: https://aidollargame.com/articles/knowledge-stays-2026.html
+- 運送の人手不足、「採る」の前に「早く一人前にする」という一手｜トラック運転手の有効求人倍率2.61倍のなかで新人の立ち上がりを早める: https://aidollargame.com/articles/unso-knowledge-2026.html
+
 ## 連絡先 (Contact)
 - メール: nosuke@aidollargame.com
 - 問い合わせフォーム: https://aidollargame.com/#contact

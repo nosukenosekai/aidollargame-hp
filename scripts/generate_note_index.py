@@ -47,6 +47,7 @@ HP_COUNTERPART = {
     "n37843927e437": ("articles/ai-jobs-payroll-2026.html", "AIで雇用は減っていない。ただし22〜25歳の入口だけがへこんでいる"),
     "n8ede6e400fda": ("articles/ai-bousai-2026.html", "防災の日、AIで家の備えを30分で整える"),
     "n37f645d1f3a3": ("articles/ai-overview-click-2026.html", "検索からの流入は本当に減ったのか"),
+    "na2694c4836d4": ("articles/ai-productivity-gap-2026.html", "個人は15%速くなり、会社は0.29%しか動かなかった"),
 }
 
 # 絵文字・記号の装飾は自社サイト側では出さない(サイト全体の表記ルール)。

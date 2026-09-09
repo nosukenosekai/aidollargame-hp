@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>三対一</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.ghost{background:transparent;color:#6b6b6b;border:1.5px solid #cfcbc2}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.big small{font-size:16px;font-weight:600;color:#6b6b6b;margin-left:3px}
+.sub2{font-size:13px;color:#6b6b6b}
+.pad{background:#101218;color:#fff;border-radius:14px;padding:22px 16px;text-align:center;margin-top:12px;user-select:none;-webkit-user-select:none;cursor:pointer}
+.pad .lbl{font-size:13px;color:#9aa3b2;letter-spacing:.1em}
+.pad .now{font-size:38px;font-weight:700;margin-top:4px;line-height:1.2}
+.pad .cnt{display:flex;justify-content:center;gap:9px;margin-top:14px}
+.pad .cnt i{width:14px;height:14px;border-radius:50%;background:#2a2e38;display:block}
+.pad .cnt i.on{background:#f97316}
+.pad .hint{font-size:13px;color:#7c8496;margin-top:12px}
+.shots{margin-top:12px}
+.shot{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eeece6;padding:9px 0;font-size:15px;font-variant-numeric:tabular-nums}
+.shot .r{font-weight:700}
+.shot .r.ok{color:#1d4ed8}
+.shot .r.ng{color:#c2410c}
+.scale{position:relative;height:56px;margin-top:14px}
+.scale .track{position:absolute;left:0;right:0;top:22px;height:10px;background:#eeece6;border-radius:5px;overflow:hidden}
+.scale .zone{position:absolute;top:22px;height:10px;background:#c7d7f7;border-radius:5px}
+.scale .tick{position:absolute;top:14px;width:3px;height:26px;background:#2563eb;border-radius:2px}
+.scale .me{position:absolute;top:8px;width:3px;height:38px;background:#c2410c;border-radius:2px}
+.scale .lab{position:absolute;top:40px;font-size:11px;color:#6b6b6b;transform:translateX(-50%);white-space:nowrap}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src a{color:#2563eb;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">音が出ます。先に音量を下げてから始めてください。ここに出る数字は、あなたが実際に画面を叩いた間隔です。クラブの動きは測っていません。</div>
+<h1>三対一</h1>
+<p class="lead">うまい人のスイングは、テンポの比がほとんど同じところに集まります。バックスイングにかけた時間を、ダウンスイングにかけた時間で割ると、だいたい3。加速度センサーをクラブに付けて測った研究では、上げ731ミリ秒・下ろし258ミリ秒で2.8でした。まず耳で3対1を聴いてから、自分の比を測ります。</p>
+
+<div class="card">
+  <div class="step">1　耳で覚える</div>
+  <h2>3対1はこう聴こえる</h2>
+  <p>低い音が「構え」、中くらいの音が「トップ」、高い音が「インパクト」です。構えからトップまでが、トップからインパクトまでの3倍あります。</p>
+  <div class="row" style="display:flex;gap:9px;margin-top:12px">
+    <button class="btn sub" style="margin-top:0" onclick="play(24)">ゆっくり（24対8コマ）</button>
+    <button class="btn sub" style="margin-top:0" onclick="play(21)">速い（21対7コマ）</button>
+  </div>
+  <p class="sub2" style="margin-top:10px">かっこ内は、この分野でよく使われる毎秒30コマ換算での上げと下ろしのコマ数です。ゆっくりのほうは上げ0.80秒・下ろし0.27秒、速いほうは上げ0.70秒・下ろし0.23秒で鳴らしています。どちらも比は3.0です。</p>
+</div>
+
+<div class="card">
+  <div class="step">2　自分で叩く</div>
+  <h2>3回叩いて1球ぶん</h2>
+  <p>下の黒い枠を、素振りの気持ちで3回叩きます。1回目が構え、2回目がトップ、3回目がインパクト。目をつぶってやると、耳で覚えたテンポが出やすくなります。5球ぶん測ります。</p>
+  <div class="pad" id="pad" onclick="hit()">
+    <div class="lbl" id="padLbl">1球目　ここを3回叩く</div>
+    <div class="now" id="padNow">構えから</div>
+    <div class="cnt"><i id="d0"></i><i id="d1"></i><i id="d2"></i></div>
+    <div class="hint" id="padHint">1回目を叩くと計測が始まります</div>
+  </div>
+  <div class="shots" id="shots"></div>
+  <button class="btn ghost hide" id="resetBtn" onclick="resetAll()">最初からやり直す</button>
+</div>
+
+<div class="card hide" id="resCard">
+  <div class="step">3　結果</div>
+  <h2>あなたのテンポ比</h2>
+  <div class="res">
+    <div class="sub2">5球の平均（上げ ÷ 下ろし）</div>
+    <div class="big" id="avg">－</div>
+    <div class="sub2" id="avgNote"></div>
+  </div>
+  <div class="scale" id="scale"></div>
+  <p class="sub2" style="margin-top:4px">青い帯が、プロが収まると言われる2.5〜3.1の幅。青い縦線が3.0。オレンジがあなたの5球です。</p>
+  <div id="spread"></div>
+  <button class="btn sub" onclick="openPaper()">元になった実測値を見る</button>
+</div>
+
+<div class="card hide" id="paperCard">
+  <h2>元になった実測値</h2>
+  <table>
+    <thead><tr><th>測ったもの</th><th>値</th></tr></thead>
+    <tbody>
+      <tr><td>バックスイング</td><td>731 ± 21 ミリ秒</td></tr>
+      <tr><td>ダウンスイング</td><td>258 ± 8 ミリ秒</td></tr>
+      <tr><td>比</td><td>2.8</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:12px">クラブに加速度センサーを取り付けて、スイングを比べた研究の値です。イェール大学の研究者による別のテンポ研究でも、上級者のバックスイングとダウンスイングの比が3対1に集まることが報告されています。</p>
+  <div class="gap">
+    <b>面白いのは、速さではなく比だという点です。</b><br>
+    ゆっくり振る人も速く振る人もいますが、うまい人はどちらも比が3付近に集まります。直すべきなのはスイングの速さではなく、上げと下ろしの配分だ、という話になります。
+  </div>
+  <div class="warn">この画面が測ったのは、あなたが指で画面を叩いた間隔です。クラブヘッドの動きではありません。実際のスイングでは、トップで一瞬止まる感覚と、センサーが測る切り返しの時点はずれます。ここで出た比は、あなたのリズム感覚の目安として見てください。</div>
+</div>
+
+<div class="card hide" id="bizCard">
+  <h2>中小企業の話に直すと一行</h2>
+  <p>練習場のレッスンで直すのは「速さ」でなく「配分」だと分かっていれば、打席で渡す指示は1つで済みます。教える側の言葉が1つに絞れると、教わる側は覚えて帰れます。</p>
+</div>
+
+<div class="src">
+出典1: An Accelerometer Based Instrumentation of the Golf Club: Comparative Analysis of Golf Swings（バックスイング731±21ms、ダウンスイング258±8ms、比2.8）<br>
+<a href="https://arxiv.org/pdf/1001.0761">https://arxiv.org/pdf/1001.0761</a><br>
+出典2: Measuring Tempo, Rhythm, Timing, and the Torques that Generate Power in the Golf Swing (R. Grober, Yale University)<br>
+<a href="https://arxiv.org/pdf/1001.1137">https://arxiv.org/pdf/1001.1137</a><br>
+1日1アプリ実験室 / 株式会社AIdollargame
+</div>
+</div>
+
+<script>
+var ac=null;
+function beep(freq,at,dur){
+  var o=ac.createOscillator(),g=ac.createGain();
+  o.type='sine';o.frequency.value=freq;
+  g.gain.setValueAtTime(0.0001,at);
+  g.gain.exponentialRampToValueAtTime(0.35,at+0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001,at+dur);
+  o.connect(g);g.connect(ac.destination);o.start(at);o.stop(at+dur+0.05);
+}
+function play(upFrames){
+  if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();
+  if(ac.state==='suspended')ac.resume();
+  var up=upFrames/30, down=up/3;
+  var t=ac.currentTime+0.15;
+  beep(330,t,0.09);
+  beep(520,t+up,0.09);
+  beep(880,t+up+down,0.12);
+}
+var taps=[],shots=[],shot=0;
+function $(i){return document.getElementById(i)}
+function hit(){
+  if(shot>=5)return;
+  if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)()}
+  if(ac.state==='suspended')ac.resume();
+  var now=performance.now();
+  taps.push(now);
+  var n=taps.length;
+  beep(n===1?330:(n===2?520:880),ac.currentTime,n===3?0.12:0.09);
+  $('d'+(n-1)).classList.add('on');
+  if(n===1){$('padNow').textContent='上げている';$('padHint').textContent='トップで2回目を叩く'}
+  if(n===2){$('padNow').textContent='下ろしている';$('padHint').textContent='インパクトで3回目を叩く'}
+  if(n===3){
+    var up=taps[1]-taps[0], down=taps[2]-taps[1];
+    if(up<80||down<40){
+      $('padNow').textContent='速すぎます';
+      $('padHint').textContent='間隔が短すぎて測れません。もう一度この球をやり直します';
+      resetTaps();return;
+    }
+    shots.push({up:up,down:down,r:up/down});
+    shot++;taps=[];
+    renderShots();
+    if(shot>=5){finish()}else{
+      setTimeout(function(){
+        clearDots();
+        $('padLbl').textContent=(shot+1)+'球目　ここを3回叩く';
+        $('padNow').textContent='構えから';
+        $('padHint').textContent='1回目を叩くと計測が始まります';
+      },500);
+    }
+  }
+}
+function clearDots(){for(var i=0;i<3;i++)$('d'+i).classList.remove('on')}
+function resetTaps(){taps=[];setTimeout(function(){clearDots();$('padNow').textContent='構えから';$('padHint').textContent='1回目を叩くと計測が始まります'},700)}
+function renderShots(){
+  var h='';
+  for(var i=0;i<shots.length;i++){
+    var s=shots[i],ok=(s.r>=2.5&&s.r<=3.1);
+    h+='<div class="shot"><span>'+(i+1)+'球目　上げ'+(s.up/1000).toFixed(2)+'秒 / 下ろし'+(s.down/1000).toFixed(2)+'秒</span><span class="r '+(ok?'ok':'ng')+'">'+s.r.toFixed(2)+'</span></div>';
+  }
+  $('shots').innerHTML=h;
+  $('resetBtn').classList.remove('hide');
+}
+function finish(){
+  $('padLbl').textContent='5球ぶん終わりました';
+  $('padNow').textContent='測り終わり';
+  $('padHint').textContent='下に結果が出ています';
+  var sum=0,min=99,max=0;
+  for(var i=0;i<shots.length;i++){sum+=shots[i].r;min=Math.min(min,shots[i].r);max=Math.max(max,shots[i].r)}
+  var avg=sum/shots.length;
+  $('avg').innerHTML=avg.toFixed(2)+'<small>対1</small>';
+  var msg;
+  if(avg<2.5)msg='下ろしに時間をかけすぎ、または上げが短い側に出ました。プロの帯の下です。';
+  else if(avg>3.1)msg='上げが長い側に出ました。プロの帯の上です。';
+  else msg='プロが収まると言われる2.5〜3.1の帯の中に入りました。';
+  $('avgNote').textContent=msg;
+  /* 目盛り 1.5〜4.5 */
+  var lo=1.5,hi=4.5,pc=function(v){return Math.max(0,Math.min(100,(v-lo)/(hi-lo)*100))};
+  var h='<div class="track"></div><div class="zone" style="left:'+pc(2.5)+'%;width:'+(pc(3.1)-pc(2.5))+'%"></div>';
+  h+='<div class="tick" style="left:'+pc(3.0)+'%"></div><div class="lab" style="left:'+pc(3.0)+'%">3.0</div>';
+  h+='<div class="lab" style="left:0%">1.5</div><div class="lab" style="left:100%">4.5</div>';
+  for(var i=0;i<shots.length;i++)h+='<div class="me" style="left:'+pc(shots[i].r)+'%"></div>';
+  $('scale').innerHTML=h;
+  var sp=max-min;
+  var spMsg;
+  if(sp<0.4)spMsg='5球のばらつきは'+sp.toFixed(2)+'。かなり揃っています。同じテンポを繰り返せる耳を持っています。';
+  else if(sp<1.0)spMsg='5球のばらつきは'+sp.toFixed(2)+'。平均より、この幅のほうが直しどころです。';
+  else spMsg='5球のばらつきは'+sp.toFixed(2)+'と大きめです。平均が3に近くても、毎回違うテンポで振っていることになります。';
+  $('spread').innerHTML='<div class="gap"><b>平均より、ばらつきのほうを見てください。</b><br>'+spMsg+'</div>';
+  $('resCard').classList.remove('hide');
+  $('resCard').scrollIntoView({behavior:'smooth'});
+}
+function resetAll(){shots=[];taps=[];shot=0;clearDots();$('shots').innerHTML='';$('resCard').classList.add('hide');$('paperCard').classList.add('hide');$('bizCard').classList.add('hide');$('padLbl').textContent='1球目　ここを3回叩く';$('padNow').textContent='構えから';$('padHint').textContent='1回目を叩くと計測が始まります';$('resetBtn').classList.add('hide')}
+function openPaper(){$('paperCard').classList.remove('hide');$('bizCard').classList.remove('hide');$('paperCard').scrollIntoView({behavior:'smooth'})}
+</script>
+</body>
+</html>

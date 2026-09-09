@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>思ったより長い</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn:disabled{background:#c9c6bf;cursor:default}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.big small{font-size:16px;font-weight:600;color:#6b6b6b;margin-left:3px}
+.sub2{font-size:13px;color:#6b6b6b}
+.guess{display:flex;align-items:center;gap:10px;margin-top:12px}
+.guess input{flex:1}
+.gv{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;min-width:96px;text-align:right}
+.gv small{font-size:14px;color:#6b6b6b;font-weight:600;margin-left:2px}
+input[type=range]{width:100%;accent-color:#2563eb;height:30px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:12px}
+.grid5 button{aspect-ratio:1;border:1.5px solid #cfcbc2;background:#fff;border-radius:10px;font-size:17px;font-weight:700;font-family:inherit;cursor:pointer;color:#1a1a1a}
+.grid5 button.done{background:#eef2fb;border-color:#2563eb;color:#9db4e8}
+.timer{font-size:44px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center;letter-spacing:.02em}
+.typebox{width:100%;font-size:19px;padding:12px;border:1.5px solid #cfcbc2;border-radius:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;margin-top:10px}
+.target{font-size:21px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#101218;color:#fff;border-radius:10px;padding:14px;text-align:center;letter-spacing:.12em;margin-top:10px;word-break:break-all}
+.dotfield{position:relative;height:210px;background:#fff;border:1.5px solid #cfcbc2;border-radius:12px;margin-top:10px;overflow:hidden}
+.dotfield i{position:absolute;width:15px;height:15px;border-radius:50%}
+.numrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.numrow button{padding:14px 0;border:1.5px solid #cfcbc2;background:#fff;border-radius:10px;font-size:18px;font-weight:700;font-family:inherit;cursor:pointer}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+.bar{height:10px;background:#eeece6;border-radius:5px;overflow:hidden;margin-top:5px}
+.bar i{display:block;height:100%;background:#2563eb}
+.bar.act i{background:#c2410c}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src a{color:#2563eb;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">サンプルデータではありません。ここに出る秒数は、いまあなたが実際に手を動かして測った数字です。比べる相手は1994年の論文の実測値です。</div>
+<h1>思ったより長い</h1>
+<p class="lead">人は自分の作業だけ、なぜか短く見積もります。卒論を出す日を学生に予測させた実験では、予測が平均33.9日、実際は55.5日。1.64倍かかりました。同じことが3分の作業でも起きるのか、いま測ります。</p>
+
+<div class="card" id="intro">
+  <h2>やること</h2>
+  <p>3つの小さな作業をやってもらいます。それぞれ、始める前に「何秒かかると思うか」を先に言ってもらいます。言い終わってから、実際にやって時間を測ります。</p>
+  <p class="sub2" style="margin-top:10px">予測を先に固定しないと意味がないので、実測が出るまで予測は変えられません。</p>
+  <button class="btn" onclick="startTask(0)">1つめを始める</button>
+</div>
+
+<div class="card hide" id="guessCard">
+  <div class="step" id="gStep"></div>
+  <h2 id="gTitle"></h2>
+  <p id="gDesc"></p>
+  <div class="guess">
+    <input type="range" id="gRange" min="3" max="120" value="20" oninput="gv.textContent=this.value">
+    <div class="gv"><span id="gv">20</span><small>秒</small></div>
+  </div>
+  <p class="sub2">これだけの秒数でできると思う、という数字にしてください。</p>
+  <button class="btn" onclick="lockGuess()">この秒数で固定して始める</button>
+</div>
+
+<div class="card hide" id="taskCard">
+  <div class="step" id="tStep"></div>
+  <div class="timer" id="timer">0.0</div>
+  <p class="sub2" style="text-align:center" id="tHint"></p>
+  <div id="taskArea"></div>
+</div>
+
+<div class="card hide" id="doneCard">
+  <div class="step">3つとも終わりました</div>
+  <h2>あなたの見積もりのずれ</h2>
+  <table>
+    <thead><tr><th>作業</th><th>予測</th><th>実測</th><th>倍率</th></tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div class="res">
+    <div class="sub2">3つならすと</div>
+    <div class="big" id="ratio">－</div>
+    <div class="sub2" id="ratioNote"></div>
+  </div>
+  <div id="cmp"></div>
+</div>
+
+<div class="card hide" id="paperCard">
+  <h2>論文が測ったこと</h2>
+  <p>心理学の学生37人に、自分の卒業論文を提出する日を予測させました。同じ人に「すべてが順調にいった場合」と「考えうる限り最悪の場合」も答えさせています。</p>
+  <table>
+    <thead><tr><th>予測のしかた</th><th>日数</th></tr></thead>
+    <tbody>
+      <tr><td>ふつうに予測</td><td>33.9日</td></tr>
+      <tr><td>最悪の場合として予測</td><td>48.6日</td></tr>
+      <tr><td>実際にかかった</td><td>55.5日</td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top:12px">自分で「最悪でもこのくらい」と言った日数すら、半数以上が超えました。別の調査では、本人が「99%確実」と言い切った期日に間に合ったのは約30%です。</p>
+  <div class="gap">
+    <b>効いた手当ては1つだけでした。</b><br>
+    知識として偏りを教えても直りません。効いたのは、過去に似た作業が実際に何日かかったかを思い出させ、それを今回の予測に結びつけるよう促したときだけでした。つまり直し方は「1.6倍しておく」ではなく「前回の実測を持っておく」です。
+  </div>
+  <div class="warn">この画面の3分の作業と、卒論の55日は同じものではありません。共通しているのは「自分の作業だけ短く見える」という向きだけです。倍率の大きさをそのまま仕事に当てはめないでください。</div>
+</div>
+
+<div class="card hide" id="bizCard">
+  <h2>中小企業の話に直すと一行</h2>
+  <p>見積もりに係数を掛けるのをやめて、同じ種類の仕事が前回何時間かかったかを1行だけ残す。次の見積もりのとき、その1行を見てから数字を書く。</p>
+</div>
+
+<div class="src">
+出典: Buehler, R., Griffin, D., &amp; Ross, M. (1994). Exploring the "Planning Fallacy": Why People Underestimate Their Task Completion Times. Journal of Personality and Social Psychology, 67(3), 366-381.<br>
+<a href="https://web.mit.edu/curhan/www/docs/Articles/biases/67_J_Personality_and_Social_Psychology_366,_1994.pdf">https://web.mit.edu/curhan/www/docs/Articles/biases/67_J_Personality_and_Social_Psychology_366,_1994.pdf</a><br>
+1日1アプリ実験室 / 株式会社AIdollargame
+</div>
+</div>
+
+<script>
+var TASKS=[
+ {short:'数字を押す',title:'1から25まで順に押す',desc:'ばらばらに並んだ1から25の数字を、1から順番に押していきます。押し間違えても止まりません。',hint:'次に押すのは 1'},
+ {short:'文字を打つ',title:'表示された文字列を打つ',desc:'画面に出る12文字を、そのまま入力欄に打ち込みます。全部合うと自動で止まります。',hint:'見たまま打ってください'},
+ {short:'点を数える',title:'赤い点の数を数える',desc:'点が散らばった四角が出ます。赤い点だけを数えて、下から正しい数を選びます。',hint:'赤だけ数えます'}
+];
+var idx=0,rec=[],t0=0,tick=null,cur=null;
+var gv=document.getElementById('gv');
+function $(i){return document.getElementById(i)}
+function show(i){$(i).classList.remove('hide')}
+function hide(i){$(i).classList.add('hide')}
+
+function startTask(i){
+  idx=i;cur=TASKS[i];
+  hide('intro');hide('taskCard');
+  $('gStep').textContent=(i+1)+' / 3　まず予測';
+  $('gTitle').textContent=cur.title;
+  $('gDesc').textContent=cur.desc;
+  $('gRange').value=20;gv.textContent='20';
+  show('guessCard');
+  window.scrollTo(0,0);
+}
+function lockGuess(){
+  rec[idx]={guess:parseInt($('gRange').value,10)};
+  hide('guessCard');
+  $('tStep').textContent=(idx+1)+' / 3　'+cur.title;
+  $('tHint').textContent=cur.hint;
+  $('taskArea').innerHTML='';
+  show('taskCard');
+  window.scrollTo(0,0);
+  t0=Date.now();
+  tick=setInterval(function(){$('timer').textContent=((Date.now()-t0)/1000).toFixed(1)},100);
+  if(idx===0)buildGrid();
+  if(idx===1)buildType();
+  if(idx===2)buildDots();
+}
+function finishTask(){
+  clearInterval(tick);
+  var sec=(Date.now()-t0)/1000;
+  rec[idx].actual=Math.round(sec*10)/10;
+  $('timer').textContent=rec[idx].actual.toFixed(1);
+  if(idx<2){
+    $('taskArea').innerHTML='<div class="res"><div class="sub2">予測 '+rec[idx].guess+'秒 / 実測 '+rec[idx].actual.toFixed(1)+'秒</div></div><button class="btn" onclick="startTask('+(idx+1)+')">次へ</button>';
+  }else{
+    $('taskArea').innerHTML='<div class="res"><div class="sub2">予測 '+rec[idx].guess+'秒 / 実測 '+rec[idx].actual.toFixed(1)+'秒</div></div>';
+    setTimeout(report,400);
+  }
+}
+/* 1: 数字グリッド */
+var need=1;
+function buildGrid(){
+  need=1;
+  var ns=[];for(var i=1;i<=25;i++)ns.push(i);
+  for(var i=ns.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=ns[i];ns[i]=ns[j];ns[j]=t}
+  var h='<div class="grid5">';
+  for(var i=0;i<25;i++)h+='<button data-n="'+ns[i]+'" onclick="hitNum(this)">'+ns[i]+'</button>';
+  h+='</div>';
+  $('taskArea').innerHTML=h;
+}
+function hitNum(b){
+  if(parseInt(b.dataset.n,10)!==need)return;
+  b.classList.add('done');b.disabled=true;need++;
+  if(need>25){finishTask();return}
+  $('tHint').textContent='次に押すのは '+need;
+}
+/* 2: タイピング */
+var TSTR='';
+function buildType(){
+  var cs='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';TSTR='';
+  for(var i=0;i<12;i++)TSTR+=cs[Math.floor(Math.random()*cs.length)];
+  $('taskArea').innerHTML='<div class="target">'+TSTR+'</div><input class="typebox" id="tin" autocapitalize="characters" autocomplete="off" spellcheck="false" placeholder="ここに打つ">';
+  var el=$('tin');el.focus();
+  el.addEventListener('input',function(){
+    if(el.value.toUpperCase()===TSTR){el.disabled=true;finishTask()}
+  });
+}
+/* 3: 赤い点 */
+var REDS=0;
+function buildDots(){
+  REDS=Math.floor(Math.random()*8)+9;
+  var total=REDS+Math.floor(Math.random()*14)+22;
+  var pts=[];
+  for(var i=0;i<total;i++)pts.push(i<REDS);
+  for(var i=pts.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pts[i];pts[i]=pts[j];pts[j]=t}
+  var h='<div class="dotfield">';
+  for(var i=0;i<total;i++){
+    var x=Math.random()*92+2,y=Math.random()*90+2;
+    h+='<i style="left:'+x.toFixed(1)+'%;top:'+y.toFixed(1)+'%;background:'+(pts[i]?'#c2410c':'#9aa3b2')+'"></i>';
+  }
+  h+='</div><div class="numrow" id="nr"></div>';
+  $('taskArea').innerHTML=h;
+  var opts=[REDS];
+  while(opts.length<4){var c=REDS+Math.floor(Math.random()*7)-3;if(c>0&&opts.indexOf(c)<0)opts.push(c)}
+  for(var i=opts.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=opts[i];opts[i]=opts[j];opts[j]=t}
+  var nh='';
+  for(var i=0;i<4;i++)nh+='<button onclick="hitDot('+opts[i]+',this)">'+opts[i]+'</button>';
+  $('nr').innerHTML=nh;
+}
+function hitDot(n,b){
+  if(n!==REDS){b.style.borderColor='#c2410c';b.style.color='#c2410c';$('tHint').textContent='違います。もう一度数えてください';return}
+  finishTask();
+}
+/* まとめ */
+function report(){
+  var tb='',sg=0,sa=0;
+  for(var i=0;i<3;i++){
+    var r=rec[i],m=r.actual/r.guess;
+    sg+=r.guess;sa+=r.actual;
+    tb+='<tr><td>'+TASKS[i].short+'</td><td>'+r.guess+'秒</td><td>'+r.actual.toFixed(1)+'秒</td><td>'+m.toFixed(2)+'倍</td></tr>';
+  }
+  $('tbody').innerHTML=tb;
+  var all=sa/sg;
+  $('ratio').innerHTML=all.toFixed(2)+'<small>倍</small>';
+  $('ratioNote').textContent='合計 予測'+sg+'秒 に対して 実測'+sa.toFixed(1)+'秒';
+  var pw=33.9/55.5*100, aw=100;
+  var mx=Math.max(sg,sa);
+  var mw=sg/mx*100, yw=sa/mx*100;
+  var msg;
+  if(all>=1.15)msg='短く見積もる側に出ました。論文の1.64倍と向きが同じです。';
+  else if(all<=0.9)msg='長く見積もる側に出ました。論文の学生とは逆向きです。3回では偶然の幅に入ります。';
+  else msg='ほぼ言った通りでした。論文の1.64倍のようなずれは、この3回では出ていません。';
+  $('cmp').innerHTML=
+    '<div class="gap"><b>論文の学生は 1.64倍</b>（予測33.9日 → 実際55.5日）'+
+    '<div style="margin-top:10px"><div class="sub2">論文の学生 予測</div><div class="bar"><i style="width:'+pw.toFixed(0)+'%"></i></div>'+
+    '<div class="sub2" style="margin-top:6px">論文の学生 実際</div><div class="bar act"><i style="width:'+aw+'%"></i></div></div>'+
+    '<div style="margin-top:12px"><div class="sub2">あなた 予測</div><div class="bar"><i style="width:'+mw.toFixed(0)+'%"></i></div>'+
+    '<div class="sub2" style="margin-top:6px">あなた 実際</div><div class="bar act"><i style="width:'+yw+'%"></i></div></div>'+
+    '<p style="margin-top:12px;font-size:14px">'+msg+'</p></div>'+
+    '<button class="btn sub" onclick="openPaper()">論文が測ったことを見る</button>';
+  hide('taskCard');show('doneCard');
+  window.scrollTo(0,0);
+}
+function openPaper(){show('paperCard');show('bizCard');$('paperCard').scrollIntoView({behavior:'smooth'})}
+</script>
+</body>
+</html>

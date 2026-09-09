@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>入る順番</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn:disabled{background:#c9c6bf;cursor:default}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.big small{font-size:16px;font-weight:600;color:#6b6b6b;margin-left:3px}
+.sub2{font-size:13px;color:#6b6b6b}
+.presets{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.presets button{border:1.5px solid #cfcbc2;background:#fff;border-radius:12px;padding:11px 10px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;color:#1a1a1a}
+.presets button.on{border-color:#2563eb;background:#eef2fb;color:#1d4ed8}
+.order{margin-top:14px;border-top:1px solid #eeece6}
+.oi{display:flex;align-items:center;gap:10px;border-bottom:1px solid #eeece6;padding:9px 0}
+.oi .n{width:26px;height:26px;border-radius:8px;background:#eeece6;color:#6b6b6b;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.oi .sw{width:16px;height:16px;border-radius:4px;flex:0 0 auto}
+.oi .nm{flex:1;font-size:15px;font-weight:600}
+.oi .sz{font-size:12px;color:#6b6b6b}
+.oi .mv{display:flex;gap:5px;flex:0 0 auto}
+.oi .mv button{width:34px;height:34px;border:1.5px solid #cfcbc2;background:#fff;border-radius:9px;font-size:15px;cursor:pointer;font-family:inherit;color:#444;padding:0;line-height:1}
+.oi .mv button:disabled{opacity:.3;cursor:default}
+.bed{margin-top:14px}
+.bedlab{display:flex;justify-content:space-between;font-size:12px;color:#6b6b6b;margin-bottom:4px}
+.grid{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;background:#dedad2;border:3px solid #101218;border-radius:8px;padding:3px;aspect-ratio:8/12}
+.grid i{display:block;background:#f0eee9;border-radius:2px}
+.left{margin-top:12px}
+.leftitem{display:flex;align-items:center;gap:9px;background:#fdecea;border:1.5px solid #f0c3bc;border-radius:11px;padding:11px 12px;margin-top:8px;font-size:15px;font-weight:600;color:#9a2b1c}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.res.ng{background:#fdecea}
+.res.ng .big{color:#c2410c}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+.log{margin-top:10px;font-size:13px;color:#6b6b6b;min-height:24px}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。荷物の寸法は単身の引っ越しでよくある大きさを置いたものです。実在の会社・顧客のデータではありません。</div>
+<h1>入る順番</h1>
+<p class="lead">荷台の広さも荷物も変えていません。変えるのは積む順番だけです。それだけで、全部入る日と、玄関に1点残る日に分かれます。単身プランの積み残しは、量が多かったからではなく、順番のせいで起きます。</p>
+
+<div class="card">
+  <div class="step">1　積む順番を決める</div>
+  <h2>2トンショート（荷台 160cm × 240cm）</h2>
+  <div class="presets">
+    <button id="p0" onclick="preset(0)">玄関から出てきた順</button>
+    <button id="p1" onclick="preset(1)">大きいものから</button>
+    <button id="p2" onclick="preset(2)">重いものから</button>
+    <button id="p3" onclick="preset(3)">軽いものから</button>
+  </div>
+  <p class="sub2" style="margin-top:10px">下の矢印で自分で並べ替えることもできます。上にあるものから順に、荷台の奥・左から詰めていきます。</p>
+  <div class="order" id="order"></div>
+  <button class="btn" id="runBtn" onclick="run()">この順で積む</button>
+</div>
+
+<div class="card">
+  <div class="step">2　荷台</div>
+  <div class="bedlab"><span>奥（運転席側）</span><span>160cm</span></div>
+  <div class="grid" id="grid"></div>
+  <div class="bedlab" style="margin-top:4px"><span>手前（扉）</span><span>240cm</span></div>
+  <div class="log" id="log"></div>
+  <div id="result"></div>
+</div>
+
+<div class="card hide" id="learnCard">
+  <h2>4つとも試すとこうなります</h2>
+  <div id="board"></div>
+  <div class="gap">
+    <b>落ちるのは決まって同じ1点でした。</b><br>
+    マットレスです。長さ180cmの長物は、壁沿いに立てて置く以外に置き場がありません。その壁沿いを先に家具で埋めてしまうと、あとから細い隙間を作ることはできません。「大きいものから」「重いものから」という定石は、長物が1本あるだけで崩れます。
+  </div>
+  <div class="warn">この画面は荷台を平面1段として計算しています。実際は積み重ね・向きの変更・毛布での養生で結果が変わりますし、重量の偏りという別の制約もあります。ここで見せたいのは正しい積み方ではなく、同じ荷物でも順番で結果が変わるという1点だけです。</div>
+</div>
+
+<div class="card hide" id="bizCard">
+  <h2>誰が払うか</h2>
+  <p>単身パックで積み残しが出ると、追加便か二次搬入になり、その日の粗利は消えます。防ぐのに要るのは、訪問見積もりでも大きい車でもなく、当日の作業員が最初の30秒で見る「長物を先に立てる」という1行です。売る相手は引っ越し会社の配車担当で、渡すのは車両ごとの積み順カードです。</p>
+</div>
+
+<div class="src">
+デモ（サンプルデータ）／1日1アプリ実験室 / 株式会社AIdollargame
+</div>
+</div>
+
+<script>
+var R=12,C=8;
+var ITEMS={
+ fridge:{n:'冷蔵庫',h:4,w:3,s:'60 × 80cm',c:'#2563eb'},
+ washer:{n:'洗濯機',h:3,w:3,s:'60 × 60cm',c:'#1d4ed8'},
+ mattress:{n:'マットレス（立てる）',h:9,w:1,s:'180 × 20cm',c:'#c2410c'},
+ shelf:{n:'本棚（寝かせる）',h:2,w:5,s:'100 × 40cm',c:'#0f766e'},
+ cases:{n:'衣装ケース3段',h:4,w:3,s:'60 × 80cm',c:'#7c3aed'},
+ tv:{n:'テレビ（梱包・立てる）',h:1,w:6,s:'120 × 20cm',c:'#a16207'},
+ box1:{n:'ダンボール大 A',h:2,w:2,s:'40 × 40cm',c:'#57534e'},
+ box2:{n:'ダンボール大 B',h:2,w:2,s:'40 × 40cm',c:'#78716c'}
+};
+var PRESETS=[
+ {name:'玄関から出てきた順',o:['box1','box2','tv','mattress','shelf','cases','washer','fridge']},
+ {name:'大きいものから',o:['fridge','cases','shelf','washer','mattress','tv','box1','box2']},
+ {name:'重いものから',o:['fridge','washer','cases','shelf','mattress','box1','box2','tv']},
+ {name:'軽いものから',o:['box1','box2','tv','shelf','washer','cases','fridge','mattress']}
+];
+var order=PRESETS[0].o.slice(), curP=0, busy=false;
+function $(i){return document.getElementById(i)}
+function preset(i){curP=i;order=PRESETS[i].o.slice();renderOrder();clearGrid();$('result').innerHTML='';$('log').textContent=''}
+function renderOrder(){
+  for(var i=0;i<4;i++)$('p'+i).classList.toggle('on',i===curP);
+  var h='';
+  for(var i=0;i<order.length;i++){
+    var it=ITEMS[order[i]];
+    h+='<div class="oi"><div class="n">'+(i+1)+'</div><div class="sw" style="background:'+it.c+'"></div>'+
+       '<div class="nm">'+it.n+'<div class="sz">'+it.s+'</div></div>'+
+       '<div class="mv"><button onclick="mv('+i+',-1)"'+(i===0?' disabled':'')+'>&#9650;</button>'+
+       '<button onclick="mv('+i+',1)"'+(i===order.length-1?' disabled':'')+'>&#9660;</button></div></div>';
+  }
+  $('order').innerHTML=h;
+}
+function mv(i,d){
+  if(busy)return;
+  var j=i+d;if(j<0||j>=order.length)return;
+  var t=order[i];order[i]=order[j];order[j]=t;
+  curP=-1;
+  renderOrder();clearGrid();$('result').innerHTML='';$('log').textContent='自分で並べ替えました';
+}
+function clearGrid(){
+  var h='';for(var i=0;i<R*C;i++)h+='<i></i>';
+  $('grid').innerHTML=h;
+}
+clearGrid();renderOrder();
+function place(g,key){
+  var it=ITEMS[key];
+  for(var r=0;r<=R-it.h;r++)for(var c=0;c<=C-it.w;c++){
+    var ok=true;
+    for(var i=0;i<it.h&&ok;i++)for(var j=0;j<it.w;j++)if(g[(r+i)*C+c+j]){ok=false;break}
+    if(ok){
+      for(var i=0;i<it.h;i++)for(var j=0;j<it.w;j++)g[(r+i)*C+c+j]=key;
+      return {r:r,c:c};
+    }
+  }
+  return null;
+}
+function simulate(ord){
+  var g=new Array(R*C).fill(0),left=[],steps=[];
+  for(var i=0;i<ord.length;i++){
+    var p=place(g,ord[i]);
+    if(p)steps.push({key:ord[i],r:p.r,c:p.c});else{left.push(ord[i]);steps.push({key:ord[i],fail:true})}
+  }
+  return {g:g,left:left,steps:steps};
+}
+function run(){
+  if(busy)return;busy=true;
+  $('runBtn').disabled=true;$('result').innerHTML='';
+  clearGrid();
+  var sim=simulate(order),cells=$('grid').children,k=0;
+  (function next(){
+    if(k>=sim.steps.length){finish(sim);return}
+    var s=sim.steps[k],it=ITEMS[s.key];
+    if(s.fail){
+      $('log').textContent=(k+1)+'　'+it.n+' → 置ける場所がありません';
+    }else{
+      for(var i=0;i<it.h;i++)for(var j=0;j<it.w;j++){
+        var el=cells[(s.r+i)*C+s.c+j];
+        el.style.background=it.c;
+      }
+      $('log').textContent=(k+1)+'　'+it.n+' を積みました';
+    }
+    k++;setTimeout(next,340);
+  })();
+}
+function finish(sim){
+  busy=false;$('runBtn').disabled=false;
+  var used=0;for(var i=0;i<sim.g.length;i++)if(sim.g[i])used++;
+  var pct=Math.round(used/(R*C)*100);
+  var h='';
+  if(sim.left.length===0){
+    h='<div class="res"><div class="sub2">この順番なら</div><div class="big">全部入りました</div>'+
+      '<div class="sub2">荷台の'+pct+'%を使っています</div></div>';
+    $('log').textContent='積み込み完了';
+  }else{
+    h='<div class="res ng"><div class="sub2">この順番だと</div><div class="big">'+sim.left.length+'点 積み残し</div>'+
+      '<div class="sub2">荷台はまだ'+(100-pct)+'%空いていますが、その空きは使える形で残っていません</div></div>';
+    for(var i=0;i<sim.left.length;i++)h+='<div class="leftitem">玄関に残った：'+ITEMS[sim.left[i]].n+'</div>';
+    $('log').textContent='積み残しが出ました';
+  }
+  h+='<button class="btn sub" onclick="showBoard()">4つの順番をまとめて見る</button>';
+  $('result').innerHTML=h;
+}
+function showBoard(){
+  var h='<table style="width:100%;border-collapse:collapse;font-size:14px;margin-top:8px">'+
+        '<thead><tr><th style="text-align:left;font-size:12px;color:#6b6b6b;padding-bottom:6px">積む順番</th>'+
+        '<th style="text-align:right;font-size:12px;color:#6b6b6b;padding-bottom:6px">結果</th></tr></thead><tbody>';
+  for(var i=0;i<PRESETS.length;i++){
+    var s=simulate(PRESETS[i].o);
+    var txt=s.left.length===0?'全部入る':(s.left.map(function(k){return ITEMS[k].n.replace('（立てる）','')}).join('・')+' が残る');
+    var col=s.left.length===0?'#1d4ed8':'#c2410c';
+    h+='<tr><td style="padding:9px 0;border-bottom:1px solid #eeece6;font-weight:600">'+PRESETS[i].name+'</td>'+
+       '<td style="padding:9px 0;border-bottom:1px solid #eeece6;text-align:right;color:'+col+';font-weight:600">'+txt+'</td></tr>';
+  }
+  h+='</tbody></table>';
+  $('board').innerHTML=h;
+  $('learnCard').classList.remove('hide');
+  $('bizCard').classList.remove('hide');
+  $('learnCard').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>

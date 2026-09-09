@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>まだ残ってる</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.big small{font-size:16px;font-weight:600;color:#6b6b6b;margin-left:3px}
+.sub2{font-size:13px;color:#6b6b6b}
+.picks{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.picks button{border:1.5px solid #cfcbc2;background:#fff;border-radius:12px;padding:12px 10px;text-align:left;font-family:inherit;cursor:pointer;color:#1a1a1a}
+.picks button b{display:block;font-size:15px}
+.picks button span{font-size:12px;color:#6b6b6b}
+.picks button:active{background:#eef2fb}
+.row{display:flex;align-items:center;gap:10px;margin-top:12px}
+.row label{font-size:14px;color:#444;min-width:82px}
+select,input[type=number]{font-size:16px;padding:10px;border:1.5px solid #cfcbc2;border-radius:10px;font-family:inherit;background:#fff;flex:1}
+input[type=range]{width:100%;accent-color:#2563eb;height:32px}
+.list{margin-top:12px}
+.item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eeece6;padding:10px 0;font-size:15px}
+.item b{font-weight:600}
+.item .x{color:#c2410c;font-size:13px;cursor:pointer;border:1px solid #e6cfc4;border-radius:8px;padding:3px 9px}
+canvas{width:100%;height:190px;display:block;margin-top:12px;border-radius:12px;background:#101218}
+.clock{display:flex;justify-content:space-between;align-items:baseline;margin-top:10px}
+.clock .t{font-size:40px;font-weight:700;font-variant-numeric:tabular-nums}
+.clock .mg{font-size:30px;font-weight:700;color:#c2410c;font-variant-numeric:tabular-nums}
+.clock .mg small{font-size:14px;color:#6b6b6b;margin-left:2px}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src a{color:#2563eb;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">この画面は、あなたの眠りを測っていません。出るのは、成分表の数値から計算したカフェインの残り量と、論文が測った1つの実験結果だけです。</div>
+<h1>まだ残ってる</h1>
+<p class="lead">400mgのカフェインを、寝る6時間前に飲んだ実験があります。6時間も前なら平気だろう、と思うところですが、睡眠時間は1時間以上減りました。しかも本人たちは、眠りが乱れたことに気づいていませんでした。今日の自分の分を、時計を進めて見てみます。</p>
+
+<div class="card">
+  <div class="step">1　今日飲んだものを足す</div>
+  <h2>何を、何時に飲みましたか</h2>
+  <div class="row">
+    <label>時刻</label>
+    <select id="hh"></select>
+    <select id="mm"><option value="0">00分</option><option value="30">30分</option></select>
+  </div>
+  <div class="picks">
+    <button onclick="add('コーヒー（カップ150mL）',90)"><b>コーヒー</b><span>カップ150mL / 90mg</span></button>
+    <button onclick="add('コーヒー（マグ250mL）',150)"><b>コーヒー 大</b><span>マグ250mL / 150mg</span></button>
+    <button onclick="add('紅茶（150mL）',45)"><b>紅茶</b><span>150mL / 45mg</span></button>
+    <button onclick="add('せん茶（150mL）',30)"><b>せん茶</b><span>150mL / 30mg</span></button>
+    <button onclick="add('玉露（60mL）',96)"><b>玉露</b><span>60mL / 96mg</span></button>
+    <button onclick="addFree()"><b>缶の表示を入力</b><span>エナジードリンク等</span></button>
+  </div>
+  <p class="sub2" style="margin-top:10px">1杯あたりの数値は、日本食品標準成分表の浸出液100mLあたりの値（コーヒー60mg、紅茶30mg、せん茶20mg、玉露160mg）に、上の容量を掛けたものです。エナジードリンクは製品ごとの差が大きいので、缶の表示を見て入れてください。</p>
+  <div class="list" id="list"></div>
+</div>
+
+<div class="card">
+  <div class="step">2　寝る時刻を決める</div>
+  <div class="row">
+    <label>就寝</label>
+    <select id="bed"></select>
+  </div>
+  <button class="btn" id="goBtn" onclick="go()">時計を進める</button>
+</div>
+
+<div class="card hide" id="simCard">
+  <div class="step">3　時計を進める</div>
+  <canvas id="cv" width="1120" height="380"></canvas>
+  <div class="clock"><div class="t" id="ct">--:--</div><div class="mg"><span id="cmg">0</span><small>mg 体に残っている</small></div></div>
+  <input type="range" id="sl" min="0" max="1000" value="0" oninput="draw(+this.value)">
+  <p class="sub2">オレンジの線が体に残るカフェイン。青い縦線が就寝時刻、その左の細い線が就寝6時間前です。半減期は5時間として計算しています。</p>
+  <div class="res">
+    <div class="sub2">就寝の瞬間に残っている推定量</div>
+    <div class="big" id="atBed">－</div>
+    <div class="sub2" id="bedNote"></div>
+  </div>
+  <div id="verdict"></div>
+  <button class="btn sub" onclick="openPaper()">論文が測ったことを見る</button>
+</div>
+
+<div class="card hide" id="paperCard">
+  <h2>論文が測ったこと</h2>
+  <p>ふだんよく眠れている健康な大人12人。4日間、毎日3錠を飲みます。就寝の6時間前、3時間前、直前の3回です。3錠のうち1錠だけが400mgのカフェインで、残り2錠は偽薬。どの回が本物かは本人にも分かりません。眠りは睡眠ポリグラフで測っています。</p>
+  <table>
+    <thead><tr><th>400mgを飲んだ時点</th><th>眠りへの影響</th></tr></thead>
+    <tbody>
+      <tr><td>就寝の直前</td><td>大きく乱れた</td></tr>
+      <tr><td>就寝の3時間前</td><td>大きく乱れた</td></tr>
+      <tr><td>就寝の6時間前</td><td>総睡眠時間が1時間以上減った</td></tr>
+    </tbody>
+  </table>
+  <div class="gap">
+    <b>いちばん効く一文はここです。</b><br>
+    本人の主観的な報告では、6時間前に飲んだ日の眠りが悪かったという自覚はありませんでした。眠れなかった感じがしないのに、測ると1時間以上減っている。だから「自分は夕方のコーヒーでも眠れる」という感覚は、この件では証拠になりません。
+  </div>
+  <div class="warn">この画面が計算しているのは、成分表の含有量と半減期5時間から出した推定の残量だけです。半減期には2〜12時間の個人差があり、喫煙で半分近くまで短くなり、妊娠後期には15時間まで延びることがあります。残量から眠りの減り方を予測することはできません。論文が測ったのは400mgを一度に飲んだ場合の1点だけです。</div>
+</div>
+
+<div class="card hide" id="bizCard">
+  <h2>中小企業の話に直すと一行</h2>
+  <p>夜勤明けや残業前のコーヒーは、眠気覚ましの効果より、そのあとの眠りの短さのほうが長く残ります。休憩室に置くなら、15時を過ぎたらカフェインの入っていない飲み物も並べておく。それだけで替えが効きます。</p>
+</div>
+
+<div class="src">
+出典1: Drake C, Roehrs T, Shambroom J, Roth T. (2013) Caffeine effects on sleep taken 0, 3, or 6 hours before going to bed. Journal of Clinical Sleep Medicine, 9(11), 1195-1200.<br>
+<a href="https://pubmed.ncbi.nlm.nih.gov/24235903/">https://pubmed.ncbi.nlm.nih.gov/24235903/</a><br>
+出典2: 文部科学省 日本食品標準成分表（し好飲料類・茶類の浸出液のカフェイン量）<br>
+<a href="https://fooddb.mext.go.jp/details/details.pl?ITEM_NO=16_16037_7">https://fooddb.mext.go.jp/details/details.pl?ITEM_NO=16_16037_7</a><br>
+出典3: Caffeine. StatPearls, NCBI Bookshelf（半減期4〜5時間、個人差2〜12時間）<br>
+<a href="https://www.ncbi.nlm.nih.gov/books/NBK519490/">https://www.ncbi.nlm.nih.gov/books/NBK519490/</a><br>
+1日1アプリ実験室 / 株式会社AIdollargame
+</div>
+</div>
+
+<script>
+var HALF=5, drinks=[], T0=6, T1=32; /* 6:00 から 翌8:00 まで */
+function $(i){return document.getElementById(i)}
+(function init(){
+  var h='';
+  for(var t=5;t<=26;t++){var d=t%24;h+='<option value="'+t+'"'+(t===15?' selected':'')+'>'+(t>=24?'翌':'')+d+'時</option>'}
+  $('hh').innerHTML=h;
+  var b='';
+  for(var t=21;t<=28;t++){var d=t%24;b+='<option value="'+t+'"'+(t===24?' selected':'')+'>'+(t>=24?'翌':'')+String(d).padStart(2,'0')+':00</option>'}
+  $('bed').innerHTML=b;
+})();
+function fmt(t){var d=Math.floor(t)%24,m=Math.round((t-Math.floor(t))*60);return String(d).padStart(2,'0')+':'+String(m).padStart(2,'0')}
+function add(name,mg){
+  var t=parseInt($('hh').value,10)+parseInt($('mm').value,10)/60;
+  drinks.push({name:name,mg:mg,t:t});
+  drinks.sort(function(a,b){return a.t-b.t});
+  render();
+}
+function addFree(){
+  var v=prompt('缶やボトルの表示にあるカフェイン量をmgで入れてください（数字だけ）');
+  if(!v)return;
+  var mg=parseFloat(v);
+  if(!(mg>0)||mg>1000){alert('0より大きく1000以下のmgを入れてください');return}
+  add('入力した飲み物',Math.round(mg));
+}
+function del(i){drinks.splice(i,1);render()}
+function render(){
+  if(!drinks.length){$('list').innerHTML='<p class="sub2" style="padding-top:10px">まだ何も入っていません。上のボタンで足してください。</p>';return}
+  var h='';
+  for(var i=0;i<drinks.length;i++){
+    var d=drinks[i];
+    h+='<div class="item"><span>'+(d.t>=24?'翌':'')+fmt(d.t)+'　<b>'+d.name+'</b></span><span>'+d.mg+'mg <span class="x" onclick="del('+i+')">消す</span></span></div>';
+  }
+  $('list').innerHTML=h;
+}
+render();
+function amountAt(t){
+  var s=0;
+  for(var i=0;i<drinks.length;i++){
+    var d=drinks[i];
+    if(t>=d.t)s+=d.mg*Math.pow(0.5,(t-d.t)/HALF);
+  }
+  return s;
+}
+var BED=24,PEAK=1;
+function go(){
+  if(!drinks.length){alert('先に飲んだものを1つ以上足してください');return}
+  BED=parseInt($('bed').value,10);
+  PEAK=0;
+  for(var t=T0;t<=T1;t+=0.05){var a=amountAt(t);if(a>PEAK)PEAK=a}
+  if(PEAK<10)PEAK=10;
+  $('simCard').classList.remove('hide');
+  $('sl').value=0;draw(0);
+  var ab=amountAt(BED);
+  $('atBed').innerHTML=Math.round(ab)+'<small>mg</small>';
+  $('bedNote').textContent='就寝時刻 '+(BED>=24?'翌':'')+fmt(BED)+' の時点。飲んだ合計は'+drinks.reduce(function(s,d){return s+d.mg},0)+'mgです。';
+  var late=drinks.filter(function(d){return d.t>BED-6});
+  var lateMg=late.reduce(function(s,d){return s+d.mg},0);
+  var v='';
+  if(lateMg>0){
+    v='<div class="gap"><b>就寝6時間前より後に'+lateMg+'mg入っています。</b><br>論文が「6時間前でも総睡眠時間が1時間以上減った」と測ったのは400mgです。あなたの'+lateMg+'mgがどれだけ効くかは、この論文からは分かりません。分かっているのは、6時間空けても消えなかったという事実だけです。</div>';
+  }else{
+    v='<div class="gap"><b>就寝6時間前より後には何も入っていません。</b><br>それでも就寝時に'+Math.round(ab)+'mgが残っている計算です。半減期5時間というのは、6時間空けても最初の量の43%ほどが体に残っているという意味です。</div>';
+  }
+  $('verdict').innerHTML=v;
+  $('simCard').scrollIntoView({behavior:'smooth'});
+}
+function draw(v){
+  var cv=$('cv'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  var pad=34, gw=W-pad*2, gh=H-pad*2;
+  var now=T0+(T1-T0)*(v/1000);
+  g.fillStyle='#101218';g.fillRect(0,0,W,H);
+  var X=function(t){return pad+gw*(t-T0)/(T1-T0)};
+  var Y=function(a){return pad+gh*(1-a/PEAK)};
+  /* 目盛り */
+  g.strokeStyle='#2a2e38';g.lineWidth=1;g.font='17px sans-serif';g.fillStyle='#7c8496';
+  for(var t=6;t<=32;t+=4){
+    g.beginPath();g.moveTo(X(t),pad);g.lineTo(X(t),H-pad);g.stroke();
+    g.textAlign='center';g.fillText((t%24)+'時',X(t),H-pad+22);
+  }
+  /* 6時間前の線 */
+  g.strokeStyle='#4b5563';g.setLineDash([5,5]);
+  g.beginPath();g.moveTo(X(BED-6),pad);g.lineTo(X(BED-6),H-pad);g.stroke();
+  g.setLineDash([]);
+  /* 就寝線 */
+  g.strokeStyle='#2563eb';g.lineWidth=3;
+  g.beginPath();g.moveTo(X(BED),pad);g.lineTo(X(BED),H-pad);g.stroke();
+  g.fillStyle='#93b4f5';g.textAlign='center';g.fillText('就寝',X(BED),pad-10);
+  g.fillStyle='#6b7280';g.fillText('6時間前',X(BED-6),pad-10);
+  /* カーブ（進んだところまで） */
+  g.strokeStyle='#c2410c';g.lineWidth=4;g.beginPath();
+  var first=true;
+  for(var t=T0;t<=now+0.001;t+=0.05){
+    var x=X(t),y=Y(amountAt(t));
+    if(first){g.moveTo(x,y);first=false}else{g.lineTo(x,y)}
+  }
+  g.stroke();
+  /* 現在点 */
+  var a=amountAt(now);
+  g.fillStyle='#f97316';g.beginPath();g.arc(X(now),Y(a),7,0,6.3);g.fill();
+  $('ct').textContent=(now>=24?'翌':'')+fmt(now);
+  $('cmg').textContent=Math.round(a);
+}
+function openPaper(){$('paperCard').classList.remove('hide');$('bizCard').classList.remove('hide');$('paperCard').scrollIntoView({behavior:'smooth'})}
+</script>
+</body>
+</html>

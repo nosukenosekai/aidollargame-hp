@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>二分で戻る</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.ghost{background:transparent;color:#6b6b6b;border:1.5px solid #cfcbc2}
+.hide{display:none}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.big small{font-size:16px;font-weight:600;color:#6b6b6b;margin-left:3px}
+.sub2{font-size:13px;color:#6b6b6b}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.stand{background:#101218;color:#fff;border-radius:14px;padding:26px 16px;text-align:center;margin-top:12px}
+.stand .t{font-size:64px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.05;letter-spacing:.02em}
+.stand .m{font-size:15px;color:#dcdcdc;margin-top:6px}
+.stand .s{font-size:13px;color:#9a9a9a;margin-top:10px}
+.prog{height:8px;background:#eeece6;border-radius:4px;overflow:hidden;margin-top:12px}
+.prog i{display:block;height:100%;background:#2563eb;width:0;transition:width .4s linear}
+.pick{border:1.5px solid #cfcbc2;border-radius:12px;padding:13px;margin-top:9px;cursor:pointer;background:#fff;display:flex;justify-content:space-between;align-items:center}
+.pick.on{border-color:#2563eb;background:#eef2fb}
+.pick b{font-size:16px}
+.pick span{font-size:13px;color:#6b6b6b}
+.dots{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.dots i{width:26px;height:26px;border-radius:8px;background:#eeece6;display:block}
+.dots i.on{background:#2563eb}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:8px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src a{color:#2563eb;word-break:break-all}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">あなたの血糖は測れません。測ったのは論文です。この画面が出すのは、あなたが実際に立って歩いた回数と、論文が測った差だけです。</div>
+<h1>二分で戻る</h1>
+<p class="lead">座り続けるのをやめるのではなく、20分ごとに2分だけ立って歩く。それだけで食後のブドウ糖の上がり方が24.1%下がった実験があります。同じ間隔を、いまこの画面で自分の足でやってみます。</p>
+
+<div class="card" id="s1">
+  <h2>実験がやったこと</h2>
+  <p>45歳から65歳の、太りぎみから肥満の大人19人（平均BMI31.2）。2時間じっと座ったあとに炭水化物75gと脂質50gを混ぜた200mLの飲み物をとり、そこから5時間、次の3つを別の日にやって比べました。</p>
+  <table>
+    <tr><th>やり方</th><th>ブドウ糖の上がり</th><th>インスリン</th></tr>
+    <tr><td>ずっと座る</td><td>6.9</td><td>828.6</td></tr>
+    <tr><td>20分ごとに2分ゆっくり歩く</td><td>5.2</td><td>633.6</td></tr>
+    <tr><td>20分ごとに2分ふつうに歩く</td><td>4.9</td><td>637.6</td></tr>
+  </table>
+  <p class="sub2" style="margin-top:8px">上がりは食後5時間の増加分の面積（mmol/L・時）、インスリンはpmol/L・時。ゆっくり歩くだけで24.1%、ふつうに歩くと29.6%低い。インスリンはどちらも23%低い。</p>
+  <div class="gap">歩いた合計は、2分×14回＝<b>28分</b>だけ。運動として長い時間を作ったのではなく、座り続けを刻んだだけです。</div>
+  <h2 style="margin-top:16px">あなたは今日、何時間座りますか</h2>
+  <div class="pick" onclick="setHours(3,this)"><b>3時間</b><span>午前だけ机にいる</span></div>
+  <div class="pick" onclick="setHours(5,this)"><b>5時間</b><span>実験と同じ長さ</span></div>
+  <div class="pick" onclick="setHours(8,this)"><b>8時間</b><span>ほぼ一日机にいる</span></div>
+  <button class="btn" id="go" disabled onclick="toS2()">2分、立ってみる</button>
+</div>
+
+<div class="card hide" id="s2">
+  <div class="step">1回ぶん</div>
+  <h2>立って、その場で2分歩いてください</h2>
+  <p class="sub2">速さは「ゆっくり」でかまいません。実験のゆっくり側は、時速3.2kmのトレッドミル歩行でした。散歩よりまだ遅い速さです。スマホを持って足踏みすると、歩数も拾えることがあります。</p>
+  <div class="warn" id="motionNote">端末の動きを測る許可を出すと、2分のあいだの足の動きを数えます。許可しなくても回数は記録できます。</div>
+  <button class="btn" id="startWalk" onclick="startWalk()">2分のタイマーを始める</button>
+  <button class="btn ghost" onclick="show('s1')">戻る</button>
+</div>
+
+<div class="card hide" id="s3">
+  <div class="stand">
+    <div class="t" id="tm">2:00</div>
+    <div class="m">立って、その場で足踏み</div>
+    <div class="s" id="stepv">歩数は測っていません</div>
+  </div>
+  <div class="prog"><i id="prog"></i></div>
+  <p class="sub2" style="margin-top:12px">画面を見ていなくて大丈夫です。終わると音が鳴ります。</p>
+  <button class="btn ghost" onclick="abortWalk()">やめる</button>
+</div>
+
+<div class="card hide" id="s4">
+  <div class="step">今日</div>
+  <div class="res"><div class="sub2">立って2分歩いた回数</div><div class="big" id="cnt">-</div><div class="sub2" id="cntsub"></div></div>
+  <div class="dots" id="dots"></div>
+  <p class="sub2" style="margin-top:10px" id="needs"></p>
+  <div class="gap" id="cmp"></div>
+  <button class="btn" onclick="again()">もう1回、2分やる</button>
+  <button class="btn sub" onclick="remind()" id="remBtn">20分後に知らせる</button>
+  <div class="gap" style="background:#eef2fb">現場に置き換えると一行。受付や事務で「20分ごとに2分立つ」に決めると、1日に足す時間は28分だけ。人も設備も増えません。決めごとにしないと、忙しい日から先に消えます。</div>
+  <button class="btn ghost" onclick="reset()">記録を消す</button>
+</div>
+
+<div class="src">
+  出典<br>
+  Dunstan, D. W., Kingwell, B. A., Larsen, R., Healy, G. N., Cerin, E., Hamilton, M. T., Shaw, J. E., Bertovic, D. A., Zimmet, P. Z., Salmon, J., &amp; Owen, N. (2012). Breaking Up Prolonged Sitting Reduces Postprandial Glucose and Insulin Responses. <i>Diabetes Care</i>, 35(5), 976-983.<br>
+  <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3329818/">https://pmc.ncbi.nlm.nih.gov/articles/PMC3329818/</a><br>
+  掲載誌ページ<br>
+  <a href="https://diabetesjournals.org/care/article/35/5/976/38374/Breaking-Up-Prolonged-Sitting-Reduces-Postprandial">https://diabetesjournals.org/care/article/35/5/976/38374/Breaking-Up-Prolonged-Sitting-Reduces-Postprandial</a><br><br>
+  この画面はあなたの血糖やインスリンを測っていません。測れるのは、あなたが立った回数と（端末が対応していれば）足の動きだけです。24.1%や23%は上の論文が19人で測った値で、あなたに同じ数字が出るという意味ではありません。持病がある方や運動を止められている方は、主治医の指示を先にしてください。
+</div>
+</div>
+
+<script>
+var hours=null,count=0,timer=null,left=120,steps=0,motionOn=false,remTimer=null;
+var $=function(id){return document.getElementById(id)};
+function show(id){['s1','s2','s3','s4'].forEach(function(x){$(x).classList.add('hide')});$(id).classList.remove('hide')}
+function setHours(h,el){hours=h;[].forEach.call(document.querySelectorAll('#s1 .pick'),function(p){p.classList.remove('on')});el.classList.add('on');$('go').disabled=false}
+function toS2(){show('s2')}
+
+function beep(){
+  try{
+    var C=window.AudioContext||window.webkitAudioContext;if(!C)return;
+    var c=new C(),o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);o.frequency.value=880;o.type='sine';
+    g.gain.setValueAtTime(0.001,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.25,c.currentTime+0.02);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.7);
+    o.start();o.stop(c.currentTime+0.75);
+  }catch(e){}
+}
+
+var lastPeak=0,lastMag=0;
+function onMotion(e){
+  var a=e.accelerationIncludingGravity||e.acceleration;if(!a)return;
+  var m=Math.sqrt((a.x||0)*(a.x||0)+(a.y||0)*(a.y||0)+(a.z||0)*(a.z||0));
+  var d=m-lastMag;lastMag=m;
+  var now=Date.now();
+  if(d>2.2&&now-lastPeak>280){lastPeak=now;steps++;$('stepv').textContent='足の動き '+steps+'回';}
+}
+function askMotion(cb){
+  if(typeof DeviceMotionEvent==='undefined'){$('motionNote').textContent='この端末では足の動きを数えられません。回数だけ記録します。';return cb(false)}
+  if(typeof DeviceMotionEvent.requestPermission==='function'){
+    DeviceMotionEvent.requestPermission().then(function(r){cb(r==='granted')}).catch(function(){cb(false)});
+  }else{cb(true)}
+}
+function startWalk(){
+  steps=0;lastMag=0;
+  askMotion(function(ok){
+    motionOn=ok;
+    if(ok){window.addEventListener('devicemotion',onMotion);$('stepv').textContent='足の動き 0回'}
+    else{$('stepv').textContent='歩数は測っていません'}
+    show('s3');left=120;tick();
+    timer=setInterval(function(){left--;tick();if(left<=0)finishWalk()},1000);
+  });
+}
+function tick(){
+  var m=Math.floor(left/60),s=left%60;
+  $('tm').textContent=m+':'+(s<10?'0':'')+s;
+  $('prog').style.width=((120-left)/120*100)+'%';
+}
+function stopMotion(){if(motionOn){window.removeEventListener('devicemotion',onMotion);motionOn=false}}
+function abortWalk(){clearInterval(timer);stopMotion();show('s2')}
+function finishWalk(){
+  clearInterval(timer);stopMotion();beep();count++;
+  render();show('s4');
+}
+function again(){show('s2')}
+function render(){
+  var need=Math.floor(hours*60/20);
+  $('cnt').innerHTML=count+'<small>回（合計'+(count*2)+'分）</small>';
+  $('cntsub').textContent=(steps>0?'いちばん最近の2分で拾えた足の動きは'+steps+'回。':'足の動きは測っていません。');
+  var d='';for(var i=0;i<need;i++){d+='<i class="'+(i<count?'on':'')+'"></i>'}
+  $('dots').innerHTML=d;
+  $('needs').textContent='座る'+hours+'時間を20分ごとに刻むと'+need+'回。実験は5時間で14回でした。';
+  var pct=Math.min(100,Math.round(count/need*100));
+  $('cmp').innerHTML='今日の達成は'+need+'回のうち'+count+'回（'+pct+'%）。'
+    +(count>=need?'20分ごとという間隔を、座る時間ぶん全部やり切った形です。論文はこの間隔でブドウ糖の上がりが24.1%、インスリンが23%低くなりました。'
+      :'論文は5時間で14回、つまり20分ごとを一度も抜かずに24.1%でした。同じ間隔なら'+hours+'時間で'+need+'回。あと'+(need-count)+'回です。');
+}
+function remind(){
+  if(remTimer){clearTimeout(remTimer);remTimer=null;$('remBtn').textContent='20分後に知らせる';return}
+  $('remBtn').textContent='20分後に鳴ります（押すと取り消し）';
+  remTimer=setTimeout(function(){beep();$('remBtn').textContent='20分たちました。もう1回どうぞ';remTimer=null},20*60*1000);
+}
+function reset(){count=0;steps=0;if(remTimer){clearTimeout(remTimer);remTimer=null}show('s1')}
+</script>
+</body>
+</html>

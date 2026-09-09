@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>賭けた仕込み</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.ghost{background:transparent;color:#6b6b6b;border:1.5px solid #cfcbc2}
+.hide{display:none}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.big small{font-size:16px;font-weight:600;color:#6b6b6b;margin-left:3px}
+.sub2{font-size:13px;color:#6b6b6b}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.day{background:#101218;color:#fff;border-radius:14px;padding:16px;margin-bottom:14px}
+.day .d{font-size:19px;font-weight:700}
+.day .w{font-size:14px;color:#c6c6c6;margin-top:2px}
+.day .l{font-size:13px;color:#9a9a9a;margin-top:8px}
+.dial{font-size:52px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1.1}
+.dial small{font-size:17px;color:#6b6b6b;font-weight:600;margin-left:4px}
+input[type=range]{width:100%;margin:10px 0 2px;accent-color:#2563eb}
+.ends{display:flex;justify-content:space-between;font-size:12px;color:#6b6b6b}
+.tel{background:#fff8e8;border-left:4px solid #e0a83c;border-radius:10px;padding:13px;margin-top:12px;font-size:15px}
+.tel b{display:block;font-size:12px;color:#8a6a20;margin-bottom:4px;letter-spacing:.06em}
+.row{display:flex;gap:9px;margin-top:12px;flex-wrap:wrap}
+.row button{flex:1 1 30%;background:#fff;border:1.5px solid #cfcbc2;border-radius:12px;padding:13px 6px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;color:#1a1a1a;line-height:1.4}
+.row button span{display:block;font-size:11px;color:#6b6b6b;font-weight:600;margin-top:3px}
+.row button:active{background:#eef2fb;border-color:#2563eb}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+td{padding:8px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+tr.tot td{border-bottom:0;border-top:2px solid #1a1a1a;font-weight:700;font-size:16px;padding-top:10px}
+.sold{background:#e6f4ea;color:#137333;border-radius:10px;padding:12px;text-align:center;font-weight:700;font-size:17px;margin-top:12px}
+.lost{background:#fdecea;color:#a50e0e;border-radius:10px;padding:12px;font-size:14px;margin-top:10px}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.neg .big{color:#a50e0e}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.ledger{background:#fbfaf7;border:1px solid #e5e3dd;border-radius:12px;padding:12px 14px;font-size:13px;margin-top:12px}
+.ledger b{font-variant-numeric:tabular-nums}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。店名・電話・数字はすべて架空です。実在の店の売れ方を予測するものではありません。</div>
+<h1>賭けた仕込み</h1>
+<p class="lead">架空の定食屋「まるみ食堂」。日替わり定食は950円、材料は1食380円。朝、何食ぶん仕込むかを決めます。売り切れれば完売の札が出て気持ちがいい。残ればその材料は捨てるだけ。3日ぶん賭けて、負けは残ります。</p>
+
+<div class="card" id="ledgerCard">
+  <div class="ledger" id="ledger"></div>
+</div>
+
+<div class="card hide" id="s1">
+  <div class="day"><div class="d" id="dDate"></div><div class="w" id="dW"></div><div class="l" id="dL"></div></div>
+  <div class="step">朝8時　仕込みを決める</div>
+  <h2>何食ぶん仕込みますか</h2>
+  <div class="dial"><span id="qty">42</span><small>食</small></div>
+  <input type="range" id="q" min="20" max="70" value="42">
+  <div class="ends"><span>20食</span><span>70食</span></div>
+  <table>
+    <tr><td>先に出る材料費</td><td id="preCost">-</td></tr>
+    <tr><td>全部売れたときの粗利</td><td id="preMax">-</td></tr>
+  </table>
+  <button class="btn" onclick="lockQty()">これで仕込む</button>
+</div>
+
+<div class="card hide" id="s2">
+  <div class="step">11時　電話が鳴った</div>
+  <div class="tel" id="tel"></div>
+  <p class="sub2" style="margin-top:10px">仕込みは<b id="curQty"></b>食。ここで動かせます。当日追加の材料は1食430円（朝より50円高い）。降りると10食ぶんを他のメニューに回して、材料費の半分だけ戻ります。</p>
+  <div class="row">
+    <button onclick="mid('up')">10食 足す<span>材料+4,300円</span></button>
+    <button onclick="mid('stay')">このまま<span>動かさない</span></button>
+    <button onclick="mid('down')">10食 降りる<span>1,900円だけ戻る</span></button>
+  </div>
+</div>
+
+<div class="card hide" id="s3">
+  <div class="step">夜9時　閉店</div>
+  <div id="soldOut"></div>
+  <table id="tbl"></table>
+  <div id="lostBox"></div>
+  <div class="gap" id="why"></div>
+  <button class="btn" id="nextBtn" onclick="nextDay()">次の日へ</button>
+</div>
+
+<div class="card hide" id="s4">
+  <div class="step">3日おわり</div>
+  <div class="res" id="finRes"><div class="sub2">3日ぶんの粗利</div><div class="big" id="finV">-</div><div class="sub2" id="finSub"></div></div>
+  <table id="finTbl"></table>
+  <div class="gap" id="finWhy"></div>
+  <div class="gap" style="background:#eef2fb">現場に置き換えると一行。当たった日の話は覚えていて、捨てた日の食数は覚えていません。仕込みは、勘の良さではなく、記録が残っているかで決まります。</div>
+  <button class="btn" onclick="startRun()">もう3日やる（成績は足されます）</button>
+  <button class="btn ghost" onclick="wipe()">通算成績を消す</button>
+</div>
+
+<div class="src">
+  数字の置き方。日替わり定食950円、朝の材料1食380円（原価率40%）、当日追加は430円。20席の店で、日替わりが1日30〜60食という前提です。すべて架空の設定で、実在の店の実績ではありません。<br><br>
+  真の需要は、その日ごとに決まった数に前後4食の振れを足したものです。11時に入る話が需要をどれだけ動かすかは日によって違い、大きい声で入ってくる話が強いとは限りません。そこが賭けになるところです。
+</div>
+</div>
+
+<script>
+var KEY='kaketa_shikomi_v1';
+var PRICE=950,COST=380,ADDC=430;
+var DAYS=[
+ {date:'9月10日（木）',w:'晴れ 29度',last:'先週の木曜は42食。ふだんの平日はこのあたり。',
+  tel:{h:'11時02分　工事現場の職人さんから電話',b:'「今日そっち行くわ。12人で寄るから、日替わり12人ぶん残しといて」'},
+  base:52,
+  why:'電話は本当だった。ただし12人と言って来たのは10人。人数を言う電話は、たいてい少しだけ減る。'},
+ {date:'9月11日（金）',w:'雨 22度',last:'先週の金曜は48食。金曜はいつも出る曜日。',
+  tel:{h:'11時20分　娘さんから連絡',b:'「うちの日替わりの写真、SNSで伸びてる。いいね140ついてるよ」'},
+  base:34,
+  why:'いいねは食べに来ない。この日を決めていたのは雨のほうで、金曜なのに34食までしか出なかった。強い声の情報が、強い要因とは限らない。'},
+ {date:'9月12日（土）',w:'曇り 26度　商店街が歩行者天国',last:'先週の土曜は37食。土曜はいつも暇。',
+  tel:{h:'11時35分　常連さんが教えてくれた',b:'「向かいの弁当屋、今日から日替わりでさばの味噌煮出してるよ。うちと同じやつ」'},
+  base:56,
+  why:'弁当屋に6食ぶんは取られた。それでも歩行者天国の人出が大きく、いつもの土曜の1.5倍の需要があった。目に入った悪い知らせより、その日の人出のほうが効いた。'}
+];
+var st=null,day=0,qty=42,cost=0,refund=0,run=[];
+var $=function(id){return document.getElementById(id)};
+function show(id){['s1','s2','s3','s4'].forEach(function(x){$(x).classList.add('hide')});$(id).classList.remove('hide')}
+function yen(n){return (n<0?'-':'')+Math.abs(n).toLocaleString('ja-JP')+'円'}
+function man(n){return Math.abs(n)>=10000?'（約'+(Math.round(n/1000)/10)+'万円）':''}
+
+function load(){try{var o=JSON.parse(localStorage.getItem(KEY));return o||null}catch(e){return null}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function fresh(){return {days:0,profit:0,waste:0,missed:0,soldout:0}}
+
+(function boot(){
+  st=load()||fresh();
+  drawLedger();
+  startRun();
+})();
+function drawLedger(){
+  if(st.days===0){$('ledger').innerHTML='通算成績はまだありません。ここに残っていきます。閉じても消えません。';return}
+  $('ledger').innerHTML='通算 '+st.days+'日　粗利 <b>'+yen(st.profit)+'</b>'+man(st.profit)
+   +'　／　捨てた材料 <b>'+st.waste+'食</b>（'+yen(st.waste*COST)+'）'
+   +'　／　入れなかったお客 <b>'+st.missed+'人</b>　／　完売 <b>'+st.soldout+'回</b>';
+}
+function startRun(){day=0;run=[];openDay()}
+function openDay(){
+  var d=DAYS[day];
+  $('dDate').textContent=d.date;$('dW').textContent=d.w;$('dL').textContent=d.last;
+  qty=42;$('q').value=42;drawQty();
+  show('s1');
+}
+$('q').addEventListener('input',function(){qty=+this.value;drawQty()});
+function drawQty(){
+  $('qty').textContent=qty;
+  $('preCost').textContent=yen(qty*COST);
+  $('preMax').textContent=yen(qty*(PRICE-COST));
+}
+function lockQty(){
+  cost=qty*COST;refund=0;
+  var d=DAYS[day];
+  $('tel').innerHTML='<b>'+d.tel.h+'</b>'+d.tel.b;
+  $('curQty').textContent=qty;
+  show('s2');
+}
+function mid(a){
+  if(a==='up'){qty+=10;cost+=10*ADDC}
+  else if(a==='down'){qty=Math.max(0,qty-10);refund=10*COST/2}
+  result();
+}
+function result(){
+  var d=DAYS[day];
+  var demand=d.base+(Math.floor(Math.random()*9)-4);
+  var sold=Math.min(qty,demand);
+  var waste=qty-sold;
+  var missed=Math.max(0,demand-qty);
+  var sales=sold*PRICE;
+  var profit=sales-cost+refund;
+  run.push({date:d.date,qty:qty,sold:sold,waste:waste,missed:missed,profit:profit,demand:demand});
+  st.days++;st.profit+=profit;st.waste+=waste;st.missed+=missed;if(waste===0)st.soldout++;
+  save();drawLedger();
+  $('soldOut').innerHTML=(waste===0)?'<div class="sold">本日完売</div>':'';
+  $('tbl').innerHTML=
+    '<tr><td>仕込み</td><td>'+qty+'食</td></tr>'+
+    '<tr><td>売れた</td><td>'+sold+'食</td></tr>'+
+    '<tr><td>売上</td><td>'+yen(sales)+'</td></tr>'+
+    '<tr><td>材料費</td><td>'+yen(-cost)+'</td></tr>'+
+    (refund?'<tr><td>他メニューに回した戻り</td><td>'+yen(refund)+'</td></tr>':'')+
+    '<tr><td>捨てた材料</td><td>'+waste+'食（'+yen(waste*COST)+'）</td></tr>'+
+    '<tr class="tot"><td>この日の粗利</td><td>'+yen(profit)+'</td></tr>';
+  $('lostBox').innerHTML=missed>0
+    ?'<div class="lost">入れなかったお客 '+missed+'人。完売の札は出ましたが、'+yen(missed*(PRICE-COST))+'ぶんの粗利は帰りました。</div>'
+    :'';
+  $('why').innerHTML='この日の本当の需要は<b>'+demand+'食</b>でした。'+d.why;
+  $('nextBtn').textContent=(day>=DAYS.length-1)?'3日ぶんを締める':'次の日へ';
+  show('s3');
+}
+function nextDay(){
+  day++;
+  if(day>=DAYS.length){return fin()}
+  openDay();
+}
+function fin(){
+  var p=run.reduce(function(a,r){return a+r.profit},0);
+  var w=run.reduce(function(a,r){return a+r.waste},0);
+  var m=run.reduce(function(a,r){return a+r.missed},0);
+  $('finRes').className='res'+(p<0?' neg':'');
+  $('finV').textContent=yen(p);
+  $('finSub').textContent=man(p)+'　捨てた材料'+w+'食、入れなかったお客'+m+'人。';
+  $('finTbl').innerHTML=run.map(function(r){
+    return '<tr><td>'+r.date+'</td><td>仕込'+r.qty+' 売'+r.sold+' 捨'+r.waste+' 逃'+r.missed+'　'+yen(r.profit)+'</td></tr>';
+  }).join('');
+  var best=run.reduce(function(a,r){return r.profit>a.profit?r:a},run[0]);
+  var worst=run.reduce(function(a,r){return r.profit<a.profit?r:a},run[0]);
+  $('finWhy').innerHTML='いちばん出たのは'+best.date+'（'+yen(best.profit)+'）、いちばん減ったのは'+worst.date+'（'+yen(worst.profit)+'）。'
+   +(m>w*2?'完売を狙いすぎています。札は出ますが、帰ったお客の粗利は札より大きい。':'')
+   +(w>m*2?'安全に振りすぎています。捨てた'+w+'食は'+yen(w*COST)+'そのままの損です。':'')
+   +'　3日の差は、当てたかどうかではなく、11時の話をどれだけ重く見たかで決まっています。';
+  show('s4');
+}
+function wipe(){st=fresh();save();drawLedger();startRun()}
+</script>
+</body>
+</html>

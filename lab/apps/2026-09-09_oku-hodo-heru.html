@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>置くほど減る</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.ghost{background:transparent;color:#6b6b6b;border:1.5px solid #cfcbc2}
+.hide{display:none}
+.sub2{font-size:13px;color:#6b6b6b}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.hud{background:#101218;color:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px}
+.hud .lbl{font-size:13px;color:#a8a8a8}
+.hud .v{font-size:38px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em;line-height:1.15}
+.hud .v small{display:block;font-size:14px;color:#a8a8a8;font-weight:600;margin-top:5px;letter-spacing:0}
+.hud .melt{font-size:14px;color:#f0a3a3;margin-top:8px}
+.hud .days{font-size:13px;color:#9a9a9a;margin-top:8px;border-top:1px solid #2a2d36;padding-top:8px}
+.it{border:1px solid #e5e3dd;border-radius:12px;padding:13px;margin-bottom:10px;background:#fff}
+.it.dead{background:#fdf4f3;border-color:#f0c9c4}
+.it.done{opacity:.45}
+.it .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.it .nm{font-size:16px;font-weight:700}
+.it .pv{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.it .meta{font-size:12px;color:#6b6b6b;margin-top:4px}
+.it .bar{height:6px;background:#eeece6;border-radius:3px;overflow:hidden;margin-top:9px}
+.it .bar i{display:block;height:100%;background:#2563eb;transition:width .5s ease}
+.it.dead .bar i{background:#c93a2b}
+.it .acts{display:flex;gap:8px;margin-top:10px}
+.it .acts button{flex:1;background:#fff;border:1.5px solid #cfcbc2;border-radius:10px;padding:9px 4px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;color:#1a1a1a}
+.it .acts button.p{border-color:#2563eb;color:#2563eb}
+.it .acts button:active{background:#eef2fb}
+.it .tag{display:inline-block;font-size:11px;font-weight:700;border-radius:5px;padding:2px 6px;margin-left:6px;vertical-align:2px}
+.it .tag.red{background:#fdecea;color:#a50e0e}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .v{font-size:34px;font-weight:700;color:#1d4ed8;font-variant-numeric:tabular-nums}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+td{padding:8px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+tr.tot td{border-bottom:0;border-top:2px solid #1a1a1a;font-weight:700;font-size:16px;padding-top:10px}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。社名・品目・相場・下落率はすべて架空の設定です。実際の中古相場や処分費ではありません。</div>
+<h1>置くほど減る</h1>
+<p class="lead">架空の内装業「三谷内装」の倉庫。閉店した店から引き取った什器が8点、置いたままになっています。売るか捨てるかを決めないあいだも、保管の坪代と中古の値下がりで毎日いくらか溶けています。日を進めて、いくら溶けるかを数えます。</p>
+
+<div class="hud">
+  <div class="lbl">いま全部片付けたときの手残り</div>
+  <div class="v" id="hv">-</div>
+  <div class="melt" id="melt">-</div>
+  <div class="days" id="days">-</div>
+</div>
+
+<div class="card" id="ctrl">
+  <div class="step">倉庫は月1,200円／平米</div>
+  <button class="btn sub" onclick="adv(7)">1週間進める</button>
+  <button class="btn ghost" onclick="adv(30)">1か月進める</button>
+</div>
+
+<div id="items"></div>
+
+<div class="card hide" id="fin">
+  <div class="step">全部片付きました</div>
+  <div class="res"><div class="sub2">手残り</div><div class="v" id="fv">-</div><div class="sub2" id="fsub"></div></div>
+  <table id="ftbl"></table>
+  <div class="gap" id="fwhy"></div>
+  <div class="gap" style="background:#eef2fb">現場に置き換えると一行。置いておく判断は毎日していないのに、代金は毎日引かれています。倉庫にある物は、点数ではなく「1日いくら溶けているか」で数えると片付きます。</div>
+  <button class="btn" onclick="reset()">もう一度</button>
+</div>
+
+<div class="src">
+  数字の置き方。倉庫は月1,200円／平米（3.3平米あたり約4,000円）。中古の売値は品目ごとに月3〜12%落ちる設定で、処分費は品目ごとに固定です。売値が処分費を下回った品は、置いておくとお金を払って捨てる側に回るので赤くしています。<br><br>
+  すべて架空のサンプル値です。実際の中古什器の相場、フロン回収や産業廃棄物の処分費は、品物の状態と地域と業者でまったく変わります。実物の判断には見積を取ってください。
+</div>
+</div>
+
+<script>
+var RENT=1200;
+var BASE=[
+ {n:'業務用冷蔵庫（縦型4面）',p:80000,r:0.06,a:1.0,d:12000,note:'フロン回収が必要'},
+ {n:'券売機（ボタン式）',p:120000,r:0.12,a:0.6,d:10000,note:'型が古くなるのが早い'},
+ {n:'業務用エアコン（4馬力）',p:60000,r:0.05,a:0.8,d:15000,note:'取り外し済み'},
+ {n:'製氷機',p:50000,r:0.08,a:0.5,d:10000,note:'動作確認済み'},
+ {n:'スチールラック 6台',p:30000,r:0.03,a:2.4,d:6000,note:'いちばん場所を食う'},
+ {n:'カウンター椅子 12脚',p:24000,r:0.05,a:1.2,d:6000,note:'座面に擦れあり'},
+ {n:'レジ台（木製）',p:15000,r:0.08,a:0.8,d:3000,note:'天板に傷'},
+ {n:'袖看板（前の店名入り）',p:0,r:0,a:1.5,d:20000,note:'店名が入っていて売れない'}
+];
+var items=[],day=0,cash=0,log=[],paidAcc=0;
+var $=function(id){return document.getElementById(id)};
+function fmt(n){
+  var s=n<0?'-':'';n=Math.abs(n);
+  if(n>=10000){return s+(Math.round(n/1000)/10)+'万円'}
+  return s+Math.round(n).toLocaleString('ja-JP')+'円';
+}
+function reset(){
+  items=BASE.map(function(b){return {n:b.n,p0:b.p,r:b.r,a:b.a,d:b.d,note:b.note,state:'here'}});
+  day=0;cash=0;log=[];paidAcc=0;
+  $('fin').classList.add('hide');$('ctrl').classList.remove('hide');
+  draw();
+}
+function price(it){return Math.round(it.p0*Math.pow(1-it.r,day/30))}
+function held(){return items.filter(function(i){return i.state==='here'})}
+function area(){return held().reduce(function(a,i){return a+i.a},0)}
+function netNow(){
+  return cash+held().reduce(function(a,i){
+    var p=price(i);
+    return a+(p>i.d?p:-i.d);
+  },0);
+}
+function meltPerDay(){
+  return held().reduce(function(a,i){
+    var p=price(i);
+    var dep=(p>i.d)?(p-Math.round(i.p0*Math.pow(1-i.r,(day+1)/30))):0;
+    return a+dep+i.a*RENT/30;
+  },0);
+}
+function month1(){
+  var d0=BASE.reduce(function(a,b){return a+(b.p>b.d?b.p:-b.d)},0);
+  var d30=BASE.reduce(function(a,b){
+    var p=Math.round(b.p*Math.pow(1-b.r,1));
+    return a+(p>b.d?p:-b.d)-b.a*RENT;
+  },0);
+  return d0-d30;
+}
+function daysToDead(it){
+  if(it.p0<=it.d)return 0;
+  var d=Math.log(it.d/it.p0)/Math.log(1-it.r)*30;
+  return Math.max(0,Math.ceil(d-day));
+}
+function draw(){
+  var start=BASE.reduce(function(a,b){return a+(b.p>b.d?b.p:-b.d)},0);
+  var now=netNow();
+  var paid=paidAcc;
+  $('hv').innerHTML=fmt(now-paid)+(day>0?'<small>（初日にすべて片付けていれば '+fmt(start)+'）</small>':'');
+  $('melt').textContent='いま1日あたり '+fmt(meltPerDay())+' 溶けています（値下がり＋保管代）';
+  $('days').textContent='置いてから '+day+'日　残り '+held().length+'点　占めている面積 '+(Math.round(area()*10)/10)+'平米　払った保管代 '+fmt(paid);
+  var h='';
+  items.forEach(function(it,i){
+    if(it.state!=='here'){
+      h+='<div class="it done"><div class="top"><span class="nm">'+it.n+'</span><span class="pv">'+(it.state==='sold'?'売った '+fmt(it.got):'捨てた '+fmt(-it.d))+'</span></div><div class="meta">'+it.doneDay+'日目に処理</div></div>';
+      return;
+    }
+    var p=price(it),dead=p<=it.d,dd=daysToDead(it);
+    var pctLeft=it.p0>0?Math.max(0,Math.min(100,Math.round(p/it.p0*100))):0;
+    h+='<div class="it'+(dead?' dead':'')+'">'
+     +'<div class="top"><span class="nm">'+it.n+(dead?'<span class="tag red">もう売り物ではない</span>':'')+'</span><span class="pv">'+fmt(p)+'</span></div>'
+     +'<div class="meta">'+it.note+'　／　'+it.a+'平米で月'+fmt(it.a*RENT)+'　／　捨てるなら'+fmt(it.d)
+     +(dead?'':'　／　あと'+dd+'日で処分費のほうが高くなる')+'</div>'
+     +'<div class="bar"><i style="width:'+pctLeft+'%"></i></div>'
+     +'<div class="acts">'+(dead?'':'<button class="p" onclick="sell('+i+')">売る '+fmt(p)+'</button>')+'<button onclick="junk('+i+')">捨てる '+fmt(-it.d)+'</button></div>'
+     +'</div>';
+  });
+  $('items').innerHTML=h;
+}
+function adv(n){
+  for(var k=0;k<n;k++){paidAcc+=area()*RENT/30;day++}
+  draw();
+}
+function sell(i){
+  var it=items[i],p=price(it);
+  it.state='sold';it.got=p;it.doneDay=day;
+  cash+=p;log.push({n:it.n,how:'売った',v:p,day:day});
+  after();
+}
+function junk(i){
+  var it=items[i];
+  it.state='junk';it.doneDay=day;
+  cash-=it.d;log.push({n:it.n,how:'捨てた',v:-it.d,day:day});
+  after();
+}
+function after(){
+  draw();
+  if(held().length===0){fin()}
+}
+function fin(){
+  $('ctrl').classList.add('hide');
+  var start=BASE.reduce(function(a,b){return a+(b.p>b.d?b.p:-b.d)},0);
+  var net=cash-paidAcc;
+  $('fv').textContent=fmt(net);
+  $('fsub').textContent='初日にすべて片付けていれば '+fmt(start)+'。差は '+fmt(start-net)+'。';
+  $('ftbl').innerHTML=log.map(function(l){
+    return '<tr><td>'+l.n+'</td><td>'+l.day+'日目に'+l.how+'　'+fmt(l.v)+'</td></tr>';
+  }).join('')+'<tr><td>払った保管代</td><td>'+fmt(-paidAcc)+'</td></tr>'
+   +'<tr class="tot"><td>手残り</td><td>'+fmt(net)+'</td></tr>';
+  var lost=start-net;
+  $('fwhy').innerHTML='かかった日数は'+day+'日。溶けた額は'+fmt(lost)+'で、そのうち保管代が'+fmt(paidAcc)+'、残りが値下がりぶんです。'
+   +(day===0?'初日に全部さばきました。これがこの倉庫の上限です。':'')
+   +'　この8点をそのまま1か月置くと、初日の時点で'+fmt(month1())+'ぶん減ります。判断を1か月伸ばすたびに、それだけ引かれます。';
+  $('fin').classList.remove('hide');
+}
+reset();
+</script>
+</body>
+</html>

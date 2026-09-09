@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>三秒で消える</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.btn.ghost{background:transparent;color:#6b6b6b;border:1.5px solid #cfcbc2}
+.hide{display:none}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.big small{font-size:16px;font-weight:600;color:#6b6b6b;margin-left:3px}
+.sub2{font-size:13px;color:#6b6b6b}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.stage{background:#101218;color:#fff;border-radius:14px;padding:24px 18px;min-height:190px;display:flex;flex-direction:column;justify-content:center;margin-top:10px}
+.stage .line{font-size:21px;font-weight:600;line-height:1.65;letter-spacing:.01em}
+.stage .ct{font-size:70px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums;line-height:1}
+.stage .hint{font-size:13px;color:#9a9a9a;margin-top:12px}
+.stage .say{font-size:26px;font-weight:700;text-align:center;color:#fff}
+.meter{height:14px;background:#2a2d36;border-radius:7px;overflow:hidden;margin-top:16px}
+.meter i{display:block;height:100%;background:#4ade80;width:0;transition:width .08s linear}
+.situ{background:#faf3ef;border-radius:12px;padding:12px;font-size:14px;margin-top:10px}
+.situ b{display:block;font-size:13px;color:#8a6a4a;margin-bottom:3px;font-weight:600}
+.prog{height:6px;background:#eeece6;border-radius:3px;overflow:hidden;margin-top:14px}
+.prog i{display:block;height:100%;background:#2563eb;width:0;transition:width .3s ease}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+.row{display:flex;gap:10px;margin-top:12px}
+.row button{flex:1}
+.row button.btn{margin-top:0}
+.list div{border-bottom:1px solid #eeece6;padding:11px 0;font-size:14px;display:flex;gap:10px;align-items:flex-start}
+.list div:last-child{border-bottom:0}
+.mark{flex:0 0 44px;font-size:12px;font-weight:700;border-radius:6px;padding:3px 0;text-align:center;margin-top:2px}
+.mark.ok{background:#e6f4ea;color:#137333}
+.mark.ng{background:#fdecea;color:#a50e0e}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。院名・症例はすべて架空です。声は端末の中だけで音の大きさと長さに変換され、どこにも送りません。録音も保存もしません。</div>
+<h1>三秒で消える</h1>
+<p class="lead">架空の「くすの木整体院」。次回予約も回数券も、断る一言も、頭では分かっているのに口が動かない。台詞を3秒だけ見せて消し、そのあと自分の声で言い切れるかを測ります。読むのではなく、言う練習です。</p>
+
+<div class="card" id="s1">
+  <h2>やること</h2>
+  <p>5つの場面が出ます。1つずつ、こう進みます。</p>
+  <p style="margin-top:8px">3秒だけ台詞が出る　→　消える　→　自分の声で言う　→　言い切れたかを音の長さで判定</p>
+  <div class="warn">声を出せる場所でやってください。マイクを許可すると、声が出ていた秒数を測ります。許可しない場合は、言えたかどうかを自分で押す形になります。</div>
+  <button class="btn" onclick="start(true)">マイクを使って始める</button>
+  <button class="btn sub" onclick="start(false)">マイクなしで始める</button>
+</div>
+
+<div class="card hide" id="s2">
+  <div class="step" id="stepv"></div>
+  <div class="situ"><b id="situT"></b><span id="situ"></span></div>
+  <div class="stage" id="stage">
+    <div class="ct" id="ct">3</div>
+    <div class="hint" id="hint">まもなく台詞が出ます。目で追うだけにしてください</div>
+  </div>
+  <div class="meter" id="meterBox" style="display:none"><i id="meter"></i></div>
+  <div id="ctrl"></div>
+  <div class="prog"><i id="prog"></i></div>
+</div>
+
+<div class="card hide" id="s3">
+  <div class="step">結果</div>
+  <div class="res"><div class="sub2">3秒で消えたあと、言い切れた数</div><div class="big" id="score">-</div><div class="sub2" id="scoresub"></div></div>
+  <div class="list" id="list"></div>
+  <div class="gap" id="advice"></div>
+  <div class="row">
+    <button class="btn" onclick="retryNg()">つまった場面だけやり直す</button>
+  </div>
+  <button class="btn ghost" onclick="location.reload()">最初から</button>
+  <div class="gap" style="background:#eef2fb;margin-top:14px">売り方に置き換えると一行。言えない一言は、文章にして貼っても言えません。口に出した回数だけが増えます。朝の3分をこれに使うと、断れなかった一件が月に何件あるかが分かります。</div>
+</div>
+
+<div class="src">
+  この画面は、言葉の中身を聞き取っているのではありません。マイクから拾った音の大きさ（実効値）と、声が出ていた秒数だけを見ています。台詞の長さから計算した目安の6割以上の時間、声が出ていれば「言えた」としています。だから、まったく別のことを言っても通ります。判定を厳しくしたいときは、声に出した内容を自分で確かめてください。<br><br>
+  症例・院名・金額はすべて架空のサンプルです。整体・接骨院の施術内容や効果について何かを述べるものではありません。
+</div>
+</div>
+
+<script>
+var CARDS=[
+ {t:'施術のあと、次回の話を切り出すとき',s:'肩の張りが強い常連の方。今日で3回目。よくなってきているが、間があくと戻る。',line:'今日でよくなった感じはありますか。次は一週間後で組みますか、それとも十日後にしますか'},
+ {t:'回数券をすすめるとき',s:'週1回で通いたいと言われた。単発だと1回6000円、回数券のほうが安いが、金額の話で口が止まる。',line:'回数券は六回で三万円です。一回あたり五千円になります。使わなかった分は半年まで持てます'},
+ {t:'うちでは診られないと言うとき',s:'転んでから足首が腫れている。相手は「もんでほしい」と言っている。',line:'その痛みはうちでは診られません。整形外科で一度レントゲンを撮ってきてください'},
+ {t:'遅刻のルールを言うとき',s:'毎回15分遅れて来る方。後ろの予約が押して、こちらが昼を抜いている。',line:'予約の十分前を過ぎると次の方に入ってしまいます。遅れそうなときは電話をください'},
+ {t:'一回で治ると思われているとき',s:'今日はじめて来た方。「一回でスッキリさせてほしい」と言われた。',line:'一回で終わる痛みではありません。三回来ていただいて、そこで続けるか決めてください'}
+];
+var order=[],idx=0,useMic=false,results=[],ac=null,an=null,stream=null,rafId=null;
+var $=function(id){return document.getElementById(id)};
+function show(id){['s1','s2','s3'].forEach(function(x){$(x).classList.add('hide')});$(id).classList.remove('hide')}
+function targetSec(line){return Math.max(2.5,Math.round(line.length/5.5*10)/10)}
+
+function acquire(cb){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){return cb(false)}
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(st){
+    stream=st;
+    var C=window.AudioContext||window.webkitAudioContext;
+    ac=new C();an=ac.createAnalyser();an.fftSize=1024;
+    ac.createMediaStreamSource(st).connect(an);
+    cb(true);
+  }).catch(function(){cb(false)});
+}
+function start(mic){
+  order=[0,1,2,3,4];idx=0;results=[];
+  if(!mic){useMic=false;show('s2');return next()}
+  acquire(function(ok){useMic=ok;show('s2');next()});
+}
+function rms(){
+  if(!an)return 0;
+  var buf=new Float32Array(an.fftSize);
+  if(an.getFloatTimeDomainData){an.getFloatTimeDomainData(buf)}
+  else{var b=new Uint8Array(an.fftSize);an.getByteTimeDomainData(b);for(var i=0;i<b.length;i++)buf[i]=(b[i]-128)/128}
+  var s=0;for(var j=0;j<buf.length;j++){s+=buf[j]*buf[j]}
+  return Math.sqrt(s/buf.length);
+}
+
+function next(){
+  if(idx>=order.length){return finish()}
+  var c=CARDS[order[idx]];
+  $('stepv').textContent=(idx+1)+' / '+order.length;
+  $('prog').style.width=(idx/order.length*100)+'%';
+  $('situT').textContent=c.t;$('situ').textContent=c.s;
+  $('meterBox').style.display='none';$('ctrl').innerHTML='';
+  var n=3;
+  $('stage').innerHTML='<div class="ct" id="ct">'+n+'</div><div class="hint">まもなく台詞が出ます。目で追うだけにしてください</div>';
+  var iv=setInterval(function(){
+    n--;
+    if(n>0){$('stage').innerHTML='<div class="ct">'+n+'</div><div class="hint">目で追うだけ。あとで消えます</div>'}
+    else{clearInterval(iv);showLine(c)}
+  },700);
+}
+function showLine(c){
+  $('stage').innerHTML='<div class="line">'+c.line+'</div><div class="hint">3秒で消えます</div>';
+  var t=3;
+  var iv=setInterval(function(){
+    t--;
+    if(t<=0){clearInterval(iv);askSay(c)}
+    else{$('stage').querySelector('.hint').textContent=t+'秒で消えます'}
+  },1000);
+}
+function askSay(c){
+  var tgt=targetSec(c.line);
+  $('stage').innerHTML='<div class="say">いま、声に出す</div><div class="hint" id="hint2">'+(useMic?'声が出ていた時間を測っています。目安 '+tgt+'秒':'言い終わったら下を押してください。目安 '+tgt+'秒')+'</div>';
+  if(useMic){
+    $('meterBox').style.display='block';
+    var voiced=0,peak=0,t0=Date.now(),limit=12000;
+    $('ctrl').innerHTML='<button class="btn sub" id="doneBtn">言い終わった</button>';
+    var stop=function(){
+      cancelAnimationFrame(rafId);clearInterval(iv2);
+      var ok=voiced>=tgt*0.6&&peak>0.035;
+      record(c,ok,voiced,peak,tgt);
+    };
+    $('doneBtn').onclick=stop;
+    var iv2=setInterval(function(){
+      var v=rms();
+      if(v>peak)peak=v;
+      if(v>0.02)voiced+=0.1;
+      $('meter').style.width=Math.min(100,Math.round(v*500))+'%';
+      $('hint2').textContent='声が出ていた時間 '+voiced.toFixed(1)+'秒 ／ 目安 '+tgt+'秒';
+      if(Date.now()-t0>limit)stop();
+    },100);
+  }else{
+    $('ctrl').innerHTML='<div class="row"><button class="btn" id="okBtn">言い切れた</button><button class="btn ghost" id="ngBtn">つまった</button></div>';
+    $('okBtn').onclick=function(){record(c,true,null,null,tgt)};
+    $('ngBtn').onclick=function(){record(c,false,null,null,tgt)};
+  }
+}
+function record(c,ok,voiced,peak,tgt){
+  results.push({card:c,ok:ok,voiced:voiced,tgt:tgt,peak:peak});
+  idx++;next();
+}
+function finish(){
+  if(stream){stream.getTracks().forEach(function(t){t.stop()});stream=null}
+  var ok=results.filter(function(r){return r.ok}).length;
+  show('s3');
+  $('score').innerHTML=ok+'<small> / '+results.length+'</small>';
+  $('scoresub').textContent=useMic?'マイクで声の長さを測った結果です。':'自己申告の結果です。';
+  $('list').innerHTML=results.map(function(r){
+    var d=r.voiced!=null?'　声'+r.voiced.toFixed(1)+'秒（目安'+r.tgt+'秒）':'';
+    return '<div><span class="mark '+(r.ok?'ok':'ng')+'">'+(r.ok?'言えた':'つまった')+'</span><span>'+r.card.t+'<span class="sub2">'+d+'</span></span></div>';
+  }).join('');
+  var ng=results.filter(function(r){return !r.ok});
+  $('advice').innerHTML=ng.length===0?'5つとも言い切れています。次は相手の顔を思い浮かべながら、同じ5枚を続けてやってみてください。'
+    :'つまったのは「'+ng.map(function(r){return r.card.t}).join('」「')+'」。'+(useMic?'声が短くなるのは、途中で言い方を探し始めたときです。':'')+'台詞を変えず、同じ言い方で3日続けると口が先に出ます。';
+}
+function retryNg(){
+  var ng=results.filter(function(r){return !r.ok}).map(function(r){return CARDS.indexOf(r.card)});
+  if(!ng.length){return}
+  order=ng;idx=0;results=[];show('s2');
+  if(useMic&&!stream){acquire(function(ok){useMic=ok;next()})}else{next()}
+}
+</script>
+</body>
+</html>

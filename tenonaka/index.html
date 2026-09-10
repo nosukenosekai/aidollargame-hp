@@ -463,18 +463,13 @@ function playAt(i){
   if(i>=playList.length)return closePlay();
   playIdx=i;
   var v=$('pv');
+  v.onended=null;v.ontimeupdate=null;v.oncanplay=null;
   v.muted=true;
   v.src=playURLs[i];
   $('pt').textContent=hhmm(playList[i].ts)+'　'+(i+1)+' / '+playList.length;
   for(var k=0;k<playList.length;k++){
     $('hud').children[k].firstChild.style.width=(k<i?'100%':'0');
   }
-  v.play().catch(function(){
-    /* 自動再生が弾かれたら、画面を一度たたけば続きが始まる */
-    $('pt').textContent='画面をたたくと続きます';
-    var go=function(){document.removeEventListener('click',go);v.play().catch(function(){})};
-    document.addEventListener('click',go);
-  });
   v.ontimeupdate=function(){
     var d=v.duration||2;
     $('hud').children[i].firstChild.style.width=Math.min(100,(v.currentTime/d)*100)+'%';
@@ -483,6 +478,18 @@ function playAt(i){
     $('hud').children[i].firstChild.style.width='100%';
     playAt(i+1);
   };
+  /* src を差し替えた直後に play() を呼ぶと読み込みに割り込んで弾かれる。
+     読める状態になってから鳴らす。 */
+  var go=function(){
+    v.oncanplay=null;
+    v.play().catch(function(){
+      $('pt').textContent='画面をたたくと続きます';
+      var tap=function(){document.removeEventListener('click',tap);v.play().catch(function(){})};
+      document.addEventListener('click',tap);
+    });
+  };
+  if(v.readyState>=3)go(); else v.oncanplay=go;
+  v.load();
 }
 function closePlay(){
   hide('play');

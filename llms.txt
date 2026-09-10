@@ -118,14 +118,14 @@
 - 冷蔵庫を撮るだけ｜今夜の献立をAIに丸投げする遊び方（スマホ1台、5分。冷蔵庫を撮るだけで今夜の献立が決まるAIの使い方。）: https://aidollargame.com/articles/ai-kondate-2026.html
 - AIを入れたけど効果ある？やめる前に確かめる「振り返り」3ステップ（続ける・直す・やめるを、感覚ではなく事実で決める振り返りの3ステップ。）: https://aidollargame.com/articles/ai-furikaeri-2026.html
 - AIが自信満々に間違えるのはなぜ？中小企業のための「ハルシネーション」の付き合い方3つ（AIはなぜ自信満々に間違えるのか。仕組みと、前提にした使い方の目安3つ。）: https://aidollargame.com/articles/hallucination-2026.html
-- 次の休み、どこ行く？AIに「おでかけプラン」を作ってもらう遊び方（スマホに話しかけるだけで、その日のおでかけ予定表ができる頼み方。）: https://aidollargame.com/articles/ai-odekake-2026.html
+- 次の休み、どこ行く？AIに1日の予定表を作ってもらう（スマホに話しかけるだけで、その日のおでかけ予定表ができる頼み方。）: https://aidollargame.com/articles/ai-odekake-2026.html
 - AIは「賢い検索」ではありません｜ネット検索と生成AIの3つの違い（ネット検索と生成AIは別物です。混同したまま使うとがっかりする理由。）: https://aidollargame.com/articles/ai-vs-kensaku-2026.html
 - AIを導入したのに「誰も使わない」を防ぐ｜社内に定着させる4ステップ（導入で終わらせない。予算も専任担当もいらない、定着までの4ステップ。）: https://aidollargame.com/articles/ai-teichaku-2026.html
 - AIに同じ質問をしても、答えが毎回変わるのはなぜ？仕様を知ると使い方が変わる（答えが毎回変わるのは故障ではなく仕様です。ブレても困らない使い方3つ。）: https://aidollargame.com/articles/kotae-kawaru-2026.html
 - 「うちにはデータがないからAIは無理」は誤解です｜必要なのは、もう社内にある文書（AIに必要なデータとは何か。もう社内にあるものだけで足りる理由。）: https://aidollargame.com/articles/data-nai-gokai-2026.html
 - AIの答え、どこを確認する？軽く通す仕事と、必ず裏取りする仕事の分け方（確認の濃さを仕事ごとに分ける。時間の配分だけを決める考え方。）: https://aidollargame.com/articles/uradori-wakekata-2026.html
-- 日本企業の86.4%が生成AIを使っている。でも「会社として決めている」のは21.5%だけだった（令和8年版情報通信白書。使っている86.4%と、決めている21.5%の差。）: https://aidollargame.com/articles/hakusho-2026.html
-- 中古トラック15,145台の値札を一晩で集めたら、半分の車に値段が書いていなかった（在庫15,145台を実測。半分の車に値段が書いていなかった話。）: https://aidollargame.com/articles/truck-nefuda-2026.html
+- 日本企業の86.4%が生成AIを使い、会社として決めているのは21.5%（令和8年版情報通信白書。使っている86.4%と、決めている21.5%の差。）: https://aidollargame.com/articles/hakusho-2026.html
+- 中古トラック15,145台を集めたら、半分に値段が書いていなかった（在庫15,145台を実測。半分の車に値段が書いていなかった話。）: https://aidollargame.com/articles/truck-nefuda-2026.html
 - AIに任せた問い合わせは64.6%速くなり、顧客の評価は0.858点下がった（下書き役と対応役で顧客評価は逆に動く。現場実験2本の結果。）: https://aidollargame.com/articles/alibaba-cs-2026.html
 - AIで書かれた本は、売上の12.1%を取っていた｜Amazon1万4,419冊の実売データ（1万4,419冊の実売データ。AIで書かれた本は売れている、ただし。）: https://aidollargame.com/articles/amazon-ai-books-2026.html
 - AIエージェントに実務を丸ごと任せたら、最高でも26.2%しか通らなかった（実務を丸ごと任せた場合の通過率。研究3本で線引きします。）: https://aidollargame.com/articles/ai-agent-genkai-2026.html
@@ -134,8 +134,8 @@
 - AI研修の効果は、受けた月だけだった。社員4,000人・71万プロンプトの実測（社員4,000人・71万プロンプトの実測。研修の効果が続いた期間。）: https://aidollargame.com/articles/ai-kenshu-kouka-2026.html
 - AIに記録を書かせたら16分減った。別の研究では16秒しか減っていなかった（16分と16秒。同じ道具の効果がここまで割れる理由と、測り方。）: https://aidollargame.com/articles/kiroku-16pun-2026.html
 - AIにメールを書き直させても、返信率は動かなかった。動いたのは文章の温度だった（AIで整えたメールと返信率。実際に動いていたのは文章の温度でした。）: https://aidollargame.com/articles/mail-henshin-2026.html
-- AIの使い道を調べた地図が3枚ある。見る地図を変えると、答えが1.9倍ずれた（AI利用の地図3枚。どのログを見るかで結論が1.9倍動きます。）: https://aidollargame.com/articles/ai-chizu-3mai-2026.html
-- OpenAIが「重大」と判定した能力を、閉じたまま出した。GPT-6 Astraで何が変わるのか（GPT-6 Astra。AGIの話ではなく、小さい会社の実務で効く2点。）: https://aidollargame.com/articles/gpt6-astra-2026.html
+- AIの使い道の地図が3枚。見る地図を変えると答えが1.9倍ずれた（AI利用の地図3枚。どのログを見るかで結論が1.9倍動きます。）: https://aidollargame.com/articles/ai-chizu-3mai-2026.html
+- GPT-6は、OpenAIが「重大」と判定した機能を止めたまま出てきた（GPT-6 Astra。AGIの話ではなく、小さい会社の実務で効く2点。）: https://aidollargame.com/articles/gpt6-astra-2026.html
 - Metaの安いプランは、打ち込んだ内容が次のAIの材料になる｜9月に出た新しいAI4本で扱いが割れた（9月に出た新AI4本。入力データの扱いが会社ごと・プランごとに割れました。）: https://aidollargame.com/articles/ai-4hon-data-2026.html
 
 ## 連絡先 (Contact)

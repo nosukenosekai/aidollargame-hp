@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f4f0">
+<title>てのなか — 今日、自分の手は何をしていたか</title>
+<meta name="description" content="1日に何度か、通知が鳴ります。鳴ったら2秒だけ、自分の手を撮る。顔は映りません。夜、手だけの2秒が順につながって今日になります。誰にも送りません。">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#f5f4f0;--ink:#1a1a1a;--sub:#6b6b6b;--blue:#2563eb;--line:#e5e3dd;--warm:#c2410c}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;padding:20px 16px calc(30px + env(safe-area-inset-bottom))}
+h1{font-size:30px;letter-spacing:.04em;margin-bottom:4px;font-weight:700}
+.tag{font-size:14px;color:var(--sub);margin-bottom:22px}
+h2{font-size:19px;margin-bottom:10px}
+p{font-size:17px}
+.card{background:#fff;border-radius:14px;padding:20px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.btn{display:block;width:100%;background:var(--blue);color:#fff;border:0;border-radius:12px;padding:17px;font-size:18px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn:disabled{background:#c9c6bf;cursor:default}
+.btn.sub{background:#fff;color:var(--blue);border:1.5px solid var(--blue)}
+.btn.ghost{background:transparent;color:var(--sub);border:1.5px solid #cfcbc2;font-size:16px;padding:14px}
+.hide{display:none !important}
+.sub2{font-size:15px;color:var(--sub)}
+.step{font-size:13px;color:#8a8a8a;letter-spacing:.1em;margin-bottom:6px}
+
+/* 枠の並び */
+.slots{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap}
+.slot{flex:1 1 0;min-width:52px;aspect-ratio:3/4;border-radius:11px;background:#e8e5de;position:relative;overflow:hidden;border:1.5px solid transparent}
+.slot.done{background:#101218;border-color:#101218}
+.slot.done canvas{width:100%;height:100%;object-fit:cover;display:block}
+.slot.next{border-color:var(--blue);background:#eef2fb}
+.slot .n{position:absolute;left:0;right:0;bottom:5px;text-align:center;font-size:12px;color:#8a8a8a;font-variant-numeric:tabular-nums}
+.slot.done .n{color:#c9c6bf}
+.slot.next .n{color:var(--blue);font-weight:700}
+
+/* 待機 */
+.waiting{background:#101218;color:#fff;border-radius:14px;padding:26px 18px;text-align:center;margin-top:14px}
+.waiting .big{font-size:46px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:.02em;line-height:1.15}
+.waiting .lbl{font-size:14px;color:#9aa3b2;margin-top:6px}
+.waiting.ring{background:var(--warm)}
+.waiting.ring .lbl{color:#ffe2d4}
+
+/* 撮影 */
+#shoot{position:fixed;inset:0;background:#000;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center}
+#shoot video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#shoot .ov{position:relative;z-index:2;text-align:center;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+#shoot .cd{font-size:104px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+#shoot .msg{font-size:19px;margin-top:10px}
+#shoot .rec{position:absolute;top:calc(22px + env(safe-area-inset-top));left:0;right:0;z-index:3;text-align:center}
+#shoot .rec b{background:var(--warm);color:#fff;font-size:15px;padding:6px 14px;border-radius:999px;letter-spacing:.08em}
+#shoot .bar{position:absolute;left:0;bottom:0;height:6px;background:var(--warm);width:0;z-index:3}
+#shoot .cancel{position:absolute;bottom:calc(28px + env(safe-area-inset-bottom));z-index:3;background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:999px;padding:11px 24px;font-size:16px;font-family:inherit;cursor:pointer}
+
+/* 再生 */
+#play{position:fixed;inset:0;background:#000;z-index:60;display:flex;align-items:center;justify-content:center}
+#play video{width:100%;height:100%;object-fit:cover}
+#play .hud{position:absolute;top:calc(20px + env(safe-area-inset-top));left:16px;right:16px;z-index:3;display:flex;gap:5px}
+#play .hud i{flex:1;height:4px;background:rgba(255,255,255,.3);border-radius:2px;overflow:hidden}
+#play .hud i b{display:block;height:100%;width:0;background:#fff}
+#play .time{position:absolute;top:calc(38px + env(safe-area-inset-top));left:0;right:0;z-index:3;text-align:center;color:#fff;font-size:15px;text-shadow:0 2px 10px rgba(0,0,0,.8);font-variant-numeric:tabular-nums}
+#play .close{position:absolute;bottom:calc(28px + env(safe-area-inset-bottom));z-index:3;background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:999px;padding:11px 24px;font-size:16px;font-family:inherit;cursor:pointer}
+
+.note{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:15px}
+.warn{background:#fff8e8;border-radius:12px;padding:13px;margin-top:12px;font-size:14px;color:#5a4a20}
+.err{background:#fdecea;border-radius:12px;padding:14px;margin-top:12px;font-size:15px;color:#9a2b1c}
+.rows{margin-top:6px}
+.row{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:13px 0;font-size:16px}
+.row:last-child{border-bottom:0}
+.row b{font-weight:600}
+.row .t{color:var(--sub);font-size:15px;font-variant-numeric:tabular-nums}
+.foot{font-size:14px;color:var(--sub);border-top:1px solid var(--line);margin-top:20px;padding-top:14px;line-height:1.8}
+.foot a{color:var(--blue)}
+.pill{display:inline-block;font-size:13px;color:var(--sub);border:1px solid #cfcbc2;border-radius:999px;padding:3px 11px;margin-right:6px;margin-top:6px}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="app">
+
+  <!-- はじめ -->
+  <section id="vIntro">
+    <h1>てのなか</h1>
+    <p class="tag">今日、自分の手は何をしていたか</p>
+
+    <div class="card">
+      <p>1日に何度か、通知が鳴ります。<br>鳴ったら2秒だけ、自分の手を撮ってください。</p>
+      <p style="margin-top:14px">顔は映りません。うしろ側のカメラが、下を向いているだけです。だから、どんな顔をしていても撮れます。</p>
+      <p style="margin-top:14px">夜、その2秒が順につながって、今日になります。</p>
+      <div class="note">
+        撮ったものは、この端末から出ません。どこにも送らず、誰にも見せず、アカウントもありません。消すのはボタン1つで、消したら本当に消えます。
+      </div>
+      <button class="btn" id="btnStart">はじめる</button>
+      <p class="sub2" style="margin-top:12px;text-align:center">カメラの使用を許可してください</p>
+    </div>
+
+    <div class="card">
+      <h2>なぜ手なのか</h2>
+      <p>顔を撮るアプリは、撮る前に顔を作ります。作るから疲れます。手は作れません。今そこにあるものを持っているだけです。</p>
+      <p style="margin-top:14px">1日の終わりに並ぶのは、コップ、ハンドル、キーボード、レジ袋、誰かの手。それが今日やったことの全部です。</p>
+    </div>
+
+    <div class="foot">
+      <span class="pill">依存ゼロ</span><span class="pill">送信なし</span><span class="pill">アカウントなし</span>
+      <div style="margin-top:10px">株式会社AIdollargame　<a href="https://aidollargame.com/">aidollargame.com</a></div>
+    </div>
+  </section>
+
+  <!-- ホーム -->
+  <section id="vHome" class="hide">
+    <h1>てのなか</h1>
+    <p class="tag" id="today"></p>
+
+    <div class="card">
+      <div class="step" id="homeStep">きょう</div>
+      <h2 id="homeTitle">まだ1本も撮っていません</h2>
+      <div class="slots" id="slots"></div>
+      <div class="waiting" id="waitBox">
+        <div class="big" id="waitBig">--:--</div>
+        <div class="lbl" id="waitLbl">次の通知まで</div>
+      </div>
+      <button class="btn hide" id="btnShootNow">いま撮る</button>
+      <button class="btn sub" id="btnPlay">今日をつなげて見る</button>
+      <p class="sub2" style="margin-top:12px" id="homeHint">この画面を開いたままにしておくと、時間になったら鳴ります。閉じているあいだは鳴りません。</p>
+    </div>
+
+    <div class="card" id="listCard">
+      <h2>撮った時刻</h2>
+      <div class="rows" id="rows"></div>
+    </div>
+
+    <div class="card">
+      <button class="btn ghost" id="btnWipe">この端末から全部消す</button>
+      <p class="sub2" style="margin-top:10px">バックアップはありません。消したら戻せません。</p>
+    </div>
+
+    <div class="foot">
+      <span class="pill">依存ゼロ</span><span class="pill">送信なし</span><span class="pill">アカウントなし</span>
+      <div style="margin-top:10px">株式会社AIdollargame　<a href="https://aidollargame.com/">aidollargame.com</a></div>
+    </div>
+  </section>
+
+  <div id="errBox"></div>
+</div>
+
+<!-- 撮影 -->
+<div id="shoot" class="hide">
+  <video id="cam" playsinline muted autoplay></video>
+  <div class="rec hide" id="recBadge"><b>REC</b></div>
+  <div class="ov">
+    <div class="cd" id="cd">3</div>
+    <div class="msg" id="cdMsg">手を写してください</div>
+  </div>
+  <div class="bar" id="recBar"></div>
+  <button class="cancel" id="btnCancel">やめる</button>
+</div>
+
+<!-- 再生 -->
+<div id="play" class="hide">
+  <video id="pv" playsinline></video>
+  <div class="hud" id="hud"></div>
+  <div class="time" id="pt"></div>
+  <button class="close" id="btnClose">閉じる</button>
+</div>
+
+<script>
+'use strict';
+var $=function(i){return document.getElementById(i)};
+var show=function(i){$(i).classList.remove('hide')};
+var hide=function(i){$(i).classList.add('hide')};
+
+/* ---------- 保存（IndexedDB。端末から出さない） ---------- */
+var DB=null;
+function openDB(){
+  return new Promise(function(res,rej){
+    var r=indexedDB.open('tenonaka',1);
+    r.onupgradeneeded=function(e){
+      var db=e.target.result;
+      if(!db.objectStoreNames.contains('clips')){
+        var s=db.createObjectStore('clips',{keyPath:'id'});
+        s.createIndex('ts','ts');
+      }
+    };
+    r.onsuccess=function(){DB=r.result;res(DB)};
+    r.onerror=function(){rej(r.error)};
+  });
+}
+function put(rec){
+  return new Promise(function(res,rej){
+    var t=DB.transaction('clips','readwrite');
+    t.objectStore('clips').put(rec);
+    t.oncomplete=res;t.onerror=function(){rej(t.error)};
+  });
+}
+function all(){
+  return new Promise(function(res,rej){
+    var t=DB.transaction('clips','readonly'),out=[];
+    t.objectStore('clips').openCursor().onsuccess=function(e){
+      var c=e.target.result;
+      if(c){out.push(c.value);c.continue()}else{out.sort(function(a,b){return a.ts-b.ts});res(out)}
+    };
+    t.onerror=function(){rej(t.error)};
+  });
+}
+function wipe(){
+  return new Promise(function(res,rej){
+    var t=DB.transaction('clips','readwrite');
+    t.objectStore('clips').clear();
+    t.oncomplete=res;t.onerror=function(){rej(t.error)};
+  });
+}
+
+/* ---------- 今日 ---------- */
+var SLOTS=5;              /* 1日の枠 */
+var WINDOW_START=9;       /* 通知の出る時間帯 */
+var WINDOW_END=22;
+function dayKey(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function jpDay(){
+  var d=new Date(),w=['日','月','火','水','木','金','土'][d.getDay()];
+  return d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日（'+w+'）';
+}
+function hhmm(ts){var d=new Date(ts);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+
+/* その日の通知時刻は、日付から決まる（同じ日なら何度開いても同じ並び） */
+function seedRand(seed){
+  var h=2166136261;
+  for(var i=0;i<seed.length;i++){h^=seed.charCodeAt(i);h=Math.imul(h,16777619)}
+  return function(){h+=0x6D2B79F5;var t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296};
+}
+function todaySchedule(){
+  var k=dayKey(),rnd=seedRand(k),span=(WINDOW_END-WINDOW_START)/SLOTS,out=[];
+  for(var i=0;i<SLOTS;i++){
+    var h=WINDOW_START+span*i+rnd()*span;
+    var d=new Date();d.setHours(Math.floor(h),Math.floor((h%1)*60),0,0);
+    out.push(d.getTime());
+  }
+  return out;
+}
+
+/* ---------- 状態 ---------- */
+var clips=[],schedule=[],timer=null,ringing=false,stream=null;
+
+function todayClips(){var k=dayKey();return clips.filter(function(c){return c.day===k})}
+
+async function refresh(){
+  clips=await all();
+  schedule=todaySchedule();
+  var tc=todayClips();
+  $('today').textContent=jpDay();
+
+  /* 枠 */
+  var h='';
+  for(var i=0;i<SLOTS;i++){
+    var got=tc[i];
+    var cls=got?'slot done':(i===tc.length?'slot next':'slot');
+    h+='<div class="'+cls+'" data-i="'+i+'"><span class="n">'+(got?hhmm(got.ts):(i+1))+'</span></div>';
+  }
+  $('slots').innerHTML=h;
+  /* 撮れているものはサムネイルを描く */
+  tc.forEach(function(c,i){thumb(c,$('slots').children[i])});
+
+  /* 見出し */
+  if(tc.length===0)$('homeTitle').textContent='まだ1本も撮っていません';
+  else if(tc.length<SLOTS)$('homeTitle').textContent='きょう '+tc.length+'本';
+  else $('homeTitle').textContent='きょうの'+SLOTS+'本、そろいました';
+
+  /* 一覧 */
+  if(tc.length===0){$('listCard').classList.add('hide')}
+  else{
+    $('listCard').classList.remove('hide');
+    var r='';
+    tc.forEach(function(c,i){r+='<div class="row"><b>'+(i+1)+'本目</b><span class="t">'+hhmm(c.ts)+'</span></div>'});
+    $('rows').innerHTML=r;
+  }
+  $('btnPlay').disabled=tc.length===0;
+  $('btnPlay').textContent=tc.length===0?'まだ見るものがありません':'今日をつなげて見る（'+tc.length+'本）';
+  tickWait();
+}
+
+function thumb(c,el){
+  if(!el||el.querySelector('canvas'))return;
+  var v=document.createElement('video');
+  v.playsInline=true;v.muted=true;v.preload='metadata';
+  v.src=URL.createObjectURL(c.blob);
+  v.onloadeddata=function(){
+    try{
+      v.currentTime=0.1;
+      v.onseeked=function(){
+        var cv=document.createElement('canvas');
+        cv.width=90;cv.height=120;
+        cv.getContext('2d').drawImage(v,0,0,90,120);
+        el.insertBefore(cv,el.firstChild);
+        URL.revokeObjectURL(v.src);
+      };
+    }catch(e){}
+  };
+}
+
+/* ---------- 待ち時間 ---------- */
+function nextSlotTime(){
+  var tc=todayClips().length;
+  if(tc>=SLOTS)return null;
+  return schedule[tc];
+}
+function tickWait(){
+  var t=nextSlotTime();
+  var box=$('waitBox');
+  if(t===null){
+    box.classList.remove('ring');
+    $('waitBig').textContent='おしまい';
+    $('waitLbl').textContent='また明日、9時から鳴ります';
+    hide('btnShootNow');ringing=false;return;
+  }
+  var left=t-Date.now();
+  if(left<=0){
+    ringing=true;
+    box.classList.add('ring');
+    $('waitBig').textContent='いま';
+    $('waitLbl').textContent='2秒だけ、手を撮ってください';
+    show('btnShootNow');
+    $('btnShootNow').textContent='撮る';
+  }else{
+    ringing=false;
+    box.classList.remove('ring');
+    var m=Math.floor(left/60000),s=Math.floor(left%60000/1000);
+    var hh=Math.floor(m/60);
+    $('waitBig').textContent=hh>0?(hh+'時間'+String(m%60).padStart(2,'0')+'分'):(m+':'+String(s).padStart(2,'0'));
+    $('waitLbl').textContent=(todayClips().length+1)+'本目の通知まで';
+    show('btnShootNow');
+    $('btnShootNow').textContent='待たずに撮る';
+  }
+}
+setInterval(function(){if(!$('vHome').classList.contains('hide'))tickWait()},1000);
+
+/* 通知 */
+var notified={};
+setInterval(function(){
+  if($('vHome').classList.contains('hide'))return;
+  var t=nextSlotTime();if(t===null)return;
+  var idx=todayClips().length;
+  if(Date.now()>=t && !notified[dayKey()+'_'+idx]){
+    notified[dayKey()+'_'+idx]=true;
+    chime();
+    if('Notification' in window && Notification.permission==='granted'){
+      try{new Notification('てのなか',{body:'2秒だけ、いまの手を撮ってください'})}catch(e){}
+    }
+  }
+},2000);
+
+function chime(){
+  try{
+    var ac=new (window.AudioContext||window.webkitAudioContext)();
+    [0,0.18].forEach(function(off,i){
+      var o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+off;
+      o.type='sine';o.frequency.value=i?880:660;
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.exponentialRampToValueAtTime(0.3,t+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+0.5);
+      o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+0.55);
+    });
+  }catch(e){}
+}
+
+/* ---------- カメラ ---------- */
+function pickMime(){
+  var c=['video/mp4','video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
+  for(var i=0;i<c.length;i++){
+    if(window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(c[i]))return c[i];
+  }
+  return '';
+}
+async function getCam(){
+  if(stream && stream.active)return stream;
+  stream=await navigator.mediaDevices.getUserMedia({
+    video:{facingMode:{ideal:'environment'},width:{ideal:720},height:{ideal:960}},
+    audio:false
+  });
+  return stream;
+}
+function stopCam(){
+  if(stream){stream.getTracks().forEach(function(t){t.stop()});stream=null}
+}
+
+var REC_MS=2000, aborted=false;
+async function startShoot(){
+  aborted=false;
+  try{
+    var s=await getCam();
+    show('shoot');
+    var v=$('cam');v.srcObject=s;await v.play().catch(function(){});
+    $('recBadge').classList.add('hide');
+    $('recBar').style.width='0';
+    /* カウントダウン */
+    for(var n=3;n>=1;n--){
+      if(aborted)return closeShoot();
+      $('cd').textContent=n;
+      $('cdMsg').textContent=n===3?'手を写してください':(n===2?'そのまま':'いくよ');
+      await sleep(700);
+    }
+    if(aborted)return closeShoot();
+    /* 録画 */
+    $('cd').textContent='';
+    $('cdMsg').textContent='2秒';
+    $('recBadge').classList.remove('hide');
+    var mime=pickMime();
+    var mr=new MediaRecorder(s, mime?{mimeType:mime}:undefined);
+    var chunks=[];
+    mr.ondataavailable=function(e){if(e.data && e.data.size)chunks.push(e.data)};
+    var done=new Promise(function(res){mr.onstop=res});
+    mr.start();
+    var t0=Date.now();
+    var iv=setInterval(function(){
+      var p=Math.min(1,(Date.now()-t0)/REC_MS);
+      $('recBar').style.width=(p*100)+'%';
+      $('cdMsg').textContent=(REC_MS/1000-(Date.now()-t0)/1000).toFixed(1)+'秒';
+    },50);
+    await sleep(REC_MS);
+    clearInterval(iv);
+    if(mr.state!=='inactive')mr.stop();
+    await done;
+    if(aborted)return closeShoot();
+    var blob=new Blob(chunks,{type:mime||'video/webm'});
+    if(blob.size<500)throw new Error('録画できませんでした');
+    await put({id:String(Date.now())+'-'+Math.random().toString(16).slice(2),ts:Date.now(),day:dayKey(),blob:blob,type:blob.type});
+    $('cdMsg').textContent='撮れました';
+    await sleep(450);
+    closeShoot();
+    await refresh();
+  }catch(e){
+    closeShoot();
+    fail(e);
+  }
+}
+function closeShoot(){hide('shoot');$('recBadge').classList.add('hide');stopCam()}
+function sleep(ms){return new Promise(function(r){setTimeout(r,ms)})}
+
+function fail(e){
+  var m=String(e && (e.name||e.message)||e);
+  var t;
+  if(m.indexOf('NotAllowed')>=0)t='カメラの使用が許可されていません。ブラウザの設定でこのサイトのカメラを許可してから、もう一度お試しください。';
+  else if(m.indexOf('NotFound')>=0)t='カメラが見つかりませんでした。カメラのある端末で開いてください。';
+  else if(location.protocol!=='https:'&&location.hostname!=='localhost')t='カメラを使うにはhttpsで開く必要があります。';
+  else t='うまくいきませんでした（'+m+'）。もう一度お試しください。';
+  $('errBox').innerHTML='<div class="err">'+t+'</div>';
+  setTimeout(function(){$('errBox').innerHTML=''},7000);
+}
+
+/* ---------- 再生（つなげて見る） ---------- */
+var playList=[],playIdx=0,playURLs=[];
+async function playToday(){
+  var tc=todayClips();
+  if(!tc.length)return;
+  playList=tc;playIdx=0;
+  playURLs=tc.map(function(c){return URL.createObjectURL(c.blob)});
+  var h='';for(var i=0;i<tc.length;i++)h+='<i><b></b></i>';
+  $('hud').innerHTML=h;
+  show('play');
+  playAt(0);
+}
+function playAt(i){
+  if(i>=playList.length)return closePlay();
+  playIdx=i;
+  var v=$('pv');
+  v.src=playURLs[i];
+  v.currentTime=0;
+  $('pt').textContent=hhmm(playList[i].ts)+'　'+(i+1)+' / '+playList.length;
+  for(var k=0;k<playList.length;k++){
+    $('hud').children[k].firstChild.style.width=(k<i?'100%':'0');
+  }
+  v.play().catch(function(){});
+  v.ontimeupdate=function(){
+    var d=v.duration||2;
+    $('hud').children[i].firstChild.style.width=Math.min(100,(v.currentTime/d)*100)+'%';
+  };
+  v.onended=function(){
+    $('hud').children[i].firstChild.style.width='100%';
+    playAt(i+1);
+  };
+}
+function closePlay(){
+  hide('play');
+  var v=$('pv');v.pause();v.removeAttribute('src');v.load();
+  playURLs.forEach(function(u){URL.revokeObjectURL(u)});
+  playURLs=[];
+}
+
+/* ---------- 起動 ---------- */
+$('btnStart').addEventListener('click',async function(){
+  try{
+    await getCam();
+    stopCam();
+    if('Notification' in window && Notification.permission==='default'){
+      try{await Notification.requestPermission()}catch(e){}
+    }
+    localStorage.setItem('tenonaka_ok','1');
+    hide('vIntro');show('vHome');
+    await refresh();
+  }catch(e){fail(e)}
+});
+$('btnShootNow').addEventListener('click',startShoot);
+$('btnCancel').addEventListener('click',function(){aborted=true;closeShoot()});
+$('btnPlay').addEventListener('click',playToday);
+$('btnClose').addEventListener('click',closePlay);
+$('btnWipe').addEventListener('click',async function(){
+  if(!confirm('この端末に残っている手を全部消します。戻せません。'))return;
+  await wipe();
+  await refresh();
+});
+
+(async function boot(){
+  if(!('indexedDB' in window)){$('errBox').innerHTML='<div class="err">このブラウザでは保存ができません。</div>';return}
+  try{await openDB()}catch(e){fail(e);return}
+  if(localStorage.getItem('tenonaka_ok')==='1'){
+    hide('vIntro');show('vHome');
+    await refresh();
+  }
+})();
+</script>
+</body>
+</html>

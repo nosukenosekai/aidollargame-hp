@@ -53,3 +53,22 @@ Allow: /
 Sitemap: https://aidollargame.com/sitemap.xml
 
 # AI向けの会社情報まとめ: https://aidollargame.com/llms.txt
+
+# 2026-09-10 追加: 他のAI検索・AIアシスタントのクローラーも明示的に許可
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: Bingbot
+Allow: /

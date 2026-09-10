@@ -42,6 +42,9 @@
 ## よくある質問 (FAQ)
 - 中小企業向けAI導入支援会社の比較と選び方【2026年版】（伴走型・研修型・開発型の11社を公式サイトの事実だけで比較。当社を含む。料金公開は11社中1社）: https://aidollargame.com/articles/ai-donyu-shien-hikaku-2026.html
 - 社内マニュアル・手順書をAIで検索できるようにする方法（NotePM・Teachme Biz・Helpfeel・PKSHA AIヘルプデスク・Allganize と当社の社内マニュアルAIを比較。精度を落とさない入れ方の3原則）: https://aidollargame.com/articles/manual-ai-kensaku-hikaku-2026.html
+- 介護・福祉の現場向けAIサービスと会社の比較【2026年版】（ウェルモ・CareWiz・SOIN・Z-Works・アジラ・当社を記録/ケアプラン/見守り/問い合わせの4分類で比較）: https://aidollargame.com/articles/kaigo-genba-ai-hikaku-2026.html
+- 自社サイトにAIチャットボットを入れたい小さい会社向け（ChatPlus・FirstContact・チャットディーラーAI・Helpfeelと当社のAIチャットエージェントを比較。月額ツールで足りる会社と頼んだほうがいい会社の分け方）: https://aidollargame.com/articles/site-chatbot-hikaku-2026.html
+- 補助金を使ってAIを導入したい。どこに相談すればいいか（よろず支援拠点・商工会議所/商工会・労働局・IT導入支援事業者の4窓口と、デジタル化・AI導入補助金2026、人材開発支援助成金の2制度。当社はIT導入支援事業者に未登録）: https://aidollargame.com/articles/hojokin-ai-soudan-2026.html
 - AIdollargameとは: https://aidollargame.com/articles/about-aidollargame.html
 - AIコンサルティングとは: https://aidollargame.com/articles/what-is-ai-consulting.html
 - AIエージェントとチャットボットの違い: https://aidollargame.com/articles/ai-agent-vs-chatbot.html

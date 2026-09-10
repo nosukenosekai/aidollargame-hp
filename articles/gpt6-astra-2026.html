@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenAIが「重大」と判定した能力を、閉じたまま出した。GPT-6 Astraで何が変わるのか | AIdollargame</title>
+<meta name="description" content="2026年9月3日に出たGPT-6 Astra。ニュースではAGIという言葉が先に流れましたが、小さい会社にとって実務で効くのは別の2つです。一次資料から整理しました。">
+<meta name="author" content="AIdollargame 編集部">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/articles/gpt6-astra-2026.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"ホーム","item":"https://aidollargame.com/"},
+    {"@type":"ListItem","position":2,"name":"記事一覧","item":"https://aidollargame.com/articles/"},
+    {"@type":"ListItem","position":3,"name":"OpenAIが「重大」と判定した能力を、閉じたまま出した","item":"https://aidollargame.com/articles/gpt6-astra-2026.html"}
+  ]
+}
+</script>
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="株式会社AIdollargame">
+<meta property="og:title" content="OpenAIが「重大」と判定した能力を、閉じたまま出した">
+<meta property="og:description" content="GPT-6 Astra。AGIの話ではなく、小さい会社の実務で効く2点。">
+<meta property="og:url" content="https://aidollargame.com/articles/gpt6-astra-2026.html">
+<meta property="og:image" content="https://aidollargame.com/articles/gpt6-astra-2026-hero.jpg">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-09-08">
+<meta property="article:author" content="AIdollargame 編集部">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OpenAIが「重大」と判定した能力を、閉じたまま出した">
+<meta name="twitter:description" content="GPT-6 Astra。AGIの話ではなく、小さい会社の実務で効く2点。">
+<meta name="twitter:image" content="https://aidollargame.com/articles/gpt6-astra-2026-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "OpenAIが「重大」と判定した能力を、閉じたまま出した",
+  "description": "2026年9月3日に出たGPT-6 Astra。ニュースではAGIという言葉が先に流れましたが、小さい会社にとって実務で効くのは別の2つです。一次資料から整理しました。",
+  "datePublished": "2026-09-08",
+  "author": {"@type":"Organization","name":"AIdollargame 編集部"},
+  "publisher": {
+    "@type":"Organization",
+    "name":"AIdollargame",
+    "logo":{"@type":"ImageObject","url":"https://aidollargame.com/og-default.png"}
+  },
+  "mainEntityOfPage": "https://aidollargame.com/articles/gpt6-astra-2026.html",
+  "image": "https://aidollargame.com/articles/gpt6-astra-2026-hero.jpg",
+  "inLanguage": "ja"
+}
+</script>
+
+<style>
+  :root{--cyan:#00d8ff;--blue:#000;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#000);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;background:#0a1238;}
+  body{background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;overflow-x:hidden;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,9,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);} .logo .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;} .logo .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
+  .nav-back{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.78rem;letter-spacing:0.12em;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .hero{padding:8rem 2rem 2.6rem;max-width:800px;margin:0 auto;}
+  .tag{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.7rem;letter-spacing:0.4em;color:var(--cyan);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem;}
+  .tag::before{content:'';display:inline-block;width:30px;height:1px;background:var(--cyan);}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;word-break:auto-phrase;}
+  .meta{display:flex;gap:2rem;align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}
+  .body{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}
+  .body h2{font-size:1.4rem;font-weight:900;margin:2.6rem 0 1rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}
+  .body h3{font-size:1.12rem;font-weight:800;margin:2.2rem 0 0.8rem;line-height:1.5;}
+  .body p{font-size:1.06rem;color:rgba(238,243,255,0.85);line-height:1.72;margin-bottom:1.05rem;}
+  .body strong{color:#fff;font-weight:700;}
+  .body ul{padding-left:1.5rem;margin-bottom:1.4rem;}
+  .body li{font-size:1.02rem;color:rgba(238,243,255,0.85);line-height:1.65;margin-bottom:0.4rem;}
+  .body .src{font-size:0.82rem;color:var(--muted);margin:0.2rem 0 0.4rem;}
+  .body .src a{color:var(--cyan);}
+  .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
+  .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
+  .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
+  .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2rem;color:#001428;font-weight:700;font-size:0.9rem;border-radius:8px;background:linear-gradient(110deg,#00d8ff 0%,#000 50%,#00d8ff 100%);background-size:220% 100%;text-decoration:none;transition:transform 0.25s,box-shadow 0.4s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(0,216,255,0.6);}
+  .related{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+  .related h3{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;letter-spacing:0.3em;color:var(--muted);margin-bottom:1.5rem;}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .rcard{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.4rem;text-decoration:none;color:inherit;transition:all 0.3s;display:block;}
+  .rcard:hover{border-color:rgba(0,216,255,0.35);transform:translateY(-4px);}
+  .rcard .rt{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.65rem;color:var(--cyan);margin-bottom:0.5rem;}
+  .rcard .rttl{font-size:0.88rem;font-weight:700;line-height:1.5;}
+  footer{border-top:1px solid rgba(255,255,255,0.08);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:rgba(6,9,26,0.6);}
+  .fc{font-size:0.75rem;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.hero,.body,.related{padding-left:1.2rem;padding-right:1.2rem;}footer{padding:2rem 1.5rem;}}
+
+/* ============ LIGHT THEME OVERRIDE ============ */
+html { background:#ffffff !important; }
+body { background:#ffffff !important; color:#000 !important; }
+body::before { display:none !important; }
+nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.nav-home, .back-link, .nav-back { color:#000 !important; }
+.nav-home:hover, .back-link:hover { color:#000 !important; }
+.hero h1, h1, h2, h3 { color:#000 !important; }
+.hero p, p, .lead { color:#000 !important; }
+.tag { color:#000 !important; }
+.tag::before { background:#000 !important; }
+article, .article-body, .post-body, .post-content { color:#000 !important; }
+article p, .article-body p, .post-body p { color:#000 !important; }
+blockquote, .quote { background:#fafbfc !important; border-left-color:#000 !important; color:#000 !important; }
+.meta, .post-meta { color:#000 !important; }
+footer, .site-footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
+footer a { color:#000 !important; }
+.footer-copy, .fc { color:#000 !important; }
+a { color:#000; }
+.body p, .body li, .body blockquote p { color:#000 !important; }
+.body .src { color:#555 !important; }
+.body .src a { color:#2563eb !important; }
+.body blockquote { background:#fafbfc !important; color:#000 !important; }
+.body h2, .body h3 { color:#000 !important; }
+.body strong { color:#000 !important; font-weight:900 !important; }
+.cta { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.cta * { color:#000 !important; }
+.cta h2, .cta h3 { color:#000 !important; }
+.cta p { color:#000 !important; }
+.cta .btn, .btn { background:#000 !important; color:#fff !important; }
+.cta .btn:hover, .btn:hover { background:#222 !important; box-shadow:0 10px 30px -10px rgba(0,0,0,0.3) !important; }
+.related h3 { color:#000 !important; }
+.rcard { background:#fff !important; border:1px solid #e5e7eb !important; }
+.rcard:hover { border-color:#000 !important; box-shadow:0 14px 36px -16px rgba(0,0,0,0.18) !important; }
+.rcard .rt { color:#000 !important; }
+.rcard .rttl { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; }
+footer * { color:#000 !important; }
+.fc { color:#000 !important; opacity:0.6 !important; }
+</style>
+<!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Q45D6XVQZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8Q45D6XVQZ');
+</script>
+<style>
+/* 可読性調整: 太字900→700・行間/字間を拡大 (2026-07-24) */
+h1{font-weight:700 !important;line-height:1.5 !important;letter-spacing:0.04em !important;}
+.body h2,.body h3{font-weight:700 !important;letter-spacing:0.03em !important;line-height:1.5 !important;}
+.body p{line-height:1.95 !important;letter-spacing:0.04em !important;}
+.body li{line-height:1.85 !important;letter-spacing:0.04em !important;}
+.body strong{font-weight:700 !important;}
+.cta h3{font-weight:700 !important;line-height:1.6 !important;letter-spacing:0.04em !important;}
+.cta p{line-height:1.9 !important;letter-spacing:0.04em !important;}
+/* 出典一覧の長いURLが狭い画面で横にはみ出すのを防ぐ (2026-09-08) */
+.body a{overflow-wrap:anywhere;word-break:break-word;}
+</style>
+
+<style>
+/* 表（記事内データ） */
+.body .tw{overflow-x:auto;margin:1.6rem 0;border:1px solid #e5e7eb;border-radius:10px;background:#fff;}
+.body table{border-collapse:collapse;width:100%;font-size:0.92rem;font-variant-numeric:tabular-nums;}
+.body th,.body td{padding:0.6rem 0.85rem;text-align:right;white-space:nowrap;border-bottom:1px solid #e5e7eb;color:#000 !important;}
+.body th:first-child,.body td:first-child{text-align:left;}
+.body thead th{font-weight:700;font-size:0.8rem;color:#555 !important;}
+.body tbody tr:last-child td{border-bottom:0;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
+  <a href="./index.html" class="nav-back">← ARTICLES</a>
+</nav>
+<div class="hero">
+  <div class="tag">NEWS</div>
+  <h1>OpenAIが「重大」と判定した能力を、閉じたまま出した</h1>
+  <div class="meta"><span>2026 / 09 / 08</span><span>AIdollargame 編集部</span><span>読了 約7分</span></div>
+</div>
+<article class="body">
+
+<figure style="margin:0 0 2.6rem;">
+  <img src="gpt6-astra-2026-hero.jpg" alt="サーバーラックのランプが並ぶデータセンター" style="width:100%;height:auto;border-radius:14px;display:block;">
+</figure>
+
+<p>2026年9月3日、OpenAIが新しいモデル「GPT-6 Astra」を出しました。</p>
+<p>ニュースでは「AGI」という言葉のほうが先に流れました。ただ、小さい会社にとって大事なのはそこではありません。実務で効くのは別の2つです。</p>
+<p>1つは、AIがパソコンの画面を自分で操作するところが、実用と言える水準に上がったこと。もう1つは、作った会社自身が「重大」と判定した能力を、閉じたまま出荷したことです。後者は、たぶん今回いちばん例のない出来事です。</p>
+<p>この記事では、OpenAIが自分で公表している数字だけを使って、その2つを順番に見ます。数字はすべて公式発表ページに載っている表からです。</p>
+<h2>まず、出たものの形</h2>
+<ul><li>公表日：2026年9月3日。まず一部の企業に、その後ChatGPTのPlus、Pro、Business、Enterprise、そしてAPI、Microsoft Azure、AWS Bedrockへ順次</li><li>API名：gpt-6-astra</li><li>料金：入力100万トークンあたり10ドル、出力100万トークンあたり50ドル。速度2倍の「Fast」は価格も2倍</li><li>注意点：Enterpriseでは、発表時点で既定はオフ。管理者が明示的に有効にする必要がある</li></ul>
+<p>料金の形をよく見てください。出力が入力の5倍です。長い文章を延々と書かせる使い方は、そのまま費用に跳ね返ります。</p>
+<h2>1. 画面を操作するAIが、実用の入口に来た</h2>
+<p>Astraが得意だとOpenAIが挙げている作業は、そのまま事務の仕事です。</p>
+<ul><li>オンラインのフォームに入力する</li><li>顧客管理システムの記録を更新する</li><li>カレンダーを整理する</li><li>表計算やプレゼン資料を、こちらの型に合わせて作る</li><li>画面に出ている不具合を調べて直す</li></ul>
+<p>公式ページには、確定申告書の記入、法律文書の書式整え、Excel、Power BI、基板の配線図といった実演も並んでいました。</p>
+<p>数字はこうです。</p>
+<ul><li>OSWorld 2.0（パソコン操作の総合試験）：72.6%。前世代のGPT-5.6 Solは65.7%</li><li>同じ試験の所要時間：1件あたり約40分。Solは約75分。OpenAIの表現で「約47%短い」</li><li>ScreenSpot-Pro（画面上の目的の場所を当てる）：92.7%。Solは76.9%</li><li>AutomationBench（業務の自動化）：41.4%。Solは18.1%</li></ul>
+<p>正直に読むと、いちばん大事なのは72.6%という数字です。これは裏返すと、4回に1回は失敗するということです。</p>
+<p>だから今の使いどころは決まっています。失敗しても取り返せる作業から渡す。取り返しのつかない作業、たとえば送信、支払い、削除は、最後の一押しを人が持つ。この線引きは、精度が上がっても当分は変えなくていいと考えています。</p>
+<h2>2. 作った会社が「重大」と判定して、能力を閉じた</h2>
+<p>ここが今回いちばん例のないところです。</p>
+<p>OpenAIには「Preparedness Framework」という自主基準があります。モデルの危険な能力を段階で判定する仕組みで、Astraはサイバーセキュリティの分野で、初めて最上位の「Critical（重大）」に達したと自分で発表しました。</p>
+<p>判定の根拠として公表された数字がこうです。</p>
+<ul><li>ExploitBench（既知の弱点を、実際に動く攻撃コードに変えられるか）：100%。Solは78.5%</li><li>直近3か月の新しい弱点だけで作った試験：39.0%。Solは5.5%</li><li>SRE-Bench（設計図なしにソフトの中身を読み解く）：1回目で88.0%、4回以内で99.2%。Solは55.9%と68.7%</li></ul>
+<p>さらに、この評価の最中にAstraが、それまで誰も知らなかった弱点を2件みずから見つけて使った、と書かれています。2件とも開発元に通知したとのことです。</p>
+<p>そのうえで、出荷版はこうなりました。</p>
+<p>&gt; 実証用の攻撃コードを作るような、より高度なサイバー作業については、Astraは応じません。（公式発表ページより、拙訳）</p>
+<p>守る側の作業、たとえば自社のコードを安全面から点検する、見つかった弱点を直す、といったことは今日からできる。攻める側に直結する部分だけを閉じた、という形です。閉じた部分は「Daybreak」という枠組みで、審査を通した相手に段階的に開けていく予定だと書かれています。</p>
+<p>強い道具を作った会社が、自分で危ないと判定して、その一部を鍵をかけたまま出した。この形が今後の標準になるのかどうかは、まだ分かりません。ただ、今回それが実際に起きたことは、覚えておく価値があると思います。</p>
+<h2>3. 見落とされやすい1行</h2>
+<p>公式ページに、こう書いてあります。</p>
+<p>&gt; 追加の安全確認が、防御目的のサイバー作業を含む正当な作業を、遅らせたり、一時停止させたり、止めたりすることがあります。（公式発表ページより、拙訳）</p>
+<p>具体的にはこうです。ChatGPTやCodexで止まった場合は、続ける前に人が内容を確認するよう求められる。APIの場合は、そこで処理が止まる。</p>
+<p>導入する側から見ると、これは性能の話より先に決めておくことです。止まったときに、誰が見て、どう再開するのか。夜間や休日に動かす仕組みほど、ここを決めていないと翌朝までそのままになります。</p>
+<h2>4. 全部で勝っているわけではない</h2>
+<p>これもOpenAI自身の表に載っていることです。</p>
+<ul><li>Humanity&#x27;s Last Exam（道具あり）：Astra 57.2%に対し、Claude Fable 5.1が65.0%</li><li>Artificial Analysis Intelligence Index：Astra 61.2に対し、Claude Fable 5.1が65.7</li></ul>
+<p>つまりAstraは、パソコン操作と、コード、数学、サイバーの領域で明確に前に出たモデルであって、あらゆる指標で首位というわけではありません。売り文句と表の両方を見ると、そこははっきりします。</p>
+<p>なお、これらの数字はすべてOpenAIが自社で実施・掲載したものです。第三者の追試ではありません。ARC Prize FoundationのGreg Kamradt氏のように外部から評価を寄せている人もいますが、表そのものは売り手が作ったものだという前提で読む必要があります。</p>
+<h2>数字のまとめ</h2>
+<div class="tw"><table><thead><tr><th>項目</th><th>GPT-6 Astra</th><th>GPT-5.6 Sol</th></tr></thead><tbody><tr><td>パソコン操作 OSWorld 2.0</td><td>72.6%</td><td>65.7%</td></tr><tr><td>1件あたりの所要時間</td><td>約40分</td><td>約75分</td></tr><tr><td>画面上の位置あて ScreenSpot-Pro</td><td>92.7%</td><td>76.9%</td></tr><tr><td>業務自動化 AutomationBench</td><td>41.4%</td><td>18.1%</td></tr><tr><td>攻撃コード生成 ExploitBench</td><td>100%</td><td>78.5%</td></tr><tr><td>長い文書の読み取り（51万〜100万トークン）</td><td>96.3%</td><td>73.8%</td></tr><tr><td>事実と違うことを言う割合（低いほど良い）</td><td>4.2%</td><td>12.2%</td></tr></tbody></table></div>
+<h2>小さい会社が、今週やること</h2>
+<h3>1. 使うつもりなら、管理者が自分で開ける</h3>
+<p>Enterpriseでは発表時点で既定がオフです。「新しいのが出たらしいのに社内で見当たらない」の答えは、たいていここです。</p>
+<h3>2. 画面操作は、取り返せる作業から渡す</h3>
+<p>72.6%は、よくできた数字であると同時に、4回に1回は転ぶ数字です。最初に渡すなら、下書きの作成、データの転記、資料の体裁合わせ。送信と支払いと削除は、まだ人の指で押す。</p>
+<h3>3. 止まったときの手順を、先に1行決める</h3>
+<p>安全確認で処理が止まることがある、と作った側が明記しています。誰が見て、どう再開するか。これを決めずに自動化だけ進めると、止まった瞬間に誰も気づかない仕組みができあがります。</p>
+<h2>まとめ</h2>
+<ul><li>GPT-6 Astraは2026年9月3日公表。API料金は入力100万トークン10ドル、出力50ドル</li><li>いちばん実務に効くのはパソコン操作。OSWorld 2.0で72.6%、所要時間はOpenAIの表現で約47%短縮</li><li>ただし72.6%は、4回に1回失敗するということ。渡すのは取り返せる作業から</li><li>OpenAIは自主基準でサイバー能力を初めて「重大」と判定し、攻撃コード作成などを閉じたまま出荷した</li><li>安全確認が正当な作業を止めることがある、と公式に明記されている。止まったときの手順を先に決める</li><li>全指標で首位ではない。数字はすべて売り手が自社で出したものとして読む</li></ul>
+<p>新しいモデルが出るたびに全部を入れ替える必要はありません。変わったのは「画面を触る仕事をどこまで渡すか」の線の位置です。その線を、自社の言葉で1行書き直す。今週やることは、それで足ります。</p>
+<h2>出典</h2>
+<ul><li>OpenAI「GPT-6 Astra: A new generation of intelligence」（2026年9月3日／開発元による公式発表。本文・ベンチマーク表・提供条件・料金はすべてこのページから）</li></ul>
+<p class="src"><a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">https://openai.com/index/gpt-6-astra/</a></p>
+<ul><li>OpenAI「Responding to the next frontier of critical cyber capabilities」（サイバー能力の判定と制限についての公式説明）</li></ul>
+<p class="src"><a href="https://openai.com/index/responding-next-frontier-critical-cyber-capabilities/" target="_blank" rel="noopener">https://openai.com/index/responding-next-frontier-critical-cyber-capabilities/</a></p>
+<ul><li>OpenAI「Safety overview: GPT-6 Astra」（安全性についての公式説明）</li></ul>
+<p class="src"><a href="https://openai.com/index/safety-overview-gpt-6-astra/" target="_blank" rel="noopener">https://openai.com/index/safety-overview-gpt-6-astra/</a></p>
+<ul><li>OpenAI「GPT-6 Astra System Card」（詳細な評価結果）</li></ul>
+<p class="src"><a href="https://deploymentsafety.openai.com/gpt-6-astra" target="_blank" rel="noopener">https://deploymentsafety.openai.com/gpt-6-astra</a></p>
+<p class="src">※本記事の数値は、いずれも開発元であるOpenAIが自社で実施し公表したものです。第三者による追試ではありません。筆者はGPT-6 Astraを業務で使用しておらず、使用感については書いていません。</p>
+
+<p class="src">この記事と同じ内容を、公式noteでも公開しています。 <a href="../note.html">公式note 記事一覧</a></p>
+
+<div class="cta">
+  <h3>新しいAIを、自社で使うかどうか一緒に決めます</h3>
+  <p>どのモデルを、どの業務で、どんな条件で使うか。データの扱いも含めて整理します。初回のご相談は無料です。</p>
+  <a href="../index.html#contact" class="btn">無料相談を予約する →</a>
+</div>
+</article>
+<div class="related">
+  <h3>RELATED ARTICLES</h3>
+  <div class="rgrid">
+    <a href="./ai-productivity-gap-2026.html" class="rcard"><div class="rt">RESEARCH</div><div class="rttl">個人は15%速くなり、会社は0.29%しか動かなかった</div></a>
+    <a href="./first-task-ai-2026.html" class="rcard"><div class="rt">CONSULTING</div><div class="rttl">最初に任せる「1業務」の選び方</div></a>
+    <a href="./knowledge-ai-who-2026.html" class="rcard"><div class="rt">INSIGHT</div><div class="rttl">社内ナレッジAIが効く会社・効かない会社</div></a>
+    <a href="./ai-cautions.html" class="rcard"><div class="rt">BASICS</div><div class="rttl">AIを使うとき本当に気をつけるべき6つのこと</div></a>
+    <a href="./shanai-ai-rule-2026.html" class="rcard"><div class="rt">HOW-TO</div><div class="rttl">AIは準備に使ってよく、判断には使わない</div></a>
+  </div>
+</div>
+<div class="svc-links" style="max-width:820px;margin:0 auto 3rem;padding:1.5rem 1.6rem;background:#fafbfc;border:1px solid #e5e7eb;border-radius:12px;">
+  <div style="font-size:0.74rem;letter-spacing:0.18em;font-weight:700;color:#555;margin-bottom:0.6rem;">SERVICE &mdash; AIdollargameのサービス</div>
+  <p style="margin:0;font-size:0.92rem;color:#333 !important;line-height:2;">記事を読んで「うちでもできるか聞いてみたい」と思ったら
+    <a href="../ai-training.html" style="color:#2563eb !important;text-decoration:underline;">社員リスキリング研修</a> ／
+    <a href="../ai-consulting.html" style="color:#2563eb !important;text-decoration:underline;">AI導入支援・コンサルティング</a> ／
+    <a href="../manual-ai.html" style="color:#2563eb !important;text-decoration:underline;">社内ナレッジAI</a> ／
+    <a href="../shindan.html" style="color:#2563eb !important;text-decoration:underline;">1分でわかる無料AI診断</a>（初回相談は無料です）
+  </p>
+</div>
+<footer>
+  <a href="../index.html" class="logo">A<span class="heart-i">ı</span>dollargame</a>
+  <div class="fc">© <span class="cpy-y" data-since="2025">2025</span> 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
+</footer>
+<script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
+<script defer src="../scripts/ga-events.js?v=20260824"></script>
+</body>
+</html>

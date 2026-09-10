@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIの使い道を調べた地図が3枚ある。見る地図を変えると、答えが1.9倍ずれた | AIdollargame</title>
+<meta name="description" content="Anthropicが400万件超の会話を、Googleが1,500万件のやりとりを、OpenAIが1,764社・1,744万通の社内利用を地図にしました。3枚を並べると指している場所が違います。">
+<meta name="author" content="AIdollargame 編集部">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/articles/ai-chizu-3mai-2026.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"ホーム","item":"https://aidollargame.com/"},
+    {"@type":"ListItem","position":2,"name":"記事一覧","item":"https://aidollargame.com/articles/"},
+    {"@type":"ListItem","position":3,"name":"AIの使い道を調べた地図が3枚ある","item":"https://aidollargame.com/articles/ai-chizu-3mai-2026.html"}
+  ]
+}
+</script>
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="株式会社AIdollargame">
+<meta property="og:title" content="AIの使い道を調べた地図が3枚ある">
+<meta property="og:description" content="AI利用の地図3枚。どのログを見るかで結論が1.9倍動きます。">
+<meta property="og:url" content="https://aidollargame.com/articles/ai-chizu-3mai-2026.html">
+<meta property="og:image" content="https://aidollargame.com/articles/ai-chizu-3mai-2026-hero.jpg">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-09-05">
+<meta property="article:author" content="AIdollargame 編集部">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AIの使い道を調べた地図が3枚ある">
+<meta name="twitter:description" content="AI利用の地図3枚。どのログを見るかで結論が1.9倍動きます。">
+<meta name="twitter:image" content="https://aidollargame.com/articles/ai-chizu-3mai-2026-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "AIの使い道を調べた地図が3枚ある",
+  "description": "Anthropicが400万件超の会話を、Googleが1,500万件のやりとりを、OpenAIが1,764社・1,744万通の社内利用を地図にしました。3枚を並べると指している場所が違います。",
+  "datePublished": "2026-09-05",
+  "author": {"@type":"Organization","name":"AIdollargame 編集部"},
+  "publisher": {
+    "@type":"Organization",
+    "name":"AIdollargame",
+    "logo":{"@type":"ImageObject","url":"https://aidollargame.com/og-default.png"}
+  },
+  "mainEntityOfPage": "https://aidollargame.com/articles/ai-chizu-3mai-2026.html",
+  "image": "https://aidollargame.com/articles/ai-chizu-3mai-2026-hero.jpg",
+  "inLanguage": "ja"
+}
+</script>
+
+<style>
+  :root{--cyan:#00d8ff;--blue:#000;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#000);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;background:#0a1238;}
+  body{background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;overflow-x:hidden;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,9,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);} .logo .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;} .logo .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
+  .nav-back{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.78rem;letter-spacing:0.12em;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .hero{padding:8rem 2rem 2.6rem;max-width:800px;margin:0 auto;}
+  .tag{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.7rem;letter-spacing:0.4em;color:var(--cyan);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem;}
+  .tag::before{content:'';display:inline-block;width:30px;height:1px;background:var(--cyan);}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;word-break:auto-phrase;}
+  .meta{display:flex;gap:2rem;align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}
+  .body{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}
+  .body h2{font-size:1.4rem;font-weight:900;margin:2.6rem 0 1rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}
+  .body h3{font-size:1.12rem;font-weight:800;margin:2.2rem 0 0.8rem;line-height:1.5;}
+  .body p{font-size:1.06rem;color:rgba(238,243,255,0.85);line-height:1.72;margin-bottom:1.05rem;}
+  .body strong{color:#fff;font-weight:700;}
+  .body ul{padding-left:1.5rem;margin-bottom:1.4rem;}
+  .body li{font-size:1.02rem;color:rgba(238,243,255,0.85);line-height:1.65;margin-bottom:0.4rem;}
+  .body .src{font-size:0.82rem;color:var(--muted);margin:0.2rem 0 0.4rem;}
+  .body .src a{color:var(--cyan);}
+  .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
+  .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
+  .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
+  .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2rem;color:#001428;font-weight:700;font-size:0.9rem;border-radius:8px;background:linear-gradient(110deg,#00d8ff 0%,#000 50%,#00d8ff 100%);background-size:220% 100%;text-decoration:none;transition:transform 0.25s,box-shadow 0.4s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(0,216,255,0.6);}
+  .related{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+  .related h3{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;letter-spacing:0.3em;color:var(--muted);margin-bottom:1.5rem;}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .rcard{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.4rem;text-decoration:none;color:inherit;transition:all 0.3s;display:block;}
+  .rcard:hover{border-color:rgba(0,216,255,0.35);transform:translateY(-4px);}
+  .rcard .rt{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.65rem;color:var(--cyan);margin-bottom:0.5rem;}
+  .rcard .rttl{font-size:0.88rem;font-weight:700;line-height:1.5;}
+  footer{border-top:1px solid rgba(255,255,255,0.08);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:rgba(6,9,26,0.6);}
+  .fc{font-size:0.75rem;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.hero,.body,.related{padding-left:1.2rem;padding-right:1.2rem;}footer{padding:2rem 1.5rem;}}
+
+/* ============ LIGHT THEME OVERRIDE ============ */
+html { background:#ffffff !important; }
+body { background:#ffffff !important; color:#000 !important; }
+body::before { display:none !important; }
+nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.nav-home, .back-link, .nav-back { color:#000 !important; }
+.nav-home:hover, .back-link:hover { color:#000 !important; }
+.hero h1, h1, h2, h3 { color:#000 !important; }
+.hero p, p, .lead { color:#000 !important; }
+.tag { color:#000 !important; }
+.tag::before { background:#000 !important; }
+article, .article-body, .post-body, .post-content { color:#000 !important; }
+article p, .article-body p, .post-body p { color:#000 !important; }
+blockquote, .quote { background:#fafbfc !important; border-left-color:#000 !important; color:#000 !important; }
+.meta, .post-meta { color:#000 !important; }
+footer, .site-footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
+footer a { color:#000 !important; }
+.footer-copy, .fc { color:#000 !important; }
+a { color:#000; }
+.body p, .body li, .body blockquote p { color:#000 !important; }
+.body .src { color:#555 !important; }
+.body .src a { color:#2563eb !important; }
+.body blockquote { background:#fafbfc !important; color:#000 !important; }
+.body h2, .body h3 { color:#000 !important; }
+.body strong { color:#000 !important; font-weight:900 !important; }
+.cta { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.cta * { color:#000 !important; }
+.cta h2, .cta h3 { color:#000 !important; }
+.cta p { color:#000 !important; }
+.cta .btn, .btn { background:#000 !important; color:#fff !important; }
+.cta .btn:hover, .btn:hover { background:#222 !important; box-shadow:0 10px 30px -10px rgba(0,0,0,0.3) !important; }
+.related h3 { color:#000 !important; }
+.rcard { background:#fff !important; border:1px solid #e5e7eb !important; }
+.rcard:hover { border-color:#000 !important; box-shadow:0 14px 36px -16px rgba(0,0,0,0.18) !important; }
+.rcard .rt { color:#000 !important; }
+.rcard .rttl { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; }
+footer * { color:#000 !important; }
+.fc { color:#000 !important; opacity:0.6 !important; }
+</style>
+<!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Q45D6XVQZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8Q45D6XVQZ');
+</script>
+<style>
+/* 可読性調整: 太字900→700・行間/字間を拡大 (2026-07-24) */
+h1{font-weight:700 !important;line-height:1.5 !important;letter-spacing:0.04em !important;}
+.body h2,.body h3{font-weight:700 !important;letter-spacing:0.03em !important;line-height:1.5 !important;}
+.body p{line-height:1.95 !important;letter-spacing:0.04em !important;}
+.body li{line-height:1.85 !important;letter-spacing:0.04em !important;}
+.body strong{font-weight:700 !important;}
+.cta h3{font-weight:700 !important;line-height:1.6 !important;letter-spacing:0.04em !important;}
+.cta p{line-height:1.9 !important;letter-spacing:0.04em !important;}
+/* 出典一覧の長いURLが狭い画面で横にはみ出すのを防ぐ (2026-09-08) */
+.body a{overflow-wrap:anywhere;word-break:break-word;}
+</style>
+
+<style>
+/* 表（記事内データ） */
+.body .tw{overflow-x:auto;margin:1.6rem 0;border:1px solid #e5e7eb;border-radius:10px;background:#fff;}
+.body table{border-collapse:collapse;width:100%;font-size:0.92rem;font-variant-numeric:tabular-nums;}
+.body th,.body td{padding:0.6rem 0.85rem;text-align:right;white-space:nowrap;border-bottom:1px solid #e5e7eb;color:#000 !important;}
+.body th:first-child,.body td:first-child{text-align:left;}
+.body thead th{font-weight:700;font-size:0.8rem;color:#555 !important;}
+.body tbody tr:last-child td{border-bottom:0;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
+  <a href="./index.html" class="nav-back">← ARTICLES</a>
+</nav>
+<div class="hero">
+  <div class="tag">RESEARCH</div>
+  <h1>AIの使い道を調べた地図が3枚ある</h1>
+  <div class="meta"><span>2026 / 09 / 05</span><span>AIdollargame 編集部</span><span>読了 約7分</span></div>
+</div>
+<article class="body">
+
+<figure style="margin:0 0 2.6rem;">
+  <img src="ai-chizu-3mai-2026-hero.jpg" alt="広げた地図の上に置かれたコンパス" style="width:100%;height:auto;border-radius:14px;display:block;">
+</figure>
+
+<p>「AIは実際、どの仕事に使われているのか」。この質問に対して、いま巨大な答えが3枚そろっています。Anthropicが400万件超の会話を、Googleが1,500万件のやりとりを、OpenAIが1,764社・1,744万通の社内利用を、それぞれ職業や作業に対応づけて地図にしました。</p>
+<p>ところが、3枚を並べると指している場所が違います。さらに「どのAIのログを見たか」を変えるだけで結論が1.9倍動く、と指摘する研究まで出ています。</p>
+<p>この記事は、自社でAIをどこに使うか決めかねている経営者に向けたものです。3枚の中身、食い違いの理由、そして他社の統計に頼らず自社で決めるための手順を書きます。</p>
+<h2>1枚目：Claudeの会話400万件</h2>
+<p>いちばん引用されているのがこれです。Anthropicが2025年2月に公表した研究で、400万件を超えるClaudeの会話を、米労働省のO*NETという職業・作業のデータベースに突き合わせました。</p>
+<p>出た結論は、ソフトウェア開発と文章作成の2つで全体のほぼ半分を占めるというもの。ただしAIの利用は経済全体に広がっており、約36%の職業が、その職業に紐づく作業の4分の1以上でAIを使っていました。</p>
+<p>使い方の内訳は、57%が人間の作業を補助する形（教わる、出てきたものを直す）、43%が任せきる形でした。</p>
+<p>なお、この地図は公表から1年半以上が経っています。いまだに「AIの用途の代表的な数字」として引かれますが、測られたのは2025年初めまでの利用です。</p>
+<h2>2枚目：Geminiのやりとり1,500万件</h2>
+<p>2026年7月に公表されたのが、Googleの「AI &amp; Economy ATLAS」。Geminiアプリ、Google AI Mode、Gemini APIから1,500万件のやりとりを取り、800を超える職業、4,000の作業、150か国、140言語に対応づけました。</p>
+<p>ここで出た数字が、経営判断にいちばん効きます。</p>
+<p>AIの利用が観測された職業は、米国の雇用の88%超をカバーしていました。つまり、ほぼどんな仕事にも入っている。ところが深さがまるで足りません。利用がある職業の中央値で見ると、AIが使われているのはその職業の作業全体の21%だけ。作業の75%超でAIが使われている職業は、全体のわずか3%でした。</p>
+<p>もうひとつ。会話型AIとのやりとりの86%超は、仕事の外で起きていました。仕事に関わる利用は14%にすぎません。</p>
+<h2>3枚目：企業1,764社・メッセージ1,744万通</h2>
+<p>2026年8月に公表されたのが、OpenAIのChatGPT Enterpriseの利用記録を使った研究です。2026年3月までのデータで、導入から6か月時点のサンプルが1,764社・1,744万6,551通。作業の分類までかけたものは973社・869万通です。</p>
+<p>ここから見えたのは、はっきりした偏りでした。</p>
+<p>まず伸び方。出力トークン量は2025年6月から2026年3月で7倍になりました。すでに入れていた企業だけに絞っても約4倍です。入れた会社ほど、使う量が増えていく。</p>
+<p>次に、誰が入れているか。導入企業の売上の中央値は約22億7,500万ドル、導入していない企業は約2億1,000万ドル。10倍以上の開きがあります。売上上位4分の1の企業は、平均より6.9ポイント導入しやすい。</p>
+<p>そして、社内で誰が使っているか。若手や研修中の社員は、社内の平均的な利用者より週に8〜9通多く送っていました。逆に役員・創業者・パートナーは平均より少ない。決める人ほど、使っていない。</p>
+<p>用途は、半数超が文書の作成や技術文書、半数近くが技術的なデジタル作業でした。</p>
+<h2>3枚が食い違う理由</h2>
+<p>1枚目は「ソフトウェアと文章に集中」、2枚目は「ほぼ全職業に広がっているが浅い」、3枚目は「大企業に偏っている」。同じ問いへの答えとして、方向がそろっていません。</p>
+<p>この食い違いを正面から扱った研究が、2026年5月に出ています。Michelle YinとBurhan Ogutによる論文です。</p>
+<p>主張はこうです。AIのログから作った「この職業はAIにどれだけさらされているか」というスコアには、2つのものが混ざっている。その作業に本当にAIが使えるかどうかと、そのサービスをどんな職業の人が使っているかという利用者の構成です。後者は測りたいものではないのに、必ず混ざります。</p>
+<p>数字で見ると深刻です。分析の設計は一切変えず、入力するプラットフォームだけ差し替えると、ChatGPT登場後の雇用への係数が1.9倍動きました。同じ会社の中でも、個人向けサービスと法人向けサービスで、影響の符号（プラスかマイナスか）が逆になった例もあります。</p>
+<p>さらに、米労働統計局の雇用構成に合わせて重みを付け直すと、推定値は42〜93%も縮みました。</p>
+<p>言い換えると、ログに映っているのは「そのAIを使った人」であって、「働いている人」ではない。当たり前のようですが、ランキング形式で並べられると、つい後者だと思ってしまいます。</p>
+<h2>それでも3枚が同じことを言っている部分</h2>
+<p>食い違いばかりではありません。共通点が2つあります。</p>
+<p>ひとつは、広いが浅いこと。職業の面では8割以上に届いているのに、ひとつの職業の中で使われている作業は2割程度。全部を置き換える話ではなく、業務の一部に刺さっている段階です。</p>
+<p>もうひとつは、用途が「書く・調べる・まとめる」に寄っていること。3枚とも文書作成、情報の整理、技術的な下書きが上位に来ます。派手な自動化ではありません。</p>
+<p>そして、少し立ち止まりたい共通点がもうひとつ。3枚とも査読前のプレプリントで、しかも3枚とも、データを持っている会社自身（Anthropic、Google、OpenAI）が書いています。数字が嘘だという意味ではありません。ただ、自社に不都合な切り口は最初から選ばれにくい、ということは頭に入れておく必要があります。</p>
+<h2>中小企業が明日からやれること</h2>
+<p>研究の紹介で終わらせず、実際に何をするかに落とします。</p>
+<p>1つ目。他社の利用率ランキングから自社の用途を決めないこと。あの表は「その道具を選んだ人たち」の分布であって、貴社の業務の分布ではありません。代わりに、自社で毎週繰り返している書き物を1つ数えてください。日報、見積の説明文、問い合わせへの返信、議事録。何本作っているかを数えるだけで、どんな統計より正確な出発点になります。</p>
+<p>2つ目。2割を狙うこと。いちばん進んでいる測定でも、職業あたりの利用は作業の21%です。全業務のAI化を目標に置くと、半年で必ず止まります。業務の2割、それも繰り返し発生する2割に絞ってください。</p>
+<p>3つ目。若手に聞くこと。ChatGPT Enterpriseの記録では、若手のほうが役員より明確に多く使っていました。会話型AIの利用の86%超は仕事の外で起きています。つまり、社員は会社の外ですでに使っていて、会社はそれを見えていない可能性が高い。禁止のルールを作る前に、まず「もう何に使っているか」を棚卸ししたほうが早いです。</p>
+<h2>まとめ</h2>
+<ul><li>AIの使われ方を測った巨大な地図が3枚ある（400万件、1,500万件、1,764社・1,744万通）</li><li>3枚は方向が食い違う。プラットフォームを差し替えるだけで結論が1.9倍動くという指摘もある</li><li>共通しているのは「広いが浅い」こと。職業の8割以上に届いているが、作業の2割程度にとどまる</li><li>用途は書く・調べる・まとめるに寄っている</li><li>自社の一手は、他社の統計ではなく、自社で毎週繰り返している書き物を数えることから決める</li></ul>
+<p>AIで作業が楽になるのは入口にすぎません。数えた結果、週に何時間かが浮いたとして、その時間を何に使うか。そこを一緒に考えるのが、私たちの仕事だと思っています。</p>
+<h2>出典</h2>
+<ul><li>Which Economic Tasks are Performed with AI? Evidence from Millions of Claude Conversations（arXiv:2503.04761、2025年2月公表／プレプリント。Anthropicによる研究。会話400万件、ソフトウェア開発と文章作成でほぼ半分、36%の職業、補助57%対自動化43%）</li></ul>
+<p class="src">  <a href="https://arxiv.org/abs/2503.04761" target="_blank" rel="noopener">https://arxiv.org/abs/2503.04761</a></p>
+<ul><li>Google&#x27;s AI &amp; Economy ATLAS v1.0: Mapping Gemini Usage in the Economy（arXiv:2608.00038、2026年7月公表／プレプリント。Googleによる研究。1,500万件、米国雇用の88%超、中央値の職業で作業の21%、3%の職業だけが75%超、仕事外86%超）</li></ul>
+<p class="src">  <a href="https://arxiv.org/abs/2608.00038" target="_blank" rel="noopener">https://arxiv.org/abs/2608.00038</a></p>
+<ul><li>How Organizations Use AI: Evidence from ChatGPT（arXiv:2608.12236、2026年8月公表／プレプリント。OpenAIのデータを使い、同社チーフエコノミストのAaron Chatterji氏らが共著。1,764社・1,744万6,551通、出力トークン7倍、売上中央値の差、若手が週8〜9通多い）</li></ul>
+<p class="src">  <a href="https://arxiv.org/abs/2608.12236" target="_blank" rel="noopener">https://arxiv.org/abs/2608.12236</a></p>
+<ul><li>Who Uses AI? Platform Selection and the Measurement of Occupational AI Exposure（arXiv:2605.21743、2026年5月公表／プレプリント。プラットフォーム差し替えで係数1.9倍、雇用構成で重み付けすると42〜93%縮小）</li></ul>
+<p class="src">  <a href="https://arxiv.org/abs/2605.21743" target="_blank" rel="noopener">https://arxiv.org/abs/2605.21743</a></p>
+
+<p class="src">この記事と同じ内容を、公式noteでも公開しています。 <a href="../note.html">公式note 記事一覧</a></p>
+
+<div class="cta">
+  <h3>研究の数字を、自社の業務に置き換えます</h3>
+  <p>どの業務なら効くのか、何を測れば効果が分かるのか。実際の業務に合わせて整理します。初回のご相談は無料です。</p>
+  <a href="../index.html#contact" class="btn">無料相談を予約する →</a>
+</div>
+</article>
+<div class="related">
+  <h3>RELATED ARTICLES</h3>
+  <div class="rgrid">
+    <a href="./ai-productivity-gap-2026.html" class="rcard"><div class="rt">RESEARCH</div><div class="rttl">個人は15%速くなり、会社は0.29%しか動かなかった</div></a>
+    <a href="./first-task-ai-2026.html" class="rcard"><div class="rt">CONSULTING</div><div class="rttl">最初に任せる「1業務」の選び方</div></a>
+    <a href="./knowledge-ai-who-2026.html" class="rcard"><div class="rt">INSIGHT</div><div class="rttl">社内ナレッジAIが効く会社・効かない会社</div></a>
+    <a href="./ai-cautions.html" class="rcard"><div class="rt">BASICS</div><div class="rttl">AIを使うとき本当に気をつけるべき6つのこと</div></a>
+    <a href="./shanai-ai-rule-2026.html" class="rcard"><div class="rt">HOW-TO</div><div class="rttl">AIは準備に使ってよく、判断には使わない</div></a>
+  </div>
+</div>
+<div class="svc-links" style="max-width:820px;margin:0 auto 3rem;padding:1.5rem 1.6rem;background:#fafbfc;border:1px solid #e5e7eb;border-radius:12px;">
+  <div style="font-size:0.74rem;letter-spacing:0.18em;font-weight:700;color:#555;margin-bottom:0.6rem;">SERVICE &mdash; AIdollargameのサービス</div>
+  <p style="margin:0;font-size:0.92rem;color:#333 !important;line-height:2;">記事を読んで「うちでもできるか聞いてみたい」と思ったら
+    <a href="../ai-training.html" style="color:#2563eb !important;text-decoration:underline;">社員リスキリング研修</a> ／
+    <a href="../ai-consulting.html" style="color:#2563eb !important;text-decoration:underline;">AI導入支援・コンサルティング</a> ／
+    <a href="../manual-ai.html" style="color:#2563eb !important;text-decoration:underline;">社内ナレッジAI</a> ／
+    <a href="../shindan.html" style="color:#2563eb !important;text-decoration:underline;">1分でわかる無料AI診断</a>（初回相談は無料です）
+  </p>
+</div>
+<footer>
+  <a href="../index.html" class="logo">A<span class="heart-i">ı</span>dollargame</a>
+  <div class="fc">© <span class="cpy-y" data-since="2025">2025</span> 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
+</footer>
+<script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
+<script defer src="../scripts/ga-events.js?v=20260824"></script>
+</body>
+</html>

@@ -40,6 +40,8 @@
 - AI用語集（生成AI・LLM・AIエージェント・RAG等をやさしく解説）: https://aidollargame.com/articles/ai-yougo.html
 
 ## よくある質問 (FAQ)
+- 中小企業向けAI導入支援会社の比較と選び方【2026年版】（伴走型・研修型・開発型の11社を公式サイトの事実だけで比較。当社を含む。料金公開は11社中1社）: https://aidollargame.com/articles/ai-donyu-shien-hikaku-2026.html
+- 社内マニュアル・手順書をAIで検索できるようにする方法（NotePM・Teachme Biz・Helpfeel・PKSHA AIヘルプデスク・Allganize と当社の社内マニュアルAIを比較。精度を落とさない入れ方の3原則）: https://aidollargame.com/articles/manual-ai-kensaku-hikaku-2026.html
 - AIdollargameとは: https://aidollargame.com/articles/about-aidollargame.html
 - AIコンサルティングとは: https://aidollargame.com/articles/what-is-ai-consulting.html
 - AIエージェントとチャットボットの違い: https://aidollargame.com/articles/ai-agent-vs-chatbot.html

@@ -31,6 +31,7 @@
 - AIコンサルティング・導入支援: AI導入戦略の立案からDX推進まで一貫支援。新規事業企画にも対応。 https://aidollargame.com/ai-consulting.html
 - AI研修・社員リスキリング: 貴社の実業務を教材にした実践型の生成AI研修。経営層向け・全社員向け・部署別ワーク・定着フォローの4プログラム。 https://aidollargame.com/ai-training.html
 - 社内マニュアルAI（マニュアルを覚えたAIがスタッフの質問に即答。新人教育・属人化対策）: https://aidollargame.com/manual-ai.html
+- AI検索表示チェック（ChatGPT・Gemini等に「おすすめの会社は」と聞かれたとき自社が候補に入っているかを測るサービス。無料の3問診断、継続測定は月1万円税別、対策までは月3万円税別から。現在の測定エンジンはGemini+Google検索）: https://aidollargame.com/aio-check.html
 - 料金の考え方（AI導入支援は20万円〜・費用が決まる3要素と見積もりまでの流れを公開）: https://aidollargame.com/ryokin.html
 - AI導入の流れ（無料相談から運用開始までの5ステップ）: https://aidollargame.com/donyu-flow.html
 - AI活用度診断: https://aidollargame.com/shindan.html
@@ -45,6 +46,9 @@
 - 介護・福祉の現場向けAIサービスと会社の比較【2026年版】（ウェルモ・CareWiz・SOIN・Z-Works・アジラ・当社を記録/ケアプラン/見守り/問い合わせの4分類で比較）: https://aidollargame.com/articles/kaigo-genba-ai-hikaku-2026.html
 - 自社サイトにAIチャットボットを入れたい小さい会社向け（ChatPlus・FirstContact・チャットディーラーAI・Helpfeelと当社のAIチャットエージェントを比較。月額ツールで足りる会社と頼んだほうがいい会社の分け方）: https://aidollargame.com/articles/site-chatbot-hikaku-2026.html
 - 補助金を使ってAIを導入したい。どこに相談すればいいか（よろず支援拠点・商工会議所/商工会・労働局・IT導入支援事業者の4窓口と、デジタル化・AI導入補助金2026、人材開発支援助成金の2制度。当社はIT導入支援事業者に未登録）: https://aidollargame.com/articles/hojokin-ai-soudan-2026.html
+- AI検索で自社が出ているかを調べる方法とサービス比較【2026年版】（無料で今日できる10問の調べ方と、GMO NIKKO・Faber Company・LANY・CINC・WACUL・当社の比較。料金公開は6社中2社）: https://aidollargame.com/articles/ai-kensaku-hyoji-check-hikaku-2026.html
+- AIを導入するだけでなく運用代行までしてくれる会社はどこか（運用の4つの作業、推進部代行型/プラットフォーム型/開発+コンサル型の3つの形、アスタ・NOVEL・クラスメソッド・Laboro.AI・ABEJA・エクサウィザーズ・当社の7社比較、契約前に確認する5つ）: https://aidollargame.com/articles/ai-unyo-daiko-hikaku-2026.html
+- ChatGPTを社内で使いたいが何から始めればいいか分からない（伴走してくれる会社7社の比較と、頼む前に自社でできる最初の4週間: ルール、情報漏えいの線引き、1業務での試行、事実での振り返り）: https://aidollargame.com/articles/chatgpt-shanai-bansou-2026.html
 - AIdollargameとは: https://aidollargame.com/articles/about-aidollargame.html
 - AIコンサルティングとは: https://aidollargame.com/articles/what-is-ai-consulting.html
 - AIエージェントとチャットボットの違い: https://aidollargame.com/articles/ai-agent-vs-chatbot.html

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>おとりの値段</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.opt{display:block;width:100%;text-align:left;background:#fff;border:1.5px solid #cfcbc2;border-radius:12px;padding:13px 14px;margin-top:10px;font-family:inherit;cursor:pointer;color:#1a1a1a}
+.opt:active{background:#f2f5fd}
+.opt .nm{font-size:16px;font-weight:700;margin-bottom:4px}
+.opt .at{display:flex;gap:16px;font-size:15px;font-variant-numeric:tabular-nums}
+.opt .at span b{font-weight:700}
+.opt .at span i{font-style:normal;color:#6b6b6b;font-size:12px;margin-right:5px}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+.tag{display:inline-block;font-size:11px;border-radius:5px;padding:2px 7px;margin-left:6px;vertical-align:2px}
+.tag.mv{background:#1d4ed8;color:#fff}
+.tag.st{background:#eeece6;color:#6b6b6b}
+.prog{font-size:12px;color:#8a8a8a;letter-spacing:.08em;margin-bottom:6px}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src a{color:#2563eb;word-break:break-all}
+.src div{margin-bottom:7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">サンプルデータではありません。ここに出るのは、いまあなた自身が選んだ結果です。比べる相手は1982年と2014年の論文の実測値です。</div>
+<h1>おとりの値段</h1>
+<p class="lead">売りたい物の隣に、それより少しだけ損な三つ目を置く。それだけで売りたい物が選ばれやすくなる、と1982年の論文が示しました。ただし2014年、91回やり直したら11回しか出ませんでした。まずあなたが引っかかるか見ます。</p>
+
+<div class="card" id="intro">
+  <h2>やること</h2>
+  <p>買い物を4つ出します。ふつうに、自分が買うと思うほうを選んでください。そのあともう一度、同じ4つを出します。理由は先に言いません。</p>
+  <p class="sub2" style="margin-top:10px">値段と中身の数字しか出しません。写真も宣伝文句もありません。これには意味があります。あとで種明かしします。</p>
+  <button class="btn" onclick="start()">1つめを見る</button>
+</div>
+
+<div class="card hide" id="q">
+  <div class="prog" id="prog"></div>
+  <h2 id="qt"></h2>
+  <p class="sub2" id="qd"></p>
+  <div id="opts"></div>
+</div>
+
+<div class="card hide" id="mid">
+  <div class="step">4つとも選びました</div>
+  <h2>もう一度、同じ4つを出します</h2>
+  <p>さっきと同じ買い物です。中身も値段も変えていません。深く考えず、また買うほうを選んでください。</p>
+  <button class="btn" onclick="startB()">2周目を始める</button>
+</div>
+
+<div class="card hide" id="reveal">
+  <div class="step">種明かし</div>
+  <h2>1周目には、買わせたい物の「引き立て役」が混ぜてありました</h2>
+  <p>1周目の3つのうち1つは、3つのなかの1つに対して<b>中身が少なくて値段も高い</b>、つまり誰も選ぶ理由のない札でした。これを非対称に劣る選択肢と呼びます。2周目では、その札だけ抜いてあります。</p>
+  <p style="margin-top:10px">論文が言っているのは、この誰も選ばない札を置くと、それを上回っている側が選ばれやすくなる、ということです。あなたはどう動いたか。</p>
+  <table>
+    <thead><tr><th>買い物</th><th>1周目（3択）</th><th>2周目（2択）</th></tr></thead>
+    <tbody id="tb"></tbody>
+  </table>
+  <div class="res">
+    <div class="sub2">引き立て役があるときだけ、それが持ち上げていた側を選んだ回数</div>
+    <div class="big" id="score">－</div>
+    <div class="sub2" id="scoreNote"></div>
+  </div>
+  <div class="warn">これは実験ではありません。本物の実験は、別々の人を3択の組と2択の組に分けて比べます。同じ人に2回見せると、2周目は1周目の答えを覚えているぶん動きにくくなります。ここで0回でも、それはおとり効果がない証拠にはなりません。逆に4回でも、あなた1人ではただの偶然です。</div>
+  <button class="btn" onclick="show('paper')">論文が測ったこと</button>
+</div>
+
+<div class="card hide" id="paper">
+  <h2>1982年：たしかに動いた</h2>
+  <p>ビール、車、レストラン、宝くじ、映画、テレビなど6種類の買い物で、2択に「非対称に劣る3つ目」を足すと、それを上回る側の選ばれる率が上がりました。選択肢を増やすと元の選択肢の取り分は減るはずだ、という当たり前の前提（正則性）が破られたことが、この論文の要点です。</p>
+
+  <h2 style="margin-top:20px">2014年：91回やって11回</h2>
+  <p>同じ効果を出そうと試みた91回のうち、確かな効果が出たのは<b>11回</b>だけでした。統計的な力から期待される回数より有意に少ない、と論文は書いています。23の商品カテゴリ、73通りのおとり付きの組み合わせを使った結果です。</p>
+  <table>
+    <thead><tr><th>2014年の再現の試み</th><th>回数</th></tr></thead>
+    <tbody>
+      <tr><td>試した回数</td><td>91</td></tr>
+      <tr><td>確かな効果が出た回数</td><td>11</td></tr>
+      <tr><td>使った商品カテゴリ</td><td>23</td></tr>
+      <tr><td>おとり付きの組み合わせ</td><td>73</td></tr>
+    </tbody>
+  </table>
+  <div class="gap">
+    <b>効果が消える条件まで書いてあります。</b><br>
+    選択肢どうしの違いを、意味のある言葉の説明や絵で見せると、効果の大きさははっきり下がりました。その形の刺激では、効果は偶然と変わらない水準でした。効果が出やすいのは、この画面のように<b>数字だけを2つ並べたとき</b>です。
+  </div>
+  <button class="btn" onclick="show('biz')">これを商売に直すと</button>
+</div>
+
+<div class="card hide" id="biz">
+  <h2>中小企業がここから持って帰れる一行</h2>
+  <p>見積を3案にするなら、3案とも<b>同じ2つの数字だけ</b>で並べたときしか効きません。写真や強みの説明で違いを出す商品では、真ん中を作っても客は動きません。</p>
+  <div class="warn">おとりは、客に損な札を選ばせるための道具ではありません。誰も選ばない札を1枚置くだけの話です。それでも気持ちのいい売り方ではないので、使うなら「自分がその見積を受け取って腹を立てないか」を先に確かめてください。</div>
+  <div class="src">
+    <div>Huber, J., Payne, J. W., &amp; Puto, C. (1982) Adding Asymmetrically Dominated Alternatives: Violations of Regularity and the Similarity Hypothesis. <i>Journal of Consumer Research</i>, 9(1), 90-98.<br><a href="https://doi.org/10.1086/208899">https://doi.org/10.1086/208899</a></div>
+    <div>Yang, S., &amp; Lynn, M. (2014) More Evidence Challenging the Robustness and Usefulness of the Attraction Effect. <i>Journal of Marketing Research</i>, 51(4), 508-513.<br><a href="https://doi.org/10.1509/jmr.14.0020">https://doi.org/10.1509/jmr.14.0020</a></div>
+    <div>2014年の数字（91回中11回・23カテゴリ・73組）は、出版社が公開している要旨の本文から取りました。1982年の6カテゴリという内訳は要旨に無く、本文が有料のため原文では確認できていません。二次的な解説にもとづく記述です。</div>
+  </div>
+</div>
+
+<script>
+var ITEMS = [
+  {t:'名刺を刷る', d:'同じ紙、同じ色数。枚数と値段だけが違います。',
+   a:{nm:'あ社', at:[['枚数','100枚'],['値段','3,800円']]},
+   b:{nm:'い社', at:[['枚数','200枚'],['値段','6,600円']]},
+   c:{nm:'う社', at:[['枚数','180枚'],['値段','6,800円']]}},
+  {t:'荷物を置く倉庫を借りる', d:'同じ町、同じ建物。広さと家賃だけが違います。',
+   a:{nm:'1号室', at:[['広さ','4.0畳'],['家賃','月1.4万円']]},
+   b:{nm:'2号室', at:[['広さ','6.0畳'],['家賃','月2.1万円']]},
+   c:{nm:'3号室', at:[['広さ','5.5畳'],['家賃','月2.2万円']]}},
+  {t:'事務所のコーヒー豆をまとめ買いする', d:'同じ豆、同じ焙煎。量と値段だけが違います。',
+   a:{nm:'小袋', at:[['量','1.0kg'],['値段','2,900円']]},
+   b:{nm:'大袋', at:[['量','2.0kg'],['値段','5,000円']]},
+   c:{nm:'中袋', at:[['量','1.8kg'],['値段','5,200円']]}},
+  {t:'中古のノートパソコンを1台買う', d:'同じ型番、同じ状態。保証と値段だけが違います。',
+   a:{nm:'A店', at:[['保証','6か月'],['値段','5.8万円']]},
+   b:{nm:'B店', at:[['保証','24か月'],['値段','8.4万円']]},
+   c:{nm:'C店', at:[['保証','20か月'],['値段','8.6万円']]}}
+];
+var round = 'A', idx = 0;
+var pickA = [], pickB = [];
+
+function show(id){
+  ['intro','q','mid','reveal','paper','biz'].forEach(function(x){
+    document.getElementById(x).classList.add('hide');
+  });
+  document.getElementById(id).classList.remove('hide');
+  window.scrollTo(0,0);
+}
+function start(){ round='A'; idx=0; render(); }
+function startB(){ round='B'; idx=0; render(); }
+
+function render(){
+  if(idx >= ITEMS.length){
+    if(round==='A'){ show('mid'); } else { finish(); }
+    return;
+  }
+  var it = ITEMS[idx];
+  document.getElementById('prog').textContent =
+    (round==='A' ? '1周目' : '2周目') + '　' + (idx+1) + ' / ' + ITEMS.length;
+  document.getElementById('qt').textContent = it.t;
+  document.getElementById('qd').textContent = it.d;
+
+  // 1周目は3択(引き立て役つき)、2周目は2択。並び順は毎回変える。
+  var list = (round==='A') ? [it.a, it.b, it.c] : [it.a, it.b];
+  var order = shuffle(list.slice());
+  var box = document.getElementById('opts');
+  box.innerHTML = '';
+  order.forEach(function(o){
+    var btn = document.createElement('button');
+    btn.className = 'opt';
+    var at = o.at.map(function(p){ return '<span><i>'+p[0]+'</i><b>'+p[1]+'</b></span>'; }).join('');
+    btn.innerHTML = '<div class="nm">'+o.nm+'</div><div class="at">'+at+'</div>';
+    btn.onclick = function(){ choose(o, it); };
+    box.appendChild(btn);
+  });
+  show('q');
+}
+function shuffle(a){
+  for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; }
+  return a;
+}
+function choose(o, it){
+  var key = (o===it.a) ? 'a' : (o===it.b) ? 'b' : 'c';
+  if(round==='A'){ pickA[idx] = key; } else { pickB[idx] = key; }
+  idx++;
+  render();
+}
+function label(it, k){
+  return k==='a' ? it.a.nm : k==='b' ? it.b.nm : it.c.nm;
+}
+function finish(){
+  var tb = document.getElementById('tb');
+  tb.innerHTML = '';
+  var moved = 0;
+  ITEMS.forEach(function(it, i){
+    var A = pickA[i], B = pickB[i];
+    // 引き立て役(c)が持ち上げているのは常に b。
+    // 3択でbを選び、2択でbを選ばなかった = 引き立て役があるときだけbに寄った。
+    var hit = (A==='b' && B!=='b');
+    if(hit) moved++;
+    var tag = hit ? '<span class="tag mv">動いた</span>' : '<span class="tag st">同じ</span>';
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>'+it.t.replace(/する$|を1台買う$/,'')+'</td>' +
+      '<td>'+label(it,A)+(A==='c'?'（引き立て役）':'')+'</td>' +
+      '<td>'+label(it,B)+tag+'</td>';
+    tb.appendChild(tr);
+  });
+  document.getElementById('score').textContent = moved + ' / 4';
+  var n = document.getElementById('scoreNote');
+  if(moved===0){ n.textContent = '1回もありません。引き立て役があってもなくても、同じほうを選びました。'; }
+  else if(moved<=1){ n.textContent = '1回だけです。ほぼ動いていない、と読むのが妥当です。'; }
+  else { n.textContent = '半分以上で、引き立て役があるときだけそちら側を選びました。'; }
+  var cPick = pickA.filter(function(k){ return k==='c'; }).length;
+  if(cPick>0){
+    n.textContent += ' なお1周目で、誰も選ぶ理由のないはずの札を ' + cPick + ' 回選んでいます。';
+  }
+  show('reveal');
+}
+</script>
+</div>
+</body>
+</html>

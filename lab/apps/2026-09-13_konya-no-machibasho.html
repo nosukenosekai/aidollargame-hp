@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>今夜の待ち場所</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn:disabled{background:#c9c6bf;cursor:default}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+
+/* 運転席で使う画面。夜に見るので暗くしてある */
+.deck{background:#101218;color:#fff;border-radius:14px;padding:20px 16px 18px;margin-bottom:14px}
+.deck .lbl{font-size:12px;color:#8f94a3;letter-spacing:.1em;margin-bottom:10px}
+.deck .hh{font-size:23px;font-weight:700;line-height:1.45;letter-spacing:.01em}
+.deck .hh em{font-style:normal;color:#7fb0ff}
+.speak{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:14px;padding:30px 14px;font-size:21px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:18px;letter-spacing:.04em}
+.speak:active{opacity:.85}
+.speak.on{background:#1b2437;color:#7fb0ff;border:1.5px solid #2f3a52}
+.row2{display:flex;gap:9px;margin-top:10px}
+.row2 button{flex:1;background:#1b2437;color:#cfd6e6;border:1.5px solid #2f3a52;border-radius:12px;padding:13px 6px;font-size:15px;font-family:inherit;cursor:pointer}
+.row2 button:disabled{opacity:.4}
+.script{background:#161a24;border-radius:10px;padding:12px 13px;margin-top:14px;font-size:13px;color:#a9b0c2;line-height:1.8}
+.script b{color:#fff;font-weight:600}
+.wave{display:flex;gap:4px;align-items:flex-end;height:22px;margin-top:14px;justify-content:center}
+.wave i{width:4px;background:#2f3a52;border-radius:2px;height:6px}
+.wave.on i{background:#7fb0ff;animation:w .7s ease-in-out infinite}
+.wave i:nth-child(2){animation-delay:.1s}
+.wave i:nth-child(3){animation-delay:.2s}
+.wave i:nth-child(4){animation-delay:.3s}
+.wave i:nth-child(5){animation-delay:.4s}
+.wave i:nth-child(6){animation-delay:.5s}
+@keyframes w{0%,100%{height:6px}50%{height:20px}}
+.facts{margin-top:2px}
+.fact{display:flex;gap:10px;align-items:baseline;padding:9px 0;border-bottom:1px solid #eeece6;font-size:14px}
+.fact:last-child{border-bottom:0}
+.fact .k{width:82px;flex:none;color:#6b6b6b;font-size:13px}
+.fact .v{font-weight:600}
+.fact .s{color:#8a8a8a;font-size:12px;margin-left:auto;text-align:right}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{font-size:30px;font-weight:700;color:#1d4ed8;line-height:1.3}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+.pick{display:flex;gap:8px;margin-top:10px}
+.pick button{flex:1;border:1.5px solid #cfcbc2;background:#fff;border-radius:10px;padding:12px 4px;font-size:14px;font-family:inherit;cursor:pointer;color:#1a1a1a}
+.pick button.on{border-color:#2563eb;background:#eef2fb;color:#1d4ed8;font-weight:700}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。市名・店名・組数はすべて架空です。</div>
+<h1>今夜の待ち場所</h1>
+<p class="lead">運転代行のドライバーは、運転中に画面を見られません。だから今夜どこで待つかの指示は、耳から入るしかない。押すと喋ります。画面は見なくてかまいません。</p>
+
+<div class="card" id="intro">
+  <h2>あなたの立場</h2>
+  <p>北原市の運転代行、<b>2種免許ドライバー</b>。随伴車は1台、相方の運転手と2人組。今夜は19時から2時まで。</p>
+  <p style="margin-top:10px">今夜の指示を、3回に分けて読み上げます。ボタンは大きく1つだけです。<b>音を出してから</b>始めてください。</p>
+  <div class="warn">この画面はブラウザの読み上げ機能を使います。端末が対応していない場合や、消音になっている場合は音が出ません。そのときは下に出る文字を読んでください。</div>
+  <button class="btn" onclick="go()">今夜の指示を受ける</button>
+</div>
+
+<div class="card hide" id="facts">
+  <div class="step">今夜わかっていること</div>
+  <div class="facts" id="factList"></div>
+  <p class="sub2" style="margin-top:10px">これは配車係が集めた情報ではありません。天気予報、市の施設の予約状況、鉄道の時刻表、店の定休日といった、誰でも見られるものを毎晩そろえています。</p>
+</div>
+
+<div class="deck hide" id="deck">
+  <div class="lbl" id="dLbl">1 / 3</div>
+  <div class="hh" id="dHead"></div>
+  <button class="speak" id="dSpeak" onclick="speakNow()">押すと喋ります</button>
+  <div class="wave" id="dWave"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="row2">
+    <button id="dAgain" onclick="speakNow()" disabled>もう一度</button>
+    <button id="dNext" onclick="next()" disabled>次へ</button>
+  </div>
+  <div class="script" id="dScript"></div>
+</div>
+
+<div class="card hide" id="after">
+  <div class="step">3つとも聞きました</div>
+  <h2>今夜の終わりに、一言だけ入れてください</h2>
+  <p class="sub2">打ち込むのではなく、当たったか外れたかを押すだけです。運転を終えて、車を降りたときに押します。</p>
+  <div id="fbList"></div>
+  <button class="btn" onclick="fin()">入れ終わった</button>
+</div>
+
+<div class="card hide" id="done">
+  <h2>入りました</h2>
+  <div class="res">
+    <div class="sub2">今夜の3つの指示のうち、当たったと押されたのは</div>
+    <div class="big" id="hit">－</div>
+    <div class="sub2" id="hitNote"></div>
+  </div>
+  <p style="margin-top:16px">外れた指示は、その夜の天気・曜日・催しの組み合わせごと記録に残ります。同じ組み合わせが次に来たとき、外れた場所は下げて読み上げます。</p>
+
+  <h2 style="margin-top:22px">なぜ喋らせるのか</h2>
+  <p>運転代行の随伴車は、ずっと走っています。ドライバーは客の車を運転しています。どちらも画面を見られません。それなのに、いまの配車指示は無線か、事務所からの電話です。事務所に人がいる時間しか出せません。</p>
+  <p style="margin-top:10px">深夜1時に「そろそろ3丁目に戻れ」と言う人を置くのは、いまの人手では無理です。そこだけ機械にやらせる、という話です。</p>
+  <div class="warn">待ち場所の当たり外れは、その土地の運転手が体で知っています。この仕組みは、その勘を置き換えるものではありません。<b>勘を持っている人が夜いない時間</b>を埋めるためのものです。新人に最初の3か月だけ持たせる、という使い方がいちばん近いはずです。</div>
+  <div class="src">
+    使っている材料：気象庁の予報、市の施設の予約公開ページ、鉄道会社の時刻表、店の定休日。いずれも誰でも見られるものです。この画面の北原市・店名・組数は、動きを見せるために作った架空のものです。実際の待ち場所の当たり外れは、その事業者の過去の受注記録がないと出せません。
+  </div>
+</div>
+
+<script>
+var FACTS = [
+  {k:'曜日',   v:'金曜日',            s:'週のうち最も多い夜'},
+  {k:'天気',   v:'21時から雨、深夜まで', s:'気象庁の予報'},
+  {k:'催し',   v:'市民会館で懇親会 約1,200人', s:'市の施設予約ページ'},
+  {k:'終電',   v:'北原駅 0時18分',     s:'鉄道会社の時刻表'},
+  {k:'定休日', v:'中央3丁目の3軒が休み', s:'各店の告知'}
+];
+var PLAN = [
+  {
+    head:'19時から21時。<em>工業団地の入口</em>で待ちます。',
+    say:'今夜は金曜です。二十一時から雨の予報です。まず、十九時から二十一時のあいだは、工業団地の入口で待ってください。金曜の早い時間は、工場の交代のあとに一杯やって帰る組が動きます。駅前はまだ動きません。'
+  },
+  {
+    head:'21時に<em>中央3丁目</em>へ。雨が降り出す前に入ります。',
+    say:'二十一時になったら、中央三丁目の飲み屋通りに移ってください。雨が降り出すと、歩いて帰るつもりだった人が代行に切り替えます。降ってから移ると、道が混んで間に合いません。降る前に入ってください。なお今夜は三丁目の三軒が定休日です。通りの北側ではなく、南側の角で待ってください。'
+  },
+  {
+    head:'23時半から<em>市民会館の南口</em>。1,200人が出ます。',
+    say:'二十三時半になったら、市民会館の南口へ回ってください。今夜は懇親会で千二百人が入っています。終わりは二十三時ごろ、そこから三十分ほどで人が出はじめます。終電は零時十八分です。それに乗れない人と、車で来ている人が、同じ時間に出てきます。南口は迎えの車で詰まるので、一本手前の通りで待ってください。'
+  }
+];
+var idx = 0, fb = [];
+var canSpeak = ('speechSynthesis' in window);
+
+function show(id){ document.getElementById(id).classList.remove('hide'); }
+function hide(id){ document.getElementById(id).classList.add('hide'); }
+
+function go(){
+  hide('intro');
+  var fl = document.getElementById('factList');
+  fl.innerHTML = '';
+  FACTS.forEach(function(f){
+    var d = document.createElement('div');
+    d.className = 'fact';
+    d.innerHTML = '<span class="k">'+f.k+'</span><span class="v">'+f.v+'</span><span class="s">'+f.s+'</span>';
+    fl.appendChild(d);
+  });
+  show('facts'); show('deck');
+  idx = 0;
+  render();
+  window.scrollTo(0,0);
+}
+
+function render(){
+  var p = PLAN[idx];
+  document.getElementById('dLbl').textContent = (idx+1) + ' / ' + PLAN.length;
+  document.getElementById('dHead').innerHTML = p.head;
+  document.getElementById('dScript').innerHTML = '<b>読み上げる文</b><br>' + p.say;
+  var sp = document.getElementById('dSpeak');
+  sp.textContent = canSpeak ? '押すと喋ります' : 'この端末は読み上げに対応していません';
+  sp.classList.remove('on');
+  sp.disabled = !canSpeak;
+  document.getElementById('dAgain').disabled = !canSpeak;
+  document.getElementById('dNext').disabled = false;
+}
+
+function speakNow(){
+  if(!canSpeak) return;
+  var sp = document.getElementById('dSpeak');
+  var wv = document.getElementById('dWave');
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(PLAN[idx].say);
+  u.lang = 'ja-JP';
+  u.rate = 0.95;
+  u.onstart = function(){
+    sp.classList.add('on'); sp.textContent = '喋っています';
+    wv.classList.add('on');
+  };
+  u.onend = u.onerror = function(){
+    sp.classList.remove('on'); sp.textContent = 'もう一度押すと喋ります';
+    wv.classList.remove('on');
+    document.getElementById('dNext').disabled = false;
+  };
+  window.speechSynthesis.speak(u);
+}
+
+function next(){
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  document.getElementById('dWave').classList.remove('on');
+  idx++;
+  if(idx < PLAN.length){ render(); return; }
+  hide('deck');
+  var fl = document.getElementById('fbList');
+  fl.innerHTML = '';
+  PLAN.forEach(function(p, i){
+    var d = document.createElement('div');
+    d.style.cssText = 'padding:12px 0;border-bottom:1px solid #eeece6';
+    d.innerHTML = '<div style="font-size:14px;font-weight:700">' +
+      (i+1) + '. ' + p.head.replace(/<\/?em>/g,'') + '</div>' +
+      '<div class="pick" data-i="'+i+'">' +
+        '<button data-v="1">当たった</button>' +
+        '<button data-v="0">外れた</button>' +
+      '</div>';
+    fl.appendChild(d);
+  });
+  fl.querySelectorAll('.pick').forEach(function(box){
+    box.querySelectorAll('button').forEach(function(b){
+      b.onclick = function(){
+        box.querySelectorAll('button').forEach(function(x){ x.classList.remove('on'); });
+        b.classList.add('on');
+        fb[parseInt(box.dataset.i,10)] = parseInt(b.dataset.v,10);
+      };
+    });
+  });
+  show('after');
+  window.scrollTo(0,0);
+}
+
+function fin(){
+  var answered = fb.filter(function(v){ return v !== undefined; }).length;
+  var hits = fb.filter(function(v){ return v === 1; }).length;
+  document.getElementById('hit').textContent = hits + ' / ' + PLAN.length;
+  var n = document.getElementById('hitNote');
+  if(answered === 0){
+    n.textContent = 'まだ何も押されていません。押さない夜が続くと、この仕組みは何も学びません。押す手間を1タップに抑えてあるのは、そのためです。';
+  } else if(hits === PLAN.length){
+    n.textContent = '3つとも当たりました。次に同じ条件の夜が来たら、同じ順で読み上げます。';
+  } else if(hits === 0){
+    n.textContent = '3つとも外れました。この組み合わせの夜は、読み上げをいったん止めて、運転手の判断に任せるべきです。';
+  } else {
+    n.textContent = '外れたぶんは、次の同じ条件の夜では下げて読み上げます。';
+  }
+  hide('after');
+  show('done');
+  window.scrollTo(0,0);
+}
+</script>
+</div>
+</body>
+</html>

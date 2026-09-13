@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>泣く前に帰る</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #2563eb}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+.q{font-size:15px;font-weight:700;margin:16px 0 2px}
+.pick{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.pick button{flex:1;min-width:92px;border:1.5px solid #cfcbc2;background:#fff;border-radius:10px;padding:11px 6px;font-size:14px;font-family:inherit;cursor:pointer;color:#1a1a1a;line-height:1.35}
+.pick button b{display:block;font-size:15px}
+.pick button small{color:#8a8a8a;font-size:11px}
+.pick button.on{border-color:#2563eb;background:#eef2fb;color:#1d4ed8}
+.pick button.on small{color:#5b7fd6}
+.tblwrap{overflow-x:auto;margin-top:10px;-webkit-overflow-scrolling:touch}
+table.grid{border-collapse:collapse;font-size:13px;min-width:100%}
+table.grid th,table.grid td{border:1px solid #e5e3dd;padding:7px 6px;text-align:center;white-space:nowrap}
+table.grid th{background:#faf8f4;font-size:12px;color:#6b6b6b;font-weight:600}
+table.grid th.d{text-align:left;font-size:12px}
+table.grid td.d{text-align:left;font-weight:700;background:#faf8f4}
+table.grid td.d small{display:block;font-weight:400;color:#8a8a8a;font-size:11px}
+.m4{background:#eaf3ea;color:#1e6b2e;font-weight:700}
+.m3{background:#f4f7e8;color:#5c6b1e;font-weight:700}
+.m2{background:#fdf0e2;color:#9a5a14;font-weight:700}
+.m1{background:#fbe6e0;color:#a32d12;font-weight:700}
+.keys{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#6b6b6b;margin-top:10px}
+.keys span b{display:inline-block;width:22px;text-align:center;border-radius:4px;margin-right:4px}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{font-size:30px;font-weight:700;color:#1d4ed8;line-height:1.3}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+
+/* 授与所に貼る紙 */
+#sheet{background:#fff;color:#000;padding:18px;border-radius:12px;margin-top:14px;border:1px solid #e5e3dd}
+#sheet h3{font-size:21px;text-align:center;letter-spacing:.04em;margin-bottom:2px}
+#sheet .sh{font-size:12px;text-align:center;color:#555;margin-bottom:12px}
+#sheet table{width:100%;border-collapse:collapse;font-size:12px}
+#sheet th,#sheet td{border:1px solid #999;padding:5px 3px;text-align:center}
+#sheet th{background:#eee;font-weight:600}
+#sheet td.d{text-align:left;font-weight:700;white-space:nowrap}
+#sheet .msg{font-size:12px;margin-top:10px;line-height:1.65}
+#sheet .ft{font-size:10px;color:#666;margin-top:8px;border-top:1px solid #ccc;padding-top:5px}
+@media print{
+  body{background:#fff;padding:0}
+  .wrap{max-width:none}
+  .noprint{display:none !important}
+  #sheet{border:0;border-radius:0;padding:0;margin:0}
+  #sheet table{font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="noprint">
+<div class="note">デモ（サンプルデータ）。神社名・参拝組数はすべて架空です。日付と曜日・祝日は2026年11月の実際のものです。</div>
+<h1>泣く前に帰る</h1>
+<p class="lead">七五三は、着付けを済ませた3歳児を連れて来ます。待たせるほど泣きます。神社が持っている去年の受付データから、混む時間と空いている時間を出して、授与所に貼る1枚の紙にします。画面で終わらせません。</p>
+
+<div class="card" id="setup">
+  <h2>お宮の条件を3つだけ</h2>
+
+  <div class="q">11月のご祈祷、ひと月で何組ほどですか</div>
+  <div class="pick" id="pSize">
+    <button data-v="120"><b>120組ほど</b><small>氏子中心のお宮</small></button>
+    <button data-v="400" class="on"><b>400組ほど</b><small>市内では知られている</small></button>
+    <button data-v="1100"><b>1,100組ほど</b><small>県外からも来る</small></button>
+  </div>
+
+  <div class="q">ご祈祷は1時間に何組まで通せますか</div>
+  <div class="pick" id="pCap">
+    <button data-v="6" class="on"><b>6組</b><small>1組ずつ個別に</small></button>
+    <button data-v="12"><b>12組</b><small>数組まとめて</small></button>
+    <button data-v="24"><b>24組</b><small>大広間で一斉に</small></button>
+  </div>
+
+  <div class="q">駐車場は何台ありますか</div>
+  <div class="pick" id="pPark">
+    <button data-v="3"><b>3台</b><small>ほぼ路上駐車</small></button>
+    <button data-v="12" class="on"><b>12台</b><small>境内の脇</small></button>
+    <button data-v="40"><b>40台以上</b><small>臨時も出せる</small></button>
+  </div>
+
+  <button class="btn" onclick="calc()">混む時間を出す</button>
+</div>
+
+<div class="card hide" id="out">
+  <div class="step">2026年11月・ご祈祷の待ち時間</div>
+  <h2>土日祝だけ出しています</h2>
+  <p class="sub2">平日は、どの時間もほぼ待ちません。表に出しているのは、実際に人が集まる11日です。</p>
+  <div class="tblwrap">
+    <table class="grid" id="gridJ"></table>
+  </div>
+  <div class="keys">
+    <span><b class="m4">◎</b>待たない</span>
+    <span><b class="m3">○</b>10分ほど</span>
+    <span><b class="m2">△</b>30分ほど</span>
+    <span><b class="m1">×</b>1時間以上</span>
+  </div>
+
+  <h2 style="margin-top:22px">駐車の待ち</h2>
+  <p class="sub2">ご祈祷より先に、ここで詰まることがあります。</p>
+  <div class="tblwrap">
+    <table class="grid" id="gridP"></table>
+  </div>
+
+  <div class="res">
+    <div class="sub2">いちばん混むのは</div>
+    <div class="big" id="peak">－</div>
+    <div class="sub2" id="peakNote"></div>
+  </div>
+  <div class="res" style="background:#eaf3ea">
+    <div class="sub2">同じ11月で、いちばん空いている土日祝の時間</div>
+    <div class="big" style="color:#1e6b2e" id="best">－</div>
+    <div class="sub2">この時間をすすめる紙を1枚作ります。</div>
+  </div>
+  <button class="btn" onclick="makeSheet()">授与所に貼る紙を作る</button>
+</div>
+</div>
+
+<div id="sheetWrap" class="hide">
+  <div id="sheet">
+    <h3>七五三　混みあう時間のご案内</h3>
+    <div class="sh" id="shSub"></div>
+    <table id="shTbl"></table>
+    <div class="msg" id="shMsg"></div>
+    <div class="ft" id="shFt"></div>
+  </div>
+  <div class="noprint">
+    <button class="btn" onclick="window.print()">この紙を印刷する</button>
+    <button class="btn sub" onclick="back()">条件を変える</button>
+    <div class="card" style="margin-top:14px">
+      <h2>なぜ画面でなく紙か</h2>
+      <p>混雑の案内を見てほしい相手は、着物の子を連れて、両手がふさがっている親です。神社のホームページを開いてもらう前提は成り立ちません。</p>
+      <p style="margin-top:10px">この紙は3か所に置きます。<b>授与所の受付</b>、<b>お問い合わせの返信に同封</b>、<b>提携している写真館と貸衣装店</b>。写真館は着付けの予約を先に取るので、そこで時間が決まってしまいます。神社が混む時間を先に渡しておかないと、写真館は自分の都合のいい時間に入れます。</p>
+      <div class="warn">この数字は、去年の受付簿から作った見込みです。当日の天気や、近隣のお宮の状況で動きます。紙には「見込み」と刷っておいてください。断定して貼ると、外れたときに苦情になります。</div>
+      <div class="src">
+        待ち時間の出し方：その時間に来ると見込む組数と、1時間に通せる組数の差を積み上げ、繰り越しぶんを次の時間に足しています。ただし待ちが90分に達したところで頭打ちにしています。実際には、そこまで混むと参拝者のほうが時間をずらすからです。駐車は、車で来る割合を6割、1台あたりの滞在を1.5時間として回転数を出し、同じく90分で頭打ちにしています。いずれもこの画面のための仮の置き方で、公的な統計ではありません。日付と曜日・祝日は2026年11月の実際のものです。
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 2026年11月の土日祝（曜日・祝日は実際のもの）
+var DAYS = [
+  {d:'11/1',  w:'日', tag:'',        wt:0.70},
+  {d:'11/3',  w:'火', tag:'文化の日', wt:0.60},
+  {d:'11/7',  w:'土', tag:'',        wt:0.70},
+  {d:'11/8',  w:'日', tag:'',        wt:0.70},
+  {d:'11/14', w:'土', tag:'',        wt:0.85},
+  {d:'11/15', w:'日', tag:'七五三',   wt:1.00},
+  {d:'11/21', w:'土', tag:'三連休',   wt:0.75},
+  {d:'11/22', w:'日', tag:'三連休',   wt:0.75},
+  {d:'11/23', w:'月', tag:'勤労感謝', wt:0.85},
+  {d:'11/28', w:'土', tag:'',        wt:0.60},
+  {d:'11/29', w:'日', tag:'',        wt:0.60}
+];
+var HOURS = [9,10,11,12,13,14,15];
+var SHAPE = [0.06,0.17,0.20,0.10,0.16,0.17,0.14]; // 時間帯ごとの来訪の山
+var WEEKDAY_SHARE = 0.12; // 平日に分散するぶん
+
+var month = 400, cap = 6, park = 12;
+var jWait = [], pWait = [];
+
+function pickInit(){
+  ['pSize','pCap','pPark'].forEach(function(id){
+    var box = document.getElementById(id);
+    box.querySelectorAll('button').forEach(function(b){
+      b.onclick = function(){
+        box.querySelectorAll('button').forEach(function(x){ x.classList.remove('on'); });
+        b.classList.add('on');
+        var v = parseInt(b.dataset.v, 10);
+        if(id==='pSize') month = v;
+        if(id==='pCap') cap = v;
+        if(id==='pPark') park = v;
+      };
+    });
+  });
+}
+pickInit();
+
+function calc(){
+  var wsum = DAYS.reduce(function(s,d){ return s + d.wt; }, 0);
+  var weekendTotal = month * (1 - WEEKDAY_SHARE);
+  jWait = []; pWait = [];
+  DAYS.forEach(function(d){
+    var dayGroups = weekendTotal * d.wt / wsum;
+    var q = 0, rowJ = [], rowP = [];
+    HOURS.forEach(function(h, i){
+      var arrive = dayGroups * SHAPE[i];
+      q = Math.max(0, q + arrive - cap);
+      // 待ちが90分を超える時間帯は、実際には参拝者のほうが時間をずらすので頭打ちにする
+      q = Math.min(q, cap * 1.5);
+      // 待ち＝いま並んでいる組数を、通せる速さで割った分数
+      rowJ.push(Math.round(q / cap * 60));
+      // 駐車：車で来るのは6割、1台1.5時間で回る。同じ理由で90分で頭打ち
+      var cars = arrive * 0.6;
+      var turn = Math.max(park / 1.5, 0.5);
+      rowP.push(Math.min(90, Math.round(Math.max(0, cars - turn) / turn * 60)));
+    });
+    jWait.push(rowJ); pWait.push(rowP);
+  });
+  drawGrid('gridJ', jWait);
+  drawGrid('gridP', pWait);
+
+  var pk = {v:-1}, bs = {v:1e9};
+  DAYS.forEach(function(d, di){
+    HOURS.forEach(function(h, hi){
+      var v = jWait[di][hi] + pWait[di][hi];
+      if(v > pk.v) pk = {v:v, d:d, h:h, j:jWait[di][hi], p:pWait[di][hi]};
+      if(v < bs.v) bs = {v:v, d:d, h:h};
+    });
+  });
+  document.getElementById('peak').textContent = pk.d.d + '（' + pk.d.w + '）' + pk.h + '時台';
+  document.getElementById('peakNote').textContent =
+    'ご祈祷の待ち ' + mins(pk.j) + '、駐車の待ち ' + mins(pk.p) + '。着物のお子さまには、ここがいちばんつらい時間です。';
+  document.getElementById('best').textContent = bs.d.d + '（' + bs.d.w + '）' + bs.h + '時台';
+  document.getElementById('out').classList.remove('hide');
+  document.getElementById('out').scrollIntoView({behavior:'smooth'});
+}
+function mins(v){ return v <= 0 ? '0分' : (v >= 90 ? '90分以上' : v + '分'); }
+function mark(v){
+  if(v < 10) return ['◎','m4'];
+  if(v < 25) return ['○','m3'];
+  if(v < 50) return ['△','m2'];
+  return ['×','m1'];
+}
+function drawGrid(id, data){
+  var t = document.getElementById(id);
+  var html = '<tr><th class="d">日</th>' + HOURS.map(function(h){ return '<th>'+h+'時</th>'; }).join('') + '</tr>';
+  DAYS.forEach(function(d, di){
+    html += '<tr><td class="d">' + d.d + '（' + d.w + '）' + (d.tag ? '<small>'+d.tag+'</small>' : '') + '</td>';
+    HOURS.forEach(function(h, hi){
+      var m = mark(data[di][hi]);
+      html += '<td class="' + m[1] + '" title="' + mins(data[di][hi]) + '">' + m[0] + '</td>';
+    });
+    html += '</tr>';
+  });
+  t.innerHTML = html;
+}
+
+function makeSheet(){
+  var best = null, worst = null;
+  DAYS.forEach(function(d, di){
+    HOURS.forEach(function(h, hi){
+      var v = jWait[di][hi] + pWait[di][hi];
+      if(!best || v < best.v) best = {v:v, d:d, h:h};
+      if(!worst || v > worst.v) worst = {v:v, d:d, h:h};
+    });
+  });
+  document.getElementById('shSub').textContent =
+    '2026年11月　ご祈祷の待ち時間の見込み　（去年の受付簿からの見込みです）';
+  var html = '<tr><th style="text-align:left">日にち</th>' + HOURS.map(function(h){ return '<th>'+h+'時</th>'; }).join('') + '</tr>';
+  DAYS.forEach(function(d, di){
+    html += '<tr><td class="d">' + d.d + '（' + d.w + '）' + (d.tag ? ' ' + d.tag : '') + '</td>';
+    HOURS.forEach(function(h, hi){
+      html += '<td>' + mark(jWait[di][hi])[0] + '</td>';
+    });
+    html += '</tr>';
+  });
+  document.getElementById('shTbl').innerHTML = html;
+  document.getElementById('shMsg').innerHTML =
+    '◎ 待たずにお通しできます　○ 10分ほど　△ 30分ほど　× 1時間以上お待ちいただきます<br><br>' +
+    '<b>いちばん空いているのは ' + best.d.d + '（' + best.d.w + '）' + best.h + '時台です。</b><br>' +
+    'いちばん混みあうのは ' + worst.d.d + '（' + worst.d.w + '）' + worst.h + '時台です。<br><br>' +
+    'お子さまは、着付けをしてからお帰りになるまでが長いほど、着崩れやぐずりが起きやすくなります。お写真の予約を入れる前に、この表をご覧のうえで時間をお決めください。写真館・貸衣装店にこの紙をお見せいただいてかまいません。';
+  document.getElementById('shFt').textContent =
+    '見込みです。当日の天候や近隣の状況により前後します。駐車場は' + park + '台です。混みあう時間は、周辺道路にお停めにならないようご協力ください。';
+  document.getElementById('sheetWrap').classList.remove('hide');
+  document.querySelector('.noprint').classList.add('hide');
+  window.scrollTo(0,0);
+}
+function back(){
+  document.getElementById('sheetWrap').classList.add('hide');
+  document.querySelector('.noprint').classList.remove('hide');
+  window.scrollTo(0,0);
+}
+</script>
+</div>
+</body>
+</html>

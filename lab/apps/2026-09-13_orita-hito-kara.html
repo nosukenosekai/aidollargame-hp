@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>おりた人から</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn:disabled{background:#c9c6bf;cursor:default}
+.btn.out{background:#fff;color:#8a5a2b;border:1.5px solid #d9c3a5}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.slot{background:#101218;color:#fff;border-radius:12px;padding:14px;margin-top:4px}
+.slot .nm{font-size:19px;font-weight:700}
+.slot .ds{font-size:13px;color:#b9bcc6;margin-top:2px}
+.price{font-size:52px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center;letter-spacing:-.02em;padding:10px 0 2px}
+.price small{font-size:18px;color:#6b6b6b;font-weight:600;margin-left:4px}
+.wallet{display:flex;justify-content:space-between;font-size:13px;color:#6b6b6b;border-bottom:1px solid #eeece6;padding-bottom:8px;margin-bottom:10px}
+.wallet b{color:#1a1a1a;font-variant-numeric:tabular-nums}
+.shops{margin-top:10px}
+.sh{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid #f0eee9;font-size:14px}
+.sh .dot{width:9px;height:9px;border-radius:50%;background:#2563eb;flex:none}
+.sh.gone{color:#a8a49c}
+.sh.gone .dot{background:#d9d5cd}
+.sh .me{font-size:11px;background:#2563eb;color:#fff;border-radius:5px;padding:1px 6px;margin-left:5px}
+.sh .tail{margin-left:auto;font-size:12px;color:#8a8a8a;font-variant-numeric:tabular-nums}
+.log{font-size:13px;background:#faf8f4;border-radius:10px;padding:10px 12px;margin-top:10px;max-height:130px;overflow-y:auto}
+.log div{padding:2px 0;color:#5b5b5b}
+.log div b{color:#1a1a1a}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.lose{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px}
+.lose .big{color:#c2410c}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。店名・数字はすべて架空です。</div>
+<h1>おりた人から</h1>
+<p class="lead">商店街の共同チラシは、どの店がどの枠に入るかで毎年もめます。だいたい「去年と同じ」で終わります。枠を競りにかけて、おりた人から順に記録が残る形にしたらどうなるか。あなたは青果店として競ってください。</p>
+
+<div class="card" id="intro">
+  <h2>あなたの立場</h2>
+  <p><b>たなか青果</b>。この商店街に加盟していて、年に4回出す共同チラシの枠を取りにいきます。</p>
+  <p style="margin-top:10px">組合から配られた入札点は<b>100点</b>。これは1年ぶんです。使い切ったら、そのあとの枠には手が出ません。</p>
+  <p style="margin-top:10px">枠は3つ。価格が2点ずつ上がっていきます。<b>粘る</b>か<b>おりる</b>かを押してください。一度おりた枠には戻れません。</p>
+  <div class="warn">おりた点数は全員に見えるところに残ります。「ずるい」と言うためではなく、来年「去年はこの店がここまで出した」と分かるようにするためです。</div>
+  <button class="btn" onclick="startSlot(0)">1つめの枠から</button>
+</div>
+
+<div class="card hide" id="bid">
+  <div class="wallet">
+    <span>残り点　<b id="wLeft">100</b></span>
+    <span>取った枠　<b id="wWon">0</b> / 3</span>
+  </div>
+  <div class="step" id="bStep"></div>
+  <div class="slot">
+    <div class="nm" id="bName"></div>
+    <div class="ds" id="bDesc"></div>
+  </div>
+  <div class="price"><span id="bPrice">6</span><small>点</small></div>
+  <p class="sub2" style="text-align:center" id="bHint"></p>
+  <div class="shops" id="bShops"></div>
+  <button class="btn" onclick="stay()">この点数でも粘る</button>
+  <button class="btn out" onclick="drop()">ここでおりる</button>
+  <div class="log" id="bLog"></div>
+</div>
+
+<div class="card hide" id="slotEnd">
+  <div class="step" id="eStep"></div>
+  <h2 id="eTitle"></h2>
+  <p id="eBody"></p>
+  <div class="log" id="eLog" style="max-height:none"></div>
+  <button class="btn" id="eBtn" onclick="nextSlot()">次へ</button>
+</div>
+
+<div class="card hide" id="final">
+  <div class="step">3枠とも決まりました</div>
+  <h2>今年のたなか青果</h2>
+  <table>
+    <thead><tr><th>枠</th><th>取った店</th><th>決まり値</th></tr></thead>
+    <tbody id="fTb"></tbody>
+  </table>
+  <div id="fBox"></div>
+
+  <h2 style="margin-top:22px">去年までのやり方だと</h2>
+  <p>去年までは、加盟年数の長い順に希望を聞いて決めていました。その方式だと、たなか青果は毎年<b>中面の小枠</b>で固定です。取れる枠は変わりませんが、誰も何点まで出す気があったのかは残りません。</p>
+  <table>
+    <thead><tr><th></th><th>去年までの方式</th><th>競り</th></tr></thead>
+    <tbody>
+      <tr><td>枠の決め方</td><td>加盟年数順</td><td>出した点</td></tr>
+      <tr><td>決まるまで</td><td>会合3回</td><td>その場</td></tr>
+      <tr><td>あとに残るもの</td><td>結果だけ</td><td>誰がどこでおりたか</td></tr>
+    </tbody>
+  </table>
+  <div class="warn">競りにすると、資金の厚い店が一等地を取り続けます。それが嫌なら、点数を売上ではなく加盟年数や当番回数で配る、上位枠は2年連続で取れない、といった枠組みを先に決めておく必要があります。競りは配り方を公平にする道具ではなく、<b>決め方を見えるようにする道具</b>です。</div>
+  <div class="src">
+    デモの枠と価格はこの画面用に作った架空のものです。実際に導入するなら、点数の配り方（何を根拠に何点配るか）と、上位枠の連続取得の扱いを、組合の総会で先に決める必要があります。
+  </div>
+</div>
+
+<script>
+var SLOTS = [
+  {name:'表1面 センター', desc:'折り込んだとき最初に目に入る場所。去年ここに載った店は、配布の週の来店が目に見えて増えました。',
+   rivals:[{n:'さくら精肉',limit:42},{n:'中村ベーカリー',limit:30},{n:'まるみ薬局',limit:26}]},
+  {name:'裏面 上段', desc:'裏返したときの一番上。冷蔵庫に貼る人が多いので、月内はずっと見られます。',
+   rivals:[{n:'小島クリーニング',limit:24},{n:'東屋そば',limit:20},{n:'まるみ薬局',limit:16}]},
+  {name:'中面 小枠', desc:'開いた中のいちばん小さい枠。3枠のなかでは効きは弱いですが、載らない年を作らずに済みます。',
+   rivals:[{n:'東屋そば',limit:12},{n:'小島クリーニング',limit:10},{n:'中村ベーカリー',limit:8}]}
+];
+var START = 6, STEP = 2;
+var left = 100, wonCount = 0, cur = 0, price = START;
+var alive = [], meIn = true, dropLog = [], results = [];
+var takenByRival = {};
+
+function show(id){
+  ['intro','bid','slotEnd','final'].forEach(function(x){
+    document.getElementById(x).classList.add('hide');
+  });
+  document.getElementById(id).classList.remove('hide');
+  window.scrollTo(0,0);
+}
+
+function startSlot(i){
+  cur = i;
+  price = START;
+  meIn = true;
+  dropLog = [];
+  // すでに枠を取った店は、その年ぶんを使い切っているので参加しない
+  alive = SLOTS[i].rivals.filter(function(r){ return !takenByRival[r.n]; })
+                          .map(function(r){ return {n:r.n, limit:r.limit, in:true}; });
+  document.getElementById('bStep').textContent = (i+1) + ' / 3 の枠';
+  document.getElementById('bName').textContent = SLOTS[i].name;
+  document.getElementById('bDesc').textContent = SLOTS[i].desc;
+  document.getElementById('bLog').innerHTML = '';
+  paint();
+  show('bid');
+}
+
+function paint(){
+  document.getElementById('wLeft').textContent = left;
+  document.getElementById('wWon').textContent = wonCount;
+  document.getElementById('bPrice').textContent = price;
+  var hint = document.getElementById('bHint');
+  if(price > left){ hint.textContent = '残り点が足りません。ここまでです。'; }
+  else { hint.textContent = '粘ると ' + (price + STEP) + ' 点に上がります'; }
+  var box = document.getElementById('bShops');
+  box.innerHTML = '';
+  var rows = [{n:'たなか青果', me:true, in:meIn, out:null}];
+  alive.forEach(function(r){
+    var d = dropLog.filter(function(x){ return x.n===r.n; })[0];
+    rows.push({n:r.n, me:false, in:r.in, out:d ? d.at : null});
+  });
+  rows.forEach(function(r){
+    var el = document.createElement('div');
+    el.className = 'sh' + (r.in ? '' : ' gone');
+    el.innerHTML = '<span class="dot"></span><span>'+r.n+'</span>' +
+      (r.me ? '<span class="me">あなた</span>' : '') +
+      '<span class="tail">' + (r.in ? '粘っている' : (r.out!=null ? r.out+'点でおりた' : 'おりた')) + '</span>';
+    box.appendChild(el);
+  });
+  document.getElementById('bid').querySelectorAll('.btn')[0].disabled = (price > left);
+}
+
+function log(t){
+  var el = document.getElementById('bLog');
+  var d = document.createElement('div');
+  d.innerHTML = t;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+
+function stay(){
+  if(price > left) return;
+  // いまの価格で降りる店を処理してから、価格を上げる
+  var dropped = [];
+  alive.forEach(function(r){
+    if(r.in && r.limit < price + STEP){
+      r.in = false;
+      dropLog.push({n:r.n, at:price});
+      dropped.push(r.n);
+    }
+  });
+  dropped.forEach(function(n){ log('<b>'+n+'</b> が '+price+'点でおりました'); });
+  var rest = alive.filter(function(r){ return r.in; });
+  if(rest.length === 0){
+    winSlot(price);
+    return;
+  }
+  price += STEP;
+  log('価格が <b>'+price+'点</b> に上がりました（残り '+(rest.length+1)+' 店）');
+  paint();
+}
+
+function drop(){
+  meIn = false;
+  // あなたがおりた時点で、まだ残っている中の最高額の店が取る
+  var rest = alive.filter(function(r){ return r.in; });
+  if(rest.length === 0){
+    // 誰も残っていないのに、あなたもおりた。この枠は今年空欄になる
+    emptySlot();
+    return;
+  }
+  rest.sort(function(a,b){ return b.limit - a.limit; });
+  var w = rest[0];
+  var second = rest.length > 1 ? rest[1].limit : price;
+  var settle = Math.min(w.limit, Math.max(price, second) + STEP);
+  loseSlot(w.n, settle);
+}
+
+function winSlot(p){
+  left -= p;
+  wonCount++;
+  takenByRival['たなか青果'] = true;
+  results.push({slot:SLOTS[cur].name, who:'たなか青果', price:p, mine:true, drops:dropLog.slice()});
+  document.getElementById('eStep').textContent = SLOTS[cur].name;
+  document.getElementById('eTitle').textContent = p + '点で取りました';
+  document.getElementById('eBody').textContent =
+    '他の店が全員おりたので、' + p + '点で決まりです。残りは ' + left + '点になりました。';
+  paintDrops();
+  document.getElementById('eBtn').textContent = (cur < 2) ? '次の枠へ' : '結果を見る';
+  show('slotEnd');
+}
+
+function loseSlot(who, p){
+  takenByRival[who] = true;
+  results.push({slot:SLOTS[cur].name, who:who, price:p, mine:false, drops:dropLog.slice()});
+  document.getElementById('eStep').textContent = SLOTS[cur].name;
+  document.getElementById('eTitle').textContent = 'おりました。' + who + 'が ' + p + '点で取りました';
+  document.getElementById('eBody').textContent =
+    'あなたは ' + price + '点でおりています。点は減りません（残り ' + left + '点）。かわりに、この枠には今年載りません。';
+  dropLog.push({n:'たなか青果', at:price});
+  paintDrops();
+  document.getElementById('eBtn').textContent = (cur < 2) ? '次の枠へ' : '結果を見る';
+  show('slotEnd');
+}
+
+function emptySlot(){
+  results.push({slot:SLOTS[cur].name, who:'（空欄）', price:0, mine:false, drops:dropLog.slice()});
+  document.getElementById('eStep').textContent = SLOTS[cur].name;
+  document.getElementById('eTitle').textContent = '誰も取りませんでした';
+  document.getElementById('eBody').textContent =
+    'あなたを含めて全員がおりたので、この枠は今年空欄になります。組合はここに「募集中」と刷ることになります。';
+  dropLog.push({n:'たなか青果', at:price});
+  paintDrops();
+  document.getElementById('eBtn').textContent = (cur < 2) ? '次の枠へ' : '結果を見る';
+  show('slotEnd');
+}
+
+function paintDrops(){
+  var el = document.getElementById('eLog');
+  el.innerHTML = '<div style="font-weight:700;color:#1a1a1a">おりた順</div>';
+  dropLog.slice().sort(function(a,b){ return a.at - b.at; }).forEach(function(d){
+    var me = (d.n === 'たなか青果') ? ' ←あなた' : '';
+    el.innerHTML += '<div><b>' + d.at + '点</b>　' + d.n + me + '</div>';
+  });
+  if(dropLog.length === 0){ el.innerHTML += '<div>誰もおりませんでした。</div>'; }
+}
+
+function nextSlot(){
+  if(cur < 2){ startSlot(cur + 1); }
+  else { final(); }
+}
+
+function final(){
+  var tb = document.getElementById('fTb');
+  tb.innerHTML = '';
+  results.forEach(function(r){
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>'+r.slot+'</td><td style="text-align:right">'+r.who+'</td><td>'+r.price+'点</td>';
+    if(r.mine) tr.style.background = '#eef2fb';
+    tb.appendChild(tr);
+  });
+  var mine = results.filter(function(r){ return r.mine; });
+  var box = document.getElementById('fBox');
+  if(mine.length === 0){
+    box.innerHTML = '<div class="lose"><div class="sub2">たなか青果が取った枠</div>' +
+      '<div class="big">なし</div>' +
+      '<div class="sub2">100点まるごと残りましたが、今年のチラシに店名は載りません。点を残すこと自体には値打ちがないので、これは負けです。</div></div>';
+  } else {
+    var names = mine.map(function(r){ return r.slot; }).join('、');
+    var spent = 100 - left;
+    box.innerHTML = '<div class="res"><div class="sub2">たなか青果が取った枠</div>' +
+      '<div class="big">' + names + '</div>' +
+      '<div class="sub2">使った点 ' + spent + '点、残り ' + left + '点。残りは次の号に回せます。</div></div>';
+  }
+  show('final');
+}
+</script>
+</div>
+</body>
+</html>

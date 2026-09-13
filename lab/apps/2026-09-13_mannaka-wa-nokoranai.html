@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>真ん中は残らない</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn:disabled{background:#c9c6bf;cursor:default}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.word{font-size:46px;font-weight:700;text-align:center;padding:56px 0;letter-spacing:.06em}
+.counter{font-size:12px;color:#8a8a8a;text-align:center;letter-spacing:.1em}
+.timer{font-size:44px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center}
+.num{font-size:54px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center;padding:16px 0}
+textarea{width:100%;height:150px;font-size:17px;padding:12px;border:1.5px solid #cfcbc2;border-radius:10px;font-family:inherit;line-height:1.8;resize:vertical}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+.chart{margin-top:14px}
+.crow{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.crow .lb{width:82px;font-size:13px;color:#444;flex:none}
+.crow .bw{flex:1;height:22px;background:#eeece6;border-radius:6px;overflow:hidden}
+.crow .bw i{display:block;height:100%;background:#2563eb}
+.crow .bw.act i{background:#c2410c}
+.crow .vv{width:56px;text-align:right;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;flex:none}
+.legend{font-size:12px;color:#6b6b6b;margin-top:4px}
+.legend b.a{color:#2563eb}
+.legend b.b{color:#c2410c}
+.dots{display:grid;grid-template-columns:repeat(15,1fr);gap:3px;margin-top:8px}
+.dots i{display:block;aspect-ratio:1;border-radius:3px;background:#eeece6}
+.dots i.on{background:#2563eb}
+.dots i.on2{background:#c2410c}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src a{color:#2563eb;word-break:break-all}
+.src div{margin-bottom:7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">サンプルデータではありません。ここに出る数字は、いまあなたが実際に覚えて、実際に思い出せた語の位置です。比べる相手は1962年と1966年の論文です。</div>
+<h1>真ん中は残らない</h1>
+<p class="lead">言葉を並べて聞かせると、人は最初のほうと最後のほうだけを持ち帰ります。真ん中は落ちます。これを2回、条件を変えて自分で測ります。1回目は聞いてすぐ、2回目は聞いたあと30秒だけ別のことをしてから。</p>
+
+<div class="card" id="intro">
+  <h2>やること</h2>
+  <p>かんたんな言葉が15個、1つずつ出ます。1個あたり1.2秒です。覚えようとしてください。書き取りはしないでください。</p>
+  <p style="margin-top:8px">全部出たら、思い出せた言葉を打ち込みます。順番は問いません。これを2回、違う15個でやります。</p>
+  <p class="sub2" style="margin-top:10px">所要は全部で3分ほどです。途中で画面を離れると測り直しになります。</p>
+  <button class="btn" onclick="startRun(0)">1回目を始める</button>
+</div>
+
+<div class="card hide" id="showCard">
+  <div class="step" id="sStep"></div>
+  <div class="counter" id="sCount"></div>
+  <div class="word" id="sWord">　</div>
+</div>
+
+<div class="card hide" id="distCard">
+  <div class="step">2回目だけ、ここで30秒はさみます</div>
+  <h2>3ずつ引いて、声に出して数えてください</h2>
+  <p class="sub2">1つ数えるたびにボタンを押してください。数字は勝手に減ります。さっきの言葉は、いま考えないでください。</p>
+  <div class="num" id="dNum">－</div>
+  <div class="timer" id="dTimer">30</div>
+  <button class="btn" id="dBtn" onclick="countDown3()">言った</button>
+</div>
+
+<div class="card hide" id="recallCard">
+  <div class="step" id="rStep"></div>
+  <h2>思い出せた言葉を打ってください</h2>
+  <p class="sub2">1行に1つ。順番は問いません。ひらがなでもカタカナでもかまいません。</p>
+  <textarea id="rBox" placeholder="みかん&#10;とけい&#10;..."></textarea>
+  <div class="timer" id="rTimer" style="font-size:24px;margin-top:8px">60</div>
+  <button class="btn" onclick="endRecall()">思い出せたぶんを出す</button>
+</div>
+
+<div class="card hide" id="between">
+  <div class="step">1回目が終わりました</div>
+  <h2>採点はあとでまとめて出します</h2>
+  <p>続けて2回目をやります。違う15個の言葉です。今度は、全部出たあとに少しだけ別のことをしてもらいます。</p>
+  <button class="btn" onclick="startRun(1)">2回目を始める</button>
+</div>
+
+<div class="card hide" id="result">
+  <div class="step">2回とも終わりました</div>
+  <h2>あなたが思い出せた位置</h2>
+  <p class="sub2">15個を、出た順に5個ずつ3つに区切っています。</p>
+  <div class="chart" id="chart"></div>
+  <div class="legend"><b class="a">青</b>＝1回目（聞いてすぐ）　<b class="b">橙</b>＝2回目（30秒はさんでから）</div>
+
+  <div style="margin-top:18px">
+    <p class="sub2">1個ずつの当たり外れ（左が1個目、右が15個目）</p>
+    <div class="dots" id="dotsA"></div>
+    <p class="sub2" style="margin-top:8px">2回目</p>
+    <div class="dots" id="dotsB"></div>
+  </div>
+
+  <div class="res">
+    <div class="sub2">最後の5個が、30秒はさんだことで減った数</div>
+    <div class="big" id="drop">－</div>
+    <div class="sub2" id="dropNote"></div>
+  </div>
+  <div class="warn">1人が1回ずつやっただけです。論文は同じことを何十人・何百回と繰り返して曲線にしています。あなたの結果が教科書どおりでなくても、それは論文が間違っている証拠にはなりません。逆もまた同じです。</div>
+  <button class="btn" onclick="show('paper')">論文が測ったこと</button>
+</div>
+
+<div class="card hide" id="paper">
+  <h2>1962年：最初と最後だけが盛り上がる</h2>
+  <p>10語・15語・20語・30語・40語のリストを、1語あたり1秒または2秒で読み上げ、直後に思い出せるだけ書かせました。学部生103人を6つの条件に分けています。出てきた曲線は、どの条件でも同じ形でした。</p>
+  <table>
+    <thead><tr><th>位置</th><th>思い出されやすさ</th></tr></thead>
+    <tbody>
+      <tr><td>最初の3〜4語</td><td>急に高い</td></tr>
+      <tr><td>真ん中</td><td>低いまま平ら</td></tr>
+      <tr><td>最後の8語ほど</td><td>終わりに向けて上がる</td></tr>
+    </tbody>
+  </table>
+
+  <h2 style="margin-top:20px">1966年：最後の山だけ、消せる</h2>
+  <p>同じ手順のあとに、数を声に出して数える作業を入れて、思い出すまでの時間を遅らせました。遅らせる時間を長くするほど、終わりの山だけが下がっていきます。<b>30秒後には、終わりの山は残っていませんでした。</b>最初の山と真ん中は、ほとんど動きません。</p>
+  <div class="gap">
+    <b>これが2つの置き場所の証拠とされました。</b><br>
+    終わりの数語は、まだ頭の作業台の上に載っているだけで、別のことをすると押し出される。最初の数語は、繰り返し唱えるうちに奥へ移っているので、30秒くらいでは動かない。同じリストなのに、消え方が違う。
+  </div>
+  <button class="btn" onclick="show('biz')">これを商売に直すと</button>
+</div>
+
+<div class="card hide" id="biz">
+  <h2>中小企業がここから持って帰れる一行</h2>
+  <p>商談で相手に残るのは、<b>最初に言ったことと、別れる直前に言ったこと</b>だけです。真ん中に置いた条件は落ちます。</p>
+  <p style="margin-top:10px">そして、別れ際に言ったことも、相手が駅まで歩いて別の電話を1本取れば消えます。最後の一言は口で言って終わりにせず、紙かメールで同じ文をもう一度渡してください。</p>
+  <div class="warn">この画面は無意味な語を15個並べています。商談の中身は互いにつながった話なので、落ち方はこれより穏やかです。順番が効く、という向きだけを持ち帰ってください。</div>
+  <div class="src">
+    <div>Murdock, B. B. (1962) The serial position effect of free recall. <i>Journal of Experimental Psychology</i>, 64(5), 482-488.<br><a href="https://doi.org/10.1037/h0045106">https://doi.org/10.1037/h0045106</a></div>
+    <div>Glanzer, M., &amp; Cunitz, A. R. (1966) Two storage mechanisms in free recall. <i>Journal of Verbal Learning and Verbal Behavior</i>, 5(4), 351-360.<br><a href="https://doi.org/10.1016/S0022-5371(66)80044-0">https://doi.org/10.1016/S0022-5371(66)80044-0</a></div>
+    <div>誌名・巻号・年は出版社の書誌データで確認しました。条件の内訳（語数・提示速度・103人・30秒で終わりの山が消える）は本文が有料のため原文で確認できておらず、学術的な二次解説にもとづく記述です。</div>
+  </div>
+</div>
+
+<script>
+var LISTS = [
+  ['みかん','ぼうし','はしご','くじら','たいこ','まくら','ひまわり','はさみ','とけい','ねずみ','かばん','せんぷうき','いかだ','つくえ','ランプ'],
+  ['きって','らくだ','ほうき','たまご','ひこうき','さかな','てぶくろ','かがみ','なべ','つばめ','ろうそく','かさ','いす','みずうみ','ボタン']
+];
+var run = 0;
+var hits = [[], []];
+var timerId = null, distId = null, distNum = 0, distLeft = 30;
+
+function show(id){
+  ['intro','showCard','distCard','recallCard','between','result','paper','biz'].forEach(function(x){
+    document.getElementById(x).classList.add('hide');
+  });
+  document.getElementById(id).classList.remove('hide');
+  window.scrollTo(0,0);
+}
+function kana(s){
+  // カタカナをひらがなに寄せて、表記ゆれを吸収する
+  return s.replace(/[ァ-ヶ]/g, function(c){
+    return String.fromCharCode(c.charCodeAt(0) - 0x60);
+  }).replace(/\s|　/g,'');
+}
+
+function startRun(n){
+  run = n;
+  var list = LISTS[n];
+  document.getElementById('sStep').textContent = (n===0 ? '1回目' : '2回目') + '　覚えてください';
+  show('showCard');
+  var i = 0;
+  var wEl = document.getElementById('sWord'), cEl = document.getElementById('sCount');
+  wEl.textContent = '　'; cEl.textContent = 'まもなく始まります';
+  setTimeout(function(){
+    timerId = setInterval(function(){
+      if(i >= list.length){
+        clearInterval(timerId);
+        wEl.textContent = '　'; cEl.textContent = '';
+        if(run === 0){ startRecall(); } else { startDist(); }
+        return;
+      }
+      wEl.textContent = list[i];
+      cEl.textContent = (i+1) + ' / ' + list.length;
+      i++;
+    }, 1200);
+  }, 1400);
+}
+
+function startDist(){
+  distNum = 400 + Math.floor(Math.random()*100)*3 + 1; // 3で割り切れない数から始める
+  distLeft = 30;
+  document.getElementById('dNum').textContent = distNum;
+  document.getElementById('dTimer').textContent = distLeft;
+  document.getElementById('dBtn').disabled = false;
+  show('distCard');
+  distId = setInterval(function(){
+    distLeft--;
+    document.getElementById('dTimer').textContent = distLeft;
+    if(distLeft <= 0){
+      clearInterval(distId);
+      document.getElementById('dBtn').disabled = true;
+      startRecall();
+    }
+  }, 1000);
+}
+function countDown3(){
+  distNum -= 3;
+  if(distNum < 0) distNum = 0;
+  document.getElementById('dNum').textContent = distNum;
+}
+
+function startRecall(){
+  document.getElementById('rStep').textContent = (run===0 ? '1回目' : '2回目') + '　60秒';
+  var box = document.getElementById('rBox');
+  box.value = '';
+  show('recallCard');
+  box.focus();
+  var left = 60;
+  document.getElementById('rTimer').textContent = left;
+  timerId = setInterval(function(){
+    left--;
+    document.getElementById('rTimer').textContent = left;
+    if(left <= 0){ clearInterval(timerId); endRecall(); }
+  }, 1000);
+}
+
+function endRecall(){
+  if(timerId) clearInterval(timerId);
+  var typed = document.getElementById('rBox').value.split(/[\n,、,\s　]+/).map(kana).filter(function(s){ return s.length>0; });
+  var list = LISTS[run];
+  hits[run] = list.map(function(w){ return typed.indexOf(kana(w)) >= 0; });
+  if(run === 0){ show('between'); } else { finish(); }
+}
+
+function band(h, from, to){
+  var c = 0;
+  for(var i=from;i<to;i++){ if(h[i]) c++; }
+  return c;
+}
+function finish(){
+  var labels = ['最初の5個','真ん中の5個','最後の5個'];
+  var chart = document.getElementById('chart');
+  chart.innerHTML = '';
+  for(var b=0;b<3;b++){
+    var a = band(hits[0], b*5, b*5+5);
+    var bb = band(hits[1], b*5, b*5+5);
+    var head = document.createElement('div');
+    head.style.cssText = 'font-size:13px;font-weight:700;margin:12px 0 6px';
+    head.textContent = labels[b];
+    chart.appendChild(head);
+    chart.appendChild(row('1回目', a, false));
+    chart.appendChild(row('30秒後', bb, true));
+  }
+  paintDots('dotsA', hits[0], 'on');
+  paintDots('dotsB', hits[1], 'on2');
+
+  var d = band(hits[0],10,15) - band(hits[1],10,15);
+  document.getElementById('drop').textContent = (d>0?'−':'') + Math.abs(d) + ' 個';
+  var nt = document.getElementById('dropNote');
+  if(d > 0){ nt.textContent = '論文と同じ向きです。終わりのほうが、30秒で押し出されました。'; }
+  else if(d === 0){ nt.textContent = '変わりませんでした。1回ずつでは、よくあることです。'; }
+  else { nt.textContent = '逆に増えました。2回目のほうが要領をつかんだ、と考えるのが自然です。'; }
+  show('result');
+}
+function row(lb, v, act){
+  var el = document.createElement('div');
+  el.className = 'crow';
+  el.innerHTML = '<div class="lb">'+lb+'</div><div class="bw'+(act?' act':'')+'"><i style="width:'+(v/5*100)+'%"></i></div><div class="vv">'+v+' / 5</div>';
+  return el;
+}
+function paintDots(id, h, cls){
+  var el = document.getElementById(id);
+  el.innerHTML = '';
+  h.forEach(function(ok){
+    var i = document.createElement('i');
+    if(ok) i.className = cls;
+    el.appendChild(i);
+  });
+}
+</script>
+</div>
+</body>
+</html>

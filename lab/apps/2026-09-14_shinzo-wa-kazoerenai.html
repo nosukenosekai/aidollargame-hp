@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>心臓は数えられない</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn:disabled{background:#c9c6bf;cursor:default}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.timer{font-size:76px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center;letter-spacing:-.02em;line-height:1.1;padding:14px 0}
+.timer.rest{color:#9a958c}
+.ring{height:6px;background:#eeece6;border-radius:3px;overflow:hidden;margin-top:4px}
+.ring i{display:block;height:100%;background:#2563eb;width:100%}
+.ring.rest i{background:#c9c6bf}
+input[type=number]{width:100%;font-size:34px;font-weight:700;padding:14px;border:1.5px solid #cfcbc2;border-radius:10px;font-family:inherit;text-align:center;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+.crow{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.crow .lb{width:70px;font-size:13px;color:#444;flex:none}
+.crow .bw{flex:1;height:24px;background:#eeece6;border-radius:6px;overflow:hidden;position:relative}
+.crow .bw i{display:block;height:100%;background:#2563eb}
+.crow .bw.g i{background:#9a958c}
+.crow .vv{width:66px;text-align:right;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;flex:none}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src a{color:#2563eb;word-break:break-all}
+.src div{margin-bottom:7px}
+.vs{display:flex;gap:10px;margin-top:12px}
+.vs>div{flex:1;background:#fff;border:1.5px solid #e5e3dd;border-radius:12px;padding:12px;text-align:center}
+.vs .k{font-size:12px;color:#6b6b6b}
+.vs .v{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3}
+.vs .v.b{color:#2563eb}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">サンプルデータではありません。ここに出る数字は、いまあなたが実際に感じた拍数と、実際に測った脈拍です。手順は1981年の論文のとおりに並べてあります。</div>
+<h1>心臓は数えられない</h1>
+<div class="lead">脈には一切さわらずに、胸の中で感じた拍だけを数えます。25秒、35秒、45秒の3回。そのあと本当の脈を測って、答え合わせをします。</div>
+
+<div class="card" id="s0">
+<div class="step">はじめに</div>
+<h2>守ることは3つだけ</h2>
+<p>1. 手首、首、胸に<b>さわらない</b>。<br>2. 秒数を数えて心拍数を<b>推測しない</b>。感じた拍だけ数える。<br>3. 感じないときは、感じないまま少ない数で答える。</p>
+<div class="warn">静かな場所で、座って行ってください。全部で6分ほどかかります。最初に60秒の安静時間があります。これは論文の手順どおりです。持病のある方や、気分が悪くなった方は途中でやめてください。この画面は医療機器ではなく、診断もしません。</div>
+<button class="btn" id="go">はじめる</button>
+</div>
+
+<div class="card hide" id="s1">
+<div class="step" id="ph">安静</div>
+<h2 id="h1x">楽にして待ってください</h2>
+<p class="sub2" id="p1x">まだ数えなくて構いません。</p>
+<div class="timer" id="tm">60</div>
+<div class="ring"><i id="rg"></i></div>
+</div>
+
+<div class="card hide" id="s2">
+<div class="step" id="ph2"></div>
+<h2>何回、感じましたか</h2>
+<p class="sub2">分からなかったら、感じた数をそのまま。0でも構いません。</p>
+<input type="number" id="inp" inputmode="numeric" min="0" max="300" placeholder="0">
+<button class="btn" id="nx">決定</button>
+</div>
+
+<div class="card hide" id="s3">
+<div class="step">答え合わせ</div>
+<h2>ここで初めて脈にさわります</h2>
+<p>手首の親指側、または首の横に指を当ててください。脈が見つかったら「30秒はかる」を押して、<b>実際に触れて感じた拍</b>を数えます。</p>
+<div class="timer hide" id="tm3">30</div>
+<div class="ring hide" id="rg3w"><i id="rg3"></i></div>
+<button class="btn" id="m30">30秒はかる</button>
+<div class="hide" id="m3in">
+<p class="sub2" style="margin-top:14px">30秒でさわって数えた拍数を入れてください。</p>
+<input type="number" id="inp3" inputmode="numeric" min="0" max="200" placeholder="0">
+<button class="btn" id="fin">結果を見る</button>
+</div>
+</div>
+
+<div class="card hide" id="s4">
+<div class="step">結果</div>
+<h2 id="h4"></h2>
+<div class="res"><div class="sub2">感じ取りの正確さ（3回の平均）</div><div class="big" id="acc"></div><div class="sub2">1.00に近いほど、申告した数が実際の拍数に近かったことを意味します。</div></div>
+
+<h2 style="margin-top:22px">3回の内訳</h2>
+<table><thead><tr><th>区間</th><th>感じた数</th><th>実際</th><th>正確さ</th></tr></thead><tbody id="tb"></tbody></table>
+<p class="sub2" style="margin-top:8px">「実際」は、あとで測った脈拍から計算した、その秒数ぶんの拍数です。</p>
+
+<h2 style="margin-top:22px">種明かし</h2>
+<p>あなたが答えた数を秒数で割って60倍すると、<b>あなたが自分の心拍数だと思っている値</b>が出ます。それを、実際に測った値と並べます。</p>
+<div class="vs">
+<div><div class="k">感じた数からの逆算</div><div class="v" id="vb"></div><div class="k">拍/分</div></div>
+<div><div class="k">さわって測った値</div><div class="v b" id="va"></div><div class="k">拍/分</div></div>
+</div>
+<div class="gap" id="gapbox"></div>
+
+<h2 style="margin-top:22px">この課題は、何を測っているのか</h2>
+<p>この「心拍計数課題」は1981年から40年以上使われてきました。ところが2018年、Zamariolaらが「このスコアは内受容感覚の正確さを測れていない」と報告します。成績が良い人は心臓を感じているのではなく、<b>自分の心拍数についての知識</b>と<b>秒数の見積り</b>で当てている、という指摘です。</p>
+<p style="margin-top:10px">反論も出ています（Ainley ら 2020、Schandry ら 2020）。論点は主に統計の扱い方で、決着はついていません。ただ、上の2つの数字が近かった人ほど、「感じていた」のか「知っていた」のかを自分では区別できない、というところは動きません。</p>
+<div class="gap" style="margin-top:14px"><b>中小企業の行動に置き換えると、こうなります。</b><br>現場から上がってくる「体感で1日2時間くらい」は、体感ではなく本人の思い込みの数字であることが多い。聞き取りで工数を集めた時点で、それは実測ではありません。1週間でいいので、実際に計ってから判断してください。</div>
+
+<div class="src">
+<div>出典1：Schandry, R. (1981). Heart beat perception and emotional experience. <i>Psychophysiology</i>, 18(4), 483–488.（査読済み）手順は「60秒の安静のあと、25秒・35秒・45秒の計数区間を30秒の休みをはさんで行う」。この画面はその並びをそのまま使っています。<br><a href="https://doi.org/10.1111/j.1469-8986.1981.tb02486.x">https://doi.org/10.1111/j.1469-8986.1981.tb02486.x</a></div>
+<div>出典2：正確さの式は 1 − |実際の拍数 − 申告した拍数| ÷ 実際の拍数。この画面もこの式をそのまま使っています。</div>
+<div>出典3：Zamariola, G., Maurage, P., Luminet, O., &amp; Corneille, O. (2018). Interoceptive accuracy scores from the heartbeat counting task are problematic: Evidence from simple bivariate correlations. <i>Biological Psychology</i>, 137, 12–17.（査読済み）<br><a href="https://doi.org/10.1016/j.biopsycho.2018.06.006">https://doi.org/10.1016/j.biopsycho.2018.06.006</a></div>
+<div>出典4：上への反論として Ainley, V. ら (2020) <i>Biological Psychology</i> 152 ほか。論争は継続中です。</div>
+<div>この画面の弱いところ：本来は心電計で1拍ずつ数えます。ここでは最後に手で測った脈拍を全区間に当てはめているので、区間ごとの心拍の揺れは反映されていません。数字は目安です。</div>
+</div>
+</div>
+
+</div>
+<script>
+function $(id){return document.getElementById(id)}
+function show(id){['s0','s1','s2','s3','s4'].forEach(function(s){$(s).classList.add('hide')});$(id).classList.remove('hide')}
+
+var SECS = [25,35,45];
+var reported = [];
+var idx = 0;
+var timer = null;
+
+function run(total, label, isRest, cb){
+  $('ph').textContent = label;
+  $('h1x').textContent = isRest ? '楽にして待ってください' : '感じた拍を数えてください';
+  $('p1x').textContent = isRest ? 'まだ数えなくて構いません。脈にはさわらないでください。' : '脈にはさわらないこと。秒数からの推測もしないこと。';
+  $('tm').className = 'timer' + (isRest ? ' rest' : '');
+  $('rg').parentNode.className = 'ring' + (isRest ? ' rest' : '');
+  var left = total;
+  $('tm').textContent = left;
+  $('rg').style.width = '100%';
+  show('s1');
+  clearInterval(timer);
+  timer = setInterval(function(){
+    left--;
+    $('tm').textContent = left;
+    $('rg').style.width = (left/total*100) + '%';
+    if(left <= 0){ clearInterval(timer); cb() }
+  }, 1000);
+}
+
+$('go').onclick = function(){ run(60, '安静 60秒', true, function(){ startInterval(0) }) };
+
+function startInterval(i){
+  idx = i;
+  run(SECS[i], '計数 ' + (i+1) + ' / 3　（' + SECS[i] + '秒）', false, function(){
+    $('ph2').textContent = '計数 ' + (i+1) + ' / 3　（' + SECS[i] + '秒）';
+    $('inp').value = '';
+    show('s2');
+    $('inp').focus();
+  });
+}
+
+$('nx').onclick = function(){
+  var v = parseInt($('inp').value, 10);
+  if(isNaN(v) || v < 0){ v = 0 }
+  reported[idx] = v;
+  if(idx < 2){
+    run(30, '休み 30秒', true, function(){ startInterval(idx+1) });
+  } else {
+    show('s3');
+  }
+};
+
+$('m30').onclick = function(){
+  $('m30').disabled = true;
+  $('tm3').classList.remove('hide');
+  $('rg3w').classList.remove('hide');
+  var left = 30;
+  $('tm3').textContent = left;
+  $('rg3').style.width = '100%';
+  var t = setInterval(function(){
+    left--;
+    $('tm3').textContent = left;
+    $('rg3').style.width = (left/30*100) + '%';
+    if(left <= 0){
+      clearInterval(t);
+      $('tm3').textContent = '終わり';
+      $('m3in').classList.remove('hide');
+      $('inp3').focus();
+    }
+  }, 1000);
+};
+
+$('fin').onclick = function(){
+  var beats30 = parseInt($('inp3').value, 10);
+  if(isNaN(beats30) || beats30 <= 0){ alert('30秒で数えた拍数を入れてください'); return }
+  var bpm = beats30 * 2;
+  var rows = '', sum = 0;
+  var totRep = 0, totSec = 0;
+  for(var i=0;i<3;i++){
+    var actual = bpm * SECS[i] / 60;
+    var a = 1 - Math.abs(actual - reported[i]) / actual;
+    sum += a;
+    totRep += reported[i]; totSec += SECS[i];
+    rows += '<tr><td>' + SECS[i] + '秒</td><td>' + reported[i] + '</td><td>' + actual.toFixed(1) + '</td><td>' + a.toFixed(2) + '</td></tr>';
+  }
+  var mean = sum/3;
+  var believed = totRep / totSec * 60;
+
+  show('s4');
+  $('tb').innerHTML = rows;
+  $('acc').textContent = mean.toFixed(2);
+  $('va').textContent = bpm;
+  $('vb').textContent = believed.toFixed(0);
+  $('h4').textContent = '実際の脈拍は1分あたり ' + bpm + ' 拍でした。';
+
+  var d = believed - bpm;
+  var pct = Math.abs(d) / bpm * 100;
+  var g;
+  if (pct <= 8) {
+    g = '2つの数字の差は ' + Math.abs(d).toFixed(0) + ' 拍（' + pct.toFixed(0) + '%）。ほぼ一致しています。ここで問題になるのは、これが「心臓を感じ取れた」からなのか、「自分の平常時の脈拍をだいたい知っていて、秒数から逆算できた」からなのか、あなた自身には区別がつかないことです。2018年の批判は、まさにここを突いています。';
+  } else if (d < 0) {
+    g = '感じた数からの逆算は、実際より ' + Math.abs(d).toFixed(0) + ' 拍（' + pct.toFixed(0) + '%）少なめでした。心拍計数課題では、この「少なめに出る」が最も多いパターンです。感じない拍は数えられないので、下振れします。正確さのスコアが低く出ても、感覚が鈍いとは限りません。';
+  } else {
+    g = '感じた数からの逆算は、実際より ' + d.toFixed(0) + ' 拍（' + pct.toFixed(0) + '%）多めでした。心臓以外の拍動（指先や耳の中の音、呼吸）を拾っている可能性があります。多めに出るのは比較的めずらしいパターンです。';
+  }
+  $('gapbox').innerHTML = g;
+};
+</script>
+</body>
+</html>

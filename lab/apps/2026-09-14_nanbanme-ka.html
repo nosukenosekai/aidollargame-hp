@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>何番目か</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;margin-top:10px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #c3d0ea}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px}
+.kpi{background:#fff;border:1.5px solid #e5e3dd;border-radius:12px;padding:11px 12px}
+.kpi.hi{border-color:#2563eb;background:#eef2fb}
+.kpi .k{font-size:11px;color:#6b6b6b;line-height:1.5}
+.kpi .v{font-size:25px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.35}
+.kpi.hi .v{color:#1d4ed8}
+.kpi .d{font-size:11px;font-variant-numeric:tabular-nums}
+.kpi .d.good{color:#15803d}
+.kpi .d.bad{color:#c2410c}
+.kpi .d.same{color:#8a8a8a}
+.row{display:flex;align-items:center;gap:9px;background:#fff;border:1.5px solid #e5e3dd;border-radius:12px;padding:9px 10px;margin-bottom:7px}
+.row.sib{border-color:#d9b98f;background:#fdf9f2}
+.row.pre{border-color:#9dbcf0}
+.row .tm{width:46px;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;color:#2563eb;flex:none}
+.row .nm{flex:1;min-width:0}
+.row .nm b{font-size:15px;display:block;line-height:1.4}
+.row .nm span{font-size:11px;color:#8a8a8a}
+.row .ar{display:flex;flex-direction:column;gap:3px;flex:none}
+.row .ar button{width:36px;height:23px;border:1.5px solid #ddd9d1;background:#fff;border-radius:7px;cursor:pointer;font-size:12px;line-height:1;color:#444;font-family:inherit;padding:0}
+.row .ar button:disabled{opacity:.3;cursor:default}
+.row .ar button:active{background:#eef2fb}
+.tag{display:inline-block;font-size:10px;padding:1px 6px;border-radius:5px;margin-left:5px;vertical-align:1px}
+.tag.sib{background:#f0dcc0;color:#7a5420}
+.tag.pre{background:#dbe6fa;color:#1d4ed8}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src div{margin-bottom:7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。生徒名・教室名はすべて架空です。</div>
+<h1>何番目か</h1>
+<div class="lead">ピアノ教室の発表会、12人の出番の順番だけを決める画面です。曲も会場も時間も変えません。順番だけで、保護者が会場に縛られる時間が1時間近く動きます。</div>
+
+<div class="card">
+<div class="step">いま決まっていること</div>
+<h2>開演 14:00　4月の発表会　12名</h2>
+<p class="sub2">1人あたり入退場に0.5分。休憩なし。保護者は自分の子の演奏が終わったら帰れる方式（最後まで残る決まりにしている教室では、この画面の数字は当てはまりません）。</p>
+<div class="kpis" style="margin-top:12px">
+<div class="kpi"><div class="k">終演時刻</div><div class="v" id="k1">--</div><div class="d same">順番を変えても1分も動きません</div></div>
+<div class="kpi hi"><div class="k">保護者10家庭の拘束時間の合計</div><div class="v" id="k2">--</div><div class="d" id="d2">--</div></div>
+<div class="kpi"><div class="k">未就学の子が出番まで待つ時間（最長）</div><div class="v" id="k3">--</div><div class="d" id="d3">--</div></div>
+<div class="kpi"><div class="k">きょうだいが出る2家庭の拘束時間</div><div class="v" id="k4">--</div><div class="d" id="d4">--</div></div>
+</div>
+</div>
+
+<div class="card">
+<div class="step">並べ替える</div>
+<h2>出番の順番</h2>
+<div id="list" style="margin-top:10px"></div>
+<button class="btn sub" id="p1">学年の昇順にする（よくある組み方）</button>
+<button class="btn sub" id="p2">曲の短い家庭から並べる</button>
+<button class="btn sub" id="p3">きょうだいを続けて出す</button>
+</div>
+
+<div class="card">
+<div class="step">いま起きていること</div>
+<div class="gap" id="gapbox"></div>
+<div class="warn" id="wbox"></div>
+</div>
+
+<div class="card">
+<h2>順番で変わるもの、変わらないもの</h2>
+<p>終演時刻は動きません。演奏時間の合計は足し算なので、どう並べても同じです。教室が順番を「学年の昇順」で決めてしまうのは、動かないものを見ているからです。</p>
+<p style="margin-top:10px">動くのは、<b>各家庭がいつ帰れるか</b>のほうです。ここは足し算ではなく、前に置いた人の長さが後ろ全員に積み上がります。短い家庭を前に置くと、積み上がる量そのものが減ります。会場費も謝礼も1円も増えません。</p>
+<div class="gap" style="margin-top:14px"><b>これは発表会だけの話ではありません。</b><br>順番を変えるだけで待ち時間の合計が減るのは、1つずつ順番に処理するもの全部に当てはまります。整体の予約枠、歯科のユニット、町工場の段取り、検査の呼び出し。短い仕事を前に置くと、後ろで待っている人の合計が縮みます。</p></div>
+</div>
+
+<div class="src">
+<div>この画面の計算：各家庭の拘束時間を「開演からその家庭の最後の子の演奏が終わるまで」として合計しています。短いものを先に処理すると待ち時間の合計が最小になるのは、スケジューリングで古くから知られた性質です（最短処理時間順）。この画面はその性質を、順番を手で動かして確かめられるようにしただけのものです。</div>
+<div>前提を変えると結論も変わります。保護者が最後まで残る決まりの教室では、全家庭の拘束時間が一律に終演までとなり、順番では動きません。また、出番の前に来場して待つ時間はここには入っていません。</div>
+</div>
+
+</div>
+<script>
+var P = [
+ {n:'井上 そうた', g:'年長', d:1.5, f:'A', pre:true},
+ {n:'三宅 ゆい',   g:'年中', d:2.0, f:'C', pre:true},
+ {n:'谷口 れん',   g:'小1', d:2.5, f:'B'},
+ {n:'井上 ひなた', g:'小2', d:4.5, f:'A'},
+ {n:'岸本 かえで', g:'小3', d:3.0, f:'D'},
+ {n:'沢田 りく',   g:'小4', d:7.5, f:'E'},
+ {n:'谷口 みお',   g:'小5', d:3.5, f:'B'},
+ {n:'堀 あおい',   g:'小6', d:2.5, f:'F'},
+ {n:'相馬 なぎさ', g:'中1', d:6.0, f:'G'},
+ {n:'三好 けい',   g:'中2', d:3.0, f:'H'},
+ {n:'川西 ともや', g:'中3', d:8.0, f:'I'},
+ {n:'大石 ふみ',   g:'高1', d:9.0, f:'J'}
+];
+var TURN = 0.5, START = 14*60;
+var order = P.map(function(_,i){return i});
+var base = null;
+
+function $(id){return document.getElementById(id)}
+function hhmm(min){ var h=Math.floor(min/60), m=Math.round(min%60); return h + ':' + (m<10?'0':'') + m }
+function mn(x){ return (Math.round(x*10)/10) }
+
+function calc(ord){
+  var t = 0, startOf = {}, endOf = {};
+  ord.forEach(function(pi){
+    t += TURN;
+    startOf[pi] = t;
+    t += P[pi].d;
+    endOf[pi] = t;
+  });
+  var famEnd = {};
+  ord.forEach(function(pi){
+    var f = P[pi].f;
+    if(famEnd[f] === undefined || endOf[pi] > famEnd[f]) famEnd[f] = endOf[pi];
+  });
+  var total = 0;
+  for(var f in famEnd){ total += famEnd[f] }
+  var preWait = 0;
+  ord.forEach(function(pi){ if(P[pi].pre && startOf[pi] > preWait) preWait = startOf[pi] });
+  var sib = famEnd['A'] + famEnd['B'];
+  return {end:t, total:total, preWait:preWait, sib:sib, startOf:startOf, endOf:endOf};
+}
+
+function diff(el, now, was, unit, lowerIsBetter){
+  var d = now - was;
+  var e = $(el);
+  if(Math.abs(d) < 0.05){ e.className = 'd same'; e.textContent = '学年の昇順と同じ'; return }
+  var better = lowerIsBetter ? d < 0 : d > 0;
+  e.className = 'd ' + (better ? 'good' : 'bad');
+  e.textContent = '学年の昇順より ' + mn(Math.abs(d)) + unit + (better ? '短い' : '長い');
+}
+
+function render(){
+  var c = calc(order);
+  if(base === null){ base = calc(P.map(function(_,i){return i})) }
+
+  $('k1').textContent = hhmm(START + c.end);
+  $('k2').textContent = mn(c.total) + '分';
+  $('k3').textContent = mn(c.preWait) + '分';
+  $('k4').textContent = mn(c.sib) + '分';
+  diff('d2', c.total, base.total, '分', true);
+  diff('d3', c.preWait, base.preWait, '分', true);
+  diff('d4', c.sib, base.sib, '分', true);
+
+  var h = '';
+  order.forEach(function(pi, k){
+    var p = P[pi];
+    var sibling = (p.f === 'A' || p.f === 'B');
+    h += '<div class="row' + (sibling ? ' sib' : (p.pre ? ' pre' : '')) + '">'
+      + '<div class="tm">' + hhmm(START + c.startOf[pi]) + '</div>'
+      + '<div class="nm"><b>' + p.n
+      + (sibling ? '<span class="tag sib">きょうだい</span>' : '')
+      + (p.pre ? '<span class="tag pre">未就学</span>' : '')
+      + '</b><span>' + p.g + '　演奏 ' + mn(p.d) + '分</span></div>'
+      + '<div class="ar"><button data-u="' + k + '"' + (k === 0 ? ' disabled' : '') + '>上へ</button>'
+      + '<button data-d="' + k + '"' + (k === order.length-1 ? ' disabled' : '') + '>下へ</button></div>'
+      + '</div>';
+  });
+  $('list').innerHTML = h;
+  Array.prototype.forEach.call($('list').querySelectorAll('button'), function(b){
+    b.onclick = function(){
+      var k;
+      if(b.dataset.u !== undefined){ k = +b.dataset.u; var t = order[k]; order[k] = order[k-1]; order[k-1] = t }
+      else { k = +b.dataset.d; var t2 = order[k]; order[k] = order[k+1]; order[k+1] = t2 }
+      render();
+    };
+  });
+
+  var saved = base.total - c.total;
+  var g;
+  if(Math.abs(saved) < 0.05){
+    g = '<b>いまは学年の昇順です。</b>10家庭の拘束時間の合計は ' + mn(c.total) + '分。この並びは動かない数字（終演時刻）だけを見て決めた並びで、動く数字はまだ一度も触られていません。下の「曲の短い家庭から並べる」を押してみてください。';
+  } else if(saved > 0){
+    g = '<b>保護者の合計 ' + mn(saved) + '分ぶんを、順番だけで返しました。</b>10家庭で割ると1家庭あたり ' + mn(saved/10) + '分。会場費も謝礼も1円も増えていません。演奏した曲も同じです。';
+  } else {
+    g = '<b>学年の昇順より ' + mn(-saved) + '分ぶん長くなりました。</b>長い曲の家庭を前に置くと、その長さが後ろの全家庭に積み上がります。1人を1つ前に出す判断が、9家庭の帰宅時刻を押します。';
+  }
+  $('gapbox').innerHTML = g;
+
+  var w;
+  if(c.preWait > 30){
+    w = '未就学の子が出番まで ' + mn(c.preWait) + '分待ちます。じっと座っていられる目安を超えています。保護者の合計を詰めることと、小さい子を前に出すことは、ここで正面からぶつかります。どちらを取るかは教室の判断です。この画面は決めてくれません。';
+  } else {
+    w = '未就学の子の待ち時間は最長 ' + mn(c.preWait) + '分。ここは無理がありません。きょうだいが出る2家庭は合計 ' + mn(c.sib) + '分の拘束です。2人を離して置くと、その家庭だけが二度待ちになります。';
+  }
+  $('wbox').innerHTML = w;
+}
+
+$('p1').onclick = function(){ order = P.map(function(_,i){return i}); render() };
+$('p2').onclick = function(){
+  var fam = {};
+  P.forEach(function(p,i){ fam[p.f] = (fam[p.f] || 0) + p.d + TURN });
+  var fs = Object.keys(fam).sort(function(a,b){ return fam[a] - fam[b] });
+  order = [];
+  fs.forEach(function(f){ P.forEach(function(p,i){ if(p.f === f) order.push(i) }) });
+  render();
+};
+$('p3').onclick = function(){
+  var seen = {}, o = [];
+  order.forEach(function(pi){
+    var f = P[pi].f;
+    if(seen[f]) return;
+    seen[f] = 1;
+    order.forEach(function(qi){ if(P[qi].f === f) o.push(qi) });
+  });
+  order = o;
+  render();
+};
+
+render();
+</script>
+</body>
+</html>

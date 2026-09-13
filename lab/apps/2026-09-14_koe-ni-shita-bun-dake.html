@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>声にした分だけ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #c3d0ea}
+.btn:disabled{background:#c9c6bf;cursor:default}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.stage{min-height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.word{font-size:52px;font-weight:700;text-align:center;letter-spacing:.08em}
+.word.aloud{color:#2563eb}
+.cue{font-size:15px;font-weight:600;margin-bottom:18px;letter-spacing:.04em}
+.cue.aloud{color:#2563eb}
+.cue.silent{color:#8a8a8a}
+.counter{font-size:12px;color:#8a8a8a;text-align:center;letter-spacing:.1em;margin-top:22px}
+.bar{height:5px;background:#eeece6;border-radius:3px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:#2563eb;width:0}
+.timer{font-size:54px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center}
+.two{display:flex;gap:10px;margin-top:16px}
+.two .btn{margin-top:0}
+.legendrow{display:flex;gap:14px;font-size:13px;margin-top:10px}
+.legendrow span{display:flex;align-items:center;gap:6px}
+.sw{width:13px;height:13px;border-radius:4px;display:inline-block}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+.crow{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.crow .lb{width:96px;font-size:13px;color:#444;flex:none}
+.crow .bw{flex:1;height:24px;background:#eeece6;border-radius:6px;overflow:hidden}
+.crow .bw i{display:block;height:100%;background:#2563eb}
+.crow .bw.g i{background:#9a958c}
+.crow .bw.r i{background:#c2410c}
+.crow .vv{width:52px;text-align:right;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;flex:none}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src a{color:#2563eb;word-break:break-all}
+.src div{margin-bottom:7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">サンプルデータではありません。ここに出る数字は、いまあなたが実際に声に出した語と、黙って読んだ語の、あなた自身の成績です。比べる相手は2010年の論文です。</div>
+<h1>声にした分だけ</h1>
+<div class="lead">24語を1語ずつ見ます。青い語は声に出して読み、白い語は黙って読みます。あとで、どちらが残っているかを数えます。</div>
+
+<div class="card" id="s0">
+<div class="step">はじめに</div>
+<h2>声を出せる場所にいますか</h2>
+<p>この実験は、実際に口から音を出さないと成立しません。小声で構いませんが、心の中で読むのは「黙読」と同じ扱いになります。</p>
+<div class="legendrow">
+<span><i class="sw" style="background:#2563eb"></i>青い語 = 声に出す</span>
+<span><i class="sw" style="background:#cfcbc2"></i>黒い語 = 黙って読む</span>
+</div>
+<p style="margin-top:12px" class="sub2">1語あたり2.4秒で自動で進みます。全24語で約1分。そのあと20秒の妨害課題と、48語の記憶テストがあります。合計4分ほどです。</p>
+<button class="btn" id="go">はじめる</button>
+</div>
+
+<div class="card hide" id="s1">
+<div class="step">1 / 3　おぼえる</div>
+<div class="stage">
+<div class="cue" id="cue">&nbsp;</div>
+<div class="word" id="w">&nbsp;</div>
+</div>
+<div class="counter" id="cnt"></div>
+<div class="bar"><i id="pb"></i></div>
+</div>
+
+<div class="card hide" id="s2">
+<div class="step">2 / 3　じゃまをする</div>
+<h2>100から3ずつ引いてください</h2>
+<p class="sub2">声に出しても、心の中でも構いません。直前に見た語が頭に残ったままテストに入るのを防ぐための時間です。</p>
+<div class="timer" id="t2" style="margin-top:18px">20</div>
+</div>
+
+<div class="card hide" id="s3">
+<div class="step">3 / 3　思い出す</div>
+<h2>この語は、さっき出ましたか</h2>
+<div class="stage" style="min-height:200px">
+<div class="word" id="tw">&nbsp;</div>
+</div>
+<div class="two">
+<button class="btn" id="yes">出た</button>
+<button class="btn sub" id="no">出てない</button>
+</div>
+<div class="counter" id="tcnt"></div>
+<div class="bar"><i id="tpb"></i></div>
+</div>
+
+<div class="card hide" id="s4">
+<div class="step">結果</div>
+<h2 id="h4"></h2>
+<div id="bars" style="margin-top:14px"></div>
+<div class="legendrow"><span class="sub2">正しく「出た」と答えられた割合（12語中）。いちばん下は、一度も出ていない24語をうっかり「出た」と答えた割合です。</span></div>
+<div class="res"><div class="sub2">声に出した語 − 黙って読んだ語</div><div class="big" id="dv"></div><div class="sub2" id="dvs"></div></div>
+<div class="gap" id="gapbox"></div>
+<div class="warn" id="wbox"></div>
+<h2 style="margin-top:22px">この実験でいちばん意外なところ</h2>
+<p>「じゃあ全部声に出せばいい」は、間違いです。MacLeodらは8つの実験でそこを潰しています。1人の中で声と黙読を<b>混ぜた</b>ときは差が出る（実験3A：差 .133）。ところが人を分けて、片方は100語ぜんぶ音読、片方は100語ぜんぶ黙読にすると、差は .032 に落ちて統計的に消えます（実験3B）。</p>
+<p style="margin-top:10px">効いているのは声そのものではなく、<b>まわりと違うこと</b>です。全部を声にすると、違いが消えて効果も消える。</p>
+<div class="gap" style="margin-top:14px"><b>中小企業の行動に置き換えると、こうなります。</b><br>朝礼でマニュアルを全文読み上げても記憶には残りません。今日だけ守ってほしい2行を選んで、そこだけ声に出させる。残りは黙読で配る。読み上げる量を減らすほうが、残る量は増えます。</div>
+
+<div class="src">
+<div>出典1：MacLeod, C. M., Gopie, N., Hourihan, K. L., Neary, K. R., &amp; Ozubko, J. D. (2010). The Production Effect: Delineation of a Phenomenon. <i>Journal of Experimental Psychology: Learning, Memory, and Cognition</i>, 36(3), 671–685.（査読済み）<br><a href="https://doi.org/10.1037/a0018785">https://doi.org/10.1037/a0018785</a></div>
+<div>本文から直接引いた数字：音読語は黙読語より再認のヒット率が「10%〜20%」高い（論文中の表現は on the order of a 12%–20% increase in hits）。実験3Aの被験者内条件で差 .133、実験3Bの被験者間条件で差 .032（有意差なし）。</div>
+<div>注意：この画面の実験は語数が24語（論文は実験により40〜100語）、提示速度も簡略化しています。1回やっただけの個人の成績は偶然で大きく振れます。数値が論文と食い違っても、それは論文が間違っている証拠にはなりません。</div>
+<div>参考：MacLeod, C. M., &amp; Bodner, G. E. (2017). The Production Effect in Memory. <i>Current Directions in Psychological Science</i>, 26(4), 390–395. の解説も同じ結論です。</div>
+</div>
+</div>
+
+</div>
+<script>
+var POOL = ['机','帽子','電車','みかん','鉛筆','手紙','靴下','時計','橋','牛乳','鏡','封筒',
+'毛布','階段','包丁','はがき','石けん','はしご','長ぐつ','眼鏡','座ぶとん','きゅうす','うちわ','ほうき',
+'煙突','柱','傘','鍵','皿','はし','枕','かばん','財布','椅子','屋根','看板',
+'花瓶','茶わん','ぞうきん','太鼓','電球','はさみ','手袋','バケツ','たんす','定規','玄関','湯のみ'];
+
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function $(id){return document.getElementById(id)}
+function show(id){['s0','s1','s2','s3','s4'].forEach(function(s){$(s).classList.add('hide')});$(id).classList.remove('hide')}
+
+var deck = shuffle(POOL);
+var studied = deck.slice(0,24);
+var lures = deck.slice(24,48);
+var aloudSet = {}, silentSet = {};
+shuffle(studied).forEach(function(w,i){ if(i<12){aloudSet[w]=1}else{silentSet[w]=1} });
+var studyOrder = shuffle(studied);
+var testOrder = shuffle(studied.concat(lures));
+var answers = {};
+
+$('go').onclick = function(){ show('s1'); studyStep(0) };
+
+function studyStep(i){
+  if(i >= studyOrder.length){ show('s2'); distract(20); return }
+  var w = studyOrder[i], isAloud = !!aloudSet[w];
+  $('cue').textContent = isAloud ? '声に出して読む' : '黙って読む';
+  $('cue').className = 'cue ' + (isAloud ? 'aloud' : 'silent');
+  $('w').textContent = w;
+  $('w').className = 'word ' + (isAloud ? 'aloud' : '');
+  $('cnt').textContent = (i+1) + ' / ' + studyOrder.length;
+  $('pb').style.width = ((i+1)/studyOrder.length*100) + '%';
+  setTimeout(function(){
+    $('w').textContent = ' '; $('cue').innerHTML = '&nbsp;';
+    setTimeout(function(){ studyStep(i+1) }, 400);
+  }, 2400);
+}
+
+function distract(n){
+  $('t2').textContent = n;
+  if(n <= 0){ show('s3'); testStep(0); return }
+  setTimeout(function(){ distract(n-1) }, 1000);
+}
+
+var ti = 0;
+function testStep(i){
+  ti = i;
+  if(i >= testOrder.length){ finish(); return }
+  $('tw').textContent = testOrder[i];
+  $('tcnt').textContent = (i+1) + ' / ' + testOrder.length;
+  $('tpb').style.width = ((i+1)/testOrder.length*100) + '%';
+}
+$('yes').onclick = function(){ answers[testOrder[ti]] = true; testStep(ti+1) };
+$('no').onclick  = function(){ answers[testOrder[ti]] = false; testStep(ti+1) };
+
+function finish(){
+  var ha = 0, hs = 0, fa = 0;
+  studied.forEach(function(w){ if(answers[w]){ if(aloudSet[w]) ha++; else hs++ } });
+  lures.forEach(function(w){ if(answers[w]) fa++ });
+  var pa = ha/12, ps = hs/12, pf = fa/24;
+  var diff = Math.round((pa - ps) * 1000) / 10;
+
+  show('s4');
+  $('h4').textContent = '声に出した12語のうち ' + ha + '語、黙って読んだ12語のうち ' + hs + '語を、正しく思い出しました。';
+
+  function row(label, val, cls, txt){
+    return '<div class="crow"><div class="lb">' + label + '</div><div class="bw ' + cls + '"><i style="width:' + (val*100) + '%"></i></div><div class="vv">' + txt + '</div></div>';
+  }
+  $('bars').innerHTML =
+    row('声に出した', pa, '', ha + '/12') +
+    row('黙って読んだ', ps, 'g', hs + '/12') +
+    row('出ていない語', pf, 'r', fa + '/24');
+
+  $('dv').textContent = (diff > 0 ? '+' : '') + diff.toFixed(1) + ' ポイント';
+  $('dvs').textContent = '論文が報告した幅は 10〜20ポイント（音読が上）です。';
+
+  var g;
+  if (diff >= 10) {
+    g = '<b>論文と同じ向き・同じ大きさで出ました。</b>声に出した語のほうが ' + diff.toFixed(1) + ' ポイント多く残っています。10〜20ポイントという報告の幅に入りました。';
+  } else if (diff > 0) {
+    g = '<b>向きは論文と同じですが、幅は小さめです（' + diff.toFixed(1) + 'ポイント）。</b>24語1回きりなので、1語の当たり外れが8.3ポイント動きます。この規模では珍しくありません。';
+  } else if (diff === 0) {
+    g = '<b>差が出ませんでした。</b>24語1回きりの試行では十分ありえます。論文の実験は1人あたり40〜100語で、しかも多数の被験者の平均です。';
+  } else {
+    g = '<b>逆向きに出ました（黙読のほうが ' + Math.abs(diff).toFixed(1) + 'ポイント上）。</b>これも1回きりでは起こります。声を出し忘れた語があった場合も、こうなります。';
+  }
+  $('gapbox').innerHTML = g;
+
+  var w;
+  if (fa >= 8) {
+    w = '出ていない24語のうち ' + fa + '語を「出た」と答えています（' + Math.round(pf*100) + '%）。誤警報が多いときは、ヒット率そのものも高く出ます。声と黙読の差のほうが、ヒット率の絶対値より信用できる数字です。';
+  } else {
+    w = '出ていない24語のうち「出た」と答えたのは ' + fa + '語（' + Math.round(pf*100) + '%）でした。当てずっぽうで押していないので、上の2本の差は読む価値があります。';
+  }
+  $('wbox').innerHTML = w;
+}
+</script>
+</body>
+</html>

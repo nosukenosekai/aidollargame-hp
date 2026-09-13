@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>伏せた席次</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #c3d0ea}
+.btn.dark{background:#3c3a35}
+.btn:disabled{background:#c9c6bf;cursor:default;color:#fff;border:0}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.handoff{background:#3c3a35;color:#fff;border-radius:14px;padding:34px 18px;text-align:center;margin-bottom:14px}
+.handoff .big{color:#fff;font-size:28px}
+.handoff .sub2{color:#c9c6bf;margin-top:10px}
+.handoff .btn{background:#fff;color:#3c3a35;margin-top:22px}
+.glist{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.g{border:1.5px solid #ddd9d1;background:#fff;border-radius:11px;padding:9px 11px;font-size:14px;cursor:pointer;font-family:inherit;text-align:left;line-height:1.35}
+.g b{display:block;font-size:15px}
+.g span{font-size:11px;color:#8a8a8a}
+.g.on{border-color:#2563eb;background:#eef2fb}
+.g.on b{color:#1d4ed8}
+.g.pick{border-color:#c2410c;background:#fdf1ea}
+.g:disabled{opacity:.4;cursor:default}
+.pairs{margin-top:10px}
+.pair{display:flex;align-items:center;justify-content:space-between;background:#fdf1ea;border-radius:10px;padding:9px 12px;font-size:14px;margin-bottom:7px}
+.pair button{background:none;border:0;color:#c2410c;font-size:13px;cursor:pointer;font-family:inherit;padding:2px 4px}
+.cap{font-size:12px;color:#8a8a8a;margin-top:6px}
+.tbl{background:#fff;border:1.5px solid #e5e3dd;border-radius:12px;padding:12px;margin-bottom:9px}
+.tbl.main{border-color:#2563eb;background:#eef2fb}
+.tbl .tn{font-size:12px;color:#6b6b6b;letter-spacing:.06em;margin-bottom:6px}
+.tbl.main .tn{color:#1d4ed8;font-weight:700}
+.tbl .seat{font-size:15px;padding:3px 0}
+.tbl .seat span{font-size:11px;color:#8a8a8a;margin-left:6px}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+.lock{background:#3c3a35;color:#fff;border-radius:12px;padding:16px;margin-top:14px}
+.lock .sub2{color:#c9c6bf}
+.lock .btn{background:#fff;color:#3c3a35}
+.reveal{background:#fff;border-radius:10px;padding:12px;margin-top:12px;font-size:14px;color:#1a1a1a}
+.reveal .rl{font-size:12px;color:#6b6b6b;letter-spacing:.06em;margin:10px 0 4px}
+.reveal .rl:first-child{margin-top:0}
+.reveal div.it{padding:4px 0;border-bottom:1px solid #f0eee9}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src div{margin-bottom:7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。招待客の名前はすべて架空です。</div>
+<h1>伏せた席次</h1>
+<div class="lead">両家が「この2人は同じ卓にしないでほしい」と「この人を新郎新婦のすぐ前に」を、相手に見せずに入れます。ぶつかった件数だけが両家に出て、中身は式場担当しか開けません。</div>
+
+<div class="card" id="s0">
+<div class="step">はじめに</div>
+<h2>この画面は、2人以上いないと動きません</h2>
+<p>1台の端末を、新郎側の方と新婦側の方に順番に渡してください。あとから入力する側に、先に入力した内容は一切表示されません。</p>
+<p style="margin-top:10px" class="sub2">披露宴は4卓、1卓3席。1卓が新郎新婦のすぐ前です。招待客は両家6名ずつの計12名。</p>
+<button class="btn" id="go">はじめる</button>
+</div>
+
+<div class="handoff hide" id="h1">
+<div class="big" id="hbig"></div>
+<div class="sub2" id="hsub"></div>
+<button class="btn" id="hgo">受け取りました</button>
+</div>
+
+<div class="card hide" id="s1">
+<div class="step" id="sidelabel"></div>
+<h2>1. 新郎新婦のすぐ前（1卓）に座らせたい方</h2>
+<p class="sub2">2名まで選べます。1卓は3席しかありません。</p>
+<div class="glist" id="nomlist"></div>
+<div class="cap" id="nomcap"></div>
+
+<h2 style="margin-top:22px">2. 同じ卓にしたくない組</h2>
+<p class="sub2">お名前を2つ続けて押すと1組になります。2組まで。理由は聞きません。</p>
+<div class="glist" id="nglist"></div>
+<div class="pairs" id="pairbox"></div>
+<div class="cap" id="ngcap"></div>
+
+<button class="btn" id="done">入力を終える</button>
+<p class="sub2" style="margin-top:10px;text-align:center">押すと画面が消えます。あとから見返すことはできません。</p>
+</div>
+
+<div class="card hide" id="s2">
+<div class="step">突き合わせ</div>
+<h2 id="h2t"></h2>
+<div class="res"><div class="sub2">両家の希望のうち、そのまま通せなかったもの</div><div class="big" id="cn"></div><div class="sub2" id="cns"></div></div>
+<h2 style="margin-top:22px">席次案</h2>
+<div id="chart"></div>
+<div class="gap" id="gapbox"></div>
+
+<div class="lock">
+<div class="big" style="font-size:20px">この先は式場担当だけが開きます</div>
+<div class="sub2">どちらの家が何を出したか、どの希望が通らなかったかが入っています。両家には見せないでください。</div>
+<button class="btn" id="unlock">担当者として開く</button>
+<div class="reveal hide" id="rev"></div>
+</div>
+
+<div class="src">
+<div>この画面がしていること：両家が伏せて出した希望を、片方だけに見えない形で受け取り、4卓×3席の組み合わせを4000通り試して、破れる希望がいちばん少ない案を選んでいます。同席を避ける希望を10点、1卓の希望を5点として重みづけしています。</div>
+<div>実際の披露宴では、卓数・席数・上座の考え方が式場ごとに違います。この画面は4卓3席に固定した簡略版です。</div>
+<div>入力した内容はこの端末の画面の中だけにあり、どこにも送信されず、再読み込みで消えます。</div>
+</div>
+</div>
+
+</div>
+<script>
+var GUESTS = [
+ {n:'佐野 健一', r:'新郎の上司', s:'g'},
+ {n:'林 まさる', r:'新郎の前職の同僚', s:'g'},
+ {n:'高木 ゆかり', r:'新郎のいとこ', s:'g'},
+ {n:'大西 とおる', r:'新郎の大学の友人', s:'g'},
+ {n:'池田 さとみ', r:'新郎の叔母', s:'g'},
+ {n:'森 やすし', r:'新郎の父の知人', s:'g'},
+ {n:'中村 あきこ', r:'新婦の高校の友人', s:'b'},
+ {n:'白石 ひろみ', r:'新婦の前職の先輩', s:'b'},
+ {n:'岡田 けんじ', r:'新婦の叔父', s:'b'},
+ {n:'三浦 なな', r:'新婦の大学の友人', s:'b'},
+ {n:'吉野 たえ', r:'新婦の祖母', s:'b'},
+ {n:'内田 りく', r:'新婦のいとこ', s:'b'}
+];
+var SIDE = {g:'新郎側', b:'新婦側'};
+var data = {g:{nom:[], ng:[]}, b:{nom:[], ng:[]}};
+var cur = 'g';
+var picking = null;
+
+function $(id){return document.getElementById(id)}
+function hideAll(){['s0','h1','s1','s2'].forEach(function(s){$(s).classList.add('hide')})}
+function show(id){hideAll();$(id).classList.remove('hide')}
+function myIdx(side){var a=[];GUESTS.forEach(function(g,i){if(g.s===side)a.push(i)});return a}
+
+$('go').onclick = function(){ handoff('g') };
+
+function handoff(side){
+  cur = side;
+  $('hbig').textContent = SIDE[side] + 'の方に端末を渡してください';
+  $('hsub').textContent = side === 'b' ? '新郎側が入れた内容は、この先どこにも表示されません。' : 'この先の入力は、新婦側には見えません。';
+  show('h1');
+}
+$('hgo').onclick = function(){ render() };
+
+function render(){
+  picking = null;
+  $('sidelabel').textContent = SIDE[cur] + 'の入力';
+  var mine = myIdx(cur);
+  var nl = '', gl = '';
+  mine.forEach(function(i){
+    var g = GUESTS[i];
+    var onN = data[cur].nom.indexOf(i) >= 0;
+    nl += '<button class="g' + (onN?' on':'') + '" data-n="' + i + '"><b>' + g.n + '</b><span>' + g.r + '</span></button>';
+    gl += '<button class="g" data-g="' + i + '"><b>' + g.n + '</b><span>' + g.r + '</span></button>';
+  });
+  $('nomlist').innerHTML = nl;
+  $('nglist').innerHTML = gl;
+  $('nomcap').textContent = data[cur].nom.length + ' / 2 名を選択中';
+  drawPairs();
+  show('s1');
+
+  Array.prototype.forEach.call($('nomlist').children, function(b){
+    b.onclick = function(){
+      var i = +b.dataset.n, a = data[cur].nom, p = a.indexOf(i);
+      if(p >= 0){ a.splice(p,1) } else { if(a.length >= 2) return; a.push(i) }
+      render();
+    };
+  });
+  Array.prototype.forEach.call($('nglist').children, function(b){
+    b.onclick = function(){
+      var i = +b.dataset.g;
+      if(data[cur].ng.length >= 2) return;
+      if(picking === null){ picking = i; b.classList.add('pick'); return }
+      if(picking === i){ picking = null; b.classList.remove('pick'); return }
+      data[cur].ng.push([picking, i]);
+      picking = null;
+      render();
+    };
+  });
+}
+
+function drawPairs(){
+  var h = '';
+  data[cur].ng.forEach(function(p, k){
+    h += '<div class="pair"><span>' + GUESTS[p[0]].n + '　と　' + GUESTS[p[1]].n + '</span><button data-k="' + k + '">取り消す</button></div>';
+  });
+  $('pairbox').innerHTML = h;
+  $('ngcap').textContent = data[cur].ng.length + ' / 2 組';
+  Array.prototype.forEach.call($('pairbox').querySelectorAll('button'), function(b){
+    b.onclick = function(){ data[cur].ng.splice(+b.dataset.k, 1); render() };
+  });
+}
+
+$('done').onclick = function(){
+  if(cur === 'g'){ handoff('b') } else { solve() }
+};
+
+function solve(){
+  var noms = data.g.nom.concat(data.b.nom);
+  var ngs = data.g.ng.concat(data.b.ng);
+  var best = null, bestP = 1e9;
+  for(var t=0;t<4000;t++){
+    var order = [0,1,2,3,4,5,6,7,8,9,10,11];
+    for(var i=11;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var x=order[i];order[i]=order[j];order[j]=x }
+    var tbl = {};
+    order.forEach(function(g, k){ tbl[g] = Math.floor(k/3) });
+    var p = 0;
+    ngs.forEach(function(pair){ if(tbl[pair[0]] === tbl[pair[1]]) p += 10 });
+    noms.forEach(function(n){ if(tbl[n] !== 0) p += 5 });
+    if(p < bestP){ bestP = p; best = tbl; if(p === 0) break }
+  }
+
+  var missedNom = noms.filter(function(n){ return best[n] !== 0 });
+  var brokenNg = ngs.filter(function(pr){ return best[pr[0]] === best[pr[1]] });
+  var total = missedNom.length + brokenNg.length;
+
+  show('s2');
+  $('h2t').textContent = '両家の入力を突き合わせました。';
+  $('cn').textContent = total + ' 件';
+  $('cns').textContent = total === 0
+    ? '両家の希望はすべて通りました。調整は要りません。'
+    : '内訳は式場担当だけが見られます。両家には件数だけをお伝えください。';
+
+  var tables = [[],[],[],[]];
+  for(var g in best){ tables[best[g]].push(+g) }
+  var ch = '';
+  tables.forEach(function(list, ti){
+    ch += '<div class="tbl' + (ti===0?' main':'') + '"><div class="tn">' + (ti===0 ? '1卓　新郎新婦のすぐ前' : (ti+1) + '卓') + '</div>';
+    list.forEach(function(gi){
+      ch += '<div class="seat">' + GUESTS[gi].n + '<span>' + GUESTS[gi].r + '</span></div>';
+    });
+    ch += '</div>';
+  });
+  $('chart').innerHTML = ch;
+
+  var gp;
+  if(total === 0){
+    gp = '<b>今回はぶつかりませんでした。</b>ただし両家が1卓に2名ずつ出すと、3席に4名ぶんの希望が集まって必ず1件あふれます。もう一度、両家が2名ずつ出して試してみてください。';
+  } else if(missedNom.length > 0 && brokenNg.length === 0){
+    gp = '<b>1卓の希望があふれました。</b>3席に対して ' + noms.length + ' 名ぶんの希望が出ています。ここで「どちらの家が下がるか」を両家に直接話させると、断りにくさだけが残ります。件数だけ伝えて、誰を動かすかは式場から提案してください。';
+  } else {
+    gp = '<b>同席を避ける希望が ' + brokenNg.length + ' 件通りませんでした。</b>4卓3席では、避けたい組が多いと物理的に収まりません。卓を増やすか、席数を変えるかの判断が要ります。理由を両家に聞き返さないでください。';
+  }
+  $('gapbox').innerHTML = gp;
+
+  $('unlock').onclick = function(){
+    var r = '';
+    ['g','b'].forEach(function(s){
+      r += '<div class="rl">' + SIDE[s] + 'が出した 1卓の希望</div>';
+      if(data[s].nom.length === 0){ r += '<div class="it">なし</div>' }
+      data[s].nom.forEach(function(n){
+        r += '<div class="it">' + GUESTS[n].n + '　' + (best[n] === 0 ? '通った' : (best[n]+1) + '卓に移動') + '</div>';
+      });
+      r += '<div class="rl">' + SIDE[s] + 'が出した 同席を避ける組</div>';
+      if(data[s].ng.length === 0){ r += '<div class="it">なし</div>' }
+      data[s].ng.forEach(function(pr){
+        r += '<div class="it">' + GUESTS[pr[0]].n + ' と ' + GUESTS[pr[1]].n + '　' + (best[pr[0]] === best[pr[1]] ? '同じ卓になってしまった' : '離せた') + '</div>';
+      });
+    });
+    $('rev').innerHTML = r;
+    $('rev').classList.remove('hide');
+    $('unlock').disabled = true;
+    $('unlock').textContent = '開きました';
+  };
+}
+</script>
+</body>
+</html>

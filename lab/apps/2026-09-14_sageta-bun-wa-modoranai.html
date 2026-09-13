@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>下げた分は戻らない</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.fld{margin-bottom:16px}
+.fld .lb{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;margin-bottom:2px}
+.fld .lb b{font-size:19px;font-variant-numeric:tabular-nums;color:#1d4ed8}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:30px;background:transparent;cursor:pointer}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:#e5e3dd;border-radius:3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#2563eb;margin-top:-10px;border:3px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+input[type=range]::-moz-range-track{height:6px;background:#e5e3dd;border-radius:3px}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#2563eb;border:3px solid #fff}
+.segs{display:flex;gap:6px;margin-top:4px}
+.segs button{flex:1;border:1.5px solid #ddd9d1;background:#fff;border-radius:10px;padding:9px 0;font-size:14px;cursor:pointer;font-family:inherit;font-variant-numeric:tabular-nums}
+.segs button.on{border-color:#2563eb;background:#eef2fb;color:#1d4ed8;font-weight:700}
+.two{display:flex;gap:10px;margin-top:4px}
+.plan{flex:1;border:1.5px solid #e5e3dd;border-radius:12px;padding:13px 12px;background:#fff}
+.plan.win{border-color:#2563eb;background:#eef2fb}
+.plan .pn{font-size:13px;font-weight:700;margin-bottom:2px}
+.plan.win .pn{color:#1d4ed8}
+.plan .pv{font-size:25px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.35}
+.plan .pd{font-size:11px;color:#6b6b6b;line-height:1.55;margin-top:4px}
+.badge{display:inline-block;font-size:10px;background:#2563eb;color:#fff;padding:1px 7px;border-radius:5px;margin-left:4px;vertical-align:2px}
+.chart{margin-top:16px}
+svg{width:100%;height:auto;display:block}
+.legendrow{display:flex;gap:14px;font-size:12px;margin-top:6px;color:#6b6b6b;flex-wrap:wrap}
+.legendrow span{display:flex;align-items:center;gap:5px}
+.sw{width:14px;height:3px;border-radius:2px;display:inline-block}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src div{margin-bottom:7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）。物件は架空です。相場の予測はしません。入れた条件どおりに計算するだけの画面です。</div>
+<h1>下げた分は戻らない</h1>
+<div class="lead">空室が出たとき、家賃を下げるか、下げずに待つか。2つの先を並べます。空室は1回きりの損ですが、下げた家賃は入居している間ずっと続きます。どこで逆転するかを出します。</div>
+
+<div class="card">
+<div class="step">条件</div>
+<div class="fld"><div class="lb"><span>いまの募集家賃</span><b id="v1"></b></div><input type="range" id="r1" min="40000" max="200000" step="1000" value="80000"></div>
+<div class="fld"><div class="lb"><span>下げるとしたら、いくら下げる</span><b id="v2"></b></div><input type="range" id="r2" min="0" max="30000" step="1000" value="5000"></div>
+<div class="fld"><div class="lb"><span>下げずに待つと、決まるまで</span><b id="v3"></b></div><input type="range" id="r3" min="1" max="12" step="1" value="4"></div>
+<div class="fld"><div class="lb"><span>下げれば、決まるまで</span><b id="v4"></b></div><input type="range" id="r4" min="0" max="6" step="1" value="1"></div>
+<div class="fld" style="margin-bottom:0"><div class="lb"><span>この先どこまでで見るか</span><b id="v5"></b></div>
+<div class="segs" id="segs">
+<button data-h="12">1年</button><button data-h="24">2年</button><button data-h="36" class="on">3年</button><button data-h="60">5年</button><button data-h="120">10年</button>
+</div></div>
+</div>
+
+<div class="card">
+<div class="step">2つの先</div>
+<div class="two">
+<div class="plan" id="pA"><div class="pn" id="nA">下げる</div><div class="pv" id="aA"></div><div class="pd" id="dA"></div></div>
+<div class="plan" id="pB"><div class="pn" id="nB">下げずに待つ</div><div class="pv" id="aB"></div><div class="pd" id="dB"></div></div>
+</div>
+<div class="chart">
+<svg viewBox="0 0 320 160" preserveAspectRatio="none" id="sv"></svg>
+<div class="legendrow">
+<span><i class="sw" style="background:#2563eb"></i>下げる</span>
+<span><i class="sw" style="background:#c2410c"></i>下げずに待つ</span>
+<span id="xl"></span>
+</div>
+</div>
+<div class="res"><div class="sub2">立場が入れ替わるのは</div><div class="big" id="cross"></div><div class="sub2" id="crosss"></div></div>
+<div class="gap" id="gapbox"></div>
+<div class="warn" id="wbox"></div>
+</div>
+
+<div class="card">
+<div class="step">同じ条件を、年ごとに</div>
+<table><thead><tr><th>経過</th><th>下げる</th><th>下げずに待つ</th><th>差</th></tr></thead><tbody id="tb"></tbody></table>
+<p class="sub2" style="margin-top:8px">累計の家賃収入です。プラスは「下げる」が上回っている額。</p>
+</div>
+
+<div class="card">
+<h2>この画面が言えること、言えないこと</h2>
+<p><b>言えること。</b>空室の損は1回で終わり、値下げの損は毎月続く。だから短い期間で見れば必ず値下げが勝ち、長く見れば必ず待ちが勝ちます。争点は「どちらが得か」ではなく「あと何年持つ物件か」です。</p>
+<p style="margin-top:10px"><b>言えないこと。</b>下げれば本当に早く決まるのか。ここは入れた数字を信じて計算しているだけで、この画面は何も知りません。管理会社の反響データを見ずにこの数字を動かすと、ただの願望になります。</p>
+<div class="gap" style="margin-top:14px"><b>オーナーに渡すなら、ここを先に埋めてください。</b><br>「下げずに待つと何ヶ月か」は、その物件の問い合わせ件数と内見数から出ます。手元にその2つがないうちは、逆転月の話をしても意味がありません。逆に、この2つを持っている管理会社だけが、値下げを断る根拠を持てます。</div>
+</div>
+
+<div class="src">
+<div>計算の中身：下げる案は「空室◯ヶ月のあと、下げた家賃が期間の終わりまで続く」。下げない案は「空室◯ヶ月のあと、いまの家賃が期間の終わりまで続く」。どちらも期間中に退去はない前提です。</div>
+<div>入れていないもの：更新料、広告料、原状回復費、空室中の管理コストと水道光熱費、税金、金利、家賃の下落そのもの。次の退去時に家賃を戻せる可能性も入れていません（戻せない前提で計算しています）。これらを入れると逆転月は動きます。</div>
+<div>この画面は入力された条件どおりに四則演算をするだけで、相場・空室率・成約率の予測は一切していません。</div>
+</div>
+
+</div>
+<script>
+function $(id){return document.getElementById(id)}
+var H = 36;
+function man(y){ return (Math.round(y/1000)/10).toFixed(1) + '万円' }
+function yen(y){ return y.toLocaleString('ja-JP') + '円' }
+
+function cum(n, vac, rent){ return Math.max(0, n - vac) * rent }
+
+function draw(){
+  var R = +$('r1').value, D = +$('r2').value, mB = +$('r3').value, mA = +$('r4').value;
+  var rA = R - D;
+  $('v1').textContent = yen(R);
+  $('v2').textContent = D === 0 ? '下げない' : yen(D);
+  $('v3').textContent = mB + 'ヶ月';
+  $('v4').textContent = mA === 0 ? 'すぐ決まる' : mA + 'ヶ月';
+  $('v5').textContent = (H/12) + '年';
+
+  var A = cum(H, mA, rA), B = cum(H, mB, R);
+  $('aA').textContent = man(A);
+  $('aB').textContent = man(B);
+  $('dA').textContent = '空室' + mA + 'ヶ月 → ' + yen(rA) + ' が ' + Math.max(0, H-mA) + 'ヶ月';
+  $('dB').textContent = '空室' + mB + 'ヶ月 → ' + yen(R) + ' が ' + Math.max(0, H-mB) + 'ヶ月';
+  $('pA').className = 'plan' + (A > B ? ' win' : '');
+  $('pB').className = 'plan' + (B > A ? ' win' : '');
+  $('nA').innerHTML = '下げる' + (A > B ? '<span class="badge">この期間では上</span>' : '');
+  $('nB').innerHTML = '下げずに待つ' + (B > A ? '<span class="badge">この期間では上</span>' : '');
+
+  var cross = null;
+  if(D > 0 && mB > mA){
+    var n = (R * (mB - mA) + mA * D) / D;
+    cross = Math.ceil(n);
+    if(cross <= mB) cross = null;
+  }
+
+  if(cross === null){
+    if(D === 0){
+      $('cross').textContent = '逆転しません';
+      $('crosss').textContent = '下げ幅が0なので、早く決まるほうが常に上です。';
+    } else if(mB <= mA){
+      $('cross').textContent = '逆転しません';
+      $('crosss').textContent = '下げても決まるのが早くならない設定です。下げない側が最初から最後まで上になります。';
+    } else {
+      $('cross').textContent = '逆転しません';
+      $('crosss').textContent = '';
+    }
+  } else {
+    var yy = Math.floor(cross/12), mm = cross % 12;
+    $('cross').textContent = cross + 'ヶ月目';
+    $('crosss').textContent = '入居から数えて約' + yy + '年' + (mm ? mm + 'ヶ月' : '') + '。ここを境に、下げずに待ったほうが累計で上回ります。';
+  }
+
+  var maxY = Math.max(A, B, cum(H, mA, rA), cum(H, mB, R), 1);
+  var W = 320, Ht = 160, pad = 4;
+  function pt(n, v){
+    var x = pad + (n / H) * (W - pad*2);
+    var y = Ht - pad - (v / maxY) * (Ht - pad*2);
+    return x.toFixed(1) + ',' + y.toFixed(1);
+  }
+  var la = [], lb = [];
+  for(var n = 0; n <= H; n++){ la.push(pt(n, cum(n, mA, rA))); lb.push(pt(n, cum(n, mB, R))) }
+  var svg = '<polyline fill="none" stroke="#2563eb" stroke-width="2.5" points="' + la.join(' ') + '"/>'
+          + '<polyline fill="none" stroke="#c2410c" stroke-width="2.5" points="' + lb.join(' ') + '"/>';
+  if(cross !== null && cross <= H){
+    var cx = (pad + (cross / H) * (W - pad*2)).toFixed(1);
+    svg = '<line x1="' + cx + '" y1="' + pad + '" x2="' + cx + '" y2="' + (Ht-pad) + '" stroke="#9a958c" stroke-width="1" stroke-dasharray="3 3"/>' + svg;
+  }
+  $('sv').innerHTML = svg;
+  $('xl').textContent = '横軸は0ヶ月から' + H + 'ヶ月　縦軸は累計の家賃収入（最大 ' + man(maxY) + '）';
+
+  var rows = '';
+  [12,24,36,60,120].forEach(function(n){
+    var a = cum(n, mA, rA), b = cum(n, mB, R), d = a - b;
+    rows += '<tr><td>' + (n/12) + '年</td><td>' + man(a) + '</td><td>' + man(b) + '</td><td style="color:' + (d >= 0 ? '#1d4ed8' : '#c2410c') + '">' + (d >= 0 ? '+' : '−') + man(Math.abs(d)) + '</td></tr>';
+  });
+  $('tb').innerHTML = rows;
+
+  var lost = (mB - mA) * R;
+  var g;
+  if(D === 0){
+    g = '下げ幅を0にしているので、比べる先が1本しかありません。左のつまみを動かしてください。';
+  } else if(cross === null){
+    g = '<b>この条件では逆転が起きません。</b>下げても空室期間が縮まらない設定になっています。値下げの話をする前に、下げたら本当に早く決まるのかを管理会社に確かめてください。';
+  } else {
+    g = '<b>空室で失うのは ' + man(lost) + '（' + (mB-mA) + 'ヶ月ぶん）、1回きりです。</b>'
+      + '値下げで失うのは毎月 ' + yen(D) + '。割ると ' + Math.ceil(lost/D) + 'ヶ月で追いつきます。'
+      + '入居期間がそれより短ければ下げたほうが得、長ければ待ったほうが得です。'
+      + 'つまりこの判断は家賃の話ではなく、<b>この部屋に何年住んでもらえるか</b>の話です。';
+  }
+  $('gapbox').innerHTML = g;
+
+  var w;
+  if(cross !== null && cross <= 24){
+    w = '逆転が' + cross + 'ヶ月目と早く来ています。単身向けの平均入居年数はこれより長いことが多いので、この条件なら値下げは慎重に。';
+  } else if(cross !== null && cross >= 72){
+    w = '逆転は' + cross + 'ヶ月目（約' + Math.floor(cross/12) + '年）。そこまで住み続ける前提が必要です。それだけ長く持つ物件かどうかを先に決めてください。';
+  } else {
+    w = '逆転は' + (cross === null ? '起きません' : cross + 'ヶ月目') + '。この画面の数字は、入居中に退去が起きない前提で出ています。途中で退去すれば、空室と募集費用がもう一度かかります。';
+  }
+  $('wbox').innerHTML = w;
+}
+
+['r1','r2','r3','r4'].forEach(function(id){ $(id).oninput = draw });
+Array.prototype.forEach.call($('segs').children, function(b){
+  b.onclick = function(){
+    Array.prototype.forEach.call($('segs').children, function(x){ x.className = '' });
+    b.className = 'on'; H = +b.dataset.h; draw();
+  };
+});
+draw();
+</script>
+</body>
+</html>

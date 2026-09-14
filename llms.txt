@@ -89,7 +89,7 @@
 - 「楽ではなく、楽しいを考える。」を、自分で実証してみた: https://aidollargame.com/articles/i-proved-our-vision.html
 - 問い合わせ対応にAIを入れていない会社が、2026年下半期に直面すること: https://aidollargame.com/articles/inquiry-ai-risk-2026.html
 - 日本政府が18万人にAIを義務化——民間企業はどう動くべきか: https://aidollargame.com/articles/japan-gov-ai-mandate-2026.html
-- LINE公式アカウントで満足してますか？ — SNS AIエージェントが変える顧客接点: https://aidollargame.com/articles/sns-ai-agent.html
+- LINE公式アカウントで満足してますか？ — AIチャットエージェントが変える顧客接点: https://aidollargame.com/articles/sns-ai-agent.html
 - 非エンジニアの経営者が数日でできたこと、全部リストにしてみた: https://aidollargame.com/articles/what-ai-let-me-do.html
 - 「答えるAI」から「やってくれるAI」へ——AIエージェントの正体: https://aidollargame.com/articles/what-is-ai-agent.html
 - AIコンサル・導入支援って、実際に何をしてくれるの？: https://aidollargame.com/articles/what-is-ai-consulting.html

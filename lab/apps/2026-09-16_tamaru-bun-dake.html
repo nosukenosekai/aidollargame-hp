@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>たまる分だけ</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #c3d0ea}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+.big{font-size:38px;font-weight:700;letter-spacing:-.01em;line-height:1.2}
+.tank{position:relative;height:190px;border:3px solid #cfcbc2;border-radius:10px;background:#fbfaf8;overflow:hidden;margin:6px 0 4px}
+.tank i{position:absolute;left:0;right:0;bottom:0;background:#2563eb;transition:height .35s}
+.tank .lv{position:absolute;left:0;right:0;border-top:2px dashed #c2410c;font-size:11px;color:#c2410c;text-align:right;padding-right:6px;line-height:1.2}
+.tank .pc{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font-size:44px;font-weight:700;color:#1a1a1a;mix-blend-mode:normal;text-shadow:0 0 8px #fff,0 0 8px #fff,0 0 8px #fff}
+.three{display:flex;gap:8px;margin-top:14px}
+.three button{flex:1;background:#fff;border:1.5px solid #d8d4cc;border-radius:12px;padding:16px 4px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;color:#1a1a1a;line-height:1.35}
+.three button:active{background:#eef2fb;border-color:#2563eb}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+.spark{display:flex;align-items:flex-end;gap:2px;height:72px;margin-top:10px}
+.spark div{flex:1;background:#c7d4ee;border-radius:2px 2px 0 0;min-height:2px}
+.spark div.full{background:#c2410c}
+.spark div.today{background:#2563eb}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:10px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+tr.win td{color:#1d4ed8;font-weight:700}
+.tag{display:inline-block;font-size:11px;background:#eef2fb;color:#1d4ed8;border-radius:5px;padding:2px 7px;margin-left:6px;vertical-align:2px}
+.log{font-size:13px;color:#555;margin-top:8px}
+.log span{display:inline-block;margin-right:10px;font-variant-numeric:tabular-nums}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src div{margin-bottom:7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）／店名・金額はすべて架空のものです</div>
+<h1>たまる分だけ</h1>
+<p class="lead">ゴミのコンテナは、放っておけば毎日たまる。なのに回収は毎週決まった曜日に来る。半分しか入っていないコンテナを運ばせた回数は、どこにも記録されない。1日1タップだけ数えて、次に呼ぶ日をずらす。</p>
+
+<div class="card">
+  <div class="step">みなと食堂（架空）　2立方メートルのコンテナ1台</div>
+  <h2>いまの入り具合</h2>
+  <div class="tank">
+    <div class="lv" id="lvline" style="bottom:90%">満杯</div>
+    <i id="fill" style="height:0%"></i>
+    <div class="pc" id="pc">0%</div>
+  </div>
+  <div class="sub2" id="pcsub">記録をつけはじめて0日</div>
+  <div class="spark" id="spark"></div>
+  <div class="sub2" style="margin-top:6px">直近30日の入り具合。赤は満杯（90%以上）になっていた日。</div>
+</div>
+
+<div class="card">
+  <div class="step">今日の1タップ</div>
+  <h2>閉店のとき、コンテナを見て押すだけ</h2>
+  <div class="three">
+    <button data-v="25">半分より下</button>
+    <button data-v="55">半分くらい</button>
+    <button data-v="85">ほぼ満杯</button>
+  </div>
+  <div class="log" id="log"></div>
+  <button class="btn sub hide" id="reset">サンプルの30日に戻す</button>
+</div>
+
+<div class="card">
+  <div class="step">見張った結果</div>
+  <h2 id="fh">満杯になる日</h2>
+  <div class="res">
+    <div class="sub2">1日あたり、たまる速さ</div>
+    <div class="big" id="rate">-</div>
+    <div class="sub2" id="ratesub"></div>
+  </div>
+  <div class="gap" id="nextday"></div>
+</div>
+
+<div class="card">
+  <div class="step">呼び方を変えると</div>
+  <h2>定期回収のままか、たまったら呼ぶか</h2>
+  <table id="cmp"></table>
+  <div class="warn" id="warnbox"></div>
+  <div class="src">
+    <div>このデモの回収料金は1回12,000円（税込・2立方メートル1台の運搬＋処分の架空の単価）としています。実際の単価は地域・品目・契約で大きく変わるため、自分の請求書の1回あたり単価を入れて考えてください。</div>
+    <div>満杯の判定は90%としています。ふたが閉まらない状態での運搬は断られるため、100%では設定していません。</div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>これは誰が買うのか</h2>
+  <p>コンテナを置いている飲食店・スーパー・工場。払うのは店側で、月額は回収1回ぶんより安くしないと意味がない。最初の1歩は、自分の店で30日だけ1タップを続けて、平均何%で運ばせていたかを出すこと。そこが80%を切っていたら、回収の回数はまだ減らせます。</p>
+</div>
+
+</div>
+<script>
+var $=function(i){return document.getElementById(i)};
+var FULL=90, PRICE=12000, CAP=2;
+/* サンプル: 30日ぶん。毎週火曜に定期回収が入り、そこで0に戻る想定で作ってある */
+var SAMPLE=[
+ 9,18,27,36,45,54,63, 8,17,26,35,44,53,62, 10,19,28,37,46,55,64, 9,18,27,36,45,54,63, 8,17
+];
+var days=[];
+
+function load(){ days=SAMPLE.slice(); draw(); }
+function draw(){
+  var cur=days.length?days[days.length-1]:0;
+  $('fill').style.height=cur+'%';
+  $('pc').textContent=cur+'%';
+  $('pcsub').textContent='記録をつけて'+days.length+'日目';
+  $('lvline').style.bottom=FULL+'%';
+
+  var s='';
+  var view=days.slice(-30);
+  for(var i=0;i<view.length;i++){
+    var cls=view[i]>=FULL?'full':(i===view.length-1?'today':'');
+    s+='<div class="'+cls+'" style="height:'+Math.max(2,view[i])+'%"></div>';
+  }
+  $('spark').innerHTML=s;
+
+  /* たまる速さ: 前日より増えた日の増分だけを平均する（回収で0に戻った日は除く） */
+  var ups=[];
+  for(var i=1;i<days.length;i++){ var d=days[i]-days[i-1]; if(d>0) ups.push(d); }
+  var rate = ups.length ? ups.reduce(function(a,b){return a+b},0)/ups.length : 0;
+  $('rate').textContent = rate.toFixed(1)+'% / 日';
+  $('ratesub').textContent = '体積でいうと1日およそ'+(CAP*rate/100).toFixed(2)+'立方メートル。増えた日だけを平均しています（回収で空になった日は外す）。';
+
+  var togo = rate>0 ? Math.ceil((FULL-cur)/rate) : 0;
+  var dow=['日','月','火','水','木','金','土'];
+  var t=new Date(2026,8,16); t.setDate(t.getDate()+togo);
+  if(cur>=FULL){
+    $('nextday').innerHTML='<b>もう満杯です。</b>ふたが閉まらない状態だと運搬を断られます。今日呼んでください。';
+  }else if(rate<=0){
+    $('nextday').innerHTML='増えた日がまだありません。数日つけると速さが出ます。';
+  }else{
+    $('nextday').innerHTML='このペースなら<b>あと'+togo+'日</b>で満杯（'+FULL+'%）。'+
+      (t.getMonth()+1)+'月'+t.getDate()+'日（'+dow[t.getDay()]+'）ごろです。定期回収が先に来るなら、その回は'+
+      Math.min(99,Math.round(cur+rate*daysUntilTue()))+'%くらいで運ばれます。';
+  }
+
+  /* 定期（毎週火曜）と、満杯で呼ぶ場合の年間比較 */
+  var avgAtPickup=avgFill();
+  var fixedTimes=52;
+  var onDemandTimes = rate>0 ? Math.round(365/(FULL/rate)) : 0;
+  var rows='<tr><th>呼び方</th><th>年の回数</th><th>平均の入り具合</th><th>年の費用</th></tr>';
+  rows+='<tr><td>毎週火曜の定期</td><td>'+fixedTimes+'回</td><td>'+avgAtPickup+'%</td><td>'+yen(fixedTimes*PRICE)+'</td></tr>';
+  if(onDemandTimes>0){
+    var win = onDemandTimes<fixedTimes;
+    rows+='<tr'+(win?' class="win"':'')+'><td>'+FULL+'%で呼ぶ</td><td>'+onDemandTimes+'回</td><td>'+FULL+'%</td><td>'+yen(onDemandTimes*PRICE)+'</td></tr>';
+    var diff=(fixedTimes-onDemandTimes)*PRICE;
+    if(diff>0){
+      $('warnbox').innerHTML='<b>差は年'+yen(diff)+'。</b>運ぶゴミの量は1立方メートルも変わりません。変えたのは呼ぶ日だけです。'+
+        '<br><span class="sub2">ただし、定期回収は契約でまとめて安くなっていることがあります。1回あたりの単価が定期のほうが安いなら、この差はその分だけ縮みます。自分の請求書で単価を確かめてください。</span>';
+    }else{
+      $('warnbox').innerHTML='<b>今のペースだと、定期回収のほうが回数が少ない。</b>この店は毎週火曜では追いつききれていないので、呼ぶ日をずらすより、回数を増やすか容量を上げる話になります。';
+    }
+  }else{
+    rows+='<tr><td>'+FULL+'%で呼ぶ</td><td>-</td><td>-</td><td>-</td></tr>';
+    $('warnbox').innerHTML='増えた日の記録がまだないので比べられません。';
+  }
+  $('cmp').innerHTML=rows;
+
+  var last=days.slice(-6);
+  $('log').innerHTML='直近の記録：'+last.map(function(v){return '<span>'+v+'%</span>'}).join('');
+  $('reset').classList.toggle('hide', days.length<=SAMPLE.length);
+  $('fh').textContent = cur>=FULL ? '満杯です' : '満杯になる日';
+}
+function daysUntilTue(){
+  var d=new Date(2026,8,16).getDay(); /* 2026-09-16は水曜 */
+  var n=(2-d+7)%7; return n===0?7:n;
+}
+function avgFill(){
+  /* 定期回収の直前（前日より減る手前）の値を平均する */
+  var pre=[];
+  for(var i=0;i<days.length-1;i++){ if(days[i+1]<days[i]) pre.push(days[i]); }
+  if(!pre.length) return days.length?days[days.length-1]:0;
+  return Math.round(pre.reduce(function(a,b){return a+b},0)/pre.length);
+}
+function yen(v){
+  if(v>=10000){ var m=v/10000; return (m%1===0?m:m.toFixed(1))+'万円'; }
+  return v.toLocaleString('ja-JP')+'円';
+}
+var bs=document.querySelectorAll('.three button');
+for(var i=0;i<bs.length;i++){
+  bs[i].onclick=function(){
+    days.push(parseInt(this.getAttribute('data-v'),10));
+    draw();
+  };
+}
+$('reset').onclick=function(){ load(); };
+load();
+</script>
+</body>
+</html>

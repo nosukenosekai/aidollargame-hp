@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>元が取れる日</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #c3d0ea;font-size:14px;padding:12px}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+.tapbig{width:100%;background:#2563eb;color:#fff;border:0;border-radius:18px;padding:46px 16px;font-size:27px;font-weight:700;cursor:pointer;font-family:inherit;line-height:1.3}
+.tapbig:active{background:#1d4ed8}
+.tapbig span{display:block;font-size:14px;font-weight:600;opacity:.85;margin-top:6px}
+.headline{font-size:30px;font-weight:700;line-height:1.35;letter-spacing:-.01em}
+.headline b{color:#1d4ed8}
+.mid{font-size:17px;margin-top:12px}
+.plans{margin-top:16px}
+.plan{display:flex;align-items:center;gap:10px;padding:12px 0;border-top:1px solid #eeece6}
+.plan:last-child{border-bottom:1px solid #eeece6}
+.plan .nm{flex:1;font-size:15px;font-weight:600}
+.plan .nm span{display:block;font-size:12px;color:#6b6b6b;font-weight:400}
+.plan .amt{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;flex:none}
+.plan.win{background:#eef2fb;margin:0 -8px;padding:12px 8px;border-radius:10px;border-color:transparent}
+.plan.win .amt{color:#1d4ed8}
+.tag{font-size:11px;background:#2563eb;color:#fff;border-radius:5px;padding:2px 7px;margin-left:6px;vertical-align:2px;font-weight:700}
+.dots{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.dots i{width:13px;height:13px;border-radius:50%;background:#ddd9d1;display:block}
+.dots i.on{background:#2563eb}
+.dots i.today{background:#c2410c}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:14px;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src div{margin-bottom:7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">デモ（サンプルデータ）／施設名・金額は架空のものです。登録も入力欄もありません</div>
+<h1>元が取れる日</h1>
+<p class="lead">回数券を買ったのに、続かなくて余らせる。入口のQRを読んだら出るのはこの1画面だけ。押すのは1回、それで今の自分のペースならどの払い方が安いかが決まる。</p>
+
+<div id="s0" class="card">
+  <div class="step">湯どころ 三鷹の湯（架空）</div>
+  <button class="tapbig" id="tap">今日、来た<span>押すのはこれだけ</span></button>
+  <p class="sub2" style="margin-top:14px">この端末の中だけに記録されます。名前も電話番号も要りません。</p>
+</div>
+
+<div id="s1" class="card hide">
+  <div class="step" id="gapline"></div>
+  <div class="headline" id="hl"></div>
+  <div class="mid" id="mid"></div>
+  <div class="dots" id="dots"></div>
+  <div class="sub2" style="margin-top:6px">この30日。青は来た日、赤は今日。</div>
+
+  <div class="plans" id="plans"></div>
+  <div class="gap" id="verdict"></div>
+  <button class="btn sub" id="reset">サンプルに戻す</button>
+</div>
+
+<div id="s2" class="card hide">
+  <div class="step">番台の画面</div>
+  <h2>離れかけている人の数だけ</h2>
+  <p class="sub2">誰が、ではなく何人か。個人は出しません。</p>
+  <table id="fac"></table>
+  <p class="sub2" style="margin-top:10px">14日以上空いた人は、そのまま来なくなることが多い。回数券の残りが多い人ほど、余らせたまま消えます。ここに出る人数が増えた週に声をかけるための画面です。</p>
+</div>
+
+<div id="s3" class="card hide">
+  <h2>これは誰が買うのか</h2>
+  <p>サウナ・銭湯・ジム。券売機の横にQRを1枚貼るだけで、客は登録なしで使えます。施設が払う理由は、回数券を売ることではなく、余らせて消える人を減らすこと。最初の1歩は、自分の施設の回数券が平均何回使われて終わっているかを数えることです。</p>
+  <div class="src">
+    <div>料金は1回700円・回数券11回6,300円・月額4,800円の架空の設定です。回数券の有効期限は6か月としています。</div>
+    <div>「14日以上空くと来なくなる」はこのデモの中で置いた線で、調査にもとづく数字ではありません。自分の施設の記録から線を引き直してください。</div>
+  </div>
+</div>
+
+</div>
+<script>
+var $=function(i){return document.getElementById(i)};
+var TANPIN=700, KAISU=6300, KAISU_N=11, TSUKI=4800;
+var TODAY=new Date(2026,8,16);
+/* サンプル: 直近30日のうち来た日（今日から何日前か） */
+var SAMPLE=[27,24,20,13,9,4];
+var visits=SAMPLE.slice();
+
+$('tap').onclick=function(){
+  if(visits.indexOf(0)<0) visits.push(0);
+  visits.sort(function(a,b){return b-a});
+  show();
+};
+$('reset').onclick=function(){ visits=SAMPLE.slice(); location.reload(); };
+
+function show(){
+  $('s0').classList.add('hide');
+  $('s1').classList.remove('hide');$('s2').classList.remove('hide');$('s3').classList.remove('hide');
+
+  var n=visits.length;
+  var prev = visits.length>1 ? visits[visits.length-2] : null;
+  $('gapline').textContent = prev===null ? '初めての記録' : '前回から'+prev+'日ぶり';
+
+  /* ペース: この30日に来た回数をそのまま使う（先読みで盛らない） */
+  var perMonth = countIn(30);
+  $('hl').innerHTML='この30日で<b>'+perMonth+'回</b>。<br>この回数のまま1か月ぶんで比べます。';
+  $('mid').textContent = perMonth<=2
+    ? '記録がまだ'+perMonth+'回ぶんしかありません。下の比べ方は、あと数回たまってから読んでください。'
+    : '払い方を変えるだけで、1か月ぶんはこう変わります。';
+
+  var d='';
+  for(var i=29;i>=0;i--){
+    var cls = i===0?'today':(visits.indexOf(i)>=0?'on':'');
+    d+='<i class="'+cls+'"></i>';
+  }
+  $('dots').innerHTML=d;
+
+  var cost1 = perMonth*TANPIN;
+  var cost2 = perMonth*(KAISU/KAISU_N);
+  var cost3 = TSUKI;
+  var list=[
+    {nm:'1回ずつ払う',sub:'1回'+TANPIN+'円',v:cost1},
+    {nm:'回数券',sub:KAISU_N+'回'+yen(KAISU)+'（1回あたり'+Math.round(KAISU/KAISU_N)+'円）',v:cost2},
+    {nm:'月額',sub:'通い放題 月'+yen(TSUKI),v:cost3}
+  ];
+  var min=Math.min(cost1,cost2,cost3);
+  var ph='';
+  for(var i=0;i<list.length;i++){
+    var w=list[i].v===min;
+    ph+='<div class="plan'+(w?' win':'')+'"><div class="nm">'+list[i].nm+(w?'<span class="tag">これが安い</span>':'')+
+        '<span>'+list[i].sub+'</span></div><div class="amt">'+yen(Math.round(list[i].v))+'</div></div>';
+  }
+  $('plans').innerHTML=ph;
+
+  /* 回数券が月額に勝てなくなる回数、回数券が単品に勝つ回数 */
+  var evenTsuki = TSUKI/(KAISU/KAISU_N);
+  var v='';
+  if(min===cost3){
+    v='<b>月'+perMonth+'回なら月額です。</b>月'+evenTsuki.toFixed(1)+'回を超えると、回数券より月額のほうが安くなります。';
+  }else if(min===cost2){
+    v='<b>回数券が一番安い。</b>ただし'+KAISU_N+'回を6か月で使い切らないと余ります。今のペースだと'+Math.ceil(KAISU_N/perMonth)+'か月かかる計算で、'+
+      (Math.ceil(KAISU_N/perMonth)>6?'<b>期限に間に合いません。</b>1回ずつ払うほうが結果として安くなります。':'期限には間に合います。');
+  }else{
+    v='<b>1回ずつ払うのが安い。</b>この料金表では、回数券の1回あたり'+Math.round(KAISU/KAISU_N)+'円は単品の'+TANPIN+'円より必ず安いので、'+
+      '単品が勝つのは'+KAISU_N+'回を使い切れないときだけです。';
+  }
+  $('verdict').innerHTML=v;
+
+  facility();
+  window.scrollTo(0,0);
+}
+function countIn(days){
+  var c=0;for(var i=0;i<visits.length;i++){if(visits[i]<days)c++} return c;
+}
+function yen(v){
+  if(v>=10000){ var m=v/10000; return (m%1===0?m:m.toFixed(1))+'万円'; }
+  return Math.round(v).toLocaleString('ja-JP')+'円';
+}
+/* 番台側: 架空の会員120人の空き日数の分布 */
+function facility(){
+  var rows=[
+   {lb:'7日以内に来た',n:41,t:''},
+   {lb:'8〜13日空いた',n:29,t:''},
+   {lb:'14〜27日空いた',n:23,t:'声をかける対象'},
+   {lb:'28日以上空いた',n:27,t:'回数券の残りが平均4.2回'}
+  ];
+  var h='<tr><th>最後に来てから</th><th>人数</th><th></th></tr>';
+  for(var i=0;i<rows.length;i++){
+    h+='<tr><td>'+rows[i].lb+'</td><td>'+rows[i].n+'人</td><td class="sub2" style="text-align:right">'+rows[i].t+'</td></tr>';
+  }
+  h+='<tr><td>合計</td><td>120人</td><td></td></tr>';
+  $('fac').innerHTML=h;
+}
+</script>
+</body>
+</html>

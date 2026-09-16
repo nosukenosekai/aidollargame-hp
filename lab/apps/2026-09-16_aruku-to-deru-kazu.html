@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>歩くと出る数</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#f5f4f0;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.7;padding:16px 14px 60px}
+.wrap{max-width:560px;margin:0 auto}
+.note{font-size:12px;color:#6b6b6b;margin-bottom:10px}
+h1{font-size:26px;letter-spacing:.02em;margin-bottom:6px}
+.lead{font-size:15px;color:#444;margin-bottom:18px}
+.card{background:#fff;border-radius:14px;padding:18px 16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+h2{font-size:17px;margin-bottom:10px}
+p{font-size:15px}
+.btn{display:block;width:100%;background:#2563eb;color:#fff;border:0;border-radius:12px;padding:15px;font-size:16px;font-weight:600;cursor:pointer;margin-top:14px;font-family:inherit}
+.btn:active{opacity:.85}
+.btn.sub{background:#fff;color:#2563eb;border:1.5px solid #c3d0ea}
+.btn:disabled{background:#c9c6bf;cursor:default}
+.hide{display:none}
+.step{font-size:12px;color:#8a8a8a;margin-bottom:6px;letter-spacing:.08em}
+.sub2{font-size:13px;color:#6b6b6b}
+.big{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
+.stage{min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.obj{font-size:46px;font-weight:700;text-align:center;letter-spacing:.06em}
+.posture{font-size:16px;font-weight:600;letter-spacing:.04em;margin-bottom:6px}
+.posture.walk{color:#2563eb}
+.posture.sit{color:#8a8a8a}
+.timer{font-size:52px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center}
+.tap{width:100%;background:#2563eb;color:#fff;border:0;border-radius:16px;padding:40px 15px;font-size:24px;font-weight:700;cursor:pointer;margin-top:16px;font-family:inherit;line-height:1.3}
+.tap:active{background:#1d4ed8}
+.cnt{font-size:70px;font-weight:700;font-variant-numeric:tabular-nums;text-align:center;line-height:1.1}
+.bar{height:5px;background:#eeece6;border-radius:3px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:#2563eb;width:0}
+.res{background:#eef2fb;border-radius:12px;padding:14px;margin-top:12px}
+.res .big{color:#1d4ed8}
+.gap{background:#faf3ef;border-radius:12px;padding:14px;margin-top:12px;font-size:14px}
+.warn{background:#fff8e8;border-radius:12px;padding:12px;margin-top:10px;font-size:13px;color:#5a4a20}
+.crow{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.crow .lb{width:110px;font-size:13px;color:#444;flex:none}
+.crow .bw{flex:1;height:26px;background:#eeece6;border-radius:6px;overflow:hidden}
+.crow .bw i{display:block;height:100%;background:#2563eb}
+.crow .bw.g i{background:#9a958c}
+.crow .vv{width:34px;text-align:right;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;flex:none}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+th{font-size:12px;color:#6b6b6b;text-align:right;font-weight:600;padding:0 0 6px}
+th:first-child{text-align:left}
+td{padding:9px 0;border-bottom:1px solid #eeece6;text-align:right;font-variant-numeric:tabular-nums}
+td:first-child{text-align:left;font-weight:600}
+.src{font-size:12px;color:#6b6b6b;border-top:1px solid #e5e3dd;margin-top:16px;padding-top:12px}
+.src a{color:#2563eb;word-break:break-all}
+.src div{margin-bottom:7px}
+ol{padding-left:22px;font-size:15px}
+ol li{margin-bottom:7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="note">実データ（2014年の論文の手順をそのまま短くしたもの）／ここに出る数字はあなた自身が押した回数です</div>
+<h1>歩くと出る数</h1>
+<p class="lead">「輪ゴムの、ふつうとは違う使い道」を90秒で思いつくだけ挙げる。1回目は座ったまま、2回目は部屋を歩きながら、3回目は歩いたあとまた座って。数は指で数えるだけ。歩いているあいだのほうが数が出るか、自分の数字で確かめる。</p>
+
+<div id="s0" class="card">
+  <div class="step">はじめに</div>
+  <h2>やること</h2>
+  <ol>
+    <li>お題の品物が1つ出ます。<b>その品物の、本来とは違う使い道</b>をできるだけ多く思いつく。</li>
+    <li>1つ思いつくたびに大きいボタンを1回押す。声に出しても、頭の中だけでもいい。書かなくていい。</li>
+    <li>90秒×3回。<b>2回目は立って部屋の中を歩き回りながら</b>やる。急がず、いつもの歩き方で。</li>
+  </ol>
+  <div class="warn">歩けるだけの広さがない場所や、足元が危ない場所ではやらないでください。2回目だけ立って足踏みに変えても、この実験の形は保てます。</div>
+  <button class="btn" id="go0">1回目をはじめる（座ったまま）</button>
+</div>
+
+<div id="s1" class="card hide">
+  <div class="stage">
+    <div class="posture" id="pos">座ったまま</div>
+    <div class="obj" id="obj">輪ゴム</div>
+    <div class="sub2" style="margin-top:8px">の、ふつうとは違う使い道</div>
+    <div class="timer" id="tm" style="margin-top:22px">90</div>
+    <div class="bar" style="width:100%"><i id="pb"></i></div>
+    <div class="cnt" id="cn" style="margin-top:14px">0</div>
+  </div>
+  <button class="tap" id="tap">思いついた</button>
+</div>
+
+<div id="s2" class="card hide">
+  <div class="step" id="mid">1回目おわり</div>
+  <h2 id="midh">つぎは歩きながら</h2>
+  <p id="midp"></p>
+  <button class="btn" id="go1"></button>
+</div>
+
+<div id="s3" class="card hide">
+  <div class="step">結果</div>
+  <h2>あなたの3本</h2>
+  <div id="bars"></div>
+  <div class="res">
+    <div class="sub2">歩きながら ÷ 座ったまま</div>
+    <div class="big" id="ratio">-</div>
+    <div class="sub2" id="ratiot"></div>
+  </div>
+  <div class="gap" id="resid"></div>
+  <div class="warn" id="caveat"></div>
+</div>
+
+<div id="s4" class="card hide">
+  <div class="step">元の論文</div>
+  <h2>48人でやると、こうなった</h2>
+  <p>スタンフォード大の2014年の論文。大学生48人が、座ったときとルームランナーで歩いたときの両方で、同じ「別の使い道を挙げる」課題（ギルフォードの代替用途テスト）を4分ずつやった。</p>
+  <table>
+    <tr><th>4分で出た使い道</th><th>座り</th><th>歩き</th></tr>
+    <tr><td>総数（良し悪し問わず）</td><td>22.2</td><td>33.1</td></tr>
+    <tr><td>うち「新しくて的を射た」数</td><td colspan="2">歩きで平均およそ6割増（d=0.70）</td></tr>
+    <tr><td>数が増えた人の割合</td><td colspan="2">48人中81%</td></tr>
+  </table>
+  <p class="sub2" style="margin-top:10px">総数は座り22.2（SD 12.20）→歩き33.1（SD 10.22）で、およそ5割増。ばらつきが大きいので、1人でやって差が出ないことは普通にあります。</p>
+  <p style="margin-top:12px">同じ論文で、<b>増えなかった課題もある</b>。答えが1つに決まっている連想課題（3語から共通の1語を当てる）では、歩いて成績が上がった人は23%しかいなかった。歩いて増えるのは「数を広げる考えごと」だけで、「正解に絞る考えごと」は増えない。</p>
+  <p style="margin-top:12px">実験3では外を歩いても同じ結果が出て、歩いたあと座った人は、ずっと座っていた人より数が多いままだった。上の3回目がそれに当たります。</p>
+  <div class="src">
+    <div>出典: Oppezzo, M., &amp; Schwartz, D. L. (2014). Give Your Ideas Some Legs: The Positive Effect of Walking on Creative Thinking. <i>Journal of Experimental Psychology: Learning, Memory, and Cognition</i>, 40(4), 1142-1152.</div>
+    <div><a href="https://www.apa.org/pubs/journals/releases/xlm-a0036577.pdf">https://www.apa.org/pubs/journals/releases/xlm-a0036577.pdf</a></div>
+    <div><a href="https://pubmed.ncbi.nlm.nih.gov/24749966/">https://pubmed.ncbi.nlm.nih.gov/24749966/</a></div>
+  </div>
+</div>
+
+<div id="s5" class="card hide">
+  <h2>仕事に1行だけ持ち帰るなら</h2>
+  <p>案を広げる会議は座ってやらない。決める会議は座ってやる。同じ論文が、広げる課題は歩いて増え、絞る課題は増えないと分けて示しています。</p>
+  <button class="btn sub" id="again">もう一度やる</button>
+</div>
+
+</div>
+<script>
+var $=function(i){return document.getElementById(i)};
+var OBJ=['輪ゴム','バケツ','新聞紙'];
+var POS=[{t:'座ったまま',c:'sit'},{t:'歩きながら',c:'walk'},{t:'座ったまま（歩いたあと）',c:'sit'}];
+var DUR=90;
+var round=0, count=[0,0,0], timer=null, left=DUR;
+
+$('go0').onclick=function(){start(0)};
+$('tap').onclick=function(){count[round]++;$('cn').textContent=count[round]};
+$('again').onclick=function(){location.reload()};
+
+function start(r){
+  round=r; left=DUR; count[r]=0;
+  $('s0').classList.add('hide'); $('s2').classList.add('hide'); $('s1').classList.remove('hide');
+  $('obj').textContent=OBJ[r];
+  $('pos').textContent=POS[r].t; $('pos').className='posture '+POS[r].c;
+  $('cn').textContent='0'; $('tm').textContent=DUR; $('pb').style.width='0%';
+  timer=setInterval(tick,1000);
+}
+function tick(){
+  left--;
+  $('tm').textContent=left;
+  $('pb').style.width=((DUR-left)/DUR*100)+'%';
+  if(left<=0){clearInterval(timer);done()}
+}
+function done(){
+  $('s1').classList.add('hide');
+  if(round<2){
+    $('s2').classList.remove('hide');
+    $('mid').textContent=(round+1)+'回目おわり　'+count[round]+'個';
+    if(round===0){
+      $('midh').textContent='つぎは歩きながら';
+      $('midp').textContent='立ち上がって、部屋の中をいつもの速さで歩き回ってください。歩き出してからボタンを押します。お題は「バケツ」に変わります。';
+      $('go1').textContent='2回目をはじめる（歩きながら）';
+    }else{
+      $('midh').textContent='つぎはまた座って';
+      $('midp').textContent='もう一度座ってください。歩いたあとに効果が残るかを見ます。お題は「新聞紙」に変わります。';
+      $('go1').textContent='3回目をはじめる（座ったまま）';
+    }
+    $('go1').onclick=function(){start(round+1)};
+  }else{
+    result();
+  }
+}
+function result(){
+  $('s3').classList.remove('hide');$('s4').classList.remove('hide');$('s5').classList.remove('hide');
+  var mx=Math.max(count[0],count[1],count[2],1);
+  var h='';
+  for(var i=0;i<3;i++){
+    h+='<div class="crow"><div class="lb">'+POS[i].t+'<br><span class="sub2">'+OBJ[i]+'</span></div>'+
+       '<div class="bw'+(i===1?'':' g')+'"><i style="width:'+(count[i]/mx*100)+'%"></i></div>'+
+       '<div class="vv">'+count[i]+'</div></div>';
+  }
+  $('bars').innerHTML=h;
+  var r = count[0]>0 ? count[1]/count[0] : 0;
+  $('ratio').textContent = count[0]>0 ? r.toFixed(2)+'倍' : '計算できません';
+  var paper='論文の総数は22.2→33.1で1.49倍。';
+  if(count[0]===0){
+    $('ratiot').textContent='1回目が0個だったので比べられません。';
+  }else if(r>=1.49){
+    $('ratiot').textContent=paper+'あなたはそれ以上に増えました。';
+  }else if(r>1){
+    $('ratiot').textContent=paper+'あなたも増えた側です。';
+  }else if(r===1){
+    $('ratiot').textContent=paper+'あなたは変わりませんでした。48人でも19%の人は増えていません。';
+  }else{
+    $('ratiot').textContent=paper+'あなたは減りました。48人のうち19%はこちら側でした。';
+  }
+  var d=count[2]-count[0];
+  if(d>0){
+    $('resid').innerHTML='<b>歩いたあとの3回目は、1回目より'+d+'個多い。</b>論文の実験2・実験3でも、歩いたあと座った人は数が多いままでした（残り効果）。';
+  }else if(d===0){
+    $('resid').innerHTML='<b>3回目は1回目と同じ数。</b>歩いたあとの残り効果は、あなたの今回の数字には出ませんでした。';
+  }else{
+    $('resid').innerHTML='<b>3回目は1回目より'+(-d)+'個少ない。</b>残り効果は出ませんでした。3回連続でやると単純に飽きるので、そちらが勝った可能性があります。';
+  }
+  $('caveat').innerHTML='ここで測ったのは1人ぶん・1回ぶんです。お題が3つで違うこと、順番がいつも同じこと、思いついた数を自分で押していること、この3つが論文の手順と違います。論文は48人・順番を入れ替え・4分・発話を書き起こして「適切で新しいもの」だけを数えました。差が出ても出なくても、1人の数字で論文の結論は動きません。';
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

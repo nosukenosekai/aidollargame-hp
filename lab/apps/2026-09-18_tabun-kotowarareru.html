@@ -53,6 +53,8 @@
   .pin i{ position:absolute; top:-2px; left:50%; transform:translateX(-50%);
     font-size:12px; font-style:normal; white-space:nowrap; background:#fff; border:1px solid var(--line);
     border-radius:5px; padding:1px 5px; }
+  .pin.lft i{ left:0; transform:none; }
+  .pin.rgt i{ left:auto; right:0; transform:none; }
   .pin.me i{ top:auto; bottom:-2px; color:var(--blue); border-color:#cddcfb; }
   .pin.paper i{ color:var(--red); border-color:#f0cfcc; }
   .ticks{ display:flex; justify-content:space-between; font-size:12px; color:var(--sub); margin-top:4px; }
@@ -233,7 +235,8 @@ function drawGauge(){
   const guessed=Math.round(100/S.env.guess);
   const paper=Math.min(100, guessed*1.5);
   const mk=(pct,cls,lab)=>{ const d=document.createElement("div");
-    d.className="pin "+cls; d.style.left=pct+"%"; d.innerHTML='<i>'+lab+'</i>'; t.appendChild(d); };
+    const side = pct<32 ? " lft" : (pct>68 ? " rgt" : "");
+    d.className="pin "+cls+side; d.style.left=pct+"%"; d.innerHTML='<i>'+lab+'</i>'; t.appendChild(d); };
   mk(paper,"paper","論文どおりなら "+Math.round(paper)+"%");
   mk(guessed,"me","あなたの予想 "+Math.round(guessed)+"%");
 }

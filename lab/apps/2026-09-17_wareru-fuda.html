@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>割れる札</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; --red:#b4322a; --green:#2f7a52; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 18px; }
+  .demo{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line);
+    background:#fff; border-radius:999px; padding:2px 10px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 10px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px;
+    padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); }
+  .btn.quit{ background:#fff; color:var(--sub); border:1.5px solid var(--line); }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .bar{ display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--sub); margin-bottom:10px; }
+  .spec{ border-top:1px solid var(--line); }
+  .spec div{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); font-size:16px; }
+  .spec span:first-child{ color:var(--sub); }
+  .spec b{ font-variant-numeric:tabular-nums; }
+  .fuda{ text-align:center; margin:16px 0 6px; }
+  .fuda .n{ font-size:40px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+  .fuda .u{ font-size:19px; font-weight:600; }
+  .fuda .m{ font-size:15px; color:var(--sub); }
+  input[type=range]{ width:100%; accent-color:var(--blue); height:34px; }
+  .agent{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:12px 14px; font-size:16px; margin:12px 0; }
+  .agent b{ color:var(--blue); }
+  .res{ font-size:16px; }
+  .res .line{ display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--line); }
+  .res .me{ font-weight:700; }
+  .res .out{ color:var(--sub); text-decoration:line-through; }
+  .win{ color:var(--green); font-weight:700; }
+  .lose{ color:var(--red); font-weight:700; }
+  .total{ display:flex; gap:10px; }
+  .total > div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; text-align:center; }
+  .total .num{ font-size:28px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+  .total .lab{ font-size:13px; color:var(--sub); }
+  .ledger div{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line); font-size:16px; }
+  .note{ font-size:14px; color:var(--sub); line-height:1.7; }
+  .hr{ height:1px; background:var(--line); margin:16px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-17</div>
+  <h1>割れる札</h1>
+  <p class="lead">地場の建設会社で、5件の入札に札を入れる。予定価格は見えない。安く入れれば取れるが、原価を割った工事は最後まで赤字のまま残る。降りることもできる。</p>
+  <div class="demo">デモ（サンプルデータ・架空の発注者と工事）</div>
+
+  <div id="app"></div>
+
+  <div class="hr"></div>
+  <p class="note">
+    デモの設定について。落札は「いちばん安い札」が取る形にしている。最低制限価格を下回った札は失格にしている（公共工事では、安すぎる札を失格にする最低制限価格や低入札価格調査の仕組みがある。この画面ではその金額を予定価格の80〜88%の範囲でこちらが決めた架空の値で、実在の発注者の設定ではない）。原価は直接工事費と現場管理費をまとめた自社の見込みとして扱っている。競合3社の札は、この画面の中で毎回ばらつかせて作った架空の値で、実在の会社の入札傾向ではない。金額はすべて万円。
+  </p>
+</div>
+
+<script>
+(function(){
+  var app = document.getElementById('app');
+  function yen(v){ return v.toLocaleString('ja-JP'); }
+  function rnd(a,b){ return a + Math.random()*(b-a); }
+
+  var JOBS = [
+    { name:'市道 3-14号線 舗装打換え', owner:'みなみ野市 建設部', term:'工期 4か月',
+      cost:3850, yotei:4600, lowRatio:0.83,
+      agent:'去年の同種工事は3社が札を入れて、予定価格の86%前後で決まっています。' },
+    { name:'第二中学校 屋上防水改修', owner:'みなみ野市 教育委員会', term:'工期 3か月（夏休み施工）',
+      cost:2180, yotei:2700, lowRatio:0.85,
+      agent:'夏休みしか入れない工事なので、手が空いている会社が少ない年です。強気で通ることがあります。' },
+    { name:'north 地区 下水管 更生工事', owner:'みなみ野市 上下水道部', term:'工期 6か月',
+      cost:9400, yotei:11200, lowRatio:0.80,
+      agent:'専用機械を持っている会社が市内に2社。うち1社は今、別現場で手いっぱいのはずです。' },
+    { name:'市民体育館 空調改修', owner:'みなみ野市 施設課', term:'工期 5か月',
+      cost:6300, yotei:7300, lowRatio:0.86,
+      agent:'設備が主で、土木の会社にはうまみが薄い案件。降りる会社が多いと読んでいます。' },
+    { name:'河川敷 護岸 補修', owner:'東信県 土木事務所', term:'工期 4か月',
+      cost:5100, yotei:5900, lowRatio:0.84,
+      agent:'県発注は参加者が増えます。市内以外から3社は来ると見ています。' }
+  ];
+  var RIVALS = ['大栄組','こだま建設','山手工業'];
+
+  var i = 0, bid = 0, log = [], agentHit = 0, agentSaid = 0;
+
+  function start(){
+    app.innerHTML = '<div class="card"><h2>やり方</h2>'
+      + '<p style="margin:0 0 12px">1件ずつ、札の額をスライダーで決めて入れます。<span class="mark">いちばん安い札が取ります</span>。ただし安すぎる札は失格になります。</p>'
+      + '<p style="margin:0 0 12px">取れた工事の利益は「落札額 − 自社原価」。原価を割って取ると、その赤字は最後の合計に残り続けます。</p>'
+      + '<p style="margin:0 0 14px;color:#5b5b66;font-size:16px">降りてもかまいません。降りた件は損も得もありません。5件終わると合計が出ます。</p>'
+      + '<button class="btn" id="go">1件目を見る</button></div>';
+    document.getElementById('go').onclick = show;
+  }
+
+  function show(){
+    if(i >= JOBS.length) return final();
+    var j = JOBS[i];
+    var min = Math.round(j.cost*0.86), max = Math.round(j.cost*1.30);
+    bid = Math.round(j.cost*1.10);
+    app.innerHTML = '<div class="card">'
+      + '<div class="bar"><span>'+(i+1)+' / 5 件目</span><span>ここまでの手残り '+yen(sum())+' 万円</span></div>'
+      + '<h2 style="margin-bottom:4px">'+j.name+'</h2>'
+      + '<p style="margin:0 0 12px;color:#5b5b66;font-size:16px">'+j.owner+'　'+j.term+'</p>'
+      + '<div class="spec"><div><span>自社原価（直接工事費＋現場管理費）</span><b>'+yen(j.cost)+' 万円</b></div>'
+      + '<div><span>予定価格</span><b>非公開</b></div>'
+      + '<div><span>参加見込み</span><b>3社</b></div></div>'
+      + '<div class="agent">AI積算エージェントの読み<br><b>'+j.agent+'</b></div>'
+      + '<div class="fuda"><div class="n" id="bn">'+yen(bid)+'</div><div class="u">万円</div>'
+      + '<div class="m" id="bm"></div></div>'
+      + '<input type="range" id="sl" min="'+min+'" max="'+max+'" step="10" value="'+bid+'">'
+      + '<div style="display:flex;justify-content:space-between;font-size:13px;color:#5b5b66;margin-top:-6px">'
+      + '<span>安い（取りやすい・薄い）</span><span>高い（取りにくい・厚い）</span></div>'
+      + '<div style="margin-top:16px"><button class="btn" id="put">この額で札を入れる</button></div>'
+      + '<div style="margin-top:8px"><button class="btn quit" id="out">この工事は降りる</button></div>'
+      + '</div>';
+    var sl = document.getElementById('sl');
+    function upd(){
+      bid = parseInt(sl.value,10);
+      document.getElementById('bn').textContent = yen(bid);
+      var p = bid - j.cost;
+      var el = document.getElementById('bm');
+      if(p >= 0) el.innerHTML = '取れたときの利益 '+yen(p)+' 万円（原価の'+Math.round(bid/j.cost*100)+'%）';
+      else el.innerHTML = '<span style="color:#b4322a">取れたときの赤字 '+yen(-p)+' 万円（原価の'+Math.round(bid/j.cost*100)+'%）</span>';
+    }
+    sl.oninput = upd; upd();
+    document.getElementById('put').onclick = function(){ judge(j, bid); };
+    document.getElementById('out').onclick = function(){ judge(j, null); };
+  }
+
+  function sum(){ return log.reduce(function(a,b){ return a + b.profit; }, 0); }
+
+  function judge(j, myBid){
+    var low = Math.round(j.yotei * j.lowRatio);
+    var bids = RIVALS.map(function(n){
+      // 競合の札は予定価格の 78〜99% の間でばらつかせる（架空）
+      return { name:n, amount: Math.round(j.yotei * rnd(0.78, 0.99) / 10)*10 };
+    });
+    if(myBid !== null) bids.push({ name:'自社', amount:myBid, me:true });
+    bids.forEach(function(b){ b.dead = b.amount < low; });
+    var alive = bids.filter(function(b){ return !b.dead; });
+    alive.sort(function(a,b){ return a.amount - b.amount; });
+    var winner = alive[0] || null;
+
+    var got = winner && winner.me;
+    var profit = 0, deadMe = false;
+    if(myBid !== null && myBid < low){ deadMe = true; }
+    if(got){ profit = myBid - j.cost; }
+    log.push({ job:j.name, bid:myBid, got:!!got, dead:deadMe, profit:profit, low:low, yotei:j.yotei, winner: winner? winner.name : 'なし' });
+
+    // エージェントの読みが当たったか（参加3社のうち予定価格の90%超が2社以上なら「強気で通る」寄り、など単純判定）
+    agentSaid++;
+    var high = bids.filter(function(b){ return !b.me && b.amount > j.yotei*0.90; }).length;
+    var said = (i===1 || i===3) ? 'high' : 'low';
+    if((said==='high' && high>=2) || (said==='low' && high<2)) agentHit++;
+
+    var html = '<div class="card"><div class="bar"><span>'+(i+1)+' / 5 件目 開札</span><span>'+j.name+'</span></div>';
+    html += '<div class="res">';
+    bids.sort(function(a,b){ return a.amount - b.amount; }).forEach(function(b){
+      var cls = b.me ? 'me' : '';
+      var right = b.dead ? '<span class="out">'+yen(b.amount)+' 万円</span>　失格' :
+                  (winner && b.name===winner.name ? '<span class="win">'+yen(b.amount)+' 万円　落札</span>' : yen(b.amount)+' 万円');
+      html += '<div class="line '+cls+'"><span>'+b.name+'</span><span>'+right+'</span></div>';
+    });
+    if(myBid === null){ html += '<div class="line"><span class="me">自社</span><span style="color:#5b5b66">降りた</span></div>'; }
+    html += '</div>';
+    html += '<div class="spec" style="margin-top:12px"><div><span>予定価格（ここで公開）</span><b>'+yen(j.yotei)+' 万円</b></div>'
+         + '<div><span>最低制限価格</span><b>'+yen(low)+' 万円</b></div>'
+         + '<div><span>自社原価</span><b>'+yen(j.cost)+' 万円</b></div></div>';
+
+    if(myBid === null){
+      html += '<p style="margin:14px 0 0">降りた。損も得もない。'+(winner? winner.name+'が'+yen(winner.amount)+'万円で取った。':'')+'</p>';
+    } else if(deadMe){
+      html += '<p style="margin:14px 0 0"><span class="lose">失格。</span>最低制限価格を'+yen(low-myBid)+'万円下回った。安くすれば取れる、ではない。</p>';
+    } else if(got && profit >= 0){
+      html += '<p style="margin:14px 0 0"><span class="win">落札。</span>利益 '+yen(profit)+' 万円。予定価格の'+Math.round(myBid/j.yotei*100)+'%で取った。</p>';
+    } else if(got){
+      html += '<p style="margin:14px 0 0"><span class="lose">落札したが原価割れ。</span>'+yen(-profit)+' 万円の赤字が残る。この赤字は消えない。</p>';
+    } else {
+      html += '<p style="margin:14px 0 0">取れなかった。'+winner.name+'が'+yen(winner.amount)+'万円。自社は'+yen(myBid-winner.amount)+'万円高かった。</p>';
+    }
+    html += '<div style="margin-top:16px"><button class="btn" id="nx">'+(i>=4?'合計を見る':'つぎの工事へ')+'</button></div></div>';
+    app.innerHTML = html;
+    document.getElementById('nx').onclick = function(){ i++; show(); };
+  }
+
+  function final(){
+    var got = log.filter(function(l){ return l.got; });
+    var red = got.filter(function(l){ return l.profit < 0; });
+    var quit = log.filter(function(l){ return l.bid === null; });
+    var dead = log.filter(function(l){ return l.dead; });
+    var total = sum();
+
+    var msg;
+    if(got.length === 0) msg = '1件も取れなかった。手残りはゼロだが、職人の手も空いたままになる。次の期は固定費だけが出ていく。';
+    else if(red.length === 0 && total > 0) msg = '取った'+got.length+'件がすべて黒字。取る件数より、割らずに取れた件数のほうが効く。';
+    else if(red.length > 0 && total > 0) msg = '合計では黒字だが、'+red.length+'件は原価割れで取っている。黒字の工事が赤字の工事を食わせている形。';
+    else msg = '合計が赤字。安く取ること自体は目的にならない。';
+
+    var html = '<div class="card"><h2>5件の合計</h2>'
+      + '<div class="total">'
+      + '<div><div class="lab">手残り</div><div class="num" style="color:'+(total>=0?'#2f7a52':'#b4322a')+'">'+yen(total)+'</div><div class="lab">万円</div></div>'
+      + '<div><div class="lab">落札</div><div class="num">'+got.length+'</div><div class="lab">/ 5件</div></div>'
+      + '<div><div class="lab">原価割れ</div><div class="num" style="color:'+(red.length?'#b4322a':'#16161a')+'">'+red.length+'</div><div class="lab">件</div></div>'
+      + '</div><p style="margin:14px 0 0">'+msg+'</p></div>';
+
+    html += '<div class="card"><h2>残った帳面</h2><div class="ledger">';
+    log.forEach(function(l){
+      var s;
+      if(l.bid===null) s = '降りた';
+      else if(l.dead) s = '失格';
+      else if(l.got) s = (l.profit>=0? '+'+yen(l.profit) : '<span class="lose">'+yen(l.profit)+'</span>')+' 万円';
+      else s = '取れず';
+      html += '<div><span>'+l.job+'</span><span>'+s+'</span></div>';
+    });
+    html += '</div></div>';
+
+    html += '<div class="card"><h2>AIエージェントの読みは当たったか</h2>'
+      + '<p style="margin:0 0 12px">5件中 <b>'+agentHit+'件</b> で、読みと開札の中身が合っていた。</p>'
+      + '<p style="margin:0">積算を助けるAIの価値は、当てることではなく<span class="mark">降りる判断を早く出せること</span>にある。5件のうち何件に人を張り付けるかが決まれば、積算担当の時間はそこに寄せられる。'
+      + '当たった外れたを毎回この形で残しておかないと、読みが効いているのかどうかは誰にも分からない。</p></div>';
+
+    html += '<div style="margin-top:16px"><button class="btn ghost" id="again">もう1回（競合の札は変わります）</button></div>';
+    app.innerHTML = html;
+    document.getElementById('again').onclick = function(){ i=0; log=[]; agentHit=0; agentSaid=0; start(); };
+  }
+
+  start();
+})();
+</script>
+</body>
+</html>

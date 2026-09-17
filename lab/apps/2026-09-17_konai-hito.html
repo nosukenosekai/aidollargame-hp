@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>来ない人</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; --red:#b4322a; --green:#2f7a52; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 14px; }
+  .demo{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line);
+    background:#fff; border-radius:999px; padding:2px 10px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 10px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px;
+    padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .opt{ display:block; width:100%; text-align:left; background:#fff; border:1px solid var(--line);
+    border-radius:11px; padding:13px 14px; font-size:17px; margin:8px 0; }
+  .bar{ display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--sub); margin-bottom:10px; }
+  .karte div{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); font-size:16px; }
+  .karte span:first-child{ color:var(--sub); }
+  .karte b{ font-variant-numeric:tabular-nums; }
+  .two{ display:flex; gap:10px; margin-top:16px; }
+  .two button{ flex:1; border-radius:11px; padding:15px 0; font-size:17px; font-weight:600; border:1.5px solid var(--line); background:#fff; }
+  .two .yes{ border-color:var(--green); color:var(--green); }
+  .two .no{ border-color:var(--red); color:var(--red); }
+  .fb{ border-radius:11px; padding:13px 14px; font-size:16px; margin-top:14px; }
+  .fb.ok{ background:#eef6f1; border:1px solid #c5e0d2; }
+  .fb.ng{ background:#fdf0ee; border:1px solid #f0c9bd; }
+  .total{ display:flex; gap:10px; }
+  .total > div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; text-align:center; }
+  .total .num{ font-size:30px; font-weight:700; letter-spacing:-.02em; }
+  .total .lab{ font-size:13px; color:var(--sub); }
+  .list div{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); font-size:16px; }
+  .note{ font-size:14px; color:var(--sub); line-height:1.7; }
+  .hr{ height:1px; background:var(--line); margin:16px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-17</div>
+  <h1>来ない人</h1>
+  <p class="lead">歯科の台帳から8人。カルテの表側だけを見て「この人は次回来るか、来ないか」を先に当てる。自分の勘の的中率と、たった1行の決まりごとの的中率を並べる。</p>
+  <div class="demo">デモ（サンプルデータ・架空の医院と患者）</div>
+
+  <div id="app"></div>
+
+  <div class="hr"></div>
+  <p class="note">
+    この画面の台帳・患者・数字はすべて架空の作り物で、実在の医院の実績ではない。業界の中断率として一般化できる数字ではない。分かるのは「この8人のサンプルで、どの線がどれだけ当たったか」だけ。
+  </p>
+</div>
+
+<script>
+(function(){
+  var app = document.getElementById('app');
+
+  var P = [
+    { n:'田村 圭子', age:62, last:'12日前', tx:'歯周治療（残り3回）', next:'あり（10日後）', hasNext:true, cancel:0, pay:'保険', came:true,
+      why:'次の予約が入っていて、間隔も空いていない。もっとも来る形。' },
+    { n:'佐久間 亮', age:34, last:'41日前', tx:'むし歯の治療（残り2回）', next:'なし', hasNext:false, cancel:1, pay:'保険', came:false,
+      why:'治療の途中で次の予約が無い。ここが中断のいちばん太い入口。' },
+    { n:'内海 みゆき', age:45, last:'18日前', tx:'被せ物の装着（残り1回）', next:'あり（6日後）', hasNext:true, cancel:2, pay:'自費', came:true,
+      why:'キャンセルは2回あるが、残り1回で装着だけ。終わりが見えていると来る。' },
+    { n:'岡部 悠真', age:27, last:'63日前', tx:'歯周治療（残り4回）', next:'なし', hasNext:false, cancel:2, pay:'保険', came:false,
+      why:'2か月空いて予約も無い。残り回数が多いほど戻ってこない。' },
+    { n:'小柳 三津子', age:71, last:'9日前', tx:'入れ歯の調整（残り2回）', next:'あり（4日後）', hasNext:true, cancel:0, pay:'保険', came:true,
+      why:'調整は不具合が出ている最中なので、自分の都合で来る。' },
+    { n:'早瀬 直人', age:39, last:'28日前', tx:'根の治療（残り2回）', next:'あり（明日）', hasNext:true, cancel:3, pay:'保険', came:false,
+      why:'予約は入っているのに来ない。ここだけ例外。過去のキャンセルが3回ある。' },
+    { n:'三宅 彩', age:52, last:'35日前', tx:'クリーニングのみ', next:'なし', hasNext:false, cancel:0, pay:'保険', came:false,
+      why:'痛みも治療の途中も無い人は、予約が無ければそのまま離れる。' },
+    { n:'宮下 健一', age:46, last:'22日前', tx:'根の治療（残り3回）', next:'なし', hasNext:false, cancel:1, pay:'保険', came:false,
+      why:'仮の蓋のまま止まっている。本人は「痛くないから」で放置する。' }
+  ];
+
+  var i = 0, hit = 0, ans = [];
+
+  function guess(){
+    app.innerHTML = '<div class="card"><h2>先に当ててください</h2>'
+      + '<p style="margin:0 0 14px">この医院の台帳には、この1年で治療に入った患者が120人います。そのうち<span class="mark">治療の途中で来なくなった人</span>は何人だと思いますか。</p>'
+      + '<button class="opt" data-v="12">12人（1割）</button>'
+      + '<button class="opt" data-v="25">25人（2割）</button>'
+      + '<button class="opt" data-v="38">38人（3割）</button>'
+      + '<button class="opt" data-v="54">54人（4割半）</button></div>';
+    Array.prototype.forEach.call(app.querySelectorAll('.opt'), function(b){
+      b.onclick = function(){ reveal(parseInt(b.getAttribute('data-v'),10)); };
+    });
+  }
+
+  function reveal(v){
+    var real = 38;
+    var msg = v===real ? '当たりです。' : (v<real ? '実際はもっと多い。' : '実際はそこまで多くない。');
+    app.innerHTML = '<div class="card"><h2>この台帳では38人</h2>'
+      + '<p style="margin:0 0 12px">'+msg+' 120人中38人、<span class="mark">3人に1人が治療の途中で止まっている</span>。院長が体感で答える数字は、だいたい実際より少なく出ます。来なくなった人は待合室にいないからです。</p>'
+      + '<p style="margin:0 0 14px;color:#5b5b66;font-size:16px">この38人が、翌年に他院でやり直すか、そのまま悪化して抜歯まで行く。つまり自費の相談も、定期健診の枠も、ここで消えている。</p>'
+      + '<button class="btn" id="go">では、来る人と来ない人を見分けられるか</button></div>';
+    document.getElementById('go').onclick = show;
+  }
+
+  function show(){
+    if(i >= P.length) return result();
+    var p = P[i];
+    app.innerHTML = '<div class="card"><div class="bar"><span>'+(i+1)+' / 8 人目</span><span>これまで '+hit+' 人的中</span></div>'
+      + '<h2 style="margin-bottom:2px">'+p.n+'<span style="font-size:15px;color:#5b5b66;font-weight:400">　'+p.age+'歳</span></h2>'
+      + '<div class="karte" style="border-top:1px solid #e3e1da;margin-top:10px">'
+      + '<div><span>前回の来院</span><b>'+p.last+'</b></div>'
+      + '<div><span>いまの治療</span><b>'+p.tx+'</b></div>'
+      + '<div><span>次回の予約</span><b>'+p.next+'</b></div>'
+      + '<div><span>これまでのキャンセル</span><b>'+p.cancel+' 回</b></div>'
+      + '<div><span>支払い</span><b>'+p.pay+'</b></div></div>'
+      + '<p style="margin:14px 0 0">この人は、このあと来ますか。</p>'
+      + '<div class="two"><button class="yes" data-v="1">来る</button><button class="no" data-v="0">来ない</button></div></div>';
+    Array.prototype.forEach.call(app.querySelectorAll('.two button'), function(b){
+      b.onclick = function(){
+        var said = b.getAttribute('data-v')==='1';
+        var ok = (said === p.came);
+        if(ok) hit++;
+        ans.push({p:p, said:said, ok:ok});
+        fb(p, said, ok);
+      };
+    });
+  }
+
+  function fb(p, said, ok){
+    app.innerHTML = '<div class="card"><div class="bar"><span>'+(i+1)+' / 8 人目</span><span></span></div>'
+      + '<h2 style="margin-bottom:2px">'+p.n+'</h2>'
+      + '<div class="fb '+(ok?'ok':'ng')+'">'
+      + (ok ? '当たり。' : 'はずれ。') + 'この人は実際には<b>'+(p.came?'来ました':'来ませんでした')+'</b>。<br>'+p.why+'</div>'
+      + '<div style="margin-top:16px"><button class="btn" id="nx">'+(i>=P.length-1?'結果を見る':'つぎの人')+'</button></div></div>';
+    document.getElementById('nx').onclick = function(){ i++; show(); };
+  }
+
+  function result(){
+    // 1行の決まりごと: 「次回の予約が入っていない人は来ない」
+    var r1 = 0;
+    P.forEach(function(p){ var pred = p.hasNext; if(pred === p.came) r1++; });
+    // 2行にした場合: 「予約が無い、または過去のキャンセルが3回以上なら来ない」
+    var r2 = 0;
+    P.forEach(function(p){ var pred = p.hasNext && p.cancel < 3; if(pred === p.came) r2++; });
+
+    var cmp;
+    if(hit > r1) cmp = '勘のほうが、1行の決まりごとより当たった。';
+    else if(hit === r1) cmp = '勘と1行の決まりごとが同じだった。';
+    else cmp = '1行の決まりごとのほうが、勘より当たった。';
+
+    app.innerHTML = '<div class="card"><h2>当たった数</h2>'
+      + '<div class="total">'
+      + '<div><div class="lab">あなたの勘</div><div class="num">'+hit+'</div><div class="lab">/ 8人</div></div>'
+      + '<div><div class="lab">1行の決まりごと</div><div class="num">'+r1+'</div><div class="lab">/ 8人</div></div>'
+      + '<div><div class="lab">2行にすると</div><div class="num">'+r2+'</div><div class="lab">/ 8人</div></div>'
+      + '</div><p style="margin:14px 0 0">'+cmp+'</p></div>'
+
+      + '<div class="card"><h2>使った決まりごと</h2>'
+      + '<p style="margin:0 0 10px"><b>1行目</b>　次回の予約が入っていない人は来ない。<br>'
+      + '<span style="color:#5b5b66;font-size:16px">これだけで8人中'+r1+'人。外れたのは早瀬さん1人で、予約が入っているのに来なかった。</span></p>'
+      + '<p style="margin:0 0 12px"><b>2行目</b>　過去のキャンセルが3回以上なら、予約が入っていても来ない。<br>'
+      + '<span style="color:#5b5b66;font-size:16px">足すと8人中'+r2+'人。</span></p>'
+      + '<p style="margin:0">ただし、<span class="mark">8人ぜんぶ当たる線は、8人を見てから作れば必ず作れる</span>。この2行が来月の患者にも効くかどうかは、来月やってみるまで分からない。'
+      + '本当に要るのは、毎月この表を出して、線が外れた人だけを見ることのほうです。</p></div>'
+
+      + '<div class="card"><h2>では、来週かける3人</h2>'
+      + '<div class="list">'
+      + '<div><span>佐久間 亮（むし歯 残り2回・予約なし・41日）</span><span>1</span></div>'
+      + '<div><span>宮下 健一（根の治療 残り3回・予約なし・22日）</span><span>2</span></div>'
+      + '<div><span>岡部 悠真（歯周治療 残り4回・予約なし・63日）</span><span>3</span></div>'
+      + '</div>'
+      + '<p style="margin:12px 0 0">条件は「次回の予約が無く、治療が残り2回以上」。三宅さん（クリーニングのみ）は外した。'
+      + 'かける文面はここでは作りません。作るべきは文面ではなく<span class="mark">かける順番と、かけない人の線引き</span>のほうです。'
+      + '受付が1日に使える時間は限られていて、38人全員には最初からかけられない。</p></div>'
+
+      + '<div style="margin-top:16px"><button class="btn ghost" id="again">もう1回</button></div>';
+    document.getElementById('again').onclick = function(){ i=0; hit=0; ans=[]; guess(); };
+  }
+
+  guess();
+})();
+</script>
+</body>
+</html>

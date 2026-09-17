@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>撮ると抜ける</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; --red:#b4322a; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 18px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 10px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px;
+    padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); }
+  .btn:disabled{ opacity:.4; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .stage{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; }
+  .bar{ display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--sub); margin-bottom:8px; }
+  .shot{ background:#fff5f2; border:1px solid #f0c9bd; color:var(--red); border-radius:10px;
+    padding:8px 10px; font-size:14px; font-weight:600; text-align:center; margin-bottom:10px; }
+  .look{ background:#eef3fe; border:1px solid #cddcfb; color:var(--blue); border-radius:10px;
+    padding:8px 10px; font-size:14px; font-weight:600; text-align:center; margin-bottom:10px; }
+  svg.art{ width:100%; height:auto; display:block; border-radius:10px; background:#faf9f6; }
+  .flash{ position:fixed; inset:0; background:#fff; opacity:0; pointer-events:none; }
+  .flash.on{ animation:fl .28s ease-out; }
+  @keyframes fl{ 0%{opacity:.9} 100%{opacity:0} }
+  .timer{ height:6px; background:#ece9e2; border-radius:3px; overflow:hidden; margin-top:10px; }
+  .timer > i{ display:block; height:100%; background:var(--blue); width:100%; }
+  .opt{ display:block; width:100%; text-align:left; background:#fff; border:1px solid var(--line);
+    border-radius:11px; padding:13px 14px; font-size:17px; margin:8px 0; }
+  .opt:active{ background:#f2f5ff; }
+  .num{ font-size:34px; font-weight:700; letter-spacing:-.02em; }
+  .row{ display:flex; gap:10px; }
+  .row > div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; }
+  .row .lab{ font-size:14px; color:var(--sub); }
+  .src{ font-size:14px; color:var(--sub); line-height:1.7; }
+  .src a{ color:var(--blue); word-break:break-all; }
+  .hr{ height:1px; background:var(--line); margin:16px 0; }
+  .ctr{ text-align:center; }
+</style>
+</head>
+<body>
+<div class="flash" id="flash"></div>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-17 &nbsp;|&nbsp; 実データ（論文）を使った回</div>
+  <h1>撮ると抜ける</h1>
+  <p class="lead">10点の展示を1点6秒ずつ見る。半分は「撮る」、半分は見るだけ。そのあと細かいところを10問。撮ったほうと見ただけのほう、どちらが残っているかが自分の数字で出る。</p>
+
+  <div id="app"></div>
+
+  <div class="hr"></div>
+  <div class="src">
+    出典（一次資料）<br>
+    ・Soares, J. S., &amp; Storm, B. C. (2018) Forget in a Flash: A Further Investigation of the Photo-Taking-Impairment Effect. <i>Journal of Applied Research in Memory and Cognition</i>, 7(1), 154–160. 実験1は42人。絵画15点を1点15秒ずつ、撮る条件と見るだけ条件に割り当て、あとで4択の細部テスト。撮った絵のほうが正答が少なかった（t(41)=3.12, p=.003, d=0.70, 95%CI[0.24,1.16]）。<br>
+    <a href="https://psychologyrocksblog.wordpress.com/wp-content/uploads/2019/07/soares2017.pdf">https://psychologyrocksblog.wordpress.com/wp-content/uploads/2019/07/soares2017.pdf</a><br>
+    ・Henkel, L. A. (2014) Point-and-Shoot Memories: The Influence of Taking Photos on Memory for a Museum Tour. <i>Psychological Science</i>, 25(2), 396–402. 美術館を歩きながら撮った作品は、見ただけの作品より覚えていなかった。ただし一部を拡大して撮った場合は落ちなかった。<br>
+    <a href="https://journals.sagepub.com/doi/abs/10.1177/0956797613504438">https://journals.sagepub.com/doi/abs/10.1177/0956797613504438</a><br><br>
+    条件の各平均値は論文本文でなく図1の中にしか無く、正確な小数は一次資料から読み取れなかった。図の縦軸は0.30〜0.70、4択なので当てずっぽうは0.25。この画面は上の手順を10点・6秒に縮めた自作版で、展示物は論文の絵画ではない。1人ぶんの結果はばらつきが大きく、これ1回で効果の有無は決まらない。
+  </div>
+</div>
+
+<script>
+(function(){
+  var art = [
+    {id:1, base:'#2f6fd0', n:5,  shape:'circle', dir:'right', band:'2本'},
+    {id:2, base:'#c2603a', n:3,  shape:'square', dir:'left',  band:'4本'},
+    {id:3, base:'#3f7d5e', n:7,  shape:'circle', dir:'left',  band:'1本'},
+    {id:4, base:'#7a4fa3', n:4,  shape:'triangle', dir:'right', band:'3本'},
+    {id:5, base:'#b58a1f', n:6,  shape:'square', dir:'right', band:'1本'},
+    {id:6, base:'#2f6fd0', n:3,  shape:'triangle', dir:'left', band:'2本'},
+    {id:7, base:'#b4322a', n:8,  shape:'circle', dir:'right', band:'4本'},
+    {id:8, base:'#3f7d5e', n:4,  shape:'square', dir:'left',  band:'3本'},
+    {id:9, base:'#7a4fa3', n:6,  shape:'triangle', dir:'left', band:'1本'},
+    {id:10,base:'#c2603a', n:5,  shape:'circle', dir:'right', band:'2本'}
+  ];
+  var names = ['朝の柵','積む人','沖の窓','三度の坂','黄の記録','ふたつの門','赤い数','角の庭','紫の階段','帰り道'];
+  var shapeJa = {circle:'丸', square:'四角', triangle:'三角'};
+  var colorJa = {'#2f6fd0':'青','#c2603a':'だいだい','#3f7d5e':'緑','#7a4fa3':'紫','#b58a1f':'からし','#b4322a':'赤'};
+
+  function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+
+  // 10点のうち5点を「撮る」条件に割り当て（毎回変わる）
+  var idx = shuffle([0,1,2,3,4,5,6,7,8,9]);
+  var photoSet = {};
+  idx.slice(0,5).forEach(function(i){ photoSet[i]=true; });
+  var order = shuffle([0,1,2,3,4,5,6,7,8,9]);
+
+  var app = document.getElementById('app');
+  var flash = document.getElementById('flash');
+  var pos = 0, shotDone=false, timerId=null;
+  var answers = [];
+
+  function svgFor(a){
+    var s = '<svg class="art" viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">';
+    s += '<rect x="0" y="0" width="320" height="200" fill="#faf9f6"/>';
+    // 帯（本数）
+    var bands = parseInt(a.band,10);
+    for(var b=0;b<bands;b++){
+      s += '<rect x="'+(18+b*14)+'" y="20" width="5" height="160" fill="'+a.base+'" opacity="0.28"/>';
+    }
+    // 図形（個数・形）
+    for(var i=0;i<a.n;i++){
+      var x = 100 + (i%4)*52, y = 52 + Math.floor(i/4)*54;
+      if(a.shape==='circle'){ s += '<circle cx="'+x+'" cy="'+y+'" r="20" fill="'+a.base+'"/>'; }
+      else if(a.shape==='square'){ s += '<rect x="'+(x-19)+'" y="'+(y-19)+'" width="38" height="38" rx="3" fill="'+a.base+'"/>'; }
+      else { s += '<polygon points="'+x+','+(y-21)+' '+(x+20)+','+(y+17)+' '+(x-20)+','+(y+17)+'" fill="'+a.base+'"/>'; }
+    }
+    // 向きの矢
+    var ax = a.dir==='right' ? '<polygon points="252,172 286,172 286,164 300,176 286,188 286,180 252,180" fill="#16161a"/>'
+                             : '<polygon points="300,172 266,172 266,164 252,176 266,188 266,180 300,180" fill="#16161a"/>';
+    s += ax + '</svg>';
+    return s;
+  }
+
+  function start(){
+    app.innerHTML = '<div class="card"><h2>やり方</h2>'
+      + '<p style="margin:0 0 12px">1点につき6秒。上に<span class="mark">「撮る」と出た回だけ、シャッターを1回押します</span>。「見るだけ」と出た回は押しません。'
+      + '見る時間はどちらも6秒で同じです。</p>'
+      + '<p style="margin:0 0 14px;color:#5b5b66;font-size:16px">10点ぜんぶ終わると、細かいところを10問聞きます。途中で戻れません。</p>'
+      + '<button class="btn" id="go">はじめる</button></div>';
+    document.getElementById('go').onclick = show;
+  }
+
+  function show(){
+    if(pos>=10){ return quizIntro(); }
+    var ai = order[pos];
+    var a = art[ai];
+    var isPhoto = !!photoSet[ai];
+    shotDone = false;
+    app.innerHTML = '<div class="stage">'
+      + '<div class="bar"><span>'+(pos+1)+' / 10</span><span>'+names[ai]+'</span></div>'
+      + (isPhoto ? '<div class="shot">撮る　シャッターを1回押してください</div>'
+                 : '<div class="look">見るだけ　押さずに見てください</div>')
+      + svgFor(a)
+      + '<div class="timer"><i id="tb"></i></div>'
+      + (isPhoto ? '<div style="margin-top:12px"><button class="btn" id="sh">シャッター</button></div>'
+                 : '<div style="margin-top:12px"><button class="btn ghost" disabled>押しません</button></div>')
+      + '</div>';
+    if(isPhoto){
+      document.getElementById('sh').onclick = function(){
+        if(shotDone) return;
+        shotDone = true;
+        flash.classList.remove('on'); void flash.offsetWidth; flash.classList.add('on');
+        this.textContent = '撮りました';
+        this.disabled = true;
+      };
+    }
+    var tb = document.getElementById('tb');
+    var t0 = Date.now(), dur = 6000;
+    clearInterval(timerId);
+    timerId = setInterval(function(){
+      var p = 1 - (Date.now()-t0)/dur;
+      if(p<=0){ clearInterval(timerId); pos++; show(); return; }
+      tb.style.width = (p*100)+'%';
+    }, 60);
+  }
+
+  function quizIntro(){
+    clearInterval(timerId);
+    app.innerHTML = '<div class="card"><h2>ここから10問</h2>'
+      + '<p style="margin:0 0 14px">見た順ではなく、ばらばらに聞きます。分からなければ勘で選んでください。4択なので、当てずっぽうでも4問に1問は当たります。</p>'
+      + '<button class="btn" id="q">10問にすすむ</button></div>';
+    document.getElementById('q').onclick = function(){ qpos=0; qOrder=shuffle(order); quiz(); };
+  }
+
+  var qpos=0, qOrder=[];
+  function quiz(){
+    if(qpos>=10){ return result(); }
+    var ai = qOrder[qpos];
+    var a = art[ai];
+    var kinds = ['n','shape','band','dir'];
+    var kind = kinds[(ai+qpos)%4];
+    var q, correct, opts;
+    if(kind==='n'){
+      q = '「'+names[ai]+'」に、同じ形はいくつ並んでいましたか。';
+      correct = a.n+'個';
+      var pool=[3,4,5,6,7,8].filter(function(v){return v!==a.n;});
+      opts = shuffle(pool).slice(0,3).map(function(v){return v+'個';}).concat([correct]);
+    } else if(kind==='shape'){
+      q = '「'+names[ai]+'」に並んでいた形は。';
+      correct = shapeJa[a.shape];
+      opts = ['丸','四角','三角','丸と四角'].filter(function(v){return v!==correct;}).slice(0,3).concat([correct]);
+    } else if(kind==='band'){
+      q = '「'+names[ai]+'」の左はしにあった細い帯は何本でしたか。';
+      correct = a.band;
+      var bp=['1本','2本','3本','4本'].filter(function(v){return v!==correct;});
+      opts = bp.slice(0,3).concat([correct]);
+    } else {
+      q = '「'+names[ai]+'」の右下の矢は、どちらを向いていましたか。';
+      correct = a.dir==='right' ? '右' : '左';
+      opts = ['右','左','上','下'].filter(function(v){return v!==correct;}).slice(0,3).concat([correct]);
+    }
+    opts = shuffle(opts);
+    var html = '<div class="card"><div class="bar"><span>'+(qpos+1)+' / 10</span><span>'
+      + (photoSet[ai] ? '' : '') + '</span></div><h2 style="font-size:18px">'+q+'</h2>';
+    opts.forEach(function(o){ html += '<button class="opt" data-o="'+o+'">'+o+'</button>'; });
+    html += '</div>';
+    app.innerHTML = html;
+    Array.prototype.forEach.call(app.querySelectorAll('.opt'), function(b){
+      b.onclick = function(){
+        answers.push({ ai:ai, photo:!!photoSet[ai], ok: b.getAttribute('data-o')===correct });
+        qpos++; quiz();
+      };
+    });
+  }
+
+  function result(){
+    var p = answers.filter(function(a){return a.photo;});
+    var o = answers.filter(function(a){return !a.photo;});
+    var pc = p.filter(function(a){return a.ok;}).length;
+    var oc = o.filter(function(a){return a.ok;}).length;
+    var pr = Math.round(pc/p.length*100), or_ = Math.round(oc/o.length*100);
+    var diff = or_ - pr;
+    var verdict;
+    if(diff >= 20) verdict = '見ただけのほうが'+diff+'ポイント高い。論文と同じ向きに出ている。';
+    else if(diff > 0) verdict = '見ただけのほうが'+diff+'ポイント高い。ただし1人・10問ぶんなので、差の大きさは当てにならない。';
+    else if(diff === 0) verdict = '同じだった。1人・10問では、差が出ないほうがむしろ普通。';
+    else verdict = '撮ったほうが'+(-diff)+'ポイント高い。1人・10問だと逆に出ることもある。';
+
+    app.innerHTML = '<div class="card"><h2>自分の数字</h2>'
+      + '<div class="row"><div><div class="lab">撮った5点</div><div class="num">'+pr+'<span style="font-size:18px">%</span></div><div class="lab">'+pc+' / '+p.length+'問</div></div>'
+      + '<div><div class="lab">見ただけ5点</div><div class="num">'+or_+'<span style="font-size:18px">%</span></div><div class="lab">'+oc+' / '+o.length+'問</div></div></div>'
+      + '<p style="margin:14px 0 0">'+verdict+'</p></div>'
+
+      + '<div class="card"><h2>種明かし</h2>'
+      + '<p style="margin:0 0 12px">割り当ては最初から決まっていました。10点のうち5点が「撮る」、5点が「見るだけ」。<span class="mark">見ていた時間はどちらも6秒で同じ</span>です。違うのはシャッターを押したかどうかだけ。</p>'
+      + '<p style="margin:0 0 12px">42人でやった2018年の実験では、撮った絵についての4択の正答が、見ただけの絵より少なくなりました（d=0.70）。撮った写真をあとで見られない設定（撮ってすぐ消す・消えるアプリで撮る）にしても、差は小さくなりませんでした。「カメラに覚えてもらったから忘れた」では説明がつかない、ということです。</p>'
+      + '<p style="margin:0">2014年の美術館の実験では、作品の一部を拡大して撮ったときは落ちませんでした。撮る行為そのものではなく、全体をひとまとめに枠へ収めて次へ行く動きのほうが効いている可能性があります。</p></div>'
+
+      + '<div class="card"><h2>中小企業に1行で直すと</h2>'
+      + '<p style="margin:0">現場写真をいちばん撮った人が、現場をいちばん覚えていない。<span class="mark">撮影とは別に、その場で1行だけ書かせる</span>手順を足す。</p></div>'
+
+      + '<div class="ctr" style="margin-top:16px"><button class="btn ghost" id="again">もう1回（割り当ては変わります）</button></div>';
+    document.getElementById('again').onclick = function(){
+      pos=0; qpos=0; answers=[];
+      idx = shuffle([0,1,2,3,4,5,6,7,8,9]); photoSet={};
+      idx.slice(0,5).forEach(function(i){ photoSet[i]=true; });
+      order = shuffle([0,1,2,3,4,5,6,7,8,9]);
+      start();
+    };
+  }
+
+  start();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>もどり道</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 14px; }
+  .demo{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line);
+    background:#fff; border-radius:999px; padding:2px 10px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 10px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px;
+    padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); }
+  .btn:disabled{ opacity:.4; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .pick{ display:block; width:100%; text-align:left; background:#fff; border:1px solid var(--line);
+    border-radius:11px; padding:14px; font-size:17px; margin:8px 0; }
+  .pick.on{ border-color:var(--blue); border-width:2px; background:#f4f7ff; }
+  .pick .s{ display:block; font-size:15px; color:var(--sub); font-weight:400; }
+  input[type=text]{ width:100%; font:inherit; padding:12px 13px; border:1px solid var(--line);
+    border-radius:11px; background:#fff; }
+  label{ display:block; font-size:15px; color:var(--sub); margin:12px 0 5px; }
+  .privacy{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:12px 14px; font-size:15px; }
+  .note{ font-size:14px; color:var(--sub); line-height:1.7; }
+  .hr{ height:1px; background:var(--line); margin:16px 0; }
+
+  /* 印刷する紙そのもの */
+  .paper{ background:#fff; color:#000; border:1px solid #bbb; border-radius:6px;
+    padding:14px 16px; margin:14px 0; font-size:15px; line-height:1.7; }
+  .paper h3{ font-size:17px; margin:0 0 2px; letter-spacing:.02em; }
+  .paper .sub{ font-size:12.5px; color:#444; margin:0 0 10px; }
+  .paper ol{ margin:0; padding-left:1.3em; }
+  .paper ol li{ margin-bottom:7px; }
+  .paper .lm{ font-weight:700; }
+  .paper .box{ border:1px solid #000; border-radius:4px; padding:8px 10px; margin-top:10px; font-size:14px; }
+  .paper .cut{ border-top:1px dashed #999; margin:14px -16px; }
+  .paper .foot{ font-size:12.5px; color:#333; margin-top:8px; }
+
+  @media print{
+    body{ background:#fff; font-size:12pt; }
+    .wrap{ max-width:none; padding:0; }
+    .noprint{ display:none !important; }
+    .paper{ border:none; border-radius:0; padding:0; margin:0 0 14mm; page-break-inside:avoid; }
+    .paper .box{ border:1px solid #000; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="noprint">
+    <div class="tag">1日1アプリ実験室 / 2026-09-17</div>
+    <h1>もどり道</h1>
+    <p class="lead">出かけた先から帰れなくなる。持たせた端末は、持って出ない日がある。財布に入る1枚の紙に、帰り道だけを、曲がり角と目印の言葉で刷る。</p>
+    <div class="demo">デモ（サンプルデータ・架空の町「みどり台」）</div>
+  </div>
+
+  <div id="app"></div>
+
+  <div class="noprint">
+    <div class="hr"></div>
+    <p class="note">
+      町名・道・店・人名はすべて架空で、実在の場所ではない。位置情報も地図も使っていない（外部の地図を読み込まない1ファイルの作りにしたため）。実際に使うなら、曲がり角の目印はケアマネジャーか家族が本人と一度歩いて決め直す必要がある。名前と電話番号を入れる欄はこの端末の中だけで動いていて、どこにも送信していない。
+    </p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var app = document.getElementById('app');
+
+  var HOME = { name:'みどり台三丁目の家', hint:'青い門・玄関に白い傘立て' };
+
+  var DEST = [
+    { id:'super', name:'スーパーさくら', time:'歩いて9分',
+      back:[
+        { t:'店を出たら、駐車場を背にして左へ。', lm:'赤いのぼりのクリーニング店' },
+        { t:'クリーニング店の角を右に曲がる。細い道に入る。', lm:'ブロック塀に「火の用心」の札' },
+        { t:'まっすぐ進んで、自動販売機が2台ならぶ角を左。', lm:'自動販売機が2台（青と赤）' },
+        { t:'坂を下りきったところが、みどり台三丁目。', lm:'青い門・白い傘立て' }
+      ]},
+    { id:'clinic', name:'川辺内科', time:'歩いて12分',
+      back:[
+        { t:'玄関を出て、川を右手に見ながら歩く。', lm:'川の柵は緑色' },
+        { t:'二つ目の橋は渡らない。手前で右に曲がる。', lm:'橋のたもとに赤い郵便ポスト' },
+        { t:'お寺の塀に沿ってまっすぐ。', lm:'長い白い塀と松の木' },
+        { t:'塀が切れたら左。坂を下る。', lm:'坂の上に消火栓（黄色）' },
+        { t:'坂の下、三軒目が家。', lm:'青い門・白い傘立て' }
+      ]},
+    { id:'park', name:'中央公園', time:'歩いて7分',
+      back:[
+        { t:'時計の下のベンチを背にして、まっすぐ出口へ。', lm:'公園の大時計' },
+        { t:'公園を出たら右。バス通りに沿って歩く。', lm:'バス停「中央公園前」' },
+        { t:'一つ目のバス停を過ぎたら、次の角を左。', lm:'バス停「みどり台」' },
+        { t:'坂を上って、突き当たりを右。', lm:'青い門・白い傘立て' }
+      ]},
+    { id:'haka', name:'東山の墓地', time:'歩いて18分',
+      back:[
+        { t:'駐車場の階段を下りて、来た道を戻る。', lm:'石段は全部で40段' },
+        { t:'下りきったら左。大きな通りに出る。', lm:'交差点の信号「東山下」' },
+        { t:'横断歩道を渡って、そのまま直進。', lm:'角にガソリンスタンド' },
+        { t:'コンビニを過ぎて二つ目の角を右。', lm:'コンビニの看板' },
+        { t:'坂を下りて三軒目。', lm:'青い門・白い傘立て' }
+      ]}
+  ];
+
+  var ASK = [
+    { n:'さくら薬局', s:'朝9時から夜7時。白衣の人がいる' },
+    { n:'みどり台交番', s:'いつでも。青い看板' },
+    { n:'コンビニ 東山下店', s:'24時間。レジの人に見せる' }
+  ];
+
+  var sel = null, who = '', tel = '', rel = '';
+
+  function step1(){
+    var html = '<div class="card noprint"><h2>どこからの帰り道を刷りますか</h2>'
+      + '<p style="margin:0 0 12px;color:#5b5b66;font-size:16px">行きは誰かと一緒でも、帰りは一人になることがあります。紙に刷るのは帰り道だけです。</p>';
+    DEST.forEach(function(d){
+      html += '<button class="pick'+(sel===d.id?' on':'')+'" data-id="'+d.id+'"><b>'+d.name+'</b><span class="s">'+HOME.name+'まで '+d.time+'　道順'+d.back.length+'つ</span></button>';
+    });
+    html += '<div style="margin-top:14px"><button class="btn" id="nx"'+(sel?'':' disabled')+'>つぎへ</button></div></div>';
+    app.innerHTML = html;
+    Array.prototype.forEach.call(app.querySelectorAll('.pick'), function(b){
+      b.onclick = function(){ sel = b.getAttribute('data-id'); step1(); };
+    });
+    var nx = document.getElementById('nx');
+    if(nx) nx.onclick = step2;
+  }
+
+  function step2(){
+    app.innerHTML = '<div class="card noprint"><h2>紙に入れる連絡先</h2>'
+      + '<div class="privacy">入力はこの端末の中だけで動きます。どこにも送りません。空のままでも刷れます。</div>'
+      + '<label>持つ人の名前</label><input type="text" id="who" value="'+who+'" placeholder="例：小柳 三津子">'
+      + '<label>連絡先の名前（続柄）</label><input type="text" id="rel" value="'+rel+'" placeholder="例：娘 あきこ">'
+      + '<label>連絡先の電話番号</label><input type="text" id="tel" value="'+tel+'" placeholder="例：090-0000-0000">'
+      + '<div style="margin-top:16px"><button class="btn" id="mk">紙を作る</button></div>'
+      + '<div style="margin-top:8px"><button class="btn ghost" id="bk">戻る</button></div></div>';
+    document.getElementById('mk').onclick = function(){
+      who = document.getElementById('who').value.trim();
+      rel = document.getElementById('rel').value.trim();
+      tel = document.getElementById('tel').value.trim();
+      paper();
+    };
+    document.getElementById('bk').onclick = step1;
+  }
+
+  function esc(s){ return (s||'').replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+
+  function paper(){
+    var d = DEST.filter(function(x){ return x.id===sel; })[0];
+    var steps = '';
+    d.back.forEach(function(s){
+      steps += '<li>'+s.t+'<br><span class="lm">目印：'+s.lm+'</span></li>';
+    });
+    var ask = '';
+    ASK.forEach(function(a){ ask += '・'+a.n+'（'+a.s+'）<br>'; });
+
+    var html = '<div class="card noprint"><h2>できました</h2>'
+      + '<p style="margin:0 0 12px">下が実物です。<span class="mark">印刷して二つに折ると、財布に入る大きさ</span>になります。画面で見るためのものではありません。</p>'
+      + '<button class="btn" id="pr">印刷する</button>'
+      + '<div style="margin-top:8px"><button class="btn ghost" id="bk2">行き先を変える</button></div></div>';
+
+    html += '<div class="paper">'
+      + '<h3>'+esc(d.name)+'から、うちに帰る道</h3>'
+      + '<p class="sub">'+HOME.name+'（'+HOME.hint+'）まで '+d.time+'</p>'
+      + '<ol>'+steps+'</ol>'
+      + '<div class="box"><b>分からなくなったら、ここで聞く</b><br>'+ask+'</div>'
+      + '<div class="box"><b>この紙を拾ってくださった方へ</b><br>'
+      + 'お手数ですが、下の番号にお電話をお願いします。<br>'
+      + (who? '持ち主　'+esc(who)+'<br>' : '持ち主　　　　　　　　　<br>')
+      + (tel? '連絡先　'+esc(rel||'家族')+'　'+esc(tel) : '連絡先　　　　　　　　　')
+      + '</div>'
+      + '<p class="foot">あわてなくて大丈夫です。座れる場所を見つけて、この紙の上から順に読んでください。</p>'
+      + '<div class="cut"></div>'
+      + '<h3>いつも持つ物</h3>'
+      + '<p class="sub" style="margin-bottom:6px">出かける前に、玄関で声に出して確かめる</p>'
+      + '<ol><li>この紙（財布の中）</li><li>家の鍵</li><li>お金</li></ol>'
+      + '</div>';
+
+    app.innerHTML = html;
+    document.getElementById('pr').onclick = function(){ window.print(); };
+    document.getElementById('bk2').onclick = step1;
+
+    var extra = document.createElement('div');
+    extra.className = 'noprint';
+    extra.innerHTML = '<div class="card"><h2>なぜ端末でなく紙なのか</h2>'
+      + '<p style="margin:0 0 12px">見守り用のGPS端末は、出かける日にかぎって充電器の上に置いてある。靴に入れる型は、その靴を履かない日がある。'
+      + '<span class="mark">紙は財布に入れておけば、財布ごと持って出る</span>。持ち物が減らないのが強みです。</p>'
+      + '<p style="margin:0 0 12px">それと、道順は地図の形で渡しても読めないことがあります。上から順に読む文章と、色と形の目印だけにしてあります。'
+      + '「北へ200メートル」ではなく「赤いのぼりのクリーニング店の角を右」。</p>'
+      + '<p style="margin:0">端末を否定しているわけではありません。両方あるのがいちばんです。紙は、端末が家にある日のための備えです。</p></div>'
+      + '<div class="card"><h2>誰が刷るか</h2>'
+      + '<p style="margin:0 0 12px">家族が自分で作るのは続きません。よく行く先が変わるたびに作り直しが要るからです。'
+      + 'ケアマネジャーか、地域包括支援センターの窓口が、面談のその場で1枚刷って渡すのが現実的です。</p>'
+      + '<p style="margin:0">目印は必ず本人と一度歩いて決め直してください。'
+      + '家族が思っている目印と、本人が実際に見ている目印は、だいたい違います。</p></div>';
+    app.appendChild(extra);
+  }
+
+  step1();
+})();
+</script>
+</body>
+</html>

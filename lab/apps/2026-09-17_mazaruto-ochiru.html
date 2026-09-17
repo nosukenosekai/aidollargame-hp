@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>まざると落ちる</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 18px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 10px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px;
+    padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); }
+  .btn:disabled{ opacity:.4; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .bar{ display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--sub); margin-bottom:10px; }
+  .big{ font-size:96px; font-weight:700; text-align:center; letter-spacing:-.03em; line-height:1.1;
+    font-variant-numeric:tabular-nums; }
+  .stage{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:22px 16px; min-height:190px;
+    display:flex; align-items:center; justify-content:center; }
+  .cond{ display:inline-block; font-size:14px; font-weight:600; border-radius:999px; padding:4px 12px; }
+  .c0{ background:#eef1ee; color:#40483f; }
+  .c1{ background:#eef3fe; color:var(--blue); }
+  .c2{ background:#fdf0e8; color:#a75a26; }
+  .pad{ display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-top:12px; }
+  .pad button{ background:#fff; border:1px solid var(--line); border-radius:11px; padding:16px 0;
+    font-size:22px; font-weight:600; font-variant-numeric:tabular-nums; }
+  .pad button:active{ background:#f2f5ff; }
+  .slots{ display:flex; gap:6px; justify-content:center; font-variant-numeric:tabular-nums; }
+  .slot{ width:34px; height:44px; border-bottom:2px solid var(--line); text-align:center;
+    font-size:26px; font-weight:700; line-height:44px; }
+  .slot.fill{ border-bottom-color:var(--blue); }
+  .row{ display:flex; gap:8px; }
+  .row > div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px 10px; text-align:center; }
+  .num{ font-size:30px; font-weight:700; letter-spacing:-.02em; }
+  .lab{ font-size:13px; color:var(--sub); }
+  .src{ font-size:14px; color:var(--sub); line-height:1.7; }
+  .src a{ color:var(--blue); word-break:break-all; }
+  .hr{ height:1px; background:var(--line); margin:16px 0; }
+  .warn{ background:#fffbe9; border:1px solid #efe0ae; border-radius:11px; padding:12px 14px; font-size:15px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-17 &nbsp;|&nbsp; 実データ（論文）を使った回</div>
+  <h1>まざると落ちる</h1>
+  <p class="lead">8つの数字を1秒ずつ見て、順番どおりに入れ直す。それだけを3通りの音でやる。無音、ずっと同じ音、変わり続ける音。耳を使っていないのに、順番だけが崩れる。</p>
+
+  <div class="warn" style="margin-bottom:14px">音が鳴ります。ヘッドホンか、音量を小さめにしてから始めてください。</div>
+
+  <div id="app"></div>
+
+  <div class="hr"></div>
+  <div class="src">
+    出典（一次資料）<br>
+    ・Bell, R., Mieth, L., Röer, J. P., Troche, S. J., &amp; Buchner, A. (2019) Preregistered Replication of the Auditory Deviant Effect: A Robust Benchmark Finding. <i>Journal of Cognition</i>, 2(1), 32. DOI 10.5334/joc.64<br>
+    <a href="https://journalofcognition.org/articles/10.5334/joc.64">https://journalofcognition.org/articles/10.5334/joc.64</a><br>
+    事前登録した追試で273人。画面に8桁を1桁1,000ミリ秒ずつ出して順番どおりに再生する課題を、ヘッドホンの妨害音つきで行った。妨害音は1語500ミリ秒・間隔300ミリ秒・約65デシベルの単音節語。同じ語をくり返す条件より、毎回違う語が並ぶ条件のほうが成績が落ちた（F(1,272)=147.80, p&lt;.01, ηp²=.35）。<br><br>
+    ・Jones, D. M., &amp; Macken, W. J. (1993) Irrelevant tones produce an irrelevant speech effect: Implications for phonological coding in working memory. <i>Journal of Experimental Psychology: Learning, Memory, and Cognition</i>, 19(2), 369–381. 言葉でなく単なる音の並びでも同じ崩れ方が起きる。<br>
+    <a href="https://psycnet.apa.org/record/1993-24448-001">https://psycnet.apa.org/record/1993-24448-001</a><br><br>
+    この画面との違いを正直に書く。（1）音は日本語の単語ではなく、ブラウザで作ったトーンを使っている（言葉を外部から読み込まない作りにしたため）。（2）無音の条件は2019年の追試には無く、比べる相手として自作で足したもの。（3）向こうは1人あたり48試行、こちらは6試行。条件ごとの平均正答率は論文本文に数字として載っておらず、図の中にしかない。だから「自分の数字が論文の平均とどれだけ違うか」は比べられない。比べられるのは3条件の並び順だけ。
+  </div>
+</div>
+
+<script>
+(function(){
+  var app = document.getElementById('app');
+  var AC = window.AudioContext || window.webkitAudioContext;
+  var ctx = null;
+  var CONDS = [
+    {k:0, name:'無音', cls:'c0', note:'音は鳴りません'},
+    {k:1, name:'同じ音のくり返し', cls:'c1', note:'同じ高さの音が鳴り続けます'},
+    {k:2, name:'変わり続ける音', cls:'c2', note:'高さの違う音が次々に鳴ります'}
+  ];
+  // 各条件2試行、計6試行。順番は毎回変える
+  function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  var trials = shuffle([0,0,1,1,2,2]);
+  var results = [[],[],[]];
+  var ti = 0, timers = [], soundStop = null;
+
+  var TONES = [262,294,330,349,392,440,494,523,587,659];
+
+  function beep(freq, at, dur){
+    var o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = freq;
+    g.gain.setValueAtTime(0, at);
+    g.gain.linearRampToValueAtTime(0.09, at+0.02);
+    g.gain.setValueAtTime(0.09, at+dur-0.03);
+    g.gain.linearRampToValueAtTime(0, at+dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(at); o.stop(at+dur+0.02);
+    return o;
+  }
+
+  function playSound(kind, seconds){
+    if(kind===0) return function(){};
+    var t = ctx.currentTime + 0.05;
+    var nodes = [];
+    var end = t + seconds;
+    var i = 0;
+    while(t < end){
+      var f = (kind===1) ? 392 : TONES[(i*3+1) % TONES.length];
+      nodes.push(beep(f, t, 0.5));
+      t += 0.8; i++;
+    }
+    return function(){ nodes.forEach(function(n){ try{ n.stop(); }catch(e){} }); };
+  }
+
+  function makeDigits(){
+    var pool = shuffle([1,2,3,4,5,6,7,8,9]);
+    return pool.slice(0,8);
+  }
+
+  function start(){
+    app.innerHTML = '<div class="card"><h2>やり方</h2>'
+      + '<p style="margin:0 0 12px">8つの数字が1秒に1つずつ出ます。ぜんぶ出たら、<span class="mark">出てきた順番のとおりに</span>入れ直してください。順番が合っている桁だけを数えます。</p>'
+      + '<p style="margin:0 0 12px;color:#5b5b66;font-size:16px">6回やります。無音・同じ音・変わる音が2回ずつ、順番はばらばら。音は無視してかまいません。むしろ無視しようとしてください。</p>'
+      + '<button class="btn" id="go">はじめる</button></div>';
+    document.getElementById('go').onclick = function(){
+      if(!ctx){ try{ ctx = new AC(); }catch(e){ ctx=null; } }
+      if(ctx && ctx.state==='suspended'){ ctx.resume(); }
+      runTrial();
+    };
+  }
+
+  var digits = [], entered = [];
+
+  function runTrial(){
+    if(ti >= trials.length){ return result(); }
+    var kind = trials[ti];
+    var c = CONDS[kind];
+    digits = makeDigits();
+    entered = [];
+    app.innerHTML = '<div class="card"><div class="bar"><span>'+(ti+1)+' / 6</span>'
+      + '<span class="cond '+c.cls+'">'+c.name+'</span></div>'
+      + '<p style="margin:0 0 14px;color:#5b5b66;font-size:16px">'+c.note+'。数字が出たら順番を覚えてください。</p>'
+      + '<button class="btn" id="st">この回をはじめる</button></div>';
+    document.getElementById('st').onclick = function(){ present(kind); };
+  }
+
+  function present(kind){
+    var c = CONDS[kind];
+    app.innerHTML = '<div class="bar"><span>'+(ti+1)+' / 6</span><span class="cond '+c.cls+'">'+c.name+'</span></div>'
+      + '<div class="stage"><div class="big" id="dg">・</div></div>';
+    var dg = document.getElementById('dg');
+    if(ctx){ soundStop = playSound(kind, 10.5); }
+    var i = 0;
+    timers.forEach(clearTimeout); timers = [];
+    function step(){
+      if(i >= digits.length){
+        dg.textContent = '';
+        timers.push(setTimeout(function(){ recall(kind); }, 400));
+        return;
+      }
+      dg.textContent = digits[i];
+      i++;
+      timers.push(setTimeout(function(){ dg.textContent=''; timers.push(setTimeout(step, 150)); }, 850));
+    }
+    timers.push(setTimeout(step, 600));
+  }
+
+  function recall(kind){
+    if(soundStop){ soundStop(); soundStop=null; }
+    draw(kind);
+  }
+
+  function draw(kind){
+    var c = CONDS[kind];
+    var slots = '';
+    for(var i=0;i<8;i++){
+      slots += '<div class="slot'+(entered[i]!==undefined?' fill':'')+'">'+(entered[i]!==undefined?entered[i]:'')+'</div>';
+    }
+    var pad = '';
+    for(var d=1;d<=9;d++){ pad += '<button data-d="'+d+'">'+d+'</button>'; }
+    pad += '<button data-d="back" style="font-size:15px">1つ消す</button>';
+    app.innerHTML = '<div class="card"><div class="bar"><span>'+(ti+1)+' / 6</span><span class="cond '+c.cls+'">'+c.name+'</span></div>'
+      + '<p style="margin:0 0 12px">出てきた順に入れてください。分からない桁も勘で埋めてください。</p>'
+      + '<div class="slots">'+slots+'</div>'
+      + '<div class="pad">'+pad+'</div>'
+      + '<div style="margin-top:14px"><button class="btn" id="done"'+(entered.length===8?'':' disabled')+'>決定</button></div></div>';
+    Array.prototype.forEach.call(app.querySelectorAll('.pad button'), function(b){
+      b.onclick = function(){
+        var d = b.getAttribute('data-d');
+        if(d==='back'){ entered.pop(); }
+        else if(entered.length<8){ entered.push(parseInt(d,10)); }
+        draw(kind);
+      };
+    });
+    var dn = document.getElementById('done');
+    if(dn) dn.onclick = function(){
+      var ok = 0;
+      for(var i=0;i<8;i++){ if(entered[i]===digits[i]) ok++; }
+      results[kind].push(ok);
+      ti++;
+      feedback(kind, ok);
+    };
+  }
+
+  function feedback(kind, ok){
+    app.innerHTML = '<div class="card"><h2>'+ok+' / 8 桁が同じ位置で合っていました</h2>'
+      + '<p style="margin:0 0 14px;color:#5b5b66;font-size:16px">正解は '+digits.join(' ')+'　あなた '+entered.join(' ')+'</p>'
+      + '<button class="btn" id="nx">'+(ti>=trials.length?'結果を見る':'つぎへ')+'</button></div>';
+    document.getElementById('nx').onclick = runTrial;
+  }
+
+  function pct(arr){ if(!arr.length) return 0; var s=arr.reduce(function(a,b){return a+b;},0); return Math.round(s/(arr.length*8)*100); }
+
+  function result(){
+    var a = pct(results[0]), b = pct(results[1]), c = pct(results[2]);
+    var verdict;
+    if(c < b && b <= a) verdict = '無音 → 同じ音 → 変わる音 の順に落ちた。論文と同じ並びです。';
+    else if(c < b) verdict = '変わる音がいちばん低い。ここが本題の部分で、論文と同じ向きに出ています。';
+    else if(c === b) verdict = '同じ音と変わる音が並んだ。6試行だとよくあることで、差が無いとまでは言えません。';
+    else verdict = '変わる音のほうが高く出た。1人・2試行ずつなので、逆に出るのは珍しくありません。';
+
+    app.innerHTML = '<div class="card"><h2>自分の数字（位置が合っていた桁の割合）</h2>'
+      + '<div class="row">'
+      + '<div><div class="lab">無音</div><div class="num">'+a+'<span style="font-size:16px">%</span></div></div>'
+      + '<div><div class="lab">同じ音</div><div class="num">'+b+'<span style="font-size:16px">%</span></div></div>'
+      + '<div><div class="lab">変わる音</div><div class="num">'+c+'<span style="font-size:16px">%</span></div></div>'
+      + '</div><p style="margin:14px 0 0">'+verdict+'</p></div>'
+
+      + '<div class="card"><h2>何が起きているか</h2>'
+      + '<p style="margin:0 0 12px">耳で聞いた音は、課題とまったく関係ありません。それでも<span class="mark">「次々に変わる音」だけが順番の記憶を崩す</span>。同じ音のくり返しはあまり崩しません。音の大きさでも、うるささでもなく、変わるかどうかで決まります。</p>'
+      + '<p style="margin:0 0 12px">273人でやった2019年の事前登録追試では、同じ語のくり返しより、違う語が次々に並ぶ条件のほうが成績が落ちました（ηp²=.35）。効果としてはかなり大きい部類です。</p>'
+      + '<p style="margin:0">崩れるのは「順番」です。数字そのものを忘れるというより、並び順が混ざります。自分の入力を見返すと、数字は合っているのに前後が入れ替わっている桁があるはずです。</p></div>'
+
+      + '<div class="card"><h2>中小企業に1行で直すと</h2>'
+      + '<p style="margin:0">事務所のBGMやラジオは、作業全部の敵ではない。<span class="mark">順番が命の作業のときだけ切る</span>。棚番の読み合わせ、電話番号や口座番号の復唱、検品の順路確認。この3つのときだけ音を止める。</p></div>'
+
+      + '<div style="margin-top:16px"><button class="btn ghost" id="again">もう1回（順番は変わります）</button></div>';
+    document.getElementById('again').onclick = function(){
+      ti=0; results=[[],[],[]]; trials = shuffle([0,0,1,1,2,2]); start();
+    };
+  }
+
+  start();
+})();
+</script>
+</body>
+</html>

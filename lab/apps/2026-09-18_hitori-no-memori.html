@@ -274,7 +274,7 @@ function draw(){
     add("全体でこの帯にいる割合", zen+"%", true);
   } else {
     add("全体でこの帯にいる割合", zen+"%");
-    add(row.name+"でこの帯にいる割合", mine+"%", true);
+    add("この区分（"+row.name+"）では", mine+"%", true);
     add("全体との差", (diff>0?"+":"")+diff+"ポイント");
   }
   const worst=[...seg.rows].sort((a,b)=>b.p[3]-a.p[3])[0];

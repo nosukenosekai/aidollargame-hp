@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>言いかえの当番</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; --red:#b4322a; --green:#2f7a52; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 18px; }
+  .demo{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line);
+    background:#fff; border-radius:999px; padding:3px 11px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 10px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px;
+    padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); }
+  .btn.quiet{ background:#fff; color:var(--sub); border:1.5px solid var(--line); font-size:15px; padding:11px; }
+  .two{ display:flex; gap:10px; }
+  .two > *{ flex:1; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .scenes{ display:grid; gap:8px; }
+  .scenes button{ background:#fff; border:1.5px solid var(--line); border-radius:11px;
+    padding:13px 14px; text-align:left; font-size:17px; color:var(--ink); }
+  .scenes button .s{ display:block; font-size:14px; color:var(--sub); }
+  .scenes button.done{ border-color:#cfe0cf; }
+  .scenes button .badge{ float:right; font-size:12px; color:var(--sub); font-weight:600; }
+  .prog{ font-size:13px; color:var(--sub); margin-bottom:8px; }
+  .situ{ background:#efece3; border-radius:11px; padding:13px 15px; font-size:16px; margin:0 0 14px; }
+  .picks{ display:grid; gap:9px; }
+  .picks button{ background:#fff; border:1.5px solid var(--line); border-radius:11px;
+    padding:13px 14px; text-align:left; font-size:16px; color:var(--ink); line-height:1.7; }
+  .picks button.on{ border-color:var(--blue); background:#eef3fe; }
+  .say{ background:#fff; border:2px solid var(--blue); border-radius:14px; padding:20px 18px; margin:14px 0; }
+  .say .h{ font-size:13px; color:var(--blue); font-weight:700; margin-bottom:8px; }
+  .say .t{ font-size:22px; line-height:1.85; font-weight:600; }
+  .say .t em{ font-style:normal; background:linear-gradient(transparent 64%, #ffe27a 64%); }
+  .parts{ margin-top:14px; border-top:1px solid var(--line); }
+  .parts div{ display:flex; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); font-size:15px; }
+  .parts .k{ color:var(--blue); font-weight:700; white-space:nowrap; width:76px; flex:none; }
+  .timer{ text-align:center; margin:10px 0; }
+  .timer .n{ font-size:44px; font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
+  .timer .u{ font-size:14px; color:var(--sub); }
+  .row{ border-top:1px solid var(--line); }
+  .row div{ display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); font-size:16px; }
+  .row span:first-child{ color:var(--sub); }
+  .row b{ font-variant-numeric:tabular-nums; text-align:right; }
+  .note{ font-size:14px; color:var(--sub); line-height:1.75; }
+  .biz{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:13px 15px; font-size:16px; margin:14px 0 0; }
+  .biz .h{ font-size:13px; color:var(--blue); font-weight:700; margin-bottom:3px; }
+  .hide{ display:none; }
+  .warn{ color:var(--red); font-size:14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-18</div>
+  <h1>言いかえの当番</h1>
+  <p class="lead">保育園で、保護者にいちばん言いにくいことを、声に出して1回だけ読む。読む前に自分ならどう言うかを選ばせて、そのあとで園の言い方を渡す。つまった場面は当番表に残り、明日また回ってくる。</p>
+  <div class="demo">デモ（サンプルデータ・架空の園と場面。実在の保護者・園児の話ではありません）</div>
+
+  <!-- 場面選び -->
+  <div id="home">
+    <div class="card">
+      <h2>今日の当番</h2>
+      <p class="note" style="margin:0 0 12px">1場面ずつ。所要1分。</p>
+      <div class="scenes" id="scenes"></div>
+    </div>
+    <div class="card">
+      <h2>これまで</h2>
+      <div class="row" id="stats"></div>
+      <button class="btn quiet" id="clear" style="margin-top:12px">記録を消す</button>
+    </div>
+    <p class="note">売り先は保育園・こども園の運営法人。新人が最初の半年でいちばん削られるのは保育ではなく保護者への一言のほうなので、そこだけを毎日1分の当番にしています。記録はこの端末のブラウザにだけ残り、どこにも送りません。</p>
+  </div>
+
+  <!-- 1: 自分ならどう言う -->
+  <div id="step1" class="hide">
+    <div class="card">
+      <div class="prog">1/3　先に、自分ならどう言うか</div>
+      <div class="situ" id="situ"></div>
+      <div class="picks" id="picks"></div>
+    </div>
+    <button class="btn quiet" id="back1">やめる</button>
+  </div>
+
+  <!-- 2: 読む -->
+  <div id="step2" class="hide">
+    <div class="card">
+      <div class="prog">2/3　声に出して、1回だけ読む</div>
+      <div class="say">
+        <div class="h">園の言い方</div>
+        <div class="t" id="line"></div>
+      </div>
+      <div class="two">
+        <button class="btn ghost" id="listen">見本を聞く</button>
+        <button class="btn" id="startRead">読みはじめる</button>
+      </div>
+      <div id="reading" class="hide">
+        <div class="timer"><div class="n" id="tn">0.0</div><div class="u">秒　読んでいます</div></div>
+        <div class="two">
+          <button class="btn" id="said">言えた</button>
+          <button class="btn quiet" id="stuck">つまった</button>
+        </div>
+      </div>
+      <p class="note warn hide" id="nospeech">この端末では読み上げが使えませんでした。文字だけで進めてください。</p>
+    </div>
+  </div>
+
+  <!-- 3: 種明かし -->
+  <div id="step3" class="hide">
+    <div class="card">
+      <div class="prog">3/3　何が違ったか</div>
+      <h2 id="verdict"></h2>
+      <p class="note" id="vnote" style="margin:0 0 12px"></p>
+      <div class="say" style="border-color:var(--line)">
+        <div class="h" style="color:#5b5b66">あなたが選んだ言い方</div>
+        <div class="t" style="font-size:18px;font-weight:400" id="mypick"></div>
+      </div>
+      <div class="parts" id="parts"></div>
+      <div class="biz">
+        <div class="h">この型は3つで固定です</div>
+        <span class="mark">事実 → 園がしたこと → お願いは最後に1つだけ</span>。謝罪から入ると事実が薄まり、お願いを先に置くと責めているように聞こえます。
+      </div>
+    </div>
+    <button class="btn" id="next">次の場面へ</button>
+    <button class="btn quiet" id="home2" style="margin-top:10px">当番表に戻る</button>
+  </div>
+</div>
+
+<script>
+const K="iikae_touban_v1";
+const $=id=>document.getElementById(id);
+const load=()=>{ try{ return JSON.parse(localStorage.getItem(K))||{said:{},stuck:{},picks:{},total:0}; }
+  catch(e){ return {said:{},stuck:{},picks:{},total:0}; } };
+const save=s=>{ try{ localStorage.setItem(K,JSON.stringify(s)); }catch(e){} };
+let S=load();
+
+const SCENES=[
+ { id:"kami", t:"友だちを噛んでしまった", s:"お迎えのとき、噛んだ側の保護者に",
+   situ:"2歳児クラス。おもちゃの取り合いで、そらちゃんがりくくんの腕を噛みました。跡が残っています。噛んだ側の保護者にお迎えで伝えます。",
+   picks:[
+     {k:"a", t:"「今日、お友だちを噛んでしまいまして……本当に申し訳ありません」"},
+     {k:"b", t:"「おうちでも、噛まないように言い聞かせていただけますか」"},
+     {k:"c", t:"「10時ごろ、おもちゃの取り合いでお友だちの腕を噛みました。すぐ引き離して、そらちゃんの話も聞きました。しばらく取り合いの場面を近くで見ますね。おうちでも眠れているか、気にかけてみてください」"}
+   ],
+   line:"10時ごろ、おもちゃの取り合いで、お友だちの腕を噛みました。すぐに引き離して、そらちゃんの言い分も聞いています。しばらくは取り合いになりそうな場面を、近くで見るようにします。おうちでは、よく眠れているかだけ気にかけてみてください。",
+   parts:[["事実","10時ごろ、取り合いで腕を噛んだ。時刻と原因を先に置く"],
+          ["したこと","引き離して、本人の言い分も聞いた。園が動いたことを次に"],
+          ["お願い","眠れているか。家庭への注文は1つだけ"]] },
+
+ { id:"okure", t:"お迎えが続けて遅れている", s:"3日連続で20分ほど遅れている家庭に",
+   situ:"5歳児クラス。今週3日続けて、お迎えが20分ほど遅れています。仕事が延びているようです。延長の手続きはしていません。",
+   picks:[
+     {k:"a", t:"「お迎え、遅れがちですよね……大丈夫ですか」"},
+     {k:"b", t:"「規則ですので、延長のお手続きをお願いします」"},
+     {k:"c", t:"「今週は3日、18時20分ごろのお迎えでした。その時間はゆうとくんと2人で絵本を読んで待っています。もし当面この時間になりそうでしたら、延長の手続きを一度しておくほうが気が楽だと思います」"}
+   ],
+   line:"今週は3日、18時20分ごろのお迎えでした。その時間は、ゆうとくんと2人で絵本を読んで待っています。もし当面この時間になりそうでしたら、延長の手続きを一度しておくほうが、お互い気が楽だと思います。",
+   parts:[["事実","3日、18時20分ごろ。日数と時刻を数字で"],
+          ["したこと","2人で絵本を読んで待っている。責めずに状況を渡す"],
+          ["お願い","延長の手続き。1つだけ、理由を添えて"]] },
+
+ { id:"hattatsu", t:"発達が気になると伝える", s:"いちばん言いにくい場面",
+   situ:"4歳児クラス。集団での指示が通りにくく、切り替えに時間がかかります。園としては一度相談につなげたい。保護者はまだ何も感じていない様子です。",
+   picks:[
+     {k:"a", t:"「一度、専門の方に見てもらったほうがいいかもしれません」"},
+     {k:"b", t:"「みんなと同じことが、少し難しいようで……」"},
+     {k:"c", t:"「みんなで動く場面で、次に何をするかの切り替えに5分ほどかかる日があります。今は始まる前に個別に声をかけると動けています。市の発達相談が月1回ここに来ますので、園での様子を一緒に見てもらえます。ご都合を伺ってもいいですか」"}
+   ],
+   line:"みんなで動く場面で、次に何をするかの切り替えに5分ほどかかる日があります。今は、始まる前に個別に声をかけると動けています。市の発達相談が月に1回この園に来ますので、園での様子を一緒に見てもらうことができます。ご都合を伺ってもいいですか。",
+   parts:[["事実","切り替えに5分。診断名でなく、園で見えた行動だけを言う"],
+          ["したこと","個別に声をかけると動けている。できている条件も必ず添える"],
+          ["お願い","相談の日程。判断でなく、次の1歩だけを頼む"]] },
+
+ { id:"kega", t:"ころんで顔に傷ができた", s:"園の見ていない所で起きたとき",
+   situ:"3歳児クラス。園庭で走っていて転び、頬に3センチのすり傷。職員は別の子を見ていて、転ぶ瞬間は見ていません。",
+   picks:[
+     {k:"a", t:"「気がついたときには転んでいて……申し訳ありません」"},
+     {k:"b", t:"「園庭で転んで、すり傷ができました。冷やしてあります」"},
+     {k:"c", t:"「15時ごろ、園庭で走っていて転び、右の頬に3センチほどのすり傷ができました。転ぶところは職員が見ておらず、泣き声で気づきました。すぐ流水で洗って冷やしています。今日は湯船を短めにしていただけますか」"}
+   ],
+   line:"15時ごろ、園庭で走っていて転び、右の頬に3センチほどのすり傷ができました。転ぶところは職員が見ておらず、泣き声で気づきました。すぐに流水で洗って、冷やしてあります。今日は、湯船を短めにしていただけますか。",
+   parts:[["事実","15時ごろ、右頬に3センチ。見ていなかったことも事実として言う"],
+          ["したこと","流水で洗って冷やした。処置の中身を具体的に"],
+          ["お願い","湯船を短く。家でできることを1つだけ"]] },
+
+ { id:"namae", t:"持ち物の名前が書かれていない", s:"何度もお願いしている家庭に",
+   situ:"1歳児クラス。着替えの靴下とタオルに名前がなく、取り違えが2回起きています。連絡帳で2回お願い済みです。",
+   picks:[
+     {k:"a", t:"「何度もすみません、お名前をお願いします」"},
+     {k:"b", t:"「名前がないと、取り違えてしまうんです」"},
+     {k:"c", t:"「今週、靴下とタオルの取り違えが2回ありました。こちらで戻していますが、じゃぶじゃぶ洗うと消える場所があるので、タグの内側に書き直していただけると助かります」"}
+   ],
+   line:"今週、靴下とタオルの取り違えが2回ありました。こちらで戻していますが、洗ううちに消えてしまう場所があるようです。タグの内側に書き直していただけると助かります。",
+   parts:[["事実","今週2回の取り違え。回数で言うと角が立たない"],
+          ["したこと","こちらで戻している。園が引き受けた分を先に"],
+          ["お願い","タグの内側。どこに書くかまで具体的に"]] }
+];
+
+let cur=null, pick=null, t0=0, timer=null;
+
+function show(p){ ["home","step1","step2","step3"].forEach(x=>$(x).classList.add("hide")); $(p).classList.remove("hide"); window.scrollTo(0,0); }
+
+function drawHome(){
+  const box=$("scenes"); box.innerHTML="";
+  SCENES.forEach(sc=>{
+    const st=S.stuck[sc.id]||0, sd=S.said[sc.id]||0;
+    const b=document.createElement("button");
+    if(sd>0&&st===0) b.className="done";
+    b.innerHTML='<span class="badge">'+(st>0?"つまった "+st+"回":(sd>0?"言えた "+sd+"回":"未"))+'</span>'+
+                sc.t+'<span class="s">'+sc.s+'</span>';
+    b.onclick=()=>open(sc);
+    box.appendChild(b);
+  });
+  const tot=S.total||0;
+  const stuckSum=Object.values(S.stuck).reduce((a,b)=>a+b,0);
+  const hard=Object.entries(S.stuck).sort((a,b)=>b[1]-a[1])[0];
+  const cbest=Object.values(S.picks).filter(v=>v==="c").length;
+  $("stats").innerHTML=
+    '<div><span>読んだ回数</span><b>'+tot+' 回</b></div>'+
+    '<div><span>つまった回数</span><b>'+stuckSum+' 回</b></div>'+
+    '<div><span>いちばんつまる場面</span><b>'+(hard? SCENES.find(s=>s.id===hard[0]).t : "—")+'</b></div>'+
+    '<div><span>読む前に園の型を当てた回数</span><b>'+cbest+' 回</b></div>';
+}
+function open(sc){
+  cur=sc; pick=null;
+  $("situ").textContent=sc.situ;
+  const box=$("picks"); box.innerHTML="";
+  const shuffled=[...sc.picks].sort(()=>Math.random()-0.5);
+  shuffled.forEach(p=>{
+    const b=document.createElement("button"); b.textContent=p.t;
+    b.onclick=()=>{ pick=p; S.picks[sc.id]=p.k; save(S); toRead(); };
+    box.appendChild(b);
+  });
+  show("step1");
+}
+function toRead(){
+  $("line").textContent=cur.line;
+  $("reading").classList.add("hide");
+  $("nospeech").classList.add("hide");
+  show("step2");
+}
+$("back1").onclick=()=>{ drawHome(); show("home"); };
+$("listen").onclick=()=>{
+  try{
+    if(!("speechSynthesis" in window)) throw 0;
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(cur.line);
+    u.lang="ja-JP"; u.rate=0.95;
+    const v=(speechSynthesis.getVoices()||[]).find(x=>/ja/i.test(x.lang));
+    if(v) u.voice=v;
+    speechSynthesis.speak(u);
+  }catch(e){ $("nospeech").classList.remove("hide"); }
+};
+$("startRead").onclick=()=>{
+  try{ speechSynthesis.cancel(); }catch(e){}
+  $("reading").classList.remove("hide");
+  t0=Date.now();
+  clearInterval(timer);
+  timer=setInterval(()=>{ $("tn").textContent=((Date.now()-t0)/1000).toFixed(1); },100);
+};
+function finishRead(ok){
+  clearInterval(timer);
+  const sec=(Date.now()-t0)/1000;
+  S.total=(S.total||0)+1;
+  if(ok){ S.said[cur.id]=(S.said[cur.id]||0)+1; if(S.stuck[cur.id]) S.stuck[cur.id]--; }
+  else { S.stuck[cur.id]=(S.stuck[cur.id]||0)+1; }
+  save(S);
+  const best = pick && pick.k==="c";
+  $("verdict").textContent = best ? "選んだ言い方は、園の型と同じでした" : "選んだ言い方は、園の型とは違いました";
+  $("vnote").textContent = (ok? "読むのに "+sec.toFixed(1)+" 秒。" : "つまった場面として当番表に残しました。明日また回ってきます。")
+    + (best ? "" : (pick && pick.k==="a" ? "謝罪から入ると、何が起きたのかが後ろに下がります。"
+                                         : "お願いから入ると、事実より先に注文が届いてしまいます。"));
+  $("mypick").textContent = pick ? pick.t : "";
+  $("parts").innerHTML = cur.parts.map(p=>'<div><span class="k">'+p[0]+'</span><span>'+p[1]+'</span></div>').join("");
+  show("step3");
+}
+$("said").onclick=()=>finishRead(true);
+$("stuck").onclick=()=>finishRead(false);
+$("next").onclick=()=>{
+  const rest=SCENES.filter(s=>s.id!==cur.id);
+  const stuckFirst=rest.filter(s=>(S.stuck[s.id]||0)>0);
+  open((stuckFirst.length?stuckFirst:rest)[Math.floor(Math.random()*(stuckFirst.length?stuckFirst.length:rest.length))]);
+};
+$("home2").onclick=()=>{ drawHome(); show("home"); };
+$("clear").onclick=()=>{ S={said:{},stuck:{},picks:{},total:0}; save(S); drawHome(); };
+try{ if("speechSynthesis" in window) speechSynthesis.getVoices(); }catch(e){}
+drawHome();
+</script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>捨てるか、切らすか</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; --red:#b4322a; --green:#2f7a52; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 18px; }
+  .demo{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line);
+    background:#fff; border-radius:999px; padding:3px 11px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 10px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px;
+    padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); }
+  .btn.quiet{ background:#fff; color:var(--sub); border:1.5px solid var(--line); font-size:15px; padding:11px; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .menu{ display:grid; gap:8px; margin-bottom:6px; }
+  .menu button{ background:#fff; border:1.5px solid var(--line); border-radius:11px;
+    padding:12px 14px; text-align:left; font-size:16px; color:var(--ink); display:flex; justify-content:space-between; gap:10px; }
+  .menu button.on{ border-color:var(--blue); background:#eef3fe; font-weight:600; }
+  .menu .n{ color:var(--sub); font-size:13px; font-weight:400; white-space:nowrap; }
+  .sl{ margin:12px 0 2px; }
+  .sl .lab{ display:flex; justify-content:space-between; font-size:15px; }
+  .sl .lab b{ font-variant-numeric:tabular-nums; }
+  input[type=range]{ width:100%; accent-color:var(--blue); height:34px; }
+  .hist{ display:flex; align-items:flex-end; gap:3px; height:88px; margin:10px 0 4px; }
+  .hist div{ flex:1; background:#cdd8e8; border-radius:3px 3px 0 0; position:relative; }
+  .hist div.hi{ background:#3c6799; }
+  .histx{ display:flex; justify-content:space-between; font-size:12px; color:var(--sub); }
+  .choice{ display:flex; gap:10px; margin:10px 0 0; }
+  .choice button{ flex:1; background:#fff; border:2px solid var(--line); border-radius:13px;
+    padding:16px 10px; text-align:center; color:var(--ink); line-height:1.5; }
+  .choice button .t{ font-size:18px; font-weight:700; display:block; }
+  .choice button .s{ font-size:13px; color:var(--sub); }
+  .choice button.on{ border-color:var(--blue); background:#eef3fe; }
+  .vs{ display:flex; gap:10px; margin:6px 0 4px; }
+  .vs > div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:13px; padding:14px 12px; }
+  .vs.win-l > div:first-child, .vs.win-r > div:last-child{ border-color:var(--green); border-width:2px; }
+  .vs .h{ font-size:14px; color:var(--sub); font-weight:700; margin-bottom:2px; }
+  .vs .q{ font-size:30px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1.25; }
+  .vs .qu{ font-size:14px; color:var(--sub); font-weight:400; }
+  .vs .k{ border-top:1px solid var(--line); margin-top:9px; padding-top:7px; font-size:14px; }
+  .vs .k div{ display:flex; justify-content:space-between; padding:3px 0; }
+  .vs .k span:first-child{ color:var(--sub); }
+  .vs .k b{ font-variant-numeric:tabular-nums; }
+  .vs .tot{ margin-top:8px; border-top:1px solid var(--line); padding-top:8px; text-align:center; }
+  .vs .tot .n{ font-size:22px; font-weight:700; font-variant-numeric:tabular-nums; }
+  .vs .tot .l{ font-size:12px; color:var(--sub); }
+  .best{ background:#eef7f1; border:1px solid #bfdccb; border-radius:13px; padding:16px; margin:14px 0; }
+  .best .h{ font-size:13px; color:var(--green); font-weight:700; }
+  .best .n{ font-size:38px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1.25; }
+  .best .n small{ font-size:16px; font-weight:400; color:var(--sub); }
+  .row{ border-top:1px solid var(--line); }
+  .row div{ display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); font-size:16px; }
+  .row span:first-child{ color:var(--sub); }
+  .row b{ font-variant-numeric:tabular-nums; text-align:right; }
+  .note{ font-size:14px; color:var(--sub); line-height:1.75; }
+  .note a{ color:var(--blue); word-break:break-all; }
+  .biz{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:13px 15px; font-size:16px; margin:14px 0 0; }
+  .biz .h{ font-size:13px; color:var(--blue); font-weight:700; margin-bottom:3px; }
+  .hide{ display:none; }
+  .slip{ background:#fff; border:1px dashed #b9b4a4; border-radius:12px; padding:15px; font-size:16px; }
+  .slip .t{ font-size:13px; color:var(--sub); }
+  .slip .row div{ font-size:16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-18</div>
+  <h1>捨てるか、切らすか</h1>
+  <p class="lead">明日の日替わりを何食ぶん仕込むか。押すのは「多めにする」か「抑える」の2つだけ。押した瞬間、両方の先が14日ぶん並んで出る。捨てた金と、切らして逃した金は、どちらも同じ帳面に載る。</p>
+  <div class="demo">デモ（サンプルデータ・架空の店と出数。金額は入力した売価と原価から計算しています）</div>
+
+  <div class="card">
+    <h2>明日の日替わり</h2>
+    <div class="menu" id="menu"></div>
+    <div class="sl">
+      <div class="lab"><span>売価</span><b id="pl">1,200円</b></div>
+      <input type="range" id="price" min="600" max="2200" step="50" value="1200">
+    </div>
+    <div class="sl">
+      <div class="lab"><span>1食の原価</span><b id="cl">480円</b></div>
+      <input type="range" id="cost" min="150" max="1200" step="10" value="480">
+    </div>
+    <div class="sl">
+      <div class="lab"><span>売れ残り1食が生む額（まかない・半額など）</span><b id="sl2">0円</b></div>
+      <input type="range" id="salv" min="0" max="600" step="10" value="0">
+    </div>
+    <p class="note" id="unit" style="margin:8px 0 0"></p>
+  </div>
+
+  <div class="card">
+    <h2>直近14日の出数</h2>
+    <div class="hist" id="hist"></div>
+    <div class="histx"><span>14日前</span><span>昨日</span></div>
+    <div class="row" id="stat"></div>
+  </div>
+
+  <div class="card">
+    <h2>明日、どうする</h2>
+    <div class="choice">
+      <button id="bMore"><span class="t">多めにする</span><span class="s" id="moreQ"></span></button>
+      <button id="bLess"><span class="t">抑える</span><span class="s" id="lessQ"></span></button>
+    </div>
+    <p class="note" style="margin:10px 0 0">どちらを押しても、押さなかったほうの先も出ます。</p>
+  </div>
+
+  <div id="out" class="hide">
+    <div class="card">
+      <h2 id="outh"></h2>
+      <div class="vs" id="vs"></div>
+      <p class="note" id="gap"></p>
+    </div>
+
+    <div class="card">
+      <h2>本当は、この数</h2>
+      <div class="best">
+        <div class="h">14日の実績と、捨てる損・切らす損の重さから決まる数</div>
+        <div class="n" id="qstar">— <small>食</small></div>
+        <div class="row" id="bestrow"></div>
+      </div>
+      <p class="note" id="crit"></p>
+      <div class="slip">
+        <div class="t">明日の発注票（この画面で作るところまで）</div>
+        <div class="row" id="slip"></div>
+      </div>
+      <button class="btn" id="order" style="margin-top:12px">この数で明日の発注を出す</button>
+      <p class="note hide" id="ordered" style="margin-top:10px">デモなので、どこにも送っていません。実際はここで仕入れ先ごとの発注メールに分かれます。</p>
+      <div class="biz">
+        <div class="h">なぜ2択なのか</div>
+        毎日エクセルを開く店主はいません。押すのは2つだけにして、<span class="mark">押さなかったほうの損だけを毎日見せる</span>。数字を作るのは店でなく画面の仕事です。
+      </div>
+    </div>
+
+    <p class="note">
+      最適な数の出し方は、在庫管理で古くからある新聞売り子モデル（newsvendor model）です。切らして逃す粗利を Cu、売れ残り1食の損を Co としたとき、Cu ÷（Cu＋Co）にあたる分位点の需要量を仕込むのが手残りが最大になります。この画面では、正規分布を仮定せず、直近14日の実績そのものの分位点を使っています。<br>
+      14日という本数は、曜日の波を2周ぶんしか見ていないという意味です。実店舗で使うなら、天気・近隣の行事・前日の予約数まで入れないと、この数はそのままでは使えません。
+    </p>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const yen=n=>{ n=Math.round(n); return Math.abs(n)>=10000 ? (n/10000).toFixed(1)+"万円" : n.toLocaleString()+"円"; };
+
+const MENUS=[
+  { n:"さばの味噌煮 定食", d:[24,31,18,27,35,22,29,26,33,20,28,30,25,38], p:1200, c:480 },
+  { n:"唐揚げ弁当（持ち帰り）", d:[52,61,44,58,70,49,66,55,72,41,63,59,54,77], p:850, c:330 },
+  { n:"本日のパスタ（ランチ）", d:[16,21,12,19,24,14,22,18,25,11,20,23,17,27], p:1450, c:520 }
+];
+let mi=0, choice=null;
+
+function drawMenu(){
+  const box=$("menu"); box.innerHTML="";
+  MENUS.forEach((m,i)=>{
+    const b=document.createElement("button");
+    if(i===mi) b.className="on";
+    const avg=(m.d.reduce((a,x)=>a+x,0)/m.d.length).toFixed(1);
+    b.innerHTML='<span>'+m.n+'</span><span class="n">平均 '+avg+' 食/日</span>';
+    b.onclick=()=>{ mi=i; $("price").value=m.p; $("cost").value=m.c; choice=null; drawMenu(); recalc(); };
+    box.appendChild(b);
+  });
+}
+function q(arr,p){ // 経験分位点（小さい順、線形補間なしの上側切り上げ）
+  const s=[...arr].sort((a,b)=>a-b);
+  const idx=Math.min(s.length-1, Math.max(0, Math.ceil(p*s.length)-1));
+  return s[idx];
+}
+function sim(Q,d,price,cost,salv){
+  let sold=0, waste=0, lost=0;
+  d.forEach(x=>{ const s=Math.min(Q,x); sold+=s; waste+=Math.max(0,Q-x); lost+=Math.max(0,x-Q); });
+  const gross = sold*(price-cost) - waste*(cost-salv);
+  return { sold, waste, lost, gross, wasteYen: waste*(cost-salv), lostYen: lost*(price-cost) };
+}
+function recalc(){
+  const m=MENUS[mi], d=m.d;
+  const price=+$("price").value, cost=+$("cost").value;
+  let salv=+$("salv").value;
+  if(salv>cost){ salv=cost; $("salv").value=cost; }
+  $("pl").textContent=price.toLocaleString()+"円";
+  $("cl").textContent=cost.toLocaleString()+"円";
+  $("sl2").textContent=salv.toLocaleString()+"円";
+  const Cu=price-cost, Co=cost-salv;
+  $("unit").textContent = Cu<=0
+    ? "売価が原価を下回っています。これだと1食売るたびに赤字なので、仕込む数の話より先に値段の話です。"
+    : "1食切らすと逃す粗利 "+Cu.toLocaleString()+"円／1食捨てると失う "+Co.toLocaleString()+"円。";
+
+  const avg=d.reduce((a,x)=>a+x,0)/d.length;
+  const sd=Math.sqrt(d.reduce((a,x)=>a+(x-avg)*(x-avg),0)/d.length);
+  const more=Math.round(avg+sd), less=Math.max(1,Math.round(avg-sd));
+  const H=$("hist"); H.innerHTML="";
+  const mx=Math.max(...d);
+  d.forEach((x,i)=>{ const b=document.createElement("div");
+    b.style.height=Math.round(88*x/mx)+"%"; if(i>=d.length-3) b.className="hi";
+    b.title=x+"食"; H.appendChild(b); });
+  $("stat").innerHTML=
+    '<div><span>平均</span><b>'+avg.toFixed(1)+' 食</b></div>'+
+    '<div><span>いちばん少ない日 / 多い日</span><b>'+Math.min(...d)+' 食 / '+Math.max(...d)+' 食</b></div>'+
+    '<div><span>ばらつき（標準偏差）</span><b>'+sd.toFixed(1)+' 食</b></div>';
+  $("moreQ").textContent=more+" 食（平均＋ばらつき1つ）";
+  $("lessQ").textContent=less+" 食（平均−ばらつき1つ）";
+  $("bMore").className = choice==="more" ? "on" : "";
+  $("bLess").className = choice==="less" ? "on" : "";
+  if(!choice || Cu<=0){ $("out").classList.add("hide"); return; }
+  $("out").classList.remove("hide");
+
+  const A=sim(more,d,price,cost,salv), B=sim(less,d,price,cost,salv);
+  const win = A.gross>=B.gross ? "l" : "r";
+  $("outh").textContent = (choice==="more"?"多めにする":"抑える")+" を押しました。両方の先です（14日ぶん）";
+  $("vs").className="vs win-"+win;
+  const box=(t,Q,r,chosen)=>
+    '<div><div class="h">'+t+(chosen?'（押したほう）':'')+'</div>'+
+    '<div class="q">'+Q+' <span class="qu">食/日</span></div>'+
+    '<div class="k">'+
+      '<div><span>捨てた</span><b>'+r.waste+' 食</b></div>'+
+      '<div><span>捨てた分の損</span><b>'+yen(r.wasteYen)+'</b></div>'+
+      '<div><span>切らした</span><b>'+r.lost+' 食</b></div>'+
+      '<div><span>逃した粗利</span><b>'+yen(r.lostYen)+'</b></div>'+
+    '</div>'+
+    '<div class="tot"><div class="n">'+yen(r.gross)+'</div><div class="l">14日の手残り</div></div></div>';
+  $("vs").innerHTML = box("多めにする",more,A,choice==="more") + box("抑える",less,B,choice==="less");
+  const diff=Math.abs(A.gross-B.gross);
+  $("gap").textContent = "2つの差は14日で "+yen(diff)+"。ひと月なら "+yen(diff*30/14)+" ぶん、この1回の押し方で変わります。";
+
+  const ratio=Cu/(Cu+Co);
+  const Qs=q(d,ratio);
+  const C=sim(Qs,d,price,cost,salv);
+  $("qstar").innerHTML=Qs+' <small>食/日</small>';
+  $("bestrow").innerHTML=
+    '<div><span>14日の手残り</span><b>'+yen(C.gross)+'</b></div>'+
+    '<div><span>多めにした場合との差</span><b>'+(C.gross-A.gross>=0?"+":"")+yen(C.gross-A.gross)+'</b></div>'+
+    '<div><span>抑えた場合との差</span><b>'+(C.gross-B.gross>=0?"+":"")+yen(C.gross-B.gross)+'</b></div>'+
+    '<div><span>捨てる / 切らす</span><b>'+C.waste+' 食 / '+C.lost+' 食</b></div>';
+  $("crit").textContent =
+    "切らして逃す粗利が "+Cu.toLocaleString()+"円、捨てて失うのが "+Co.toLocaleString()+"円。"+
+    "重いのは"+(Cu>Co?"切らすほう":"捨てるほう")+"なので、14日の出数のうち下から "+
+    Math.round(ratio*100)+"% にあたる "+Qs+" 食まで仕込むのが、手残りがいちばん大きくなります。";
+  $("slip").innerHTML=
+    '<div><span>品目</span><b>'+m.n+'</b></div>'+
+    '<div><span>仕込み数</span><b>'+Qs+' 食</b></div>'+
+    '<div><span>必要原価</span><b>'+yen(Qs*cost)+'</b></div>'+
+    '<div><span>見込み売上（1日あたり）</span><b>'+yen(C.sold/14*price)+'</b></div>';
+  $("ordered").classList.add("hide");
+}
+$("bMore").onclick=()=>{ choice="more"; recalc(); $("out").scrollIntoView({behavior:"smooth"}); };
+$("bLess").onclick=()=>{ choice="less"; recalc(); $("out").scrollIntoView({behavior:"smooth"}); };
+["price","cost","salv"].forEach(id=>$(id).oninput=recalc);
+$("order").onclick=()=>$("ordered").classList.remove("hide");
+drawMenu(); recalc();
+</script>
+</body>
+</html>

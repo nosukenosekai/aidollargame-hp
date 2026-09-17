@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ひとりの目盛り</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; --red:#b4322a; --green:#2f7a52; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 18px; }
+  .src{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line);
+    background:#fff; border-radius:999px; padding:3px 11px; line-height:1.5; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 4px; }
+  .card .q{ font-size:18px; margin:0 0 12px; line-height:1.6; }
+  button{ font:inherit; cursor:pointer; }
+  .opts{ display:grid; gap:8px; }
+  .opt{ background:#fff; border:1.5px solid var(--line); border-radius:11px; padding:13px 14px;
+    text-align:left; font-size:17px; color:var(--ink); }
+  .opt.on{ border-color:var(--blue); background:#eef3fe; font-weight:600; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px;
+    padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn:disabled{ background:#c3c3bd; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .step{ font-size:13px; color:var(--sub); margin-bottom:6px; }
+  .score{ text-align:center; margin:6px 0 14px; }
+  .score .n{ font-size:52px; font-weight:700; letter-spacing:-.03em; font-variant-numeric:tabular-nums; line-height:1.1; }
+  .score .u{ font-size:20px; font-weight:600; }
+  .score .band{ font-size:17px; color:var(--blue); font-weight:700; }
+  .segsel{ display:flex; flex-wrap:wrap; gap:7px; margin:2px 0 14px; }
+  .segsel button{ background:#fff; border:1.5px solid var(--line); border-radius:999px;
+    padding:7px 13px; font-size:14px; color:var(--sub); }
+  .segsel button.on{ border-color:var(--blue); color:var(--blue); font-weight:700; background:#eef3fe; }
+  .picker{ display:grid; gap:7px; margin-bottom:14px; }
+  .picker button{ background:#fff; border:1.5px solid var(--line); border-radius:10px;
+    padding:11px 13px; font-size:16px; text-align:left; color:var(--ink); display:flex; justify-content:space-between; gap:10px; }
+  .picker button.on{ border-color:var(--blue); background:#eef3fe; font-weight:600; }
+  .picker .n{ color:var(--sub); font-size:13px; font-weight:400; white-space:nowrap; }
+  .stack{ margin:14px 0 6px; }
+  .stackbar{ display:flex; height:46px; border-radius:9px; overflow:hidden; border:1px solid var(--line); }
+  .stackbar div{ display:flex; align-items:center; justify-content:center; font-size:13px;
+    color:#fff; font-variant-numeric:tabular-nums; position:relative; }
+  .c3{ background:#9fb7d4; } .c46{ background:#6f93bd; } .c79{ background:#3c6799; } .c1012{ background:#1f3f66; }
+  .cna{ background:#cfccc4; color:#5b5b66 !important; }
+  .stackbar div.me{ box-shadow:inset 0 0 0 3px #ffd43b; font-weight:800; }
+  .legend{ display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; margin-top:12px; font-size:14px; }
+  .legend div{ display:flex; align-items:center; gap:7px; }
+  .sw{ width:13px; height:13px; border-radius:3px; flex:none; }
+  .you{ background:#fffbe8; border:1px solid #f2e2a8; border-radius:11px; padding:12px 14px; font-size:16px; margin:12px 0; }
+  .you b{ font-size:19px; }
+  .cmp{ border-top:1px solid var(--line); margin-top:12px; }
+  .cmp div{ display:flex; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); font-size:16px; }
+  .cmp span:first-child{ color:var(--sub); }
+  .cmp b{ font-variant-numeric:tabular-nums; }
+  .note{ font-size:14px; color:var(--sub); line-height:1.75; }
+  .note a{ color:var(--blue); word-break:break-all; }
+  .hr{ height:1px; background:var(--line); margin:16px 0; }
+  .biz{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:13px 15px; font-size:16px; margin:14px 0 0; }
+  .biz .h{ font-size:13px; color:var(--blue); font-weight:700; margin-bottom:3px; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-18</div>
+  <h1>ひとりの目盛り</h1>
+  <p class="lead">国が1万人に聞いたのと同じ3問に、あなたも答える。点数がついたら、10,871人の実測分布のどこに立っているかが分かる。年齢や暮らし方を変えると、立っている場所が動く。</p>
+  <div class="src">実データ。内閣府「人々のつながりに関する基礎調査（令和6年）」の集計表（e-Stat公表 2025-04-25、有効回答 10,871人）の数値をそのまま使用</div>
+
+  <!-- 3問 -->
+  <div id="quiz">
+    <div class="card">
+      <div class="step">3問のうち <b id="qn">1</b> 問目</div>
+      <h2>UCLA孤独感尺度（日本語版3項目）</h2>
+      <p class="q" id="qtext"></p>
+      <div class="opts" id="opts"></div>
+    </div>
+    <p class="note">この3問と選択肢は、内閣府の調査票に載っているものと同じです。「決してない」1点、「ほとんどない」2点、「時々ある」3点、「常にある」4点として合計し、3〜12点で見ます。</p>
+  </div>
+
+  <!-- 結果 -->
+  <div id="result" class="hide">
+    <div class="card">
+      <div class="step">あなたの合計</div>
+      <div class="score">
+        <div class="n" id="sc">—</div>
+        <div class="u">点 <span style="color:#5b5b66;font-size:15px;font-weight:400">/ 3〜12点</span></div>
+        <div class="band" id="bandname"></div>
+      </div>
+      <div class="you" id="youline"></div>
+      <button class="btn ghost" id="redo">3問をやり直す</button>
+    </div>
+
+    <div class="card">
+      <h2>どの1万人と比べるか</h2>
+      <p class="note" style="margin:0 0 10px">同じ調査の中で、区分を選ぶ。帯の中の黄色い枠が、あなたが入っている帯です。</p>
+      <div class="segsel" id="segsel"></div>
+      <div class="picker" id="picker"></div>
+
+      <div class="stack">
+        <div class="stackbar" id="bar"></div>
+      </div>
+      <div class="legend">
+        <div><i class="sw c3"></i>3点（決してない）</div>
+        <div><i class="sw c46"></i>4〜6点（ほとんどない）</div>
+        <div><i class="sw c79"></i>7〜9点（時々ある）</div>
+        <div><i class="sw c1012"></i>10〜12点（常にある）</div>
+      </div>
+      <div class="cmp" id="cmp"></div>
+    </div>
+
+    <div class="card">
+      <h2>この調査で差がいちばん大きかったところ</h2>
+      <div class="cmp">
+        <div><span>気軽に話せる相手が「いる」（9,954人）</span><b>常にある 4.2%</b></div>
+        <div><span>気軽に話せる相手が「いない」（833人）</span><b class="mark">常にある 34.2%</b></div>
+      </div>
+      <p class="note" style="margin-top:10px">年齢でも、世帯構成でも、外出の頻度でもない。話せる相手が1人いるかどうかで、8倍ちがう。</p>
+      <div class="biz">
+        <div class="h">中小企業の行動に1行だけ翻訳すると</div>
+        面談で聞くことを1問に絞るなら、「最近どう？」ではなく<span class="mark">「気軽に話せる相手、社内にいますか」</span>。この調査でいちばん大きく割れた1問がこれです。
+      </div>
+    </div>
+
+    <p class="note">
+      出典（一次資料）<br>
+      内閣府 孤独・孤立の実態把握に関する全国調査（令和6年実施）<br>
+      <a href="https://www.cao.go.jp/kodoku_koritsu/torikumi/zenkokuchousa/r6.html">https://www.cao.go.jp/kodoku_koritsu/torikumi/zenkokuchousa/r6.html</a><br>
+      統計表「人々のつながりに関する基礎調査 令和6年 孤独感に関する集計」（e-Stat）<br>
+      <a href="https://www.e-stat.go.jp/stat-search/files?cycle=7&layout=datalist&stat_infid=000040263715&tclass1=000001227585&tclass2val=0&toukei=00000004&tstat=000001227583">https://www.e-stat.go.jp/stat-search/files?stat_infid=000040263715</a><br>
+      画面の割合は上記統計表の表1-1／1-2／1-3／1-5／1-9／1-20から転記。各区分の残りは無回答です。調査の実施月までは一次資料で確認できていません（公表は2025年4月25日）。<br>
+      尺度そのものの出典：Hughes, M. E. et al. (2004) A Short Scale for Measuring Loneliness in Large Surveys. Research on Aging 26(6), 655-672.<br>
+      これは調査結果の見せ方の実験であって、診断でも医療行為でもありません。
+    </p>
+  </div>
+</div>
+
+<script>
+const QS = [
+  "あなたは、自分には人とのつきあいがないと感じることがありますか",
+  "あなたは、自分は取り残されていると感じることがありますか",
+  "あなたは、自分は他の人たちから孤立していると感じることがありますか"
+];
+const OPTS = [["決してない",1],["ほとんどない",2],["時々ある",3],["常にある",4]];
+
+/* 内閣府「人々のつながりに関する基礎調査（令和6年）」孤独感に関する集計より転記
+   値は [3点, 4〜6点, 7〜9点, 10〜12点, 無回答] の% */
+const SEGS = [
+  { key:"zentai", label:"全体", rows:[ {name:"全体", n:10871, p:[14.2,38.0,39.2,6.5,2.0]} ] },
+  { key:"age", label:"年齢", rows:[
+      {name:"16〜19歳", n:306,  p:[21.6,43.5,29.4,4.2,1.3]},
+      {name:"20〜29歳", n:839,  p:[17.0,32.7,40.9,9.1,0.4]},
+      {name:"30〜39歳", n:1112, p:[14.3,29.8,45.2,9.5,1.2]},
+      {name:"40〜49歳", n:1572, p:[12.0,35.1,44.8,7.2,1.0]},
+      {name:"50〜59歳", n:1914, p:[11.8,34.9,44.4,7.6,1.4]},
+      {name:"60〜69歳", n:1909, p:[13.8,40.8,37.5,6.7,1.3]},
+      {name:"70〜79歳", n:2030, p:[15.6,44.4,32.4,3.9,3.7]},
+      {name:"80歳以上", n:1189, p:[15.4,42.0,33.5,4.1,5.0]}
+  ]},
+  { key:"haigu", label:"配偶者", rows:[
+      {name:"未婚",   n:2345, p:[12.0,29.8,44.9,12.0,1.3]},
+      {name:"有配偶", n:6851, p:[15.6,40.8,37.0,4.6,2.0]},
+      {name:"死別",   n:912,  p:[12.9,42.5,37.2,4.2,3.2]},
+      {name:"離別",   n:676,  p:[9.6,32.8,45.0,10.5,2.1]}
+  ]},
+  { key:"setai", label:"世帯", rows:[
+      {name:"ひとり世帯",        n:1772, p:[11.0,31.9,45.3,9.9,1.9]},
+      {name:"一世代世帯（夫婦のみ）",          n:3307, p:[15.4,41.7,35.5,5.0,2.4]},
+      {name:"二世代世帯（両親と子）",          n:3269, p:[14.8,37.8,39.9,6.2,1.3]},
+      {name:"二世代世帯（ひとり親と子）",      n:909,  p:[10.9,37.6,40.9,8.0,2.5]},
+      {name:"三世代世帯",        n:704,  p:[17.8,41.5,33.4,5.8,1.6]},
+      {name:"その他の世帯",      n:580,  p:[14.0,34.5,43.4,6.6,1.6]}
+  ]},
+  { key:"gaishutsu", label:"外出", rows:[
+      {name:"週5日以上",    n:6009, p:[15.2,39.5,38.7,5.4,1.3]},
+      {name:"週3〜4日程度", n:2046, p:[13.6,38.6,40.0,5.6,2.2]},
+      {name:"週1〜2日程度", n:1669, p:[13.7,36.0,39.7,8.1,2.5]},
+      {name:"週1日未満",    n:563,  p:[8.7,32.0,44.8,12.3,2.3]},
+      {name:"外出しない",   n:280,  p:[11.1,31.1,36.1,17.9,3.9]}
+  ]},
+  { key:"hanaseru", label:"話せる相手", rows:[
+      {name:"気軽に話せる相手がいる",   n:9954, p:[15.4,40.1,38.4,4.2,1.9]},
+      {name:"気軽に話せる相手がいない", n:833,  p:[1.6,13.0,48.6,34.2,2.6]}
+  ]}
+];
+const BANDS = [
+  {name:"3点（決してない）",      cls:"c3"},
+  {name:"4〜6点（ほとんどない）", cls:"c46"},
+  {name:"7〜9点（時々ある）",     cls:"c79"},
+  {name:"10〜12点（常にある）",   cls:"c1012"}
+];
+const bandOf = s => s<=3 ? 0 : s<=6 ? 1 : s<=9 ? 2 : 3;
+
+let qi=0, ans=[], score=0, segKey="zentai", rowIdx=0;
+const $ = id => document.getElementById(id);
+
+function drawQ(){
+  $("qn").textContent = qi+1;
+  $("qtext").textContent = QS[qi];
+  const box = $("opts"); box.innerHTML = "";
+  OPTS.forEach(([lab,v])=>{
+    const b=document.createElement("button");
+    b.className="opt"; b.textContent=lab+"（"+v+"点）";
+    b.onclick=()=>{ ans[qi]=v; qi++; if(qi<3) drawQ(); else finish(); };
+    box.appendChild(b);
+  });
+}
+function finish(){
+  score = ans.reduce((a,b)=>a+b,0);
+  $("quiz").classList.add("hide");
+  $("result").classList.remove("hide");
+  $("sc").textContent = score;
+  const bi = bandOf(score);
+  $("bandname").textContent = "この調査の区分では「"+BANDS[bi].name+"」";
+  drawSegSel(); drawPicker(); draw();
+  window.scrollTo(0,0);
+}
+function drawSegSel(){
+  const box=$("segsel"); box.innerHTML="";
+  SEGS.forEach(s=>{
+    const b=document.createElement("button");
+    b.textContent=s.label; if(s.key===segKey) b.className="on";
+    b.onclick=()=>{ segKey=s.key; rowIdx=0; drawSegSel(); drawPicker(); draw(); };
+    box.appendChild(b);
+  });
+}
+function drawPicker(){
+  const seg=SEGS.find(s=>s.key===segKey);
+  const box=$("picker"); box.innerHTML="";
+  if(seg.rows.length<2){ return; }
+  seg.rows.forEach((r,i)=>{
+    const b=document.createElement("button");
+    if(i===rowIdx) b.className="on";
+    b.innerHTML='<span>'+r.name+'</span><span class="n">'+r.n.toLocaleString()+'人</span>';
+    b.onclick=()=>{ rowIdx=i; drawPicker(); draw(); };
+    box.appendChild(b);
+  });
+}
+function draw(){
+  const seg=SEGS.find(s=>s.key===segKey);
+  const row=seg.rows[rowIdx];
+  const bi=bandOf(score);
+  const bar=$("bar"); bar.innerHTML="";
+  const order=[0,1,2,3,4];
+  order.forEach(k=>{
+    const pct=row.p[k]; if(pct<=0) return;
+    const d=document.createElement("div");
+    d.style.width=pct+"%";
+    d.className = k===4 ? "cna" : BANDS[k].cls;
+    if(k===bi) d.className+=" me";
+    d.title=(k===4?"無回答":BANDS[k].name)+" "+pct+"%";
+    d.textContent = pct>=7 ? pct+"%" : "";
+    bar.appendChild(d);
+  });
+  const mine=row.p[bi];
+  $("youline").innerHTML =
+    "あなたの "+score+" 点は「"+BANDS[bi].name+"」。<br>"+
+    row.name+"（"+row.n.toLocaleString()+"人）のうち <b>"+mine+"%</b> が同じ帯にいます。"+
+    "人数にすると約 <b>"+Math.round(row.n*mine/100).toLocaleString()+"人</b>。";
+  const zen=SEGS[0].rows[0].p[bi];
+  const diff=(mine-zen).toFixed(1);
+  const cmp=$("cmp"); cmp.innerHTML="";
+  const add=(a,b,mk)=>{ const d=document.createElement("div");
+    d.innerHTML='<span>'+a+'</span><b'+(mk?' class="mark"':'')+'>'+b+'</b>'; cmp.appendChild(d); };
+  add("あなたの帯", BANDS[bi].name);
+  if(segKey==="zentai"){
+    add("全体でこの帯にいる割合", zen+"%", true);
+  } else {
+    add("全体でこの帯にいる割合", zen+"%");
+    add(row.name+"でこの帯にいる割合", mine+"%", true);
+    add("全体との差", (diff>0?"+":"")+diff+"ポイント");
+  }
+  const worst=[...seg.rows].sort((a,b)=>b.p[3]-a.p[3])[0];
+  if(seg.rows.length>1) add("この区分で「常にある」が最も多いのは", worst.name+"（"+worst.p[3]+"%）");
+}
+$("redo").onclick=()=>{ qi=0; ans=[]; $("result").classList.add("hide"); $("quiz").classList.remove("hide"); drawQ(); window.scrollTo(0,0); };
+drawQ();
+</script>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>たぶん断られる</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; --red:#b4322a; --green:#2f7a52; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 18px; }
+  .src{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line);
+    background:#fff; border-radius:999px; padding:3px 11px; line-height:1.5; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 10px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px;
+    padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn:disabled{ background:#c3c3bd; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); }
+  .btn.quiet{ background:#fff; color:var(--sub); border:1.5px solid var(--line); font-size:15px; padding:11px; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  textarea,input[type=number]{ font:inherit; width:100%; border:1.5px solid var(--line); border-radius:10px;
+    padding:11px 12px; background:#fff; color:var(--ink); }
+  textarea{ min-height:76px; resize:vertical; }
+  textarea:focus,input:focus{ outline:none; border-color:var(--blue); }
+  .chips{ display:flex; flex-wrap:wrap; gap:7px; margin:9px 0 0; }
+  .chips button{ background:#fff; border:1.5px solid var(--line); border-radius:999px;
+    padding:7px 12px; font-size:14px; color:var(--sub); text-align:left; }
+  .big{ text-align:center; margin:10px 0 4px; }
+  .big .n{ font-size:52px; font-weight:700; letter-spacing:-.03em; font-variant-numeric:tabular-nums; line-height:1.1; }
+  .big .u{ font-size:18px; color:var(--sub); }
+  input[type=range]{ width:100%; accent-color:var(--blue); height:36px; }
+  .fuu{ background:#efece3; border:1px dashed #b9b4a4; border-radius:14px; padding:24px 18px; text-align:center; margin:14px 0; }
+  .fuu .seal{ font-size:15px; color:var(--sub); }
+  .fuu .when{ font-size:21px; font-weight:700; margin:8px 0 2px; }
+  .fuu .body{ font-size:15px; color:var(--sub); }
+  .row{ border-top:1px solid var(--line); }
+  .row div{ display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); font-size:16px; }
+  .row span:first-child{ color:var(--sub); }
+  .row b{ font-variant-numeric:tabular-nums; text-align:right; }
+  .good{ color:var(--green); } .bad{ color:var(--red); }
+  .gauge{ margin:14px 0 4px; }
+  .track{ position:relative; height:54px; background:#f0eee7; border:1px solid var(--line); border-radius:10px; }
+  .pin{ position:absolute; top:0; bottom:0; width:2px; background:var(--ink); }
+  .pin.me{ background:var(--blue); }
+  .pin.paper{ background:var(--red); }
+  .pin i{ position:absolute; top:-2px; left:50%; transform:translateX(-50%);
+    font-size:12px; font-style:normal; white-space:nowrap; background:#fff; border:1px solid var(--line);
+    border-radius:5px; padding:1px 5px; }
+  .pin.me i{ top:auto; bottom:-2px; color:var(--blue); border-color:#cddcfb; }
+  .pin.paper i{ color:var(--red); border-color:#f0cfcc; }
+  .ticks{ display:flex; justify-content:space-between; font-size:12px; color:var(--sub); margin-top:4px; }
+  .note{ font-size:14px; color:var(--sub); line-height:1.75; }
+  .note a{ color:var(--blue); word-break:break-all; }
+  .quote{ border-left:3px solid var(--line); padding:2px 0 2px 12px; font-size:15px; color:var(--sub); margin:10px 0; }
+  .biz{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:13px 15px; font-size:16px; margin:14px 0 0; }
+  .biz .h{ font-size:13px; color:var(--blue); font-weight:700; margin-bottom:3px; }
+  .ledger div{ display:flex; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); font-size:15px; }
+  .ledger .t{ color:var(--sub); flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .hide{ display:none; }
+  .hr{ height:1px; background:var(--line); margin:16px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-18</div>
+  <h1>たぶん断られる</h1>
+  <p class="lead">頼みごとを1つ決めて、「何人に頼めばOKが1件もらえるか」を予想して封をする。封は日をまたぐまで開かない。翌日、実際に頼んだ結果と、論文が測った実測値の両方に照らす。</p>
+  <div class="src">実験の出典あり。Flynn &amp; Lake (2008) Journal of Personality and Social Psychology 95(1), 128-143</div>
+
+  <!-- 1: 封をする -->
+  <div id="seal">
+    <div class="card">
+      <h2>今日、誰かに頼みたいこと</h2>
+      <textarea id="ask" placeholder="例：来週の見積もりチェックを30分だけ見てほしい"></textarea>
+      <div class="chips" id="chips"></div>
+    </div>
+    <div class="card">
+      <h2>OKが1件もらえるまでに、何人に頼むと思う？</h2>
+      <div class="big"><div class="n" id="gn">6</div><div class="u">人に頼めば、1件はOKが出る</div></div>
+      <input type="range" id="g" min="1" max="20" value="6">
+      <div class="ticks"><span>1人</span><span>10人</span><span>20人</span></div>
+      <p class="note" style="margin:6px 0 12px">この予想は、あなたが見込んでいる承諾率 <b id="rate">17%</b> と同じ意味です。</p>
+      <button class="btn" id="doSeal">この予想に封をする</button>
+    </div>
+    <p class="note">封の中身は、この端末のブラウザにだけ残ります。どこにも送りません。</p>
+  </div>
+
+  <!-- 2: 封をした -->
+  <div id="sealed" class="hide">
+    <div class="fuu">
+      <div class="seal">封をしました</div>
+      <div class="when" id="openwhen"></div>
+      <div class="body">その場で答えは出ません。今日のうちに、実際に頼んでください。</div>
+    </div>
+    <div class="card">
+      <div class="row" id="sealedrow"></div>
+    </div>
+    <button class="btn quiet" id="fast">デモとして、翌日になったことにして開ける</button>
+    <p class="note" style="margin-top:10px">本来は日付が変わるまで開きません。1日1アプリ実験室では中身を見てもらう必要があるので、上のボタンで先に進めるようにしています。</p>
+    <button class="btn quiet" id="reset" style="margin-top:10px">封を捨ててやり直す</button>
+  </div>
+
+  <!-- 3: 開封 -->
+  <div id="opened" class="hide">
+    <div class="card">
+      <h2>開封</h2>
+      <div class="row" id="openedrow"></div>
+    </div>
+
+    <div class="card">
+      <h2>論文が測った線と、あなたの予想</h2>
+      <div class="gauge">
+        <div class="track" id="track"></div>
+        <div class="ticks"><span>承諾率 0%</span><span>50%</span><span>100%</span></div>
+      </div>
+      <div class="row" id="paperrow"></div>
+      <p class="quote">Flynn &amp; Lake (2008) の抄録より：最初の3つの研究で、人は直接頼んだときに他人が応じてくれる確率を「最大50%」過小評価した。スタンフォード経営大学院の紹介記事では、参加者は必要な人数を一貫して50%多く見積もったと書かれています。</p>
+      <p class="note">上の赤い線は、この「予想は実際より50%多い」をあなたの予想に当てはめた位置です。論文の実験はアンケート記入・携帯電話を貸す・体育館まで一緒に歩く、といった見知らぬ人への頼みごとで測られたもので、あなたの頼みごとそのものの確率ではありません。</p>
+    </div>
+
+    <div class="card">
+      <h2>実際はどうだった？</h2>
+      <div style="display:flex;gap:10px;margin-bottom:10px">
+        <div style="flex:1"><div class="note">頼んだ人数</div><input type="number" id="asked" min="0" max="200" placeholder="3"></div>
+        <div style="flex:1"><div class="note">OKだった件数</div><input type="number" id="oks" min="0" max="200" placeholder="2"></div>
+      </div>
+      <button class="btn" id="save">結果を帳面に入れる</button>
+      <div id="verdict"></div>
+    </div>
+
+    <div class="card">
+      <h2>帳面（予想と実際のずれ）</h2>
+      <div class="ledger" id="ledger"></div>
+      <div class="row" id="calib" style="margin-top:8px"></div>
+      <div class="biz">
+        <div class="h">中小企業の行動に1行だけ翻訳すると</div>
+        新規の初回接触も同じ形です。<span class="mark">断られる前提で送り先を絞るのが、いちばん取りこぼす</span>。減らすなら数ではなく、頼み方のほうを削る。
+      </div>
+      <button class="btn ghost" id="again" style="margin-top:14px">もう1通、封をする</button>
+    </div>
+
+    <p class="note">
+      出典（一次資料）<br>
+      Flynn, F. J., &amp; Lake, V. K. B. (2008). If You Need Help, Just Ask: Underestimating Compliance With Direct Requests for Help. <i>Journal of Personality and Social Psychology</i>, 95(1), 128-143.<br>
+      <a href="https://pubmed.ncbi.nlm.nih.gov/18605856/">https://pubmed.ncbi.nlm.nih.gov/18605856/</a><br>
+      <a href="https://www.gsb.stanford.edu/faculty-research/publications/if-you-need-help-just-ask-underestimating-compliance-direct-requests">https://www.gsb.stanford.edu/faculty-research/publications/if-you-need-help-just-ask-underestimating-compliance-direct-requests</a><br>
+      解説（スタンフォード経営大学院）<a href="https://www.gsb.stanford.edu/insights/francis-flynn-if-you-want-something-ask-it">https://www.gsb.stanford.edu/insights/francis-flynn-if-you-want-something-ask-it</a><br>
+      論文本文（全文）までは当たれていません。画面で使った数字は抄録と、掲載機関であるスタンフォード経営大学院の記事に書かれた「50%」だけです。個々の実験ごとの人数は、その2つで確認できなかったので使っていません。
+    </p>
+  </div>
+</div>
+
+<script>
+const K="tabun_kotowarareru_v1";
+const $=id=>document.getElementById(id);
+const load=()=>{ try{ return JSON.parse(localStorage.getItem(K))||{env:null,log:[]}; }catch(e){ return {env:null,log:[]}; } };
+const save=s=>{ try{ localStorage.setItem(K,JSON.stringify(s)); }catch(e){} };
+let S=load();
+
+const EXAMPLES=[
+ "来週の見積もりをもう一度だけ見てほしい",
+ "取引先の担当者を1人紹介してほしい",
+ "土曜の搬入を1時間だけ手伝ってほしい",
+ "うちのサービスの感想を10分もらいたい",
+ "使っていない棚を1つ譲ってほしい"
+];
+EXAMPLES.forEach(t=>{ const b=document.createElement("button"); b.textContent=t;
+  b.onclick=()=>{ $("ask").value=t; }; $("chips").appendChild(b); });
+
+const g=$("g");
+function syncG(){ const v=+g.value; $("gn").textContent=v; $("rate").textContent=Math.round(100/v)+"%"; }
+g.oninput=syncG; syncG();
+
+const dstr=d=>d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日";
+const today0=()=>{ const d=new Date(); d.setHours(0,0,0,0); return d.getTime(); };
+
+function rowsHtml(el,pairs){ el.innerHTML=pairs.map(p=>
+  '<div><span>'+p[0]+'</span><b'+(p[2]?' class="'+p[2]+'"':'')+'>'+p[1]+'</b></div>').join(""); }
+
+$("doSeal").onclick=()=>{
+  const t=($("ask").value||"").trim();
+  if(!t){ $("ask").focus(); $("ask").style.borderColor="#b4322a"; return; }
+  const d=new Date(); const nd=new Date(); nd.setDate(nd.getDate()+1);
+  S.env={ text:t, guess:+g.value, sealedAt:Date.now(), openDay:today0()+86400000, openLabel:dstr(nd) };
+  save(S); render();
+};
+$("fast").onclick=()=>{ S.env.forced=true; save(S); render(); };
+$("reset").onclick=()=>{ S.env=null; save(S); render(); };
+$("again").onclick=()=>{ S.env=null; save(S); render(); window.scrollTo(0,0); };
+
+$("save").onclick=()=>{
+  const a=parseInt($("asked").value,10), o=parseInt($("oks").value,10);
+  if(!(a>0) || !(o>=0) || o>a){ $("verdict").innerHTML='<p class="note bad" style="color:#b4322a">頼んだ人数は1以上、OK件数はそれ以下で入れてください。</p>'; return; }
+  const actual=o/a, guessed=1/S.env.guess;
+  S.log.unshift({ text:S.env.text, guess:S.env.guess, asked:a, oks:o, at:Date.now() });
+  save(S);
+  const ratio=actual>0 ? (actual/guessed) : 0;
+  let msg;
+  if(o===0) msg="この1件は全部断られました。帳面はこういう回も入れて初めて意味があります。";
+  else if(ratio>=1.4) msg="実際の承諾率は、あなたの予想の"+ratio.toFixed(1)+"倍。論文と同じ向きに外しています。";
+  else if(ratio<=0.7) msg="実際の承諾率は予想の"+ratio.toFixed(1)+"倍。論文とは逆向きでした。頼み方か相手の選び方のほうを見たほうがよさそうです。";
+  else msg="予想とほぼ同じでした。";
+  $("verdict").innerHTML='<p class="note" style="margin-top:12px;font-size:16px;color:#16161a">'+msg+'</p>';
+  drawLedger();
+};
+
+function drawLedger(){
+  const L=$("ledger");
+  if(!S.log.length){ L.innerHTML='<div class="note">まだ1件もありません。</div>'; rowsHtml($("calib"),[]); return; }
+  L.innerHTML=S.log.slice(0,8).map(r=>{
+    const act=r.oks>0 ? Math.round(100*r.oks/r.asked)+"%" : "0%";
+    return '<div><span class="t">'+r.text.replace(/</g,"&lt;")+'</span><b>予想 '+Math.round(100/r.guess)+'% → 実際 '+act+'</b></div>';
+  }).join("");
+  const sg=S.log.reduce((a,r)=>a+100/r.guess,0)/S.log.length;
+  const sa=S.log.reduce((a,r)=>a+100*r.oks/r.asked,0)/S.log.length;
+  rowsHtml($("calib"),[
+    ["件数", S.log.length+"件"],
+    ["予想した承諾率の平均", sg.toFixed(0)+"%"],
+    ["実際の承諾率の平均", sa.toFixed(0)+"%", sa>sg?"good":"bad"],
+    ["ずれ", (sa-sg>0?"+":"")+(sa-sg).toFixed(0)+"ポイント"]
+  ]);
+}
+
+function drawGauge(){
+  const t=$("track"); t.innerHTML="";
+  const guessed=Math.round(100/S.env.guess);
+  const paper=Math.min(100, guessed*1.5);
+  const mk=(pct,cls,lab)=>{ const d=document.createElement("div");
+    d.className="pin "+cls; d.style.left=pct+"%"; d.innerHTML='<i>'+lab+'</i>'; t.appendChild(d); };
+  mk(paper,"paper","論文どおりなら "+Math.round(paper)+"%");
+  mk(guessed,"me","あなたの予想 "+Math.round(guessed)+"%");
+}
+
+function render(){
+  $("seal").classList.add("hide"); $("sealed").classList.add("hide"); $("opened").classList.add("hide");
+  if(!S.env){ $("seal").classList.remove("hide"); return; }
+  const canOpen = S.env.forced || Date.now()>=S.env.openDay;
+  if(!canOpen){
+    $("sealed").classList.remove("hide");
+    $("openwhen").textContent=S.env.openLabel+"に開きます";
+    rowsHtml($("sealedrow"),[
+      ["頼みごと", S.env.text.replace(/</g,"&lt;")],
+      ["封をした予想", "見えません"],
+      ["開くまで", Math.max(1,Math.ceil((S.env.openDay-Date.now())/3600000))+"時間"]
+    ]);
+    return;
+  }
+  $("opened").classList.remove("hide");
+  const guessed=Math.round(100/S.env.guess);
+  rowsHtml($("openedrow"),[
+    ["頼みごと", S.env.text.replace(/</g,"&lt;")],
+    ["あなたが封に入れた予想", S.env.guess+"人に頼めば1件OK"],
+    ["＝見込んでいた承諾率", guessed+"%"],
+    ["封をしたのは", dstr(new Date(S.env.sealedAt))]
+  ]);
+  const paper=Math.min(100, guessed*1.5);
+  const need=Math.max(1, Math.round(S.env.guess/1.5));
+  rowsHtml($("paperrow"),[
+    ["あなたの予想", guessed+"%（"+S.env.guess+"人に1件）"],
+    ["論文の向きに直すと", Math.round(paper)+"%（およそ"+need+"人に1件）","good"],
+    ["差", "+"+Math.round(paper-guessed)+"ポイント"]
+  ]);
+  drawGauge(); drawLedger();
+}
+render();
+</script>
+</body>
+</html>

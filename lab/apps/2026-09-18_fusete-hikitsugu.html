@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>伏せて引き継ぐ</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; --red:#b4322a; --green:#2f7a52; --amber:#9a6b12; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; letter-spacing:-.01em; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 18px; }
+  .demo{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line);
+    background:#fff; border-radius:999px; padding:3px 11px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 10px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px;
+    padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn:disabled{ background:#c3c3bd; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); }
+  .btn.quiet{ background:#fff; color:var(--sub); border:1.5px solid var(--line); font-size:15px; padding:11px; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .who{ display:flex; align-items:center; gap:10px; background:#eef3fe; border:1px solid #cddcfb;
+    border-radius:11px; padding:10px 13px; font-size:15px; margin-bottom:12px; }
+  .who b{ color:var(--blue); }
+  .item{ border-bottom:1px solid var(--line); padding:12px 0; }
+  .item:last-of-type{ border-bottom:none; }
+  .item .nm{ font-size:17px; margin-bottom:8px; }
+  .item .nm i{ font-style:normal; color:var(--sub); font-size:14px; }
+  .three{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; }
+  .three button{ background:#fff; border:1.5px solid var(--line); border-radius:9px;
+    padding:10px 4px; font-size:14px; color:var(--sub); line-height:1.4; }
+  .three button.on-ok{ border-color:var(--green); background:#eef7f1; color:var(--green); font-weight:700; }
+  .three button.on-ng{ border-color:var(--red); background:#fbf0ef; color:var(--red); font-weight:700; }
+  .three button.on-na{ border-color:var(--amber); background:#faf4e6; color:var(--amber); font-weight:700; }
+  .pass{ background:#efece3; border:1px dashed #b9b4a4; border-radius:14px; padding:26px 18px; text-align:center; margin:14px 0; }
+  .pass .t{ font-size:21px; font-weight:700; margin-bottom:4px; }
+  .pass .s{ font-size:15px; color:var(--sub); }
+  .fp{ width:78px; height:78px; margin:12px auto 6px; border-radius:50%;
+    border:2px solid var(--line); background:#fff; display:flex; align-items:center; justify-content:center; }
+  .fp svg{ width:40px; height:40px; }
+  .fp.on{ border-color:var(--blue); background:#eef3fe; }
+  .sum{ display:flex; gap:10px; margin:6px 0 14px; }
+  .sum > div{ flex:1; background:#fff; border:1px solid var(--line); border-radius:13px; padding:13px 8px; text-align:center; }
+  .sum .num{ font-size:29px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1.2; }
+  .sum .lab{ font-size:12px; color:var(--sub); line-height:1.5; }
+  .sum .g{ color:var(--green); } .sum .r{ color:var(--red); } .sum .a{ color:var(--amber); }
+  .diff{ border-radius:11px; padding:12px 13px; margin:9px 0; font-size:16px; border:1px solid var(--line); background:#fff; }
+  .diff.blind{ background:#faf4e6; border-color:#eadcb8; }
+  .diff.split{ background:#fbf0ef; border-color:#f0cfcc; }
+  .diff .h{ font-size:13px; font-weight:700; margin-bottom:3px; }
+  .diff.blind .h{ color:var(--amber); } .diff.split .h{ color:var(--red); }
+  .diff .two{ display:flex; gap:10px; margin-top:7px; font-size:14px; color:var(--sub); }
+  .diff .two div{ flex:1; border-top:1px solid var(--line); padding-top:5px; }
+  .ok{ font-size:15px; color:var(--sub); padding:9px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; }
+  .row{ border-top:1px solid var(--line); }
+  .row div{ display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); font-size:16px; }
+  .row span:first-child{ color:var(--sub); }
+  .row b{ font-variant-numeric:tabular-nums; text-align:right; }
+  .note{ font-size:14px; color:var(--sub); line-height:1.75; }
+  .biz{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:13px 15px; font-size:16px; margin:14px 0 0; }
+  .biz .h{ font-size:13px; color:var(--blue); font-weight:700; margin-bottom:3px; }
+  .hide{ display:none; }
+  .prog{ font-size:13px; color:var(--sub); margin-bottom:8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-18</div>
+  <h1>伏せて引き継ぐ</h1>
+  <p class="lead">施設警備の交代。明け番と入り番が、同じ端末を渡し合って、同じ8か所に別々に答える。相手の答えは見えない。一致した所は消え、食い違った所だけが引き継ぎ書に残る。</p>
+  <div class="demo">デモ（サンプルデータ・架空の現場と隊員。指紋は押した演出だけで、生体データは一切扱いません）</div>
+
+  <!-- 明け番 -->
+  <div id="phase1">
+    <div class="card">
+      <div class="prog">交代 1/3　明け番の入力</div>
+      <div class="who">端末を持っているのは <b id="w1"></b>（明け番・22時から6時）</div>
+      <h2>8か所、見たとおりに</h2>
+      <div id="list1"></div>
+    </div>
+    <button class="btn" id="fin1" disabled>指紋で確定して、画面を伏せる</button>
+    <p class="note" style="margin-top:10px">確定すると、明け番の答えは入り番からは見えなくなります。</p>
+  </div>
+
+  <!-- 受け渡し -->
+  <div id="phase2" class="hide">
+    <div class="pass">
+      <div class="fp" id="fp"><svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.6" stroke-linecap="round"><path d="M12 2a9 9 0 0 0-9 9v3"/><path d="M21 14v-3a9 9 0 0 0-4.5-7.8"/><path d="M7 12a5 5 0 0 1 10 0v5"/><path d="M12 12v6"/><path d="M5 18v2"/><path d="M17 20v1"/></svg></div>
+      <div class="t">端末を入り番に渡してください</div>
+      <div class="s">明け番の答えは封じました。<br>受け取った人が指紋で名乗るまで、次に進みません。</div>
+    </div>
+    <button class="btn" id="take">入り番として指紋で名乗る</button>
+  </div>
+
+  <!-- 入り番 -->
+  <div id="phase3" class="hide">
+    <div class="card">
+      <div class="prog">交代 2/3　入り番の入力</div>
+      <div class="who">端末を持っているのは <b id="w2"></b>（入り番・6時から14時）</div>
+      <h2>同じ8か所を、自分の目で</h2>
+      <div id="list2"></div>
+    </div>
+    <button class="btn" id="fin2" disabled>指紋で確定して、突き合わせる</button>
+  </div>
+
+  <!-- 照合 -->
+  <div id="phase4" class="hide">
+    <div class="card">
+      <div class="prog">交代 3/3　突き合わせ</div>
+      <h2 id="resh"></h2>
+      <div class="sum">
+        <div><div class="num g" id="nOk">0</div><div class="lab">一致<br>（消える）</div></div>
+        <div><div class="num r" id="nSplit">0</div><div class="lab">判断が割れた<br>（残る）</div></div>
+        <div><div class="num a" id="nBlind">0</div><div class="lab">どちらも<br>見ていない</div></div>
+      </div>
+      <div id="diffs"></div>
+      <div id="okslist"></div>
+    </div>
+
+    <div class="card">
+      <h2>この現場の、積み上がったズレ</h2>
+      <p class="note" style="margin:0 0 8px">同じ場所で何度も食い違うなら、人ではなく、その場所の見方が決まっていないということです。</p>
+      <div class="row" id="hist"></div>
+      <div class="biz">
+        <div class="h">なぜ伏せるのか</div>
+        引き継ぎ書を先に見せると、後番は<span class="mark">「異常なし」に丸を合わせてしまう</span>。伏せて別々に書かせて初めて、見落としが数字として出てきます。
+      </div>
+    </div>
+    <button class="btn ghost" id="next">次の交代へ</button>
+    <button class="btn quiet" id="clear" style="margin-top:10px">積み上げを消して最初から</button>
+    <p class="note" style="margin-top:14px">売り先は施設警備の会社。人が減っても巡回の質が落ちていないことを、契約更新のときに数字で出せる材料になります。記録はこの端末のブラウザにだけ残り、どこにも送りません。</p>
+  </div>
+</div>
+
+<script>
+const K="fusete_hikitsugu_v1";
+const $=id=>document.getElementById(id);
+const load=()=>{ try{ return JSON.parse(localStorage.getItem(K))||{hist:{},turns:0}; }catch(e){ return {hist:{},turns:0}; } };
+const save=s=>{ try{ localStorage.setItem(K,JSON.stringify(s)); }catch(e){} };
+let S=load();
+
+const SITE="城南ビジネスタワー（架空）";
+const CREW=[["佐々木","明け番"],["大西","入り番"],["樋口","明け番"],["前田","入り番"]];
+const ITEMS=[
+ {id:"a", n:"東通用口の施錠",        h:"22時以降は内側から施錠"},
+ {id:"b", n:"3階非常口前の障害物",   h:"台車・段ボールが置かれやすい"},
+ {id:"c", n:"地下駐輪場の照明",      h:"奥から2列目が切れやすい"},
+ {id:"d", n:"防災センターの鍵数",    h:"定数42本"},
+ {id:"e", n:"来客受付簿の記入漏れ",  h:"退館時刻の空欄"},
+ {id:"f", n:"4階給湯室の漏水跡",     h:"床のシミの広がり"},
+ {id:"g", n:"屋上扉の施錠",          h:"風で開くことがある"},
+ {id:"h", n:"警報盤の表示",          h:"黄色の点灯が残っていないか"}
+];
+const CH=[["ok","異常なし"],["ng","気になる点あり"],["na","見ていない"]];
+
+let turn=0, a1={}, a2={};
+const crewPair=()=>{ const i=(turn*2)%CREW.length; return [CREW[i][0], CREW[(i+1)%CREW.length][0]]; };
+
+function drawList(box, store, finBtn){
+  box.innerHTML="";
+  ITEMS.forEach(it=>{
+    const d=document.createElement("div"); d.className="item";
+    d.innerHTML='<div class="nm">'+it.n+' <i>'+it.h+'</i></div>';
+    const g=document.createElement("div"); g.className="three";
+    CH.forEach(([v,lab])=>{
+      const b=document.createElement("button"); b.textContent=lab;
+      b.onclick=()=>{ store[it.id]=v;
+        [...g.children].forEach(c=>c.className="");
+        b.className="on-"+v;
+        finBtn.disabled = Object.keys(store).length<ITEMS.length; };
+      g.appendChild(b);
+    });
+    d.appendChild(g); box.appendChild(d);
+  });
+}
+function show(p){ ["phase1","phase2","phase3","phase4"].forEach(x=>$(x).classList.add("hide")); $(p).classList.remove("hide"); window.scrollTo(0,0); }
+
+function startTurn(){
+  a1={}; a2={};
+  const [n1,n2]=crewPair();
+  $("w1").textContent=n1+"隊員"; $("w2").textContent=n2+"隊員";
+  $("fin1").disabled=true; $("fin2").disabled=true;
+  drawList($("list1"), a1, $("fin1"));
+  drawList($("list2"), a2, $("fin2"));
+  show("phase1");
+}
+$("fin1").onclick=()=>{ show("phase2"); };
+$("take").onclick=()=>{ $("fp").classList.add("on"); setTimeout(()=>show("phase3"),260); };
+$("fin2").onclick=()=>{ compare(); };
+
+function compare(){
+  let ok=0, split=[], blind=[];
+  ITEMS.forEach(it=>{
+    const x=a1[it.id], y=a2[it.id];
+    if(x==="na" && y==="na"){ blind.push(it); bump(it.id,"blind"); }
+    else if(x===y){ ok++; }
+    else { split.push({it,x,y}); bump(it.id,"split"); }
+  });
+  const [n1,n2]=crewPair();
+  S.turns=(S.turns||0)+1; save(S);
+  $("resh").textContent = n1+"隊員 → "+n2+"隊員　"+SITE;
+  $("nOk").textContent=ok; $("nSplit").textContent=split.length; $("nBlind").textContent=blind.length;
+  const lab=v=>({ok:"異常なし",ng:"気になる点あり",na:"見ていない"})[v];
+  const D=$("diffs"); D.innerHTML="";
+  blind.forEach(it=>{
+    D.insertAdjacentHTML("beforeend",
+      '<div class="diff blind"><div class="h">どちらも見ていない</div>'+it.n+
+      '<div class="two"><div>明け番：見ていない</div><div>入り番：見ていない</div></div></div>');
+  });
+  split.forEach(s=>{
+    D.insertAdjacentHTML("beforeend",
+      '<div class="diff split"><div class="h">判断が割れた</div>'+s.it.n+
+      '<div class="two"><div>明け番：'+lab(s.x)+'</div><div>入り番：'+lab(s.y)+'</div></div></div>');
+  });
+  if(!blind.length && !split.length)
+    D.innerHTML='<div class="diff"><div class="h" style="color:#2f7a52">残るものなし</div>8か所すべて一致しました。引き継ぎ書は白紙で出ます。</div>';
+  const O=$("okslist");
+  O.innerHTML = ok ? '<p class="note" style="margin:14px 0 6px">一致して消えた '+ok+' か所</p>'+
+    ITEMS.filter(it=>a1[it.id]===a2[it.id] && !(a1[it.id]==="na")).map(it=>
+      '<div class="ok"><span>'+it.n+'</span><span>'+lab(a1[it.id])+'</span></div>').join("") : "";
+  drawHist();
+  show("phase4");
+}
+function bump(id,kind){
+  S.hist[id]=S.hist[id]||{split:0,blind:0};
+  S.hist[id][kind]++; save(S);
+}
+function drawHist(){
+  const rows=ITEMS.map(it=>({it,h:S.hist[it.id]||{split:0,blind:0}}))
+    .filter(r=>r.h.split+r.h.blind>0)
+    .sort((a,b)=>(b.h.split+b.h.blind)-(a.h.split+a.h.blind));
+  const el=$("hist");
+  if(!rows.length){ el.innerHTML='<div><span>まだズレはありません</span><b>交代 '+S.turns+' 回</b></div>'; return; }
+  el.innerHTML='<div><span>これまでの交代</span><b>'+S.turns+' 回</b></div>'+
+    rows.map(r=>'<div><span>'+r.it.n+'</span><b>割れ '+r.h.split+' / 見ていない '+r.h.blind+'</b></div>').join("");
+}
+$("next").onclick=()=>{ turn++; startTurn(); };
+$("clear").onclick=()=>{ S={hist:{},turns:0}; save(S); turn=0; startTurn(); };
+startTurn();
+</script>
+</body>
+</html>

@@ -697,6 +697,14 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .center{margin-top:32px;}
 
 /* ---------- ニュース ---------- */
+.news-pickup{display:grid;grid-template-columns:minmax(0,420px) 1fr;gap:1.6rem;align-items:center;margin:0 0 1.2rem;padding:0 4px 1.4rem;border-bottom:1px solid var(--line);color:inherit;text-decoration:none;}
+.news-pickup img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line);}
+.news-pickup .np-body{display:block;}
+.news-pickup .np-label{display:block;font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem;}
+.news-pickup .np-title{display:block;font-size:1.15rem;font-weight:700;line-height:1.6;}
+.news-pickup .np-sub{display:block;font-size:0.92rem;line-height:1.8;margin-top:0.5rem;}
+.news-pickup:hover .np-title{color:var(--blue);}
+@media(max-width:760px){.news-pickup{grid-template-columns:1fr;gap:0.9rem;}}
 .news a{display:grid;grid-template-columns:6.4rem 5.8rem 1fr auto;gap:1.2rem;align-items:baseline;padding:19px 4px;border-bottom:1px solid var(--line);transition:color 0.3s var(--ease),padding-left 0.3s var(--ease);}
 .news a:hover{color:var(--blue);padding-left:8px;}
 .news .d{font-size:0.8rem;color:var(--muted);}
@@ -1531,6 +1539,10 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <h2 class="sec-title" data-rv="up" style="--d:100ms">お知らせ</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
     </div>
+    <a class="news-pickup" href="https://www.youtube.com/watch?v=eB3ZNJ4BT90" target="_blank" rel="noopener" data-rv="up" style="--d:120ms">
+      <img src="articles/nbc-2026-09-youtube.jpg" alt="東京NBC公式YouTube「AIを使うだけでは意味がない！23歳社長が教える“AI活用の本質”とは？【NBCメンバー紹介】」のサムネイル。AIdollargame代表・佐藤徳之介" width="1280" height="720" loading="lazy">
+      <span class="np-body"><span class="np-label">2026 / 09 / 18 &nbsp; MEDIA &nbsp; YouTube</span><span class="np-title">AIを使うだけでは意味がない！23歳社長が教える“AI活用の本質”とは？【NBCメンバー紹介】</span><span class="np-sub">東京NBC公式YouTubeのメンバー紹介コーナーに代表・佐藤が出演しました。YouTubeで見る →</span></span>
+    </a>
     <div class="news" id="newsList" data-rv="up" style="--d:160ms">
       <a href="articles/nbc-2026-07.html"><span class="d">2026 / 09 / 18</span><span class="b">MEDIA</span><span class="t">東京NBC公式YouTubeで代表・佐藤の出演回「AIを使うだけでは意味がない！23歳社長が教える“AI活用の本質”とは？【NBCメンバー紹介】」が公開されました — 事業内容と独自性、AIを使うことの本質を話しています</span><span class="a">→</span></a>
       <a href="aio-check.html"><span class="d">2026 / 09 / 13</span><span class="b">SERVICE</span><span class="t">「AI検索表示チェック」を公開 — ChatGPTやGeminiに「おすすめの会社は」と聞かれたとき貴社が候補に入っているかを測るサービス。無料の3問診断から。あわせて比較記事3本(AI検索の計測サービス6つ / 運用代行までする会社7社 / ChatGPT社内利用の伴走7社)を公開</span><span class="a">→</span></a>

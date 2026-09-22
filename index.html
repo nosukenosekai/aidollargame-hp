@@ -597,16 +597,17 @@ header.site.scrolled{box-shadow:0 10px 30px -22px rgba(20,30,70,0.3);}
 .flow-note{margin-top:22px;font-size:0.88rem;color:var(--muted);line-height:1.9;max-width:56em;}
 
 /* ---------- 安心材料4点 ---------- */
-.tech-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 26px 18px;box-shadow:var(--shadow);}
-.tech-box h3{font-size:1.02rem;font-weight:700;margin-bottom:0.4rem;}
-.tech-lead{font-size:0.9rem;color:var(--ink-soft);margin-bottom:1rem;}
-.tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 14px;}
-.tech{display:grid;grid-template-columns:28px 1fr;grid-template-rows:auto auto;column-gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper,#fafafa);}
-.tech img{grid-row:1/3;width:28px;height:28px;}
-.tech .tn{font-size:0.92rem;font-weight:700;line-height:1.3;}
-.tech .tr{font-size:0.78rem;color:var(--muted);line-height:1.4;}
-@media(max-width:860px){.tech-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:480px){.tech-grid{grid-template-columns:1fr;}}
+.skills-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 26px 18px;box-shadow:var(--shadow);}
+.skills-box h3{font-size:1.02rem;font-weight:700;margin-bottom:0.4rem;}
+.skills-lead{font-size:0.9rem;color:var(--ink-soft);margin-bottom:1.1rem;}
+.skill-row{display:grid;grid-template-columns:7.5rem 1fr;gap:10px 14px;padding:12px 0;border-top:1px solid var(--line);align-items:start;}
+.skill-cat{font-size:0.78rem;font-weight:700;letter-spacing:0.08em;color:var(--blue);padding-top:0.45rem;}
+.skill-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:0.38rem 0.8rem;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:0.86rem;line-height:1.3;color:var(--ink);text-decoration:none;}
+.chip img{width:16px;height:16px;flex:none;}
+a.chip{border-color:rgba(37,99,235,0.35);}
+a.chip:hover{border-color:var(--blue);color:var(--blue);}
+@media(max-width:640px){.skill-row{grid-template-columns:1fr;gap:6px;}.skill-cat{padding-top:0;}}
 .trust-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 @media(max-width:860px){.trust-grid{grid-template-columns:1fr;}}
 .trust{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 26px 22px;box-shadow:var(--shadow);}
@@ -1487,18 +1488,14 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       </ul>
       <p class="pnote" data-edit="ringi-note">※試算例は仮定の計算です。実際の削減時間は業務内容により異なるため、相談時に貴社の数字で計算し直します。</p>
     </div>
-    <div class="tech-box" data-rv="up" style="margin-top:22px;">
-      <h3 data-edit="tech-t">対応しているAIと連携先</h3>
-      <p class="tech-lead" data-edit="tech-lead">AIは特定の1社に固定せず、業務と予算に合わせて選びます。連携先は、すでにお使いのチャットにそのままつなぎます。</p>
-      <div class="tech-grid">
-        <div class="tech"><img src="logos/googlegemini.svg" alt="Google Gemini" width="28" height="28" loading="lazy"><span class="tn">Google Gemini</span><span class="tr">自社プロダクトで採用</span></div>
-        <div class="tech"><img src="logos/claude.svg" alt="Claude" width="28" height="28" loading="lazy"><span class="tn">Claude</span><span class="tr">開発・文章生成で採用</span></div>
-        <div class="tech"><img src="logos/openai.svg" alt="ChatGPT / OpenAI" width="28" height="28" loading="lazy"><span class="tn">ChatGPT / OpenAI</span><span class="tr">要望に応じて採用</span></div>
-        <div class="tech"><img src="logos/line.svg" alt="LINE" width="28" height="28" loading="lazy"><span class="tn">LINE</span><span class="tr">LINE公式アカウント</span></div>
-        <div class="tech"><img src="logos/slack.svg" alt="Slack" width="28" height="28" loading="lazy"><span class="tn">Slack</span><span class="tr">社内チャット連携</span></div>
-        <div class="tech"><img src="logos/chatwork.svg" alt="Chatwork" width="28" height="28" loading="lazy"><span class="tn">Chatwork</span><span class="tr">社内チャット連携</span></div>
-      </div>
-      <p class="pnote" data-edit="tech-note">※各ロゴ・名称は各社の商標です。当社との提携や各社による推奨を示すものではありません。サーバー構成やドメイン設定などの裏側は、セキュリティ上の理由から公開していません。</p>
+    <div class="skills-box" data-rv="up" style="margin-top:22px;">
+      <h3 data-edit="skills-t">扱える技術・ツール</h3>
+      <p class="skills-lead" data-edit="skills-lead">自社のサイトとプロダクトを作りながら、実際に触ってきたものです。AIは1社に固定せず、業務と予算に合わせて選びます。ここにない道具が必要なときも、まず試します。</p>
+        <div class="skill-row"><div class="skill-cat">AI</div><div class="skill-chips"><span class="chip"><img src="logos/googlegemini.svg" alt="" width="16" height="16" loading="lazy"><span>Google Gemini</span></span><span class="chip"><img src="logos/claude.svg" alt="" width="16" height="16" loading="lazy"><span>Claude</span></span><span class="chip"><img src="logos/openai.svg" alt="" width="16" height="16" loading="lazy"><span>ChatGPT / OpenAI</span></span><a class="chip" href="manual-ai.html"><span>RAG（自社資料だけを根拠に答えるAI）</span></a><span class="chip"><span>プロンプト設計</span></span><span class="chip"><span>音声の文字起こし・要約</span></span><a class="chip" href="line-ai-agent.html"><span>AIエージェント設計</span></a><a class="chip" href="human-clone-ai.html"><span>経営者の判断のAI化</span></a></div></div>
+        <div class="skill-row"><div class="skill-cat">連携先</div><div class="skill-chips"><span class="chip"><img src="logos/line.svg" alt="" width="16" height="16" loading="lazy"><span>LINE公式アカウント</span></span><span class="chip"><img src="logos/slack.svg" alt="" width="16" height="16" loading="lazy"><span>Slack</span></span><span class="chip"><img src="logos/chatwork.svg" alt="" width="16" height="16" loading="lazy"><span>Chatwork</span></span><span class="chip"><img src="logos/gmail.svg" alt="" width="16" height="16" loading="lazy"><span>Gmail</span></span><span class="chip"><img src="logos/googlecalendar.svg" alt="" width="16" height="16" loading="lazy"><span>Googleカレンダー</span></span><span class="chip"><img src="logos/googledrive.svg" alt="" width="16" height="16" loading="lazy"><span>Googleドライブ</span></span><span class="chip"><img src="logos/googlesheets.svg" alt="" width="16" height="16" loading="lazy"><span>Googleスプレッドシート</span></span><span class="chip"><img src="logos/googleappsscript.svg" alt="" width="16" height="16" loading="lazy"><span>Google Apps Script</span></span></div></div>
+        <div class="skill-row"><div class="skill-cat">開発</div><div class="skill-chips"><span class="chip"><img src="logos/nodedotjs.svg" alt="" width="16" height="16" loading="lazy"><span>Node.js</span></span><span class="chip"><img src="logos/python.svg" alt="" width="16" height="16" loading="lazy"><span>Python</span></span><span class="chip"><img src="logos/javascript.svg" alt="" width="16" height="16" loading="lazy"><span>JavaScript</span></span><span class="chip"><img src="logos/html5.svg" alt="" width="16" height="16" loading="lazy"><span>HTML / CSS</span></span><span class="chip"><img src="logos/github.svg" alt="" width="16" height="16" loading="lazy"><span>GitHub</span></span><span class="chip"><img src="logos/git.svg" alt="" width="16" height="16" loading="lazy"><span>Git</span></span><span class="chip"><span>REST API連携</span></span><span class="chip"><span>Webスクレイピング</span></span><span class="chip"><span>PDF・Excel・PowerPointの自動生成</span></span><span class="chip"><span>構造化データ（JSON-LD）</span></span></div></div>
+        <div class="skill-row"><div class="skill-cat">データ・分析</div><div class="skill-chips"><span class="chip"><img src="logos/googleanalytics.svg" alt="" width="16" height="16" loading="lazy"><span>Google Analytics</span></span><span class="chip"><img src="logos/googlesearchconsole.svg" alt="" width="16" height="16" loading="lazy"><span>Search Console</span></span><span class="chip"><span>IndexNow</span></span><a class="chip" href="aio-check.html"><span>AI検索表示チェック</span></a><a class="chip" href="lab/"><span>公開データの活用（厚労省・WAM NET・jグランツ・法人番号）</span></a><a class="chip" href="articles/ai-teiten-2026-07.html"><span>公的統計の定点観測</span></a></div></div>
+      <p class="pnote" data-edit="skills-note">※各ロゴ・名称は各社の商標です。当社との提携や各社による推奨を示すものではありません。自社のサーバー構成やドメイン設定などの裏側は、セキュリティ上の理由から公開していません。</p>
     </div>
   </div>
 </section>

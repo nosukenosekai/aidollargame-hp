@@ -11,7 +11,7 @@
 <style>
   :root{
     --desk:#e9ecf1; --bg:#f6f7f9; --card:#ffffff; --text:#16191d; --sub:#4f5763; --muted:#8a929d;
-    --line:#e3e6eb; --soft:#f0f2f5; --blue:#2f6fed; --blue-2:#6aa0ff; --blue-soft:#eaf1fe; --band:#e3edfd;
+    --line:#e3e6eb; --soft:#f0f2f5; --blue:#0a84d6; --blue-2:#5cc3f2; --blue-soft:#eaf1fe; --band:#dcf0fb;
     --green:#1e7f4f; --green-soft:#e8f5ee; --down:#c2410c;
     --ai-grad:linear-gradient(135deg,#8b5cf6 0%,#3b6cf6 100%); --ai-soft:#f5f1ff; --ai-line:#e2d8fd; --ai-text:#5b3fd6;
   }
@@ -135,7 +135,7 @@
   .ans .foot small{font-size:13.5px;color:var(--muted)}
   .hbars{margin:14px 0 0 26px;display:flex;flex-direction:column;gap:8px}
   .hbars .r{display:grid;grid-template-columns:190px 1fr 110px;gap:12px;align-items:center;font-size:14px;color:var(--sub)}
-  .hbars .r i{display:block;height:18px;border-radius:3px;background:#b9d1fb}
+  .hbars .r i{display:block;height:18px;border-radius:3px;background:#bfe3f7}
   .hbars .r.top i{background:var(--blue-2)}
   .hbars .r.top{color:var(--text);font-weight:700}
   .hbars .r b{font-weight:500;color:var(--sub);font-size:13.5px}
@@ -249,25 +249,99 @@
   .mc .lb{grid-column:1/3;font-size:13px;color:var(--muted)}
   .mc.odd .lb{color:var(--down);font-weight:700}
   .mc svg{width:120px;height:36px}
-  .aib{width:22px;height:22px;border-radius:7px;background:var(--ai-grad);display:inline-grid;place-items:center;flex:none;margin-top:3px;box-shadow:0 2px 6px -2px rgba(91,63,214,.5)}
+  .aib{width:22px;height:22px;border-radius:7px;background:var(--ai-grad);display:inline-grid;place-items:center;flex:none;margin-top:3px;box-shadow:0 2px 6px -2px rgba(0,90,180,.45)}
   .aib svg{width:13px;height:13px;fill:#fff;stroke:none;margin:0!important}
   .brand .lg{background:var(--ai-grad)!important}
   .hsum{background:linear-gradient(135deg,#f6f1ff 0%,#edf3ff 100%)!important;border-color:var(--ai-line)!important}
   .hsum .lnk{color:var(--ai-text)!important}
   .pill{border-color:var(--ai-line)!important;color:var(--ai-text)!important;background:var(--ai-soft)!important}
-  .pill:hover{background:#ece4ff!important}
-  .input:focus-within{border-color:#a78bfa;box-shadow:0 0 0 3px #efe9ff}
+  .pill:hover{background:#d9effc!important}
+  .input:focus-within{border-color:#5cc3f2;box-shadow:0 0 0 3px #e6f5fd}
   .input .send{width:34px!important;height:34px!important;padding:0!important;border-radius:50%!important;background:var(--ai-grad)!important;display:grid;place-items:center;flex:none}
   .input .send svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.2}
   .scope{font-size:12.5px;color:var(--ai-text);background:var(--ai-soft);border-radius:6px;padding:2px 9px;white-space:nowrap}
-  .ans{border-color:var(--ai-line)!important;box-shadow:0 10px 28px -16px rgba(91,63,214,.35)}
+  .ans{border-color:var(--ai-line)!important;box-shadow:0 10px 28px -16px rgba(0,90,180,.28)}
   .ans .ah{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
   .ans .ah .aib{margin-top:0}
   .ans .ah b{color:var(--ai-text);font-weight:700}
   .steps{display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0 8px 30px;font-size:12.5px;color:var(--muted)}
-  .steps span::before{content:"\2713";color:#8b5cf6;margin-right:5px;font-weight:700}
+  .steps span::before{content:"\2713";color:#0a84d6;margin-right:5px;font-weight:700}
   .ans .t{display:block!important;margin-left:30px}
-  .btn.ai{background:var(--ai-grad);box-shadow:0 6px 16px -8px rgba(91,63,214,.6)}
+  .btn.ai{background:var(--ai-grad);box-shadow:0 6px 16px -8px rgba(0,90,180,.5)}
+
+  /* ===== CMG palette (cross-m.co.jp / cm-group.co.jp 実測) ===== */
+  :root{--blue:#0a84d6;--blue-2:#5cc3f2;--blue-soft:#e6f5fd;--band:#dcf0fb;--navy:#004893;--navy-2:#0b3f7e;
+    --ai-grad:linear-gradient(135deg,#21b9ff 0%,#0068d6 100%);--ai-soft:#eaf6fd;--ai-line:#cbe7f8;--ai-text:#0070c4}
+  .btn{border-radius:999px!important;background:var(--ai-grad)}
+  .btn.ghost{background:#fff}
+  .btn.dark{background:var(--navy)}
+  #vApp.view.on,#vCm.view.on{display:grid;grid-template-columns:228px 1fr;grid-template-rows:52px 1fr}
+  .gtop{grid-column:1/3;background:var(--navy);display:flex;align-items:center;gap:14px;padding:0 16px;color:#fff}
+  .gtop .lgw{display:flex;align-items:center;gap:10px;width:200px;font-weight:700;font-size:15px}
+  .gtop .lgw i{width:26px;height:26px;border-radius:50%;background:var(--ai-grad);display:grid;place-items:center;box-shadow:0 0 0 2px rgba(255,255,255,.25) inset}
+  .gtop .lgw i svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.2}
+  .gtop .lgw small{font-weight:400;opacity:.7;font-size:12.5px}
+  .gsearch{flex:1;max-width:560px;margin:0 auto;display:flex;align-items:center;gap:10px;height:34px;border-radius:999px;background:rgba(255,255,255,.14);padding:0 6px 0 14px}
+  .gsearch svg.sp{width:15px;height:15px;fill:#8fd8ff;flex:none}
+  .gsearch input{flex:1;border:0;outline:0;background:none;color:#fff;font:inherit;font-size:14px}
+  .gsearch input::placeholder{color:rgba(255,255,255,.72)}
+  .gsearch:focus-within{background:#fff}.gsearch:focus-within input{color:var(--text)}
+  .gsearch button{height:26px;padding:0 12px;border-radius:999px;background:#fff;color:var(--navy);font-size:12.5px;font-weight:700}
+  .gtop .gr{display:flex;align-items:center;gap:14px;width:200px;justify-content:flex-end}
+  .gtop .bell{position:relative;opacity:.9}.gtop .bell svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:1.8}
+  .gtop .bell b{position:absolute;top:-5px;right:-7px;min-width:16px;height:16px;border-radius:8px;background:#ff7a45;font-size:10.5px;display:grid;place-items:center;padding:0 4px}
+  .gtop .me{width:28px;height:28px;border-radius:50%;background:#fff;color:var(--navy);display:grid;place-items:center;font-size:12px;font-weight:700}
+  .side{background:#0e3566!important;border-right:0!important;color:#fff;padding-top:10px!important}
+  .side .brand{display:none}
+  .side .nav a{color:rgba(255,255,255,.82)!important}
+  .side .nav a:hover{background:rgba(255,255,255,.08)!important}
+  .side .nav a.on{background:rgba(255,255,255,.16)!important;color:#fff!important}
+  .side .nav-h{color:rgba(255,255,255,.55)!important}
+  .side .nav a .cnt{color:rgba(255,255,255,.6)!important}
+  .side .nav a .new{background:#21b9ff!important}
+  .side .nav a .dot{background:#ff9a5c!important}
+  .side .nav a svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;flex:none}
+  .main{grid-column:2;min-height:0;overflow:clip}
+  .side{min-height:0}
+  .bar{height:auto!important;min-height:56px;padding:12px 28px 0!important;align-items:flex-start!important;flex-wrap:wrap}
+  .bar .crumb{font-size:18px;color:var(--text)!important;font-weight:700;display:flex;align-items:center;gap:10px;padding-bottom:10px}
+  .bar .crumb .pi{width:26px;height:26px;border-radius:7px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center}
+  .bar .crumb .pi svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
+  .bar .crumb small{font-size:13px;color:var(--muted);font-weight:400}
+  .tabs{flex-basis:100%;display:flex;gap:22px;font-size:14px}
+  .tabs span{padding:6px 0 10px;color:var(--sub);cursor:pointer;border-bottom:2px solid transparent}
+  .tabs span.on{color:var(--text);font-weight:700;border-color:var(--text)}
+  .bar .sp .btn.sm{height:32px}
+  .seg{display:none!important}
+  .mhead .num{color:var(--navy)}
+  .start{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .stc{border:1px solid var(--line);background:#fff;border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;text-align:left}
+  .stc .n{font-size:13px;font-weight:700;color:var(--ai-text)}
+  .stc .t{font-size:16px;font-weight:700;line-height:1.5}
+  .stc .d{font-size:13.5px;color:var(--sub);line-height:1.6;flex:1}
+  .stc .go{align-self:flex-start;margin-top:6px;height:32px;padding:0 16px;border-radius:999px;border:1px solid var(--line);font-size:13.5px;font-weight:700;color:var(--text)}
+  .stc.cur{background:var(--ai-grad);border-color:transparent;color:#fff;box-shadow:0 12px 26px -14px rgba(0,104,214,.7)}
+  .stc.cur .n,.stc.cur .d{color:rgba(255,255,255,.88)}
+  .stc.cur .go{background:#fff;border-color:#fff;color:var(--navy)}
+  .stc.ok .n::after{content:"　済み";color:var(--green)}
+  .stc.ok{opacity:.7}
+  .hgreet{font-size:22px;font-weight:700;margin-bottom:4px}
+  .hgreet small{display:block;font-size:13.5px;font-weight:400;color:var(--muted)}
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .tile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 10px 12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
+  .tile:hover{border-color:#9fd3f3}
+  .tile .k{font-size:14px;color:var(--sub);font-weight:500}
+  .tile .v{font-size:38px;font-weight:500;line-height:1.3;color:var(--text)}
+  .tile .f{font-size:12.5px;color:var(--muted)}
+  .tile.odd{border-color:#f3c7a8;box-shadow:0 0 0 3px #fff3ea}
+  .tile.odd .f{color:var(--down);font-weight:700}
+  .ctip{position:absolute;z-index:7;width:300px;background:#0a84d6;color:#fff;border-radius:10px;padding:12px 36px 12px 14px;font-size:13.5px;line-height:1.6;box-shadow:0 12px 28px -10px rgba(0,60,130,.55);display:none}
+  .ctip.on{display:block}
+  .ctip b{display:block;font-size:14.5px;margin-bottom:2px}
+  .ctip .x{position:absolute;top:8px;right:10px;color:#fff;opacity:.85;font-size:16px;line-height:1}
+  .ctip::after{content:"";position:absolute;left:26px;top:-7px;border:7px solid transparent;border-top:0;border-bottom-color:#0a84d6}
+  .ctip.up::after{top:auto;bottom:-7px;border-bottom:0;border-top:7px solid #0a84d6}
+  .ctip.right::after{left:auto;right:26px}
   .flash{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);background:var(--text);color:#fff;border-radius:10px;padding:10px 18px;font-size:14.5px;z-index:20;display:none;white-space:nowrap}
   .flash.on{display:block}
   .list{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
@@ -322,6 +396,9 @@
 
   <!-- app -->
   <section class="view" id="vApp">
+    <header class="gtop"><div class="lgw"><i><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7"/></svg></i>脳内POS<small>A社</small></div>
+      <form class="gsearch" id="gForm"><svg class="sp" viewBox="0 0 24 24"><path d="M12 2l2.1 5.9L20 10l-5.9 2.1L12 18l-2.1-5.9L4 10l5.9-2.1z"/></svg><input id="gIn" placeholder="何でも聞いてください（A社の過去の調査128回から答えます）" autocomplete="off"><button type="submit">質問</button></form>
+      <div class="gr"><span class="bell" data-page="rq"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 1112 0c0 7 3 8 3 8H3s3-1 3-8M10 20a2 2 0 004 0"/></svg><b id="bellN" hidden>1</b></span><span class="me">佐々</span></div></header>
     <aside class="side">
       <div class="brand"><div class="lg"><svg class="i" viewBox="0 0 24 24" stroke="#fff"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></div><div><b>脳内POS</b><span>A社</span></div></div>
       <nav class="nav" id="nav"></nav>
@@ -330,7 +407,7 @@
       <div class="bar"><div class="crumb" id="crumb"></div><div class="sp" id="barBtns"></div></div>
       <div class="scroll" id="scroll"></div>
 
-      <div class="pop" id="pop"></div>
+      <div class="pop" id="pop"></div><div class="ctip" id="ctip"><button class="x" data-tipx="1" aria-label="閉じる">×</button><b id="ctipT"></b><span id="ctipD"></span></div>
 
       <aside class="panel" id="panel">
         <div class="ph">20代に理由を聞く<button data-closepanel="1" aria-label="閉じる"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -365,6 +442,7 @@
 
   <!-- CMG -->
   <section class="view" id="vCm">
+    <header class="gtop"><div class="lgw"><i><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7"/></svg></i>脳内POS 管理<small>社内</small></div><div class="gsearch" style="visibility:hidden"></div><div class="gr"><span class="me">担当</span></div></header>
     <aside class="side">
       <div class="brand"><div class="lg"><svg class="i" viewBox="0 0 24 24" stroke="#fff"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></div><div><b>脳内POS 管理</b><span>クロス・マーケティング</span></div></div>
       <nav class="nav"><div class="nav-h">担当</div><a class="on"><span>追加調査の依頼</span><span class="new" id="cmBadge">8</span></a><a><span>お客さん一覧</span><span class="cnt">12社</span></a><a><span>届けた結果</span><span class="cnt">24件</span></a></nav>
@@ -406,7 +484,7 @@ var CITE={
   memo:'<div class="h">A社の施策記録（A社がアップロード）</div><div class="s">2023年12月 ブランド会議メモ</div><div style="margin-top:8px;color:var(--sub)">「20代の好意度低下を受け、Instagram広告を12/4〜12/17に20代向けへ増額」</div>',
   add:'<div class="h">追加調査 9月19日</div><div class="s">20代女性 300人 ・ 質問3つ ・ 回答期間 9月16〜19日</div><div style="margin-top:8px;color:var(--sub)">Q1「この1か月で、美容液の新しい商品や広告を見ましたか」の集計</div>'
 };
-var S0=function(){return {view:'app',page:'home',tab:'t',thread:{},req:null,shared:false,n:300,role:'a'}};var S=S0();
+var S0=function(){return {view:'app',page:'home',tab:'t',thread:{},req:null,shared:false,n:300,role:'a',ob:{},tipx:{}}};var S=S0();
 var STL={approve:'部長の承認待ち',wait:'見積もり待ち',est:'見積もりが届きました',run:'回答を集めています・9月19日ごろ',done:'回答が届きました'};
 var $=function(s){return document.querySelector(s)};
 var BULB='<span class="aib"><svg viewBox="0 0 24 24"><path d="M12 2l2.1 5.9L20 10l-5.9 2.1L12 18l-2.1-5.9L4 10l5.9-2.1z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span>';
@@ -441,14 +519,14 @@ function lineSVG(m){
   var y=function(v){return 20+(hi-v)/(hi-lo)*150},xs=function(i){return x0+i*(x1-x0)/(m.s.length-1)};
   var pts=m.s.slice(0,-1).map(function(v,i){return xs(i)+','+y(v)}).join(' ');
   var n=m.s.length-1,lx=xs(n),ly=y(m.s[n]);
-  return '<svg class="chart tn" viewBox="0 0 '+W+' '+H+'" width="100%"><polygon points="'+x0+','+y(m.band[1])+' '+x1+','+y(m.band[1])+' '+x1+','+y(m.band[0])+' '+x0+','+y(m.band[0])+'" fill="#e3edfd"/>'+
+  return '<svg class="chart tn" viewBox="0 0 '+W+' '+H+'" width="100%"><polygon points="'+x0+','+y(m.band[1])+' '+x1+','+y(m.band[1])+' '+x1+','+y(m.band[0])+' '+x0+','+y(m.band[0])+'" fill="#dcf0fb"/>'+
    '<line x1="40" y1="176" x2="900" y2="176" stroke="#e3e6eb"/><text x="0" y="'+(y(m.band[1])+4)+'">'+m.band[1]+'%</text><text x="0" y="'+(y(m.band[0])+4)+'">'+m.band[0]+'%</text>'+
-   '<polyline points="'+pts+'" fill="none" stroke="#2f6fed" stroke-width="2.4"/><polyline points="'+xs(n-1)+','+y(m.s[n-1])+' '+lx+','+ly+'" fill="none" stroke="#2f6fed" stroke-width="2.4" stroke-dasharray="'+(m.odd?'5 5':'0')+'"/>'+
-   '<circle cx="'+lx+'" cy="'+ly+'" r="6" fill="#fff" stroke="#2f6fed" stroke-width="2.4"/><text x="'+(lx-60)+'" y="'+(ly+(m.odd?24:-12))+'" style="font-weight:700;fill:#16191d">'+m.v+'%</text>'+
-   '<text x="40" y="195">3月</text><text x="274" y="195">5月</text><text x="508" y="195">7月</text><text x="846" y="195">9月16日</text></svg><div class="legend"><span><i style="background:#e3edfd"></i>いつもの幅（過去1年の上下）</span></div>';
+   '<polyline points="'+pts+'" fill="none" stroke="#0a84d6" stroke-width="2.4"/><polyline points="'+xs(n-1)+','+y(m.s[n-1])+' '+lx+','+ly+'" fill="none" stroke="#0a84d6" stroke-width="2.4" stroke-dasharray="'+(m.odd?'5 5':'0')+'"/>'+
+   '<circle cx="'+lx+'" cy="'+ly+'" r="6" fill="#fff" stroke="#0a84d6" stroke-width="2.4"/><text x="'+(lx-60)+'" y="'+(ly+(m.odd?24:-12))+'" style="font-weight:700;fill:#16191d">'+m.v+'%</text>'+
+   '<text x="40" y="195">3月</text><text x="274" y="195">5月</text><text x="508" y="195">7月</text><text x="846" y="195">9月16日</text></svg><div class="legend"><span><i style="background:#dcf0fb"></i>いつもの幅（過去1年の上下）</span></div>';
 }
 function ageHTML(m){
-  return '<div class="agebars tn">'+m.ages.map(function(a){return '<div class="r'+(a[3]?' hot':'')+'"><span>'+a[0]+'</span><div class="b"><i style="width:'+a[1]*1.6+'%"></i><i style="width:'+a[2]*1.6+'%"></i></div><span>'+a[1]+'% → '+a[2]+'%</span></div>'}).join('')+'</div><div class="legend" style="margin-top:10px"><span><i style="background:#c9d3e1"></i>前回</span><span><i style="background:#2f6fed"></i>今回</span></div>';
+  return '<div class="agebars tn">'+m.ages.map(function(a){return '<div class="r'+(a[3]?' hot':'')+'"><span>'+a[0]+'</span><div class="b"><i style="width:'+a[1]*1.6+'%"></i><i style="width:'+a[2]*1.6+'%"></i></div><span>'+a[1]+'% → '+a[2]+'%</span></div>'}).join('')+'</div><div class="legend" style="margin-top:10px"><span><i style="background:#c9d3e1"></i>前回</span><span><i style="background:#0a84d6"></i>今回</span></div>';
 }
 
 function renderDigest(){
@@ -459,11 +537,11 @@ function renderDigest(){
   $('#digest').innerHTML=rows;
 }
 function renderNav(){
-  var h='<a data-page="home" class="'+(S.page==='home'?'on':'')+'"><span>ホーム</span></a><div class="nav-h">フォロー中の指標</div>';
+  var h='<a data-page="home" class="'+(S.page==='home'?'on':'')+'"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg><span>ホーム</span></a><div class="nav-h">フォロー中の指標</div>';
   ['m20','all','rec','buy'].forEach(function(k){h+='<a data-open="'+k+'" class="'+(S.page===k?'on':'')+'"><span>'+M[k].name+'</span>'+(M[k].odd?'<i class="dot"></i>':'')+'</a>';});
-  h+='<div class="nav-h">データ</div><a data-page="sv" class="'+(S.page==='sv'?'on':'')+'"><span>過去の調査</span><span class="cnt">128回</span></a>';
+  h+='<div class="nav-h">データ</div><a data-page="sv" class="'+(S.page==='sv'?'on':'')+'"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg><span>過去の調査</span><span class="cnt">128回</span></a>';
   var badge=S.req?(S.req.st==='done'&&!S.req.seen?'<span class="new">1 回答</span>':'<span class="cnt">1</span>'):'<span class="cnt">0</span>';
-  h+='<a data-page="rq" class="'+(S.page==='rq'?'on':'')+'"><span>頼んだ追加調査</span>'+badge+'</a>';
+  h+='<a data-page="rq" class="'+(S.page==='rq'?'on':'')+'"><svg viewBox="0 0 24 24"><path d="M4 4h16v12H8l-4 4z"/></svg><span>頼んだ追加調査</span>'+badge+'</a>';
   $('#nav').innerHTML=h;
 }
 function renderMetric(){
@@ -478,8 +556,8 @@ function renderMetric(){
   th.forEach(function(q){var a=answer(q),st=stepsFor(q);h+='<div><div class="asked"><span>あなたの質問</span>'+q+'</div><div class="ans"><div class="ah">'+BULB+'<b>AIの答え</b>'+(st.length?'<span>・ '+st.length+'つ調べました</span>':'')+'</div>'+(st.length?'<div class="steps">'+st.map(function(x){return '<span>'+x+'</span>'}).join('')+'</div>':'')+'<div class="t"><div>'+a.h+'</div></div>'+(a.x||'')+'</div></div>';});
   h+='</div></div>';
   $('#scroll').innerHTML=h;
-  $('#crumb').innerHTML='フォロー中の指標 ／ <b>'+m.full+'</b>';
-  $('#barBtns').innerHTML=S.page==='m20'?'<button class="btn ghost sm" data-openshare="1"><svg class="i" viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>上司に共有</button>':'';
+  $('#crumb').innerHTML='<span class="pi"><svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7"/></svg></span>'+m.full+'<small>フォロー中の指標</small>';
+  $('#barBtns').innerHTML=(S.page==='m20'?'<button class="btn ghost sm" data-openshare="1"><svg class="i" viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>上司に共有</button>':'');$('.bar').insertAdjacentHTML('beforeend','<div class="tabs" id="tabs"><span data-tab="t" class="'+(S.tab==='t'?'on':'')+'">推移</span><span data-tab="a" class="'+(S.tab==='a'?'on':'')+'">年代別</span><span data-tab="t">質問の履歴 '+(th.length||'')+'</span></div>');
 }
 function renderSurveys(filter){
   var rows=[[128,'2026年9月16日','定点（ブランド指標）',1000],[127,'2026年9月2日','定点（ブランド指標）',1000],[126,'2026年8月19日','定点＋新CM認知',1000],[125,'2026年8月5日','定点（ブランド指標）',1000],[124,'2026年7月15日','定点＋夏の限定品',1000],[121,'2023年11月1日','定点＋自由回答',1000],[104,'2025年9月17日','定点（ブランド指標）',1000]];
@@ -489,19 +567,24 @@ function renderSurveys(filter){
   h+='<div class="list sv tn"><div class="li h"><span>回</span><span>日付</span><span>中身</span><span>回答者</span></div>';
   h+=list.length?list.map(function(r){return '<div class="li"><span>第'+r[0]+'回</span><span>'+r[1]+'</span><span>'+r[2]+'</span><span>'+r[3].toLocaleString()+'人</span></div>'}).join(''):'<div class="empty">当てはまる調査はありません</div>';
   h+='</div><p style="margin-top:10px;font-size:13px;color:var(--muted)">見本のため7回分だけ表示しています（本番は128回すべて）</p>';
-  $('#scroll').innerHTML=h;$('#crumb').innerHTML='データ ／ <b>過去の調査</b>';$('#barBtns').innerHTML='';
+  $('#scroll').innerHTML=h;$('#crumb').innerHTML='過去の調査<small>A社の脳内POS 128回</small>';$('#barBtns').innerHTML='';
 }
 function renderHome(){
-  var odd=M.m20;
-  var h='<div class="hsum">'+BULB+'<div><div class="k">9月16日（水）の脳内POS ・ フォロー中の4つの指標のまとめ</div><p><b>いつもと違う動きは1つです。</b>20代の好意度が37%（前回から−8）で、いつもの幅を下回りました。ほかの3つは、いつもの幅の中です。</p><button class="lnk" data-open="m20">20代の好意度を見る →</button></div></div>';
-  h+='<div class="hsec">A社の調査に質問する</div><form class="input" id="homeForm"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="homeIn" placeholder="過去の調査128回から答えます（例：20代の好意度はなぜ下がった？）" autocomplete="off"><span class="scope">対象：A社の脳内POS 128回</span><button class="send" type="submit" aria-label="質問する"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></form>';
-  h+='<div class="pills">'+[['m20','20代の好意度は、なぜ下がったの？'],['m20','競合も下がっている？'],['all','去年の同じ時期は？']].map(function(q){return '<button class="pill" data-hq="'+q[0]+'|'+q[1]+'">'+q[1]+'</button>'}).join('')+'</div>';
-  h+='<div class="hsec">フォロー中の指標</div><div class="cards tn">';
-  ['m20','all','rec','buy'].forEach(function(k){var m=M[k],d=m.v-m.prev,mn=Math.min.apply(null,m.s),mx=Math.max.apply(null,m.s);
-    var pts=m.s.map(function(v,i){return (i*120/11).toFixed(1)+','+(33-(v-mn)/(mx-mn+.01)*28).toFixed(1)}).join(' ');
-    h+='<button class="mc'+(m.odd?' odd':'')+'" data-open="'+k+'"><span class="nm">'+m.name+'</span><span class="v">'+m.v+'%<small>'+(d>0?'+':d<0?'−':'±')+Math.abs(d)+'</small></span><svg viewBox="0 0 120 36"><polyline points="'+pts+'" fill="none" stroke="'+(m.odd?'#c2410c':'#2f6fed')+'" stroke-width="2"/></svg><span class="lb">'+(m.odd?'いつもの幅の外':'いつもの幅の中')+' ・ 9月16日</span></button>';});
+  var ob=S.ob||{},cur=!ob.v?1:!ob.a?2:!ob.s?3:0;
+  var steps=[[1,'今回の結果を見る','水曜に届いた結果のうち、いつもと違う動きだけを先に見ます','見てみる','data-open="m20"','v'],
+             [2,'AIに「なぜ？」を聞く','過去の調査128回から、出典つきで答えます。答えがない時は次の一手を出します','聞いてみる','data-hq="m20|20代の好意度は、なぜ下がったの？"','a'],
+             [3,'上司に1枚で共有する','分かったことを、定例にそのまま出せるパワポ1枚にします','共有してみる','data-openshare2="1"','s']];
+  var h='<div class="hgreet">おはようございます、佐々木さん<small>9月16日（水） ・ 脳内POSの結果が届きました</small></div>';
+  h+='<div class="hsec" style="margin-top:14px">はじめる<small>'+(cur?'3つのうち'+(cur-1)+'つ完了':'3つとも完了')+'</small></div><div class="start">';
+  steps.forEach(function(x){var ok=ob[x[5]],c=cur===x[0];h+='<div class="stc'+(c?' cur':'')+(ok?' ok':'')+'"><span class="n">'+x[0]+'.</span><span class="t">'+x[1]+'</span><span class="d">'+x[2]+'</span><button class="go" '+x[4]+'>'+(ok?'もう一度':x[3])+'</button></div>';});
   h+='</div>';
-  $('#scroll').innerHTML=h;$('#crumb').innerHTML='<b>ホーム</b>';$('#barBtns').innerHTML='';
+  h+='<div class="hsec">フォロー中の指標<small>9月16日の調査</small></div><div class="tiles tn">';
+  ['m20','all','rec','buy'].forEach(function(k){var m=M[k],d=m.v-m.prev;
+    h+='<button class="tile'+(m.odd?' odd':'')+'" data-open="'+k+'"><span class="k">'+m.name+'</span><span class="v">'+m.v+'%</span><span class="f">前回から'+(d>0?'+':d<0?'−':'±')+Math.abs(d)+' ・ '+(m.odd?'いつもの幅の外':'いつもの幅の中')+'</span></button>';});
+  h+='</div>';
+  h+='<div class="hsec">AIのまとめ</div><div class="hsum">'+BULB+'<div><p><b>いつもと違う動きは1つです。</b>20代の好意度が37%（前回から−8）で、いつもの幅を下回りました。ほかの3つは、いつもの幅の中です。</p><button class="lnk" data-open="m20">20代の好意度を見る →</button></div></div>';
+  $('#scroll').innerHTML=h;
+  $('#crumb').innerHTML='<span class="pi">'+'<svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg></span>ホーム';$('#barBtns').innerHTML='';
 }
 function renderReq(){
   var h='<div class="ptitle">頼んだ追加調査</div><div class="list rq tn"><div class="li h"><span>知りたいこと</span><span>聞く相手</span><span>状態</span><span></span></div>';
@@ -511,7 +594,7 @@ function renderReq(){
     h+='<div class="li"><span>20代の好意度だけが下がった理由</span><span>20代女性 '+S.req.n+'人</span><span class="st '+(S.req.st==='done'?'g':'b')+'">'+st+'</span><span>'+act+'</span></div>';
     if(S.req.st==='done')S.req.seen=true;}
   h+='</div>';
-  $('#scroll').innerHTML=h;$('#crumb').innerHTML='データ ／ <b>頼んだ追加調査</b>';$('#barBtns').innerHTML='';
+  $('#scroll').innerHTML=h;$('#crumb').innerHTML='頼んだ追加調査';$('#barBtns').innerHTML='';
 }
 function renderCm(){
   var rows='',live=S.req&&S.req.st!=='approve';
@@ -535,7 +618,7 @@ function hint(){
   var t,r=S.req;
   if(S.role==='cm') t=r&&r.st==='wait'?'A社から依頼が届いています。「見積もりを送る」を押すと、A社の担当者に見積もりが届きます':'お客さんが「理由を聞く」を頼み、その部長がOKすると、ここに依頼が届きます';
   else if(S.view==='mail') t='メールで届いた場合。行を押すと、その指標のページに直接入ります';
-  else if(S.page==='home') t='アプリを開くと最初に出る画面。上のまとめで「何が動いたか」、下のカードで4つの指標が分かります';
+  else if(S.page==='home') t='アプリを開くと最初に出る画面。初めての人は「はじめる」の青いカードから順に進めます';
   else if(S.page==='sv') t='過去の調査の一覧。言葉で絞り込めます';
   else if(!r) t='質問の候補を押すか、自分で打ちます。「なぜ」と聞くと、答えがない時の次の一手が出ます';
   else if(r.st==='approve') t='部長の承認待ち。明日の定例には、右上の「上司に共有」で「理由は調査中」の1枚を出せます';
@@ -547,6 +630,7 @@ function hint(){
   $('#msg').textContent=t;evtBtn();
 }
 function render(){
+  var ot=document.getElementById('tabs');if(ot)ot.remove();
   $('#vMail').classList.toggle('on',S.role==='a'&&S.view==='mail');
   $('#vApp').classList.toggle('on',S.role==='a'&&S.view==='app');
   $('#vCm').classList.toggle('on',S.role==='cm');
@@ -554,14 +638,32 @@ function render(){
   if(S.role==='cm')renderCm();
   else if(S.view==='mail')renderDigest();
   else{renderNav();if(S.page==='home')renderHome();else if(M[S.page])renderMetric();else if(S.page==='sv')renderSurveys();else renderReq();}
-  closePop();hint();
+  if(S.role==='a'&&S.view==='app'&&M[S.page]){S.ob.v=1;if((S.thread[S.page]||[]).length)S.ob.a=1;}
+  if(S.shared)S.ob.s=1;
+  var bn=document.getElementById('bellN');if(bn)bn.hidden=!(S.req&&S.req.st==='done'&&!S.req.seen);
+  closePop();hint();setTimeout(coach,60);
+}
+function coach(){
+  var t=$('#ctip'),main=$('#appMain');t.classList.remove('on','up','right');
+  if(S.role!=='a'||S.view!=='app')return;
+  var k,sel,T,D,up=false,right=false;
+  if(S.page==='m20'&&!(S.thread.m20||[]).length){k='ask';sel='.pills';T='ここから質問できます';D='部長に聞かれそうなことを候補に並べました。押すと、過去の調査から出典つきで答えます。';}
+  else if(S.page==='m20'&&S.req&&S.req.st!=='done'&&!S.shared){k='share';sel='[data-openshare]';T='明日の定例には、ここから';D='答えが届く前でも「理由は調査中」の1枚を出せます。';right=true;}
+  else if(S.page==='m20'&&S.req&&S.req.st==='done'&&!S.shared){k='share2';sel='[data-openshare]';T='答えが届きました';D='分かったことを、定例用のパワポ1枚にして送れます。';right=true;}
+  if(!k||S.tipx[k])return;
+  var el=document.querySelector('#appMain '+sel);if(!el)return;
+  var mr=main.getBoundingClientRect(),r=el.getBoundingClientRect(),sc=mr.width/main.offsetWidth;
+  $('#ctipT').textContent=T;$('#ctipD').textContent=D;t.dataset.k=k;t.classList.add('on');if(right)t.classList.add('right');
+  var left=right?(r.right-mr.left)/sc-300+10:(r.left-mr.left)/sc,top=(r.bottom-mr.top)/sc+10;
+  if(top+t.offsetHeight>main.offsetHeight-10){top=(r.top-mr.top)/sc-t.offsetHeight-10;t.classList.add('up');}
+  t.style.left=Math.max(10,left)+'px';t.style.top=top+'px';
 }
 function flash(t,id){var f=$(id||'#flash');f.textContent=t;f.classList.add('on');clearTimeout(f._t);f._t=setTimeout(function(){f.classList.remove('on')},2800);}
 function closePop(){$('#pop').classList.remove('on')}
 function ask(q){if(!q)return;(S.thread[S.page]=S.thread[S.page]||[]).push(q);render();var sc=$('#scroll');setTimeout(function(){sc.scrollTo({top:sc.scrollHeight,behavior:'smooth'})},30);}
 function slide(){
   var done=S.req&&S.req.st==='done';
-  $('#slide').innerHTML='<div class="st1">脳内POS 9月16日：20代の好意度だけが下がった</div><div class="sb"><svg viewBox="0 0 260 110"><polygon points="0,20 260,20 260,62 0,62" fill="#e3edfd"/><polyline points="0,40 40,34 80,44 120,30 160,40 200,34 230,38" fill="none" stroke="#2f6fed" stroke-width="2"/><polyline points="230,38 258,80" fill="none" stroke="#2f6fed" stroke-width="2" stroke-dasharray="4 4"/><circle cx="258" cy="80" r="4" fill="#fff" stroke="#2f6fed" stroke-width="2"/></svg><div class="pts"><p>20代だけ 45%→37%（いつもの幅の外）</p><p>30代・40代、競合は動いていない</p><p>2023年11月にも同じ動き、6週で回復</p><p>'+(done?'理由：SNSで競合の新作を見た人が52%':'理由：20代に追加で聞いている（'+(S.req?'9月19日に届く':'未依頼')+'）')+'</p></div></div><div class="sf">出典：脳内POS 第128回'+(done?'・追加調査（9月19日）':'')+' クロス・マーケティング</div>';
+  $('#slide').innerHTML='<div class="st1">脳内POS 9月16日：20代の好意度だけが下がった</div><div class="sb"><svg viewBox="0 0 260 110"><polygon points="0,20 260,20 260,62 0,62" fill="#dcf0fb"/><polyline points="0,40 40,34 80,44 120,30 160,40 200,34 230,38" fill="none" stroke="#0a84d6" stroke-width="2"/><polyline points="230,38 258,80" fill="none" stroke="#0a84d6" stroke-width="2" stroke-dasharray="4 4"/><circle cx="258" cy="80" r="4" fill="#fff" stroke="#0a84d6" stroke-width="2"/></svg><div class="pts"><p>20代だけ 45%→37%（いつもの幅の外）</p><p>30代・40代、競合は動いていない</p><p>2023年11月にも同じ動き、6週で回復</p><p>'+(done?'理由：SNSで競合の新作を見た人が52%':'理由：20代に追加で聞いている（'+(S.req?'9月19日に届く':'未依頼')+'）')+'</p></div></div><div class="sf">出典：脳内POS 第128回'+(done?'・追加調査（9月19日）':'')+' クロス・マーケティング</div>';
 }
 
 document.addEventListener('click',function(e){
@@ -572,6 +674,8 @@ document.addEventListener('click',function(e){
     p.style.left=left+'px';p.style.top=top+'px';p.classList.add('on');
     if(top+p.offsetHeight>main.offsetHeight-10){p.style.top=((r.top-mr.top)/k-p.offsetHeight-6)+'px';}
     return;}
+  if(t.closest('[data-tipx]')){S.tipx[$('#ctip').dataset.k]=1;$('#ctip').classList.remove('on');return;}
+  if(t.closest('[data-openshare2]')){S.page='m20';S.view='app';render();slide();$('#share').classList.add('on');return;}
   if(!t.closest('.pop'))closePop();
   if(c=t.closest('[data-open]')){S.view='app';S.page=c.dataset.open;S.tab='t';render();var sc=$('#scroll');sc.scrollTo({top:0});if(S.req&&S.req.st==='done'&&S.page==='m20'&&(S.thread.m20||[]).length)setTimeout(function(){sc.scrollTo({top:sc.scrollHeight,behavior:'smooth'})},250);return;}
   if(c=t.closest('[data-page]')){S.page=c.dataset.page;render();return;}
@@ -595,10 +699,11 @@ document.addEventListener('click',function(e){
     $('#share').classList.remove('on');S.shared=true;hint();flash(to.length?to.join('と')+'に送りました（見本なので実際には送られません）':'宛先を1つ以上選んでください');return;}
   if(c=t.closest('[data-role]')){S.role=c.dataset.role;$('#panel').classList.remove('on');$('#share').classList.remove('on');render();return;}
 });
-document.addEventListener('submit',function(e){if(e.target.id==='askForm'){e.preventDefault();ask($('#askIn').value.trim());}if(e.target.id==='homeForm'){e.preventDefault();var v=$('#homeIn').value.trim();if(!v)return;S.page=/全体|去年|昨年/.test(v)&&!/20代/.test(v)?'all':/想起/.test(v)?'rec':/購入/.test(v)?'buy':'m20';S.tab='t';ask(v);}});
+document.addEventListener('submit',function(e){if(e.target.id==='gForm'){e.preventDefault();var g=$('#gIn').value.trim();if(!g)return;$('#gIn').value='';S.view='app';S.page=/全体|去年|昨年/.test(g)&&!/20代/.test(g)?'all':/想起/.test(g)?'rec':/購入/.test(g)?'buy':'m20';S.tab='t';ask(g);return;}if(e.target.id==='askForm'){e.preventDefault();ask($('#askIn').value.trim());}if(e.target.id==='homeForm'){e.preventDefault();var v=$('#homeIn').value.trim();if(!v)return;S.page=/全体|去年|昨年/.test(v)&&!/20代/.test(v)?'all':/想起/.test(v)?'rec':/購入/.test(v)?'buy':'m20';S.tab='t';ask(v);}});
 document.addEventListener('input',function(e){if(e.target.id==='svIn'){var v=e.target.value,pos=e.target.selectionStart;renderSurveys(v);var i=$('#svIn');i.focus();i.setSelectionRange(pos,pos);}});
 $('#restart').addEventListener('click',function(){S=S0();$('#panel').classList.remove('on');$('#share').classList.remove('on');render();});
 function fit(){var s=$('#scaler');var w=Math.min(1,(window.innerWidth-24)/1282);s.style.transform='scale('+w+')';s.style.marginLeft=Math.max(0,(s.parentNode.clientWidth-1282*w)/2)+'px';s.parentNode.style.height=(802*w+20)+'px';}
+document.addEventListener('scroll',function(e){if(e.target&&e.target.id==='scroll'){$('#ctip').classList.remove('on');clearTimeout(window._ct);window._ct=setTimeout(coach,300);}},true);
 window.addEventListener('resize',fit);fit();render();
 })();
 </script>

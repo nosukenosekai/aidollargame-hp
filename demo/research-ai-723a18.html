@@ -382,6 +382,23 @@
   .vbar{max-width:none!important;margin:0!important;border-radius:0!important;border-left:0!important;border-right:0!important;border-top:0!important;border-bottom:1px solid var(--line)!important}
   .viewport{padding:0!important}
   .frame{border-radius:0!important;box-shadow:none!important}
+  .scroll{padding:36px 48px 64px!important}
+  .scroll>*{max-width:1040px;margin-left:auto;margin-right:auto}
+  .bar{padding-left:max(48px,calc((100% - 1040px) / 2))!important;padding-right:max(48px,calc((100% - 1040px) / 2))!important}
+  .hsec{margin-top:36px!important;margin-bottom:14px!important}
+  .scroll>*{margin-left:auto!important;margin-right:auto!important}
+  .hgreet{margin-bottom:0}
+  .start,.tiles,.cards{gap:16px!important}
+  .stc{padding:20px 22px!important}
+  .tile{padding:18px 12px 16px!important}
+  .past,.ask,.mcard+.ask{margin-top:28px!important}
+  .past{padding:20px 26px!important}
+  .ans{margin-top:14px!important;padding:22px 26px!important}
+  .thread>div+div{margin-top:18px!important}
+  .pills{margin-top:14px!important}
+  .side{padding:16px 14px!important}
+  .nav a{padding:9px 12px!important}
+  .nav-h{padding:18px 12px 6px!important}
   .flash{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);background:var(--text);color:#fff;border-radius:10px;padding:10px 18px;font-size:14.5px;z-index:20;display:none;white-space:nowrap}
   .flash.on{display:block}
   .list{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
@@ -764,7 +781,7 @@ document.addEventListener('click',function(e){
 document.addEventListener('submit',function(e){if(e.target.id==='gForm'){e.preventDefault();var g=$('#gIn').value.trim();if(!g)return;$('#gIn').value='';S.view='app';S.page=/全体|去年|昨年/.test(g)&&!/20代/.test(g)?'all':/想起/.test(g)?'rec':/購入/.test(g)?'buy':'m20';S.tab='t';ask(g);return;}if(e.target.id==='askForm'){e.preventDefault();ask($('#askIn').value.trim());}if(e.target.id==='homeForm'){e.preventDefault();var v=$('#homeIn').value.trim();if(!v)return;S.page=/全体|去年|昨年/.test(v)&&!/20代/.test(v)?'all':/想起/.test(v)?'rec':/購入/.test(v)?'buy':'m20';S.tab='t';ask(v);}});
 document.addEventListener('input',function(e){if(e.target.id==='svIn'){var v=e.target.value,pos=e.target.selectionStart;renderSurveys(v);var i=$('#svIn');i.focus();i.setSelectionRange(pos,pos);}});
 $('#restart').addEventListener('click',function(){S=S0();$('#panel').classList.remove('on');$('#share').classList.remove('on');render();});
-function fit(){var s=$('#scaler'),f=$('#frame'),vb=$('#vbar'),W=window.innerWidth,H=window.innerHeight-vb.offsetHeight;var k=Math.min(1.25,W/1280);var fw=W/k,fh=Math.max(560,H/k);f.style.width=fw+'px';f.style.height=fh+'px';s.style.width=fw+'px';s.style.transform='scale('+k+')';s.style.marginLeft='0px';s.parentNode.style.height=(fh*k)+'px';}
+function fit(){var s=$('#scaler'),f=$('#frame'),vb=$('#vbar'),W=window.innerWidth,H=window.innerHeight-vb.offsetHeight;var k=Math.min(1,W/1280);var fw=W/k,fh=Math.max(560,H/k);f.style.width=fw+'px';f.style.height=fh+'px';s.style.width=fw+'px';s.style.transform='scale('+k+')';s.style.marginLeft='0px';s.parentNode.style.height=(fh*k)+'px';}
 document.addEventListener('scroll',function(e){if(e.target&&e.target.id==='scroll'){$('#ctip').classList.remove('on');clearTimeout(window._ct);window._ct=setTimeout(coach,300);}},true);
 window.addEventListener('resize',fit);fit();render();
 })();

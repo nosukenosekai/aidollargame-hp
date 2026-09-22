@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>調査に質問できるAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --desk:#e9ecf1; --bg:#f6f7f9; --card:#ffffff; --text:#16191d; --sub:#4f5763; --muted:#8a929d;
+    --line:#e3e6eb; --soft:#f0f2f5; --blue:#2f6fed; --blue-2:#6aa0ff; --blue-soft:#eaf1fe; --band:#e3edfd;
+    --green:#1e7f4f; --green-soft:#e8f5ee; --down:#c2410c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--desk);color:var(--text)}
+  body{font-family:"Noto Sans JP","Hiragino Sans","Hiragino Kaku Gothic ProN",sans-serif;font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  button:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:8px}
+  .tn{font-variant-numeric:tabular-nums}
+  svg.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+  .viewport{width:100%;overflow:hidden;display:flex;justify-content:flex-start;padding-top:10px;padding-bottom:24px}
+  .scaler{transform-origin:top left;width:1282px}
+  .frame{width:1280px;height:800px;background:var(--bg);border-radius:12px;overflow:clip;box-shadow:0 1px 2px rgba(0,0,0,.05),0 18px 48px rgba(20,25,35,.14);position:relative}
+  .coach{max-width:1280px;margin:14px auto 28px;padding:0 16px;display:flex;align-items:center;gap:14px;font-size:14px;color:var(--sub)}
+  .coach .dots{display:flex;gap:6px}
+  .coach .dots i{width:8px;height:8px;border-radius:50%;background:#cfd4db}
+  .coach .dots i.on{background:var(--text)}
+  .coach b{color:var(--text)}
+  .coach .r{margin-left:auto;display:flex;gap:16px;align-items:center;color:var(--muted);font-size:13px}
+  .coach .r button{color:var(--sub);text-decoration:underline;text-underline-offset:3px}
+
+  .next{position:relative}
+  .next::after{content:"";position:absolute;inset:-5px;border-radius:12px;border:2px solid var(--blue);opacity:0;animation:ring 1.6s ease-out infinite;pointer-events:none}
+  @keyframes ring{0%{opacity:.75;transform:scale(.96)}100%{opacity:0;transform:scale(1.07)}}
+  @media (prefers-reduced-motion:reduce){.next::after{animation:none;opacity:.6}}
+
+  .view{position:absolute;inset:0;display:none;overflow:clip}
+  .view.on{display:flex}
+
+  /* ===== mail ===== */
+  #vMail{flex-direction:column}
+  .mtop{height:52px;display:flex;align-items:center;gap:10px;padding:0 24px;background:#fff;border-bottom:1px solid var(--line);font-size:14px;color:var(--sub)}
+  .mtop b{color:var(--text)}
+  .mscroll{flex:1;overflow:auto;padding:28px 0}
+  .mail{width:680px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:12px}
+  .mail .hd{padding:18px 28px;border-bottom:1px solid var(--soft);display:flex;gap:12px;align-items:center}
+  .av{width:38px;height:38px;border-radius:50%;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-weight:700;font-size:14px}
+  .mail .hd .who{font-weight:700;font-size:15px;line-height:1.4}
+  .mail .hd .who span{display:block;font-weight:400;font-size:13px;color:var(--muted)}
+  .mail .hd time{margin-left:auto;font-size:13px;color:var(--muted)}
+  .mail .bd{padding:24px 28px 28px}
+  .mail h1{font-size:22px;line-height:1.5}
+  .mail .lead{color:var(--sub);margin-top:4px}
+  .dig{margin-top:18px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .dig .row{display:grid;grid-template-columns:1fr 80px 84px 200px;gap:12px;align-items:center;padding:13px 18px;border-top:1px solid var(--soft)}
+  .dig .row:first-child{border-top:0}
+  .dig .row.h{background:var(--bg);font-size:12.5px;color:var(--muted);padding:8px 18px}
+  .dig .nm{font-weight:500}
+  .dig .val{font-size:18px;font-weight:700;text-align:right}
+  .dig .chg{text-align:right;color:var(--sub)}
+  .dig .lab{font-size:13px;color:var(--muted);white-space:nowrap}
+  .dig .row.hot{background:#fffaf5}
+  .dig .row.hot .chg{color:var(--down);font-weight:700}
+  .dig .row.hot .lab{color:var(--down);font-weight:700}
+  .spark{width:70px;height:22px;vertical-align:middle;margin-right:6px}
+  .mail .act{margin-top:20px}
+  .btn{white-space:nowrap;display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 20px;border-radius:8px;background:var(--blue);color:#fff;font-weight:700;font-size:15px}
+  .btn.ghost{background:#fff;color:var(--text);border:1px solid var(--line);font-weight:500}
+  .btn.sm{height:34px;padding:0 14px;font-size:14px}
+  .mail .att{margin-top:22px;padding-top:14px;border-top:1px solid var(--soft);font-size:13px;color:var(--muted)}
+
+  /* ===== app shell ===== */
+  .side{width:228px;flex:none;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;padding:14px 12px}
+  .brand{display:flex;align-items:center;gap:10px;padding:4px 8px 14px;border-bottom:1px solid var(--soft);margin-bottom:10px}
+  .brand .lg{width:28px;height:28px;border-radius:7px;background:var(--text);display:grid;place-items:center;color:#fff}
+  .brand .lg svg{width:15px;height:15px}
+  .brand b{font-size:14px;display:block;line-height:1.3}
+  .brand span{font-size:12px;color:var(--muted)}
+  .nav-h{font-size:12px;color:var(--muted);padding:12px 10px 4px}
+  .nav a{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:7px;color:var(--sub);font-size:14px;text-decoration:none;line-height:1.4}
+  .nav a.on{background:var(--soft);color:var(--text);font-weight:700}
+  .nav a .dot{width:7px;height:7px;border-radius:50%;background:var(--down);margin-left:auto}
+  .nav a .cnt{margin-left:auto;font-size:12px;color:var(--muted)}
+  .nav a .new{margin-left:auto;font-size:11.5px;font-weight:700;color:#fff;background:var(--blue);border-radius:10px;padding:0 7px}
+
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;position:relative;overflow:clip}
+  .bar{height:56px;flex:none;display:flex;align-items:center;gap:12px;padding:0 28px;border-bottom:1px solid var(--line);background:#fff}
+  .crumb{font-size:14px;color:var(--muted)}
+  .crumb b{color:var(--text);font-weight:700}
+  .bar .sp{margin-left:auto;display:flex;gap:10px;align-items:center}
+  .scroll{flex:1;overflow-y:auto;padding:22px 28px 40px;scrollbar-width:thin}
+
+  .toast{display:flex;align-items:center;gap:10px;background:var(--green-soft);color:var(--green);border-radius:10px;padding:10px 16px;font-size:14.5px;font-weight:500;margin-bottom:14px}
+
+  .mcard{background:#fff;border:1px solid var(--line);border-radius:12px}
+  .mhead{display:flex;align-items:center;gap:22px;padding:18px 24px;border-bottom:1px solid var(--soft)}
+  .mhead .num{font-size:44px;font-weight:700;line-height:1}
+  .mhead .meta{border-left:1px solid var(--line);padding-left:20px;line-height:1.6}
+  .mhead .meta b{font-size:15px}
+  .mhead .meta .d{color:var(--down);font-weight:700}
+  .mhead .meta .d span{color:var(--sub);font-weight:400}
+  .seg{margin-left:auto;display:flex;background:var(--soft);border-radius:9px;padding:3px}
+  .seg span{padding:5px 18px;border-radius:7px;font-size:14px;color:var(--sub)}
+  .seg span.on{background:#fff;color:var(--text);font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  .mbody{padding:16px 24px 18px}
+  .ins{display:flex;gap:10px;font-size:15.5px;line-height:1.75}
+  .ins svg{margin-top:4px;color:var(--blue)}
+  .ins p+p{margin-top:2px}
+  .chart{margin-top:10px}
+  .chart text{font-family:inherit;font-size:12px;fill:var(--muted)}
+  .legend{display:flex;gap:18px;font-size:12.5px;color:var(--muted);margin-top:2px}
+  .legend i{display:inline-block;width:14px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+
+  .ask{margin-top:16px}
+  .ask h2{font-size:15px;font-weight:700;margin-bottom:8px}
+  .input{display:flex;align-items:center;gap:10px;height:46px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:0 16px;color:var(--muted)}
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .pill{height:34px;padding:0 16px;border:1px solid #cfdcf7;border-radius:17px;color:var(--blue);background:#fff;font-size:14px;font-weight:500}
+  .asked{display:inline-flex;gap:10px;align-items:center;margin-top:16px;background:var(--soft);border-radius:8px;padding:6px 14px;font-size:14px}
+  .asked span{color:var(--muted)}
+  .asked span::after{content:"｜";margin-left:10px;color:#c5cad2}
+  .ans{margin-top:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px}
+  .ans .t{display:flex;gap:10px;font-size:15.5px;line-height:1.8}
+  .ans .t svg{margin-top:5px;color:var(--blue)}
+  .ans .t b{font-weight:700}
+  .cite{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--sub);background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:0 7px;margin-left:4px;vertical-align:1px;line-height:1.7;position:relative}
+  .cite:hover{border-color:var(--blue);color:var(--blue)}
+  .clue{margin:12px 0 0 26px;border-left:3px solid var(--line);padding:4px 0 4px 14px;font-size:14.5px;color:var(--sub)}
+  .ans .foot{display:flex;align-items:center;gap:14px;margin:16px 0 0 26px}
+  .ans .foot small{font-size:13.5px;color:var(--muted)}
+  .hbars{margin:14px 0 0 26px;display:flex;flex-direction:column;gap:8px}
+  .hbars .r{display:grid;grid-template-columns:190px 1fr 110px;gap:12px;align-items:center;font-size:14px;color:var(--sub)}
+  .hbars .r i{display:block;height:18px;border-radius:3px;background:#b9d1fb}
+  .hbars .r.top i{background:var(--blue-2)}
+  .hbars .r.top{color:var(--text);font-weight:700}
+  .hbars .r b{font-weight:500;color:var(--sub);font-size:13.5px}
+
+  .pop{position:absolute;z-index:6;width:360px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(20,25,35,.16);padding:14px 16px;font-size:13.5px;display:none}
+  .pop.on{display:block}
+  .pop .h{font-weight:700;font-size:14px}
+  .pop .s{color:var(--muted);font-size:12.5px}
+  .pop table{width:100%;border-collapse:collapse;margin-top:8px}
+  .pop td,.pop th{padding:5px 4px;border-bottom:1px solid var(--soft);text-align:right}
+  .pop th{font-weight:400;color:var(--muted);font-size:12px}
+  .pop td:first-child,.pop th:first-child{text-align:left}
+  .pop tr.hl td{background:#fff5cc;font-weight:700}
+
+  /* right panel */
+  .panel{position:absolute;top:0;right:0;bottom:0;width:440px;background:#fff;border-left:1px solid var(--line);box-shadow:-16px 0 40px rgba(20,25,35,.1);z-index:5;display:flex;flex-direction:column;transform:translateX(100%);visibility:hidden;transition:transform .28s ease}
+  .panel.on{transform:none;visibility:visible}
+  .panel .ph{height:56px;display:flex;align-items:center;padding:0 22px;border-bottom:1px solid var(--line);font-weight:700}
+  .panel .ph button{margin-left:auto;color:var(--muted)}
+  .panel .pb{flex:1;overflow:auto;padding:18px 22px}
+  .panel .lbl{font-size:12.5px;color:var(--muted);margin-top:16px}
+  .panel .lbl:first-child{margin-top:0}
+  .qlist{list-style:none;counter-reset:q;margin-top:6px}
+  .qlist li{counter-increment:q;display:flex;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin-top:8px;font-size:14.5px;line-height:1.6}
+  .qlist li::before{content:counter(q);flex:none;width:22px;height:22px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:12px;color:var(--sub);margin-top:1px}
+  .kv{display:grid;grid-template-columns:110px 1fr;row-gap:8px;margin-top:8px;font-size:14.5px}
+  .kv dt{color:var(--muted)}
+  .panel .pf{padding:16px 22px;border-top:1px solid var(--line);display:flex;align-items:center;gap:12px}
+  .panel .pf small{font-size:12.5px;color:var(--muted);line-height:1.5}
+
+  /* modal */
+  .veil{position:absolute;inset:0;background:rgba(20,24,30,.35);display:none;align-items:center;justify-content:center;z-index:8}
+  .veil.on{display:flex}
+  .modal{width:640px;background:#fff;border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.22)}
+  .modal .mh{padding:18px 24px;border-bottom:1px solid var(--line);font-weight:700;font-size:16px}
+  .modal .mb{padding:18px 24px}
+  .to{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+  .to span{color:var(--text);background:var(--soft);border-radius:6px;padding:2px 10px}
+  .slide{margin-top:14px;border:1px solid var(--line);border-radius:8px;aspect-ratio:16/9;padding:18px 22px;display:flex;flex-direction:column;gap:8px}
+  .slide .st1{font-size:15px;font-weight:700}
+  .slide .sb{display:grid;grid-template-columns:1.1fr 1fr;gap:18px;flex:1;align-items:center}
+  .slide .pts{font-size:12px;line-height:1.8;color:var(--sub)}
+  .slide .pts p::before{content:"・"}
+  .slide .sf{font-size:10px;color:var(--muted)}
+  .modal .mf{padding:14px 24px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px}
+
+  /* CMG */
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px}
+  .kpi .k{font-size:13.5px;color:var(--muted)}
+  .kpi .v{font-size:32px;font-weight:700;line-height:1.35}
+  .kpi.hot .v{color:var(--blue)}
+  .tbl{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .tbl .rr{display:grid;grid-template-columns:80px 1fr 160px 120px 120px;gap:12px;padding:13px 20px;border-top:1px solid var(--soft);font-size:14.5px;align-items:center}
+  .tbl .rr.h{border-top:0;background:var(--bg);font-size:12.5px;color:var(--muted);padding:9px 20px}
+  .st{justify-self:start;font-size:12.5px;border-radius:5px;padding:2px 9px;background:var(--soft);color:var(--sub)}
+  .st.b{background:var(--blue-soft);color:var(--blue)}
+  .st.g{background:var(--green-soft);color:var(--green)}
+  .ptitle{font-size:22px;font-weight:700;margin-bottom:14px}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<style>
+  .nav a{cursor:pointer}
+  .nav a:hover{background:var(--soft)}
+  .dig .row:not(.h){cursor:pointer}
+  .dig .row:not(.h):hover{background:#f7f9fc}
+  .dig .row.hot:hover{background:#fff4ea}
+  .seg span{cursor:pointer}
+  .pill:hover{background:var(--blue-soft)}
+  .input{color:var(--text);padding:0 8px 0 16px}
+  .input input{flex:1;border:0;outline:0;font:inherit;font-size:15px;background:none;color:var(--text);height:100%}
+  .input input::placeholder{color:var(--muted)}
+  .input .send{height:32px;padding:0 14px;border-radius:7px;background:var(--blue);color:#fff;font-size:14px;font-weight:700}
+  .thread>div+div{margin-top:4px}
+  .qlist li[contenteditable]{outline:0;cursor:text}
+  .qlist li[contenteditable]:focus{border-color:var(--blue)}
+  .opt{display:flex;gap:8px;margin-top:6px}
+  .opt button{height:32px;padding:0 14px;border:1px solid var(--line);border-radius:7px;font-size:14px;color:var(--sub)}
+  .opt button.on{border-color:var(--blue);color:var(--blue);background:var(--blue-soft);font-weight:700}
+  .coach #msg{flex:1;min-width:0}
+  .coach .r{white-space:nowrap}
+  .coach .r span{display:none}
+  .role{flex:none}
+  .st{white-space:nowrap}
+  .demo{max-width:1280px;margin:12px auto 0;display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:13.5px;color:var(--sub);flex-wrap:wrap}
+  .demo .dl{font-weight:700;color:var(--muted);padding-right:12px;border-right:1px solid var(--line)}
+  .demo .grp{display:flex;align-items:center;gap:6px}
+  .demo .grp em{font-style:normal;color:var(--muted)}
+  .evt{height:32px;padding:0 14px;border:1px dashed var(--blue);color:var(--blue);border-radius:7px;font-size:13.5px;font-weight:700;white-space:nowrap}
+  .evt:disabled{border-color:var(--line);color:var(--muted);font-weight:400;cursor:default}
+  .demo .rs{margin-left:auto;color:var(--sub);text-decoration:underline;text-underline-offset:3px}
+  .dhint{max-width:1280px;margin:8px auto 0;padding:0 4px;font-size:14px;color:var(--sub)}
+  .dhint::before{content:"この画面で：";color:var(--muted)}
+  .hsum{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px;display:flex;gap:12px}
+  .hsum svg{margin-top:5px;color:var(--blue)}
+  .hsum .k{font-size:13px;color:var(--muted)}
+  .hsum p{font-size:16px;line-height:1.8}
+  .hsum .lnk{margin-top:8px;color:var(--blue);font-weight:700;font-size:14.5px}
+  .hsec{font-size:15px;font-weight:700;margin:22px 0 10px;display:flex;align-items:center}
+  .hsec small{margin-left:auto;font-weight:400;font-size:13.5px;color:var(--blue)}
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .mc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 20px;text-align:left;display:grid;grid-template-columns:1fr 120px;gap:4px 12px;align-items:end}
+  .mc:hover{border-color:#b9cdf7}
+  .mc .nm{grid-column:1/3;font-size:14px;color:var(--sub)}
+  .mc .v{font-size:30px;font-weight:700;line-height:1.2}
+  .mc .v small{font-size:14px;font-weight:700;margin-left:8px;color:var(--sub)}
+  .mc.odd{border-color:#f1c9ad}
+  .mc.odd .v small{color:var(--down)}
+  .mc .lb{grid-column:1/3;font-size:13px;color:var(--muted)}
+  .mc.odd .lb{color:var(--down);font-weight:700}
+  .mc svg{width:120px;height:36px}
+  .flash{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);background:var(--text);color:#fff;border-radius:10px;padding:10px 18px;font-size:14.5px;z-index:20;display:none;white-space:nowrap}
+  .flash.on{display:block}
+  .list{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .list .li{display:grid;gap:12px;padding:13px 20px;border-top:1px solid var(--soft);font-size:14.5px;align-items:center}
+  .list .li.h{border-top:0;background:var(--bg);font-size:12.5px;color:var(--muted);padding:9px 20px}
+  .list.sv .li{grid-template-columns:70px 120px 1fr 110px}
+  .list.rq .li{grid-template-columns:1fr 150px 150px 200px}
+  .list.cm .li{grid-template-columns:70px 1fr 150px 100px 120px 150px}
+  .filter{display:flex;align-items:center;gap:10px;height:42px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:0 14px;margin-bottom:12px;width:420px}
+  .filter input{flex:1;border:0;outline:0;font:inherit;background:none}
+  .empty{padding:28px 20px;color:var(--muted);text-align:center;font-size:14.5px}
+  .role{display:flex;gap:4px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:3px}
+  .role button{white-space:nowrap;padding:3px 12px;border-radius:6px;font-size:13px;color:var(--sub)}
+  .role button.on{background:var(--text);color:#fff}
+  .to button{color:var(--text);background:var(--soft);border-radius:6px;padding:2px 10px;font-size:14px;border:1px solid transparent}
+  .to button.off{background:#fff;border-color:var(--line);color:var(--muted);text-decoration:line-through}
+  .agebars{margin-top:14px;display:flex;flex-direction:column;gap:12px}
+  .agebars .r{display:grid;grid-template-columns:60px 1fr 120px;gap:14px;align-items:center;font-size:14.5px;color:var(--sub)}
+  .agebars .r .b{display:flex;flex-direction:column;gap:4px}
+  .agebars .r .b i{display:block;height:12px;border-radius:3px;background:#c9d3e1}
+  .agebars .r .b i+i{background:var(--blue-2)}
+  .agebars .r.hot{color:var(--text);font-weight:700}
+  .agebars .r.hot .b i+i{background:var(--blue)}
+</style>
+
+<div class="demo">
+  <span class="dl">見本の操作</span>
+  <div class="grp"><em>見ている人</em><div class="role"><button data-role="a" class="on">A社の担当者</button><button data-role="cm">クロス・マーケティング</button></div></div>
+  <div class="grp"><em>入り口</em><div class="role" id="entry"><button data-entry="app" class="on">アプリを開く</button><button data-entry="mail">メールで届く</button></div></div>
+  <button class="evt" id="evt"></button>
+  <button class="rs" id="restart">最初から</button>
+</div>
+<div class="dhint" id="msg"></div>
+<div class="viewport"><div class="scaler" id="scaler"><div class="frame" id="frame">
+
+  <!-- mail -->
+  <section class="view on" id="vMail">
+    <div class="mtop"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><b>受信トレイ</b>・ A社 ブランドチーム 佐々木さん</div>
+    <div class="mscroll">
+      <div class="mail">
+        <div class="hd"><div class="av">CM</div><div class="who">クロス・マーケティング 脳内POS<span>宛先：A社 ブランドチーム</span></div><time>9月16日（水）9:02</time></div>
+        <div class="bd">
+          <h1>9月16日の結果：いつもと違う動きが1つあります</h1>
+          <p class="lead">フォロー中の4つの指標のうち、20代の好意度だけが、いつもの幅から外れました。</p>
+          <div class="dig tn" id="digest"></div>
+          <div class="act"><button class="btn" data-open="m20">好意度（20代）をくわしく見る</button></div>
+          <div class="att">いつものExcel（ローデータ・単純集計表）も添付しています</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- app -->
+  <section class="view" id="vApp">
+    <aside class="side">
+      <div class="brand"><div class="lg"><svg class="i" viewBox="0 0 24 24" stroke="#fff"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></div><div><b>脳内POS</b><span>A社</span></div></div>
+      <nav class="nav" id="nav"></nav>
+    </aside>
+    <div class="main" id="appMain">
+      <div class="bar"><div class="crumb" id="crumb"></div><div class="sp" id="barBtns"></div></div>
+      <div class="scroll" id="scroll"></div>
+
+      <div class="pop" id="pop"></div>
+
+      <aside class="panel" id="panel">
+        <div class="ph">20代に理由を聞く<button data-closepanel="1" aria-label="閉じる"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+        <div class="pb">
+          <div class="lbl">聞くこと（AIの下書き。クリックすると直せます）</div>
+          <ol class="qlist">
+            <li contenteditable="true">この1か月で、美容液の新しい商品や広告を見ましたか。どこで見ましたか</li>
+            <li contenteditable="true">A社の印象は、1か月前と比べて変わりましたか</li>
+            <li contenteditable="true">変わった理由に近いものを選んでください</li>
+          </ol>
+          <div class="lbl">聞く人数</div>
+          <div class="opt" id="optN"><button data-n="100">100人</button><button data-n="300" class="on">300人</button><button data-n="500">500人</button></div>
+          <div class="lbl">条件</div>
+          <dl class="kv"><dt>聞く相手</dt><dd id="kvWho">20代の女性 300人</dd><dt>答えが届く</dt><dd>約3日後（9月19日ごろ）</dd><dt>届く場所</dt><dd>この画面と、メール</dd><dt>費用</dt><dd>クロス・マーケティングから見積もり</dd></dl>
+        </div>
+        <div class="pf"><button class="btn" data-order="1">部長に回して頼む</button><small>部長がOKすると、クロス・マーケティングに依頼が届き、見積もりが来ます</small></div>
+      </aside>
+
+      <div class="veil" id="share">
+        <div class="modal">
+          <div class="mh">上司に共有</div>
+          <div class="mb">
+            <div class="to">宛先<button data-to="1">B部長</button><button data-to="1">定例チャンネル（Teams）</button><button data-to="1" class="off">C課長</button></div>
+            <div class="slide" id="slide"></div>
+          </div>
+          <div class="mf"><button class="btn ghost" data-closeshare="1">やめる</button><button class="btn" data-send="1">パワポ1枚で送る</button></div>
+        </div>
+      </div>
+      <div class="flash" id="flash"></div>
+    </div>
+  </section>
+
+  <!-- CMG -->
+  <section class="view" id="vCm">
+    <aside class="side">
+      <div class="brand"><div class="lg"><svg class="i" viewBox="0 0 24 24" stroke="#fff"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></div><div><b>脳内POS 管理</b><span>クロス・マーケティング</span></div></div>
+      <nav class="nav"><div class="nav-h">担当</div><a class="on"><span>追加調査の依頼</span><span class="new" id="cmBadge">8</span></a><a><span>お客さん一覧</span><span class="cnt">12社</span></a><a><span>届けた結果</span><span class="cnt">24件</span></a></nav>
+    </aside>
+    <div class="main">
+      <div class="bar"><div class="crumb">クロス・マーケティング 担当者の画面 ／ <b>追加調査の依頼</b></div></div>
+      <div class="scroll" id="cmScroll"></div>
+      <div class="flash" id="flash2"></div>
+    </div>
+  </section>
+
+</div></div></div>
+
+</div>
+
+<script>
+(function(){
+var M={
+  m20:{name:'好意度（20代）',full:'好意度（20代女性）',v:37,prev:45,band:[41,49],s:[46,47,45,48,46,47,45,48,47,48,47,37],odd:true,
+    ins:['20代の好意度は<b>37%</b>で、<b>いつもの幅（41〜49%）を下回りました。</b>回答者が変わっただけでは説明できない下がり方です。<button class="cite" data-c="c128">第128回 p.3</button>','いつもの幅を下回ったのは<b>2023年11月以来</b>で、そのときは6週間で戻りました。<button class="cite" data-c="c121">第121回</button>'],
+    ages:[['20代',45,37,1],['30代',40,40],['40代',39,39]],pills:['なぜ20代だけ下がったの？','前はどうやって戻したの？','競合も下がっている？','30代・40代は大丈夫？']},
+  all:{name:'好意度（全体）',full:'好意度（20〜49歳女性 全体）',v:39,prev:41,band:[37,43],s:[40,41,39,42,40,41,40,41,40,42,41,39],
+    ins:['全体の好意度は<b>39%</b>で、<b>いつもの幅（37〜43%）の中</b>です。<button class="cite" data-c="c128">第128回 p.3</button>','ただし内訳を見ると、下げているのは20代だけです。'],
+    ages:[['20代',45,37,1],['30代',40,40],['40代',39,39]],pills:['どの年代が下げている？','去年の同じ時期は？']},
+  rec:{name:'想起（全体）',full:'想起（美容液で最初に思い浮かぶブランド）',v:24,prev:23,band:[21,27],s:[23,24,22,25,23,24,23,24,23,25,23,24],
+    ins:['想起は<b>24%</b>で、<b>いつもの幅（21〜27%）の中</b>です。<button class="cite" data-c="c128b">第128回 p.5</button>'],
+    ages:[['20代',22,22],['30代',24,25],['40代',23,24]],pills:['競合の想起は？','去年の同じ時期は？']},
+  buy:{name:'購入意向（全体）',full:'購入意向（次に買いたい）',v:31,prev:31,band:[28,34],s:[31,32,30,33,31,31,30,32,31,32,31,31],
+    ins:['購入意向は<b>31%</b>で、前回と同じです。<b>いつもの幅（28〜34%）の中</b>です。<button class="cite" data-c="c128c">第128回 p.6</button>'],
+    ages:[['20代',30,29],['30代',32,32],['40代',31,32]],pills:['どの年代が下げている？','去年の同じ時期は？']}
+};
+var CITE={
+  c128:'<div class="h">脳内POS 第128回 単純集計表 p.3</div><div class="s">20〜49歳女性 1,000人（20代312人・30代344人・40代344人）</div><table class="tn"><tr><th>年代</th><th>前回</th><th>今回</th><th>差</th></tr><tr class="hl"><td>20代</td><td>45%</td><td>37%</td><td>−8</td></tr><tr><td>30代</td><td>40%</td><td>40%</td><td>0</td></tr><tr><td>40代</td><td>39%</td><td>39%</td><td>0</td></tr><tr><td>全体</td><td>41%</td><td>39%</td><td>−2</td></tr></table><div class="s" style="margin-top:6px">20代312人での誤差は約±7.7ポイント。8ポイントの差はその外です。</div>',
+  c128b:'<div class="h">脳内POS 第128回 単純集計表 p.5</div><div class="s">想起（純粋想起・美容液）1,000人</div><div style="margin-top:8px;color:var(--sub)">A社 24% ・ B社 21% ・ C社 18%</div>',
+  c128c:'<div class="h">脳内POS 第128回 単純集計表 p.6</div><div class="s">購入意向 1,000人</div><div style="margin-top:8px;color:var(--sub)">A社 31% ・ B社 27% ・ C社 22%</div>',
+  c128d:'<div class="h">脳内POS 第128回 単純集計表 p.7</div><div class="s">競合ブランドの好意度（20代312人）</div><table class="tn"><tr><th>ブランド</th><th>前回</th><th>今回</th></tr><tr><td>A社</td><td>45%</td><td>37%</td></tr><tr class="hl"><td>B社</td><td>33%</td><td>35%</td></tr><tr><td>C社</td><td>29%</td><td>29%</td></tr></table>',
+  c121:'<div class="h">脳内POS 第121回（2023年11月1日）</div><div class="s">20代の好意度 44% → 36%、6週間後に44%へ回復</div><div style="margin-top:8px;color:var(--sub)">自由回答（20代）：「SNSで見た新しいブランドが気になる」ほか2件</div>',
+  c104:'<div class="h">脳内POS 第104回（2025年9月17日）</div><div class="s">20〜49歳女性 1,000人</div><div style="margin-top:8px;color:var(--sub)">好意度 全体40% ・ 20代46%</div>',
+  memo:'<div class="h">A社の施策記録（A社がアップロード）</div><div class="s">2023年12月 ブランド会議メモ</div><div style="margin-top:8px;color:var(--sub)">「20代の好意度低下を受け、Instagram広告を12/4〜12/17に20代向けへ増額」</div>',
+  add:'<div class="h">追加調査 9月19日</div><div class="s">20代女性 300人 ・ 質問3つ ・ 回答期間 9月16〜19日</div><div style="margin-top:8px;color:var(--sub)">Q1「この1か月で、美容液の新しい商品や広告を見ましたか」の集計</div>'
+};
+var S0=function(){return {view:'app',page:'home',tab:'t',thread:{},req:null,shared:false,n:300,role:'a'}};var S=S0();
+var STL={approve:'部長の承認待ち',wait:'見積もり待ち',est:'見積もりが届きました',run:'回答を集めています・9月19日ごろ',done:'回答が届きました'};
+var $=function(s){return document.querySelector(s)};
+var BULB='<svg class="i" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0012 3z"/></svg>';
+
+function answer(q,key){
+  q=q||'';
+  if(/なぜ|理由|原因/.test(q)){
+    if(S.req&&S.req.st==='done') return {h:'<b>20代の半分（52%）が、SNSで競合の新しい美容液を見ていました。</b>見た人の約6割が、A社を「少し古く感じる」と答えています。<button class="cite" data-c="add">追加調査 9月19日</button>',x:'<div class="hbars tn"><div class="r top"><span>SNSで競合の新作を見た</span><i style="width:100%"></i><b>52%（156人）</b></div><div class="r"><span>店頭で競合の新作を見た</span><i style="width:44%"></i><b>23%（69人）</b></div><div class="r"><span>特に何も見ていない</span><i style="width:48%"></i><b>25%（75人）</b></div></div>'};
+    var a={h:'<b>過去の調査128回では、理由は分かりません。</b>20代に「なぜ好きでなくなったか」を聞いた質問が、これまで一度もないためです。',x:'<div class="clue">手がかりは1つあります。2023年11月の自由回答で、20代の3人が「SNSで見た新しいブランドが気になる」と書いています。<button class="cite" data-c="c121">第121回 自由回答</button></div>'};
+    if(!S.req) a.x+='<div class="foot"><button class="btn" data-openpanel="1">20代に理由を聞く</button><small>20代の女性に、約3日で聞けます</small></div>';
+    else a.x+='<div class="foot"><small>追加調査を頼んでいます（'+STL[S.req.st]+'）。答えが届くと、ここが書き変わります。</small></div>';
+    return a;
+  }
+  if(/戻/.test(q)) return {h:'<b>2023年11月は、12月にSNS広告を20代向けに2週間増やし、6週間後に44%へ戻っています。</b>ただし、そのときの下がった理由は調べていないため、今回も同じ手が効くかは分かりません。<button class="cite" data-c="memo">A社の施策記録 2023年12月</button><button class="cite" data-c="c121">第121回</button>'};
+  if(/競合/.test(q)){ if(S.page==='rec') return {h:'想起は、B社21%・C社18%で、どちらも前回から動いていません。<button class="cite" data-c="c128b">第128回 p.5</button>'};
+    return {h:'<b>競合は下がっていません。</b>20代の好意度は、B社が33%→35%（+2）、C社は29%のままです。下がっているのはA社だけです。<button class="cite" data-c="c128d">第128回 p.7</button>'};}
+  if(/30代|40代|年代/.test(q)) return {h:'<b>下げているのは20代だけです。</b>30代は40%、40代は39%で、どちらも前回と同じです。<button class="cite" data-c="c128">第128回 p.3</button>'};
+  if(/去年|昨年|前年|季節/.test(q)) return {h:'去年の同じ時期（2025年9月17日）は、全体40%・20代46%でした。<b>この時期に下がる季節の動きは、過去3年ありません。</b><button class="cite" data-c="c104">第104回</button>'};
+  return {h:'この見本は、決まった質問にだけ答えます（AIは動いていません）。「なぜ」「競合」「30代」「去年」などの言葉を入れるか、候補から選んでください。'};
+}
+
+function lineSVG(m){
+  var W=940,H=200,x0=40,x1=900,lo=Math.min(m.band[0],Math.min.apply(null,m.s))-4,hi=Math.max(m.band[1],Math.max.apply(null,m.s))+2;
+  var y=function(v){return 20+(hi-v)/(hi-lo)*150},xs=function(i){return x0+i*(x1-x0)/(m.s.length-1)};
+  var pts=m.s.slice(0,-1).map(function(v,i){return xs(i)+','+y(v)}).join(' ');
+  var n=m.s.length-1,lx=xs(n),ly=y(m.s[n]);
+  return '<svg class="chart tn" viewBox="0 0 '+W+' '+H+'" width="100%"><polygon points="'+x0+','+y(m.band[1])+' '+x1+','+y(m.band[1])+' '+x1+','+y(m.band[0])+' '+x0+','+y(m.band[0])+'" fill="#e3edfd"/>'+
+   '<line x1="40" y1="176" x2="900" y2="176" stroke="#e3e6eb"/><text x="0" y="'+(y(m.band[1])+4)+'">'+m.band[1]+'%</text><text x="0" y="'+(y(m.band[0])+4)+'">'+m.band[0]+'%</text>'+
+   '<polyline points="'+pts+'" fill="none" stroke="#2f6fed" stroke-width="2.4"/><polyline points="'+xs(n-1)+','+y(m.s[n-1])+' '+lx+','+ly+'" fill="none" stroke="#2f6fed" stroke-width="2.4" stroke-dasharray="'+(m.odd?'5 5':'0')+'"/>'+
+   '<circle cx="'+lx+'" cy="'+ly+'" r="6" fill="#fff" stroke="#2f6fed" stroke-width="2.4"/><text x="'+(lx-60)+'" y="'+(ly+(m.odd?24:-12))+'" style="font-weight:700;fill:#16191d">'+m.v+'%</text>'+
+   '<text x="40" y="195">3月</text><text x="274" y="195">5月</text><text x="508" y="195">7月</text><text x="846" y="195">9月16日</text></svg><div class="legend"><span><i style="background:#e3edfd"></i>いつもの幅（過去1年の上下）</span></div>';
+}
+function ageHTML(m){
+  return '<div class="agebars tn">'+m.ages.map(function(a){return '<div class="r'+(a[3]?' hot':'')+'"><span>'+a[0]+'</span><div class="b"><i style="width:'+a[1]*1.6+'%"></i><i style="width:'+a[2]*1.6+'%"></i></div><span>'+a[1]+'% → '+a[2]+'%</span></div>'}).join('')+'</div><div class="legend" style="margin-top:10px"><span><i style="background:#c9d3e1"></i>前回</span><span><i style="background:#2f6fed"></i>今回</span></div>';
+}
+
+function renderDigest(){
+  var rows='<div class="row h"><span>指標</span><span style="text-align:right">今回</span><span style="text-align:right">前回から</span><span>この1年</span></div>';
+  ['m20','all','rec','buy'].forEach(function(k){var m=M[k],d=m.v-m.prev;
+    var pts=m.s.map(function(v,i){return (i*70/11).toFixed(1)+','+(22-(v-Math.min.apply(null,m.s))/(Math.max.apply(null,m.s)-Math.min.apply(null,m.s)+.01)*18-2).toFixed(1)}).join(' ');
+    rows+='<div class="row'+(m.odd?' hot':'')+'" data-open="'+k+'"><span class="nm">'+m.name+'</span><span class="val">'+m.v+'%</span><span class="chg">'+(d>0?'+':d<0?'−':'')+Math.abs(d)+'</span><span class="lab"><svg class="spark" viewBox="0 0 70 22"><polyline points="'+pts+'" fill="none" stroke="'+(m.odd?'#c2410c':'#9aa3ae')+'" stroke-width="1.8"/></svg>'+(m.odd?'いつもと違う':'いつもどおり')+'</span></div>';});
+  $('#digest').innerHTML=rows;
+}
+function renderNav(){
+  var h='<a data-page="home" class="'+(S.page==='home'?'on':'')+'"><span>ホーム</span></a><div class="nav-h">フォロー中の指標</div>';
+  ['m20','all','rec','buy'].forEach(function(k){h+='<a data-open="'+k+'" class="'+(S.page===k?'on':'')+'"><span>'+M[k].name+'</span>'+(M[k].odd?'<i class="dot"></i>':'')+'</a>';});
+  h+='<div class="nav-h">データ</div><a data-page="sv" class="'+(S.page==='sv'?'on':'')+'"><span>過去の調査</span><span class="cnt">128回</span></a>';
+  var badge=S.req?(S.req.st==='done'&&!S.req.seen?'<span class="new">1 回答</span>':'<span class="cnt">1</span>'):'<span class="cnt">0</span>';
+  h+='<a data-page="rq" class="'+(S.page==='rq'?'on':'')+'"><span>頼んだ追加調査</span>'+badge+'</a>';
+  $('#nav').innerHTML=h;
+}
+function renderMetric(){
+  var m=M[S.page],d=m.v-m.prev,th=S.thread[S.page]||[];
+  var h='';
+  if(S.req&&S.req.st==='done'&&S.page==='m20') h+='<div class="toast"><svg class="i" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>9月19日：頼んだ追加調査（20代'+S.req.n+'人）の回答が届きました。下の答えが書き変わっています</div>';
+  h+='<div class="mcard"><div class="mhead tn"><div class="num">'+m.v+'%</div><div class="meta"><b>9月16日（水）の調査</b><div class="d" style="color:'+(m.odd?'var(--down)':'var(--sub)')+'">'+(d>0?'+':d<0?'−':'±')+Math.abs(d)+'ポイント <span>前回 9月2日は'+m.prev+'%</span></div></div>'+
+     '<div class="seg"><span data-tab="t" class="'+(S.tab==='t'?'on':'')+'">推移</span><span data-tab="a" class="'+(S.tab==='a'?'on':'')+'">年代別</span></div></div>'+
+     '<div class="mbody"><div class="ins">'+BULB+'<div>'+m.ins.map(function(p){return '<p>'+p+'</p>'}).join('')+'</div></div>'+(S.tab==='t'?lineSVG(m):ageHTML(m))+'</div></div>';
+  h+='<div class="ask"><h2>この結果について質問する</h2><form class="input" id="askForm"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="askIn" placeholder="A社の過去の調査128回から答えます（例：なぜ20代だけ下がったの？）" autocomplete="off"><button class="send" type="submit">質問</button></form>';
+  h+='<div class="pills">'+m.pills.map(function(p){return '<button class="pill" data-ask="'+p+'">'+p+'</button>'}).join('')+'</div><div class="thread">';
+  th.forEach(function(q){var a=answer(q);h+='<div><div class="asked"><span>あなたの質問</span>'+q+'</div><div class="ans"><div class="t">'+BULB+'<div>'+a.h+'</div></div>'+(a.x||'')+'</div></div>';});
+  h+='</div></div>';
+  $('#scroll').innerHTML=h;
+  $('#crumb').innerHTML='フォロー中の指標 ／ <b>'+m.full+'</b>';
+  $('#barBtns').innerHTML=S.page==='m20'?'<button class="btn ghost sm" data-openshare="1"><svg class="i" viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>上司に共有</button>':'';
+}
+function renderSurveys(filter){
+  var rows=[[128,'2026年9月16日','定点（ブランド指標）',1000],[127,'2026年9月2日','定点（ブランド指標）',1000],[126,'2026年8月19日','定点＋新CM認知',1000],[125,'2026年8月5日','定点（ブランド指標）',1000],[124,'2026年7月15日','定点＋夏の限定品',1000],[121,'2023年11月1日','定点＋自由回答',1000],[104,'2025年9月17日','定点（ブランド指標）',1000]];
+  var f=(filter||'').trim();
+  var list=rows.filter(function(r){return !f||(r.join(' ')).indexOf(f)>=0});
+  var h='<div class="ptitle">過去の調査</div><div class="filter"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="svIn" placeholder="回・日付・中身で絞り込む（例：自由回答）" value="'+f+'"></div>';
+  h+='<div class="list sv tn"><div class="li h"><span>回</span><span>日付</span><span>中身</span><span>回答者</span></div>';
+  h+=list.length?list.map(function(r){return '<div class="li"><span>第'+r[0]+'回</span><span>'+r[1]+'</span><span>'+r[2]+'</span><span>'+r[3].toLocaleString()+'人</span></div>'}).join(''):'<div class="empty">当てはまる調査はありません</div>';
+  h+='</div><p style="margin-top:10px;font-size:13px;color:var(--muted)">見本のため7回分だけ表示しています（本番は128回すべて）</p>';
+  $('#scroll').innerHTML=h;$('#crumb').innerHTML='データ ／ <b>過去の調査</b>';$('#barBtns').innerHTML='';
+}
+function renderHome(){
+  var odd=M.m20;
+  var h='<div class="hsum">'+BULB+'<div><div class="k">9月16日（水）の脳内POS ・ フォロー中の4つの指標のまとめ</div><p><b>いつもと違う動きは1つです。</b>20代の好意度が37%（前回から−8）で、いつもの幅を下回りました。ほかの3つは、いつもの幅の中です。</p><button class="lnk" data-open="m20">20代の好意度を見る →</button></div></div>';
+  h+='<div class="hsec">A社の調査に質問する</div><form class="input" id="homeForm"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="homeIn" placeholder="過去の調査128回から答えます（例：20代の好意度はなぜ下がった？）" autocomplete="off"><button class="send" type="submit">質問</button></form>';
+  h+='<div class="pills">'+[['m20','20代の好意度は、なぜ下がったの？'],['m20','競合も下がっている？'],['all','去年の同じ時期は？']].map(function(q){return '<button class="pill" data-hq="'+q[0]+'|'+q[1]+'">'+q[1]+'</button>'}).join('')+'</div>';
+  h+='<div class="hsec">フォロー中の指標</div><div class="cards tn">';
+  ['m20','all','rec','buy'].forEach(function(k){var m=M[k],d=m.v-m.prev,mn=Math.min.apply(null,m.s),mx=Math.max.apply(null,m.s);
+    var pts=m.s.map(function(v,i){return (i*120/11).toFixed(1)+','+(33-(v-mn)/(mx-mn+.01)*28).toFixed(1)}).join(' ');
+    h+='<button class="mc'+(m.odd?' odd':'')+'" data-open="'+k+'"><span class="nm">'+m.name+'</span><span class="v">'+m.v+'%<small>'+(d>0?'+':d<0?'−':'±')+Math.abs(d)+'</small></span><svg viewBox="0 0 120 36"><polyline points="'+pts+'" fill="none" stroke="'+(m.odd?'#c2410c':'#2f6fed')+'" stroke-width="2"/></svg><span class="lb">'+(m.odd?'いつもの幅の外':'いつもの幅の中')+' ・ 9月16日</span></button>';});
+  h+='</div>';
+  $('#scroll').innerHTML=h;$('#crumb').innerHTML='<b>ホーム</b>';$('#barBtns').innerHTML='';
+}
+function renderReq(){
+  var h='<div class="ptitle">頼んだ追加調査</div><div class="list rq tn"><div class="li h"><span>知りたいこと</span><span>聞く相手</span><span>状態</span><span></span></div>';
+  if(!S.req) h+='<div class="empty">まだありません。指標のページで「なぜ？」と聞くと、そこから頼めます</div>';
+  else{var st={approve:'部長の承認待ち',wait:'見積もり待ち',est:'見積もりが届きました',run:'回答を集めています',done:'回答が届きました'}[S.req.st];
+    var act={est:'<button class="btn sm" data-estok="1">見積もりを見てOKする</button>',done:'<button class="btn sm" data-open="m20">答えを見る</button>'}[S.req.st]||'';
+    h+='<div class="li"><span>20代の好意度だけが下がった理由</span><span>20代女性 '+S.req.n+'人</span><span class="st '+(S.req.st==='done'?'g':'b')+'">'+st+'</span><span>'+act+'</span></div>';
+    if(S.req.st==='done')S.req.seen=true;}
+  h+='</div>';
+  $('#scroll').innerHTML=h;$('#crumb').innerHTML='データ ／ <b>頼んだ追加調査</b>';$('#barBtns').innerHTML='';
+}
+function renderCm(){
+  var rows='',live=S.req&&S.req.st!=='approve';
+  if(live){var st={wait:'<span class="st b">新しい依頼</span>',est:'<span class="st">お客さんの返事待ち</span>',run:'<span class="st">回答を集めています</span>',done:'<span class="st g">回答済み</span>'}[S.req.st];
+    var act=S.req.st==='wait'?'<button class="btn sm" data-sendest="1">見積もりを送る</button>':'';
+    rows+='<div class="li"><span>A社</span><span>20代の好意度だけが下がった理由</span><span>20代女性 '+S.req.n+'人</span><span>9月16日</span>'+st+'<span>'+act+'</span></div>';}
+  rows+='<div class="li"><span>B社</span><span>新しい味が30代に受け入れられるか</span><span>30〜40代 500人</span><span>9月17日</span><span class="st">見積もり中</span><span></span></div><div class="li"><span>C社</span><span>値上げの後に買わなくなった理由</span><span>購入者 400人</span><span>9月4日</span><span class="st g">受注</span><span></span></div>';
+  var n=live?9:8,won=S.req&&(S.req.st==='run'||S.req.st==='done')?4:3;
+  $('#cmBadge').textContent=n;
+  $('#cmScroll').innerHTML='<div class="ptitle">お客さんの「なぜ？」から、追加調査の依頼が'+n+'件届きました</div><div class="kpis tn"><div class="kpi"><div class="k">お客さんに届けた結果（9月）</div><div class="v">24件</div></div><div class="kpi hot"><div class="k">「理由を聞く」から来た依頼</div><div class="v">'+n+'件</div></div><div class="kpi"><div class="k">見積もりから受注</div><div class="v">'+won+'件</div></div></div>'+
+   '<div class="list cm tn" style="margin-top:14px"><div class="li h"><span>会社</span><span>お客さんが知りたいこと</span><span>聞く相手</span><span>頼まれた日</span><span>状態</span><span></span></div>'+rows+'</div>'+(live?'':'<p style="margin-top:10px;font-size:13px;color:var(--muted)">A社の担当者が頼み、部長がOKすると、ここに1行増えます</p>');
+}
+function evtBtn(){
+  var b=$('#evt'),r=S.req,L;
+  if(!r) L=['次の出来事：担当者が追加調査を頼むと進められます',0];
+  else L={approve:['次の出来事：B部長がOKする',1],wait:['次の出来事：クロス・マーケティングが見積もりを送る',1],est:['次の出来事：担当者が見積もりにOKする',1],run:['次の出来事：3日後（9月19日）になる',1],done:['次の出来事：なし（答えが届きました）',0]}[r.st];
+  b.textContent=L[0];b.disabled=!L[1];
+  [].forEach.call(document.querySelectorAll('[data-entry]'),function(x){x.classList.toggle('on',S.role==='a'&&x.dataset.entry===(S.view==='mail'?'mail':'app'))});
+}
+function hint(){
+  var t,r=S.req;
+  if(S.role==='cm') t=r&&r.st==='wait'?'A社から依頼が届いています。「見積もりを送る」を押すと、A社の担当者に見積もりが届きます':'お客さんが「理由を聞く」を頼み、その部長がOKすると、ここに依頼が届きます';
+  else if(S.view==='mail') t='メールで届いた場合。行を押すと、その指標のページに直接入ります';
+  else if(S.page==='home') t='アプリを開くと最初に出る画面。上のまとめで「何が動いたか」、下のカードで4つの指標が分かります';
+  else if(S.page==='sv') t='過去の調査の一覧。言葉で絞り込めます';
+  else if(!r) t='質問の候補を押すか、自分で打ちます。「なぜ」と聞くと、答えがない時の次の一手が出ます';
+  else if(r.st==='approve') t='部長の承認待ち。明日の定例には、右上の「上司に共有」で「理由は調査中」の1枚を出せます';
+  else if(r.st==='wait') t='見積もり待ち。上で「クロス・マーケティング」に切り替えると、依頼を受けた側の画面が見られます';
+  else if(r.st==='est') t='見積もりが届きました。左の「頼んだ追加調査」でOKすると、調査が始まります';
+  else if(r.st==='run') t='回答を集めています。答えが届くと、同じ質問の答えが書き変わります';
+  else if(!S.shared) t='答えが届きました。右上の「上司に共有」で、定例用の1枚にして送れます';
+  else t='ひととおり終わりです。上で「クロス・マーケティング」に切り替えると、依頼を受ける側が見られます';
+  $('#msg').textContent=t;evtBtn();
+}
+function render(){
+  $('#vMail').classList.toggle('on',S.role==='a'&&S.view==='mail');
+  $('#vApp').classList.toggle('on',S.role==='a'&&S.view==='app');
+  $('#vCm').classList.toggle('on',S.role==='cm');
+  [].forEach.call(document.querySelectorAll('[data-role]'),function(b){b.classList.toggle('on',b.dataset.role===S.role)});
+  if(S.role==='cm')renderCm();
+  else if(S.view==='mail')renderDigest();
+  else{renderNav();if(S.page==='home')renderHome();else if(M[S.page])renderMetric();else if(S.page==='sv')renderSurveys();else renderReq();}
+  closePop();hint();
+}
+function flash(t,id){var f=$(id||'#flash');f.textContent=t;f.classList.add('on');clearTimeout(f._t);f._t=setTimeout(function(){f.classList.remove('on')},2800);}
+function closePop(){$('#pop').classList.remove('on')}
+function ask(q){if(!q)return;(S.thread[S.page]=S.thread[S.page]||[]).push(q);render();var sc=$('#scroll');setTimeout(function(){sc.scrollTo({top:sc.scrollHeight,behavior:'smooth'})},30);}
+function slide(){
+  var done=S.req&&S.req.st==='done';
+  $('#slide').innerHTML='<div class="st1">脳内POS 9月16日：20代の好意度だけが下がった</div><div class="sb"><svg viewBox="0 0 260 110"><polygon points="0,20 260,20 260,62 0,62" fill="#e3edfd"/><polyline points="0,40 40,34 80,44 120,30 160,40 200,34 230,38" fill="none" stroke="#2f6fed" stroke-width="2"/><polyline points="230,38 258,80" fill="none" stroke="#2f6fed" stroke-width="2" stroke-dasharray="4 4"/><circle cx="258" cy="80" r="4" fill="#fff" stroke="#2f6fed" stroke-width="2"/></svg><div class="pts"><p>20代だけ 45%→37%（いつもの幅の外）</p><p>30代・40代、競合は動いていない</p><p>2023年11月にも同じ動き、6週で回復</p><p>'+(done?'理由：SNSで競合の新作を見た人が52%':'理由：20代に追加で聞いている（'+(S.req?'9月19日に届く':'未依頼')+'）')+'</p></div></div><div class="sf">出典：脳内POS 第128回'+(done?'・追加調査（9月19日）':'')+' クロス・マーケティング</div>';
+}
+
+document.addEventListener('click',function(e){
+  var t=e.target, c;
+  if(c=t.closest('[data-c]')){var p=$('#pop'),same=p.dataset.k===c.dataset.c&&p.classList.contains('on');closePop();if(same)return;
+    var main=$('#appMain'),mr=main.getBoundingClientRect(),r=c.getBoundingClientRect(),k=mr.width/main.offsetWidth;
+    p.innerHTML=CITE[c.dataset.c];p.dataset.k=c.dataset.c;var left=Math.min((r.left-mr.left)/k,main.offsetWidth-390),top=(r.bottom-mr.top)/k+6;
+    p.style.left=left+'px';p.style.top=top+'px';p.classList.add('on');
+    if(top+p.offsetHeight>main.offsetHeight-10){p.style.top=((r.top-mr.top)/k-p.offsetHeight-6)+'px';}
+    return;}
+  if(!t.closest('.pop'))closePop();
+  if(c=t.closest('[data-open]')){S.view='app';S.page=c.dataset.open;S.tab='t';render();$('#scroll').scrollTo({top:0});return;}
+  if(c=t.closest('[data-page]')){S.page=c.dataset.page;render();return;}
+  if(t.closest('[data-mail]')){S.view='mail';render();return;}
+  if(c=t.closest('[data-tab]')){S.tab=c.dataset.tab;render();return;}
+  if(c=t.closest('[data-ask]')){ask(c.dataset.ask);return;}
+  if(t.closest('[data-openpanel]')){$('#panel').classList.add('on');return;}
+  if(t.closest('[data-closepanel]')){$('#panel').classList.remove('on');return;}
+  if(c=t.closest('[data-n]')){S.n=+c.dataset.n;[].forEach.call(document.querySelectorAll('#optN button'),function(b){b.classList.toggle('on',b===c)});$('#kvWho').textContent='20代の女性 '+S.n+'人';return;}
+  if(t.closest('[data-order]')){S.req={st:'approve',n:S.n};$('#panel').classList.remove('on');render();flash('B部長に承認をお願いしました（Teamsに通知）');return;}
+  if(t.closest('[data-estok]')){S.req.st='run';render();flash('見積もりにOKしました。回答を集めています（9月19日ごろ）');return;}
+  if(t.closest('[data-sendest]')){S.req.st='est';render();flash('A社の担当者に見積もりを送りました','#flash2');return;}
+  if(c=t.closest('[data-hq]')){var q=c.dataset.hq.split('|');S.page=q[0];S.tab='t';ask(q[1]);return;}
+  if(c=t.closest('[data-entry]')){S.role='a';S.view=c.dataset.entry==='mail'?'mail':'app';if(S.view==='app')S.page='home';$('#panel').classList.remove('on');$('#share').classList.remove('on');render();return;}
+  if(t.closest('#evt')){var r=S.req;if(!r)return;var nx={approve:'wait',wait:'est',est:'run',run:'done'}[r.st];if(!nx)return;r.st=nx;if(nx==='done')r.seen=false;
+    render();var f=S.role==='cm'?'#flash2':'#flash';flash({wait:'B部長がOKしました。クロス・マーケティングに依頼が届きました',est:'クロス・マーケティングから見積もりが届きました',run:'担当者が見積もりにOKしました。調査が始まりました',done:'9月19日：回答が届きました'}[nx],f);return;}
+  if(t.closest('[data-openshare]')){slide();$('#share').classList.add('on');return;}
+  if(t.closest('[data-closeshare]')){$('#share').classList.remove('on');return;}
+  if(c=t.closest('[data-to]')){c.classList.toggle('off');return;}
+  if(t.closest('[data-send]')){var to=[].filter.call(document.querySelectorAll('[data-to]'),function(b){return !b.classList.contains('off')}).map(function(b){return b.textContent});
+    $('#share').classList.remove('on');S.shared=true;hint();flash(to.length?to.join('と')+'に送りました（見本なので実際には送られません）':'宛先を1つ以上選んでください');return;}
+  if(c=t.closest('[data-role]')){S.role=c.dataset.role;$('#panel').classList.remove('on');$('#share').classList.remove('on');render();return;}
+});
+document.addEventListener('submit',function(e){if(e.target.id==='askForm'){e.preventDefault();ask($('#askIn').value.trim());}if(e.target.id==='homeForm'){e.preventDefault();var v=$('#homeIn').value.trim();if(!v)return;S.page=/全体|去年|昨年/.test(v)&&!/20代/.test(v)?'all':/想起/.test(v)?'rec':/購入/.test(v)?'buy':'m20';S.tab='t';ask(v);}});
+document.addEventListener('input',function(e){if(e.target.id==='svIn'){var v=e.target.value,pos=e.target.selectionStart;renderSurveys(v);var i=$('#svIn');i.focus();i.setSelectionRange(pos,pos);}});
+$('#restart').addEventListener('click',function(){S=S0();$('#panel').classList.remove('on');$('#share').classList.remove('on');render();});
+function fit(){var s=$('#scaler');var w=Math.min(1,(window.innerWidth-24)/1282);s.style.transform='scale('+w+')';s.style.marginLeft=Math.max(0,(s.parentNode.clientWidth-1282*w)/2)+'px';s.parentNode.style.height=(802*w+20)+'px';}
+window.addEventListener('resize',fit);fit();render();
+})();
+</script>
+</body>
+</html>

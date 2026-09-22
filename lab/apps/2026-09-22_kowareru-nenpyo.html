@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>壊れる年表</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; --red:#b4322a; --amber:#c98a12; --green:#2f7a52; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif; font-size:17px; line-height:1.7; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .demo{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line); background:#fff; border-radius:999px; padding:2px 10px; }
+  .tag{ font-size:13px; color:var(--sub); margin-top:8px; }
+  h1{ font-size:27px; line-height:1.3; margin:4px 0 8px; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 12px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; margin:12px 0; }
+  .card h2{ font-size:18px; margin:0 0 8px; }
+  button{ font:inherit; cursor:pointer; }
+  .yr{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+  .yr .y{ font-size:40px; font-weight:700; letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1.1; }
+  .yr .a{ font-size:15px; color:var(--sub); text-align:right; }
+  input[type=range]{ width:100%; accent-color:var(--blue); margin:10px 0 2px; height:28px; }
+  .ticks{ display:flex; justify-content:space-between; font-size:12px; color:var(--sub); font-variant-numeric:tabular-nums; }
+  .bldg{ width:100%; display:block; margin-top:6px; }
+  .leg{ display:flex; flex-wrap:wrap; gap:12px; font-size:13px; color:var(--sub); margin-top:4px; }
+  .leg i{ display:inline-block; width:11px; height:11px; border-radius:3px; margin-right:4px; vertical-align:-1px; }
+  .kpi{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
+  .kpi div{ background:#fafaf7; border:1px solid var(--line); border-radius:11px; padding:10px; }
+  .kpi .l{ font-size:12.5px; color:var(--sub); }
+  .kpi .v{ font-size:24px; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.25; }
+  .neg{ color:var(--red); }
+  .say{ background:#fffbe8; border:1px solid #f2e2a8; border-radius:11px; padding:11px 13px; font-size:16px; margin-top:10px; }
+  .chips{ display:flex; flex-wrap:wrap; gap:7px; margin:4px 0 4px; }
+  .chips button{ background:#fff; border:1.5px solid var(--line); border-radius:999px; padding:6px 13px; font-size:15px; color:var(--ink); }
+  .chips button.on{ border-color:var(--blue); color:var(--blue); background:#eef3fe; font-weight:700; }
+  .lbl{ font-size:13.5px; color:var(--sub); margin-top:8px; }
+  .ev{ border-top:1px solid var(--line); }
+  .ev div{ display:grid; grid-template-columns:52px 1fr auto; gap:8px; padding:8px 0; border-bottom:1px solid var(--line); font-size:15px; font-variant-numeric:tabular-nums; }
+  .ev .t{ color:var(--sub); }
+  .ev .now{ background:#eef3fe; }
+  .ev .past{ color:#9a9aa3; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .note{ font-size:13.5px; color:var(--sub); }
+  .biz{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:12px 14px; font-size:15.5px; margin-top:12px; }
+  .biz .h{ font-size:13px; color:var(--blue); font-weight:700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo">デモ（サンプルデータ）</span>
+  <div class="tag">1日1アプリ実験室 / 2026-09-22 / デジタルツイン × 賃貸管理 × 老後資金 × 時間を進める</div>
+  <h1>壊れる年表</h1>
+  <p class="lead">2014年築、木造2階建て8戸のアパート。つまみを右へ動かすと年が進み、給湯器やエアコンが替えどきに入った部屋から色が変わります。いまの積立のままで、何年に、オーナーが何歳のときにお金が足りなくなるかが出ます。</p>
+
+  <div class="card">
+    <div class="yr"><div class="y" id="yr">2026年</div><div class="a" id="age"></div></div>
+    <input type="range" id="sl" min="2026" max="2050" value="2026" aria-label="年">
+    <div class="ticks"><span>2026</span><span>2032</span><span>2038</span><span>2044</span><span>2050</span></div>
+    <svg id="bldg" class="bldg" viewBox="0 0 340 230"></svg>
+    <div class="leg"><span><i style="background:#e3f1e8;border:1px solid #2f7a52"></i>まだ大丈夫</span><span><i style="background:#fbf1d6;border:1px solid #c98a12"></i>替えどきが近い（残り2年以内）</span><span><i style="background:#f8e1de;border:1px solid #b4322a"></i>今年が替えどき（交換費が出る年）</span></div>
+    <div class="kpi">
+      <div><div class="l">その年までに出ていく修繕費</div><div class="v" id="kOut">-</div></div>
+      <div><div class="l">その年の積立の残り</div><div class="v" id="kBal">-</div></div>
+    </div>
+    <div class="say" id="say"></div>
+  </div>
+
+  <div class="card">
+    <h2>積立と始め方を変える</h2>
+    <div class="lbl">毎月の修繕積立</div>
+    <div class="chips" id="cSave"></div>
+    <div class="lbl">いまの積立残高</div>
+    <div class="chips" id="cBase"></div>
+    <div class="lbl">オーナーのいまの年齢</div>
+    <div class="chips" id="cAge"></div>
+  </div>
+
+  <div class="card">
+    <h2>この先の出費</h2>
+    <div class="ev" id="ev"></div>
+  </div>
+
+  <div class="card">
+    <h2>この数の出し方</h2>
+    <p class="note" style="margin:0">設備の替えどきと費用は、このデモのために置いた仮の目安です（給湯器12年・1台20万円、エアコン13年・1台12万円、外壁塗装15年・200万円、屋根と防水18年・150万円、鉄部塗装と外階段8年・30万円、換気扇やコンロなど15年・1戸8万円）。実際の年数は製品と使い方で大きく変わり、費用も地域と時期で変わります。入居時にまとめて付けた設備は同じ年に一斉に替えどきが来る、という形だけを見せています。家賃収入・税金・空室は入れていません。</p>
+    <div class="biz"><div class="h">使う人・払う人</div>アパート1〜3棟を持つ個人オーナーと、その管理を受けている地域の管理会社。管理会社は「そろそろ給湯器が」と毎回単発で言うより、10年先までの年表を1枚渡して、積立額の見直しと前倒し工事の相談につなげられます。管理会社の月額に入れて、オーナーごとの年表を印刷して持っていく使い方です。</div>
+  </div>
+</div>
+
+<script>
+const BUILT=2014;
+// 仮の目安（デモ）。life=年, cost=万円（1件あたり）
+const EQ=[
+ {k:'kyuto', nm:'給湯器', life:12, cost:20, per:true},
+ {k:'ac',    nm:'エアコン', life:13, cost:12, per:true},
+ {k:'kitchen',nm:'換気扇・コンロ', life:15, cost:8, per:true},
+ {k:'wall',  nm:'外壁塗装', life:15, cost:200, per:false},
+ {k:'roof',  nm:'屋根・防水', life:18, cost:150, per:false},
+ {k:'iron',  nm:'鉄部塗装・外階段', life:8, cost:30, per:false},
+];
+// 各部屋で、途中で壊れて単発交換した年（サンプル）。無い場合は築年
+const UNITS=[
+ {no:'101', kyuto:2014, ac:2014, kitchen:2014},
+ {no:'102', kyuto:2019, ac:2014, kitchen:2014},
+ {no:'103', kyuto:2014, ac:2017, kitchen:2014},
+ {no:'104', kyuto:2016, ac:2021, kitchen:2014},
+ {no:'201', kyuto:2014, ac:2014, kitchen:2014},
+ {no:'202', kyuto:2020, ac:2016, kitchen:2019},
+ {no:'203', kyuto:2014, ac:2014, kitchen:2014},
+ {no:'204', kyuto:2017, ac:2018, kitchen:2014},
+];
+// 共用部の直近の施工年（サンプル）
+const COMMON={wall:2014, roof:2014, iron:2022};
+const NOW=2026;
+let save=3, base=300, age=62;
+const $=id=>document.getElementById(id);
+
+// 各設備の交換イベントを NOW〜2050 で作る。替えどきを過ぎているものは NOW 年に交換扱い
+function events(){
+  const out=[];
+  const add=(nm,last,life,cost,where)=>{ let y=last+life; if(y<NOW) y=NOW; while(y<=2050){ out.push({y,nm,cost,where}); y+=life; } };
+  UNITS.forEach(u=>['kyuto','ac','kitchen'].forEach(k=>{ const e=EQ.find(x=>x.k===k); add(e.nm,u[k],e.life,e.cost,u.no); }));
+  ['wall','roof','iron'].forEach(k=>{ const e=EQ.find(x=>x.k===k); add(e.nm,COMMON[k],e.life,e.cost,'共用'); });
+  return out.sort((a,b)=>a.y-b.y);
+}
+// 設備の状態：その年時点で、直近の交換からの経過で判断
+function stateOf(last,life,year){
+  // year までの交換を反映
+  let l=last, next=last+life; if(next<NOW) next=NOW;
+  while(next<year){ l=next; next=l+life; }
+  const left=next-year;
+  return left<=0?'bad':left<=2?'warn':'ok';
+}
+const COL={ok:['#e3f1e8','#2f7a52'],warn:['#fbf1d6','#c98a12'],bad:['#f8e1de','#b4322a']};
+function yen(v){ const s=v<0?'-':''; v=Math.abs(Math.round(v)); return s+(v>=10000?(v/10000).toFixed(2)+'億円':v.toLocaleString()+'万円'); }
+
+function simulate(){ // 年ごとの残高
+  const ev=events(); const bal={}; let b=base;
+  for(let y=NOW;y<=2050;y++){ if(y>NOW) b+=save*12; ev.filter(e=>e.y===y).forEach(e=>b-=e.cost); bal[y]=b; }
+  return {ev,bal};
+}
+function render(){
+  const year=+$('sl').value;
+  const {ev,bal}=simulate();
+  $('yr').textContent=year+'年';
+  $('age').innerHTML='築'+(year-BUILT)+'年<br>オーナー '+(age+year-NOW)+'歳';
+  const out=ev.filter(e=>e.y<=year).reduce((s,e)=>s+e.cost,0);
+  $('kOut').textContent=yen(out);
+  $('kBal').innerHTML='<span class="'+(bal[year]<0?'neg':'')+'">'+yen(bal[year])+'</span>';
+  let first=null; for(let y=NOW;y<=2050;y++){ if(bal[y]<0){ first=y; break; } }
+  const low=Math.min(...Object.values(bal)); let lowY=NOW; for(let y=NOW;y<=2050;y++) if(bal[y]===low){ lowY=y; break; }
+  let msg;
+  if(first) msg='いまの積立だと <span class="mark">'+first+'年、オーナーが'+(age+first-NOW)+'歳のときに足りなくなります</span>。その年に出ていくのは '+ev.filter(e=>e.y===first).map(e=>e.nm).filter((v,i,a)=>a.indexOf(v)===i).join('・')+'。いちばん苦しい'+lowY+'年には '+yen(-low)+' の持ち出しです。';
+  else msg='2050年まで積立の範囲で回ります。いちばん残高が減るのは'+lowY+'年（残り '+yen(low)+'）。';
+  $('say').innerHTML=msg;
+  drawB(year);
+  $('ev').innerHTML=groupByYear(ev).map(g=>'<div class="'+(g.y===year?'now':g.y<year?'past':'')+'"><span class="t">'+g.y+'</span><span>'+g.txt+'</span><b>'+yen(g.sum)+'</b></div>').join('');
+}
+function groupByYear(ev){
+  const m={}; ev.forEach(e=>{ (m[e.y]=m[e.y]||[]).push(e); });
+  return Object.keys(m).map(Number).sort((a,b)=>a-b).map(y=>{ const c={}; m[y].forEach(e=>{ c[e.nm]=(c[e.nm]||0)+1; });
+    const txt=Object.entries(c).map(([k,n])=>EQ.find(x=>x.nm===k).per? k+' '+n+'台' : k).join('、');
+    return {y,txt,sum:m[y].reduce((s,e)=>s+e.cost,0)}; });
+}
+function drawB(year){
+  let s='';
+  // 屋根
+  const rs=stateOf(COMMON.roof,18,year), ws=stateOf(COMMON.wall,15,year), is=stateOf(COMMON.iron,8,year);
+  s+='<polygon points="14,58 170,14 326,58" fill="'+COL[rs][0]+'" stroke="'+COL[rs][1]+'" stroke-width="2"/>';
+  s+='<text x="170" y="46" font-size="11" text-anchor="middle" fill="'+COL[rs][1]+'">屋根・防水</text>';
+  s+='<rect x="22" y="58" width="296" height="150" fill="'+COL[ws][0]+'" stroke="'+COL[ws][1]+'" stroke-width="2"/>';
+  s+='<text x="30" y="222" font-size="11" fill="'+COL[ws][1]+'">外壁</text>';
+  // 外階段
+  s+='<rect x="300" y="70" width="12" height="132" fill="'+COL[is][0]+'" stroke="'+COL[is][1]+'" stroke-width="1.5"/>';
+  s+='<text x="318" y="222" font-size="11" text-anchor="end" fill="'+COL[is][1]+'">外階段</text>';
+  UNITS.forEach((u,i)=>{ const col=i%4, row=i<4?1:0; const x=30+col*67, y=66+row*70;
+    s+='<rect x="'+x+'" y="'+y+'" width="61" height="62" rx="4" fill="#fff" stroke="#cfccc4"/>';
+    s+='<text x="'+(x+6)+'" y="'+(y+14)+'" font-size="11" fill="#16161a" font-weight="700">'+u.no+'</text>';
+    [['kyuto','給湯',12],['ac','空調',13],['kitchen','台所',15]].forEach(([k,lb,life],j)=>{ const st=stateOf(u[k],life,year);
+      s+='<rect x="'+(x+5)+'" y="'+(y+19+j*14)+'" width="51" height="12" rx="3" fill="'+COL[st][0]+'" stroke="'+COL[st][1]+'"/>';
+      s+='<text x="'+(x+30.5)+'" y="'+(y+28.5+j*14)+'" font-size="9" text-anchor="middle" fill="'+COL[st][1]+'">'+lb+'</text>'; });
+  });
+  $('bldg').innerHTML=s;
+}
+function chips(id,vals,cur,fmt,set){
+  $(id).innerHTML=vals.map(v=>'<button data-v="'+v+'" class="'+(v===cur?'on':'')+'">'+fmt(v)+'</button>').join('');
+  $(id).onclick=e=>{ const b=e.target.closest('button'); if(!b) return; set(+b.dataset.v); [...$(id).children].forEach(c=>c.classList.toggle('on',c===b)); render(); };
+}
+chips('cSave',[2,3,5,8],save,v=>'月'+v+'万円',v=>save=v);
+chips('cBase',[0,150,300,500],base,v=>v+'万円',v=>base=v);
+chips('cAge',[55,62,70],age,v=>v+'歳',v=>age=v);
+$('sl').addEventListener('input',render);
+render();
+</script>
+</body>
+</html>

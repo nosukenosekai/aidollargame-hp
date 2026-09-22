@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>留守の少ない順</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; --red:#b4322a; --green:#2f7a52; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif; font-size:17px; line-height:1.7; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .demo{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line); background:#fff; border-radius:999px; padding:2px 10px; }
+  .tag{ font-size:13px; color:var(--sub); margin-top:8px; }
+  h1{ font-size:27px; line-height:1.3; margin:4px 0 8px; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 12px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; margin:12px 0; }
+  .card h2{ font-size:18px; margin:0 0 8px; }
+  button{ font:inherit; cursor:pointer; }
+  .kpi{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .kpi div{ background:#fafaf7; border:1px solid var(--line); border-radius:11px; padding:10px 8px; text-align:center; }
+  .kpi .l{ font-size:12px; color:var(--sub); }
+  .kpi .v{ font-size:26px; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.2; }
+  .kpi .v small{ font-size:13px; font-weight:600; }
+  .kpi .d{ font-size:12px; font-variant-numeric:tabular-nums; min-height:18px; }
+  .up{ color:var(--red); } .dn{ color:var(--green); }
+  .mode{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:0 0 10px; }
+  .mode button{ background:#fff; border:1.5px solid var(--line); border-radius:11px; padding:10px 6px; font-size:15px; color:var(--ink); }
+  .mode button.on{ border-color:var(--blue); background:#eef3fe; color:var(--blue); font-weight:700; }
+  .list{ display:grid; gap:6px; }
+  .row{ display:grid; grid-template-columns:28px 1fr auto; gap:8px; align-items:center; border:1px solid var(--line); border-radius:11px; padding:8px 8px 8px 10px; background:#fff; transition:background .2s; }
+  .row.flash{ background:#eef3fe; }
+  .num{ width:24px; height:24px; border-radius:50%; background:var(--ink); color:#fff; font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+  .nm{ font-size:15px; font-weight:600; line-height:1.35; }
+  .sub{ font-size:12.5px; color:var(--sub); line-height:1.5; font-variant-numeric:tabular-nums; }
+  .p{ display:inline-block; min-width:44px; text-align:center; border-radius:6px; padding:0 5px; font-weight:700; font-size:12.5px; }
+  .p.hi{ background:#e3f1e8; color:var(--green); } .p.mid{ background:#fbf1d6; color:#8a6410; } .p.lo{ background:#f8e1de; color:var(--red); }
+  .mv{ display:flex; flex-direction:column; gap:4px; }
+  .mv button{ width:38px; height:30px; border:1.5px solid var(--line); background:#fff; border-radius:8px; display:flex; align-items:center; justify-content:center; padding:0; }
+  .mv button:disabled{ opacity:.3; }
+  .mv svg{ width:16px; height:16px; stroke:var(--ink); fill:none; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px; padding:13px 16px; font-size:16px; font-weight:600; width:100%; }
+  .map{ width:100%; background:#fafaf7; border:1px solid var(--line); border-radius:11px; }
+  .say{ background:#fffbe8; border:1px solid #f2e2a8; border-radius:11px; padding:11px 13px; font-size:15.5px; margin-top:10px; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .note{ font-size:13.5px; color:var(--sub); }
+  .biz{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:12px 14px; font-size:15.5px; }
+  .biz .h{ font-size:13px; color:var(--blue); font-weight:700; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo">デモ（サンプルデータ）</span>
+  <div class="tag">1日1アプリ実験室 / 2026-09-22 / 需要予測 × 物流 × 疲れた × 並べ替える</div>
+  <h1>留守の少ない順</h1>
+  <p class="lead">午後から夜の便で、戸建てと小さな集合住宅の12軒をどの順に回るか。荷物も道も同じで、順番を入れ替えるだけで「行ったのに留守」の件数と帰りの時刻が動きます。いつもの近い順と、在宅しやすい時間に合わせた順を並べて比べます。</p>
+
+  <div class="card">
+    <div class="mode">
+      <button id="mNear" class="on">いつもの近い順</button>
+      <button id="mAI">在宅に合わせた順</button>
+    </div>
+    <div class="kpi">
+      <div><div class="l">留守の見込み</div><div class="v" id="kAbs">-<small>件</small></div><div class="d" id="dAbs"></div></div>
+      <div><div class="l">走る距離</div><div class="v" id="kKm">-<small>km</small></div><div class="d" id="dKm"></div></div>
+      <div><div class="l">再配達込みの終わり</div><div class="v" id="kEnd">-</div><div class="d" id="dEnd"></div></div>
+    </div>
+    <div class="say" id="say"></div>
+  </div>
+
+  <div class="card">
+    <h2>回る順（上下で入れ替え）</h2>
+    <p class="note" style="margin:-4px 0 10px">緑の%＝その軒に着く時刻に家にいそうな割合（過去の受け取り記録から出した見込み）。1軒動かすと、後ろの全部の到着時刻がずれます。</p>
+    <div class="list" id="list"></div>
+  </div>
+
+  <div class="card">
+    <h2>道のり</h2>
+    <svg id="map" class="map" viewBox="0 0 320 250"></svg>
+    <p class="note" style="margin:6px 0 0">左下が営業所。番号は回る順。赤い輪は留守になりやすい軒。</p>
+  </div>
+
+  <div class="card">
+    <h2>この数の出し方</h2>
+    <p class="note" style="margin:0">14:00 に営業所を出発。道は碁盤の目として縦横の距離で計算し、時速20km。この12軒のあいだに集合住宅などほかの荷物も配るため、1軒ごとに20分を見込んでいます。各軒の在宅の割合は時間帯ごと（14時台〜19時台）にサンプルで入れてあります。留守の見込み＝各軒の「留守の割合」の合計。留守だった分は、夜に届け直す手間を1件20分と置いて終わり時刻に足しています。数字はすべて架空の配達エリアのものです。</p>
+    <div class="biz" style="margin-top:12px"><div class="h">使う人・払う人</div>軽貨物の個人ドライバーと、それを束ねる委託元の営業所。受け取り記録はすでに端末に溜まっているので、それを並べ替えに使うだけ。売るのは営業所単位の月額で、成果は「1日あたり何分早く上がれたか」で見せます。</div>
+  </div>
+</div>
+
+<script>
+// 架空の配達先12軒。x,y は km（営業所=0,0）。p は 14〜19時台の在宅割合
+const STOPS = [
+ {id:'A', nm:'緑ヶ丘3丁目 戸建（共働き）',      x:1.2,y:0.8, p:[.25,.25,.30,.45,.80,.90]},
+ {id:'B', nm:'さくら荘 102（高齢の方）',         x:1.6,y:1.4, p:[.95,.95,.90,.85,.80,.70]},
+ {id:'C', nm:'架空工務店 事務所',                x:2.4,y:0.6, p:[.90,.90,.90,.85,.40,.10]},
+ {id:'D', nm:'メゾン北 305（単身）',             x:2.9,y:1.9, p:[.15,.15,.20,.25,.55,.80]},
+ {id:'E', nm:'東町2丁目 戸建（子育て世帯）',     x:3.6,y:1.2, p:[.60,.55,.75,.85,.85,.80]},
+ {id:'F', nm:'ハイツ川沿い 201（夜勤あり）',     x:4.1,y:2.6, p:[.85,.80,.70,.40,.30,.30]},
+ {id:'G', nm:'架空歯科クリニック',               x:3.0,y:3.2, p:[.95,.95,.95,.95,.95,.30]},
+ {id:'H', nm:'西台団地 5-402（共働き）',         x:1.8,y:3.4, p:[.20,.20,.25,.40,.75,.90]},
+ {id:'I', nm:'丘の上 戸建（在宅勤務）',          x:0.9,y:2.6, p:[.85,.85,.85,.80,.75,.70]},
+ {id:'J', nm:'コーポ駅前 1F（学生）',            x:4.6,y:3.8, p:[.35,.45,.50,.50,.40,.35]},
+ {id:'K', nm:'架空青果店',                       x:3.8,y:4.4, p:[.90,.90,.85,.85,.80,.60]},
+ {id:'L', nm:'南町 戸建（日中不在が多い）',      x:2.3,y:4.6, p:[.10,.10,.15,.30,.65,.85]},
+];
+const SPEED=20, STAY=20, START=14*60, REDO=20;
+const $=id=>document.getElementById(id);
+let order, mode='near', nearRes=null;
+
+const dist=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
+const O={x:0,y:0};
+function sim(ord){
+  let t=START, km=0, prev=O, abs=0; const arr=[];
+  for(const i of ord){ const s=STOPS[i]; const d=dist(prev,s); km+=d; t+=d/SPEED*60;
+    const h=Math.min(5,Math.max(0,Math.floor(t/60)-14)); const p=s.p[h];
+    arr.push({t,p}); abs+=1-p; t+=STAY; prev=s; }
+  const back=dist(prev,O); km+=back; t+=back/SPEED*60;
+  // 留守分：届け直し1件あたり REDO 分を見込みで足す
+  return {arr,km,abs,end:t+abs*REDO};
+}
+function nearest(){
+  const left=STOPS.map((_,i)=>i), out=[]; let prev=O;
+  while(left.length){ left.sort((a,b)=>dist(prev,STOPS[a])-dist(prev,STOPS[b])); const i=left.shift(); out.push(i); prev=STOPS[i]; }
+  return out;
+}
+function cost(o){ const r=sim(o); return r.end; }
+function optimize(){
+  let best=nearest(), bc=cost(best);
+  for(let rs=0; rs<30; rs++){
+    let cur = rs===0? best.slice() : best.slice().sort(()=>Math.random()-.5), cc=cost(cur), improved=true;
+    while(improved){ improved=false;
+      for(let i=0;i<cur.length;i++) for(let j=0;j<cur.length;j++){ if(i===j) continue;
+        const c=cur.slice(); const [x]=c.splice(i,1); c.splice(j,0,x); const v=cost(c);
+        if(v<cc-0.01){ cur=c; cc=v; improved=true; } } }
+    if(cc<bc){ best=cur; bc=cc; }
+  }
+  return best;
+}
+const hm=m=>{ m=Math.round(m); return Math.floor(m/60)+':'+String(m%60).padStart(2,'0'); };
+const arrowUp='<svg viewBox="0 0 24 24"><polyline points="6 15 12 9 18 15"/></svg>';
+const arrowDn='<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>';
+function render(flash){
+  const r=sim(order);
+  $('kAbs').innerHTML=r.abs.toFixed(1)+'<small>件</small>';
+  $('kKm').innerHTML=r.km.toFixed(1)+'<small>km</small>';
+  $('kEnd').textContent=hm(r.end);
+  const n=nearRes;
+  const df=(v,u,dec)=>{ if(Math.abs(v)<(dec?0.05:0.5)) return ''; return '<span class="'+(v>0?'up':'dn')+'">近い順より '+(v>0?'+':'')+(dec?v.toFixed(1):Math.round(v))+u+'</span>'; };
+  $('dAbs').innerHTML=df(r.abs-n.abs,'件',1); $('dKm').innerHTML=df(r.km-n.km,'km',1); $('dEnd').innerHTML=df(r.end-n.end,'分',0);
+  const save=Math.round(n.end-r.end);
+  let msg;
+  if(mode==='near' && order.join()===nearest().join()) msg='いつもの近い順です。留守の見込みは <b>'+n.abs.toFixed(1)+'件</b>。昼間いない家に14時台に行っているのが原因です。「在宅に合わせた順」を押してみてください。';
+  else if(save>=1) msg='近い順より <span class="mark">'+save+'分早く上がれる見込み</span>です。走る距離は'+(r.km-n.km>=0?'少し増えますが':'短くなり')+'、留守が '+(n.abs-r.abs).toFixed(1)+'件減るぶん、夜の届け直しが減ります。';
+  else if(save<=-1) msg='この順だと近い順より '+(-save)+'分遅くなります。留守になりやすい軒（赤）を夕方へ回すと戻ります。';
+  else msg='近い順とほぼ同じ終わり時刻です。';
+  $('say').innerHTML=msg;
+  $('list').innerHTML=order.map((i,k)=>{ const s=STOPS[i], a=r.arr[k], cls=a.p>=.7?'hi':a.p>=.45?'mid':'lo';
+    return '<div class="row'+(flash===i?' flash':'')+'"><div class="num">'+(k+1)+'</div><div><div class="nm">'+s.nm+'</div><div class="sub">着 '+hm(a.t)+'　在宅 <span class="p '+cls+'">'+Math.round(a.p*100)+'%</span></div></div>'
+      +'<div class="mv"><button data-k="'+k+'" data-d="-1" '+(k===0?'disabled':'')+' aria-label="上へ">'+arrowUp+'</button><button data-k="'+k+'" data-d="1" '+(k===order.length-1?'disabled':'')+' aria-label="下へ">'+arrowDn+'</button></div></div>'; }).join('');
+  drawMap(r);
+}
+function drawMap(r){
+  const sx=v=>20+v*58, sy=v=>230-v*44;
+  let s='';
+  for(let g=0; g<=5; g++){ s+='<line x1="'+sx(g)+'" y1="'+sy(0)+'" x2="'+sx(g)+'" y2="'+sy(5)+'" stroke="#eceae4"/><line x1="'+sx(0)+'" y1="'+sy(g)+'" x2="'+sx(5)+'" y2="'+sy(g)+'" stroke="#eceae4"/>'; }
+  let prev=O, path='M'+sx(0)+' '+sy(0);
+  order.forEach(i=>{ const s2=STOPS[i]; path+=' L'+sx(s2.x)+' '+sy(prev.y)+' L'+sx(s2.x)+' '+sy(s2.y); prev=s2; });
+  path+=' L'+sx(0)+' '+sy(prev.y)+' L'+sx(0)+' '+sy(0);
+  s+='<path d="'+path+'" fill="none" stroke="#2563eb" stroke-width="2" opacity=".7"/>';
+  s+='<rect x="'+(sx(0)-7)+'" y="'+(sy(0)-7)+'" width="14" height="14" fill="#16161a" rx="3"/>';
+  order.forEach((i,k)=>{ const s2=STOPS[i], p=r.arr[k].p;
+    if(p<.45) s+='<circle cx="'+sx(s2.x)+'" cy="'+sy(s2.y)+'" r="14" fill="none" stroke="#b4322a" stroke-width="2"/>';
+    s+='<circle cx="'+sx(s2.x)+'" cy="'+sy(s2.y)+'" r="10" fill="#16161a"/><text x="'+sx(s2.x)+'" y="'+(sy(s2.y)+4)+'" font-size="11" fill="#fff" text-anchor="middle" font-weight="700">'+(k+1)+'</text>'; });
+  $('map').innerHTML=s;
+}
+$('list').addEventListener('click',e=>{ const b=e.target.closest('button[data-k]'); if(!b) return;
+  const k=+b.dataset.k, d=+b.dataset.d, j=k+d; if(j<0||j>=order.length) return;
+  const moved=order[k]; [order[k],order[j]]=[order[j],order[k]]; mode='hand'; setMode(); render(moved); });
+function setMode(){ $('mNear').classList.toggle('on',mode==='near'); $('mAI').classList.toggle('on',mode==='ai'); }
+$('mNear').onclick=()=>{ mode='near'; order=nearest(); setMode(); render(); };
+$('mAI').onclick=()=>{ mode='ai'; order=optimize(); setMode(); render(); };
+order=nearest(); nearRes=sim(order); render();
+</script>
+</body>
+</html>

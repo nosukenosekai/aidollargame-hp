@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>言わずに済む</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif; font-size:17px; line-height:1.7; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .demo{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line); background:#fff; border-radius:999px; padding:2px 10px; }
+  .tag{ font-size:13px; color:var(--sub); margin-top:8px; }
+  h1{ font-size:27px; line-height:1.3; margin:4px 0 8px; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 12px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:12px 0; }
+  .card h2{ font-size:19px; margin:0 0 6px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px; padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn:disabled{ background:#c3c3bd; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); margin-top:8px; }
+  .who{ display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; letter-spacing:.04em; margin-bottom:8px; }
+  .who i{ width:9px; height:9px; border-radius:50%; background:var(--blue); display:inline-block; }
+  .who.cust{ color:#8a6410; } .who.cust i{ background:#d9a520; }
+  .handoff{ text-align:center; padding:34px 16px; }
+  .handoff svg{ width:64px; height:64px; stroke:var(--ink); fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+  .handoff p{ font-size:20px; font-weight:700; margin:10px 0 4px; }
+  .q{ font-size:17px; font-weight:700; margin:14px 0 8px; }
+  .q small{ display:block; font-weight:400; font-size:13.5px; color:var(--sub); }
+  .opts{ display:grid; gap:7px; }
+  .opt{ background:#fff; border:1.5px solid var(--line); border-radius:11px; padding:12px 13px; text-align:left; font-size:16px; color:var(--ink); }
+  .opt.on{ border-color:#d9a520; background:#fffbe8; font-weight:600; }
+  .step{ font-size:13px; color:var(--sub); }
+  .hold{ position:relative; overflow:hidden; background:var(--ink); color:#fff; border:none; border-radius:11px; padding:16px; font-size:17px; font-weight:700; width:100%; touch-action:none; }
+  .hold .bar{ position:absolute; left:0; top:0; bottom:0; width:0; background:var(--blue); }
+  .hold span{ position:relative; }
+  .order{ border:2px solid var(--ink); border-radius:12px; padding:14px; }
+  .order .h{ font-size:13px; color:var(--sub); }
+  .order ul{ margin:6px 0 0; padding:0; list-style:none; }
+  .order li{ display:flex; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); font-size:17px; }
+  .order li:last-child{ border-bottom:none; }
+  .order li b{ min-width:78px; font-size:13px; color:var(--sub); font-weight:600; padding-top:3px; }
+  .log{ font-size:13.5px; color:var(--sub); background:#fafaf7; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-variant-numeric:tabular-nums; margin-top:12px; line-height:1.7; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .note{ font-size:14px; color:var(--sub); }
+  .cmp{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+  .cmp div{ border:1px solid var(--line); border-radius:10px; padding:10px; font-size:14.5px; }
+  .cmp .h{ font-size:12px; color:var(--sub); font-weight:700; }
+  .biz{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:12px 14px; font-size:15.5px; margin-top:12px; }
+  .biz .h{ font-size:13px; color:var(--blue); font-weight:700; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="demo">デモ（サンプルデータ）</span>
+  <div class="tag">1日1アプリ実験室 / 2026-09-22 / 電子契約 × 美容室 × 断りにくい × 端末を渡す</div>
+  <h1>言わずに済む</h1>
+  <p class="lead">「今日は話したくない」「おすすめは要らない」「写真は載せないで」。面と向かっては言いにくいことを、受付でタブレットを渡して選んでもらう。担当者に戻ると、角の立たない指示に言いかえた札だけが出ます。</p>
+
+  <!-- 1. スタイリスト側 -->
+  <div id="s1" class="card">
+    <div class="who"><i></i>お店の人が操作</div>
+    <h2>今日の予約</h2>
+    <p style="margin:0 0 4px">14:30　カット＋カラー　<b>架空 花子 様</b>（3回目）</p>
+    <p class="note" style="margin:0 0 14px">前回：「前回と同じ長さで」／写真掲載の同意：未確認</p>
+    <button class="btn" id="toCust">お客様に渡す</button>
+    <p class="note" style="margin:10px 0 0">渡すと、お客様が選んでいるあいだはお店側の画面に何も出ません。</p>
+  </div>
+
+  <!-- 2. 渡す合図 -->
+  <div id="s2" class="card hide">
+    <div class="handoff">
+      <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+      <p>お客様へ</p>
+      <div class="note">ここから先はお店の人には見えません。<br>選び終わったら、お店の人に戻してください。</div>
+    </div>
+    <button class="btn" id="startCust">はじめる</button>
+  </div>
+
+  <!-- 3. お客様側 -->
+  <div id="s3" class="card hide">
+    <div class="who cust"><i></i>お客様が選ぶ</div>
+    <div class="step" id="qstep">1 / 4</div>
+    <div id="qbox"></div>
+    <button class="btn" id="next" disabled style="margin-top:14px">次へ</button>
+  </div>
+
+  <!-- 4. 戻す -->
+  <div id="s4" class="card hide">
+    <div class="who cust"><i></i>お客様が選ぶ</div>
+    <h2>これで伝わります</h2>
+    <p style="margin:0 0 6px">お店の人には、あなたが選んだ言葉ではなく、下の言いかえだけが出ます。</p>
+    <div id="preview" class="order" style="border-color:#d9a520"></div>
+    <p class="note" style="margin:10px 0 12px" id="consentNote"></p>
+    <button class="btn" id="back">お店の人に戻す</button>
+  </div>
+
+  <!-- 5. スタイリストが受け取る -->
+  <div id="s5" class="card hide">
+    <div class="who"><i></i>お店の人が受け取る</div>
+    <p style="margin:0 0 12px">お客様の目の前で開かないよう、長押しで開きます。</p>
+    <button class="hold" id="hold"><div class="bar" id="bar"></div><span>長押しで開く</span></button>
+  </div>
+
+  <div id="s6" class="hide">
+    <div class="card">
+      <div class="who"><i></i>お店の人が見る札</div>
+      <div class="order" id="order"></div>
+      <div class="log" id="log"></div>
+      <button class="btn ghost" id="restart">別の答えで試す</button>
+    </div>
+    <div class="card">
+      <h2>お客様が押した言葉と、出た札</h2>
+      <p class="note" style="margin:0">同じ中身でも、お店側に届く言葉は変えてあります。お客様は本音に近い言葉を選べて、担当者は責められた気持ちにならずに済みます。</p>
+      <div id="pairs"></div>
+      <div class="biz"><div class="h">払うのは誰か</div>スタッフ3〜10人の美容室。写真のSNS掲載は、口頭の「いいですよ」だけだと後から揉めたときに記録が残りません。掲載同意を日時つきで残せることを入口に、店舗単位の月額で売ります。会話量や提案の要不要はそのおまけで、次回来店時に自動で引き継がれます。</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const Q=[
+ {k:'talk', q:'今日の会話は', sub:'正直なところで大丈夫です', o:[
+   {t:'いろいろ話したい', s:'会話：ふつうに'},
+   {t:'少しならいい', s:'会話：控えめに'},
+   {t:'今日は静かに過ごしたい', s:'会話：必要なことだけ（施術の確認は通常どおり）'}]},
+ {k:'sell', q:'商品やメニューのおすすめは', sub:'断るのが苦手な方もどうぞ', o:[
+   {t:'聞いてみたい', s:'提案：歓迎'},
+   {t:'1つだけならいい', s:'提案：1つまで'},
+   {t:'今日はいらない', s:'提案：今回はなし（次回以降は聞いてOKか改めて確認）'}]},
+ {k:'len', q:'切る長さで心配なことは', sub:'', o:[
+   {t:'おまかせで大丈夫', s:'長さ：おまかせ'},
+   {t:'前に短くされすぎたことがある', s:'長さ：切り始める前に鏡で1回確認'},
+   {t:'途中で何度か見せてほしい', s:'長さ：途中で2回確認'}]},
+ {k:'photo', q:'仕上がりの写真は', sub:'あとで変更できます', o:[
+   {t:'お店のSNSに載せていい（顔も可）', s:'写真：SNS掲載可（顔あり）'},
+   {t:'顔なしならSNSに載せていい', s:'写真：SNS掲載可（顔なし・後ろ姿のみ）'},
+   {t:'カルテ用だけならいい', s:'写真：店内記録のみ・掲載不可'},
+   {t:'撮らないでほしい', s:'写真：撮影しない'}]},
+];
+const $=id=>document.getElementById(id);
+let ans={}, qi=0;
+const show=id=>{ ['s1','s2','s3','s4','s5','s6'].forEach(x=>$(x).classList.toggle('hide',x!==id)); window.scrollTo(0,0); };
+function drawQ(){
+  const q=Q[qi]; $('qstep').textContent=(qi+1)+' / '+Q.length;
+  $('qbox').innerHTML='<div class="q">'+q.q+(q.sub?'<small>'+q.sub+'</small>':'')+'</div><div class="opts">'+q.o.map((o,i)=>'<button class="opt'+(ans[q.k]===i?' on':'')+'" data-i="'+i+'">'+o.t+'</button>').join('')+'</div>';
+  $('next').disabled = ans[q.k]==null; $('next').textContent = qi===Q.length-1?'確認へ':'次へ';
+}
+$('qbox').addEventListener('click',e=>{ const b=e.target.closest('.opt'); if(!b) return; ans[Q[qi].k]=+b.dataset.i; drawQ(); });
+$('next').onclick=()=>{ if(qi<Q.length-1){ qi++; drawQ(); } else { renderOrder($('preview')); consent(); show('s4'); } };
+$('toCust').onclick=()=>show('s2');
+$('startCust').onclick=()=>{ qi=0; drawQ(); show('s3'); };
+let stamp=null;
+function consent(){
+  const p=ans.photo; const d=new Date(); stamp=d;
+  $('consentNote').textContent = p<=1 ? '「お店に戻す」を押すと、写真掲載に同意した記録が日時つきで残ります。あとから取り消せます。' : '写真の掲載はしない、として記録されます。';
+}
+function renderOrder(el){
+  el.innerHTML='<div class="h">14:30 架空 花子 様</div><ul>'+Q.map(q=>{ const s=q.o[ans[q.k]].s.split('：'); return '<li><b>'+s[0]+'</b><span>'+s[1]+'</span></li>'; }).join('')+'</ul>';
+}
+$('back').onclick=()=>show('s5');
+
+// 長押し
+let tm=null, st=0;
+function down(e){ e.preventDefault(); st=performance.now(); const step=()=>{ const r=Math.min(1,(performance.now()-st)/900); $('bar').style.width=(r*100)+'%'; if(r>=1){ open(); return; } tm=requestAnimationFrame(step); }; tm=requestAnimationFrame(step); }
+function up(){ cancelAnimationFrame(tm); $('bar').style.width='0'; }
+$('hold').addEventListener('pointerdown',down); ['pointerup','pointerleave','pointercancel'].forEach(ev=>$('hold').addEventListener(ev,up));
+function open(){
+  cancelAnimationFrame(tm); $('bar').style.width='0';
+  renderOrder($('order'));
+  const pad=n=>String(n).padStart(2,'0'), d=stamp;
+  const ts=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds());
+  const p=ans.photo;
+  $('log').innerHTML='記録　'+ts+'<br>写真掲載：'+(p===0?'同意（顔あり）':p===1?'同意（顔なし）':'不同意')+'　本人がタブレットで選択'+'<br>次回来店時にこの内容を先に表示（お客様が変更可）';
+  $('pairs').innerHTML='<div class="cmp">'+Q.map(q=>{ const o=q.o[ans[q.k]]; return '<div><div class="h">お客様が押した</div>'+o.t+'</div><div><div class="h">お店に出た</div>'+o.s.split('：')[1]+'</div>'; }).join('')+'</div>';
+  show('s6');
+}
+$('restart').onclick=()=>{ ans={}; show('s1'); };
+</script>
+</body>
+</html>

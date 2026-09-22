@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4つまでは一目</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; -webkit-user-select:none; user-select:none; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 14px; }
+  .src{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line);
+    background:#fff; border-radius:12px; padding:5px 11px; line-height:1.6; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 6px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px; padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .field{ position:relative; width:100%; aspect-ratio:1/0.72; background:#fafaf7; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .dot{ position:absolute; width:22px; height:22px; margin:-11px 0 0 -11px; border-radius:50%; background:#16161a; }
+  .cross{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:34px; color:var(--sub); }
+  .prog{ font-size:13px; color:var(--sub); text-align:center; margin-bottom:6px; }
+  .pad{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
+  .pad button{ background:#fff; border:2px solid var(--blue); color:var(--blue); border-radius:12px; padding:13px 0; font-size:22px; font-weight:700; touch-action:manipulation; font-variant-numeric:tabular-nums; }
+  .pad button:active{ background:#eef3fe; }
+  .guess{ display:flex; flex-wrap:wrap; gap:7px; margin:8px 0 12px; }
+  .guess button{ background:#fff; border:1.5px solid var(--line); border-radius:999px; padding:7px 14px; font-size:16px; }
+  .guess button.on{ border-color:var(--blue); color:var(--blue); background:#eef3fe; font-weight:700; }
+  .big{ text-align:center; margin:4px 0 8px; }
+  .big .n{ font-size:52px; font-weight:700; letter-spacing:-.03em; line-height:1.1; font-variant-numeric:tabular-nums; }
+  .big .u{ font-size:19px; font-weight:600; }
+  .cmp div{ display:flex; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); font-size:16px; }
+  .cmp span:first-child{ color:var(--sub); }
+  .cmp b{ font-variant-numeric:tabular-nums; }
+  .you{ background:#fffbe8; border:1px solid #f2e2a8; border-radius:11px; padding:12px 14px; font-size:16px; margin:10px 0; }
+  .note{ font-size:14px; color:var(--sub); }
+  .note a{ color:var(--blue); word-break:break-all; }
+  .biz{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:13px 15px; font-size:16px; margin:14px 0 0; }
+  .biz .h{ font-size:13px; color:var(--blue); font-weight:700; margin-bottom:3px; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-22 / 実測する</div>
+  <h1>4つまでは一目</h1>
+  <p class="lead">点がいくつあるかを答えるだけ。少ないうちは数えなくても分かり、ある数を超えたとたん1個ずつ数え始めます。その切り替わる数と、1個増えるごとの遅れを自分で測ります。</p>
+  <div class="src">比べる相手：Trick & Pylyshyn（1994, Psychological Review）が示した「4個未満は1個あたり40〜100ミリ秒、4個を超えると250〜350ミリ秒」</div>
+
+  <div id="intro" class="card">
+    <h2>先にひとつだけ予想</h2>
+    <p style="margin:0">あなたは点がいくつまでなら、数えずに一目で分かると思いますか。</p>
+    <div class="guess" id="guess"></div>
+    <p class="note" style="margin:0 0 12px">点は1〜8個。全32回・1分半ほど。出た瞬間から、数字を押すまでの時間を測ります。正確さも大事なので、急ぎすぎないでください。</p>
+    <button class="btn" id="startBtn" disabled style="background:#c3c3bd">予想を選ぶと始められます</button>
+  </div>
+
+  <div id="task" class="card hide">
+    <div class="prog" id="prog">1 / 32</div>
+    <div class="field" id="field"><div class="cross">+</div></div>
+    <div class="pad" id="pad"></div>
+  </div>
+
+  <div id="result" class="hide">
+    <div class="card">
+      <h2>あなたが一目で分かった数</h2>
+      <div class="big"><span class="n" id="rLimit">-</span><span class="u"> 個まで</span></div>
+      <div class="you" id="rGuess"></div>
+      <svg id="chart" viewBox="0 0 340 220" width="100%" role="img" aria-label="点の数ごとの反応時間"></svg>
+      <p class="note" style="margin:4px 0 0">青い点＝あなたの中央値（正解した回のみ）。薄い帯＝論文の傾き（一目の範囲 40〜100ミリ秒/個、数える範囲 250〜350ミリ秒/個）を、あなたの1個のときの時間から引いたもの。</p>
+    </div>
+    <div class="card">
+      <h2>1個増えるごとの遅れ</h2>
+      <div class="cmp">
+        <div><span>一目の範囲（あなた）</span><b id="sLow">-</b></div>
+        <div><span>一目の範囲（論文）</span><b>40〜100ミリ秒</b></div>
+        <div><span>数える範囲（あなた）</span><b id="sHigh">-</b></div>
+        <div><span>数える範囲（論文）</span><b>250〜350ミリ秒</b></div>
+        <div><span>正解率（1〜3個 / 6〜8個）</span><b id="acc">-</b></div>
+      </div>
+      <p class="note" style="margin:10px 0 0">「一目で分かった数」は、1個増えたときの遅れが初めて150ミリ秒を超えた手前の数として、この画面が決めています。150ミリ秒は論文の2つの範囲のあいだを取った目安で、論文の値ではありません。この画面は数字の場所を探して押す時間も入るので、絶対値でなく<span class="mark">傾きの折れ曲がり</span>を見てください。</p>
+    </div>
+    <div class="card">
+      <h2>何が起きていたか</h2>
+      <p style="margin:0">3〜4個までは、視覚が同時にいくつかの物に「印」をつけられるので、数えずに数が分かります。論文はこれを数に限りのある並列の仕組みだと考えました。それを超えると1個ずつ目で追うので、1個ごとに数倍の時間がかかり、間違いも増えます。</p>
+      <div class="biz"><div class="h">お店・現場に置きかえると</div>棚の在庫、トレーの部品、釣り銭の硬貨。1か所に置く数を4個以内に小分けするか、4個ずつの塊に並べておくと、確認する人が数えずに見て分かる範囲に入ります。検品や棚卸しの「数え直し」が起きやすいのは、塊が大きいところです。</div>
+    </div>
+    <div class="card">
+      <button class="btn" id="again">もう一度やる</button>
+      <p class="note" style="margin:12px 0 0">出典：Trick LM, Pylyshyn ZW (1994) Why are small and large numbers enumerated differently? A limited-capacity preattentive stage in vision. Psychological Review 101(1): 80-102. 数値は要旨に書かれた範囲をそのまま使用（本文の表には当たれていません）。<br><a href="https://pubmed.ncbi.nlm.nih.gov/8121961/">https://pubmed.ncbi.nlm.nih.gov/8121961/</a><br>この画面は記録をどこにも送りません。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let guess=null, trials=[], idx=0, t0=0, waiting=false, log=[];
+for(let n=2;n<=8;n++){ const b=document.createElement('button'); b.textContent=n+'個'; b.onclick=()=>{ guess=n; [...$('guess').children].forEach(c=>c.classList.toggle('on',c===b)); const s=$('startBtn'); s.disabled=false; s.style.background=''; s.textContent='始める'; }; $('guess').appendChild(b); }
+for(let n=1;n<=9;n++){ const b=document.createElement('button'); b.textContent=n; b.addEventListener('pointerdown',e=>{e.preventDefault(); answer(n);}); $('pad').appendChild(b); }
+document.addEventListener('keydown',e=>{ if(/^[1-9]$/.test(e.key)) answer(+e.key); });
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function place(n){
+  const f=$('field'), W=f.clientWidth, H=f.clientHeight, pts=[];
+  let guard=0;
+  while(pts.length<n && guard<5000){ guard++;
+    const x=20+Math.random()*(W-40), y=20+Math.random()*(H-40);
+    if(pts.every(p=>Math.hypot(p[0]-x,p[1]-y)>44)) pts.push([x,y]);
+  }
+  f.innerHTML=pts.map(p=>'<div class="dot" style="left:'+p[0]+'px;top:'+p[1]+'px"></div>').join('');
+}
+function show(){
+  $('prog').textContent=(idx+1)+' / '+trials.length;
+  $('field').innerHTML='<div class="cross">+</div>'; waiting=false;
+  setTimeout(()=>{ place(trials[idx]); t0=performance.now(); waiting=true; }, 500+Math.random()*400);
+}
+function answer(n){
+  if(!waiting) return; waiting=false;
+  const rt=performance.now()-t0, k=trials[idx];
+  log.push({k,rt,ok:n===k});
+  $('field').innerHTML='<div class="cross">'+(n===k?'':'×')+'</div>';
+  idx++;
+  if(idx>=trials.length) return finish();
+  setTimeout(show, n===k?150:600);
+}
+$('startBtn').onclick=()=>{ trials=[]; for(let n=1;n<=8;n++) for(let r=0;r<4;r++) trials.push(n); shuffle(trials); idx=0; log=[];
+  $('intro').classList.add('hide'); $('task').classList.remove('hide'); show(); };
+$('again').onclick=()=>{ $('result').classList.add('hide'); $('intro').classList.remove('hide'); window.scrollTo(0,0); };
+
+function median(a){ if(!a.length) return null; const s=[...a].sort((x,y)=>x-y), m=Math.floor(s.length/2); return s.length%2?s[m]:(s[m-1]+s[m])/2; }
+function fit(xs,ys){ const n=xs.length; if(n<2) return null; const mx=xs.reduce((a,b)=>a+b)/n, my=ys.reduce((a,b)=>a+b)/n;
+  let num=0,den=0; xs.forEach((x,i)=>{num+=(x-mx)*(ys[i]-my); den+=(x-mx)**2;}); return den? num/den : null; }
+function finish(){
+  $('task').classList.add('hide'); $('result').classList.remove('hide'); window.scrollTo(0,0);
+  const med={};
+  for(let n=1;n<=8;n++) med[n]=median(log.filter(r=>r.k===n&&r.ok&&r.rt<10000).map(r=>r.rt));
+  // 境目：1個増えたときの遅れが初めて150msを超えた手前
+  let limit=null;
+  for(let n=2;n<=8;n++){ if(med[n]!=null && med[n-1]!=null && med[n]-med[n-1]>150){ limit=n-1; break; } }
+  if(limit==null) limit = med[8]!=null ? 8 : null;
+  $('rLimit').textContent = limit==null?'-':limit;
+  let g;
+  if(limit==null) g='正解した回が少なく、境目を決められませんでした。';
+  else if(guess===limit) g='予想は '+guess+' 個。<span class="mark">ぴったりです。</span>';
+  else if(guess>limit) g='予想は '+guess+' 個。実際は '+limit+' 個でした。<span class="mark">思っていたより手前から数え始めています。</span>';
+  else g='予想は '+guess+' 個。実際は '+limit+' 個でした。思っていたより先まで一目で分かっています。';
+  $('rGuess').innerHTML=g;
+  const L=limit||3;
+  const lowX=[],lowY=[],hiX=[],hiY=[];
+  for(let n=1;n<=8;n++){ if(med[n]==null) continue; if(n<=Math.max(L,2)){lowX.push(n);lowY.push(med[n]);} else if(n>L){hiX.push(n);hiY.push(med[n]);} }
+  const sl=fit(lowX,lowY), sh=fit(hiX,hiY);
+  $('sLow').textContent = sl==null?'-':Math.round(sl)+'ミリ秒';
+  $('sHigh').textContent = sh==null?'-':Math.round(sh)+'ミリ秒';
+  const a1=log.filter(r=>r.k<=3), a2=log.filter(r=>r.k>=6);
+  const p=a=>a.length?Math.round(a.filter(r=>r.ok).length/a.length*100)+'%':'-';
+  $('acc').textContent=p(a1)+' / '+p(a2);
+  draw(med,L);
+}
+function draw(med,L){
+  const W=340,H=220,Lm=44,R=10,T=12,B=30;
+  const base=med[1]!=null?med[1]:600;
+  // 論文帯：1→Lは40〜100ms/個、Lより先は250〜350ms/個
+  const band=(n,lo)=>{ const s1=lo?40:100, s2=lo?250:350; return n<=L? base+s1*(n-1) : base+s1*(L-1)+s2*(n-L); };
+  const vals=[...Object.values(med).filter(x=>x!=null), band(8,false)];
+  let lo=Math.floor(Math.min(base,...vals)/500)*500, hi=Math.ceil(Math.max(...vals)/500)*500; if(hi-lo<1000) hi=lo+1000;
+  const x=n=>Lm+(W-Lm-R)*(n-1)/7, y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
+  let s='';
+  for(let v=lo;v<=hi;v+=500) s+='<line x1="'+Lm+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="#eceae4"/><text x="'+(Lm-6)+'" y="'+(y(v)+4)+'" font-size="11" fill="#5b5b66" text-anchor="end">'+(v/1000).toFixed(1)+'</text>';
+  for(let n=1;n<=8;n++) s+='<text x="'+x(n)+'" y="'+(H-10)+'" font-size="12" fill="#5b5b66" text-anchor="middle">'+n+'</text>';
+  s+='<text x="4" y="10" font-size="11" fill="#5b5b66">秒</text><text x="'+(W-R)+'" y="'+(H-0)+'" font-size="11" fill="#5b5b66" text-anchor="end">点の数</text>';
+  let up=[],dn=[]; for(let n=1;n<=8;n++){ up.push(x(n)+','+y(band(n,false))); dn.unshift(x(n)+','+y(band(n,true))); }
+  s+='<polygon points="'+up.concat(dn).join(' ')+'" fill="#dfe8fd" opacity=".8"/>';
+  s+='<line x1="'+(x(L)+ (x(2)-x(1))/2)+'" x2="'+(x(L)+(x(2)-x(1))/2)+'" y1="'+T+'" y2="'+(H-B)+'" stroke="#2563eb" stroke-dasharray="4 4"/>';
+  const pts=[]; for(let n=1;n<=8;n++) if(med[n]!=null) pts.push([x(n),y(med[n])]);
+  s+='<polyline points="'+pts.map(p=>p.join(',')).join(' ')+'" fill="none" stroke="#2563eb" stroke-width="2.5"/>';
+  s+=pts.map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="4" fill="#2563eb"/>').join('');
+  $('chart').innerHTML=s;
+}
+</script>
+</body>
+</html>

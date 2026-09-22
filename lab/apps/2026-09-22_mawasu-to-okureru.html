@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>まわすと遅れる</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; --red:#b4322a; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; -webkit-user-select:none; user-select:none; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 14px; }
+  .src{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line);
+    background:#fff; border-radius:12px; padding:5px 11px; line-height:1.6; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 6px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px; padding:14px 18px;
+    font-size:17px; font-weight:600; width:100%; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); margin-top:8px; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .stage{ height:230px; display:flex; align-items:center; justify-content:center; position:relative; }
+  .glyph{ font-size:120px; font-weight:700; line-height:1; font-family:Helvetica,Arial,sans-serif; }
+  .fix{ font-size:40px; color:var(--sub); }
+  .prog{ font-size:13px; color:var(--sub); text-align:center; }
+  .ans{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px; }
+  .ans button{ background:#fff; border:2px solid var(--blue); color:var(--blue); border-radius:12px;
+    padding:18px 8px; font-size:18px; font-weight:700; touch-action:manipulation; }
+  .ans button:active{ background:#eef3fe; }
+  .ans small{ display:block; font-size:12px; font-weight:400; color:var(--sub); }
+  .ex{ display:flex; gap:18px; justify-content:center; margin:10px 0 4px; }
+  .ex div{ text-align:center; font-size:13px; color:var(--sub); }
+  .ex span{ display:block; font-size:54px; font-weight:700; color:var(--ink); font-family:Helvetica,Arial,sans-serif; line-height:1.2; }
+  .big{ text-align:center; margin:4px 0 10px; }
+  .big .n{ font-size:50px; font-weight:700; letter-spacing:-.03em; font-variant-numeric:tabular-nums; line-height:1.1; }
+  .big .u{ font-size:19px; font-weight:600; }
+  table{ width:100%; border-collapse:collapse; font-size:15px; font-variant-numeric:tabular-nums; }
+  th,td{ padding:7px 4px; border-bottom:1px solid var(--line); text-align:right; }
+  th:first-child,td:first-child{ text-align:left; }
+  th{ font-size:13px; color:var(--sub); font-weight:600; }
+  .legend{ display:flex; flex-wrap:wrap; gap:14px; font-size:14px; color:var(--sub); margin-top:6px; }
+  .legend i{ display:inline-block; width:18px; height:3px; vertical-align:middle; margin-right:5px; }
+  .note{ font-size:14px; color:var(--sub); }
+  .note a{ color:var(--blue); word-break:break-all; }
+  .biz{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:13px 15px; font-size:16px; margin:14px 0 0; }
+  .biz .h{ font-size:13px; color:var(--blue); font-weight:700; margin-bottom:3px; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-22 / 再現実験</div>
+  <h1>まわすと遅れる</h1>
+  <p class="lead">傾いた文字が、そのままか裏返しかを当てるだけ。頭の中で文字を起こしてから判断しているなら、傾きが大きいほど答えが遅れるはずです。2017年の実験と同じ角度で、自分でも遅れが出るかを試します。</p>
+  <div class="src">比べる相手：Quan ら（2017, PLoS ONE）22人の実測値。文字 F・R と数字 2・4・5、角度 0°・60°・120°・180°</div>
+
+  <div id="intro" class="card">
+    <h2>やること</h2>
+    <p style="margin:0 0 6px">真ん中に文字が1つ、傾いて出ます。傾きは気にせず、<span class="mark">起こしたときに正しい向きか、鏡に映した向きか</span>だけを答えてください。できるだけ速く、でも正確に。</p>
+    <div class="ex">
+      <div><span>R</span>そのまま</div>
+      <div><span style="display:inline-block;transform:scaleX(-1)">R</span>裏返し</div>
+      <div><span style="display:inline-block;transform:rotate(120deg)">R</span>傾いたそのまま</div>
+    </div>
+    <p class="note" style="margin:8px 0 14px">全32回・約2分。練習4回のあと本番。パソコンなら F キー＝そのまま、J キー＝裏返し でも答えられます。</p>
+    <button class="btn" id="startBtn">練習から始める</button>
+  </div>
+
+  <div id="task" class="card hide">
+    <div class="prog" id="prog">練習 1 / 4</div>
+    <div class="stage"><div id="glyph" class="glyph"></div></div>
+    <div class="ans">
+      <button id="bN">そのまま<small>F キー</small></button>
+      <button id="bM">裏返し<small>J キー</small></button>
+    </div>
+  </div>
+
+  <div id="between" class="card hide">
+    <h2>練習おわり</h2>
+    <p style="margin:0 0 12px">ここから本番の32回です。記録は正解した回の反応時間だけを使います。</p>
+    <button class="btn" id="goMain">本番を始める</button>
+  </div>
+
+  <div id="result" class="hide">
+    <div class="card">
+      <h2>あなたの遅れ方</h2>
+      <p class="note" style="margin:0">「そのまま」の文字で、180° のときが 0° のときより何秒遅かったか</p>
+      <div class="big"><span class="n" id="rDelay">-</span><span class="u"> 秒遅い</span></div>
+      <p id="rVerdict" style="margin:0 0 10px"></p>
+      <svg id="chart" viewBox="0 0 340 220" width="100%" role="img" aria-label="角度ごとの反応時間"></svg>
+      <div class="legend">
+        <span><i style="background:#2563eb"></i>あなた（そのまま）</span>
+        <span><i style="background:#93b4f5"></i>あなた（裏返し）</span>
+        <span><i style="background:#16161a"></i>論文（そのまま）</span>
+        <span><i style="background:#9a9aa3"></i>論文（裏返し）</span>
+      </div>
+    </div>
+    <div class="card">
+      <h2>数字でくらべる</h2>
+      <table>
+        <thead><tr><th>角度</th><th>あなた<br>そのまま</th><th>論文<br>そのまま</th><th>あなた<br>裏返し</th><th>論文<br>裏返し</th></tr></thead>
+        <tbody id="tbl"></tbody>
+      </table>
+      <p class="note" style="margin:10px 0 0" id="slopeTxt"></p>
+      <p class="note" style="margin:6px 0 0">画面をタップして答えると指の移動ぶん全体が遅くなりやすいので、<span class="mark">比べるのは絶対値ではなく、角度が増えたときの伸び方</span>です。正解率は論文で 0° が99.2%、裏返し180° が85.7%まで落ちました。</p>
+    </div>
+    <div class="card">
+      <h2>何が起きていたか</h2>
+      <p style="margin:0">文字の見た目は角度が違っても同じ情報量です。それでも傾きに比例して遅れるのは、頭の中で絵を実際に回してから照らし合わせているからだと考えられています。1971年に立体図形で最初に示され、文字でも同じ形が出ることが繰り返し確かめられてきました。論文の「そのまま」の文字では、0° の0.816秒から180° の1.506秒まで伸びています。</p>
+      <div class="biz"><div class="h">お店・現場に置きかえると</div>受付で書類を相手向きに回して渡す、横向きに貼った掲示、逆さに置かれた伝票。読む人は毎回頭の中でそれを回しています。向きを揃えて置くだけで、読むたびの小さな遅れと読み違いを減らせます。</div>
+    </div>
+    <div class="card">
+      <button class="btn" id="again">もう一度やる</button>
+      <p class="note" style="margin:12px 0 0">出典：Quan C, Li C, Xue J, Yue J, Zhang C (2017) Mirror-normal difference in the late phase of mental rotation: An ERP study. PLoS ONE 12(9): e0184963. 表の平均反応時間・正解率をそのまま使用。<br><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5600392/">https://pmc.ncbi.nlm.nih.gov/articles/PMC5600392/</a><br>原型：Shepard & Metzler (1971) Science 171、Cooper & Shepard (1973)。この2本の数値は原典に当たれていないため画面では使っていません。<br>この画面は記録をどこにも送りません。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const PAPER = { // Quan et al. 2017 Table (ms)
+  normal: {0:816, 60:891, 120:1115, 180:1506},
+  mirror: {0:1151, 60:1326, 120:1580, 180:1817}
+};
+const CHARS = ['F','R','2','4','5'];
+const ANG = [0,60,120,180];
+const $ = id => document.getElementById(id);
+let trials=[], idx=0, practice=true, t0=0, waiting=false, log=[];
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function build(n){
+  const out=[];
+  if(n===4){ [[0,false],[120,true],[60,false],[180,true]].forEach(([a,m])=>out.push({a,m,c:CHARS[Math.floor(Math.random()*5)]})); return shuffle(out); }
+  for(const a of ANG) for(const m of [false,true]) for(let r=0;r<4;r++) out.push({a,m,c:CHARS[Math.floor(Math.random()*5)]});
+  return shuffle(out);
+}
+function show(){
+  const t=trials[idx];
+  $('prog').textContent=(practice?'練習 ':'本番 ')+(idx+1)+' / '+trials.length;
+  const g=$('glyph'); g.className='fix'; g.style.transform=''; g.textContent='+'; waiting=false;
+  setTimeout(()=>{
+    const sign = (t.a===60||t.a===120) && Math.random()<.5 ? -1 : 1;
+    g.className='glyph'; g.textContent=t.c;
+    g.style.transform='rotate('+(sign*t.a)+'deg)'+(t.m?' scaleX(-1)':'');
+    t0=performance.now(); waiting=true;
+  }, 450+Math.random()*350);
+}
+function answer(mirror){
+  if(!waiting) return;
+  waiting=false;
+  const rt=performance.now()-t0, t=trials[idx];
+  if(!practice) log.push({a:t.a,m:t.m,rt,ok:mirror===t.m});
+  const g=$('glyph'); g.className='fix'; g.style.transform='';
+  g.textContent = (mirror===t.m) ? '' : '×';
+  idx++;
+  if(idx>=trials.length){
+    if(practice){ $('task').classList.add('hide'); $('between').classList.remove('hide'); }
+    else finish();
+    return;
+  }
+  setTimeout(show, mirror===t.m?150:600);
+}
+$('bN').addEventListener('pointerdown', e=>{e.preventDefault(); answer(false);});
+$('bM').addEventListener('pointerdown', e=>{e.preventDefault(); answer(true);});
+document.addEventListener('keydown', e=>{ if(e.key==='f'||e.key==='F') answer(false); if(e.key==='j'||e.key==='J') answer(true); });
+
+$('startBtn').onclick=()=>{ practice=true; trials=build(4); idx=0; $('intro').classList.add('hide'); $('task').classList.remove('hide'); show(); };
+$('goMain').onclick=()=>{ practice=false; trials=build(32); idx=0; log=[]; $('between').classList.add('hide'); $('task').classList.remove('hide'); show(); };
+$('again').onclick=()=>{ $('result').classList.add('hide'); $('intro').classList.remove('hide'); window.scrollTo(0,0); };
+
+function median(a){ if(!a.length) return null; const s=[...a].sort((x,y)=>x-y); const m=Math.floor(s.length/2); return s.length%2?s[m]:(s[m-1]+s[m])/2; }
+function finish(){
+  $('task').classList.add('hide'); $('result').classList.remove('hide'); window.scrollTo(0,0);
+  const me={normal:{},mirror:{}}, acc={normal:{},mirror:{}};
+  for(const k of ['normal','mirror']) for(const a of ANG){
+    const rows=log.filter(r=>r.a===a && r.m===(k==='mirror'));
+    // 平均の代わりに中央値（タップの押しそこねで1回だけ極端に遅い値を吸収する）
+    me[k][a]=median(rows.filter(r=>r.ok && r.rt<6000).map(r=>r.rt));
+    acc[k][a]=rows.length? rows.filter(r=>r.ok).length/rows.length : null;
+  }
+  const d = (me.normal[180]!=null && me.normal[0]!=null) ? (me.normal[180]-me.normal[0])/1000 : null;
+  $('rDelay').textContent = d==null ? '-' : d.toFixed(2);
+  const pd=(PAPER.normal[180]-PAPER.normal[0])/1000;
+  let v;
+  if(d==null) v='180° か 0° の正解が1回もなかったため計算できませんでした。';
+  else if(d>=pd*0.5) v='論文の22人は '+pd.toFixed(2)+' 秒遅くなりました。<span class="mark">あなたにも同じ向きの遅れが出ています。</span>';
+  else if(d>0.1) v='論文の22人は '+pd.toFixed(2)+' 秒遅くなりました。あなたの遅れはそれより小さめですが、向きは同じです。';
+  else v='論文の22人は '+pd.toFixed(2)+' 秒遅くなりました。今回のあなたはほとんど遅れていません。1角度4回ずつなので、もう一度やると変わることがあります。';
+  $('rVerdict').innerHTML=v;
+  const fmt=x=> x==null?'-':(x/1000).toFixed(2);
+  $('tbl').innerHTML = ANG.map(a=>'<tr><td>'+a+'°</td><td>'+fmt(me.normal[a])+'</td><td>'+fmt(PAPER.normal[a])+'</td><td>'+fmt(me.mirror[a])+'</td><td>'+fmt(PAPER.mirror[a])+'</td></tr>').join('')
+    + '<tr><td>正解率</td><td>'+pct(acc.normal)+'</td><td>98%</td><td>'+pct(acc.mirror)+'</td><td>94%</td></tr>';
+  const slope = k => (me[k][180]!=null&&me[k][0]!=null)? ((me[k][180]-me[k][0])/180) : null;
+  const sN=slope('normal');
+  $('slopeTxt').innerHTML = '単位は秒。1° 傾くごとの遅れは、論文の「そのまま」で '+((PAPER.normal[180]-PAPER.normal[0])/180).toFixed(1)+' ミリ秒、あなたは '+(sN==null?'-':sN.toFixed(1))+' ミリ秒。';
+  draw(me);
+}
+function pct(o){ const v=ANG.map(a=>o[a]).filter(x=>x!=null); return v.length? Math.round(v.reduce((s,x)=>s+x,0)/v.length*100)+'%' : '-'; }
+function draw(me){
+  const W=340,H=220,L=44,R=12,T=12,B=34;
+  const all=[...Object.values(PAPER.normal),...Object.values(PAPER.mirror),...ANG.map(a=>me.normal[a]),...ANG.map(a=>me.mirror[a])].filter(x=>x!=null);
+  let lo=Math.floor(Math.min(...all)/250)*250, hi=Math.ceil(Math.max(...all)/250)*250; if(hi-lo<500) hi=lo+500;
+  const x=a=>L+(W-L-R)*a/180, y=v=>T+(H-T-B)*(1-(v-lo)/(hi-lo));
+  let s='';
+  for(let v=lo; v<=hi; v+=250){ s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="#eceae4"/><text x="'+(L-6)+'" y="'+(y(v)+4)+'" font-size="11" fill="#5b5b66" text-anchor="end">'+(v/1000).toFixed(2)+'</text>'; }
+  ANG.forEach(a=>{ s+='<text x="'+x(a)+'" y="'+(H-14)+'" font-size="12" fill="#5b5b66" text-anchor="middle">'+a+'°</text>'; });
+  s+='<text x="'+(W-R)+'" y="'+(H-1)+'" font-size="11" fill="#5b5b66" text-anchor="end">傾き</text><text x="4" y="10" font-size="11" fill="#5b5b66">秒</text>';
+  const line=(o,col,dash)=>{ const pts=ANG.filter(a=>o[a]!=null).map(a=>x(a)+','+y(o[a])); if(!pts.length) return '';
+    return '<polyline points="'+pts.join(' ')+'" fill="none" stroke="'+col+'" stroke-width="2.5"'+(dash?' stroke-dasharray="5 4"':'')+'/>'+ANG.filter(a=>o[a]!=null).map(a=>'<circle cx="'+x(a)+'" cy="'+y(o[a])+'" r="3.5" fill="'+col+'"/>').join(''); };
+  s+=line(PAPER.mirror,'#9a9aa3',true)+line(PAPER.normal,'#16161a',true)+line(me.mirror,'#93b4f5')+line(me.normal,'#2563eb');
+  $('chart').innerHTML=s;
+}
+</script>
+</body>
+</html>

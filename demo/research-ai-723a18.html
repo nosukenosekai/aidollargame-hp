@@ -13,6 +13,7 @@
     --desk:#e9ecf1; --bg:#f6f7f9; --card:#ffffff; --text:#16191d; --sub:#4f5763; --muted:#8a929d;
     --line:#e3e6eb; --soft:#f0f2f5; --blue:#2f6fed; --blue-2:#6aa0ff; --blue-soft:#eaf1fe; --band:#e3edfd;
     --green:#1e7f4f; --green-soft:#e8f5ee; --down:#c2410c;
+    --ai-grad:linear-gradient(135deg,#8b5cf6 0%,#3b6cf6 100%); --ai-soft:#f5f1ff; --ai-line:#e2d8fd; --ai-text:#5b3fd6;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{background:var(--desk);color:var(--text)}
@@ -248,6 +249,25 @@
   .mc .lb{grid-column:1/3;font-size:13px;color:var(--muted)}
   .mc.odd .lb{color:var(--down);font-weight:700}
   .mc svg{width:120px;height:36px}
+  .aib{width:22px;height:22px;border-radius:7px;background:var(--ai-grad);display:inline-grid;place-items:center;flex:none;margin-top:3px;box-shadow:0 2px 6px -2px rgba(91,63,214,.5)}
+  .aib svg{width:13px;height:13px;fill:#fff;stroke:none;margin:0!important}
+  .brand .lg{background:var(--ai-grad)!important}
+  .hsum{background:linear-gradient(135deg,#f6f1ff 0%,#edf3ff 100%)!important;border-color:var(--ai-line)!important}
+  .hsum .lnk{color:var(--ai-text)!important}
+  .pill{border-color:var(--ai-line)!important;color:var(--ai-text)!important;background:var(--ai-soft)!important}
+  .pill:hover{background:#ece4ff!important}
+  .input:focus-within{border-color:#a78bfa;box-shadow:0 0 0 3px #efe9ff}
+  .input .send{width:34px!important;height:34px!important;padding:0!important;border-radius:50%!important;background:var(--ai-grad)!important;display:grid;place-items:center;flex:none}
+  .input .send svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.2}
+  .scope{font-size:12.5px;color:var(--ai-text);background:var(--ai-soft);border-radius:6px;padding:2px 9px;white-space:nowrap}
+  .ans{border-color:var(--ai-line)!important;box-shadow:0 10px 28px -16px rgba(91,63,214,.35)}
+  .ans .ah{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+  .ans .ah .aib{margin-top:0}
+  .ans .ah b{color:var(--ai-text);font-weight:700}
+  .steps{display:flex;flex-wrap:wrap;gap:4px 16px;margin:6px 0 8px 30px;font-size:12.5px;color:var(--muted)}
+  .steps span::before{content:"\2713";color:#8b5cf6;margin-right:5px;font-weight:700}
+  .ans .t{display:block!important;margin-left:30px}
+  .btn.ai{background:var(--ai-grad);box-shadow:0 6px 16px -8px rgba(91,63,214,.6)}
   .flash{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);background:var(--text);color:#fff;border-radius:10px;padding:10px 18px;font-size:14.5px;z-index:20;display:none;white-space:nowrap}
   .flash.on{display:block}
   .list{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
@@ -326,7 +346,7 @@
           <div class="lbl">条件</div>
           <dl class="kv"><dt>聞く相手</dt><dd id="kvWho">20代の女性 300人</dd><dt>答えが届く</dt><dd>約3日後（9月19日ごろ）</dd><dt>届く場所</dt><dd>この画面と、メール</dd><dt>費用</dt><dd>クロス・マーケティングから見積もり</dd></dl>
         </div>
-        <div class="pf"><button class="btn" data-order="1">部長に回して頼む</button><small>部長がOKすると、クロス・マーケティングに依頼が届き、見積もりが来ます</small></div>
+        <div class="pf"><button class="btn ai" data-order="1">部長に回して頼む</button><small>部長がOKすると、クロス・マーケティングに依頼が届き、見積もりが来ます</small></div>
       </aside>
 
       <div class="veil" id="share">
@@ -389,14 +409,22 @@ var CITE={
 var S0=function(){return {view:'app',page:'home',tab:'t',thread:{},req:null,shared:false,n:300,role:'a'}};var S=S0();
 var STL={approve:'部長の承認待ち',wait:'見積もり待ち',est:'見積もりが届きました',run:'回答を集めています・9月19日ごろ',done:'回答が届きました'};
 var $=function(s){return document.querySelector(s)};
-var BULB='<svg class="i" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0012 3z"/></svg>';
+var BULB='<span class="aib"><svg viewBox="0 0 24 24"><path d="M12 2l2.1 5.9L20 10l-5.9 2.1L12 18l-2.1-5.9L4 10l5.9-2.1z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span>';
 
+function stepsFor(q){
+  if(/戻/.test(q))return['A社の施策記録を検索（1件）','第121〜124回の20代の数字を確認'];
+  if(/なぜ|理由|原因/.test(q))return S.req&&S.req.st==='done'?['追加調査 9月19日の回答'+S.req.n+'件を集計']:['過去128回の質問票を確認（理由を聞いた質問は0件）','自由回答から20代の記述を検索（3件）'];
+  if(/競合/.test(q))return['第128回の競合ブランド欄を確認'];
+  if(/30代|40代|年代/.test(q))return['第128回の年代別の集計を確認'];
+  if(/去年|昨年|前年|季節/.test(q))return['2023〜2025年の9月の回を確認（3回）'];
+  return[];
+}
 function answer(q,key){
   q=q||'';
   if(/なぜ|理由|原因/.test(q)){
     if(S.req&&S.req.st==='done') return {h:'<b>20代の半分（52%）が、SNSで競合の新しい美容液を見ていました。</b>見た人の約6割が、A社を「少し古く感じる」と答えています。<button class="cite" data-c="add">追加調査 9月19日</button>',x:'<div class="hbars tn"><div class="r top"><span>SNSで競合の新作を見た</span><i style="width:100%"></i><b>52%（156人）</b></div><div class="r"><span>店頭で競合の新作を見た</span><i style="width:44%"></i><b>23%（69人）</b></div><div class="r"><span>特に何も見ていない</span><i style="width:48%"></i><b>25%（75人）</b></div></div>'};
     var a={h:'<b>過去の調査128回では、理由は分かりません。</b>20代に「なぜ好きでなくなったか」を聞いた質問が、これまで一度もないためです。',x:'<div class="clue">手がかりは1つあります。2023年11月の自由回答で、20代の3人が「SNSで見た新しいブランドが気になる」と書いています。<button class="cite" data-c="c121">第121回 自由回答</button></div>'};
-    if(!S.req) a.x+='<div class="foot"><button class="btn" data-openpanel="1">20代に理由を聞く</button><small>20代の女性に、約3日で聞けます</small></div>';
+    if(!S.req) a.x+='<div class="foot"><button class="btn ai" data-openpanel="1">20代に理由を聞く</button><small>20代の女性に、約3日で聞けます</small></div>';
     else a.x+='<div class="foot"><small>追加調査を頼んでいます（'+STL[S.req.st]+'）。答えが届くと、ここが書き変わります。</small></div>';
     return a;
   }
@@ -445,9 +473,9 @@ function renderMetric(){
   h+='<div class="mcard"><div class="mhead tn"><div class="num">'+m.v+'%</div><div class="meta"><b>9月16日（水）の調査</b><div class="d" style="color:'+(m.odd?'var(--down)':'var(--sub)')+'">'+(d>0?'+':d<0?'−':'±')+Math.abs(d)+'ポイント <span>前回 9月2日は'+m.prev+'%</span></div></div>'+
      '<div class="seg"><span data-tab="t" class="'+(S.tab==='t'?'on':'')+'">推移</span><span data-tab="a" class="'+(S.tab==='a'?'on':'')+'">年代別</span></div></div>'+
      '<div class="mbody"><div class="ins">'+BULB+'<div>'+m.ins.map(function(p){return '<p>'+p+'</p>'}).join('')+'</div></div>'+(S.tab==='t'?lineSVG(m):ageHTML(m))+'</div></div>';
-  h+='<div class="ask"><h2>この結果について質問する</h2><form class="input" id="askForm"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="askIn" placeholder="A社の過去の調査128回から答えます（例：なぜ20代だけ下がったの？）" autocomplete="off"><button class="send" type="submit">質問</button></form>';
+  h+='<div class="ask"><h2>この結果について質問する</h2><form class="input" id="askForm"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="askIn" placeholder="A社の過去の調査128回から答えます（例：なぜ20代だけ下がったの？）" autocomplete="off"><span class="scope">対象：A社の脳内POS 128回</span><button class="send" type="submit" aria-label="質問する"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></form>';
   h+='<div class="pills">'+m.pills.map(function(p){return '<button class="pill" data-ask="'+p+'">'+p+'</button>'}).join('')+'</div><div class="thread">';
-  th.forEach(function(q){var a=answer(q);h+='<div><div class="asked"><span>あなたの質問</span>'+q+'</div><div class="ans"><div class="t">'+BULB+'<div>'+a.h+'</div></div>'+(a.x||'')+'</div></div>';});
+  th.forEach(function(q){var a=answer(q),st=stepsFor(q);h+='<div><div class="asked"><span>あなたの質問</span>'+q+'</div><div class="ans"><div class="ah">'+BULB+'<b>AIの答え</b>'+(st.length?'<span>・ '+st.length+'つ調べました</span>':'')+'</div>'+(st.length?'<div class="steps">'+st.map(function(x){return '<span>'+x+'</span>'}).join('')+'</div>':'')+'<div class="t"><div>'+a.h+'</div></div>'+(a.x||'')+'</div></div>';});
   h+='</div></div>';
   $('#scroll').innerHTML=h;
   $('#crumb').innerHTML='フォロー中の指標 ／ <b>'+m.full+'</b>';
@@ -466,7 +494,7 @@ function renderSurveys(filter){
 function renderHome(){
   var odd=M.m20;
   var h='<div class="hsum">'+BULB+'<div><div class="k">9月16日（水）の脳内POS ・ フォロー中の4つの指標のまとめ</div><p><b>いつもと違う動きは1つです。</b>20代の好意度が37%（前回から−8）で、いつもの幅を下回りました。ほかの3つは、いつもの幅の中です。</p><button class="lnk" data-open="m20">20代の好意度を見る →</button></div></div>';
-  h+='<div class="hsec">A社の調査に質問する</div><form class="input" id="homeForm"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="homeIn" placeholder="過去の調査128回から答えます（例：20代の好意度はなぜ下がった？）" autocomplete="off"><button class="send" type="submit">質問</button></form>';
+  h+='<div class="hsec">A社の調査に質問する</div><form class="input" id="homeForm"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="homeIn" placeholder="過去の調査128回から答えます（例：20代の好意度はなぜ下がった？）" autocomplete="off"><span class="scope">対象：A社の脳内POS 128回</span><button class="send" type="submit" aria-label="質問する"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></form>';
   h+='<div class="pills">'+[['m20','20代の好意度は、なぜ下がったの？'],['m20','競合も下がっている？'],['all','去年の同じ時期は？']].map(function(q){return '<button class="pill" data-hq="'+q[0]+'|'+q[1]+'">'+q[1]+'</button>'}).join('')+'</div>';
   h+='<div class="hsec">フォロー中の指標</div><div class="cards tn">';
   ['m20','all','rec','buy'].forEach(function(k){var m=M[k],d=m.v-m.prev,mn=Math.min.apply(null,m.s),mx=Math.max.apply(null,m.s);
@@ -545,7 +573,7 @@ document.addEventListener('click',function(e){
     if(top+p.offsetHeight>main.offsetHeight-10){p.style.top=((r.top-mr.top)/k-p.offsetHeight-6)+'px';}
     return;}
   if(!t.closest('.pop'))closePop();
-  if(c=t.closest('[data-open]')){S.view='app';S.page=c.dataset.open;S.tab='t';render();$('#scroll').scrollTo({top:0});return;}
+  if(c=t.closest('[data-open]')){S.view='app';S.page=c.dataset.open;S.tab='t';render();var sc=$('#scroll');sc.scrollTo({top:0});if(S.req&&S.req.st==='done'&&S.page==='m20'&&(S.thread.m20||[]).length)setTimeout(function(){sc.scrollTo({top:sc.scrollHeight,behavior:'smooth'})},250);return;}
   if(c=t.closest('[data-page]')){S.page=c.dataset.page;render();return;}
   if(t.closest('[data-mail]')){S.view='mail';render();return;}
   if(c=t.closest('[data-tab]')){S.tab=c.dataset.tab;render();return;}

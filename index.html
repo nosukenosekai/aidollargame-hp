@@ -1228,19 +1228,19 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     </div>
     <div class="stats stats--3">
       <div class="stat2" data-rv="up" style="--d:0ms">
-        <div class="lbl" data-edit="lab-s1t">実験室で作った、動くデモ</div>
-        <div class="num" data-edit="lab-s1n">178本</div>
-        <p data-edit="lab-s1p">2026年7月9日から毎日1本。お題は架空の現場で、お客様への納品物ではありません。すべて<a href="lab/" style="color:var(--blue);text-decoration:underline;">公開</a>していて、その場で触れます</p>
+        <div class="lbl" data-edit="lab-s1t">開発したプロダクト・社内ツール</div>
+        <div class="num" data-edit="lab-s1n">50本以上</div>
+        <p data-edit="lab-s1p">お客様向けのAI、自社の営業・経理・記事制作を回す社内ツール、毎日自動で動く定期処理まで。既製品を当てはめず、業務ごとに作っています。実験室のデモは含みません</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:120ms">
-        <div class="lbl" data-edit="lab-s2t">デモのお題にした業種</div>
-        <div class="num" data-edit="lab-s2n">31業種</div>
-        <p data-edit="lab-s2p">農業、小売業、町工場、保育、駐車場、旅館。実案件の数ではなく、お題として扱った業種の数です。業種が変わっても同じやり方で形にしています</p>
+        <div class="lbl" data-edit="lab-s2t">実験室で公開した、動くデモ</div>
+        <div class="num" data-edit="lab-s2n">178本</div>
+        <p data-edit="lab-s2p">2026年7月9日から毎日1本。お題を決めたその日のうちに触れる形にします。お題は架空の現場で、納品物ではありません。すべて<a href="lab/" style="color:var(--blue);text-decoration:underline;">公開</a>していて、その場で触れます</p>
       </div>
       <div class="stat2" data-rv="up" style="--d:240ms">
-        <div class="lbl" data-edit="lab-s3t">デモができるまで</div>
-        <div class="num" data-edit="lab-s3n">最短1日</div>
-        <p data-edit="lab-s3p">お題を決めたその日のうちに、触れる形にするところまで。この178本がその積み重ねです。実案件の納品は、要件しだいで数日から数週間です</p>
+        <div class="lbl" data-edit="lab-s3t">デモのお題にした業種</div>
+        <div class="num" data-edit="lab-s3n">31業種</div>
+        <p data-edit="lab-s3p">農業、小売業、町工場、保育、駐車場、旅館。実案件の数ではなく、お題として扱った業種の数です。業種が変わっても同じやり方で形にしています</p>
       </div>
     </div>
     <div class="posts">
@@ -1971,11 +1971,9 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
           if (!g || skip[g] || g.length > 12 || seen[g]) return;
           seen[g] = 1; n++;
         });
-        setNum('lab-s1n', list.length);
-        if (n) setNum('lab-s2n', n);
-        /* 3枚目の説明文にも本数が出てくるので合わせる */
-        var p3 = document.querySelector('[data-edit="lab-s3p"]');
-        if (p3) p3.textContent = p3.textContent.replace(/[0-9０-９,]+本/, list.length + '本');
+        /* 1枚目(プロダクト・社内ツール 50本以上)は手書き。デモ数は2枚目、業種数は3枚目 */
+        setNum('lab-s2n', list.length);
+        if (n) setNum('lab-s3n', n);
       })
       .catch(function(){});
   }

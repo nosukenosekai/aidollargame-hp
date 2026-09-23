@@ -122,6 +122,15 @@
   .bars .r.top{color:var(--ink);font-weight:700}
   .bars .r.top i{background:var(--sky)}
   .bars .r b{text-align:right;font-weight:500}
+  .exq.first{border-color:var(--navy);border-width:2px;font-weight:700}
+  .exq .tag{margin-left:auto;font-size:12px;font-weight:700;color:#fff;background:var(--navy);border-radius:999px;padding:1px 10px}
+  .askbig .send.ready{position:relative}
+  .askbig .send.ready::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--navy);animation:ring 1.5s ease-out infinite}
+  @keyframes ring{0%{opacity:.7;transform:scale(.94)}100%{opacity:0;transform:scale(1.15)}}
+  @media (prefers-reduced-motion:reduce){.askbig .send.ready::after{animation:none;opacity:.6}}
+  .sumlines{margin-top:16px;border-top:1px solid var(--line)}
+  .sumline{display:grid;grid-template-columns:28px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);font-size:16.5px;line-height:1.8}
+  .sumline .no{width:24px;height:24px;border-radius:50%;background:var(--soft);color:var(--navy);display:grid;place-items:center;font-size:12px;font-weight:700;margin-top:5px}
   .chgs{margin-top:18px;border-top:1px solid var(--line)}
   .chg{display:grid;grid-template-columns:32px 1fr auto;gap:14px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line)}
   .chg .no{width:26px;height:26px;border-radius:50%;background:var(--soft);color:var(--navy);display:grid;place-items:center;font-size:12.5px;font-weight:700;align-self:center}
@@ -316,10 +325,10 @@
       <div class="cwrap">
         <form class="askbig" id="askForm">
           <svg class="sp" viewBox="0 0 24 24"><path d="M12 2l2.1 5.9L20 10l-5.9 2.1L12 18l-2.1-5.9L4 10l5.9-2.1z"/></svg>
-          <input id="askIn" placeholder="過去の調査について、何でも聞いてください" autocomplete="off">
+          <input id="askIn" placeholder="質問を入力してください（例：20代の好意度が下がった理由は？）" autocomplete="off">
           <button class="send" type="submit" aria-label="質問する"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
         </form>
-        <p class="cnote">例：「20代の好意度が下がった理由は？」</p>
+        <p class="cnote">上の質問例を押すと、ここに入ります。そのまま送信できます</p>
       </div>
     </div>
 
@@ -432,6 +441,13 @@ function answer(q){
     refs:4};
   if(/30代|40代|年代|全体/.test(q)) return {lead:'<b>下げているのは20代だけです。</b>30代は40%、40代は39%で、どちらも前回と同じでした。全体は−2ポイントで、誤差の範囲です。'+CITE('c128','第128回 p.3'),
     refs:2};
+  if(/まとめ|3行|要約|1年|この1年|全部教え/.test(q)) return {lead:'この1年の動きを、3行にまとめます。',
+    html:'<div class="sumlines">'+
+      '<div class="sumline"><span class="no">1</span><div>好意度は1年を通して<b>41〜49%の幅</b>で動いていましたが、<b>9月16日に37%まで下がりました。</b>いつもの幅を外れたのは、この1回だけです。'+CITE('c128','第128回 p.3')+'</div></div>'+
+      '<div class="sumline"><span class="no">2</span><div>下がっているのは<b>20代だけ</b>です。30代・40代・全体は、1年間ほとんど動いていません。'+CITE('c128','第128回 p.3')+'</div></div>'+
+      '<div class="sumline"><span class="no">3</span><div>同じ時期に、20代の「新しい」という評価が<b>1年前の45%から33%</b>まで下がり、競合B社の好意度が<b>1年前の31%から35%</b>まで上がっています（前回との比較は、それぞれ41%→33%、33%→35%）。'+CITE('p124','第124回 p.11')+CITE('p7','第128回 p.7')+'</div></div>'+
+    '</div>',
+    refs:12, next:true};
   if(/去年|昨年|前年|季節/.test(q)) return {lead:'去年の同じ時期（2025年9月17日）は、全体40%・20代46%でした。<b>この時期に下がる季節の動きは、過去3年ありません。</b>'+CITE('c104','第104回'),
     refs:9};
   return {lead:'この見本は、決まった質問にだけ答えます（AIはつないでいません）。「なぜ」「競合」「30代」「去年」「前に似た動き」などの言葉で聞いてください。'};
@@ -439,15 +455,16 @@ function answer(q){
 
 /* ---------- 画面 ---------- */
 function hero(){
+  var ex=['20代の好意度が下がった理由は？','過去にも同じことはあった？','競合と比べるとどう？','この1年の変化を3行でまとめて'];
   return '<div class="hero"><h1>過去の調査について、<em>何でも聞いてください</em></h1>'+
     '<div class="ex"><div class="exlist">'+
-    ['20代の好意度が下がった理由は？','過去にも似たことはあった？','競合と比べるとどう？','美容液について分かっていることを全部教えて'].map(function(q){
-      return '<button class="exq" data-q="'+q+'"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0012 3z"/></svg>'+q+'</button>'}).join('')+
+    ex.map(function(q,i){
+      return '<button class="exq'+(i===0?' first':'')+'" data-fill="'+q+'"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0012 3z"/></svg>'+q+(i===0?'<span class="tag">まずはこれ</span>':'')+'</button>'}).join('')+
     '</div></div>'+
     '<div class="digest"><div class="h">最近の調査</div>'+
     [['9/16','20代の好意度に変化','20代の好意度が下がった理由は？'],['9/02','新商品の認知が上昇','新商品の認知はどう動いた？'],['8/19','競合B社の評価が上昇','競合と比べるとどう？']].map(function(r){
-      return '<a data-q="'+r[2]+'"><span>'+r[0]+'</span><span>'+r[1]+'</span></a>'}).join('')+'</div>'+
-    '<div class="cnt">過去128回の調査</div></div>';
+      return '<a data-fill="'+r[2]+'"><span>'+r[0]+'</span><span>'+r[1]+'</span></a>'}).join('')+'</div>'+
+    '<div class="cnt">128回の過去調査を参照できます</div></div>';
 }
 function turnHTML(t){
   var a=t.a,h='<div class="turn"><div class="you">あなた</div><div class="qtext">'+t.q+'</div>'+
@@ -459,7 +476,7 @@ function turnHTML(t){
       h+='<div class="state"><span class="dot"></span><div>追加調査（20代女性'+S.req.n+'人）：<b>'+st+'</b>'+(S.req.st==='est'?' <button class="btn sm" id="estok" style="margin-left:8px">見積もりにOKする</button>':'')+'</div></div>';}
   }
   if(a.share) h+='<div class="actions"><button class="btn ghost" data-share="1"><svg viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>上司に1枚で共有</button><button class="btn ghost" data-detail="1">元データを見る</button><button class="btn ghost" data-newq="1">別の質問をする</button></div>';
-  h+=(t.follow?'<div class="follow">'+t.follow.map(function(q){return '<button data-q="'+q+'">'+q+'</button>'}).join('')+'</div>':'')+'</div></div></div>';
+  h+=(t.follow?'<div class="follow">'+t.follow.map(function(q){return '<button data-fill="'+q+'">'+q+'</button>'}).join('')+'</div>':'')+'</div></div></div>';
   return h;
 }
 function render(){
@@ -477,7 +494,7 @@ function render(){
 function ask(q){
   if(!q)return;
   var a=answer(q);
-  var fol=S.req&&S.req.st==='done'?['競合と比べるとどう？','30代・40代はどうだった？']:['過去に似た動きはあった？','競合と比べるとどう？','去年の同じ時期は？'];
+  var fol=S.req&&S.req.st==='done'?['競合と比べるとどう？','30代・40代はどうだった？']:['過去にも同じことはあった？','競合と比べるとどう？','この1年の変化を3行でまとめて'];
   S.turns.push({q:q,a:a,follow:a.lead.indexOf('決まった質問')>=0?null:fol});
   render();
 }
@@ -551,6 +568,7 @@ document.addEventListener('click',function(e){
     if(top+p.offsetHeight>$('#main').offsetHeight-10)top=Math.max(10,r.top-m.top-p.offsetHeight-8);
     p.style.left=Math.max(10,left)+'px';p.style.top=top+'px';return;}
   if(!t.closest('.pop'))closePop();
+  if(c=t.closest('[data-fill]')){var inp=$('#askIn');inp.value=c.dataset.fill;inp.focus();$('.askbig .send').classList.add('ready');return;}
   if(c=t.closest('[data-q]')){ask(c.dataset.q);return;}
   if(t.closest('[data-openpanel]')){$('#panel').classList.add('on');return;}
   if(t.closest('#panelX')){$('#panel').classList.remove('on');return;}
@@ -578,7 +596,8 @@ document.addEventListener('click',function(e){
     if(r2.st==='done')S.turns.pop();r2.st=pv;render();return;}
   if(t.closest('#restart')){S=S0();$('#panel').classList.remove('on');$('#detail').classList.remove('on');$('#share').classList.remove('on');render();return;}
 });
-document.addEventListener('submit',function(e){if(e.target.id==='askForm'){e.preventDefault();var v=$('#askIn').value.trim();$('#askIn').value='';ask(v);}});
+document.addEventListener('submit',function(e){if(e.target.id==='askForm'){e.preventDefault();var v=$('#askIn').value.trim();$('#askIn').value='';$('.askbig .send').classList.remove('ready');ask(v);}});
+document.addEventListener('input',function(e){if(e.target.id==='askIn')$('.askbig .send').classList.toggle('ready',!!e.target.value.trim());});
 render();
 })();
 </script>

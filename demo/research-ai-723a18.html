@@ -268,6 +268,35 @@
   .frame{box-shadow:none!important}
   .mail .att b i{background:#8c8c90!important}
   .slide .mini i{background:#d4d4d6!important}.slide .mini span.h i{background:#00a0ea!important}
+  .vbar{height:52px!important;padding:0 14px!important}
+  .vlabel{border:0!important;padding:0!important;margin:0!important;font-size:13px!important;color:#55555a!important}
+  .vnextbtn{display:flex;align-items:center;gap:10px;height:36px;padding:0 16px;border-radius:999px;background:#004893;color:#fff;font-size:13.5px;font-weight:700;white-space:nowrap}
+  .vnextbtn svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .vnextbtn:disabled{background:#efeff0;color:#8c8c90}
+  .vnextbtn:disabled svg{stroke:#8c8c90}
+  .vsel{height:36px;border:1px solid #d4d4d6;border-radius:999px;gap:8px!important;padding:0 12px 0 14px!important;font-weight:500!important}
+  .vsel .vk{color:#8c8c90;font-size:12.5px}
+  .vr{gap:10px!important}
+  .vbar.narrow .vlabel{display:none}
+  .vbar.narrow .vnextbtn span{display:none}
+  /* ===== Gemini型の大きな質問欄 ===== */
+  .gsearch{display:none!important}
+  .askbig{display:flex;align-items:center;gap:14px;height:64px;background:#fff;border:1px solid #d4d4d6;border-radius:999px;padding:0 8px 0 24px;box-shadow:0 2px 10px rgba(0,0,0,.05);max-width:720px;margin:0 auto}
+  .askbig:focus-within{border-color:#004893;box-shadow:0 2px 14px rgba(0,0,0,.09)}
+  .askbig .sp{width:22px;height:22px;fill:#00a0ea;flex:none}
+  .askbig input{flex:1;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:17px;color:#1a1a1a;height:100%}
+  .askbig input::placeholder{color:#8c8c90}
+  .askbig .send{width:46px;height:46px;flex:none;border-radius:50%;background:#004893;display:grid;place-items:center}
+  .askbig .send svg{width:19px;height:19px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .askhint{max-width:720px;margin:10px auto 0;text-align:center;font-size:13px;color:#8c8c90}
+  .ask .askbig{max-width:none;margin:0}
+  .ask .pills,.askpills{justify-content:center}
+  .frame.narrow .askbig{height:56px;padding-left:16px;gap:10px}
+  .frame.narrow .askbig input{font-size:16px}
+  .frame.narrow .askbig .send{width:40px;height:40px}
+  .gtop{justify-content:space-between}
+  .gtop .lgw{width:auto!important}
+  .gtop .gr{width:auto!important;margin-left:auto}
 </style>
 </head>
 <body>
@@ -626,25 +655,21 @@
 </style>
 
 <div class="vbar" id="vbar">
-  <div class="vl">
-    <span class="vlabel">見本の操作</span>
-    <button class="ib" id="vBack" aria-label="1つ前の出来事に戻る" title="1つ前の出来事に戻る"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
-    <button class="ib" id="evt" aria-label="次の出来事へ進める" title="次の出来事へ進める"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
-    <button class="ib" id="restart" aria-label="最初から" title="最初から"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 108-8H8M8 1v6h6" transform="translate(0 0)"/></svg></button>
-    <span class="vnext" id="vNext"></span>
-  </div>
+  <div class="vl"><span class="vlabel">これは画面の見本です（AIは動いていません。会社名と数字は架空です）</span></div>
   <div class="vr">
-    <span class="vnote">見本 ・ AIは動いていません ・ 数字は架空</span>
-    <div class="vmenu-w"><button class="vsel" id="vSel"><span id="vSelT">A社の担当者の画面</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
+    <button class="vnextbtn" id="evt"><span id="vNext"></span><svg viewBox="0 0 24 24"><path d="M5 12h13M12 6l6 6-6 6"/></svg></button>
+    <div class="vmenu-w"><button class="vsel" id="vSel"><span class="vk">見る人</span><span id="vSelT">A社の担当者</span><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>
       <div class="vmenu" id="vMenu">
-        <div class="mh">見ている人</div>
-        <button data-role="a"><i></i>A社の担当者</button>
+        <div class="mh">見る人を切り替える</div>
+        <button data-role="a"><i></i>A社の担当者（お客さん側）</button>
         <button data-role="cm"><i></i>クロス・マーケティングの担当者</button>
         <div class="sep"></div>
         <div class="mh">A社の担当者の入り口</div>
         <button data-entry="app"><i></i>アプリを開く</button>
         <button data-entry="mail"><i></i>メールで届く</button>
       </div></div>
+    <button class="ib" id="vBack" aria-label="1つ戻す" title="1つ戻す"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <button class="ib" id="restart" aria-label="最初から" title="最初から"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 108-8H8M8 1v6h6"/></svg></button>
   </div>
 </div>
 <div class="dhint" id="msg" hidden></div>
@@ -827,7 +852,7 @@ function renderMetric(){
      '<div class="seg"><span data-tab="t" class="'+(S.tab==='t'?'on':'')+'">推移</span><span data-tab="a" class="'+(S.tab==='a'?'on':'')+'">年代別</span></div></div>'+
      '<div class="mbody"><div class="ins">'+BULB+'<div>'+m.ins.map(function(p){return '<p>'+p+'</p>'}).join('')+'</div></div>'+(S.tab==='t'?lineSVG(m):ageHTML(m))+'</div></div>';
   if(S.page==='m20') h+='<div class="past"><h3>'+BULB+'前に同じ動きがあった時の分析とふりかえり<small>・ AIが過去の資料から見つけました</small></h3><div class="pitem"><div class="who"><b>2023年11月8日</b>分析レポート</div><div><span class="tag cm">クロス・マーケティング</span>20代だけの低下で、競合D社のSNS発の新ブランドと時期が重なる。因果は未検証。理由を聞く設問の追加を推奨。<button class="cite" data-c="rep121">第121回 分析レポート p.4</button></div></div><div class="pitem"><div class="who"><b>2023年12月20日</b>ブランド会議</div><div><span class="tag a">A社の振り返り</span>SNS広告を増やして6週で戻ったが、理由は分からずじまい。「次は先に理由を確かめる」。<button class="cite" data-c="fb2312">議事メモ</button></div></div></div>';
-  h+='<div class="ask"><h2>この結果について質問する</h2><form class="input" id="askForm"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="askIn" placeholder="A社の過去の調査128回から答えます（例：なぜ20代だけ下がったの？）" autocomplete="off"><span class="scope">対象：脳内POS 128回・分析レポート・振り返り</span><button class="send" type="submit" aria-label="質問する"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></form>';
+  h+='<div class="ask"><h2>この結果について質問する</h2><form class="askbig" id="askForm"><svg class="sp" viewBox="0 0 24 24"><path d="M12 2l2.1 5.9L20 10l-5.9 2.1L12 18l-2.1-5.9L4 10l5.9-2.1z"/></svg><input id="askIn" placeholder="A社の過去の調査128回から答えます（例：なぜ20代だけ下がったの？）" autocomplete="off"><span class="scope">対象：脳内POS 128回・分析レポート・振り返り</span><button class="send" type="submit" aria-label="質問する"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></form>';
   h+='<div class="pills">'+m.pills.map(function(p){return '<button class="pill" data-ask="'+p+'">'+p+'</button>'}).join('')+'</div><div class="thread">';
   th.forEach(function(q){var a=answer(q),st=stepsFor(q);h+='<div><div class="asked"><span>あなたの質問</span>'+q+'</div><div class="ans"><div class="ah">'+BULB+'<b>AIの答え</b>'+(st.length?'<span>・ '+st.length+'つ調べました</span>':'')+'<span class="lgd">出典はすべて押すと元の資料が開きます ・ <i></i>は根拠が弱いところ</span></div>'+(st.length?'<div class="steps">'+st.map(function(x){return '<span>'+x+'</span>'}).join('')+'</div>':'')+'<div class="t"><div>'+a.h+'</div></div>'+(a.x||'')+'</div></div>';});
   h+='</div></div>';
@@ -851,6 +876,9 @@ function renderHome(){
              [2,'AIに「なぜ？」を聞く','過去の調査128回から、出典つきで答えます。答えがない時は次の一手を出します','聞いてみる','data-hq="m20|20代の好意度は、なぜ下がったの？"','a'],
              [3,'上司に1枚で共有する','分かったことを、定例にそのまま出せるパワポ1枚にします','共有してみる','data-openshare2="1"','s']];
   var h='<div class="hgreet">おはようございます、佐々木さん<small>9月16日（水） ・ 脳内POSの結果が届きました</small></div>';
+  h+='<form class="askbig" id="homeForm" style="margin-top:22px"><svg class="sp" viewBox="0 0 24 24"><path d="M12 2l2.1 5.9L20 10l-5.9 2.1L12 18l-2.1-5.9L4 10l5.9-2.1z"/></svg><input id="homeIn" placeholder="A社の調査について、何でも聞いてください" autocomplete="off"><button class="send" type="submit" aria-label="質問する"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button></form>';
+  h+='<p class="askhint">過去の調査128回と、分析レポート・振り返りから、出典つきで答えます</p>';
+  h+='<div class="pills askpills" style="margin-top:12px;margin-bottom:8px">'+[['m20','20代の好意度は、なぜ下がったの？'],['m20','競合も下がっている？'],['all','去年の同じ時期は？']].map(function(q){return '<button class="pill" data-hq="'+q[0]+'|'+q[1]+'">'+q[1]+'</button>'}).join('')+'</div>';
   h+='<div class="hsec" style="margin-top:14px">はじめる<small>'+(cur?'3つのうち'+(cur-1)+'つ完了':'3つとも完了')+'</small></div><div class="start">';
   steps.forEach(function(x){var ok=ob[x[5]],c=cur===x[0];h+='<div class="stc'+(c?' cur':'')+(ok?' ok':'')+'"><span class="n">'+x[0]+'.</span><span class="t">'+x[1]+'</span><span class="d">'+x[2]+'</span><button class="go" '+x[4]+'>'+(ok?'もう一度':x[3])+'</button></div>';});
   h+='</div>';
@@ -885,10 +913,10 @@ function renderCm(){
 }
 function evtBtn(){
   var r=S.req,L;
-  if(!r) L=['A社の担当者が追加調査を頼むと、ここから先の出来事に進めます',0];
-  else L={approve:['次の出来事：<b>B部長がOKする</b>',1],wait:['次の出来事：<b>クロス・マーケティングが見積もりを送る</b>',1],est:['次の出来事：<b>担当者が見積もりにOKする</b>',1],run:['次の出来事：<b>3日後（9月19日）になる</b>',1],done:['ここまでの出来事はすべて進みました',0]}[r.st];
-  $('#vNext').innerHTML=L[0];$('#evt').disabled=!L[1];$('#vBack').disabled=!(r&&r.st!=='approve');
-  $('#vSelT').textContent=S.role==='cm'?'クロス・マーケティングの画面':(S.view==='mail'?'A社の担当者・メール':'A社の担当者の画面');
+  if(!r) L=['次に進む（まだ進めません）',0];
+  else L={approve:['次に進む：B部長がOKする',1],wait:['次に進む：見積もりが届く',1],est:['次に進む：見積もりにOKする',1],run:['次に進む：3日後になる',1],done:['最後まで進みました',0]}[r.st];
+  $('#vNext').textContent=L[0];$('#evt').disabled=!L[1];$('#vBack').disabled=!(r&&r.st!=='approve');
+  $('#vSelT').textContent=S.role==='cm'?'クロス・マーケティング':(S.view==='mail'?'A社の担当者（メール）':'A社の担当者');
   [].forEach.call(document.querySelectorAll('#vMenu [data-role]'),function(x){x.classList.toggle('on',x.dataset.role===S.role)});
   [].forEach.call(document.querySelectorAll('#vMenu [data-entry]'),function(x){x.classList.toggle('on',S.role==='a'&&x.dataset.entry===(S.view==='mail'?'mail':'app'))});
 }
@@ -980,7 +1008,7 @@ document.addEventListener('click',function(e){
     $('#share').classList.remove('on');S.shared=true;hint();flash(to.length?to.join('と')+'に送りました（見本なので実際には送られません）':'宛先を1つ以上選んでください');return;}
   if(c=t.closest('[data-role]')){$('#vMenu').classList.remove('on');S.role=c.dataset.role;$('#panel').classList.remove('on');$('#share').classList.remove('on');render();return;}
 });
-document.addEventListener('submit',function(e){if(e.target.id==='gForm'){e.preventDefault();var g=$('#gIn').value.trim();if(!g)return;$('#gIn').value='';S.view='app';S.page=/全体|去年|昨年/.test(g)&&!/20代/.test(g)?'all':/想起/.test(g)?'rec':/購入/.test(g)?'buy':'m20';S.tab='t';ask(g);return;}if(e.target.id==='askForm'){e.preventDefault();ask($('#askIn').value.trim());}if(e.target.id==='homeForm'){e.preventDefault();var v=$('#homeIn').value.trim();if(!v)return;S.page=/全体|去年|昨年/.test(v)&&!/20代/.test(v)?'all':/想起/.test(v)?'rec':/購入/.test(v)?'buy':'m20';S.tab='t';ask(v);}});
+document.addEventListener('submit',function(e){if(e.target.id==='gForm-removed'){e.preventDefault();var g=$('#gIn').value.trim();if(!g)return;$('#gIn').value='';S.view='app';S.page=/全体|去年|昨年/.test(g)&&!/20代/.test(g)?'all':/想起/.test(g)?'rec':/購入/.test(g)?'buy':'m20';S.tab='t';ask(g);return;}if(e.target.id==='askForm'){e.preventDefault();ask($('#askIn').value.trim());}if(e.target.id==='homeForm'){e.preventDefault();var v=$('#homeIn').value.trim();if(!v)return;S.page=/全体|去年|昨年/.test(v)&&!/20代/.test(v)?'all':/想起/.test(v)?'rec':/購入/.test(v)?'buy':'m20';S.tab='t';ask(v);}});
 document.addEventListener('input',function(e){if(e.target.id==='svIn'){var v=e.target.value,pos=e.target.selectionStart;renderSurveys(v);var i=$('#svIn');i.focus();i.setSelectionRange(pos,pos);}});
 $('#restart').addEventListener('click',function(){S=S0();$('#panel').classList.remove('on');$('#share').classList.remove('on');render();});
 function fit(){var s=$('#scaler'),f=$('#frame'),vb=$('#vbar'),W=window.innerWidth,nar=W<760;f.classList.toggle('narrow',nar);vb.classList.toggle('narrow',nar);var H=window.innerHeight-vb.offsetHeight;var k=nar?1:Math.min(1,W/1280);var fw=W/k,fh=Math.max(nar?480:560,H/k);f.style.width=fw+'px';f.style.height=fh+'px';s.style.width=fw+'px';s.style.transform='scale('+k+')';s.style.marginLeft='0px';s.parentNode.style.height=(fh*k)+'px';}

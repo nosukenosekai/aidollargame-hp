@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>埋めた分だけ残る</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif; font-size:17px; line-height:1.75; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 14px; }
+  .src{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line); background:#fff; border-radius:12px; padding:5px 11px; line-height:1.6; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 6px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px; padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn:disabled{ background:#c3c3bd; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .prog{ font-size:13px; color:var(--sub); text-align:center; }
+  .pair{ text-align:center; font-size:30px; font-weight:700; margin:18px 0 10px; letter-spacing:.04em; min-height:52px; }
+  .pair .dash{ color:var(--sub); font-weight:400; margin:0 10px; }
+  .pair .hole{ display:inline-block; width:1.1em; border-bottom:3px solid var(--blue); color:var(--blue); }
+  input[type=text]{ font:inherit; font-size:22px; width:100%; padding:11px 13px; border:1.5px solid var(--line); border-radius:11px; text-align:center; }
+  input[type=text]:focus{ outline:none; border-color:var(--blue); }
+  .timer{ text-align:center; font-size:56px; font-weight:700; font-variant-numeric:tabular-nums; margin:6px 0; }
+  .big{ display:flex; gap:10px; margin:6px 0 10px; }
+  .big div{ flex:1; text-align:center; background:#fafaf7; border:1px solid var(--line); border-radius:12px; padding:10px 4px; }
+  .big .n{ font-size:40px; font-weight:700; line-height:1.15; font-variant-numeric:tabular-nums; }
+  .big .l{ font-size:14px; color:var(--sub); }
+  .big div.g{ border-color:#cddcfb; background:#eef3fe; }
+  .big div.g .n{ color:var(--blue); }
+  .you{ background:#fffbe8; border:1px solid #f2e2a8; border-radius:11px; padding:12px 14px; font-size:16px; margin:10px 0; }
+  .list{ font-size:15px; }
+  .list div{ display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--line); }
+  .list .k{ font-size:12px; color:var(--sub); border:1px solid var(--line); border-radius:8px; padding:0 7px; margin-left:6px; }
+  .list .ok{ color:var(--blue); font-weight:700; }
+  .list .ng{ color:#b4b4ad; }
+  .note{ font-size:14px; color:var(--sub); }
+  .note a{ color:var(--blue); word-break:break-all; }
+  .biz{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:13px 15px; font-size:16px; margin:14px 0 0; }
+  .biz .h{ font-size:13px; color:var(--blue); font-weight:700; margin-bottom:3px; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-23 / 再現実験</div>
+  <h1>埋めた分だけ残る</h1>
+  <p class="lead">言葉の組を16個おぼえます。半分はそのまま読むだけ、半分は1文字だけ抜けていて自分で埋めます。あとで思い出すと、埋めたほうが多く残っているか。1978年に見つかった「生成効果」を自分で試します。</p>
+  <div class="src">比べる相手：Bertsch ほか（2007, Memory & Cognition）のメタ分析。86研究・445の効果量をならすと、自分で作った側が読んだ側より標準偏差の約0.40ぶん良く覚えていた。</div>
+
+  <div id="intro" class="card">
+    <h2>やること（3分ほど）</h2>
+    <p style="margin:0 0 10px">1. 「えんぴつ ― けしごむ」のような組が1つずつ出ます。全部そろっている組は、読んで次へ。<br>2. 「えんぴつ ― け□ごむ」のように1文字抜けている組は、抜けた1文字をひらがなで入れます。<br>3. 30秒だけ別のことをしてから、左の言葉を見て右の言葉を思い出します。</p>
+    <p class="note" style="margin:0 0 12px">どの組が「読む」側になるかは毎回ランダムです。メモはとらないでください。</p>
+    <button class="btn" id="startBtn">始める</button>
+  </div>
+
+  <div id="study" class="card hide">
+    <div class="prog" id="sProg"></div>
+    <div class="pair" id="sPair"></div>
+    <div id="sGen" class="hide"><input type="text" id="sIn" maxlength="2" autocomplete="off" placeholder="抜けた1文字"></div>
+    <p class="note" id="sMsg" style="text-align:center;min-height:24px;margin:8px 0"></p>
+    <button class="btn" id="sNext">次へ</button>
+  </div>
+
+  <div id="gap" class="card hide">
+    <h2>30秒だけ、声に出して</h2>
+    <p style="margin:0">100から3ずつ引いていってください。100、97、94……。頭の中の言葉を一度流すための時間です。</p>
+    <div class="timer" id="gTime">30</div>
+  </div>
+
+  <div id="test" class="card hide">
+    <div class="prog" id="tProg"></div>
+    <div class="pair" id="tPair"></div>
+    <input type="text" id="tIn" autocomplete="off" placeholder="右にあった言葉（ひらがな）">
+    <p class="note" style="text-align:center;margin:8px 0">思い出せなければ空のまま次へ。</p>
+    <button class="btn" id="tNext">次へ</button>
+  </div>
+
+  <div id="result" class="hide">
+    <div class="card">
+      <h2>思い出せた数（各8組中）</h2>
+      <div class="big">
+        <div><div class="n" id="rRead">-</div><div class="l">読んだ組</div></div>
+        <div class="g"><div class="n" id="rGen">-</div><div class="l">自分で埋めた組</div></div>
+      </div>
+      <div class="you" id="rSay"></div>
+      <p class="note" style="margin:0">8組ずつでは偶然の揺れが大きく、1〜2組の差は運でも出ます。論文の0.40は「標準偏差の半分弱」で、何組ぶんかには直せません。あなたの差がプラスなら同じ向き、というところまでを見てください。</p>
+    </div>
+    <div class="card">
+      <h2>1組ずつ</h2>
+      <div class="list" id="rList"></div>
+    </div>
+    <div class="card">
+      <h2>何が起きていたか</h2>
+      <p style="margin:0">1文字を埋めるには、左の言葉から右の言葉を一度頭の中で引き出す必要があります。この「自分で取り出した」一手間が、あとで思い出すときの手がかりになると考えられています。ただしメタ分析は、条件によって効果の大きさがかなり変わると書いています。埋める作業が簡単すぎたり、全部の組を埋めさせたりすると差が縮む研究もあります。</p>
+      <div class="biz"><div class="h">お店・現場に置きかえると</div>新人に手順書を全文読ませるより、要所の語だけ1文字抜いた版を渡して埋めさせる。「レジ締めは ○時に 現金と□□□を照合」のように、覚えてほしい所だけを穴にすると、同じ時間で残る量が変わります。</div>
+    </div>
+    <div class="card">
+      <button class="btn" id="again">もう一度やる（組の割り振りが変わります）</button>
+      <p class="note" style="margin:12px 0 0">出典：Bertsch S, Pesta BJ, Wiscott R, McDaniel MA (2007) The generation effect: A meta-analytic review. Memory & Cognition 35(2): 201-210. 数値は要旨の「86研究・445の効果量・効果量0.40」をそのまま使用（本文の調整変数ごとの表には当たれていません）。<br><a href="https://pubmed.ncbi.nlm.nih.gov/17645161/">https://pubmed.ncbi.nlm.nih.gov/17645161/</a><br>最初の報告：Slamecka NJ, Graf P (1978) Journal of Experimental Psychology: Human Learning and Memory 4(6): 592-604.<br>言葉の組はこの画面のために作ったもので、論文の刺激ではありません。記録はどこにも送りません。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const PAIRS=[['えんぴつ','けしごむ',1],['くつ','くつした',2],['ほん','しおり',1],['はし','ちゃわん',2],['まくら','ふとん',1],['りんご','みかん',1],['うみ','さかな',1],['やま','ふもと',1],['つくえ','いす',1],['まど','すだれ',1],['さいふ','こぜに',1],['かぎ','とびら',1],['ゆき','こおり',2],['たいよう','ひかり',1],['はな','かびん',1],['ふね','みなと',1]];
+let items=[], si=0, ti=0, order=[];
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+const norm=s=>s.trim().replace(/[ァ-ヶ]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60)).replace(/\s/g,'');
+function show(id){ ['intro','study','gap','test','result'].forEach(x=>$(x).classList.toggle('hide',x!==id)); window.scrollTo(0,0); }
+
+$('startBtn').onclick=()=>{
+  const idx=shuffle([...Array(16).keys()]);
+  items=PAIRS.map((p,i)=>({cue:p[0],tgt:p[1],hole:p[2],gen:false,ans:''}));
+  idx.slice(0,8).forEach(i=>items[i].gen=true);
+  order=shuffle([...Array(16).keys()]); si=0; show('study'); showStudy();
+};
+function showStudy(){
+  const it=items[order[si]];
+  $('sProg').textContent=(si+1)+' / 16';
+  $('sMsg').textContent='';
+  if(it.gen){
+    const t=it.tgt, h=it.hole;
+    $('sPair').innerHTML=it.cue+'<span class="dash">―</span>'+t.slice(0,h)+'<span class="hole">&nbsp;</span>'+t.slice(h+1);
+    $('sGen').classList.remove('hide'); $('sIn').value=''; setTimeout(()=>$('sIn').focus(),50);
+    $('sNext').textContent='入れた';
+  } else {
+    $('sPair').innerHTML=it.cue+'<span class="dash">―</span>'+it.tgt;
+    $('sGen').classList.add('hide'); $('sNext').textContent='読んだ';
+  }
+  $('sNext').dataset.state='';
+}
+function studyNext(){
+  const it=items[order[si]];
+  if(it.gen && $('sNext').dataset.state!=='shown'){
+    const v=norm($('sIn').value), ok=v===it.tgt[it.hole];
+    if(!v){ $('sMsg').textContent='1文字入れてください。浮かばなければ思いつく字で構いません。'; return; }
+    $('sPair').innerHTML=it.cue+'<span class="dash">―</span>'+it.tgt;
+    $('sMsg').textContent=ok?'そのとおり':'正しくは「'+it.tgt[it.hole]+'」';
+    $('sNext').dataset.state='shown'; $('sNext').textContent='次へ';
+    $('sGen').classList.add('hide'); return;
+  }
+  si++;
+  if(si<16) return showStudy();
+  show('gap'); let n=30; $('gTime').textContent=n;
+  const iv=setInterval(()=>{ n--; $('gTime').textContent=n; if(n<=0){ clearInterval(iv); ti=0; order=shuffle([...Array(16).keys()]); show('test'); showTest(); } },1000);
+}
+$('sNext').onclick=studyNext;
+$('sIn').addEventListener('keydown',e=>{ if(e.key==='Enter' && !e.isComposing){ e.preventDefault(); studyNext(); } });
+
+function showTest(){
+  const it=items[order[ti]];
+  $('tProg').textContent=(ti+1)+' / 16';
+  $('tPair').innerHTML=it.cue+'<span class="dash">―</span>？';
+  $('tIn').value=''; setTimeout(()=>$('tIn').focus(),50);
+}
+function testNext(){
+  items[order[ti]].ans=norm($('tIn').value);
+  ti++; if(ti<16) return showTest();
+  finish();
+}
+$('tNext').onclick=testNext;
+$('tIn').addEventListener('keydown',e=>{ if(e.key==='Enter' && !e.isComposing){ e.preventDefault(); testNext(); } });
+
+function finish(){
+  show('result');
+  const r=items.filter(x=>!x.gen), g=items.filter(x=>x.gen);
+  const ok=x=>x.ans===x.tgt;
+  const nr=r.filter(ok).length, ng=g.filter(ok).length;
+  $('rRead').textContent=nr; $('rGen').textContent=ng;
+  let s;
+  if(ng>nr) s='埋めた組のほうが <span class="mark">'+(ng-nr)+'組多く</span> 残りました。メタ分析と同じ向きです。';
+  else if(ng===nr) s='同じ数でした。8組ずつだと差が出ない回もよくあります。組の割り振りを変えてもう一度やると、向きが見えてきます。';
+  else s='読んだ組のほうが '+(nr-ng)+'組多く残りました。論文と逆の向きです。今回の組だけで決めずに、もう一度やって確かめてください。';
+  if(nr+ng>=15) s+='<br>ほぼ全部思い出せていて、差が出る余地がありませんでした（天井）。';
+  $('rSay').innerHTML=s;
+  $('rList').innerHTML=items.map(x=>'<div><span>'+x.cue+' ― '+x.tgt+'<span class="k">'+(x.gen?'埋めた':'読んだ')+'</span></span><span class="'+(ok(x)?'ok':'ng')+'">'+(ok(x)?'思い出せた':(x.ans?'「'+x.ans+'」':'空欄'))+'</span></div>').join('');
+}
+$('again').onclick=()=>show('intro');
+</script>
+</body>
+</html>

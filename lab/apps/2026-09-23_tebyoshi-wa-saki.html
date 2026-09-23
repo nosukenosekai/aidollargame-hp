@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>手拍子は先に出る</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:17px; line-height:1.75; -webkit-user-select:none; user-select:none; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 14px; }
+  .src{ display:inline-block; font-size:12px; color:var(--sub); border:1px solid var(--line); background:#fff; border-radius:12px; padding:5px 11px; line-height:1.6; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 6px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px; padding:14px 18px; font-size:17px; font-weight:600; width:100%; }
+  .btn:disabled{ background:#c3c3bd; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .choice{ display:flex; gap:8px; margin:10px 0 14px; }
+  .choice button{ flex:1; background:#fff; border:1.5px solid var(--line); border-radius:11px; padding:10px 0; font-size:16px; }
+  .choice button.on{ border-color:var(--blue); color:var(--blue); background:#eef3fe; font-weight:700; }
+  .tap{ width:100%; aspect-ratio:1/0.8; border-radius:18px; border:2px solid var(--blue); background:#fafaf7; display:flex; align-items:center; justify-content:center; flex-direction:column; touch-action:manipulation; font-size:18px; color:var(--sub); }
+  .tap .ring{ width:90px; height:90px; border-radius:50%; background:#dfe8fd; margin-bottom:10px; transition:transform .06s; }
+  .tap .ring.hit{ transform:scale(1.15); background:var(--blue); }
+  .prog{ font-size:14px; color:var(--sub); text-align:center; margin-bottom:8px; }
+  .big{ text-align:center; margin:4px 0 8px; }
+  .big .n{ font-size:50px; font-weight:700; letter-spacing:-.03em; line-height:1.1; font-variant-numeric:tabular-nums; }
+  .big .u{ font-size:18px; font-weight:600; }
+  .cmp div{ display:flex; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); font-size:16px; }
+  .cmp span:first-child{ color:var(--sub); }
+  .cmp b{ font-variant-numeric:tabular-nums; }
+  .you{ background:#fffbe8; border:1px solid #f2e2a8; border-radius:11px; padding:12px 14px; font-size:16px; margin:10px 0; }
+  .note{ font-size:14px; color:var(--sub); }
+  .note a{ color:var(--blue); word-break:break-all; }
+  .biz{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:13px 15px; font-size:16px; margin:14px 0 0; }
+  .biz .h{ font-size:13px; color:var(--blue); font-weight:700; margin-bottom:3px; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-23 / 引っかける</div>
+  <h1>手拍子は先に出る</h1>
+  <p class="lead">ライブの手拍子、自分はちゃんと拍に乗っているつもりでも、実はいつも少し早く叩いています。メトロノームに合わせて画面を叩くだけで、自分が何ミリ秒先に出ているかを測ります。</p>
+  <div class="src">比べる相手：Repp（2005, Psychonomic Bulletin & Review）の総説。音楽経験のない人は拍より「数十ミリ秒」先に叩き、人によっては100ミリ秒先。本人はそれに気づいていない。</div>
+
+  <div id="intro" class="card">
+    <h2>先に予想</h2>
+    <p style="margin:0">メトロノームに合わせて叩いたら、あなたの指は拍に対してどうなると思いますか。</p>
+    <div class="choice" id="pred">
+      <button data-v="early">少し早い</button><button data-v="just">ぴったり</button><button data-v="late">少し遅い</button>
+    </div>
+    <p class="note" style="margin:0 0 12px">音が出ます。イヤホンかスピーカーの音量を上げてください。3回に分けて、合計1分ほど。パソコンならスペースキー、スマホなら下の大きな丸を叩きます。最初の4拍は慣らしなので数えません。</p>
+    <button class="btn" id="startBtn" disabled>予想を選ぶと始められます</button>
+  </div>
+
+  <div id="task" class="card hide">
+    <div class="prog" id="prog"></div>
+    <div class="tap" id="pad"><div class="ring" id="ring"></div><div id="padTxt">拍に合わせて叩く</div></div>
+    <p class="note" id="hint" style="margin:10px 0 0"></p>
+  </div>
+
+  <div id="ask" class="card hide">
+    <h2>いまの1回目、どうでしたか</h2>
+    <p style="margin:0">結果を見る前に、自分の感覚で答えてください。</p>
+    <div class="choice" id="feel">
+      <button data-v="early">早かった</button><button data-v="just">合っていた</button><button data-v="late">遅かった</button>
+    </div>
+    <button class="btn" id="nextBtn" disabled>答えると次へ進めます</button>
+  </div>
+
+  <div id="result" class="hide">
+    <div class="card">
+      <h2>1回目、あなたの指は拍より</h2>
+      <div class="big"><span class="n" id="rMain">-</span><span class="u" id="rDir"></span></div>
+      <div class="you" id="rFeel"></div>
+      <svg id="chart" viewBox="0 0 340 170" width="100%" role="img" aria-label="1打ごとのずれ"></svg>
+      <p class="note" style="margin:4px 0 0">縦線＝メトロノームの音。点＝あなたの1打ずつ。左が早い、右が遅い。</p>
+    </div>
+    <div class="card">
+      <h2>条件を変えると、ずれも変わる</h2>
+      <div class="cmp">
+        <div><span>1回目：1秒おき・叩いても音なし</span><b id="c1">-</b></div>
+        <div><span>2回目：0.5秒おき（速い）</span><b id="c2">-</b></div>
+        <div><span>3回目：1秒おき・叩くと音が鳴る</span><b id="c3">-</b></div>
+      </div>
+      <p class="note" style="margin:10px 0 0">マイナス＝拍より早い。総説がまとめた先行研究では、テンポが速いほど、また叩いた音が自分に返ってくるほど、先走りは小さくなります。あなたの2回目・3回目が1回目より0に近ければ、<span class="mark">同じ向きが再現した</span>ことになります。</p>
+      <p class="note" id="devNote" style="margin:8px 0 0"></p>
+    </div>
+    <div class="card">
+      <h2>何が起きていたか</h2>
+      <p style="margin:0">耳からの合図は速く脳に届き、指先の「叩いた」という感覚は遅れて届く、というのが有力な説明の1つです。脳の中で2つが同時になるよう指を先に出すので、外から測ると早い。総説によると、ずれをゼロにする訓練を受けた人は「わざと遅らせて叩かないといけなかった」と報告しています。合っている感覚と、実際に合っていることは別物です。</p>
+      <div class="biz"><div class="h">お店・現場に置きかえると</div>合図に合わせて手を出す作業（プレスの投入、ベルトの積み替え、厨房の「はい」の掛け声）では、人は合図より少し先に動き、本人はそれに気づきません。手を入れてよい合図は、機械が止まりきった「後」に鳴らす順にしておくと、先走っても危なくない側に倒れます。</div>
+    </div>
+    <div class="card">
+      <button class="btn" id="again">もう一度やる</button>
+      <p class="note" style="margin:12px 0 0">出典：Repp BH (2005) Sensorimotor synchronization: A review of the tapping literature. Psychonomic Bulletin & Review 12(6): 969-992. 本文の「負の平均非同期（NMA）」の節から、数十ミリ秒先に叩く・人によって100ミリ秒・速いテンポで小さくなる・叩いた音を返すと小さくなる・本人は気づかない、の5点を使用。1回ごとの平均値の表には当たっていないため、この画面は論文の数値との一致ではなく「向き」を比べます。<br><a href="https://pubmed.ncbi.nlm.nih.gov/16615317/">https://pubmed.ncbi.nlm.nih.gov/16615317/</a><br>この画面は記録をどこにも送りません。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const BLOCKS=[
+  {ioi:1000,beats:20,fb:false,name:'1回目：1秒おき。叩いても音は鳴りません'},
+  {ioi:500,beats:28,fb:false,name:'2回目：0.5秒おき。速くなります'},
+  {ioi:1000,beats:20,fb:true,name:'3回目：1秒おき。今度は叩くと小さな音が鳴ります'}
+];
+let pred=null, feel=null, ctx=null, bi=0, clicks=[], taps=[], res=[], running=false, endTimer=null;
+
+function pick(box,cb){ box.querySelectorAll('button').forEach(b=>b.onclick=()=>{ box.querySelectorAll('button').forEach(c=>c.classList.toggle('on',c===b)); cb(b.dataset.v); }); }
+pick($('pred'),v=>{ pred=v; $('startBtn').disabled=false; $('startBtn').textContent='始める'; });
+pick($('feel'),v=>{ feel=v; $('nextBtn').disabled=false; $('nextBtn').textContent='2回目へ'; });
+
+function ctxToPerf(t){
+  if(ctx.getOutputTimestamp){ const o=ctx.getOutputTimestamp(); if(o && o.performanceTime) return o.performanceTime+(t-o.contextTime)*1000; }
+  return performance.now()+(t-ctx.currentTime)*1000+((ctx.outputLatency||ctx.baseLatency||0)*1000);
+}
+function beep(t,freq,vol,dur){
+  const o=ctx.createOscillator(), g=ctx.createGain();
+  o.frequency.value=freq; o.type='sine';
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+0.003); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g).connect(ctx.destination); o.start(t); o.stop(t+dur+0.02);
+}
+function runBlock(){
+  const B=BLOCKS[bi]; clicks=[]; taps=[];
+  $('intro').classList.add('hide'); $('ask').classList.add('hide'); $('task').classList.remove('hide');
+  $('prog').textContent=B.name; $('hint').textContent='最初の4拍は聞くだけでも構いません。音が止まったら次へ進みます。';
+  const t0=ctx.currentTime+0.8;
+  for(let i=0;i<B.beats;i++){ const t=t0+i*B.ioi/1000; beep(t, i<4?660:880, 0.5, 0.05); clicks.push(ctxToPerf(t)); }
+  running=true;
+  const endMs=(0.8+B.beats*B.ioi/1000)*1000+400;
+  endTimer=setTimeout(endBlock,endMs);
+}
+function onTap(ts){
+  if(!running) return;
+  taps.push(ts);
+  const r=$('ring'); r.classList.add('hit'); setTimeout(()=>r.classList.remove('hit'),80);
+  if(BLOCKS[bi].fb) beep(ctx.currentTime+0.001,1500,0.25,0.03);
+}
+$('pad').addEventListener('pointerdown',e=>{ e.preventDefault(); onTap(e.timeStamp||performance.now()); });
+document.addEventListener('keydown',e=>{ if(e.code==='Space'||e.key===' '){ e.preventDefault(); if(!e.repeat) onTap(e.timeStamp||performance.now()); } });
+
+function analyse(B){
+  const half=B.ioi/2, asy=[];
+  for(let i=4;i<clicks.length;i++){
+    const c=clicks[i]; let best=null;
+    taps.forEach(t=>{ const d=t-c; if(Math.abs(d)<half && (best===null||Math.abs(d)<Math.abs(best))) best=d; });
+    if(best!==null) asy.push(best);
+  }
+  const mean=asy.length?asy.reduce((a,b)=>a+b,0)/asy.length:null;
+  return {asy,mean,n:asy.length,need:clicks.length-4};
+}
+function endBlock(){
+  running=false; const B=BLOCKS[bi]; res[bi]=analyse(B);
+  bi++;
+  $('task').classList.add('hide');
+  if(bi===1){ $('ask').classList.remove('hide'); return; }
+  if(bi<BLOCKS.length) return runBlock();
+  showResult();
+}
+$('startBtn').onclick=()=>{ try{ ctx=ctx||new (window.AudioContext||window.webkitAudioContext)(); ctx.resume(); }catch(e){ alert('この端末では音が鳴らせないため、実験を始められません。'); return; }
+  bi=0; res=[]; feel=null; runBlock(); };
+$('nextBtn').onclick=()=>runBlock();
+$('again').onclick=()=>{ $('result').classList.add('hide'); $('intro').classList.remove('hide');
+  $('feel').querySelectorAll('button').forEach(c=>c.classList.remove('on')); $('nextBtn').disabled=true; $('nextBtn').textContent='答えると次へ進めます'; window.scrollTo(0,0); };
+
+const fmt=m=>m==null?'叩いた数が足りません':(m<0?'':'+')+Math.round(m)+'ミリ秒';
+function showResult(){
+  $('result').classList.remove('hide'); window.scrollTo(0,0);
+  const r=res[0], m=r.mean;
+  if(m==null || r.n<r.need*0.5){ $('rMain').textContent='-'; $('rDir').textContent=''; $('rFeel').innerHTML='拍と対応づけられた打数が少なく、1回目のずれを決められませんでした。もう一度どうぞ。'; }
+  else{
+    $('rMain').textContent=Math.abs(Math.round(m)); $('rDir').textContent=m<-10?' ミリ秒 早い':m>10?' ミリ秒 遅い':' ミリ秒（ほぼ同時）';
+    const act=m<-10?'early':m>10?'late':'just';
+    const lab={early:'早い',just:'ぴったり',late:'遅い'};
+    let s='始める前の予想は「'+lab[pred]+'」、叩いた直後の感覚は「'+({early:'早かった',just:'合っていた',late:'遅かった'})[feel]+'」。実際は「'+lab[act]+'」でした。';
+    if(feel==='just' && act==='early') s+='<br><span class="mark">合っている感覚のまま、先に出ていました。</span>総説が書いているのと同じ形です。';
+    else if(feel===act) s+='<br>感覚と実際が一致しています。';
+    else s+='<br>感覚と実際がずれています。';
+    $('rFeel').innerHTML=s;
+  }
+  $('c1').textContent=fmt(res[0].mean); $('c2').textContent=fmt(res[1].mean); $('c3').textContent=fmt(res[2].mean);
+  $('devNote').innerHTML='注意：画面を指で叩く場合、端末がタッチを拾うまでに数十ミリ秒かかることがあり、その分あなたの打鍵は<span class="mark">実際より遅く</span>記録されます。それでもマイナスが出ていれば、先走りは本物です。キーボードのほうが遅れは小さめです。';
+  draw(res[0]);
+}
+function draw(r){
+  const W=340,H=170,cx=W/2,sc=0.55;
+  let s='<line x1="'+cx+'" x2="'+cx+'" y1="10" y2="'+(H-30)+'" stroke="#16161a" stroke-width="2"/>';
+  [-200,-100,100,200].forEach(v=>{ const x=cx+v*sc; s+='<line x1="'+x+'" x2="'+x+'" y1="10" y2="'+(H-30)+'" stroke="#eceae4"/><text x="'+x+'" y="'+(H-14)+'" font-size="11" fill="#5b5b66" text-anchor="middle">'+(v>0?'+':'')+v+'</text>'; });
+  s+='<text x="'+cx+'" y="'+(H-14)+'" font-size="11" fill="#16161a" text-anchor="middle">拍</text><text x="'+(W-4)+'" y="'+(H-0)+'" font-size="11" fill="#5b5b66" text-anchor="end">ミリ秒</text>';
+  s+='<rect x="'+(cx-80*sc)+'" y="10" width="'+(60*sc)+'" height="'+(H-40)+'" fill="#fff3c4" opacity=".7"/>';
+  s+='<text x="'+(cx-50*sc)+'" y="24" font-size="10" fill="#8a6d00" text-anchor="middle">数十ms先</text>';
+  r.asy.forEach((a,i)=>{ const x=cx+Math.max(-290,Math.min(290,a))*sc, y=34+(i%12)*8; s+='<circle cx="'+x+'" cy="'+y+'" r="4" fill="#2563eb" opacity=".8"/>'; });
+  if(r.mean!=null){ const x=cx+r.mean*sc; s+='<line x1="'+x+'" x2="'+x+'" y1="10" y2="'+(H-30)+'" stroke="#2563eb" stroke-dasharray="4 3" stroke-width="2"/>'; }
+  $('chart').innerHTML=s;
+}
+</script>
+</body>
+</html>

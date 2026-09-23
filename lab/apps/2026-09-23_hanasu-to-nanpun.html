@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>話すと何分</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif; font-size:17px; line-height:1.75; }
+  .wrap{ max-width:640px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  .demo{ display:inline-block; font-size:12px; color:#8a6d00; background:#fff7d6; border:1px solid #f2e2a8; border-radius:8px; padding:1px 8px; margin-left:6px; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 14px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 8px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px; padding:12px 16px; font-size:16px; font-weight:600; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); }
+  .row{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  textarea{ font:inherit; font-size:16px; width:100%; min-height:170px; padding:12px; border:1.5px solid var(--line); border-radius:11px; line-height:1.7; }
+  textarea:focus{ outline:none; border-color:var(--blue); }
+  select, input[type=number]{ font:inherit; font-size:16px; padding:7px 9px; border:1.5px solid var(--line); border-radius:9px; background:#fff; }
+  input[type=range]{ width:100%; accent-color:var(--blue); }
+  .clock{ display:flex; justify-content:space-between; align-items:baseline; margin:4px 0 2px; }
+  .clock .t{ font-size:44px; font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:-.02em; }
+  .clock .lim{ font-size:15px; color:var(--sub); }
+  .over .t{ color:#c2410c; }
+  .speech{ font-size:17px; line-height:2; background:#fafaf7; border:1px solid var(--line); border-radius:12px; padding:14px; margin-top:10px; white-space:pre-wrap; word-break:break-all; }
+  .speech .done{ color:var(--ink); }
+  .speech .todo{ color:#9a9aa3; }
+  .speech .cut{ color:#c2410c; background:#fff1e8; }
+  .speech .pin{ display:inline-block; font-size:11px; color:#fff; background:var(--blue); border-radius:6px; padding:0 5px; margin:0 2px; line-height:1.6; vertical-align:2px; }
+  .speech .pin.red{ background:#c2410c; }
+  .sum div{ display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line); font-size:16px; }
+  .sum span:first-child{ color:var(--sub); }
+  .sum b{ font-variant-numeric:tabular-nums; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .note{ font-size:14px; color:var(--sub); }
+  .measure{ background:#eef3fe; border:1px solid #cddcfb; border-radius:11px; padding:12px 14px; margin-top:10px; font-size:16px; }
+  .paras div{ display:flex; justify-content:space-between; gap:8px; padding:7px 0; border-bottom:1px solid var(--line); font-size:15px; }
+  .paras .bar{ height:8px; background:#dfe8fd; border-radius:4px; margin-top:4px; }
+  .paras .bar i{ display:block; height:8px; background:var(--blue); border-radius:4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-23 / 時間を進める<span class="demo">デモ（サンプル原稿）</span></div>
+  <h1>話すと何分</h1>
+  <p class="lead">結婚式の友人代表スピーチ。原稿を貼って時計を進めると、「3分の持ち時間で、どこまで言えて、どこから先が時間切れか」が原稿の上に出ます。速さは自分の声で測れます。</p>
+
+  <div class="card">
+    <h2>1. 原稿</h2>
+    <textarea id="txt"></textarea>
+    <div class="row" style="margin-top:8px;justify-content:space-between">
+      <span class="note" id="chars"></span>
+      <span class="row"><span class="note">持ち時間</span>
+        <select id="lim"><option value="120">2分</option><option value="180" selected>3分</option><option value="240">4分</option><option value="300">5分</option></select></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. 話す速さ</h2>
+    <div class="row"><input type="number" id="cpm" value="270" min="150" max="500" step="10" style="width:100px"><span>字 / 分</span></div>
+    <p class="note" style="margin:6px 0 0">最初は仮の値です。緊張すると速くなる人も遅くなる人もいるので、下で自分の声を測ってください。</p>
+    <div class="measure">
+      <div style="margin-bottom:6px">最初の段落を、本番のつもりで声に出して読み、終わったら止めます。</div>
+      <div class="row"><button class="btn" id="mBtn">読み始める</button><span id="mOut" class="note"></span></div>
+    </div>
+    <div class="row" style="margin-top:10px"><button class="btn ghost" id="sayBtn">この速さで読み上げを聞く</button><span class="note" id="sayNote"></span></div>
+  </div>
+
+  <div class="card" id="clockCard">
+    <h2>3. 時計を進める</h2>
+    <div class="clock" id="clock"><span class="t" id="tNow">0:00</span><span class="lim" id="tLim"></span></div>
+    <input type="range" id="slider" min="0" max="300" value="0" step="1">
+    <div class="row" style="margin-top:8px"><button class="btn" id="play">自動で進める（10倍速）</button><button class="btn ghost" id="toEnd">最後まで</button></div>
+    <div class="speech" id="speech"></div>
+  </div>
+
+  <div class="card">
+    <h2>4. どこを削るか</h2>
+    <div class="sum">
+      <div><span>全部話すと</span><b id="sTotal">-</b></div>
+      <div><span>持ち時間との差</span><b id="sDiff">-</b></div>
+      <div><span>削る必要のある字数</span><b id="sCut">-</b></div>
+    </div>
+    <p class="note" style="margin:10px 0 6px">段落ごとの長さ（長い順）。時間切れのとき、最初に見直すのは上の段落です。</p>
+    <div class="paras" id="paras"></div>
+  </div>
+
+  <p class="note">原稿と人名は架空のサンプルです。読み上げは端末に入っている合成音声を使い、原稿はどこにも送りません。字数は句読点と改行を除いて数えています。</p>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const SAMPLE=`新郎の浩一くん、新婦の美咲さん、本日はご結婚おめでとうございます。ただいまご紹介にあずかりました、新郎の大学時代の友人の田原と申します。僭越ながら、友人を代表してひとことお祝いを申し上げます。
+
+浩一くんとは、大学一年の春、同じ山岳部に入ったのが出会いです。最初の合宿で、彼は地図を逆さまに持ったまま、自信満々に先頭を歩いていきました。結果、私たちは二時間ほど同じ沢を行ったり来たりすることになりました。ところが、日が暮れて全員が不安になったとき、真っ先に荷物を下ろして火をおこし、みんなに温かいスープを配ってくれたのも浩一くんでした。道には迷うけれど、人を置いていくことは絶対にしない。それが、私の知っている浩一くんです。
+
+社会人になってからも、彼は変わりませんでした。私が仕事でつまずいて落ち込んでいたとき、夜中に電話をかけてきて、何も聞かずに一時間、山の話だけをして切りました。あとから、あれは彼なりの励まし方だったのだと気づきました。
+
+もう一つだけ、思い出話をさせてください。卒業旅行で北アルプスに登ったとき、山小屋に着く直前で雨が降り出しました。みんなが急ぎ足になるなか、浩一くんだけは立ち止まって、後ろを歩いていた一年生の荷物を黙って自分のザックに移していました。小屋に着いたとき、いちばん濡れていたのは彼でしたが、本人は「いい雨だった」と笑っていました。あのときの一年生は、今日この会場に来ています。浩一くんのそういうところを、私たちは何度も見てきました。
+
+美咲さんのことを初めて聞いたのは、三年前の冬です。いつもは山の話しかしない彼が、その日はずっと、美咲さんがどんなふうに笑うか、どんな本を読むかを話していました。あのとき、ああ、この人はもう迷わないんだなと思いました。
+
+美咲さん、浩一くんはこれからもきっと、ときどき地図を逆さまに持ちます。そのときは、どうか隣で正しい向きに直してあげてください。そして浩一くん、美咲さんが疲れたときは、あの夜のスープのように、黙って温かいものを差し出してあげてください。
+
+お二人の末永いお幸せと、ご両家の皆様のご健康を心よりお祈りして、私からのお祝いの言葉とさせていただきます。本日は誠におめでとうございます。`;
+$('txt').value=SAMPLE;
+const count=s=>s.replace(/[\s、。，．,.！？!?「」『』（）()・…]/g,'').length;
+let t=0, timer=null;
+
+function paras(){ return $('txt').value.split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean); }
+function secPerChar(){ const c=Math.max(100,Math.min(600,+$('cpm').value||270)); return 60/c; }
+function fmt(s){ s=Math.max(0,Math.round(s)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+function esc(s){ return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'})[c]); }
+
+function render(){
+  const text=$('txt').value, spc=secPerChar(), lim=+$('lim').value;
+  const total=count(text)*spc;
+  $('chars').textContent=count(text)+'字（句読点を除く）';
+  $('slider').max=Math.max(Math.ceil(total),lim)+5;
+  if(t>+$('slider').max) t=+$('slider').max;
+  $('slider').value=t;
+  $('tNow').textContent=fmt(t);
+  $('tLim').textContent='持ち時間 '+fmt(lim)+' / 全部で '+fmt(total);
+  $('clockCard').querySelector('.clock').classList.toggle('over',t>lim);
+  // 1文字ずつ時刻を割り当てて描く
+  let acc=0, html='', nextPin=30, limDone=false, state='';
+  const open=cls=>{ if(state!==cls){ if(state) html+='</span>'; html+='<span class="'+cls+'">'; state=cls; } };
+  for(const ch of text){
+    const counts=!/[\s、。，．,.！？!?「」『』（）()・…]/.test(ch);
+    if(counts){
+      if(acc>=nextPin && nextPin<lim){ if(state){html+='</span>';state='';} html+='<span class="pin">'+fmt(nextPin)+'</span>'; nextPin+=30; }
+      if(!limDone && acc>=lim){ if(state){html+='</span>';state='';} html+='<span class="pin red">'+fmt(lim)+' 時間切れ</span>'; limDone=true; }
+      acc+=spc;
+    }
+    const cls= acc>lim ? 'cut' : (acc<=t ? 'done' : 'todo');
+    open(cls); html+=esc(ch);
+  }
+  if(state) html+='</span>';
+  $('speech').innerHTML=html;
+  const diff=total-lim;
+  $('sTotal').textContent=fmt(total);
+  $('sDiff').innerHTML=diff>0?'<span class="mark">'+fmt(diff)+' 超える</span>':fmt(-diff)+' 余る';
+  $('sCut').textContent=diff>0?Math.ceil(diff/spc)+'字':'なし';
+  const ps=paras().map((p,i)=>({i,p,n:count(p)})).sort((a,b)=>b.n-a.n);
+  const mx=ps.length?ps[0].n:1;
+  $('paras').innerHTML=ps.map(x=>'<div><span style="flex:1">第'+(x.i+1)+'段落「'+esc(x.p.slice(0,14))+'…」<div class="bar"><i style="width:'+(x.n/mx*100)+'%"></i></div></span><b style="white-space:nowrap">'+fmt(x.n*spc)+'</b></div>').join('');
+}
+['txt','cpm','lim'].forEach(id=>$(id).addEventListener('input',render));
+$('slider').addEventListener('input',()=>{ t=+$('slider').value; stop(); render(); });
+function stop(){ if(timer){ clearInterval(timer); timer=null; $('play').textContent='自動で進める（10倍速）'; } }
+$('play').onclick=()=>{
+  if(timer) return stop();
+  if(t>=+$('slider').max) t=0;
+  $('play').textContent='止める';
+  timer=setInterval(()=>{ t+=1; if(t>=+$('slider').max){ t=+$('slider').max; stop(); } render(); },100);
+};
+$('toEnd').onclick=()=>{ stop(); t=+$('slider').max; render(); };
+
+// 自分の速さを測る
+let m0=null;
+$('mBtn').onclick=()=>{
+  if(m0===null){ m0=performance.now(); $('mBtn').textContent='読み終えた'; $('mOut').textContent='最初の段落を声に出して読んでください'; return; }
+  const sec=(performance.now()-m0)/1000; m0=null; $('mBtn').textContent='もう一度測る';
+  const n=count(paras()[0]||'');
+  if(sec<3||!n){ $('mOut').textContent='短すぎて測れませんでした'; return; }
+  const c=Math.round(n/sec*60/10)*10;
+  $('cpm').value=c; $('mOut').innerHTML=n+'字を'+sec.toFixed(1)+'秒 → <b>毎分'+c+'字</b>にしました'; render();
+};
+// 読み上げ
+$('sayBtn').onclick=()=>{
+  if(!('speechSynthesis' in window)){ $('sayNote').textContent='この端末は読み上げに対応していません'; return; }
+  if(speechSynthesis.speaking){ speechSynthesis.cancel(); $('sayBtn').textContent='この速さで読み上げを聞く'; return; }
+  const u=new SpeechSynthesisUtterance(paras()[0]||'');
+  u.lang='ja-JP'; u.rate=Math.max(0.5,Math.min(2,(+$('cpm').value||300)/300));
+  u.onend=()=>{ $('sayBtn').textContent='この速さで読み上げを聞く'; };
+  speechSynthesis.speak(u); $('sayBtn').textContent='止める';
+  $('sayNote').textContent='最初の段落だけ。合成音声の速さは端末ごとに違うので目安です';
+};
+render();
+</script>
+</body>
+</html>

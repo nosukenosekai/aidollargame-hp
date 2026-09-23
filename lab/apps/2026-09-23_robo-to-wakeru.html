@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ロボと分ける</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif; font-size:17px; line-height:1.7; }
+  .wrap{ max-width:600px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  .demo{ display:inline-block; font-size:12px; color:#8a6d00; background:#fff7d6; border:1px solid #f2e2a8; border-radius:8px; padding:1px 8px; margin-left:6px; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 14px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 8px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px; padding:13px 16px; font-size:17px; font-weight:600; width:100%; }
+  .two{ display:flex; gap:8px; }
+  .two button{ flex:1; }
+  .btn.ghost{ background:#fff; color:var(--blue); border:1.5px solid var(--blue); }
+  .hud{ display:flex; flex-wrap:wrap; gap:2px 12px; justify-content:space-between; font-size:15px; color:var(--sub); margin-bottom:8px; }
+  .hud b{ color:var(--ink); font-variant-numeric:tabular-nums; }
+  .meter{ height:10px; background:#eceae4; border-radius:5px; overflow:hidden; margin-bottom:12px; }
+  .meter i{ display:block; height:10px; background:var(--blue); transition:width .3s; }
+  .truck{ display:flex; justify-content:space-between; align-items:baseline; }
+  .truck b{ font-size:22px; }
+  .comp{ display:flex; height:34px; border-radius:8px; overflow:hidden; margin:10px 0 6px; border:1px solid var(--line); }
+  .comp span{ display:flex; align-items:center; justify-content:center; font-size:12px; color:#fff; white-space:nowrap; overflow:hidden; }
+  .legend{ display:flex; flex-wrap:wrap; gap:4px 12px; font-size:14px; color:var(--sub); margin-bottom:12px; }
+  .legend i{ display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:4px; vertical-align:0; }
+  .price{ font-size:13px; color:var(--sub); border-top:1px solid var(--line); padding-top:8px; margin-top:10px; }
+  .log div{ display:grid; grid-template-columns:1fr 70px 70px; gap:6px; padding:6px 0; border-bottom:1px solid var(--line); font-size:14px; font-variant-numeric:tabular-nums; }
+  .log div span:not(:first-child){ text-align:right; }
+  .log .h{ color:var(--sub); font-size:13px; }
+  .good{ color:var(--blue); font-weight:700; }
+  .bad{ color:#b4b4ad; }
+  .score{ display:flex; gap:10px; margin:6px 0 10px; }
+  .score div{ flex:1; text-align:center; background:#fafaf7; border:1px solid var(--line); border-radius:12px; padding:10px 4px; }
+  .score .n{ font-size:32px; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.2; }
+  .score .l{ font-size:14px; color:var(--sub); }
+  .score div.win{ border-color:var(--blue); background:#eef3fe; }
+  .verdict{ text-align:center; font-size:22px; font-weight:700; margin:4px 0 6px; }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  .note{ font-size:14px; color:var(--sub); }
+  .flash{ background:#fffbe8; border:1px solid #f2e2a8; border-radius:11px; padding:10px 12px; font-size:15px; margin-top:10px; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">1日1アプリ実験室 / 2026-09-23 / 勝ち負けをつける<span class="demo">デモ（サンプルの単価）</span></div>
+  <h1>ロボと分ける</h1>
+  <p class="lead">産廃の中間処理場。今日はトラックが8台来ますが、手で選別できる時間は2人で300分だけ。荷を見て「手で分ける」か「混合のまま出す」かを決めます。同じ8台を、決まった基準で動く選別ロボも裁きます。どちらが処分費を多く浮かせたかで勝ち負け。</p>
+
+  <div id="intro" class="card">
+    <h2>ルール</h2>
+    <p style="margin:0 0 8px">・混合のまま出すと、重さ全部に混合廃棄物の処分費がかかります。<br>・手で分けると、金属は売れ、木くず・廃プラ・がれきは安い処分費になります。ただし1トンにつき30分かかり、どうしても分けられない残りかすは混合の値段のままです。<br>・次に何が来るかは分かりません。時間を先に使い切ると、あとの良い荷を分けられません。</p>
+    <p class="note" style="margin:0 0 12px">ロボの基準：「分けて浮く金額が1分あたり0.07万円（700円）以上なら、時間が残る限り分ける」。先は読みません。</p>
+    <button class="btn" id="startBtn">1台目を呼ぶ</button>
+    <p class="note" id="record" style="margin:10px 0 0;text-align:center"></p>
+  </div>
+
+  <div id="game" class="card hide">
+    <div class="hud"><span>トラック <b id="gNo">1</b> / 8</span><span>残り選別時間 <b id="gMin">300</b>分</span><span>浮かせた額 <b id="gYou">0</b>万円</span></div>
+    <div class="meter"><i id="gBar" style="width:100%"></i></div>
+    <div class="truck"><b id="gName"></b><span id="gTon"></span></div>
+    <div class="comp" id="gComp"></div>
+    <div class="legend" id="gLeg"></div>
+    <div class="two"><button class="btn" id="bSort">手で分ける（<span id="gCost"></span>分）</button><button class="btn ghost" id="bMix">混合のまま出す</button></div>
+    <div class="flash hide" id="gFlash"></div>
+    <div class="price">処分費の目安（サンプル・1トンあたり）：混合 3.0万円／木くず 1.2万円／廃プラ 2.0万円／がれき 0.5万円／金属 2.5万円で売れる／残りかす 3.0万円</div>
+  </div>
+
+  <div id="result" class="hide">
+    <div class="card">
+      <div class="verdict" id="rVerdict"></div>
+      <div class="score"><div id="sYou"><div class="n" id="rYou">-</div><div class="l">あなた（万円）</div></div><div id="sRobo"><div class="n" id="rRobo">-</div><div class="l">ロボ（万円）</div></div><div><div class="n" id="rBest">-</div><div class="l">先が全部見えていたら</div></div></div>
+      <p class="note" style="margin:0" id="rNote"></p>
+    </div>
+    <div class="card">
+      <h2>1台ずつ（浮いた額・万円）</h2>
+      <div class="log" id="rLog"></div>
+    </div>
+    <div class="card">
+      <h2>この勝負で分かること</h2>
+      <p style="margin:0">面倒な手選別は、全部やるか全部やめるかではなく「どの荷なら手間に見合うか」の線引きです。線を決めておけば、ロボでなくても、新人でも同じ判断ができます。負けた回は、どの荷で時間を使いすぎたかを上の表で見てください。</p>
+      <button class="btn" id="again" style="margin-top:12px">もう一日やる（8台の中身が変わります）</button>
+      <p class="note" style="margin:10px 0 0">単価・作業時間・荷の中身はこの画面のためのサンプルで、実際の処分費は地域・品目・契約で大きく違います。通算の勝敗はこの端末にだけ残ります。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const KINDS=[
+  {k:'金属',c:-2.5,col:'#475569'},{k:'木くず',c:1.2,col:'#b45309'},{k:'廃プラ',c:2.0,col:'#2563eb'},{k:'がれき',c:0.5,col:'#9ca3af'},{k:'残りかす',c:3.0,col:'#7c2d12'}
+];
+const MIX=3.0, MIN_PER_T=30, CAP=300, ROBO_TH=0.07;
+const SOURCES=['解体現場（木造）','内装解体','工場の片付け','店舗の閉店','リフォーム','倉庫の整理','外構工事','家財の整理'];
+let loads=[], i=0, left=CAP, you=0, youLog=[];
+function rnd(a,b){ return a+Math.random()*(b-a); }
+function makeLoad(){
+  const ton=Math.round(rnd(1,4.5)*2)/2;
+  let w=KINDS.map(()=>Math.random()**1.6); w[4]=w[4]*rnd(0.3,1.8);
+  const s=w.reduce((a,b)=>a+b,0); const pct=w.map(x=>x/s);
+  const sorted=ton*pct.reduce((a,p,j)=>a+p*KINDS[j].c,0);
+  const gain=ton*MIX-sorted, min=Math.round(ton*MIN_PER_T);
+  return {name:SOURCES[Math.floor(Math.random()*SOURCES.length)],ton,pct,gain,min};
+}
+function rec(){ try{ return JSON.parse(localStorage.getItem('robo_wakeru')||'{"w":0,"l":0,"d":0}'); }catch(e){ return {w:0,l:0,d:0}; } }
+function saveRec(r){ try{ localStorage.setItem('robo_wakeru',JSON.stringify(r)); }catch(e){} }
+function showRec(){ const r=rec(); $('record').textContent=(r.w+r.l+r.d)?'通算 '+r.w+'勝 '+r.l+'敗 '+r.d+'分け':''; }
+showRec();
+const f1=x=>(Math.round(x*10)/10).toFixed(1);
+
+function start(){
+  loads=Array.from({length:8},makeLoad); i=0; left=CAP; you=0; youLog=[];
+  $('intro').classList.add('hide'); $('result').classList.add('hide'); $('game').classList.remove('hide'); show();
+}
+function show(){
+  const L=loads[i];
+  $('gNo').textContent=i+1; $('gMin').textContent=left; $('gYou').textContent=f1(you); $('gBar').style.width=(left/CAP*100)+'%';
+  $('gName').textContent=L.name; $('gTon').textContent=L.ton+'トン';
+  $('gComp').innerHTML=L.pct.map((p,j)=>'<span style="width:'+(p*100)+'%;background:'+KINDS[j].col+'">'+(p>0.12?Math.round(p*100)+'%':'')+'</span>').join('');
+  $('gLeg').innerHTML=L.pct.map((p,j)=>'<span><i style="background:'+KINDS[j].col+'"></i>'+KINDS[j].k+' '+Math.round(p*100)+'%</span>').join('');
+  $('gCost').textContent=L.min;
+  const can=L.min<=left;
+  $('bSort').disabled=!can; $('bSort').style.opacity=can?1:.4;
+  if(!can) $('bSort').innerHTML='時間が足りない（'+L.min+'分）'; else $('bSort').innerHTML='手で分ける（'+L.min+'分）';
+}
+function decide(sort){
+  const L=loads[i]; const g=sort?L.gain:0;
+  if(sort) left-=L.min; you+=g; youLog.push(sort);
+  $('gFlash').classList.remove('hide');
+  $('gFlash').innerHTML= sort ? '分けて <b>'+f1(L.gain)+'万円</b> 浮きました（1分あたり '+Math.round(L.gain/L.min*10000).toLocaleString()+'円）。' : '混合で出しました。分けていれば '+f1(L.gain)+'万円浮く荷でした（1分あたり '+Math.round(L.gain/L.min*10000).toLocaleString()+'円）。';
+  i++;
+  if(i>=8) return setTimeout(finish,700);
+  show();
+}
+$('bSort').onclick=()=>decide(true);
+$('bMix').onclick=()=>decide(false);
+$('startBtn').onclick=start;
+$('again').onclick=()=>{ $('gFlash').classList.add('hide'); start(); };
+
+function robo(){ let t=CAP, s=0; const d=loads.map(L=>{ const ok=L.gain/L.min>=ROBO_TH && L.min<=t; if(ok){ t-=L.min; s+=L.gain; } return ok; }); return {s,d}; }
+function best(){ // 先が全部見えていたときの最大（8台なので全通り）
+  let b=0; for(let m=0;m<256;m++){ let t=0,s=0; for(let j=0;j<8;j++) if(m>>j&1){ t+=loads[j].min; s+=loads[j].gain; } if(t<=CAP&&s>b) b=s; } return b;
+}
+function finish(){
+  $('game').classList.add('hide'); $('result').classList.remove('hide'); window.scrollTo(0,0);
+  const R=robo(), B=best(), r=rec();
+  $('rYou').textContent=f1(you); $('rRobo').textContent=f1(R.s); $('rBest').textContent=f1(B);
+  const diff=Math.round((you-R.s)*10)/10;
+  $('sYou').classList.toggle('win',diff>0); $('sRobo').classList.toggle('win',diff<0);
+  if(diff>0){ $('rVerdict').textContent='あなたの勝ち'; r.w++; }
+  else if(diff<0){ $('rVerdict').textContent='ロボの勝ち'; r.l++; }
+  else { $('rVerdict').textContent='引き分け'; r.d++; }
+  saveRec(r); showRec();
+  $('rNote').innerHTML='通算 '+r.w+'勝 '+r.l+'敗 '+r.d+'分け。先が全部見えていた場合の最大 '+f1(B)+'万円に対して、あなたは<span class="mark">'+Math.round(you/B*100)+'%</span>、ロボは'+Math.round(R.s/B*100)+'%でした。';
+  $('rLog').innerHTML='<div class="h"><span>荷</span><span>あなた</span><span>ロボ</span></div>'+loads.map((L,j)=>'<div><span>'+(j+1)+'. '+L.name+' '+L.ton+'t<br><span class="note">分ければ'+f1(L.gain)+'万円・'+L.min+'分</span></span><span class="'+(youLog[j]?'good':'bad')+'">'+(youLog[j]?'分けた '+f1(L.gain):'混合')+'</span><span class="'+(R.d[j]?'good':'bad')+'">'+(R.d[j]?'分けた '+f1(L.gain):'混合')+'</span></div>').join('');
+}
+</script>
+</body>
+</html>

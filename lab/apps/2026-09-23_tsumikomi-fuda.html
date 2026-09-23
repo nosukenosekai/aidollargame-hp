@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>積み込み札</title>
+<style>
+  :root{ --bg:#f5f4f0; --ink:#16161a; --sub:#5b5b66; --line:#e3e1da; --blue:#2563eb; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif; font-size:17px; line-height:1.7; }
+  .wrap{ max-width:720px; margin:0 auto; padding:18px 16px 60px; }
+  .tag{ font-size:13px; color:var(--sub); letter-spacing:.04em; }
+  .demo{ display:inline-block; font-size:12px; color:#8a6d00; background:#fff7d6; border:1px solid #f2e2a8; border-radius:8px; padding:1px 8px; margin-left:6px; }
+  h1{ font-size:27px; line-height:1.3; margin:6px 0 8px; }
+  .lead{ color:var(--sub); font-size:16px; margin:0 0 14px; }
+  .card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 16px; margin:14px 0; }
+  .card h2{ font-size:19px; margin:0 0 8px; }
+  button{ font:inherit; cursor:pointer; }
+  .btn{ background:var(--blue); color:#fff; border:none; border-radius:11px; padding:13px 16px; font-size:17px; font-weight:600; width:100%; }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  label{ font-size:14px; color:var(--sub); display:block; margin-bottom:3px; }
+  select, input[type=number]{ font:inherit; font-size:17px; width:100%; padding:9px 10px; border:1.5px solid var(--line); border-radius:10px; background:#fff; }
+  .boats{ display:flex; flex-direction:column; gap:8px; }
+  .boat{ display:grid; grid-template-columns:90px 1fr 90px; gap:8px; align-items:center; }
+  .boat b{ font-size:16px; }
+  .note{ font-size:14px; color:var(--sub); }
+  .mark{ background:linear-gradient(transparent 62%, #ffe27a 62%); font-weight:600; }
+  table{ width:100%; border-collapse:collapse; font-size:14px; }
+  th,td{ text-align:right; padding:6px 4px; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums; }
+  th:first-child,td:first-child{ text-align:left; }
+  th{ color:var(--sub); font-weight:600; }
+  .fuda-wrap{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; }
+  .fuda{ background:#fff; border:2px solid #16161a; border-radius:10px; padding:12px 14px; page-break-inside:avoid; break-inside:avoid; }
+  .fuda .hd{ display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px solid #16161a; padding-bottom:4px; margin-bottom:6px; }
+  .fuda .hd b{ font-size:22px; }
+  .fuda .hd span{ font-size:13px; }
+  .it{ display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px dashed #bbb; font-size:16px; }
+  .it .q{ font-weight:700; font-size:18px; font-variant-numeric:tabular-nums; margin-right:8px; }
+  .holes{ display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end; max-width:48%; }
+  .holes i{ width:15px; height:15px; border:1.5px solid #16161a; border-radius:50%; display:inline-block; }
+  .forget{ font-size:13px; margin-top:6px; }
+  .back{ margin-top:8px; font-size:13px; border:1.5px solid #16161a; border-radius:6px; padding:6px 8px; }
+  .back .ln{ display:inline-block; border-bottom:1px solid #16161a; width:44px; margin:0 3px; }
+  @media print{
+    body{ background:#fff; font-size:13px; }
+    .noprint{ display:none !important; }
+    .wrap{ max-width:none; padding:0; }
+    .fuda-wrap{ grid-template-columns:1fr 1fr; gap:8mm; }
+    .card.print{ border:none; padding:0; margin:0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="noprint">
+    <div class="tag">1日1アプリ実験室 / 2026-09-23 / 紙に出す<span class="demo">デモ（サンプルデータ）</span></div>
+    <h1>積み込み札</h1>
+    <p class="lead">釣り船宿の朝。今日の釣り物と船ごとの予約人数を選ぶと、過去の出船でお客さん1人が実際に使った量から、エサ・氷・予備仕掛けの数を出し、船ごとの札にして印刷します。積んだら丸を塗る。帰港したら余りを札に書いて戻す。</p>
+  </div>
+
+  <div class="card noprint">
+    <h2>1. 今日の出船</h2>
+    <div class="grid">
+      <div><label>釣り物</label><select id="fish"></select></div>
+      <div><label>予報の最高気温（℃）</label><input type="number" id="temp" value="27" min="0" max="40"></div>
+    </div>
+    <div class="boats" style="margin-top:12px" id="boats"></div>
+  </div>
+
+  <div class="card noprint">
+    <h2>2. 数の出し方</h2>
+    <p style="margin:0 0 8px" id="how"></p>
+    <table id="log"></table>
+    <p class="note" style="margin:8px 0 0">架空の船宿「潮見丸」の、この釣り物の直近の出船記録（サンプル）。積んだ量から、帰港時に札へ書かれた余りを引いたものを「使った量」としています。</p>
+  </div>
+
+  <div class="card noprint">
+    <button class="btn" id="printBtn">札を印刷する</button>
+    <p class="note" style="margin:8px 0 0">A4に2列で並びます。船の操舵室か、積み込み口の柱に貼る想定です。</p>
+  </div>
+
+  <div class="card print">
+    <div class="fuda-wrap" id="fudas"></div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+// 1人あたり実使用量のサンプル記録（架空）
+const FISH={
+  'アジ（ビシ）':{items:[['コマセ（アミ）','kg',2],['付けエサ（赤タン）','パック',1],['予備仕掛け','組',1]],log:[[8,17.9,8,6],[12,21.0,12,14],[6,13.5,5,4],[10,17.2,10,11],[14,30.8,13,15]],forget:['ビシの予備','手拭きタオル','コマセ用ひしゃく']},
+  'タチウオ':{items:[['サンマの切り身','パック',1],['予備仕掛け','組',2],['ワイヤーハリス','本',2]],log:[[10,11,18,17],[8,11,19,10],[12,13,29,15],[9,13,16,16]],forget:['フィッシュグリップ','ハサミ','テンヤの予備']},
+  'マダイ（コマセ）':{items:[['コマセ（オキアミ）','kg',3],['付けエサ（オキアミ）','パック',1],['予備仕掛け','組',1]],log:[[6,19.8,7,8],[9,22.1,10,8],[7,21.5,9,6],[11,29.0,13,15]],forget:['タモ（大）','酸素の予備','天秤の予備']},
+  'カワハギ':{items:[['アサリむき身','パック',1],['予備仕掛け','組',3],['オモリ25号','個',1]],log:[[8,8,22,14],[10,14,36,12],[6,8,24,6],[12,13,40,19]],forget:['エサ付け用のヘラ','ハリ外し','集魚板']}
+};
+// 記録の列：人数, 品目1の使用量, 品目2, 品目3
+const BOATS=[['一号船',12],['二号船',8],['三号船',0]];
+Object.keys(FISH).forEach(k=>{ const o=document.createElement('option'); o.textContent=k; $('fish').appendChild(o); });
+$('boats').innerHTML=BOATS.map((b,i)=>'<div class="boat"><b>'+b[0]+'</b><input type="number" id="n'+i+'" value="'+b[1]+'" min="0" max="30"><span class="note">人（0で出さない）</span></div>').join('');
+
+function perHead(F){
+  // 3品目それぞれ：記録の合計使用量 ÷ 合計人数、と 1人あたりのばらつき
+  return F.items.map((it,j)=>{
+    const r=F.log.map(l=>l[j+1]/l[0]);
+    const mean=r.reduce((a,b)=>a+b,0)/r.length;
+    const sd=Math.sqrt(r.reduce((a,b)=>a+(b-mean)**2,0)/Math.max(1,r.length-1));
+    return {name:it[0],unit:it[1],mean,sd};
+  });
+}
+function iceKg(n,temp){ // 氷：1人1.5kgを基本に、25℃を超えた1℃ごとに1人0.1kg足す（この船宿の決めごと・サンプル）
+  return Math.ceil(n*(1.5+Math.max(0,temp-25)*0.1));
+}
+function render(){
+  const F=FISH[$('fish').value], temp=+$('temp').value||20, ph=perHead(F);
+  $('how').innerHTML='1人あたりの平均使用量に、記録のばらつき1つぶん（標準偏差）を足した量を人数に掛け、切り上げています。<span class="mark">平均だけで積むと、2回に1回ほど足りなくなる</span>からです。氷はこの船宿の決めごと（1人1.5kg、25℃を超えた1℃ごとに1人0.1kg追加）で出しています。';
+  let h='<tr><th>人数</th>'+F.items.map(i=>'<th>'+i[0].replace(/（.*）/,'')+'</th>').join('')+'</tr>';
+  F.log.forEach(l=>{ h+='<tr><td>'+l[0]+'人</td>'+l.slice(1).map((v,j)=>'<td>'+v+F.items[j][1]+'</td>').join('')+'</tr>'; });
+  h+='<tr><td><b>1人あたり</b></td>'+ph.map(p=>'<td><b>'+p.mean.toFixed(2)+'</b> ±'+p.sd.toFixed(2)+'</td>').join('')+'</tr>';
+  $('log').innerHTML=h;
+  const d=new Date(); const ds=(d.getMonth()+1)+'月'+d.getDate()+'日';
+  $('fudas').innerHTML=BOATS.map((b,i)=>{
+    const n=+$('n'+i).value||0; if(!n) return '';
+    const rows=ph.map((p,j)=>{ const q=Math.ceil(n*(p.mean+p.sd)); return [p.name,q,F.items[j][1]]; });
+    rows.push(['氷',iceKg(n,temp),'kg']);
+    const holes=(q,u)=>{ const k=u==='kg'?Math.ceil(q/5):q; const m=Math.min(k,12); return '<span class="holes">'+'<i></i>'.repeat(m)+(k>12?'<span style="font-size:12px">…'+k+'</span>':'')+'</span>'; };
+    return '<div class="fuda"><div class="hd"><b>'+b[0]+'</b><span>'+ds+' / '+$('fish').value+' / '+n+'人 / '+temp+'℃</span></div>'+
+      rows.map(r=>'<div class="it"><span><span class="q">'+r[1]+'</span>'+r[2]+'　'+r[0]+'</span>'+holes(r[1],r[2])+'</div>').join('')+
+      '<div class="forget"><b>忘れやすい物：</b>'+F.forget.map(x=>'□ '+x).join('　')+'</div>'+
+      '<div class="back">帰港後の余り：'+rows.slice(0,3).map(r=>r[0].replace(/（.*）/,'')+'<span class="ln"></span>'+r[2]).join('　')+'</div>'+
+      '<div class="note" style="font-size:11px;margin-top:4px">丸は積んだら塗る（kgは5kgで1つ）</div></div>';
+  }).join('') || '<p class="note">出船する船がありません。</p>';
+}
+['fish','temp','n0','n1','n2'].forEach(id=>$(id).addEventListener('input',render));
+$('printBtn').onclick=()=>window.print();
+render();
+</script>
+</body>
+</html>

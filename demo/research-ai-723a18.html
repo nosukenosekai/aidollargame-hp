@@ -20,17 +20,17 @@
   svg{flex:none}
 
   /* ===== 見本の操作（製品ではない） ===== */
-  .vbar{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--line);background:#fff}
-  .vlabel{font-size:13px;color:var(--sub)}
+  .vbar{height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--mid);background:var(--soft)}
+  .vlabel{font-size:12.5px;color:var(--muted)}
   .vr{display:flex;align-items:center;gap:10px}
-  .vnextbtn{display:flex;align-items:center;gap:10px;height:36px;padding:0 16px;border-radius:999px;background:var(--navy);color:#fff;font-size:13.5px;font-weight:700;white-space:nowrap}
-  .vnextbtn svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-  .vnextbtn:disabled{background:var(--soft);color:var(--muted)}
-  .vnextbtn:disabled svg{stroke:var(--muted)}
-  .vsel{display:flex;align-items:center;gap:8px;height:36px;padding:0 12px 0 14px;border:1px solid var(--mid);border-radius:999px;font-size:13.5px}
+  .vnextbtn{display:flex;align-items:center;gap:8px;height:32px;padding:0 14px;border-radius:999px;background:#fff;border:1px solid var(--mid);color:var(--sub);font-size:13px;font-weight:500;white-space:nowrap}
+  .vnextbtn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .vnextbtn:disabled{background:var(--soft);color:#b4b4b8;border-color:var(--line)}
+  .vnextbtn:disabled svg{stroke:#b4b4b8}
+  .vsel{display:flex;align-items:center;gap:8px;height:32px;padding:0 10px 0 12px;border:1px solid var(--mid);border-radius:999px;font-size:13px;background:#fff;color:var(--sub)}
   .vsel .vk{color:var(--muted);font-size:12.5px}
   .vsel svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2}
-  .ib{width:34px;height:34px;border-radius:8px;display:grid;place-items:center}
+  .ib{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:var(--sub)}
   .ib:hover:not(:disabled){background:var(--soft)}
   .ib:disabled{color:#c9c9cc;cursor:default}
   .ib svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -73,22 +73,22 @@
   .col{max-width:760px;margin:0 auto}
 
   /* ===== 最初の画面 ===== */
-  .hero{padding:72px 0 0;text-align:center}
+  .hero{padding:clamp(12px,4vh,48px) 0 0;text-align:center}
   .hero .today{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--mid);border-radius:999px;padding:7px 18px;font-size:14px;color:var(--sub)}
   .hero .today b{color:var(--ink)}
-  .hero h1{font-size:30px;line-height:1.5;margin-top:22px;font-weight:700}
+  .hero h1{font-size:clamp(22px,3.2vh,30px);line-height:1.45;font-weight:700}
   .hero h1 em{font-style:normal;color:var(--navy)}
   .hero .sub{color:var(--sub);font-size:15.5px;margin-top:8px}
-  .ex{margin-top:26px;text-align:left}
+  .ex{margin-top:clamp(14px,2.6vh,26px);text-align:left}
   .ex .lbl{font-size:13.5px;color:var(--muted);text-align:center;margin-bottom:10px}
   .exlist{display:flex;flex-direction:column;gap:8px}
-  .exq{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--mid);border-radius:12px;padding:13px 18px;font-size:15.5px;text-align:left;background:#fff}
+  .exq{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--mid);border-radius:12px;padding:clamp(9px,1.4vh,13px) 18px;font-size:15.5px;text-align:left;background:#fff}
   .exq:hover{border-color:var(--navy);background:var(--soft)}
   .exq svg{width:16px;height:16px;stroke:var(--sky);fill:none;stroke-width:2.2}
   .foot-note{text-align:center;font-size:13px;color:var(--muted);margin-top:18px}
 
   /* ===== 入力欄（Gemini型） ===== */
-  .composer{padding:12px 24px 22px;background:#fff}
+  .composer{padding:12px 24px 18px;background:#fff;border-top:1px solid var(--line);position:sticky;bottom:0;z-index:5}
   .cwrap{max-width:760px;margin:0 auto}
   .askbig{display:flex;align-items:center;gap:14px;height:64px;background:#fff;border:1px solid var(--mid);border-radius:999px;padding:0 8px 0 24px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
   .askbig:focus-within{border-color:var(--navy);box-shadow:0 2px 14px rgba(0,0,0,.09)}
@@ -97,7 +97,7 @@
   .askbig input::placeholder{color:var(--muted)}
   .askbig .send{width:46px;height:46px;border-radius:50%;background:var(--navy);display:grid;place-items:center}
   .askbig .send svg{width:19px;height:19px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-  .cnote{text-align:center;font-size:12.5px;color:var(--muted);margin-top:9px}
+  .cnote{text-align:center;font-size:12.5px;color:var(--muted);margin-top:7px}
 
   /* ===== 会話 ===== */
   .thread{padding-top:28px}
@@ -145,12 +145,14 @@
   .more{display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 18px;border:1px solid var(--mid);border-radius:999px;font-size:14px;font-weight:700}
   .more:hover{border-color:var(--navy);color:var(--navy)}
   .more svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
-  .digest{margin-top:40px;text-align:left;max-width:520px;margin-left:auto;margin-right:auto}
-  .digest .h{font-size:13px;color:var(--muted);margin-bottom:6px}
-  .digest a{display:grid;grid-template-columns:54px 1fr;gap:12px;padding:10px 12px;border-radius:10px;font-size:15px;color:var(--ink);cursor:pointer}
+  .digest{margin-top:clamp(16px,3vh,36px);text-align:left;max-width:520px;margin-left:auto;margin-right:auto}
+  .digest .h{font-size:12.5px;color:var(--muted);margin-bottom:2px}
+  .digest a{display:grid;grid-template-columns:54px 1fr;gap:12px;padding:clamp(6px,1.1vh,10px) 12px;border-radius:10px;font-size:15px;color:var(--ink);cursor:pointer}
   .digest a:hover{background:var(--soft)}
   .digest a span:first-child{color:var(--muted);font-size:14px}
-  .hero .cnt{margin-top:34px;font-size:13px;color:var(--muted)}
+  .hero .cnt{display:none}
+  .moreex{margin-top:8px;font-size:14px;color:var(--navy);text-decoration:underline;text-underline-offset:4px}
+  .demonote{margin-top:10px;font-size:13px;color:var(--muted)}
   .reflist{list-style:none;font-size:14.5px}
   .reflist li{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);color:var(--sub)}
   .reflist li b{color:var(--ink);font-weight:500}
@@ -257,6 +259,15 @@
   .cmn{margin-top:10px;font-size:13px;color:var(--sub);background:var(--soft);border-radius:8px;padding:9px 12px}
 
   /* ===== スマホ ===== */
+  @media (max-height:830px){
+    .scroll{padding-bottom:10px}
+    .digest a{padding-top:5px;padding-bottom:5px}
+  }
+  @media (max-height:700px){
+    .digest{display:none}
+    .demonote{display:none}
+    .composer{padding-bottom:12px}
+  }
   @media (max-width:760px){
     .app,.cm.on{grid-template-columns:1fr}
     .side{display:none}
@@ -328,7 +339,7 @@
           <input id="askIn" placeholder="質問を入力してください（例：20代の好意度が下がった理由は？）" autocomplete="off">
           <button class="send" type="submit" aria-label="質問する"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
         </form>
-        <p class="cnote">上の質問例を押すと、ここに入ります。そのまま送信できます</p>
+        <p class="cnote">例を押すとそのまま聞けます ・ 128回の過去調査を参照できます</p>
       </div>
     </div>
 
@@ -392,7 +403,7 @@
 <script>
 (function(){
 var $=function(s){return document.querySelector(s)};
-var S0=function(){return {role:'a',turns:[],req:null,shared:false,n:300}};
+var S0=function(){return {role:'a',turns:[],req:null,shared:false,n:300,moreEx:false}};
 var S=S0();
 var SPARK='<svg viewBox="0 0 70 20" style="width:70px;height:20px;vertical-align:-4px"><polyline points="0,7 9,6 18,8 27,5 36,7 45,6 54,5 63,7 70,17" fill="none" stroke="#004893" stroke-width="1.8"/></svg>';
 var MARK='<span class="mark"><svg viewBox="0 0 24 24"><path d="M12 2l2.1 5.9L20 10l-5.9 2.1L12 18l-2.1-5.9L4 10l5.9-2.1z"/></svg></span>';
@@ -455,15 +466,18 @@ function answer(q){
 
 /* ---------- 画面 ---------- */
 function hero(){
-  var ex=['20代の好意度が下がった理由は？','過去にも同じことはあった？','競合と比べるとどう？','この1年の変化を3行でまとめて'];
+  var ex=['20代の好意度が下がった理由は？','過去にも同じことはあった？','競合と比べるとどう？'];
+  var more=['この1年の変化を3行でまとめて','30代・40代はどうだった？','去年の同じ時期は？'];
   return '<div class="hero"><h1>過去の調査について、<em>何でも聞いてください</em></h1>'+
+    '<p class="demonote">これは画面の見本です。AIはつないでいません（決まった質問にだけ答えます）</p>'+
     '<div class="ex"><div class="exlist">'+
-    ex.map(function(q,i){
-      return '<button class="exq'+(i===0?' first':'')+'" data-fill="'+q+'"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0012 3z"/></svg>'+q+(i===0?'<span class="tag">まずはこれ</span>':'')+'</button>'}).join('')+
+    ex.slice(0,3).map(function(q,i){
+      return '<button class="exq'+(i===0?' first':'')+'" data-q="'+q+'"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0012 3z"/></svg>'+q+(i===0?'<span class="tag">まずはこれ</span>':'')+'</button>'}).join('')+
+    (S.moreEx?more.map(function(q){return '<button class="exq" data-q="'+q+'"><svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 00-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0012 3z"/></svg>'+q+'</button>'}).join(''):'<button class="moreex" id="moreEx">他の例を見る</button>')+
     '</div></div>'+
     '<div class="digest"><div class="h">最近の調査</div>'+
     [['9/16','20代の好意度に変化','20代の好意度が下がった理由は？'],['9/02','新商品の認知が上昇','新商品の認知はどう動いた？'],['8/19','競合B社の評価が上昇','競合と比べるとどう？']].map(function(r){
-      return '<a data-fill="'+r[2]+'"><span>'+r[0]+'</span><span>'+r[1]+'</span></a>'}).join('')+'</div>'+
+      return '<a data-q="'+r[2]+'"><span>'+r[0]+'</span><span>'+r[1]+'</span></a>'}).join('')+'</div>'+
     '<div class="cnt">128回の過去調査を参照できます</div></div>';
 }
 function turnHTML(t){
@@ -473,10 +487,10 @@ function turnHTML(t){
   if(a.next){
     if(!S.req) h+='<div class="nextbox"><p>さらに調べるなら、<b>20代女性300人に直接聞けます。</b>質問はAIが下書きし、答えは約3日でこの画面に届きます。</p><div class="actions"><button class="btn" data-openpanel="1">20代に理由を聞く</button><button class="btn ghost" data-newq="1">別の質問をする</button></div></div>';
     else{var st={approve:'B部長の承認待ちです',wait:'クロス・マーケティングが見積もりを作っています',est:'見積もりが届きました',run:'回答を集めています（9月19日ごろ）',done:'回答が届きました'}[S.req.st];
-      h+='<div class="state"><span class="dot"></span><div>追加調査（20代女性'+S.req.n+'人）：<b>'+st+'</b>'+(S.req.st==='est'?' <button class="btn sm" id="estok" style="margin-left:8px">見積もりにOKする</button>':'')+'</div></div>';}
+      h+='<div class="state"><span class="dot"></span><div>追加調査（20代女性'+S.req.n+'人）：<b>'+st+'</b>'+(S.req.st==='est'?' <button class="btn sm" id="estok" style="margin-left:8px">見積もりにOKする</button>':'')+'</div>'+(S.req.st!=='done'?'<button class="btn sm" id="skipall" style="margin-left:auto">答えを見る（3日後へ）</button>':'')+'</div>';}
   }
   if(a.share) h+='<div class="actions"><button class="btn ghost" data-share="1"><svg viewBox="0 0 24 24"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7M16 6l-4-4-4 4M12 2v13"/></svg>上司に1枚で共有</button><button class="btn ghost" data-detail="1">元データを見る</button><button class="btn ghost" data-newq="1">別の質問をする</button></div>';
-  h+=(t.follow?'<div class="follow">'+t.follow.map(function(q){return '<button data-fill="'+q+'">'+q+'</button>'}).join('')+'</div>':'')+'</div></div></div>';
+  h+=(t.follow?'<div class="follow">'+t.follow.map(function(q){return '<button data-q="'+q+'">'+q+'</button>'}).join('')+'</div>':'')+'</div></div></div>';
   return h;
 }
 function render(){
@@ -486,7 +500,7 @@ function render(){
   var c=$('#col');
   c.innerHTML=S.turns.length?'<div class="thread">'+S.turns.map(turnHTML).join('')+'</div>':hero();
   var hi=S.turns.slice().reverse().map(function(t,i){return '<a class="'+(i===0?'on':'')+'"><span>'+t.q+'</span></a>'}).join('');
-  $('#hist').innerHTML=hi||'<a style="opacity:.55"><span>まだありません</span></a>';
+  $('#hist').innerHTML=hi||['20代の好意度が下がった理由は？','競合と比べるとどう？','この1年の変化を3行でまとめて'].map(function(q){return '<a data-q="'+q+'"><span>'+q+'</span></a>'}).join('');
   if(S.req) $('#hist').insertAdjacentHTML('beforeend','<div class="sh">頼んだ追加調査</div><a><span>20代の好意度の理由</span>'+(S.req.st==='done'?'<span class="bdg">1</span>':'')+'</a>');
   evtBtn();
   var sc=$('#scroll');if(S.turns.length)setTimeout(function(){sc.scrollTo({top:sc.scrollHeight,behavior:'smooth'})},40);
@@ -555,6 +569,7 @@ function evtBtn(){
   else L={approve:['次に進む：B部長がOKする',1],wait:['次に進む：見積もりが届く',1],est:['次に進む：見積もりにOKする',1],run:['次に進む：3日後になる',1],done:['最後まで進みました',0]}[r.st];
   $('#vNext').textContent=L[0];$('#evt').disabled=!L[1];$('#vBack').disabled=!(r&&r.st!=='approve');
   $('#vSelT').textContent=S.role==='cm'?'クロス・マーケティング':'A社の担当者';
+  var done=S.req&&S.req.st==='done';document.querySelector('.vmenu-w').style.display=(done||S.role==='cm')?'':'none';
   [].forEach.call(document.querySelectorAll('#vMenu [data-role]'),function(x){x.classList.toggle('on',x.dataset.role===S.role)});
 }
 function closePop(){$('#pop').classList.remove('on')}
@@ -568,7 +583,6 @@ document.addEventListener('click',function(e){
     if(top+p.offsetHeight>$('#main').offsetHeight-10)top=Math.max(10,r.top-m.top-p.offsetHeight-8);
     p.style.left=Math.max(10,left)+'px';p.style.top=top+'px';return;}
   if(!t.closest('.pop'))closePop();
-  if(c=t.closest('[data-fill]')){var inp=$('#askIn');inp.value=c.dataset.fill;inp.focus();$('.askbig .send').classList.add('ready');return;}
   if(c=t.closest('[data-q]')){ask(c.dataset.q);return;}
   if(t.closest('[data-openpanel]')){$('#panel').classList.add('on');return;}
   if(t.closest('#panelX')){$('#panel').classList.remove('on');return;}
@@ -578,6 +592,7 @@ document.addEventListener('click',function(e){
   if(t.closest('#detailX')){$('#detail').classList.remove('on');return;}
   if(c=t.closest('[data-n]')){S.n=+c.dataset.n;[].forEach.call(document.querySelectorAll('#optN button'),function(b){b.classList.toggle('on',b===c)});$('#kvWho').textContent='20代の女性 '+S.n+'人';return;}
   if(t.closest('#order')){S.req={st:'approve',n:S.n};$('#panel').classList.remove('on');render();flash('B部長に承認をお願いしました（Teamsに通知）');return;}
+  if(t.closest('#skipall')){S.req.st='done';S.turns.push({q:'20代の好意度が下がった理由は？',a:answer('なぜ下がった'),follow:['競合と比べるとどう？','30代・40代はどうだった？']});render();flash('9月19日：回答が届き、答えが書き足されました');return;}
   if(t.closest('#estok')){S.req.st='run';render();flash('見積もりにOKしました。回答を集めています');return;}
   if(t.closest('#sendest')){S.req.st='est';render();flash('A社の担当者に見積もりを送りました','#flash2');return;}
   if(t.closest('[data-share]')){slide();return;}
@@ -585,6 +600,7 @@ document.addEventListener('click',function(e){
   if(c=t.closest('[data-to]')){c.classList.toggle('off');return;}
   if(t.closest('#sendSlide')){var to=[].filter.call(document.querySelectorAll('[data-to]'),function(b){return !b.classList.contains('off')}).map(function(b){return b.textContent});
     $('#share').classList.remove('on');S.shared=true;flash(to.length?to.join('と')+'に送りました（見本なので実際には送られません）':'宛先を1つ以上選んでください');return;}
+  if(t.closest('#moreEx')){S.moreEx=true;render();return;}
   if(t.closest('#newq')){S.turns=[];render();return;}
   if(t.closest('#vSel')){$('#vMenu').classList.toggle('on');return;}
   if(!t.closest('#vMenu'))$('#vMenu').classList.remove('on');

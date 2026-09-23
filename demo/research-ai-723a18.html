@@ -151,8 +151,14 @@
   .digest a:hover{background:var(--soft)}
   .digest a span:first-child{color:var(--muted);font-size:14px}
   .hero .cnt{display:none}
+  .value{margin-top:10px;font-size:15.5px;color:var(--sub);line-height:1.8}
+  .value b{color:var(--ink);font-weight:700}
+  .steps3{margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+  .steps3 .st3{display:inline-flex;align-items:center;gap:5px}
+  .steps3 .st3 i{width:16px;height:16px;border-radius:50%;background:var(--soft);color:var(--navy);font-style:normal;font-size:10.5px;display:grid;place-items:center;font-weight:700}
+  .steps3 .ar{color:var(--mid)}
+  .demonote{margin-top:10px;font-size:12.5px;color:var(--muted)}
   .moreex{margin-top:8px;font-size:14px;color:var(--navy);text-decoration:underline;text-underline-offset:4px}
-  .demonote{margin-top:10px;font-size:13px;color:var(--muted)}
   .reflist{list-style:none;font-size:14.5px}
   .reflist li{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);color:var(--sub)}
   .reflist li b{color:var(--ink);font-weight:500}
@@ -259,9 +265,20 @@
   .cmn{margin-top:10px;font-size:13px;color:var(--sub);background:var(--soft);border-radius:8px;padding:9px 12px}
 
   /* ===== スマホ ===== */
+  @media (max-height:940px){
+    .demonote{display:none}
+  }
   @media (max-height:830px){
+    .ex{margin-top:8px}
+    .exlist{gap:6px}
+    .digest{margin-top:12px}
+    .value{margin-top:6px}
     .scroll{padding-bottom:10px}
+    .digest .h{margin-bottom:0}
     .digest a{padding-top:5px;padding-bottom:5px}
+  }
+  @media (max-height:760px){
+    .value{font-size:14.5px;margin-top:8px}
   }
   @media (max-height:700px){
     .digest{display:none}
@@ -469,6 +486,9 @@ function hero(){
   var ex=['20代の好意度が下がった理由は？','過去にも同じことはあった？','競合と比べるとどう？'];
   var more=['この1年の変化を3行でまとめて','30代・40代はどうだった？','去年の同じ時期は？'];
   return '<div class="hero"><h1>過去の調査について、<em>何でも聞いてください</em></h1>'+
+    '<p class="value">128回の過去調査と分析レポートを横断して、<b>出典つきで答えます。</b>答えがない時は、その場で<b>20代に追加で聞けます。</b></p>'+
+    '<div class="steps3">'+[['1','聞く'],['2','足りなければ、その場で追加で聞く'],['3','そのまま1枚で共有']].map(function(x,i){
+      return (i?'<span class="ar">›</span>':'')+'<span class="st3"><i>'+x[0]+'</i>'+x[1]+'</span>'}).join('')+'</div>'+
     '<p class="demonote">これは画面の見本です。AIはつないでいません（決まった質問にだけ答えます）</p>'+
     '<div class="ex"><div class="exlist">'+
     ex.slice(0,3).map(function(q,i){
@@ -567,7 +587,8 @@ function evtBtn(){
   var r=S.req,L;
   if(!r) L=['次に進む（まだ進めません）',0];
   else L={approve:['次に進む：B部長がOKする',1],wait:['次に進む：見積もりが届く',1],est:['次に進む：見積もりにOKする',1],run:['次に進む：3日後になる',1],done:['最後まで進みました',0]}[r.st];
-  $('#vNext').textContent=L[0];$('#evt').disabled=!L[1];$('#vBack').disabled=!(r&&r.st!=='approve');
+  $('#vNext').textContent=L[0];$('#evt').disabled=!L[1];$('#evt').style.display=L[1]?'':'none';
+  var canBack=!!(r&&r.st!=='approve');$('#vBack').disabled=!canBack;$('#vBack').style.display=canBack?'':'none';
   $('#vSelT').textContent=S.role==='cm'?'クロス・マーケティング':'A社の担当者';
   var done=S.req&&S.req.st==='done';document.querySelector('.vmenu-w').style.display=(done||S.role==='cm')?'':'none';
   [].forEach.call(document.querySelectorAll('#vMenu [data-role]'),function(x){x.classList.toggle('on',x.dataset.role===S.role)});

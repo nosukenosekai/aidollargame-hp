@@ -160,6 +160,7 @@
 株式会社AIdollargameが note.com で公開している記事。一覧ページ: https://aidollargame.com/note.html
 アカウント: https://note.com/aidollargame
 
+- 2026-09-27｜20代のプログラマーは15%減、30代は22%増。ノルウェーの雇用記録を全部数えた結果: https://note.com/aidollargame/n/n45c2ddfc93b8
 - 2026-09-22｜「16時に電話します」の予約代行AI、16時を過ぎても音沙汰なし。運営会社に電話したら出たのはAIだった、、。: https://note.com/aidollargame/n/n7b8c8f56a885
 - 2026-09-14｜AI大手3社が「開発速度を落とすべき」で一致。AI時代はこの先どうなるのか？: https://note.com/aidollargame/n/n4665836446ab
 - 2026-09-09｜2026年9月に登場した最新AIモデル4つは何が違うのか？！徹底比較してみました！！: https://note.com/aidollargame/n/n13e050cfd77c

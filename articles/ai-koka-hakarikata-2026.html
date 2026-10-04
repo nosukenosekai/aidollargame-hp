@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>「AIで36%増えた」が、測り方を変えると7〜25%に縮んだ。210万本の論文データ | AIdollargame</title>
+<meta name="description" content="210万本の論文を調べた研究と、その測り方に異議を出した論文、元の著者の反論。AI導入の効果は、比べる起点をどこに置くかで動きます。">
+<meta name="author" content="AIdollargame 編集部">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/articles/ai-koka-hakarikata-2026.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://aidollargame.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "記事一覧",
+      "item": "https://aidollargame.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "「AIで36%増えた」が、測り方を変えると7〜25%に縮んだ",
+      "item": "https://aidollargame.com/articles/ai-koka-hakarikata-2026.html"
+    }
+  ]
+}
+</script>
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="株式会社AIdollargame">
+<meta property="og:title" content="「AIで36%増えた」が、測り方を変えると7〜25%に縮んだ">
+<meta property="og:description" content="210万本の論文データ。AI導入の効果は、比べる起点の決め方で大きく動きます。">
+<meta property="og:url" content="https://aidollargame.com/articles/ai-koka-hakarikata-2026.html">
+<meta property="og:image" content="https://aidollargame.com/articles/ai-koka-hakarikata-2026-hero.jpg">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-10-04">
+<meta property="article:author" content="AIdollargame 編集部">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="「AIで36%増えた」が、測り方を変えると7〜25%に縮んだ">
+<meta name="twitter:description" content="210万本の論文データ。AI導入の効果は、比べる起点の決め方で大きく動きます。">
+<meta name="twitter:image" content="https://aidollargame.com/articles/ai-koka-hakarikata-2026-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "「AIで36%増えた」が、測り方を変えると7〜25%に縮んだ",
+  "description": "210万本の論文を調べた研究と、その測り方に異議を出した論文、元の著者の反論。AI導入の効果は、比べる起点をどこに置くかで動きます。",
+  "datePublished": "2026-10-04",
+  "author": {
+    "@type": "Organization",
+    "name": "AIdollargame 編集部"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AIdollargame",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://aidollargame.com/og-default.png"
+    }
+  },
+  "mainEntityOfPage": "https://aidollargame.com/articles/ai-koka-hakarikata-2026.html",
+  "image": "https://aidollargame.com/articles/ai-koka-hakarikata-2026-hero.jpg",
+  "inLanguage": "ja"
+}
+</script>
+
+<style>
+  :root{--cyan:#00d8ff;--blue:#000;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#000);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;background:#0a1238;}
+  body{background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;overflow-x:hidden;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,9,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);} .logo .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;} .logo .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
+  .nav-back{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.78rem;letter-spacing:0.12em;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .hero{padding:8rem 2rem 2.6rem;max-width:800px;margin:0 auto;}
+  .tag{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.7rem;letter-spacing:0.4em;color:var(--cyan);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem;}
+  .tag::before{content:'';display:inline-block;width:30px;height:1px;background:var(--cyan);}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;word-break:auto-phrase;}
+  .meta{display:flex;gap:2rem;align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}
+  .body{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}
+  .body h2{font-size:1.4rem;font-weight:900;margin:2.6rem 0 1rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}
+  .body h3{font-size:1.12rem;font-weight:800;margin:2.2rem 0 0.8rem;line-height:1.5;}
+  .body p{font-size:1.06rem;color:rgba(238,243,255,0.85);line-height:1.72;margin-bottom:1.05rem;}
+  .body strong{color:#fff;font-weight:700;}
+  .body ul{padding-left:1.5rem;margin-bottom:1.4rem;}
+  .body li{font-size:1.02rem;color:rgba(238,243,255,0.85);line-height:1.65;margin-bottom:0.4rem;}
+  .body .src{font-size:0.82rem;color:var(--muted);margin:0.2rem 0 0.4rem;}
+  .body .src a{color:var(--cyan);}
+  .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
+  .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
+  .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
+  .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2rem;color:#001428;font-weight:700;font-size:0.9rem;border-radius:8px;background:linear-gradient(110deg,#00d8ff 0%,#000 50%,#00d8ff 100%);background-size:220% 100%;text-decoration:none;transition:transform 0.25s,box-shadow 0.4s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(0,216,255,0.6);}
+  .related{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+  .related h3{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;letter-spacing:0.3em;color:var(--muted);margin-bottom:1.5rem;}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .rcard{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.4rem;text-decoration:none;color:inherit;transition:all 0.3s;display:block;}
+  .rcard:hover{border-color:rgba(0,216,255,0.35);transform:translateY(-4px);}
+  .rcard .rt{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.65rem;color:var(--cyan);margin-bottom:0.5rem;}
+  .rcard .rttl{font-size:0.88rem;font-weight:700;line-height:1.5;}
+  footer{border-top:1px solid rgba(255,255,255,0.08);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:rgba(6,9,26,0.6);}
+  .fc{font-size:0.75rem;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.hero,.body,.related{padding-left:1.2rem;padding-right:1.2rem;}footer{padding:2rem 1.5rem;}}
+
+/* ============ LIGHT THEME OVERRIDE ============ */
+html { background:#ffffff !important; }
+body { background:#ffffff !important; color:#000 !important; }
+body::before { display:none !important; }
+nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.nav-home, .back-link, .nav-back { color:#000 !important; }
+.nav-home:hover, .back-link:hover { color:#000 !important; }
+.hero h1, h1, h2, h3 { color:#000 !important; }
+.hero p, p, .lead { color:#000 !important; }
+.tag { color:#000 !important; }
+.tag::before { background:#000 !important; }
+article, .article-body, .post-body, .post-content { color:#000 !important; }
+article p, .article-body p, .post-body p { color:#000 !important; }
+blockquote, .quote { background:#fafbfc !important; border-left-color:#000 !important; color:#000 !important; }
+.meta, .post-meta { color:#000 !important; }
+footer, .site-footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
+footer a { color:#000 !important; }
+.footer-copy, .fc { color:#000 !important; }
+a { color:#000; }
+.body p, .body li, .body blockquote p { color:#000 !important; }
+.body .src { color:#555 !important; }
+.body .src a { color:#2563eb !important; }
+.body blockquote { background:#fafbfc !important; color:#000 !important; }
+.body h2, .body h3 { color:#000 !important; }
+.body strong { color:#000 !important; font-weight:900 !important; }
+.cta { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.cta * { color:#000 !important; }
+.cta h2, .cta h3 { color:#000 !important; }
+.cta p { color:#000 !important; }
+.cta .btn, .btn { background:#000 !important; color:#fff !important; }
+.cta .btn:hover, .btn:hover { background:#222 !important; box-shadow:0 10px 30px -10px rgba(0,0,0,0.3) !important; }
+.related h3 { color:#000 !important; }
+.rcard { background:#fff !important; border:1px solid #e5e7eb !important; }
+.rcard:hover { border-color:#000 !important; box-shadow:0 14px 36px -16px rgba(0,0,0,0.18) !important; }
+.rcard .rt { color:#000 !important; }
+.rcard .rttl { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; }
+footer * { color:#000 !important; }
+.fc { color:#000 !important; opacity:0.6 !important; }
+</style>
+<!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Q45D6XVQZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8Q45D6XVQZ');
+</script>
+<style>
+/* 可読性調整: 太字900→700・行間/字間を拡大 (2026-07-24) */
+h1{font-weight:700 !important;line-height:1.5 !important;letter-spacing:0.04em !important;}
+.body h2,.body h3{font-weight:700 !important;letter-spacing:0.03em !important;line-height:1.5 !important;}
+.body p{line-height:1.95 !important;letter-spacing:0.04em !important;}
+.body li{line-height:1.85 !important;letter-spacing:0.04em !important;}
+.body strong{font-weight:700 !important;}
+.cta h3{font-weight:700 !important;line-height:1.6 !important;letter-spacing:0.04em !important;}
+.cta p{line-height:1.9 !important;letter-spacing:0.04em !important;}
+/* 出典一覧の長いURLが狭い画面で横にはみ出すのを防ぐ (2026-09-08) */
+.body a{overflow-wrap:anywhere;word-break:break-word;}
+</style>
+
+<style>
+/* 表（記事内データ） */
+.body .tw{overflow-x:auto;margin:1.6rem 0;border:1px solid #e5e7eb;border-radius:10px;background:#fff;}
+.body table{border-collapse:collapse;width:100%;font-size:0.92rem;font-variant-numeric:tabular-nums;}
+.body th,.body td{padding:0.6rem 0.85rem;text-align:right;white-space:nowrap;border-bottom:1px solid #e5e7eb;color:#000 !important;}
+.body th:first-child,.body td:first-child{text-align:left;}
+.body thead th{font-weight:700;font-size:0.8rem;color:#555 !important;}
+.body tbody tr:last-child td{border-bottom:0;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
+  <a href="./index.html" class="nav-back">← ARTICLES</a>
+</nav>
+<div class="hero">
+  <div class="tag">RESEARCH</div>
+  <h1>「AIで36%増えた」が、測り方を変えると7〜25%に縮んだ。210万本の論文データ</h1>
+  <div class="meta"><span>2026 / 10 / 04</span><span>AIdollargame 編集部</span><span>読了 約6分</span></div>
+</div>
+<article class="body">
+
+<figure style="margin:0 0 2.6rem;">
+  <img src="ai-koka-hakarikata-2026-hero.jpg" alt="机の上に広げられた巻尺" style="width:100%;height:auto;border-radius:14px;display:block;">
+</figure>
+
+<p>AIを入れた前と後を比べて「生産性が何%上がった」と言いたい人に向けた記事です。この数字は、比べる起点をどこに置くかで大きく動きます。210万本の論文を調べた研究と、その測り方に異議を出した論文、そして元の著者による反論を順番に追います。最後に、自分の会社で測るときにやることを3つ置きます。</p>
+<p>私は自社でも顧客先でもAI導入の前後を数字で出す側なので、この論争は他人事ではありませんでした。</p>
+<h2>210万本を調べた研究が出した「36%増」</h2>
+<p>最初に出たのは、コーネル大学とカリフォルニア大学バークレー校の研究チームによる論文です。Science誌の2025年12月18日号に載った査読済みの研究です。</p>
+<p>調べた量が大きい研究です。プレプリント(査読前に公開される論文)210万本、査読レポート2万8,000件、論文の閲覧とダウンロード2億4,600万件を使っています。</p>
+<p>やったことはこうです。論文の要旨をAI検出器にかけ、「AIが書いたと判定された論文が初めて出た月」をその研究者がAIを使い始めた月とみなす。その前後で投稿数がどう変わったかを、使っていない研究者と比べる。</p>
+<p>結果、投稿数が増えていました。arXivで36.2%、bioRxivで52.9%、SSRNで59.8%。分野や著者の背景で分けると23.7%から89.3%の幅になり、伸びが大きかったのは英語を母語としない国の研究者でした。</p>
+<h2>「AIを使い始めた日」の決め方に穴があった</h2>
+<p>ここに異議が出ました。パリ・サクレー大学、HECパリ、パリ第1大学の3人による指摘で、PNAS(米国科学アカデミー紀要)の2026年8月18日号に載りました。これも査読済みです。</p>
+<p>指摘は1点だけ、しかし急所でした。「AIを使い始めた月」の決め方が、投稿数そのものと機械的につながっている。</p>
+<p>理屈は単純です。投稿が多い月ほど、そのうち1本がAI判定を受ける確率は高くなる。だから「判定が初めて出た月」は、ふつうの月ではなく投稿が多い月に偏ります。そしてその直前の月は、定義上「判定が1本も出なかった月」、つまり投稿が少ない月に偏る。</p>
+<p>低い月を基準にして、その後の月と比べれば、右肩上がりに見えます。AIの効果がゼロでも。</p>
+<h2>でたらめな印でも、同じ上がり方が出た</h2>
+<p>指摘側は、これを実際にやって見せています。中身のない印で同じ計算をしたらどうなるか、を4通り試しました。</p>
+<p>論文にランダムに印を付ける。「theory」「data」「from」のような、AIと関係のない中立な単語で印を付ける。ChatGPTが存在しなかった2020年1月から2022年6月の期間で同じ計算をする。処置の定義を反転させる。</p>
+<p>4通りすべてで、同じように右肩上がりの線が出ました。効果の大きさは元の論文の推定値を挟む範囲に収まったと書かれています。</p>
+<p>さらに、元の論文の再現コードを動かして、図では省かれていた「導入した月そのもの」の係数を復元すると、その月だけ投稿数が跳ね上がっていました。導入月が「投稿の多い月」として選ばれていることが、目に見える形で出ています。</p>
+<h2>測り直したら、7〜25%は残った</h2>
+<p>元の著者側が反論を出しました。arXivに2026年7月31日に投稿されたもので、こちらはまだ査読前のプレプリントです。格が違うので、ここは割り引いて読む必要があります。</p>
+<p>反論の主旨は「偏りは実在する。ただし大きさは限られる」です。導入日の決め方に依存しない4つの設計で測り直しています。</p>
+<p>1つ目は年をまたぐ前後比較です。2023年の判定で研究者を分け、2024年1月から6月の投稿数を2022年1月から6月と比べる。導入月の直前を基準にしないので、指摘された偏りが入りません。結果は17.3%増(ゆるい判定基準)と25.1%増(厳しい判定基準)。ChatGPT前の期間で同じ計算をすると、−0.9%と0.0%でした。</p>
+<p>2つ目は対照群を厳しくした差の差です。「まだ使っていないが、のちに使い始める研究者」を比較相手に混ぜます。将来の利用者を対照に入れると効果は小さく出るので、下限を見る設計です。結果は0.068ログポイント、95%信頼区間0.053から0.083。おおむね7%の増加にあたります。ChatGPT前の期間ではどの月も有意になりませんでした。</p>
+<p>3つ目は導入日を定義しない推定です。前の四半期のAI使用量と、今の四半期の投稿数の関係を見る。3つの測り方すべてで正の関係が有意に出て、ChatGPT前の期間ではすべて負で有意になりませんでした。</p>
+<p>まとめると、36%という数字は残りませんでした。ただしゼロにもなりませんでした。測り方を厳しくするほど7%から25%の範囲に落ち着き、ChatGPT前の期間でやると毎回ゼロが出る。これが現時点での着地です。</p>
+<h2>自分の会社で測るときにやること</h2>
+<p>ここからが仕事の話です。この論争の構図は、中小企業がAI導入の効果を測るときにそのまま起きます。</p>
+<p>1つ目、導入日は「配った日」で先に固定する。「AIを使った痕跡が最初に見えた月」を起点にすると、その月は忙しい月である可能性が高い。忙しい月の直前は暇な月です。暇な月を基準に忙しい月を見れば、何を入れても数字は上がります。アカウントを配った日と研修をやった日を先に台帳に書いて、動かさないことです。</p>
+<p>2つ目、まだ配っていない部署を同じ期間で並べる。配った部署だけを前後で比べると、季節の波と区別がつきません。反論側がやったように「来月配る予定の部署」を比較相手にすると、効果は小さめに出ます。小さめに出た数字こそ、社内の説明に耐えます。</p>
+<p>3つ目、導入前の同じ季節で同じ計算をして、ゼロが出るか確かめる。2026年4月に入れたなら、2025年4月を架空の導入月にして同じ集計を回す。ここで数字が出てしまったら、その集計方法は季節か偶然を拾っています。</p>
+<h2>もうひとつ、文章の上手さの話</h2>
+<p>元の研究には、投稿数とは別の発見があります。</p>
+<p>AIを使っていない論文では、文章が複雑な論文のほうが査読を通りやすいという関係がありました。文章の作りこみは、中身の作りこみの合図として働いていたわけです。AIを使った論文では、この関係が逆向きになっていました。文章が複雑なほど、査読者の評価が低くなる。語の長さや文の作りを別の指標で測り直しても、同じ逆転が出たと書かれています。</p>
+<p>社内でも同じことが起きます。稟議書や提案書が急に整ってきたとき、それは中身が良くなった合図ではないかもしれない。見るところを「書けているか」から「何を決めたか」に移すほうが安全です。</p>
+<h2>まとめ</h2>
+<ul>
+<li>210万本の論文で「AI導入で投稿数が36%増」が出た(Science、査読済み)</li>
+<li>その測り方は、導入月を投稿の多い月から選んでしまう仕組みになっていた(PNAS、査読済み)</li>
+<li>でたらめな印でも同じ上がり方が出た。ただし測り直すと7%から25%の増加は残った(反論はプレプリント、査読前)</li>
+<li>自社で測るなら、導入日は配った日で固定し、まだ配っていない部署と並べ、導入前の同じ季節でゼロが出るか確かめる</li>
+<li>文章が整ったことを、中身が良くなったことと読み替えない</li>
+</ul>
+<p>AIを入れて作業が速くなったかどうかは、入れた側がいちばん知りたいところです。だからこそ、数字が都合よく出る測り方に寄ってしまいます。測り方を厳しくして、それでも残った分だけを成果として数える。そのほうが、次に何を変えるかを決めやすくなります。</p>
+<h2>出典</h2>
+<p class="src">Kusumegi, Yang, Ginsparg, de Vaan, Stuart, Yin「Scientific production in the era of large language models」Science、2025年12月18日／査読済み（著者版: <a href="https://arxiv.org/abs/2601.13187" target="_blank" rel="noopener">https://arxiv.org/abs/2601.13187</a> ）</p>
+<p class="src">Renault, Bergeaud, Bosquet「Comment on Scientific production in the era of large language models」PNAS、2026年8月18日号／査読済み（ <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13486544/" target="_blank" rel="noopener">https://pmc.ncbi.nlm.nih.gov/articles/PMC13486544/</a> 、プレプリント版: <a href="https://arxiv.org/abs/2605.17979" target="_blank" rel="noopener">https://arxiv.org/abs/2605.17979</a> ）</p>
+<p class="src">Kusumegi et al.「A robust association between LLM use and scientific productivity: Assessing stopping-time selection」2026年7月31日／プレプリント・査読前（ <a href="https://arxiv.org/abs/2607.28968" target="_blank" rel="noopener">https://arxiv.org/abs/2607.28968</a> ）</p>
+
+<p class="src">この記事と同じ内容を、公式noteでも公開しています。 <a href="../note.html">公式note 記事一覧</a></p>
+
+<div class="cta">
+  <h3>研究の数字を、自社の業務に置き換えます</h3>
+  <p>どの業務なら役に立つのか、何を測れば効果が分かるのか。実際の業務に合わせて整理します。初回のご相談は無料です。</p>
+  <a href="../index.html#contact" class="btn">無料相談を予約する →</a>
+</div>
+</article>
+<div class="related">
+  <h3>RELATED ARTICLES</h3>
+  <div class="rgrid">
+    <a href="./ai-ichinichi-5percent-2026.html" class="rcard"><div class="rt">RESEARCH</div><div class="rttl">AIが一日の中心だった日は5%</div></a>
+    <a href="./programmer-nenrei-norway-2026.html" class="rcard"><div class="rt">RESEARCH</div><div class="rttl">20代のプログラマーは15%減、30代は22%増</div></a>
+    <a href="./ai-suisen-jitsuzai-2026.html" class="rcard"><div class="rt">RESEARCH</div><div class="rttl">検索を切ったAIが挙げた医者は、9割がその街に実在しなかった</div></a>
+    <a href="./shanai-ai-rule-2026.html" class="rcard"><div class="rt">HOW-TO</div><div class="rttl">AIは準備に使ってよく、判断には使わない</div></a>
+    <a href="./ai-productivity-gap-2026.html" class="rcard"><div class="rt">RESEARCH</div><div class="rttl">個人は15%速くなり、会社は0.29%しか動かなかった</div></a>
+  </div>
+</div>
+<div class="svc-links" style="max-width:820px;margin:0 auto 3rem;padding:1.5rem 1.6rem;background:#fafbfc;border:1px solid #e5e7eb;border-radius:12px;">
+  <div style="font-size:0.74rem;letter-spacing:0.18em;font-weight:700;color:#555;margin-bottom:0.6rem;">SERVICE &mdash; AIdollargameのサービス</div>
+  <p style="margin:0;font-size:0.92rem;color:#333 !important;line-height:2;">記事を読んで「うちでもできるか聞いてみたい」と思ったら
+    <a href="../ai-training.html" style="color:#2563eb !important;text-decoration:underline;">社員リスキリング研修</a> ／
+    <a href="../ai-consulting.html" style="color:#2563eb !important;text-decoration:underline;">AI導入支援・コンサルティング</a> ／
+    <a href="../manual-ai.html" style="color:#2563eb !important;text-decoration:underline;">社内ナレッジAI</a> ／
+    <a href="../shindan.html" style="color:#2563eb !important;text-decoration:underline;">1分でわかる無料AI診断</a>（初回相談は無料です）
+  </p>
+</div>
+<footer>
+  <a href="../index.html" class="logo">A<span class="heart-i">ı</span>dollargame</a>
+  <div class="fc">© <span class="cpy-y" data-since="2025">2025</span> 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
+</footer>
+<script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
+<script defer src="../scripts/ga-events.js?v=20260824"></script>
+</body>
+</html>

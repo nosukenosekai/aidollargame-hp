@@ -7,363 +7,383 @@
 <title>MONOMI — ホワイトハック診断</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap">
 <style>
-/* 参考として実際に開いて測ったもの
-   vercel.com … 地色 rgb(0,0,0) / 文字 rgb(237,237,237) / 面 rgb(10,10,10)
-                 境界 rgba(255,255,255,.14) / 白い丸ボタン / 色は使わない
-   cursor.com … 同じく単色。アクセントはクリーム色のボタン1つだけ
-   赤は1か所だけに使う。緊急と、重大の件数。それ以外に色は置かない。 */
+/* blackpanda.co.jp を実測して合わせた
+   白地 rgb(255,255,255) / 文字 rgb(51,51,51) / Montserrat + Noto Sans JP
+   赤 rgb(238,53,36) = RESPONSE / 山吹 rgb(200,116,9) = READINESS / 青 rgb(21,124,165) = RECOVERY
+   緊急インシデント通報は右上に常設。押すと受付へ飛ぶ。 */
 :root{
-  --bg:#000; --panel:#0A0A0A; --panel2:#121212;
-  --line:rgba(255,255,255,.14); --line2:rgba(255,255,255,.08);
-  --ink:#EDEDED; --sub:#8F8F8F; --dim:#5A5A5A;
-  --red:#E5484D;
-  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  --sans:"Inter","Noto Sans JP","ヒラギノ角ゴシック","Hiragino Sans",system-ui,sans-serif;
-  color-scheme:dark;
+  --paper:#fff; --soft:#F5F6F8; --line:#E3E5E9; --line2:#EDEEF1;
+  --ink:#333; --sub:#6B7280; --dim:#9AA1AC;
+  --red:#EE3524; --amber:#C87409; --blue:#157CA5;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --disp:"Montserrat",sans-serif;
+  --jp:"Noto Sans JP","ヒラギノ角ゴシック","Hiragino Sans",system-ui,sans-serif;
+  color-scheme:light;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
-  font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;
-  font-feature-settings:"palt" 1}
-a{color:var(--ink)}
-.wrap{max-width:1040px;margin:0 auto;padding-inline:22px}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--disp),var(--jp);font-size:15.5px;line-height:1.85;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:28px}
+@media(max-width:600px){.wrap{padding-inline:18px}}
 
 /* 上部バー */
-.top{position:sticky;top:0;z-index:60;border-bottom:1px solid var(--line2);
-  background:rgba(0,0,0,.78);backdrop-filter:blur(12px)}
-.top .wrap{display:flex;align-items:center;gap:14px;height:56px}
-.brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:15.5px;
-  letter-spacing:.14em;white-space:nowrap}
-.brand svg{width:17px;height:17px;flex:none}
-.brand small{font-family:var(--mono);font-weight:400;font-size:10.5px;letter-spacing:.04em;color:var(--dim)}
+.top{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.94);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line2)}
+.top .wrap{display:flex;align-items:center;gap:16px;height:62px}
+.brand{display:flex;align-items:center;gap:9px;font-family:var(--disp);font-weight:900;
+  font-size:20px;letter-spacing:.02em;white-space:nowrap;color:var(--ink)}
+.brand svg{width:21px;height:21px;flex:none}
+.brand small{font-family:var(--jp);font-weight:400;font-size:11px;color:var(--dim);letter-spacing:0}
 .spacer{margin-left:auto}
-.tagdemo{font-family:var(--mono);font-size:10.5px;color:var(--dim);border:1px solid var(--line2);
-  padding:3px 8px;border-radius:999px;white-space:nowrap}
-@media(max-width:700px){.tagdemo,.brand small{display:none}}
+.demotag{font-family:var(--mono);font-size:10.5px;color:var(--dim);border:1px solid var(--line);
+  padding:3px 9px;border-radius:4px;white-space:nowrap}
+@media(max-width:760px){.demotag,.brand small{display:none}}
 
-/* ボタン */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:999px;
-  font-family:var(--sans);font-size:14px;font-weight:600;padding:10px 20px;cursor:pointer;
-  border:1px solid transparent;white-space:nowrap;transition:.15s}
-.btn.pri{background:var(--ink);color:#000}
-.btn.pri:hover{background:#fff}
-.btn.pri:disabled{background:#1C1C1C;color:var(--dim);cursor:not-allowed}
-.btn.sec{background:transparent;color:var(--ink);border-color:var(--line)}
-.btn.sec:hover{border-color:rgba(255,255,255,.34)}
-.btn.sos{background:transparent;color:var(--red);border-color:rgba(229,72,77,.4);padding:8px 15px;font-size:13.5px}
-.btn.sos:hover{background:rgba(229,72,77,.1);border-color:var(--red)}
-.btn svg{width:14px;height:14px}
-@media(max-width:560px){.btn.sos span{display:none}.btn.sos{padding:8px 11px}}
+.sosbtn{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;
+  border:0;border-radius:4px;padding:11px 18px;font-family:var(--jp);font-weight:700;font-size:13.5px;
+  cursor:pointer;white-space:nowrap;text-decoration:none}
+.sosbtn:hover{background:#D82B1B}
+.sosbtn svg{width:15px;height:15px;flex:none}
+@media(max-width:560px){.sosbtn{padding:10px 13px;font-size:12.5px}}
 
-/* 見出し */
-.hero{padding:76px 0 56px;border-bottom:1px solid var(--line2)}
-.eyebrow{font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.02em;margin-bottom:18px}
-h1{font-size:clamp(30px,4.6vw,50px);line-height:1.22;margin:0 0 16px;font-weight:600;
-  letter-spacing:-.02em;max-width:19ch}
-.hero .sub{margin:0 0 32px;color:var(--sub);font-size:16px;max-width:56ch}
+/* 見出し帯 */
+.hero{position:relative;overflow:hidden;padding:60px 0 54px;border-bottom:1px solid var(--line)}
+.hero:after{content:"";position:absolute;top:0;right:0;bottom:0;width:34%;
+  background:linear-gradient(118deg,transparent 0 44%,rgba(238,53,36,.07) 44% 60%,transparent 60%);
+  pointer-events:none}
+.ask{font-size:17px;font-weight:700;margin:0 0 10px}
+.mark{font-family:var(--disp);font-weight:900;font-size:clamp(52px,9.5vw,116px);line-height:.92;
+  letter-spacing:-.02em;margin:0 0 6px}
+.mark span{color:var(--red)}
+.tagline{font-size:clamp(19px,2.4vw,26px);font-weight:700;margin:0 0 18px}
+.hero p.body{margin:0 0 26px;color:var(--sub);max-width:52ch;font-size:15.5px}
 
-/* 入口 */
-.entry{display:flex;gap:10px;max-width:600px}
-.entry input{flex:1;min-width:0;background:var(--panel);border:1px solid var(--line);
-  color:var(--ink);border-radius:999px;padding:12px 20px;font-family:var(--mono);font-size:14px}
-.entry input:focus{outline:none;border-color:rgba(255,255,255,.4)}
-.entry .btn{flex:none}
-@media(max-width:560px){.entry{flex-direction:column}.entry input{border-radius:8px}.entry .btn{border-radius:8px}}
-.under{font-family:var(--mono);font-size:12px;color:var(--dim);margin-top:14px}
+.entry{display:flex;gap:10px;max-width:620px;position:relative;z-index:2}
+.entry input{flex:1;min-width:0;background:#fff;border:1px solid #C9CDD4;color:var(--ink);
+  border-radius:4px;padding:14px 18px;font-family:var(--mono);font-size:14.5px}
+.entry input:focus{outline:none;border-color:var(--ink)}
+.cta{display:inline-flex;align-items:center;gap:9px;background:var(--red);color:#fff;border:0;
+  border-radius:4px;padding:14px 26px;font-family:var(--jp);font-weight:700;font-size:15px;
+  cursor:pointer;white-space:nowrap}
+.cta:hover{background:#D82B1B}
+.cta:disabled{background:#D5D8DD;color:#fff;cursor:not-allowed}
+.cta svg{width:16px;height:16px}
+@media(max-width:620px){.entry{flex-direction:column}}
+.note{font-size:13px;color:var(--dim);margin-top:13px}
 
-/* 段 */
-.rail{border-bottom:1px solid var(--line2);background:#000;position:sticky;top:56px;z-index:50}
-body.started .hero{display:none}
-.rail .dom{margin-left:auto;align-self:center;font-family:var(--mono);font-size:11.5px;color:var(--dim);white-space:nowrap}
-.rail .wrap{display:flex;gap:26px;overflow-x:auto;padding-block:0}
-.rail button{background:none;border:0;border-bottom:1px solid transparent;color:var(--dim);
-  font-family:var(--mono);font-size:12.5px;padding:14px 0;cursor:pointer;white-space:nowrap;margin-bottom:-1px}
-.rail button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
-.rail button:disabled{opacity:.4;cursor:not-allowed}
+/* 進み具合（押せるのは済んだところだけ。押せないものはボタンに見せない） */
+.flow{border-bottom:1px solid var(--line);background:var(--soft);position:sticky;top:62px;z-index:50}
+.flow .wrap{display:flex;align-items:center;gap:0;overflow-x:auto;padding-block:0}
+.flow .it{display:flex;align-items:center;gap:9px;padding:15px 0;color:var(--dim);
+  font-size:13.5px;white-space:nowrap;font-weight:500}
+.flow .it .n{width:21px;height:21px;border-radius:50%;border:1px solid currentColor;
+  display:grid;place-items:center;font-family:var(--mono);font-size:10.5px;flex:none}
+.flow .it.done{color:var(--sub);cursor:pointer}
+.flow .it.done .n{background:var(--sub);border-color:var(--sub);color:#fff}
+.flow .it.now{color:var(--red);font-weight:700}
+.flow .it.now .n{background:var(--red);border-color:var(--red);color:#fff}
+.flow .sep{width:26px;height:1px;background:#CFD3DA;margin:0 12px;flex:none}
+@media(max-width:760px){.flow .sep{width:14px;margin:0 8px}.flow .it{font-size:12.5px}}
 
-main{padding:36px 0 110px}
+main{padding:40px 0 110px}
 section[hidden]{display:none}
-h2{font-size:22px;font-weight:600;letter-spacing:-.01em;margin:0 0 8px}
-.lead{color:var(--sub);margin:0 0 26px;max-width:66ch}
 
-/* 面 */
-.card{background:var(--panel);border:1px solid var(--line2);border-radius:10px;padding:22px 24px;margin-bottom:12px}
-.rowsplit{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:760px){.rowsplit{grid-template-columns:1fr}}
+/* 節の見出し。blackpanda の RESPONSE 対応 の形 */
+.sh{display:flex;align-items:baseline;gap:14px;margin:0 0 6px}
+.sh b{font-family:var(--disp);font-weight:800;font-size:23px;letter-spacing:.02em;margin-right:4px}
+.sh i{font-style:normal;font-size:16px;font-weight:700;color:var(--ink)}
+.sh svg{width:21px;height:21px;flex:none;align-self:center}
+.sh.red{color:var(--red)} .sh.amber{color:var(--amber)} .sh.blue{color:var(--blue)}
+.sh i{color:var(--ink)}
+.lead{color:var(--sub);margin:4px 0 26px;max-width:66ch}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:22px 24px;margin-bottom:12px}
+.soft{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:20px 22px;margin-bottom:12px}
 
 /* 所有の確認 */
-.verify{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border:1px solid var(--line2);
-  border-radius:10px;background:var(--panel);margin-bottom:12px}
-.verify .n{font-family:var(--mono);font-size:12px;color:var(--dim);padding-top:2px;flex:none;width:18px}
-.verify b{display:block;font-weight:600;font-size:15px;margin-bottom:4px}
-.verify p{margin:0 0 10px;color:var(--sub);font-size:13.5px}
-.verify p:last-child{margin-bottom:0}
-.tok{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-code{font-family:var(--mono);font-size:12.5px;background:var(--panel2);border:1px solid var(--line2);
-  border-radius:6px;padding:7px 11px;color:var(--ink);display:inline-block;word-break:break-all}
-.okmark{font-family:var(--mono);font-size:12px;color:var(--sub)}
+.vrow{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--line);
+  border-radius:6px;padding:18px 20px;margin-bottom:10px}
+.vrow .k{font-family:var(--disp);font-weight:800;font-size:13px;color:var(--dim);width:16px;flex:none;padding-top:3px}
+.vrow b{display:block;font-size:15.5px;font-weight:700;margin-bottom:3px}
+.vrow p{margin:0 0 10px;color:var(--sub);font-size:13.5px}
+code{font-family:var(--mono);font-size:12.5px;background:var(--soft);border:1px solid var(--line);
+  border-radius:4px;padding:8px 12px;display:inline-block;word-break:break-all;color:var(--ink)}
+.okline{color:var(--blue);font-weight:700;font-size:14px}
 
 /* ログ */
-.console{background:var(--panel);border:1px solid var(--line2);border-radius:10px;
-  padding:18px 20px;font-family:var(--mono);font-size:12.5px;line-height:1.95;height:340px;overflow:auto}
-.console .t{color:#3A3A3A} .console .hit{color:var(--red)} .console .ok{color:var(--sub)}
-.bar{height:2px;background:#1A1A1A;border-radius:2px;overflow:hidden;margin-top:12px}
-.bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .3s linear}
+.console{background:#1A1D21;color:#D7DCE2;border-radius:6px;padding:18px 20px;
+  font-family:var(--mono);font-size:12.5px;line-height:1.95;height:330px;overflow:auto}
+.console .t{color:#5B636E} .console .hit{color:#FF7A6A} .console .ok{color:#8FD6A8}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:12px}
+.bar i{display:block;height:100%;width:0;background:var(--red);transition:width .3s linear}
 
-/* 所見 */
-.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line2);
-  border:1px solid var(--line2);border-radius:10px;overflow:hidden;margin-bottom:26px}
-@media(max-width:620px){.sum{grid-template-columns:repeat(2,1fr)}}
-.sum div{background:var(--panel);padding:18px 20px}
-.sum b{display:block;font-size:30px;font-weight:600;line-height:1.1;letter-spacing:-.02em}
-.sum span{font-family:var(--mono);font-size:11px;color:var(--dim)}
-.sum .h b{color:var(--red)}
+/* 件数 */
+.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:26px}
+@media(max-width:700px){.sum{grid-template-columns:repeat(2,1fr)}}
+.sum div{border:1px solid var(--line);border-radius:6px;padding:16px 18px;background:#fff}
+.sum b{display:block;font-family:var(--disp);font-weight:900;font-size:34px;line-height:1.1}
+.sum span{font-size:12.5px;color:var(--sub)}
+.sum .h{border-color:rgba(238,53,36,.4);background:rgba(238,53,36,.04)} .sum .h b{color:var(--red)}
+.sum .m b{color:var(--amber)} .sum .u b{color:var(--blue)}
 
-.gh{font-family:var(--mono);font-size:12px;color:var(--dim);margin:28px 0 10px;
-  display:flex;align-items:center;gap:10px}
-.gh:after{content:"";flex:1;height:1px;background:var(--line2)}
+.gh{font-family:var(--disp);font-weight:800;font-size:12.5px;letter-spacing:.12em;color:var(--dim);
+  margin:28px 0 10px;display:flex;align-items:center;gap:12px}
+.gh em{font-style:normal;font-family:var(--jp);font-weight:700;letter-spacing:0;color:var(--ink);font-size:14.5px}
+.gh:after{content:"";flex:1;height:1px;background:var(--line)}
 
-.find{border:1px solid var(--line2);border-radius:10px;background:var(--panel);
+.find{border:1px solid var(--line);border-left:4px solid var(--dim);border-radius:6px;background:#fff;
   padding:18px 20px;margin-bottom:10px}
-.find .r1{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
-.sev{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--dim)}
-.find.high .sev{color:var(--red)}
-.fid{font-family:var(--mono);font-size:10.5px;color:var(--dim)}
-.own{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--sub);
-  border:1px solid var(--line2);border-radius:999px;padding:2px 10px;white-space:nowrap}
-.own.us{color:var(--ink);border-color:var(--line)}
-.find h3{margin:0 0 6px;font-size:16px;font-weight:600;line-height:1.5}
-.find p{margin:0 0 12px;color:var(--sub);font-size:14px}
-.ev{font-family:var(--mono);font-size:11.5px;color:var(--sub);background:#060606;
-  border:1px solid var(--line2);border-radius:7px;padding:10px 12px;white-space:pre-wrap;line-height:1.8}
+.find.high{border-left-color:var(--red)} .find.mid{border-left-color:var(--amber)}
+.find .r1{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:7px}
+.sev{font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:3px;background:var(--soft);color:var(--sub)}
+.high .sev{background:rgba(238,53,36,.1);color:var(--red)}
+.mid .sev{background:rgba(200,116,9,.1);color:var(--amber)}
+.fid{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.own{margin-left:auto;font-size:11.5px;font-weight:700;padding:2px 10px;border-radius:3px;white-space:nowrap}
+.own.us{background:rgba(21,124,165,.1);color:var(--blue)}
+.own.vendor{background:var(--soft);color:var(--sub)}
+.find h3{margin:0 0 6px;font-size:16.5px;font-weight:700;line-height:1.55}
+.find p{margin:0 0 12px;color:var(--sub);font-size:14.5px}
+.ev{font-family:var(--mono);font-size:11.5px;color:var(--sub);background:var(--soft);
+  border-radius:4px;padding:10px 12px;white-space:pre-wrap;line-height:1.8}
 .ev b{color:var(--dim);font-weight:400}
 .fix{margin-top:10px}
-.fix summary{font-family:var(--mono);font-size:11.5px;color:var(--sub);cursor:pointer;
-  list-style:none;display:inline-flex;align-items:center;gap:7px}
+.fix summary{font-size:13px;font-weight:700;color:var(--blue);cursor:pointer;list-style:none;
+  display:inline-flex;align-items:center;gap:7px}
 .fix summary::-webkit-details-marker{display:none}
-.fix summary:before{content:"+";color:var(--dim)}
+.fix summary:before{content:"＋"}
 .fix[open] summary:before{content:"−"}
-.fix pre{margin:10px 0 0;background:#060606;border:1px solid var(--line2);border-radius:7px;
-  padding:12px 14px;overflow-x:auto;font-family:var(--mono);font-size:11.5px;line-height:1.85;color:var(--sub)}
-.fix pre .c{color:var(--dim)}
+.fix pre{margin:10px 0 0;background:#1A1D21;color:#D7DCE2;border-radius:6px;padding:14px 16px;
+  overflow-x:auto;font-family:var(--mono);font-size:11.5px;line-height:1.9}
 
-/* 表 */
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line2);vertical-align:top}
-th{font-family:var(--mono);font-size:10.5px;color:var(--dim);font-weight:500;white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line2);vertical-align:top}
+th{font-size:12px;color:var(--sub);font-weight:700;white-space:nowrap;background:var(--soft)}
 td.no{font-family:var(--mono);font-size:12px;color:var(--dim);white-space:nowrap}
-td.a b{font-family:var(--mono);font-weight:500}
-.no-ans b{color:var(--red)} .yes-ans b{color:var(--sub)}
-.tagx{font-family:var(--mono);font-size:10px;color:var(--dim);border:1px solid var(--line2);
-  border-radius:999px;padding:1px 7px;margin-left:7px}
+td.a b{font-weight:700}
+.no-ans b{color:var(--red)} .yes-ans b{color:var(--blue)}
+.tagx{font-size:10.5px;color:var(--amber);border:1px solid rgba(200,116,9,.4);border-radius:3px;
+  padding:1px 6px;margin-left:7px}
 
-/* 証明書 */
-.cert{background:#fff;color:#111;border-radius:10px;padding:28px 30px}
-.cert .ch{display:flex;align-items:baseline;gap:12px;border-bottom:1px solid #DDD;padding-bottom:11px}
-.cert .ch b{font-size:16px;font-weight:600;letter-spacing:.02em}
-.cert .ch span{font-size:11.5px;color:#777;margin-left:auto;font-family:var(--mono)}
-.cert h4{margin:20px 0 4px;font-size:15px}
+.cert{border:1px solid var(--line);border-radius:6px;padding:26px 28px;background:#fff}
+.cert .ch{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:10px}
+.cert .ch b{font-family:var(--disp);font-weight:800;font-size:17px}
+.cert .ch span{font-size:11.5px;color:var(--dim);margin-left:auto;font-family:var(--mono)}
+.cert h4{margin:18px 0 4px;font-size:15.5px}
 .cert .four{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
-@media(max-width:620px){.cert .four{grid-template-columns:repeat(2,1fr)}}
-.cert .four div{border:1px solid #E3E3E3;border-radius:8px;padding:12px 14px}
-.cert .four b{display:block;font-family:var(--mono);font-size:10.5px;color:#777;font-weight:400}
-.cert .four i{font-style:normal;font-size:16px;font-weight:600}
-.cert .four .ng i{color:#C0392B}
-.cert p{color:#666;font-size:12.5px}
+@media(max-width:700px){.cert .four{grid-template-columns:repeat(2,1fr)}}
+.cert .four div{border:1px solid var(--line);border-radius:4px;padding:12px 14px}
+.cert .four b{display:block;font-size:11.5px;color:var(--sub);font-weight:500}
+.cert .four i{font-style:normal;font-family:var(--disp);font-weight:800;font-size:17px;color:var(--red)}
+.cert p{color:var(--sub);font-size:13px}
 
-/* 次にやること */
-.pick{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line2);
-  border:1px solid var(--line2);border-radius:10px;overflow:hidden;margin-bottom:16px}
-@media(max-width:820px){.pick{grid-template-columns:1fr}}
-.pick article{background:var(--panel);padding:24px 22px;display:flex;flex-direction:column}
-.pick .n{font-family:var(--mono);font-size:11px;color:var(--dim);margin-bottom:12px}
-.pick h3{margin:0 0 8px;font-size:17px;font-weight:600}
-.pick p{margin:0 0 18px;color:var(--sub);font-size:13.5px;flex:1}
-.pick .btn{align-self:flex-start}
-.pick.hl article:last-child{background:var(--panel2)}
+/* 直す */
+.pick{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+@media(max-width:880px){.pick{grid-template-columns:1fr}}
+.pick article{border:1px solid var(--line);border-radius:6px;padding:24px 22px;display:flex;
+  flex-direction:column;background:#fff}
+.pick article:last-child{border-color:var(--red);background:rgba(238,53,36,.03)}
+.pick .n{font-family:var(--disp);font-weight:800;font-size:12px;color:var(--dim);margin-bottom:10px}
+.pick h3{margin:0 0 8px;font-size:17.5px;font-weight:700}
+.pick p{margin:0 0 18px;color:var(--sub);font-size:14px;flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:4px;
+  font-family:var(--jp);font-weight:700;font-size:14px;padding:11px 20px;cursor:pointer;
+  border:1px solid var(--ink);background:#fff;color:var(--ink);text-decoration:none;align-self:flex-start}
+.btn:hover{background:var(--soft)}
+.btn.red{background:var(--red);border-color:var(--red);color:#fff}
+.btn.red:hover{background:#D82B1B}
 
-.contact{border:1px solid var(--line);border-radius:10px;padding:24px;display:flex;
-  gap:18px;align-items:center;flex-wrap:wrap}
-.contact div{flex:1;min-width:240px}
-.contact b{display:block;font-size:16px;font-weight:600;margin-bottom:4px}
+.contact{border:1px solid var(--line);border-radius:6px;padding:24px;display:flex;gap:18px;
+  align-items:center;flex-wrap:wrap;background:var(--soft)}
+.contact div{flex:1;min-width:230px}
+.contact b{display:block;font-size:16.5px;font-weight:700;margin-bottom:3px}
 .contact p{margin:0;color:var(--sub);font-size:13.5px}
+.foot{color:var(--dim);font-size:12.5px;line-height:1.9;margin-top:34px;
+  border-top:1px solid var(--line);padding-top:20px}
 
-.foot{font-family:var(--mono);color:var(--dim);font-size:11.5px;line-height:1.95;
-  margin-top:34px;border-top:1px solid var(--line2);padding-top:20px}
-
-/* 緊急 */
-.sheet{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.72);
-  backdrop-filter:blur(5px);display:flex;justify-content:flex-end}
+/* 緊急の受付 */
+.sheet{position:fixed;inset:0;z-index:80;background:rgba(20,22,26,.6);display:flex;justify-content:center;
+  align-items:flex-start;padding:40px 18px;overflow:auto}
 .sheet[hidden]{display:none}
-.sheet .inner{width:min(540px,100%);height:100%;overflow:auto;background:#050505;
-  border-left:1px solid var(--line);padding:26px 28px 60px;position:relative}
-.sheet h2{color:var(--red);font-size:21px;margin:8px 0 4px}
-.sheet .x{position:absolute;top:22px;right:24px;background:none;border:1px solid var(--line2);
-  color:var(--sub);border-radius:999px;padding:5px 13px;cursor:pointer;font-family:var(--mono);font-size:11px}
-.notreal{border:1px solid rgba(229,72,77,.36);background:rgba(229,72,77,.07);color:var(--ink);
-  border-radius:8px;padding:12px 14px;margin:0 0 20px;font-size:13px;line-height:1.75}
-.step{border-left:1px solid var(--line2);padding:0 0 20px 18px;margin-left:5px;position:relative}
-.step:last-of-type{padding-bottom:4px}
-.step:before{content:"";position:absolute;left:-4px;top:9px;width:7px;height:7px;border-radius:50%;background:var(--red)}
-.step.wait:before{background:#333}
-.step b{display:block;font-size:15px;font-weight:600;margin-bottom:3px}
-.step p{margin:0;color:var(--sub);font-size:13.5px}
+.sheet .inner{width:min(620px,100%);background:#fff;border-radius:8px;padding:0 0 28px;position:relative;
+  overflow:hidden}
+.sheet .hd{background:var(--red);color:#fff;padding:22px 28px}
+.sheet .hd b{display:block;font-size:21px;font-weight:700;margin-bottom:3px}
+.sheet .hd span{font-size:13.5px;opacity:.92}
+.sheet .bd{padding:24px 28px 0}
+.sheet .x{position:absolute;top:20px;right:22px;background:rgba(255,255,255,.2);border:0;color:#fff;
+  border-radius:4px;padding:5px 12px;cursor:pointer;font-size:12.5px;font-family:var(--jp)}
+.notreal{border:1px solid rgba(238,53,36,.4);background:rgba(238,53,36,.05);border-radius:4px;
+  padding:12px 14px;margin:0 0 20px;font-size:13px;line-height:1.8}
+.sheet label{display:block;margin-bottom:14px}
+.sheet label span{display:block;font-size:12.5px;font-weight:700;color:var(--sub);margin-bottom:5px}
+.sheet input,.sheet textarea,.sheet select{width:100%;border:1px solid #C9CDD4;border-radius:4px;
+  padding:11px 13px;font-family:var(--jp);font-size:14px;color:var(--ink);background:#fff}
+.sheet textarea{min-height:76px;resize:vertical}
+.sheet .tel{display:flex;align-items:center;gap:12px;background:var(--soft);border-radius:6px;
+  padding:14px 16px;margin-bottom:18px;flex-wrap:wrap}
+.sheet .tel b{font-family:var(--disp);font-weight:800;font-size:21px;letter-spacing:.02em}
+.sheet .tel span{font-size:12.5px;color:var(--sub)}
+.sheet .after{font-size:12.5px;color:var(--dim);margin-top:16px;line-height:1.85}
 </style>
 </head>
 <body>
 
 <div class="top"><div class="wrap">
   <div class="brand">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M12 2 4 5.5v6c0 5 3.4 9.3 8 10.5 4.6-1.2 8-5.5 8-10.5v-6L12 2Z"/><circle cx="12" cy="11" r="2.4"/>
     </svg>
-    MONOMI <small>物見 / 仮</small>
+    MONOMI <small>物見（仮）</small>
   </div>
   <div class="spacer"></div>
-  <div class="tagdemo">DEMO / 架空データ</div>
-  <button class="btn sos" id="sos">
+  <div class="demotag">DEMO / 架空データ</div>
+  <button class="sosbtn" id="sos">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-      <path d="M12 9v5"/><path d="M12 17.5v.01"/>
-      <path d="M10.3 3.9 2.4 17.6A1.9 1.9 0 0 0 4 20.5h16a1.9 1.9 0 0 0 1.6-2.9L13.7 3.9a1.9 1.9 0 0 0-3.4 0Z"/>
-    </svg><span>いま事故が起きている</span>
+      <circle cx="12" cy="12" r="9"/><path d="M12 7.5v5"/><path d="M12 16v.01"/>
+    </svg>
+    緊急インシデント通報
   </button>
 </div></div>
 
+<!-- 緊急の受付。手順書ではなく、こちらが受ける画面 -->
 <div class="sheet" id="sheet" hidden><div class="inner">
-  <button class="x" id="sheetx">閉じる</button>
-  <div class="notreal">これは画面の見本です。下の番号は実在しません。<br>
-    本当に事故が起きている場合は、契約している保険会社と、警察のサイバー犯罪相談窓口（#9110）へ。</div>
-  <div class="eyebrow" style="margin-bottom:6px">EMERGENCY</div>
-  <h2>いま事故が起きている</h2>
-  <p style="color:var(--sub);margin:4px 0 24px;font-size:14px">診断より先にこちらです。最初の30分で消えてしまうものがあります。上から順に。</p>
-  <div class="step"><b>1　電源を切らない</b>
-    <p>落とすと、何が起きたかの記録が消えます。LANケーブルを抜く、無線を切る。本体は動かしたままに。</p></div>
-  <div class="step"><b>2　この番号に電話する</b>
-    <p>24時間窓口 080-0000-0000（見本の番号です）<br>つながらないときは stop@example.com</p></div>
-  <div class="step"><b>3　パスワードを変える順番を決める</b>
-    <p>管理者、メール、会計、その他の順。先に全部変えると、相手の動きが追えなくなることがあります。</p></div>
-  <div class="step wait"><b>4　保険の連絡はパートナーにつなぎます</b>
-    <p>加入済みなら、事故から何時間以内に連絡するかが決まっています。契約書を手元に。</p></div>
-  <div class="step wait"><b>5　個人情報保護委員会への報告</b>
-    <p>速報は概ね3日から5日、確報は30日（不正アクセスは60日）。様式の下書きを出します。</p></div>
+  <div class="hd">
+    <button class="x" id="sheetx">閉じる</button>
+    <b>緊急インシデント通報</b>
+    <span>いま起きていることを、こちらで引き受けます。</span>
+  </div>
+  <div class="bd">
+    <div class="notreal">これは画面の見本です。下の番号と送信先は実在しません。<br>
+      本当に事故が起きている場合は、契約している保険会社と、警察のサイバー犯罪相談窓口（#9110）へ。</div>
+    <div class="tel">
+      <b>080-0000-0000</b>
+      <span>24時間　つながらないときは下のフォームへ</span>
+    </div>
+    <label><span>何が起きていますか</span>
+      <select id="e1">
+        <option>分からない／はっきりしない</option>
+        <option>画面に身代金の要求が出た</option>
+        <option>情報が外に出たらしい</option>
+        <option>不正なログインの形跡がある</option>
+        <option>取引先から指摘された</option>
+      </select></label>
+    <label><span>会社名とご連絡先</span><input type="text" id="e2" placeholder="株式会社○○／090-0000-0000"></label>
+    <label><span>分かっている範囲で（任意）</span><textarea id="e3" placeholder="いつ気づいたか、どの端末か、など"></textarea></label>
+    <button class="btn red" id="esend" style="width:100%;padding:14px">通報する</button>
+    <div class="after">受け付けたら折り返します。待っている間に、電源は切らないでください。記録が消えます。<br>
+      LANケーブルを抜く、無線を切る。本体は動かしたままに。</div>
+  </div>
 </div></div>
 
 <div class="hero"><div class="wrap">
-  <div class="eyebrow">WHITE HAT ASSESSMENT</div>
-  <h1>自分のサイトの、開いているところを数える。</h1>
-  <p class="sub">所有を確認したドメインだけを、自分で診断できます。見るのはサーバーだけではありません。外に預けている先と、社員のAIの使い方まで。</p>
+  <p class="ask">自分の会社のサイト、外からどう見えていますか。</p>
+  <div class="mark">MONO<span>MI</span></div>
+  <div class="tagline">ホワイトハック診断</div>
+  <p class="body">ドメインを入れて所有を確かめると、その場でチェックが始まります。見るのはサーバーだけではありません。外に預けている先と、社員のAIの使い方まで数えます。</p>
   <div class="entry">
     <input type="text" id="domain" placeholder="example.co.jp" value="sample-shokai.example">
-    <button class="btn pri" id="start">所有を確認する</button>
+    <button class="cta" id="start">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      チェックを始める
+    </button>
   </div>
-  <div class="under" id="under">自分が権限を持つドメインだけ。確認が取れるまでスキャンは始まりません。</div>
+  <div class="note" id="under">自分が権限を持つドメインだけ。所有の確認が取れるまでチェックは始まりません。</div>
 </div></div>
 
-<nav class="rail"><div class="wrap">
-  <button aria-selected="true"  data-s="1">01　所有の確認</button>
-  <button aria-selected="false" data-s="2" disabled>02　スキャン</button>
-  <button aria-selected="false" data-s="3" disabled>03　所見</button>
-  <button aria-selected="false" data-s="4" disabled>04　書類</button>
-  <button aria-selected="false" data-s="5" disabled>05　次にやること</button>
-  <span class="dom" id="dom"></span>
-</div></nav>
+<div class="flow"><div class="wrap" id="flow"></div></div>
 
 <main><div class="wrap">
 
 <section id="s1">
-  <h2>所有の確認</h2>
-  <p class="lead">許諾のない診断は不正アクセス禁止法に当たります。自分のドメインであることを機械で確かめてから始めます。どちらか片方で構いません。</p>
+  <div class="sh red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5.5v6c0 5 3.4 9.3 8 10.5 4.6-1.2 8-5.5 8-10.5v-6L12 2Z"/></svg>
+    <b>STEP 1</b><i>所有の確認</i></div>
+  <p class="lead">許諾のない診断は不正アクセス禁止法に当たります。自分のドメインであることを機械で確かめてから始めます。AとBのどちらか片方で構いません。</p>
 
-  <div class="verify">
-    <div class="n">A</div>
-    <div style="flex:1">
-      <b>DNSのTXTレコードに置く</b>
-      <p>ドメインの設定画面で、下の1行を追加します。反映に数分かかります。</p>
-      <div class="tok"><code id="tokA">monomi-verify=…</code></div>
-    </div>
-  </div>
+  <div class="vrow"><div class="k">A</div><div style="flex:1">
+    <b>DNSのTXTレコードに置く</b>
+    <p>ドメインの設定画面で、下の1行を追加します。反映に数分かかります。</p>
+    <code id="tokA">monomi-verify=…</code></div></div>
 
-  <div class="verify">
-    <div class="n">B</div>
-    <div style="flex:1">
-      <b>サイトにファイルを置く</b>
-      <p>次の場所に、確認コードだけを書いたファイルを置きます。</p>
-      <div class="tok"><code id="tokB">https://…/.well-known/monomi-verify.txt</code></div>
-    </div>
-  </div>
+  <div class="vrow"><div class="k">B</div><div style="flex:1">
+    <b>サイトにファイルを置く</b>
+    <p>次の場所に、確認コードだけを書いたファイルを置きます。</p>
+    <code id="tokB">https://…/.well-known/monomi-verify.txt</code></div></div>
 
-  <div class="card" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
-    <div style="flex:1;min-width:220px">
-      <b style="display:block;font-weight:600;margin-bottom:3px">確認が終わったら</b>
+  <div class="soft" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+    <div style="flex:1;min-width:230px">
+      <b style="display:block;font-size:15.5px;margin-bottom:2px">確認が終わったら</b>
       <span style="color:var(--sub);font-size:13.5px" id="vstate">まだ確認していません。</span>
     </div>
-    <button class="btn sec" id="check">確認する</button>
-    <button class="btn pri" id="run" disabled>スキャンを始める</button>
+    <button class="btn" id="check">確認する</button>
+    <button class="cta" id="run" disabled>チェックを始める</button>
   </div>
-  <div class="under" id="hint">見本なので、確認するを押すと成功したことにします。</div>
+  <div class="note">見本なので、確認するを押すと成功したことにします。本番はDNSかファイルを実際に読みに行きます。</div>
 </section>
 
 <section id="s2" hidden>
-  <h2>スキャン</h2>
-  <p class="lead">範囲は確認が取れたドメインの中だけです。外のホストには触れません。</p>
+  <div class="sh amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    <b>STEP 2</b><i>チェック中</i></div>
+  <p class="lead">範囲は所有が確認できたドメインの中だけです。外のホストには触れません。</p>
   <div class="console" id="log"></div>
   <div class="bar"><i id="bar"></i></div>
 </section>
 
 <section id="s3" hidden>
-  <h2>所見</h2>
-  <p class="lead">根拠と、直し方のコマンドを付けます。直す人は「自分で直せる」と「今のお取引先に頼む」に分けています。</p>
+  <div class="sh red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 2.4 17.6A1.9 1.9 0 0 0 4 20.5h16a1.9 1.9 0 0 0 1.6-2.9L13.7 3.9a1.9 1.9 0 0 0-3.4 0Z"/><path d="M12 9v4.5"/><path d="M12 17v.01"/></svg>
+    <b>STEP 3</b><i>見つかったもの</i></div>
+  <p class="lead">根拠と、直し方のコマンドを付けます。直す人は「こちらで直せる」と「今のお取引先に頼む」に分けています。</p>
   <div class="sum" id="sum"></div>
   <div id="groups"></div>
 </section>
 
 <section id="s4" hidden>
-  <h2>書類</h2>
-  <p class="lead">所見はそのまま2つの書類になります。保険の申込に出す回答票と、毎月の稼働証明書です。</p>
+  <div class="sh blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5"/></svg>
+    <b>STEP 4</b><i>保険に出す書類</i></div>
+  <p class="lead">見つかったものは、そのまま2つの書類になります。サイバー保険を申し込むときの回答票と、毎月出す稼働証明書です。</p>
 
-  <div class="gh">保険の質問書の回答票</div>
-  <div class="card" style="padding:4px 0 0"><table id="ans"></table></div>
-  <p class="under" style="margin:10px 2px 0">AI-で始まる4問は、2026年10月2日に確認した東京海上日動の質問書（本問28・任意14）に無かった設問です。こちらで足しています。</p>
+  <div class="gh">ANSWER SHEET <em>保険会社に出す回答票</em></div>
+  <div class="card" style="padding:0;overflow:hidden"><table id="ans"></table></div>
+  <p class="note" style="margin:10px 2px 0">AI-で始まる4問は、2026年10月2日に確認した東京海上日動の質問書（本問28・任意14）に無かった設問です。こちらで足しています。</p>
 
-  <div class="gh">毎月の稼働証明書（見本）</div>
+  <div class="gh">CERTIFICATE <em>毎月出す稼働証明書（見本）</em></div>
   <div class="cert">
     <div class="ch"><b>稼働証明書</b> OPERATION CERTIFICATE <span id="certno">—</span></div>
     <h4 id="certco">—</h4>
     <p style="margin:4px 0 0">下記4点について、機械の記録をもとに確認しました。申告ではありません。</p>
     <div class="four">
-      <div class="ng"><b>規程</b><i>未整備</i></div>
-      <div class="ng"><b>教育</b><i>0%</i></div>
-      <div class="ng"><b>入力前チェック</b><i>未稼働</i></div>
-      <div class="ng"><b>ログ保存</b><i>0日</i></div>
+      <div><b>規程</b><i>未整備</i></div>
+      <div><b>教育</b><i>0%</i></div>
+      <div><b>入力前チェック</b><i>未稼働</i></div>
+      <div><b>ログ保存</b><i>0日</i></div>
     </div>
-    <p style="margin-top:15px">診断の時点では4点とも満たしていません。運用を始めると順に埋まり、毎月この形で出ます。1年で12通になります。</p>
+    <p style="margin-top:15px">チェックの時点では4点とも満たしていません。運用を始めると順に埋まり、毎月この形で出ます。1年で12通になります。保険の更新に使えます。</p>
   </div>
 </section>
 
 <section id="s5" hidden>
-  <h2 id="h5">次にやること</h2>
+  <div class="sh blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4.5 4.5 0 0 0 5.9 5.9l-7.3 7.3a2.1 2.1 0 0 1-3 0l-2.8-2.8a2.1 2.1 0 0 1 0-3Z"/></svg>
+    <b>STEP 5</b><i>どうやって直すか</i></div>
   <p class="lead">見つけただけでは何も変わりません。3つのどれかを選んでください。全部こちらでやる、とは言いません。</p>
 
-  <div class="pick hl">
+  <div class="pick">
     <article>
-      <div class="n">01</div>
-      <h3>自分で直す</h3>
-      <p>所見ごとに直し方のコマンドを付けてあります。手順をまとめて持ち出せます。費用はかかりません。</p>
-      <button class="btn sec" id="dl">手順を書き出す</button>
+      <div class="n">01</div><h3>自分で直す</h3>
+      <p>見つかったものそれぞれに、直し方のコマンドを付けてあります。まとめて持ち出せます。費用はかかりません。</p>
+      <button class="btn" id="dl">手順をまとめてコピー</button>
     </article>
     <article>
-      <div class="n">02</div>
-      <h3>重大な分だけ頼む</h3>
-      <p id="p02">重大な3件のうち、こちらで直せるのは2件です。サーバー周りは今のお取引先のほうが早く確実です。</p>
-      <button class="btn sec" id="ask1">この件だけ相談する</button>
+      <div class="n">02</div><h3>重大な分だけ頼む</h3>
+      <p id="p02">重大な分のうち、こちらで直せるものだけをお引き受けします。サーバー周りは今のお取引先のほうが早く確実です。</p>
+      <button class="btn" id="ask1">この件だけ相談する</button>
     </article>
     <article>
-      <div class="n">03</div>
-      <h3>毎月保つところまで頼む</h3>
+      <div class="n">03</div><h3>毎月保つところまで頼む</h3>
       <p>直したあと、放っておくと元に戻ります。規程・教育・入力前チェック・ログの4点を毎月保ち、稼働証明書を出します。</p>
-      <button class="btn pri" id="ask2">運用の相談をする</button>
+      <button class="btn red" id="ask2">運用の相談をする</button>
     </article>
   </div>
 
@@ -372,8 +392,8 @@ td.a b{font-family:var(--mono);font-weight:500}
       <b>株式会社AIdollargame</b>
       <p>AIを納品して、毎月回すところまで引き受けている会社です。情報システムの担当者がいない会社を見ています。</p>
     </div>
-    <a class="btn pri" id="mail" href="#">相談する</a>
-    <a class="btn sec" href="https://aidollargame.com" target="_blank" rel="noopener">会社を見る</a>
+    <a class="btn red" id="mail" href="#">相談する</a>
+    <a class="btn" href="https://aidollargame.com" target="_blank" rel="noopener">会社を見る</a>
   </div>
 
   <div class="foot">
@@ -387,10 +407,8 @@ td.a b{font-family:var(--mono);font-weight:500}
 <script>
 const $  = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
-let data = null, domain = '', verified = false;
+let data = null, domain = '', verified = false, reached = 1, cur = 1;
 
-/* オフライン閲覧用の控え。正は server.js の scan()。
-   server.js を直したら .build/sync_demo.py を1回走らせて貼り直す。 */
 const DEMO = {
   target:{company:'株式会社サンプル商会（架空）',scope:'www.sample-shokai.example',
           period:'2026-10-14 〜 2026-10-16',contact:'情報システム 佐々木様',stop:'当社 24時間窓口'},
@@ -458,11 +476,10 @@ const DEMO = {
 ]
 };
 
-/* 所見ごとの直し方。id をそろえて持つ */
 const FIX = {
  'F-01':'# 一覧を止めて、匿名の読み取りを落とす\naws s3api put-public-access-block \\\n  --bucket <バケット名> \\\n  --public-access-block-configuration "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"\n\n# 誰でも読める設定が残っていないか見る\naws s3api get-bucket-policy --bucket <バケット名>',
  'F-02':'# 今の送信先を確かめる\ncurl -s https://<自社サイト>/contact | grep -o \'action="[^"]*"\'\n\n# 預け先に出す確認事項\n# 1. 再委託の有無と範囲\n# 2. 保存期間と削除の方法\n# 3. 事故のときに何時間以内に知らせるか',
- 'F-03':'# 送信前の検査を入れて、記録を90日残す\n# 入口を1つにまとめ、そこを通ったものだけAIへ送る\n#   許可する宛先: api.openai.com / api.anthropic.com / generativelanguage.googleapis.com\n#   記録する項目: 日時 / 利用者 / 宛先 / 区分 / 判定\n# ログの保存期間\nretention_days: 90',
+ 'F-03':'# 送信前の検査を入れて、記録を90日残す\n# 入口を1つにまとめ、そこを通ったものだけAIへ送る\n#   許可する宛先: api.openai.com / api.anthropic.com / generativelanguage.googleapis.com\n#   記録する項目: 日時 / 利用者 / 宛先 / 区分 / 判定\nretention_days: 90',
  'F-04':'# 名簿と突き合わせて、残っているアカウントを出す\ncomma=$(cut -d, -f1 taishokusha.csv | tr "\\n" "|")\ngrep -E "${comma%|}" ai-accounts.csv\n\n# 退職の手続きに次の1行を足す\n# [ ] 生成AIのアカウントを止める（個人のメールで登録されている分も）',
  'F-05':'# 古い方式を止める（nginx の例）\nssl_protocols TLSv1.2 TLSv1.3;\n\n# 直ったか確かめる\nnmap --script ssl-enum-ciphers -p 443 <ホスト名>',
  'F-06':'# 今どれだけ外から見えているか数える\ncurl -s "https://crt.sh/?q=%25.<ドメイン>&output=json" | jq -r ".[].name_value" | sort -u\n\n# 使っていないものはDNSから消す\n# 消す前に、まだ誰か使っていないかアクセスログで確認',
@@ -470,46 +487,58 @@ const FIX = {
  'F-08':'# 戻せるか試す。取れているかではなく、戻せるか\nrestic -r <保管先> snapshots\nrestic -r <保管先> restore latest --target /tmp/restore-test\ndiff -rq /tmp/restore-test/<確認する場所> <本番の場所>'
 };
 
-/* 緊急 */
+/* 緊急の受付 */
 $('#sos').addEventListener('click', () => { $('#sheet').hidden = false; });
 $('#sheetx').addEventListener('click', () => { $('#sheet').hidden = true; });
 $('#sheet').addEventListener('click', e => { if (e.target.id === 'sheet') $('#sheet').hidden = true; });
 addEventListener('keydown', e => { if (e.key === 'Escape') $('#sheet').hidden = true; });
+$('#esend').addEventListener('click', () => {
+  $('#esend').textContent = '見本なので送信されません';
+  setTimeout(() => { $('#esend').textContent = '通報する'; }, 2400);
+});
 
-/* 段 */
-function go(n){
-  $$('.rail button').forEach(b => b.setAttribute('aria-selected', b.dataset.s == n));
-  [1,2,3,4,5].forEach(i => $('#s'+i).hidden = (i != n));
-  window.scrollTo({top:0, behavior:'smooth'});
+/* 進み具合 */
+const STEPS = ['所有の確認','チェック中','見つかったもの','保険に出す書類','どうやって直すか'];
+function drawFlow(){
+  $('#flow').innerHTML = STEPS.map((t,i) => {
+    const n = i + 1;
+    const cls = n === cur ? 'now' : (n <= reached ? 'done' : '');
+    return (i ? '<span class="sep"></span>' : '') +
+      '<span class="it ' + cls + '" data-s="' + n + '"><span class="n">' + n + '</span>' + t + '</span>';
+  }).join('');
+  $$('#flow .it.done').forEach(e => e.addEventListener('click', () => go(+e.dataset.s)));
 }
-$$('.rail button').forEach(b => b.addEventListener('click', () => { if(!b.disabled) go(b.dataset.s); }));
-const unlock = n => { const b = $('.rail button[data-s="' + n + '"]'); if(b) b.disabled = false; };
+function go(n){
+  cur = n; reached = Math.max(reached, n);
+  [1,2,3,4,5].forEach(i => $('#s'+i).hidden = (i != n));
+  drawFlow();
+  const y = document.querySelector('.flow').offsetTop;
+  window.scrollTo({top: Math.max(0, y - 62), behavior:'smooth'});
+}
+drawFlow();
 
 /* 所有の確認 */
-function token(d){
-  let h = 0; for (const c of d) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  return 'monomi-' + h.toString(16).padStart(8,'0');
-}
-$('#start').addEventListener('click', () => {
+function token(d){ let h=0; for (const c of d) h=(h*31+c.charCodeAt(0))>>>0;
+  return 'monomi-' + h.toString(16).padStart(8,'0'); }
+function setDomain(){
   domain = $('#domain').value.trim().replace(/^https?:\/\//,'').replace(/\/.*$/,'');
-  if (!domain) { $('#under').textContent = 'ドメインを入れてください。'; return; }
-  const t = token(domain);
-  $('#tokA').textContent = 'monomi-verify=' + t;
+  if (!domain) { $('#under').textContent = 'ドメインを入れてください。'; return false; }
+  $('#tokA').textContent = 'monomi-verify=' + token(domain);
   $('#tokB').textContent = 'https://' + domain + '/.well-known/monomi-verify.txt';
-  $('#under').textContent = domain + ' の所有を確認します。';
   verified = false; $('#run').disabled = true;
   $('#vstate').textContent = 'まだ確認していません。';
-  go(1);
-});
-$('#start').click();
+  $('#under').textContent = domain + ' の所有を確認します。';
+  return true;
+}
+$('#start').addEventListener('click', () => { if (setDomain()) go(1); });
+setDomain();
 
 $('#check').addEventListener('click', () => {
   verified = true; $('#run').disabled = false;
-  $('#vstate').innerHTML = '<span class="okmark">確認できました　' + domain + '</span>';
-  $('#hint').textContent = '見本なので、確認したことにしています。本番ではDNSかファイルを実際に読みに行きます。';
+  $('#vstate').innerHTML = '<span class="okline">確認できました　' + domain + '</span>';
 });
 
-/* スキャン */
+/* チェック */
 const stamp = () => new Date().toTimeString().slice(0,8);
 function line(text, cls){
   const d = document.createElement('div');
@@ -519,11 +548,8 @@ function line(text, cls){
 
 $('#run').addEventListener('click', async () => {
   if (!verified) return;
-  unlock(2); go(2);
-  document.body.classList.add('started');
-  $('#dom').textContent = domain;
+  go(2);
   $('#log').innerHTML = ''; $('#bar').style.width = '0';
-
   let res;
   try {
     res = await fetch('/api/scan', {method:'POST', headers:{'Content-Type':'application/json'},
@@ -543,80 +569,68 @@ $('#run').addEventListener('click', async () => {
     line('  ' + (hits.length ? hits.length + ' 件' : 'なし'), 'ok');
     done++; $('#bar').style.width = (done / res.stages.length * 100) + '%';
   }
-  line('所見 ' + res.findings.length + ' 件', 'ok');
-  render(); unlock(3); unlock(4); unlock(5);
+  line('見つかったもの ' + res.findings.length + ' 件', 'ok');
+  render(); reached = 5; drawFlow();
   setTimeout(() => go(3), 800);
 });
 
-const GROUPS = [
-  ['vendor','外に預けている先'], ['store','外から見えるファイル置き場'],
-  ['ai','AIの使われ方'], ['dns','公開されている入口'], ['tls','通信と証明書'],
-];
+const GROUPS = [['vendor','外に預けている先'],['store','外から見えるファイル置き場'],
+  ['ai','AIの使われ方'],['dns','公開されている入口'],['tls','通信と証明書']];
 const SEV = {high:'重大', mid:'注意', low:'軽微'};
-
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
 function render(){
-  const f = data.findings;
-  const c = s => f.filter(x => x.severity === s).length;
+  const f = data.findings, c = s => f.filter(x => x.severity === s).length;
   const mine = f.filter(x => x.owner === 'us').length;
   $('#sum').innerHTML =
     '<div class="h"><b>' + c('high') + '</b><span>重大</span></div>' +
-    '<div><b>' + c('mid') + '</b><span>注意</span></div>' +
+    '<div class="m"><b>' + c('mid') + '</b><span>注意</span></div>' +
     '<div><b>' + c('low') + '</b><span>軽微</span></div>' +
-    '<div><b>' + mine + ' <span style="font-size:15px;color:var(--dim)">/ ' + f.length +
+    '<div class="u"><b>' + mine + '<span style="font-size:16px;color:var(--dim)"> / ' + f.length +
       '</span></b><span>こちらで直せる</span></div>';
 
   $('#groups').innerHTML = GROUPS.map(g => {
     const list = f.filter(x => x.group === g[0]);
     if (!list.length) return '';
-    return '<div class="gh">' + g[1] + '</div>' + list.map(x =>
-      '<article class="find ' + x.severity + '">' +
-        '<div class="r1"><span class="sev">' + SEV[x.severity] + '</span>' +
-        '<span class="fid">' + x.id + '</span>' +
+    return '<div class="gh"><em>' + g[1] + '</em></div>' + list.map(x =>
+      '<article class="find ' + x.severity + '"><div class="r1">' +
+        '<span class="sev">' + SEV[x.severity] + '</span><span class="fid">' + x.id + '</span>' +
         (x.q ? '<span class="fid">' + x.q + '</span>' : '') +
-        '<span class="own ' + x.owner + '">' + (x.owner === 'us' ? 'こちらで直せる' : '今のお取引先に') + '</span></div>' +
+        '<span class="own ' + x.owner + '">' + (x.owner==='us'?'こちらで直せる':'今のお取引先に') + '</span></div>' +
         '<h3>' + x.title + '</h3><p>' + x.detail + '</p>' +
         '<div class="ev"><b>根拠</b>  ' + x.evidence + '</div>' +
-        (FIX[x.id] ? '<details class="fix"><summary>直し方</summary><pre>' + esc(FIX[x.id]) + '</pre></details>' : '') +
+        (FIX[x.id] ? '<details class="fix"><summary>直し方を見る</summary><pre>' + esc(FIX[x.id]) + '</pre></details>' : '') +
       '</article>').join('');
   }).join('');
 
   $('#ans').innerHTML = '<tr><th>番号</th><th>設問</th><th>回答</th><th>根拠</th></tr>' +
     data.answers.map(a =>
-      '<tr><td class="no">' + a.no + (a.extra ? '<span class="tagx">追加</span>' : '') + '</td>' +
-      '<td>' + a.question + '</td>' +
-      '<td class="a ' + (a.answer === 'はい' ? 'yes-ans' : 'no-ans') + '"><b>' + a.answer + '</b></td>' +
-      '<td class="no">' + a.from + '</td></tr>').join('');
+      '<tr><td class="no">' + a.no + (a.extra?'<span class="tagx">追加</span>':'') + '</td><td>' + a.question +
+      '</td><td class="a ' + (a.answer==='はい'?'yes-ans':'no-ans') + '"><b>' + a.answer +
+      '</b></td><td class="no">' + a.from + '</td></tr>').join('');
 
-  $('#certno').textContent = new Date().toISOString().slice(0,10).replace(/-/g,'') + '-001';
-  $('#certco').textContent = domain + '　' + new Date().getFullYear() + '年' + (new Date().getMonth()+1) + '月分';
-
-  const hiUs = f.filter(x => x.severity === 'high' && x.owner === 'us').length;
-  $('#h5').textContent = '次にやること';
+  const d = new Date();
+  $('#certno').textContent = d.toISOString().slice(0,10).replace(/-/g,'') + '-001';
+  $('#certco').textContent = domain + '　' + d.getFullYear() + '年' + (d.getMonth()+1) + '月分';
+  const hiUs = f.filter(x => x.severity==='high' && x.owner==='us').length;
   $('#p02').textContent = '重大な' + c('high') + '件のうち、こちらで直せるのは' + hiUs +
     '件です。サーバー周りは今のお取引先のほうが早く確実です。';
-
-  const body = ['MONOMI の診断結果について相談したい。','', 'ドメイン: ' + domain,
-    '所見: 重大' + c('high') + ' / 注意' + c('mid') + ' / 軽微' + c('low'), ''].join('\n');
   $('#mail').href = 'mailto:info@aidollargame.com?subject=' +
-    encodeURIComponent('ホワイトハック診断の相談') + '&body=' + encodeURIComponent(body);
+    encodeURIComponent('ホワイトハック診断の相談') + '&body=' +
+    encodeURIComponent('MONOMI の結果について相談したい。\n\nドメイン: ' + domain +
+      '\n重大' + c('high') + ' / 注意' + c('mid') + ' / 軽微' + c('low') + '\n');
 }
 
-/* 手順の書き出し */
 $('#dl').addEventListener('click', () => {
-  const f = data.findings;
   const txt = ['# ' + domain + ' の直し方', '# ' + new Date().toISOString().slice(0,10),
-    '# これは見本のデータです', ''].concat(
-    f.map(x => ['## [' + SEV[x.severity] + '] ' + x.id + '  ' + x.title, x.detail,
-      '根拠: ' + x.evidence, '担当: ' + (x.owner === 'us' ? 'こちらで直せる' : '今のお取引先に'),
-      '', FIX[x.id] || '（コマンドなし）', ''].join('\n'))).join('\n');
+    '# これは見本のデータです',''].concat(data.findings.map(x =>
+    ['## [' + SEV[x.severity] + '] ' + x.id + '  ' + x.title, x.detail, '根拠: ' + x.evidence,
+     '担当: ' + (x.owner==='us'?'こちらで直せる':'今のお取引先に'), '', FIX[x.id]||'（コマンドなし）',''].join('\n'))).join('\n');
   const ta = document.createElement('textarea');
   ta.value = txt; document.body.appendChild(ta); ta.select();
   try { document.execCommand('copy'); $('#dl').textContent = 'コピーしました'; }
   catch(e){ $('#dl').textContent = 'コピーできませんでした'; }
-  ta.remove();
-  setTimeout(() => { $('#dl').textContent = '手順を書き出す'; }, 2200);
+  ta.remove(); setTimeout(() => { $('#dl').textContent = '手順をまとめてコピー'; }, 2200);
 });
 $('#ask1').addEventListener('click', () => $('#mail').click());
 $('#ask2').addEventListener('click', () => $('#mail').click());

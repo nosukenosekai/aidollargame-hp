@@ -86,6 +86,20 @@ body{margin:0;background:var(--paper);color:var(--ink);
 .gate b{display:block;font-size:16px;font-weight:700;margin-bottom:4px}
 .gate p{margin:0;color:var(--sub);font-size:13.5px}
 
+/* 画面の下に貼り付く次へ。本物のボタンが見えている間は隠す */
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:55;background:rgba(255,255,255,.96);
+  backdrop-filter:blur(10px);border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  transform:translateY(110%);transition:transform .22s ease;pointer-events:none}
+.sticky.on{transform:translateY(0);pointer-events:auto}
+.sticky .wrap{display:flex;align-items:center;gap:16px;padding-block:12px}
+.sticky span{flex:1;min-width:0;font-size:13.5px;color:var(--sub);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sticky .cta{flex:none;padding:12px 22px}
+@media(max-width:620px){.sticky span{display:none}.sticky .cta{width:100%}}
+body.hasSticky main{padding-bottom:150px}
+@media(prefers-reduced-motion:reduce){.sticky{transition:none}}
+
 /* 次へ進むボタン。各段の下に必ず置く */
 .nextbar{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:28px;
   border:1px solid var(--line);border-left:4px solid var(--red);border-radius:6px;
@@ -453,6 +467,11 @@ td.a b{font-weight:700}
 
 </div></main>
 
+<div class="sticky" id="sticky"><div class="wrap">
+  <span id="stickytext"></span>
+  <button class="cta" id="stickybtn"></button>
+</div></div>
+
 <script>
 const $  = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -557,10 +576,45 @@ function drawFlow(){
   }).join('');
   $$('#flow .it.done').forEach(e => e.addEventListener('click', () => go(+e.dataset.s)));
 }
+/* 段ごとの「次へ」。無い段は null */
+const NEXT = {3:{to:4, label:'保険に出す書類を見る', note:'見つかったものは、そのまま書類になります'},
+              4:{to:5, label:'どうやって直すか',     note:'あとは、どうやって直すかだけです'}};
+let realBar = null;
+
+/* 本物のボタンが画面に入っているかを、位置を測って判断する。
+   IntersectionObserver はプレビュー環境で発火しないことがあったので使わない。 */
+function syncSticky(){
+  const s = $('#sticky');
+  if (!realBar) return;
+  const r = realBar.getBoundingClientRect();
+  const seen = r.top < innerHeight - 70 && r.bottom > 0;
+  s.classList.toggle('on', !seen);
+}
+addEventListener('scroll', syncSticky, {passive:true});
+addEventListener('resize', syncSticky);
+/* スクロールの合図が飛ばない環境があるので、出している間は一定間隔でも見る */
+let tick = null;
+
+function setSticky(n){
+  const s = $('#sticky'), nx = NEXT[n];
+  if (!nx) { realBar = null; if (tick) { clearInterval(tick); tick = null; }
+    s.classList.remove('on'); document.body.classList.remove('hasSticky'); return; }
+  $('#stickytext').textContent = nx.note;
+  $('#stickybtn').textContent = nx.label;
+  $('#stickybtn').onclick = () => go(nx.to);
+  document.body.classList.add('hasSticky');
+  realBar = $('#s' + n + ' .nextbar');
+  s.classList.add('on');
+  requestAnimationFrame(syncSticky);
+  if (tick) clearInterval(tick);
+  tick = setInterval(syncSticky, 200);
+}
+
 function go(n){
   cur = n; reached = Math.max(reached, n);
   [1,2,3,4,5].forEach(i => $('#s'+i).hidden = (i != n));
   drawFlow();
+  setSticky(n);
   const y = document.querySelector('.flow').offsetTop;
   window.scrollTo({top: Math.max(0, y - 62), behavior:'smooth'});
 }

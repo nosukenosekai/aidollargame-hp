@@ -86,6 +86,17 @@ body{margin:0;background:var(--paper);color:var(--ink);
 .gate b{display:block;font-size:16px;font-weight:700;margin-bottom:4px}
 .gate p{margin:0;color:var(--sub);font-size:13.5px}
 
+/* 次へ進むボタン。各段の下に必ず置く */
+.nextbar{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:28px;
+  border:1px solid var(--line);border-left:4px solid var(--red);border-radius:6px;
+  padding:20px 22px;background:var(--soft)}
+.nextbar div{flex:1;min-width:250px}
+.nextbar b{display:block;font-size:16px;font-weight:700;margin-bottom:4px}
+.nextbar p{margin:0;color:var(--sub);font-size:13.5px}
+.backlink{display:inline-flex;align-items:center;gap:6px;margin-top:16px;color:var(--sub);
+  font-size:13.5px;background:none;border:0;cursor:pointer;padding:0}
+.backlink:hover{color:var(--ink)}
+
 /* 進み具合（押せるのは済んだところだけ。押せないものはボタンに見せない） */
 .flow{border-bottom:1px solid var(--line);background:var(--soft);position:sticky;top:62px;z-index:50}
 .flow .wrap{display:flex;align-items:center;gap:0;overflow-x:auto;padding-block:0}
@@ -363,6 +374,11 @@ td.a b{font-weight:700}
   <p class="lead">根拠と、直し方のコマンドを付けます。直す人は「こちらで直せる」と「今のお取引先に頼む」に分けています。</p>
   <div class="sum" id="sum"></div>
   <div id="groups"></div>
+  <div class="nextbar">
+    <div><b>見つかったものは、そのまま書類になります</b>
+      <p id="n3">サイバー保険を申し込むときの回答票と、毎月出す稼働証明書の2つです。</p></div>
+    <button class="cta" data-go="4">保険に出す書類を見る</button>
+  </div>
 </section>
 
 <section id="s4" hidden>
@@ -387,6 +403,12 @@ td.a b{font-weight:700}
     </div>
     <p style="margin-top:15px">チェックの時点では4点とも満たしていません。運用を始めると順に埋まり、毎月この形で出ます。1年で12通になります。保険の更新に使えます。</p>
   </div>
+  <div class="nextbar">
+    <div><b>あとは、どうやって直すかだけです</b>
+      <p>自分で直す、重大な分だけ頼む、毎月保つところまで頼む。3つから選べます。</p></div>
+    <button class="cta" data-go="5">どうやって直すか</button>
+  </div>
+  <button class="backlink" data-go="3">← 見つかったものに戻る</button>
 </section>
 
 <section id="s5" hidden>
@@ -420,6 +442,8 @@ td.a b{font-weight:700}
     <a class="btn red" id="mail" href="#">相談する</a>
     <a class="btn" href="https://aidollargame.com" target="_blank" rel="noopener">会社を見る</a>
   </div>
+
+  <button class="backlink" data-go="4">← 保険に出す書類に戻る</button>
 
   <div class="foot">
     DEMO — ドメイン名・所見・コマンドはすべて架空で、実在の組織とは関係ありません。<br>
@@ -541,6 +565,9 @@ function go(n){
   window.scrollTo({top: Math.max(0, y - 62), behavior:'smooth'});
 }
 drawFlow();
+
+/* 各段の下にある「次へ」と「戻る」 */
+$$('[data-go]').forEach(b => b.addEventListener('click', () => go(+b.dataset.go)));
 
 /* 自分のサイトか確かめる */
 function token(d){ let h=0; for (const c of d) h=(h*31+c.charCodeAt(0))>>>0;

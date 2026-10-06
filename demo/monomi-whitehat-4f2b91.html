@@ -74,7 +74,7 @@ body{margin:0;background:var(--paper);color:var(--ink);
 @media(max-width:620px){.entry{flex-direction:column}}
 .note{font-size:13px;color:var(--dim);margin-top:13px}
 
-/* 所有確認の前に出す分 */
+/* 自分のサイトだと確かめる前に出す分 */
 .peekwrap{border-bottom:1px solid var(--line);padding:30px 0 34px;background:#fff}
 .peekhd{display:flex;align-items:baseline;gap:14px;margin-bottom:14px;flex-wrap:wrap}
 .peekhd b{font-size:18px;font-weight:700}
@@ -115,7 +115,7 @@ section[hidden]{display:none}
 .card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:22px 24px;margin-bottom:12px}
 .soft{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:20px 22px;margin-bottom:12px}
 
-/* 所有の確認 */
+/* 自分のサイトか確かめる */
 .vrow{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--line);
   border-radius:6px;padding:18px 20px;margin-bottom:10px}
 .vrow .k{font-family:var(--disp);font-weight:800;font-size:13px;color:var(--dim);width:16px;flex:none;padding-top:3px}
@@ -295,7 +295,7 @@ td.a b{font-weight:700}
   <p class="ask">自分の会社のサイト、外からどう見えていますか。</p>
   <div class="mark">MONO<span>MI</span></div>
   <div class="tagline">ホワイトハック診断</div>
-  <p class="body">ドメインを入れて所有を確かめると、その場でチェックが始まります。見るのはサーバーだけではありません。外に預けている先と、社員のAIの使い方まで数えます。</p>
+  <p class="body">ドメインを入れると、公開されている範囲をその場で見ます。続きは、自分のサイトだと確かめてから。見るのはサーバーだけではありません。外に預けている先と、社員のAIの使い方まで数えます。</p>
   <div class="entry">
     <input type="text" id="domain" placeholder="example.co.jp" value="sample-shokai.example">
     <button class="cta" id="start">
@@ -303,7 +303,7 @@ td.a b{font-weight:700}
       外から見る
     </button>
   </div>
-  <div class="note" id="under">まず、誰でも見られる公開情報だけで数えます。相手のサーバーは叩きません。</div>
+  <div class="note" id="under">まず、誰でも見られる情報だけで数えます。相手のサーバーには触れません。</div>
 </div></div>
 
 <div class="peekwrap" id="peekwrap" hidden><div class="wrap">
@@ -313,9 +313,9 @@ td.a b{font-weight:700}
   </div>
   <div id="peeklist"></div>
   <div class="gate">
-    <div><b id="gatetitle">ここから先は、所有の確認が要ります</b>
+    <div><b id="gatetitle">ここから先は、自分のサイトだと確かめてからです</b>
       <p>相手のサーバーに実際にリクエストを投げるので、自分のドメインだと確かめてからでないと始められません。社内のAIの使われ方も、ここから先です。</p></div>
-    <button class="cta" id="togate">所有の確認へ</button>
+    <button class="cta" id="togate">自分のサイトだと確かめる</button>
   </div>
 </div></div>
 
@@ -325,8 +325,8 @@ td.a b{font-weight:700}
 
 <section id="s1">
   <div class="sh red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5.5v6c0 5 3.4 9.3 8 10.5 4.6-1.2 8-5.5 8-10.5v-6L12 2Z"/></svg>
-    <b>STEP 1</b><i>所有の確認</i></div>
-  <p class="lead">許諾のない診断は不正アクセス禁止法に当たります。自分のドメインであることを機械で確かめてから始めます。AとBのどちらか片方で構いません。</p>
+    <b>STEP 1</b><i>自分のサイトか確かめる</i></div>
+  <p class="lead">他人のサイトを勝手に調べられないように、先に「このサイトは自分のもの」と確かめます。許可なく人のサイトを調べるのは不正アクセス禁止法に当たるためです。AとBのどちらか片方で構いません。</p>
 
   <div class="vrow"><div class="k">A</div><div style="flex:1">
     <b>DNSのTXTレコードに置く</b>
@@ -341,18 +341,18 @@ td.a b{font-weight:700}
   <div class="soft" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
     <div style="flex:1;min-width:230px">
       <b style="display:block;font-size:15.5px;margin-bottom:2px">確認が終わったら</b>
-      <span style="color:var(--sub);font-size:13.5px" id="vstate">まだ確認していません。</span>
+      <span style="color:var(--sub);font-size:13.5px" id="vstate">まだ確かめていません。</span>
     </div>
-    <button class="btn" id="check">確認する</button>
+    <button class="btn" id="check">確かめる</button>
     <button class="cta" id="run" disabled>チェックを始める</button>
   </div>
-  <div class="note">見本なので、確認するを押すと成功したことにします。本番はDNSかファイルを実際に読みに行きます。</div>
+  <div class="note">見本なので、確かめるを押すと成功したことにします。本番はDNSかファイルを実際に読みに行きます。</div>
 </section>
 
 <section id="s2" hidden>
   <div class="sh amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
     <b>STEP 2</b><i>チェック中</i></div>
-  <p class="lead">範囲は所有が確認できたドメインの中だけです。外のホストには触れません。</p>
+  <p class="lead">調べるのは、自分のサイトだと確かめが取れたドメインの中だけです。ほかのホストには触れません。</p>
   <div class="console" id="log"></div>
   <div class="bar"><i id="bar"></i></div>
 </section>
@@ -523,7 +523,7 @@ $('#esend').addEventListener('click', () => {
 });
 
 /* 進み具合 */
-const STEPS = ['所有の確認','チェック中','見つかったもの','保険に出す書類','どうやって直すか'];
+const STEPS = ['自分のサイトか確かめる','チェック中','見つかったもの','保険に出す書類','どうやって直すか'];
 function drawFlow(){
   $('#flow').innerHTML = STEPS.map((t,i) => {
     const n = i + 1;
@@ -542,7 +542,7 @@ function go(n){
 }
 drawFlow();
 
-/* 所有の確認 */
+/* 自分のサイトか確かめる */
 function token(d){ let h=0; for (const c of d) h=(h*31+c.charCodeAt(0))>>>0;
   return 'monomi-' + h.toString(16).padStart(8,'0'); }
 function setDomain(){
@@ -551,8 +551,8 @@ function setDomain(){
   $('#tokA').textContent = 'monomi-verify=' + token(domain);
   $('#tokB').textContent = 'https://' + domain + '/.well-known/monomi-verify.txt';
   verified = false; $('#run').disabled = true;
-  $('#vstate').textContent = 'まだ確認していません。';
-  $('#under').textContent = domain + ' の所有を確認します。';
+  $('#vstate').textContent = 'まだ確かめていません。';
+  $('#under').textContent = domain + ' が自分のサイトかを先に確かめます。';
   return true;
 }
 $('#start').addEventListener('click', async () => {
@@ -569,7 +569,7 @@ $('#start').addEventListener('click', async () => {
   $('#start').disabled = false; $('#start').lastChild.textContent = ' 外から見る';
   $('#peektitle').textContent = domain + ' を外から見たところ　' + p.findings.length + ' 件';
   $('#peeklist').innerHTML = p.findings.map(card).join('');
-  $('#gatetitle').textContent = 'ここから先の ' + p.locked + ' 項目は、所有の確認が要ります';
+  $('#gatetitle').textContent = 'ここから先の ' + p.locked + ' 項目は、自分のサイトだと確かめてからです';
   $('#peekwrap').hidden = false;
   $('#peekwrap').scrollIntoView({behavior:'smooth', block:'start'});
 });
@@ -578,7 +578,7 @@ setDomain();
 
 $('#check').addEventListener('click', () => {
   verified = true; $('#run').disabled = false;
-  $('#vstate').innerHTML = '<span class="okline">確認できました　' + domain + '</span>';
+  $('#vstate').innerHTML = '<span class="okline">自分のサイトだと確かめられました　' + domain + '</span>';
 });
 
 /* チェック */
@@ -602,7 +602,7 @@ $('#run').addEventListener('click', async () => {
   } catch(e) { res = JSON.parse(JSON.stringify(DEMO)); }
   data = res;
 
-  line('所有を確認　' + domain, 'ok');
+  line('自分のサイトだと確認済み　' + domain, 'ok');
   let done = 0;
   for (const st of res.stages){
     line('> ' + st.label);

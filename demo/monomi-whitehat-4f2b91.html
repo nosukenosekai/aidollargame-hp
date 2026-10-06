@@ -74,6 +74,18 @@ body{margin:0;background:var(--paper);color:var(--ink);
 @media(max-width:620px){.entry{flex-direction:column}}
 .note{font-size:13px;color:var(--dim);margin-top:13px}
 
+/* 所有確認の前に出す分 */
+.peekwrap{border-bottom:1px solid var(--line);padding:30px 0 34px;background:#fff}
+.peekhd{display:flex;align-items:baseline;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.peekhd b{font-size:18px;font-weight:700}
+.peekhd span{font-size:12.5px;color:var(--dim)}
+.gate{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:16px;
+  border:1px solid var(--line);border-left:4px solid var(--red);border-radius:6px;
+  padding:20px 22px;background:var(--soft)}
+.gate div{flex:1;min-width:260px}
+.gate b{display:block;font-size:16px;font-weight:700;margin-bottom:4px}
+.gate p{margin:0;color:var(--sub);font-size:13.5px}
+
 /* 進み具合（押せるのは済んだところだけ。押せないものはボタンに見せない） */
 .flow{border-bottom:1px solid var(--line);background:var(--soft);position:sticky;top:62px;z-index:50}
 .flow .wrap{display:flex;align-items:center;gap:0;overflow-x:auto;padding-block:0}
@@ -288,10 +300,23 @@ td.a b{font-weight:700}
     <input type="text" id="domain" placeholder="example.co.jp" value="sample-shokai.example">
     <button class="cta" id="start">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      チェックを始める
+      外から見る
     </button>
   </div>
-  <div class="note" id="under">自分が権限を持つドメインだけ。所有の確認が取れるまでチェックは始まりません。</div>
+  <div class="note" id="under">まず、誰でも見られる公開情報だけで数えます。相手のサーバーは叩きません。</div>
+</div></div>
+
+<div class="peekwrap" id="peekwrap" hidden><div class="wrap">
+  <div class="peekhd">
+    <div><b id="peektitle">外から見えているもの</b>
+      <span id="peeksrc">証明書の透明性ログ・DNS・HTTPのヘッダ・TLSの握手・公開ページ</span></div>
+  </div>
+  <div id="peeklist"></div>
+  <div class="gate">
+    <div><b id="gatetitle">ここから先は、所有の確認が要ります</b>
+      <p>相手のサーバーに実際にリクエストを投げるので、自分のドメインだと確かめてからでないと始められません。社内のAIの使われ方も、ここから先です。</p></div>
+    <button class="cta" id="togate">所有の確認へ</button>
+  </div>
 </div></div>
 
 <div class="flow"><div class="wrap" id="flow"></div></div>
@@ -422,42 +447,42 @@ const DEMO = {
   { id: 'report', label: '所見をまとめる',                   ms: 600 },
 ],
   findings: [
-  { id:'F-01', group:'store', severity:'high', owner:'us',  q:'TM-07',
+  { id:'F-01', group:'store', severity:'high', owner:'us',  q:'TM-07', passive:false,
     title:'認証なしで中身が一覧できるファイル置き場が1つ',
     detail:'見積のひな形と、2024年の顧客名簿らしいCSVが外から直接開けます。攻撃を受けたわけではなく、公開設定のまま置かれています。',
     evidence:'storage.sample-shokai.example / ListObjects が匿名で成功（応答200・オブジェクト417件）' },
 
-  { id:'F-02', group:'vendor', severity:'high', owner:'vendor', q:'TM-21',
+  { id:'F-02', group:'vendor', severity:'high', owner:'vendor', q:'TM-21', passive:true,
     title:'問い合わせの受け口を外部サービスに預けている',
     detail:'サイトの問い合わせフォームが外部の管理サービスへ送られています。預け先が落ちると、こちらが無事でもお客様の氏名とメールアドレスが出ます。',
     evidence:'フォームの送信先が別ドメイン（form-relay.example）/ 預け先との契約書・再委託の範囲は未確認' },
 
-  { id:'F-03', group:'ai', severity:'high', owner:'us', q:null,
+  { id:'F-03', group:'ai', severity:'high', owner:'us', q:null, passive:false,
     title:'外部のAIに貼られた中身が残っていない',
     detail:'社内で3つの生成AIが使われていますが、誰が何を貼ったかの記録がありません。事故が起きても、何が出たかを説明できない状態です。',
     evidence:'端末3台の履歴から確認。入力前チェックの導入なし・ログの保存期間0日' },
 
-  { id:'F-04', group:'ai', severity:'mid', owner:'us', q:null,
+  { id:'F-04', group:'ai', severity:'mid', owner:'us', q:null, passive:false,
     title:'退職者のアカウントが2つ生きている',
     detail:'人の出入りに合わせた棚卸しが行われていません。AIサービスは個人のメールで登録できるため、会社の管理台帳に載りません。',
     evidence:'名簿との突き合わせで2件不一致（最終利用 2026-08-14 / 2026-09-02）' },
 
-  { id:'F-05', group:'tls', severity:'mid', owner:'vendor', q:'TM-03',
+  { id:'F-05', group:'tls', severity:'mid', owner:'vendor', q:'TM-03', passive:true,
     title:'古い暗号方式が1つ有効なまま',
     detail:'いまは使わない方式が残っています。実害が出る前に止められます。',
     evidence:'TLS 1.0 が有効（www.sample-shokai.example:443）' },
 
-  { id:'F-06', group:'dns', severity:'mid', owner:'vendor', q:'TM-18',
+  { id:'F-06', group:'dns', severity:'mid', owner:'vendor', q:'TM-18', passive:true,
     title:'誰も使っていない入口が3つ開いている',
     detail:'過去のキャンペーン用のサブドメインが残り、古いままのソフトが動いています。',
     evidence:'campaign2023 / test / old-mail の3件が応答' },
 
-  { id:'F-07', group:'ai', severity:'low', owner:'us', q:null,
+  { id:'F-07', group:'ai', severity:'low', owner:'us', q:null, passive:false,
     title:'AIの使い方を決めた文書がない',
     detail:'何を貼ってよいかの線引きが書かれていません。研修の記録もありません。',
     evidence:'社内規程に生成AIの記載なし・教育の実施記録なし' },
 
-  { id:'F-08', group:'store', severity:'low', owner:'vendor', q:'TM-09',
+  { id:'F-08', group:'store', severity:'low', owner:'vendor', q:'TM-09', passive:false,
     title:'バックアップの戻し確認を2年していない',
     detail:'取っているだけで、戻せるかを試した記録がありません。',
     evidence:'直近の復元テスト 2024-06（運用記録より）' },
@@ -530,7 +555,25 @@ function setDomain(){
   $('#under').textContent = domain + ' の所有を確認します。';
   return true;
 }
-$('#start').addEventListener('click', () => { if (setDomain()) go(1); });
+$('#start').addEventListener('click', async () => {
+  if (!setDomain()) return;
+  $('#start').disabled = true; $('#start').lastChild.textContent = ' 見ています…';
+  let p;
+  try {
+    p = await fetch('/api/peek', {method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({domain})}).then(r => r.json());
+  } catch(e) {
+    p = { findings: DEMO.findings.filter(f => f.passive),
+          locked: DEMO.findings.filter(f => !f.passive).length };
+  }
+  $('#start').disabled = false; $('#start').lastChild.textContent = ' 外から見る';
+  $('#peektitle').textContent = domain + ' を外から見たところ　' + p.findings.length + ' 件';
+  $('#peeklist').innerHTML = p.findings.map(card).join('');
+  $('#gatetitle').textContent = 'ここから先の ' + p.locked + ' 項目は、所有の確認が要ります';
+  $('#peekwrap').hidden = false;
+  $('#peekwrap').scrollIntoView({behavior:'smooth', block:'start'});
+});
+$('#togate').addEventListener('click', () => go(1));
 setDomain();
 
 $('#check').addEventListener('click', () => {
@@ -579,6 +622,17 @@ const GROUPS = [['vendor','外に預けている先'],['store','外から見え�
 const SEV = {high:'重大', mid:'注意', low:'軽微'};
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 
+function card(x){
+  return '<article class="find ' + x.severity + '"><div class="r1">' +
+    '<span class="sev">' + SEV[x.severity] + '</span><span class="fid">' + x.id + '</span>' +
+    (x.q ? '<span class="fid">' + x.q + '</span>' : '') +
+    '<span class="own ' + x.owner + '">' + (x.owner==='us'?'こちらで直せる':'今のお取引先に') + '</span></div>' +
+    '<h3>' + x.title + '</h3><p>' + x.detail + '</p>' +
+    '<div class="ev"><b>根拠</b>  ' + x.evidence + '</div>' +
+    (FIX[x.id] ? '<details class="fix"><summary>直し方を見る</summary><pre>' + esc(FIX[x.id]) + '</pre></details>' : '') +
+  '</article>';
+}
+
 function render(){
   const f = data.findings, c = s => f.filter(x => x.severity === s).length;
   const mine = f.filter(x => x.owner === 'us').length;
@@ -592,15 +646,7 @@ function render(){
   $('#groups').innerHTML = GROUPS.map(g => {
     const list = f.filter(x => x.group === g[0]);
     if (!list.length) return '';
-    return '<div class="gh"><em>' + g[1] + '</em></div>' + list.map(x =>
-      '<article class="find ' + x.severity + '"><div class="r1">' +
-        '<span class="sev">' + SEV[x.severity] + '</span><span class="fid">' + x.id + '</span>' +
-        (x.q ? '<span class="fid">' + x.q + '</span>' : '') +
-        '<span class="own ' + x.owner + '">' + (x.owner==='us'?'こちらで直せる':'今のお取引先に') + '</span></div>' +
-        '<h3>' + x.title + '</h3><p>' + x.detail + '</p>' +
-        '<div class="ev"><b>根拠</b>  ' + x.evidence + '</div>' +
-        (FIX[x.id] ? '<details class="fix"><summary>直し方を見る</summary><pre>' + esc(FIX[x.id]) + '</pre></details>' : '') +
-      '</article>').join('');
+    return '<div class="gh"><em>' + g[1] + '</em></div>' + list.map(card).join('');
   }).join('');
 
   $('#ans').innerHTML = '<tr><th>番号</th><th>設問</th><th>回答</th><th>根拠</th></tr>' +

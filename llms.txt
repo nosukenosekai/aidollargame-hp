@@ -160,6 +160,7 @@
 株式会社AIdollargameが note.com で公開している記事。一覧ページ: https://aidollargame.com/note.html
 アカウント: https://note.com/aidollargame
 
+- 2026-10-07｜顧客名簿をAIに入れる前に。氏名をIDに置き換えて消える義務と、消えない義務: https://note.com/aidollargame/n/nb22ce91508cb
 - 2026-10-05｜【衝撃】AIが核融合の式を見つけた？！: https://note.com/aidollargame/n/n16ad58f2a828
 - 2026-09-30｜660万件と57万件の情報漏洩。漏れてからでは遅い。企業が今週やるべき３つのこと: https://note.com/aidollargame/n/n3019e37cdcdf
 - 2026-09-27｜20代のプログラマーは15%減、30代は22%増。ノルウェーの雇用記録を全部数えた結果: https://note.com/aidollargame/n/n45c2ddfc93b8

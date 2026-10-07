@@ -241,6 +241,18 @@ td.a b{font-weight:700}
 .foot{color:var(--dim);font-size:12.5px;line-height:1.9;margin-top:34px;
   border-top:1px solid var(--line);padding-top:20px}
 
+.tierbox{border:1px solid var(--line);border-left:4px solid var(--red);padding:18px 20px;margin:0 0 26px}
+.tierbox>b{display:block;font-size:19px;line-height:1.5}
+.tierbox>p{margin:6px 0 14px;color:var(--sub);font-size:14px}
+.tierbox table{width:100%;border-collapse:collapse;font-size:14px}
+.tierbox th,.tierbox td{text-align:left;padding:9px 10px;border-top:1px solid var(--line);vertical-align:top}
+.tierbox th{font-size:12px;color:var(--dim);font-weight:600;border-top:0}
+.tierbox .tg{display:inline-block;min-width:38px;text-align:center;font-weight:700;font-size:12px;
+  padding:3px 6px;border:1px solid var(--line)}
+.tierbox .tg.t0{background:var(--red);color:#fff;border-color:var(--red)}
+.tierbox .tg.t1{color:var(--red);border-color:var(--red)}
+.tierbox .bs{color:var(--dim);font-size:12.5px}
+
 /* 緊急の受付 */
 .sheet{position:fixed;inset:0;z-index:80;background:rgba(20,22,26,.6);display:flex;justify-content:center;
   align-items:flex-start;padding:40px 18px;overflow:auto}
@@ -294,11 +306,10 @@ td.a b{font-weight:700}
     <span>いま起きていることを、こちらで引き受けます。</span>
   </div>
   <div class="bd">
-    <div class="notreal">これは画面の見本です。下の番号と送信先は実在しません。<br>
-      本当に事故が起きている場合は、契約している保険会社と、警察のサイバー犯罪相談窓口（#9110）へ。</div>
+    <div class="notreal">これは画面の見本です。下の番号と送信先は実在しません。<br>いま被害が進行中なら110。#9110は相談の窓口で、受付は平日の日中です。契約している保険会社の事故受付にも、同時に電話してください。</div>
     <div class="tel">
-      <b>080-0000-0000</b>
-      <span>24時間　つながらないときは下のフォームへ</span>
+      <b>電話 受付は平日 9:00〜18:00</b>
+      <span>時間外はフォームが受け取ります。折り返しの時刻はここに入れる（本番で決めてから公開する）</span>
     </div>
     <label><span>何が起きていますか</span>
       <select id="e1">
@@ -311,8 +322,7 @@ td.a b{font-weight:700}
     <label><span>会社名とご連絡先</span><input type="text" id="e2" placeholder="株式会社○○／090-0000-0000"></label>
     <label><span>分かっている範囲で（任意）</span><textarea id="e3" placeholder="いつ気づいたか、どの端末か、など"></textarea></label>
     <button class="btn red" id="esend" style="width:100%;padding:14px">通報する</button>
-    <div class="after">受け付けたら折り返します。待っている間に、電源は切らないでください。記録が消えます。<br>
-      LANケーブルを抜く、無線を切る。本体は動かしたままに。</div>
+    <div class="after">待っている間に2つ。感染した端末をネットワークから切り離す（有線はLANケーブルを抜く、無線を切る）。電源は切らない。調べるのに必要な記録が消えます。<br>根拠 <a href="https://www.npa.go.jp/bureau/cyber/pdf/Vol.17cpal.pdf" target="_blank" rel="noopener">警察庁サイバー警察局 Cyber Police Agency Letter R5 Vol.17</a>（隔離・電源は切らない）／<a href="https://www.jpcert.or.jp/magazine/security/ransom-faq.html" target="_blank" rel="noopener">JPCERT/CC 侵入型ランサムウェア攻撃を受けたら読むFAQ</a>（この後の手順）</div>
   </div>
 </div></div>
 
@@ -320,7 +330,7 @@ td.a b{font-weight:700}
   <p class="ask">自分の会社のサイト、外からどう見えていますか。</p>
   <div class="mark">MONO<span>MI</span></div>
   <div class="tagline">ホワイトハック診断</div>
-  <p class="body">ドメインを入れると、公開されている範囲をその場で見ます。続きは、自分のサイトだと確かめてから。見るのはサーバーだけではありません。外に預けている先と、社員のAIの使い方まで数えます。</p>
+  <p class="body">ドメインを入れると、公開されている範囲をその場で見ます。続きは、自分のサイトだと確かめてから。見るのはサーバーだけではありません。使っている外部サービスと、社員が使っているAIも数えます。AIの分は外から見えないので、送信前を通る入口を1本入れてから数えます。</p>
   <div class="entry">
     <input type="text" id="domain" placeholder="example.co.jp" value="sample-shokai.example">
     <button class="cta" id="start">
@@ -328,18 +338,18 @@ td.a b{font-weight:700}
       外から見る
     </button>
   </div>
-  <div class="note" id="under">まず、誰でも見られる情報だけで数えます。相手のサーバーには触れません。</div>
+  <div class="note" id="under">まず、誰でも見られる記録だけで数えます。証明書の透明性ログ、公開DNS、WHOIS。相手のサーバーには1回もつなぎません。</div>
 </div></div>
 
 <div class="peekwrap" id="peekwrap" hidden><div class="wrap">
   <div class="peekhd">
     <div><b id="peektitle">外から見えているもの</b>
-      <span id="peeksrc">証明書の透明性ログ・DNS・HTTPのヘッダ・TLSの握手・公開ページ</span></div>
+      <span id="peeksrc">証明書の透明性ログ（crt.sh）・公開DNS・WHOIS</span></div>
   </div>
   <div id="peeklist"></div>
   <div class="gate">
     <div><b id="gatetitle">ここから先は、自分のサイトだと確かめてからです</b>
-      <p>相手のサーバーに実際にリクエストを投げるので、自分のドメインだと確かめてからでないと始められません。社内のAIの使われ方も、ここから先です。</p></div>
+      <p>ここから先は、相手のサーバーに実際につなぎます。TLSの握手、HTTPのヘッダ、ファイル置き場の確かめ。だから自分のドメインだと確かめてからでないと始められません。社員が使っているAIも、ここから先です。</p></div>
     <button class="cta" id="togate">自分のサイトだと確かめる</button>
   </div>
 </div></div>
@@ -387,6 +397,11 @@ td.a b{font-weight:700}
     <b>STEP 3</b><i>見つかったもの</i></div>
   <p class="lead">根拠と、直し方のコマンドを付けます。直す人は「こちらで直せる」と「今のお取引先に頼む」に分けています。</p>
   <div class="sum" id="sum"></div>
+  <div class="tierbox" id="tierbox" hidden>
+    <b id="tierline"></b>
+    <p>並べ替えの軸は、情報が機微かどうかではありません。漏れた後に、二次被害がどこまで連鎖するかです。</p>
+    <table id="tiertable"></table>
+  </div>
   <div id="groups"></div>
   <div class="nextbar">
     <div><b>見つかったものは、そのまま書類になります</b>
@@ -485,7 +500,7 @@ const DEMO = {
   { id: 'dns',    label: '公開されている入口を数える',       ms: 900 },
   { id: 'tls',    label: '通信と証明書を見る',               ms: 700 },
   { id: 'store',  label: '外から見えるファイル置き場を探す', ms: 1200 },
-  { id: 'vendor', label: '外に預けている先を洗い出す',       ms: 1100 },
+  { id: 'vendor', label: '使っている外部サービスを洗い出す',       ms: 1100 },
   { id: 'ai',     label: 'AIの使われ方を調べる',             ms: 1400 },
   { id: 'report', label: '所見をまとめる',                   ms: 600 },
 ],
@@ -496,9 +511,9 @@ const DEMO = {
     evidence:'storage.sample-shokai.example / ListObjects が匿名で成功（応答200・オブジェクト417件）' },
 
   { id:'F-02', group:'vendor', severity:'high', owner:'vendor', q:'TM-21', passive:true,
-    title:'問い合わせの受け口を外部サービスに預けている',
+    title:'問い合わせの受け口が外部サービスにある',
     detail:'サイトの問い合わせフォームが外部の管理サービスへ送られています。預け先が落ちると、こちらが無事でもお客様の氏名とメールアドレスが出ます。',
-    evidence:'フォームの送信先が別ドメイン（form-relay.example）/ 預け先との契約書・再委託の範囲は未確認' },
+    evidence:'DNSのCNAMEとSPFに form-relay.example が入っている（ページの中身は取得していません）/ 預け先との契約書・再委託の範囲は未確認' },
 
   { id:'F-03', group:'ai', severity:'high', owner:'us', q:null, passive:false,
     title:'外部のAIに貼られた中身が残っていない',
@@ -510,15 +525,15 @@ const DEMO = {
     detail:'人の出入りに合わせた棚卸しが行われていません。AIサービスは個人のメールで登録できるため、会社の管理台帳に載りません。',
     evidence:'名簿との突き合わせで2件不一致（最終利用 2026-08-14 / 2026-09-02）' },
 
-  { id:'F-05', group:'tls', severity:'mid', owner:'vendor', q:'TM-03', passive:true,
+  { id:'F-05', group:'tls', severity:'mid', owner:'vendor', q:'TM-03', passive:false,
     title:'古い暗号方式が1つ有効なまま',
     detail:'いまは使わない方式が残っています。実害が出る前に止められます。',
     evidence:'TLS 1.0 が有効（www.sample-shokai.example:443）' },
 
   { id:'F-06', group:'dns', severity:'mid', owner:'vendor', q:'TM-18', passive:true,
-    title:'誰も使っていない入口が3つ開いている',
-    detail:'過去のキャンペーン用のサブドメインが残り、古いままのソフトが動いています。',
-    evidence:'campaign2023 / test / old-mail の3件が応答' },
+    title:'誰も使っていない入口が3つ残っている',
+    detail:'過去のキャンペーン用の名前が、証明書のログに残っています。まだ動いているかは、自分のサイトだと確かめた後に見ます。',
+    evidence:'証明書の透明性ログ（crt.sh）に campaign2023 / test / old-mail の3件。応答するかは確かめていません' },
 
   { id:'F-07', group:'ai', severity:'low', owner:'us', q:null, passive:false,
     title:'AIの使い方を決めた文書がない',
@@ -541,6 +556,25 @@ const DEMO = {
   { no:'AI-02', question:'生成AIへの入力を送信前に検査していますか',             answer:'いいえ', from:'F-03', extra:true },
   { no:'AI-03', question:'生成AIの利用ログを90日以上保存していますか',           answer:'いいえ', from:'F-03', extra:true },
   { no:'AI-04', question:'生成AIのアカウントを人の出入りに合わせて棚卸ししていますか', answer:'いいえ', from:'F-04', extra:true },
+],
+  vendors: [
+  { name:'GitHub Actions', tier:'S++', passive:true, doors:2, uncovered:1,
+    basis:'DNSのTXTにGitHubの所有確認レコード',
+    note:'秘密の鍵を置く場所。管理者2名のうち1名が多要素認証なし' },
+
+  { name:'Microsoft Entra ID（認証基盤）', tier:'S++', passive:true, doors:1, uncovered:0,
+    basis:'DNSのTXTの所有確認レコードと autodiscover のCNAME',
+    note:'ここの署名鍵が出ると、つながっている先すべてに正規のログインとして入られる' },
+
+  { name:'Microsoft 365（会社のメール）', tier:'S+', passive:true, doors:0, uncovered:0,
+    basis:'MXレコード', note:'' },
+
+  { name:'form-relay（問い合わせの受け口）', tier:'B', passive:true, doors:0, uncovered:0,
+    basis:'SPFとCNAME', note:'お客様の氏名とメールアドレスが置かれる。F-02' },
+
+  { name:'生成AI 3サービス', tier:'S', passive:false, doors:0, uncovered:0,
+    basis:'送信前を通る入口の記録（自分のサイトだと確かめた後の段で数えます）',
+    note:'F-03 / F-04' },
 ]
 };
 
@@ -633,7 +667,8 @@ function setDomain(){
   $('#tokB').textContent = 'https://' + domain + '/.well-known/monomi-verify.txt';
   verified = false; $('#run').disabled = true;
   $('#vstate').textContent = 'まだ確かめていません。';
-  $('#under').textContent = domain + ' が自分のサイトかを先に確かめます。';
+  $('#under').textContent = domain + ' を、誰でも見られる記録だけで数えます。'
+    + '証明書の透明性ログ、公開DNS、WHOIS。相手のサーバーには1回もつなぎません。';
   return true;
 }
 $('#start').addEventListener('click', async () => {
@@ -698,7 +733,7 @@ $('#run').addEventListener('click', async () => {
   setTimeout(() => go(3), 800);
 });
 
-const GROUPS = [['vendor','外に預けている先'],['store','外から見えるファイル置き場'],
+const GROUPS = [['vendor','外部サービスを使っている先'],['store','外から見えるファイル置き場'],
   ['ai','AIの使われ方'],['dns','公開されている入口'],['tls','通信と証明書']];
 const SEV = {high:'重大', mid:'注意', low:'軽微'};
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -724,6 +759,24 @@ function render(){
     '<div class="u"><b>' + mine + '<span style="font-size:16px;color:var(--dim)"> / ' + f.length +
       '</span></b><span>こちらで直せる</span></div>';
 
+  const vs = (data.vendors || []), top = vs.filter(v => v.tier === 'S++');
+  const doors = top.reduce((a,v) => a + (v.doors||0), 0);
+  const unc   = top.reduce((a,v) => a + (v.uncovered||0), 0);
+  $('#tierbox').hidden = !vs.length;
+  if (vs.length) {
+    $('#tierline').textContent = top.length
+      ? 'S++相当が' + top.length + '件。そこへ届く管理者の入口が' + doors + '本、うち' + unc + '本が未対策です。'
+      : '預けている先 ' + vs.length + '件。S++相当はありません。';
+    const TW = {'S++':'ここが出ると、他の全部に手が届く','S+':'会社のやり取りが乗っ取られる',
+      'S':'社内の書類とやり取りがまとまって出る','A+':'金と、取り返しのつかない情報',
+      'A':'口座と本人確認の情報','B':'氏名と連絡先','C':'その他'};
+    $('#tiertable').innerHTML = '<tr><th>等級</th><th>預けている先</th><th>漏れたらどうなるか</th><th>どこで分かったか</th></tr>' +
+      vs.slice().sort((a,b) => Object.keys(TW).indexOf(a.tier) - Object.keys(TW).indexOf(b.tier)).map(v =>
+        '<tr><td><span class="tg ' + (v.tier==='S++'?'t0':(v.tier==='S+'||v.tier==='S'?'t1':'')) + '">' + v.tier + '</span></td>' +
+        '<td><b>' + esc(v.name) + '</b>' + (v.note ? '<br><span class="bs">' + esc(v.note) + '</span>' : '') + '</td>' +
+        '<td>' + TW[v.tier] + '</td><td class="bs">' + esc(v.basis) + '</td></tr>').join('');
+  }
+
   $('#groups').innerHTML = GROUPS.map(g => {
     const list = f.filter(x => x.group === g[0]);
     if (!list.length) return '';
@@ -747,6 +800,20 @@ function render(){
     encodeURIComponent('MONOMI の結果について相談したい。\n\nドメイン: ' + domain +
       '\n重大' + c('high') + ' / 注意' + c('mid') + ' / 軽微' + c('low') + '\n');
 }
+
+/* 資料用の写真を撮るための入口。?shot=3 のように指定すると、その段まで一気に進む */
+(async () => {
+  const m = location.search.match(/[?&]shot=(\d)/);
+  if (!m) return;
+  setDomain(); verified = true; $('#run').disabled = false;
+  $('#vstate').innerHTML = '<span class="okline">自分のサイトだと確かめられました　' + domain + '</span>';
+  data = JSON.parse(JSON.stringify(DEMO)); render();
+  reached = 5; drawFlow(); go(+m[1]);
+  document.querySelector('.hero').style.display = 'none';   // 写真では見出し帯を外す
+  document.querySelector('#sticky').style.display = 'none';
+  document.body.classList.remove('hasSticky');
+  document.querySelectorAll('.fix').forEach((d,i) => { if (i === 0) d.open = true; });
+})();
 
 $('#dl').addEventListener('click', () => {
   const txt = ['# ' + domain + ' の直し方', '# ' + new Date().toISOString().slice(0,10),

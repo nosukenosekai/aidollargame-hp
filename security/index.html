@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>情報システムの担当者がいない会社のセキュリティ｜株式会社AIdollargame</title>
+<meta name="description" content="情報システムの担当者がいない会社のかわりに、外から穴を調べてふさぎ、社員のAIの使い方を点検します。その月に起きたことを社長が読める1枚にして毎月お渡しします。">
+<link rel="canonical" href="https://aidollargame.com/security/">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="株式会社AIdollargame">
+<meta property="og:title" content="情報システムの担当者がいない会社のセキュリティ｜株式会社AIdollargame">
+<meta property="og:description" content="情報システムの担当者がいない会社のかわりに、外から穴を調べてふさぎ、社員のAIの使い方を点検します。その月に起きたことを社長が読める1枚にして毎月お渡しします。">
+<meta property="og:url" content="https://aidollargame.com/security/">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#ffffff}
+a{color:inherit}
+h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
+.wrap{max-width:1200px;margin:0 auto;padding:0 44px;box-sizing:border-box}
+.en{font-family:Archivo,-apple-system,sans-serif}
+.eyebrow{font-family:Archivo,-apple-system,sans-serif;font-size:12px;font-weight:700;letter-spacing:0.18em}
+.hero{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,0.88fr);gap:52px;align-items:center}
+.inc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#23314f}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#e2e5ea}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px}
+.anno{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:60px;align-items:start}
+.four{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:44px 60px}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:30px}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1)}
+.rv.in{opacity:1;transform:none}
+.sweep{position:relative;overflow:hidden}
+.sweep::after{content:"";position:absolute;left:0;right:0;top:-40%;height:40%;background:linear-gradient(180deg,rgba(200,30,30,0) 0%,rgba(200,30,30,0.16) 50%,rgba(200,30,30,0) 100%);animation:sw 3.6s linear infinite}
+@keyframes sw{0%{top:-40%}100%{top:100%}}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#c81e1e;animation:pl 1.8s ease-out infinite}
+@keyframes pl{0%{box-shadow:0 0 0 0 rgba(200,30,30,0.6)}70%{box-shadow:0 0 0 8px rgba(200,30,30,0)}100%{box-shadow:0 0 0 0 rgba(200,30,30,0)}}
+.bar{height:3px;background:#e2e5ea;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#c81e1e;transition:width 1.1s cubic-bezier(.22,.61,.36,1)}
+.in .bar i{width:var(--w)}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.sweep::after,.dot{animation:none}.bar i{transition:none}}
+@media (max-width:980px){.hero,.anno,.g2,.four,.inc{grid-template-columns:minmax(0,1fr)}.g3,.steps{grid-template-columns:minmax(0,1fr)}.wrap{padding:0 18px}.navlinks{display:none !important}.h1{font-size:34px !important}.stack{height:430px !important}}
+</style>
+
+</head>
+<body>
+
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;color:#0b1220;background:#ffffff;font-size:17px;line-height:1.9">
+
+<header style="position:sticky;top:0;z-index:20;background:#0b1220;border-bottom:1px solid rgba(255,255,255,0.1)">
+  <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:20px;height:72px">
+    <a href="#top" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:#ffffff">
+      <span style="display:inline-flex;background:#ffffff;border-radius:5px;padding:8px 11px"><img src="../wordmark-400.png" alt="AIdollargame" style="height:17px;width:auto;display:block"></span>
+      <span class="eyebrow" style="color:#8e9bb3">SECURITY</span>
+    </a>
+    <nav class="navlinks" style="display:flex;gap:30px;font-size:15px;color:#d3dae6;white-space:nowrap">
+      <a href="#report" style="text-decoration:none">毎月の1枚</a>
+      <a href="#cycle" style="text-decoration:none">やること</a>
+      <a href="#vendors" style="text-decoration:none">預け先の事故</a>
+      <a href="#start" style="text-decoration:none">始め方</a>
+      <a href="#faq" style="text-decoration:none">よくある質問</a>
+    </nav>
+    <a href="emergency.html" style="display:inline-flex;align-items:center;gap:10px;background:#c81e1e;color:#ffffff;text-decoration:none;font-weight:800;font-size:15px;padding:11px 20px;border-radius:5px;min-height:44px;box-sizing:border-box;white-space:nowrap">
+      <span class="dot" style="background:#ffffff"></span>緊急対応
+    </a>
+  </div>
+</header>
+
+<section id="top" style="background:#0b1220;color:#ffffff">
+  <div class="wrap hero" style="padding-top:88px;padding-bottom:80px">
+    <div>
+      <div class="eyebrow" style="display:inline-flex;align-items:center;gap:12px;color:#c81e1e;margin-bottom:28px"><span style="width:30px;height:2px;background:#c81e1e"></span>MONTHLY SECURITY REPORT</div>
+      <h1 class="h1" style="margin:0 0 28px;font-size:52px;line-height:1.3;font-weight:900;letter-spacing:-0.01em;white-space:nowrap">攻撃は止められない。<br>だから、毎月ふさぐ。</h1>
+      <p style="margin:0 0 38px;font-size:18px;line-height:1.95;color:#bac5d8;max-width:500px">情報システムの担当者がいない会社のかわりに、外から穴を調べ、ふさぎ、社員のAIの使い方を点検する。その月に起きたことを、社長が読める1枚にしてお渡しします。</p>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">
+        <a href="#contact-sec" style="background:#ffffff;color:#0b1220;text-decoration:none;font-weight:800;padding:18px 32px;border-radius:6px;font-size:17px">無料で相談する</a>
+        <a href="#report" style="color:#ffffff;text-decoration:none;font-weight:700;padding:18px 6px;border-bottom:1px solid rgba(255,255,255,0.45)">毎月の1枚を見る</a>
+      </div>
+    </div>
+
+    <div class="stack rv" style="position:relative;height:482px">
+      <div style="position:absolute;right:0;top:44px;width:80%;height:400px;background:#18223a;border:1px solid #23314f;border-radius:10px;transform:rotate(5deg)"></div>
+      <div style="position:absolute;right:24px;top:24px;width:82%;height:410px;background:#dde3ee;border-radius:10px;transform:rotate(2deg)"></div>
+      <div class="sweep" style="position:absolute;right:50px;top:0;width:85%;background:#ffffff;color:#0b1220;border-radius:10px;box-shadow:0 28px 56px rgba(0,0,0,0.5);padding:26px 28px;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+          <div><div class="eyebrow" style="color:#7a8597;font-size:11px">MONTHLY REPORT</div><div style="font-weight:900;font-size:20px;margin-top:2px;white-space:nowrap">2026年10月の報告</div></div>
+          <div class="en" style="font-size:11px;font-weight:700;color:#7a8597;border:1px solid #d2d7e0;border-radius:3px;padding:2px 8px">SAMPLE</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#e2e5ea;border:1px solid #e2e5ea;border-radius:6px;overflow:hidden;margin-bottom:18px">
+          <div style="background:#ffffff;padding:13px 12px"><div class="en cnt" data-to="2" style="font-size:30px;font-weight:900;line-height:1">0</div><div style="font-size:11.5px;color:#5c6577;margin-top:5px;line-height:1.5;white-space:nowrap">急いで直す穴</div></div>
+          <div style="background:#ffffff;padding:13px 12px"><div class="en cnt" data-to="5" style="font-size:30px;font-weight:900;line-height:1">0</div><div style="font-size:11.5px;color:#5c6577;margin-top:5px;line-height:1.5;white-space:nowrap">止まった送信</div></div>
+          <div style="background:#ffffff;padding:13px 12px"><div class="en cnt" data-to="2" style="font-size:30px;font-weight:900;line-height:1">0</div><div style="font-size:11.5px;color:#5c6577;margin-top:5px;line-height:1.5;white-space:nowrap">消した<br>アカウント</div></div>
+        </div>
+        <div class="eyebrow" style="font-size:11px;color:#7a8597;margin-bottom:10px">今月起きたこと</div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:16px;font-size:13.5px;line-height:1.65">
+          <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:0 0 48px;font-size:11px;font-weight:800;color:#5c6577;border:1px solid #d2d7e0;border-radius:3px;padding:1px 0;text-align:center;margin-top:3px">決まり</span><span>AIに社外秘を送ってよいかの決まりがない</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:0 0 48px;font-size:11px;font-weight:800;color:#5c6577;border:1px solid #d2d7e0;border-radius:3px;padding:1px 0;text-align:center;margin-top:3px">仕組み</span><span>偽メール対策の設定が1つ抜けている</span></div>
+          <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:0 0 48px;font-size:11px;font-weight:800;color:#5c6577;border:1px solid #d2d7e0;border-radius:3px;padding:1px 0;text-align:center;margin-top:3px">手ちがい</span><span>退職した2人のアカウントが残っていた</span></div>
+        </div>
+        <div style="border-top:1px solid #e2e5ea;padding-top:14px;display:flex;justify-content:space-between;gap:14px;font-size:13.5px;line-height:1.6">
+          <div><div class="eyebrow" style="font-size:11px;color:#7a8597;margin-bottom:2px">来月やること</div>AI利用の決まりを1枚作る</div>
+          <div style="text-align:right;flex:0 0 auto"><div class="eyebrow" style="font-size:11px;color:#7a8597;margin-bottom:2px">かかるお金</div><span class="en" style="font-weight:800">[金額]</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid #23314f">
+    <div class="wrap" style="padding-top:22px;padding-bottom:6px;display:flex;align-items:center;gap:12px">
+      <span class="dot"></span>
+      <span class="eyebrow" style="color:#c81e1e">先週、日本で実際に起きたこと</span>
+    </div>
+    <div class="wrap" style="padding-bottom:30px">
+      <div class="inc rv" style="border:1px solid #23314f">
+        <a href="emergency.html" style="display:block;background:#0b1220;text-decoration:none;color:#ffffff;padding:26px 28px">
+          <div class="en" style="font-size:12px;font-weight:700;color:#8e9bb3;margin-bottom:8px">2026.10.05</div>
+          <div style="font-size:19px;font-weight:800;line-height:1.6;margin-bottom:8px">大和証券の顧客 約11万人分の情報に不正アクセス。同社のシステムは無事だった。</div>
+          <div style="font-size:15.5px;color:#9fadc4;line-height:1.8">問い合わせの管理を任せていた委託先が攻撃を受けた。自社をどれだけ固めても、預け先が破られれば出ていく。</div>
+        </a>
+        <a href="emergency.html" style="display:block;background:#0b1220;text-decoration:none;color:#ffffff;padding:26px 28px">
+          <div class="en" style="font-size:12px;font-weight:700;color:#8e9bb3;margin-bottom:8px">2026.10.07</div>
+          <div style="font-size:19px;font-weight:800;line-height:1.6;margin-bottom:8px">IDCFクラウドがランサムウェア被害。495の企業と自治体が止まった。</div>
+          <div style="font-size:15.5px;color:#9fadc4;line-height:1.8">預けていたデータは取り出しも復元も難しい見通しと発表された。借りている側に打てる手はなかった。</div>
+        </a>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:16px">
+        <div style="font-size:13.5px;color:#8e9bb3">出典：ITmedia（10/7）、ScanNetSecurity（10/9）</div>
+        <a href="emergency.html" style="color:#ffffff;font-weight:800;text-decoration:none;border-bottom:2px solid #c81e1e;padding-bottom:3px">貴社は、この2社を使っていませんか →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="border-bottom:1px solid #e2e5ea">
+  <div class="wrap g3" style="border-left:1px solid #e2e5ea;border-right:1px solid #e2e5ea">
+    <div class="rv" style="background:#ffffff;padding:52px 34px 46px">
+      <div style="display:flex;align-items:baseline"><span class="en cnt" data-to="30" style="font-size:62px;font-weight:900;line-height:1;letter-spacing:-0.02em">0</span><span class="en" style="font-size:30px;font-weight:900">%</span></div>
+      <div class="bar" style="--w:30%;margin:18px 0 16px"><i></i></div>
+      <div style="font-weight:800;margin-bottom:8px;line-height:1.7;font-size:17px">漏えいの3割に、外部の事業者が関わっていた</div>
+      <div style="font-size:14px;color:#5c6577;line-height:1.85">確認された漏えい12,195件の分析。Verizon 2025 Data Breach Investigations Report</div>
+    </div>
+    <div class="rv" style="background:#ffffff;padding:52px 34px 46px">
+      <div style="display:flex;align-items:baseline"><span class="en cnt" data-to="15.6" style="font-size:62px;font-weight:900;line-height:1;letter-spacing:-0.02em">0</span><span class="en" style="font-size:30px;font-weight:900">%</span></div>
+      <div class="bar" style="--w:15.6%;margin:18px 0 16px"><i></i></div>
+      <div style="font-weight:800;margin-bottom:8px;line-height:1.7;font-size:17px">辞めた社員のアカウントが残っていた会社</div>
+      <div style="font-size:14px;color:#5c6577;line-height:1.85">従業員100〜500人の会社のIT・セキュリティ責任者109人への調査（2025年9月3日実施）</div>
+    </div>
+    <div class="rv" style="background:#ffffff;padding:52px 34px 46px">
+      <div style="display:flex;align-items:baseline"><span class="en" style="font-size:62px;font-weight:900;line-height:1;letter-spacing:-0.02em">3–5</span><span class="en" style="font-size:30px;font-weight:900">日</span></div>
+      <div class="bar" style="--w:100%;margin:18px 0 16px"><i></i></div>
+      <div style="font-weight:800;margin-bottom:8px;line-height:1.7;font-size:17px">漏えいに気づいてから、国への速報の期限</div>
+      <div style="font-size:14px;color:#5c6577;line-height:1.85">報告の対象に当たる場合。個人情報保護委員会へ。確報は30日以内（悪意によるものは60日以内）</div>
+    </div>
+  </div>
+</section>
+
+<section id="report">
+  <div class="wrap" style="padding-top:104px;padding-bottom:96px">
+    <div class="rv">
+      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">WHAT YOU GET</div>
+      <h2 style="margin:0 0 20px;font-size:40px;line-height:1.4;font-weight:900">届くのは、毎月この1枚。</h2>
+      <p style="margin:0 0 54px;color:#4a5365;max-width:620px">技術の細かい話は書きません。その月に何があり、来月何をして、いくらかかるか。対策とお金を決める人が、5分で読み終えられるように書きます。</p>
+    </div>
+    <div class="anno">
+      <div class="rv" style="border:1px solid #d2d7e0;border-radius:12px;padding:38px 42px">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #0b1220;padding-bottom:16px;margin-bottom:26px">
+          <div style="font-weight:900;font-size:21px">株式会社〇〇 御中　2026年10月</div>
+          <div class="en" style="font-size:11px;font-weight:700;color:#7a8597;border:1px solid #d2d7e0;border-radius:3px;padding:2px 8px">SAMPLE</div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">1</span><div><div style="font-weight:800">外からの検査</div><div style="font-size:16px;color:#4a5365;line-height:1.8">新しく見つかった穴 2件（うち急ぐもの1件）</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">2</span><div><div style="font-weight:800">アカウント</div><div style="font-size:16px;color:#4a5365;line-height:1.8">退職者2人分を停止。新しく使い始めたAI 1つ</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">3</span><div><div style="font-weight:800">AIに送ろうとして止まったもの</div><div style="font-size:16px;color:#4a5365;line-height:1.8">5件（お客様の名前 3、電話番号 2）</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:26px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">4</span><div><div style="font-weight:800">決まりと教育</div><div style="font-size:16px;color:#4a5365;line-height:1.8">確認済み 12人／まだ 3人</div></div></div>
+        <div style="background:#0b1220;color:#ffffff;border-radius:8px;padding:22px 24px;display:flex;gap:16px;align-items:flex-start"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#ffffff;color:#0b1220;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">5</span><div><div style="font-weight:800">まとめ：来月やること</div><div style="font-size:16px;color:#bac5d8;line-height:1.8">AI利用の決まりを1枚作り、全員に確認してもらう。かかるお金 [金額]</div></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:32px;padding-top:8px">
+        <div class="rv" style="display:flex;gap:20px"><span class="en" style="flex:0 0 auto;font-weight:900;font-size:20px;color:#c81e1e;width:30px">01</span><div><div style="font-weight:800;font-size:19px;margin-bottom:6px">前の月と比べられる</div><div style="color:#4a5365">毎月同じやり方で調べるので、増えた穴と減った穴が分かります。</div></div></div>
+        <div class="rv" style="display:flex;gap:20px"><span class="en" style="flex:0 0 auto;font-weight:900;font-size:20px;color:#c81e1e;width:30px">02</span><div><div style="font-weight:800;font-size:19px;margin-bottom:6px">3つに分けて書く</div><div style="color:#4a5365">起きたことを「決まり」「仕組み」「人の手ちがい」に分けます。誰が直すかが決まります。</div></div></div>
+        <div class="rv" style="display:flex;gap:20px"><span class="en" style="flex:0 0 auto;font-weight:900;font-size:20px;color:#c81e1e;width:30px">03</span><div><div style="font-weight:800;font-size:19px;margin-bottom:6px">社員の名前は載せない</div><div style="color:#4a5365">誰が送ったかではなく、何が危なかったかを書きます。</div></div></div>
+        <div class="rv" style="display:flex;gap:20px"><span class="en" style="flex:0 0 auto;font-weight:900;font-size:20px;color:#c81e1e;width:30px">04</span><div><div style="font-weight:800;font-size:19px;margin-bottom:6px">聞かれたら、そのまま出せる</div><div style="color:#4a5365">取引先や保険会社に対策を聞かれたとき、毎月の記録がそのまま答えになります。</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cycle" style="border-top:1px solid #e2e5ea">
+  <div class="wrap" style="padding-top:104px;padding-bottom:104px">
+    <div class="rv">
+      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">EVERY MONTH</div>
+      <h2 style="margin:0 0 54px;font-size:40px;line-height:1.4;font-weight:900">1枚の裏で、毎月まわしている4つ</h2>
+    </div>
+    <div class="four">
+      <div class="rv" style="display:flex;gap:22px">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c81e1e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <div><div style="font-weight:800;font-size:21px;margin-bottom:10px">外から調べる</div><div style="color:#4a5365">攻撃者と同じやり方で外から調べ（ホワイトハック診断）、新しく公表された危ない穴にも当てて、直します。</div></div>
+      </div>
+      <div class="rv" style="display:flex;gap:22px">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c81e1e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg>
+        <div><div style="font-weight:800;font-size:21px;margin-bottom:10px">アカウントを数える</div><div style="color:#4a5365">辞めた人のアカウント、社員が新しく使い始めたAIやクラウドを、毎月数え直します。</div></div>
+      </div>
+      <div class="rv" style="display:flex;gap:22px">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c81e1e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div><div style="font-weight:800;font-size:21px;margin-bottom:10px">AIの送信を見る</div><div style="color:#4a5365">会社用のAIの窓口を通る送信に、お客様の名前や電話番号が入っていれば、送る前に止めます。</div></div>
+      </div>
+      <div class="rv" style="display:flex;gap:22px">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c81e1e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>
+        <div><div style="font-weight:800;font-size:21px;margin-bottom:10px">決まりを古くしない</div><div style="color:#4a5365">AIの更新や世の中の事故に合わせて社内の決まりを差し替え、誰が確認したかを記録します。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="vendors" style="border-top:1px solid #e2e5ea">
+  <div class="wrap g2" style="padding-top:104px;padding-bottom:104px;align-items:center">
+    <div class="rv">
+      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">THIRD-PARTY INCIDENTS</div>
+      <h2 style="margin:0 0 24px;font-size:38px;line-height:1.45;font-weight:900">漏れるのは、自社の<br>サーバーとは限らない。</h2>
+      <p style="margin:0 0 18px;color:#4a5365">問い合わせフォーム、名簿の置き場、チャット、クラウド。会社の情報は、いくつもの外部サービスに預けられています。10月の大和証券も、自社ではなく委託先が破られました。</p>
+      <p style="margin:0 0 28px;color:#4a5365">当社はお客様ごとに預け先の一覧を持ちます。ニュースで事故が出たら、巻き込まれたかどうかを [時間] 以内にお伝えします。</p>
+      <a href="emergency.html" style="display:inline-flex;align-items:center;gap:8px;font-weight:800;color:#0b1220;text-decoration:none;border-bottom:2px solid #c81e1e;padding-bottom:4px">今出ている事故を確かめる →</a>
+    </div>
+    <div class="rv" style="background:#0b1220;border-radius:12px;padding:30px;color:#ffffff">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+        <div style="font-weight:800">預け先の一覧</div>
+        <div class="en" style="font-size:11px;font-weight:700;color:#8e9bb3;border:1px solid #23314f;border-radius:3px;padding:2px 8px">SAMPLE</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1px;background:#23314f;border:1px solid #23314f;border-radius:8px;overflow:hidden;font-size:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#111b2f;padding:15px 18px"><span>問い合わせフォーム</span><span style="font-size:13px;color:#8e9bb3">問題なし</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#111b2f;padding:15px 18px"><span>メール配信</span><span style="font-size:13px;color:#8e9bb3">問題なし</span></div>
+        <div class="sweep" style="display:flex;justify-content:space-between;align-items:center;background:#c81e1e;padding:15px 18px"><span style="font-weight:700">名簿の管理（[事業者名]）</span><span style="font-size:13px;font-weight:800">事故の報道あり</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;background:#111b2f;padding:15px 18px"><span>チャット</span><span style="font-size:13px;color:#8e9bb3">問題なし</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="border-top:1px solid #e2e5ea">
+  <div class="wrap g2" style="padding-top:96px;padding-bottom:96px">
+    <div class="rv">
+      <div class="eyebrow" style="color:#c81e1e;margin-bottom:12px">WE DO</div>
+      <h3 style="margin:0 0 26px;font-size:25px;font-weight:900">約束すること</h3>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div style="display:flex;gap:14px"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><path d="M20 6 9 17l-5-5"/></svg><span>決まった日に、毎月1枚をお渡しする</span></div>
+        <div style="display:flex;gap:14px"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><path d="M20 6 9 17l-5-5"/></svg><span>書面で許可をいただいてから調べる</span></div>
+        <div style="display:flex;gap:14px"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#0b1220" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><path d="M20 6 9 17l-5-5"/></svg><span>見つけた穴を、直すところまで一緒にやる</span></div>
+      </div>
+    </div>
+    <div class="rv">
+      <div class="eyebrow" style="color:#8e9bb3;margin-bottom:12px">WE DON'T</div>
+      <h3 style="margin:0 0 26px;font-size:25px;font-weight:900">約束しないこと</h3>
+      <div style="display:flex;flex-direction:column;gap:16px;color:#4a5365">
+        <div style="display:flex;gap:14px"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#9aa3b2" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span>攻撃を全部止めること（ゼロにはできません）</span></div>
+        <div style="display:flex;gap:14px"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#9aa3b2" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span>24時間365日の駆けつけ</span></div>
+        <div style="display:flex;gap:14px"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#9aa3b2" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span>私物のスマホや個人のアカウントのAIまで止めること</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="start" style="border-top:1px solid #e2e5ea">
+  <div class="wrap" style="padding-top:104px;padding-bottom:104px">
+    <div class="rv">
+      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">HOW TO START</div>
+      <h2 style="margin:0 0 54px;font-size:40px;line-height:1.4;font-weight:900">始め方</h2>
+    </div>
+    <div class="steps">
+      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">01</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">相談する</div><div style="font-size:16px;color:#4a5365;line-height:1.85">今の困りごとと、使っている外部サービスを伺い、1枚の見本をお見せします。</div></div>
+      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">02</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">書面で許可</div><div style="font-size:16px;color:#4a5365;line-height:1.85">調べる対象、期間、ご担当者、緊急時に止める連絡先を決めます。許可のない診断は不正アクセス禁止法に当たるためです。</div></div>
+      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">03</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">最初の1枚</div><div style="font-size:16px;color:#4a5365;line-height:1.85">外から調べ、預け先の一覧を作り、最初の報告をお渡しします。<br>[初回の料金]</div></div>
+      <div class="rv" style="border-top:3px solid #c81e1e;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c81e1e">04</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">毎月続ける</div><div style="font-size:16px;color:#4a5365;line-height:1.85">毎月決まった日に1枚が届きます。<br>[月額]</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" style="border-top:1px solid #e2e5ea">
+  <div class="wrap" style="padding-top:96px;padding-bottom:96px">
+    <div class="rv">
+      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">FAQ</div>
+      <h2 style="margin:0 0 40px;font-size:40px;line-height:1.4;font-weight:900">よくある質問</h2>
+    </div>
+    <div class="rv" style="display:flex;flex-direction:column;border-top:1px solid #e2e5ea;max-width:880px">
+      <div style="padding:26px 0;border-bottom:1px solid #e2e5ea"><div style="font-weight:800;margin-bottom:8px">24時間対応してもらえますか</div><div style="color:#4a5365">していません。お約束するのは、毎月の1枚と、預け先の事故が出たときにお答えすることです。今まさに被害が進んでいるときは、右上の「緊急対応」から最初の動き方を確認してください。</div></div>
+      <div style="padding:26px 0;border-bottom:1px solid #e2e5ea"><div style="font-weight:800;margin-bottom:8px">社内に詳しい人がいなくても大丈夫ですか</div><div style="color:#4a5365">そのための1枚です。技術の言葉ではなく、来月やることとかかるお金で書きます。</div></div>
+      <div style="padding:26px 0;border-bottom:1px solid #e2e5ea"><div style="font-weight:800;margin-bottom:8px">サイバー保険はどうなりますか</div><div style="color:#4a5365">当社は保険を販売していません。保険の加入や更新で対策を聞かれたときに出せる記録を、毎月残します。</div></div>
+      <div style="padding:26px 0;border-bottom:1px solid #e2e5ea"><div style="font-weight:800;margin-bottom:8px">他社のサイトを調べてもらえますか</div><div style="color:#4a5365">できません。調べるのは、お客様ご自身が管理しているサイトとサービスだけです。</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact-sec" style="background:#0b1220;color:#ffffff">
+  <div class="wrap rv" style="padding-top:96px;padding-bottom:96px">
+    <h2 style="margin:0 0 20px;font-size:42px;line-height:1.4;font-weight:900">まず、貴社の名前で<br>1枚を作ってみる。</h2>
+    <p style="margin:0 0 40px;color:#bac5d8;max-width:560px">相談は無料です。外から見える範囲だけで、最初の見本をお作りします。</p>
+    <a href="../index.html#contact" style="display:inline-block;background:#ffffff;color:#0b1220;text-decoration:none;font-weight:800;padding:20px 40px;border-radius:6px;font-size:18px">無料で相談する</a>
+  </div>
+</section>
+
+<footer id="company" style="background:#0b1220;color:#8e9bb3;border-top:1px solid #23314f">
+  <div class="wrap" style="padding-top:44px;padding-bottom:52px;display:flex;flex-wrap:wrap;gap:28px;justify-content:space-between;font-size:15px">
+    <div>
+      <div style="color:#ffffff;font-weight:800;margin-bottom:8px">株式会社AIdollargame</div>
+      <div>これまで作ってきたAI：<a href="../line-ai-agent.html" style="color:#bac5d8">AIチャットエージェント</a>　<a href="../aiside.html" style="color:#bac5d8">AIside</a>　<a href="../jirei.html" style="color:#bac5d8">導入事例</a></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:26px">
+      <a href="../company.html" style="color:#bac5d8">会社概要</a>
+      <a href="../privacy.html" style="color:#bac5d8">プライバシーポリシー</a>
+      <a href="../tokushoho.html" style="color:#bac5d8">特定商取引法に基づく表記</a>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+function counts(root,instant){var els=root.querySelectorAll?root.querySelectorAll('.cnt'):[];
+for(var i=0;i<els.length;i++){(function(el){if(el.dataset.done)return;el.dataset.done='1';
+var raw=el.getAttribute('data-to');var to=parseFloat(raw);var dec=raw.indexOf('.')>=0?1:0;
+if(instant){el.textContent=to.toFixed(dec);return;}
+var start=null,dur=1100;function step(ts){if(start===null)start=ts;var p=Math.min(1,(ts-start)/dur);
+var e=1-Math.pow(1-p,3);el.textContent=(to*e).toFixed(dec);if(p<1)requestAnimationFrame(step);}
+requestAnimationFrame(step);})(els[i]);}}
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var nodes=document.querySelectorAll('.rv');
+if(reduce||!('IntersectionObserver' in window)){for(var i=0;i<nodes.length;i++)nodes[i].classList.add('in');counts(document,true);return;}
+var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;
+e.target.classList.add('in');counts(e.target,false);io.unobserve(e.target);});},
+{rootMargin:'0px 0px -12% 0px',threshold:0.15});
+for(var j=0;j<nodes.length;j++)io.observe(nodes[j]);
+})();
+</script>
+</body>
+</html>

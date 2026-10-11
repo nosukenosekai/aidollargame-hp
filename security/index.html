@@ -87,7 +87,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
     <nav class="navlinks" style="display:flex;gap:30px;font-size:15px;color:#d3dae6;white-space:nowrap">
       <a href="#cycle" style="text-decoration:none">やること</a>
       <a href="#report" style="text-decoration:none">月次報告書</a>
-      <a href="#vendors" style="text-decoration:none">預け先の事故</a>
+      <a href="#vendors" style="text-decoration:none">委託先の事故</a>
       <a href="#tool" style="text-decoration:none">MONOMI</a>
       <a href="#start" style="text-decoration:none">始め方</a>
       <a href="#faq" style="text-decoration:none">よくある質問</a>
@@ -103,7 +103,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
     <div>
       <div class="eyebrow" style="display:inline-flex;align-items:center;gap:12px;color:#c81e1e;margin-bottom:28px"><span style="width:30px;height:2px;background:#c81e1e"></span>MONTHLY SECURITY REPORT</div>
       <h1 class="h1" style="margin:0 0 28px;font-size:52px;line-height:1.32;font-weight:900;letter-spacing:-0.01em;white-space:nowrap">ハッカーより先に、<br>脆弱性を見つけます。</h1>
-      <p style="margin:0 0 38px;font-size:18px;line-height:1.95;color:#bac5d8;max-width:510px">書面で範囲と日時の許可をいただいたうえで、ハッカーと同じ手口で外から疑似攻撃をしかけ、脆弱性を洗い出します。情報システムの担当者がいない会社のかわりに、当社が毎月これを回し、その月の実施結果と翌月の計画を、月次報告書でご報告します。</p>
+      <p style="margin:0 0 38px;font-size:18px;line-height:1.95;color:#bac5d8;max-width:510px">書面で範囲と日時の許可をいただいたうえで、ハッカーと同じ手口で外から疑似攻撃をしかけ、脆弱性を洗い出します。情報システムの担当者がいない会社のかわりに、当社が毎月実施し、その月の実施結果と翌月の計画を、月次報告書でご報告します。</p>
       <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">
         <a href="#contact-sec" style="background:#ffffff;color:#0b1220;text-decoration:none;font-weight:800;padding:18px 32px;border-radius:6px;font-size:17px">無料で相談する</a>
         <a href="#report" style="color:#ffffff;text-decoration:none;font-weight:700;padding:18px 6px;border-bottom:1px solid rgba(255,255,255,0.45)">月次報告書を見る</a>
@@ -147,7 +147,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
         <a href="emergency.html" style="display:block;background:#0b1220;text-decoration:none;color:#ffffff;padding:26px 28px">
           <div class="en" style="font-size:12px;font-weight:700;color:#8e9bb3;margin-bottom:8px">2026.10.05</div>
           <div style="font-size:19px;font-weight:800;line-height:1.6;margin-bottom:8px">問い合わせの管理を任せていた会社が不正アクセスを受け、顧客 約11万人分の情報が漏れた可能性。</div>
-          <div style="font-size:15.5px;color:#9fadc4;line-height:1.8">委託元の証券会社は、自社のシステムに侵入された形跡はないと発表した。自社をどれだけ固めても、預け先が破られれば出ていく。</div>
+          <div style="font-size:15.5px;color:#9fadc4;line-height:1.8">委託元の証券会社は、自社のシステムに侵入された形跡はないと発表した。自社をどれだけ固めても、委託先が破られれば出ていく。</div>
         </a>
         <a href="emergency.html" style="display:block;background:#0b1220;text-decoration:none;color:#ffffff;padding:26px 28px">
           <div class="en" style="font-size:12px;font-weight:700;color:#8e9bb3;margin-bottom:8px">2026.10.07</div>
@@ -157,7 +157,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:16px">
         <div style="font-size:13.5px;color:#8e9bb3">いずれも報道による。出典：ITmedia（10/7）、ScanNetSecurity（10/9）</div>
-        <a href="emergency.html" style="color:#ffffff;font-weight:800;text-decoration:none;border-bottom:2px solid #c81e1e;padding-bottom:3px">貴社が情報を預けている先を、数えていますか →</a>
+        <a href="emergency.html" style="color:#ffffff;font-weight:800;text-decoration:none;border-bottom:2px solid #c81e1e;padding-bottom:3px">貴社の委託先を、把握していますか →</a>
       </div>
   </div>
 </section>
@@ -166,8 +166,8 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
   <div class="wrap g2" style="padding-top:96px;padding-bottom:96px;align-items:center">
     <div class="rv">
       <div class="eyebrow" style="color:#ff6b5e;margin-bottom:16px">MONOMI — VULNERABILITY ASSESSMENT</div>
-      <h2 style="margin:0 0 24px;font-size:38px;line-height:1.45;font-weight:900">診断は、<br>触らない調査から始めます。</h2>
-      <p style="margin:0 0 18px;color:#bac5d8">当社の脆弱性診断の道具が MONOMI です。はじめに使うのは、誰でも見られる記録だけ。証明書の透明性ログ（CT）、公開されているDNS、ドメインの登録情報（WHOIS）。この段階では、貴社のサーバーに一度も接続しません。</p>
+      <h2 style="margin:0 0 24px;font-size:38px;line-height:1.45;font-weight:900">パッシブスキャンから<br>始めます。</h2>
+      <p style="margin:0 0 18px;color:#bac5d8">当社の脆弱性診断の道具が MONOMI です。はじめはパッシブスキャン、つまり公開されている記録だけを照会する調査から入ります。証明書の透明性ログ（CT）、公開DNS、ドメインの登録情報（WHOIS）の3つです。この段階では、貴社のサーバーに一度も接続しません。</p>
       <p style="margin:0 0 28px;color:#bac5d8">疑似攻撃に進むのは、ご自身のドメインだと確かめていただいた後です。許可のない診断は不正アクセス禁止法に当たるため、確かめる手順を飛ばせない作りにしてあります。</p>
       <a href="../demo/monomi-whitehat-4f2b91.html" style="display:inline-flex;align-items:center;gap:8px;font-weight:800;color:#ffffff;text-decoration:none;border-bottom:2px solid #ff6b5e;padding-bottom:4px">MONOMI の画面を見る →</a>
       <p style="margin:14px 0 0;font-size:14px;color:#8e9bb3">画面の見本です。出てくるドメイン名と所見は架空で、実在の組織とは関係ありません。</p>
@@ -178,7 +178,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
         <div class="term-bar"><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span><span class="term-title">MONOMI — passive scan</span><span class="term-tag en">SAMPLE</span></div>
         <div class="term-body">
           <div class="tl"><span class="tp">$</span> monomi scan <span class="tv">example.co.jp</span> --passive</div>
-          <div class="tl tdim">触らない調査を開始します。対象のサーバーには接続しません。</div>
+          <div class="tl tdim">パッシブスキャンを開始します。対象のサーバーには接続しません。</div>
           <div class="tl"><span class="tk">[1/3]</span> 証明書の透明性ログ（CT）を照会</div>
           <div class="tl tind">サブドメイン <span class="tv">12</span> 件（稼働 9 / 応答なし 3）</div>
           <div class="tl tind twarn">応答なし 3 件に、テスト用と旧システムの名前が残っています</div>
@@ -281,12 +281,12 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">THIRD-PARTY INCIDENTS</div>
       <h2 style="margin:0 0 24px;font-size:38px;line-height:1.45;font-weight:900">漏れるのは、自社の<br>サーバーとは限らない。</h2>
       <p style="margin:0 0 18px;color:#4a5365">問い合わせフォーム、名簿の置き場、チャット、クラウド。会社の情報は、いくつもの外部サービスに預けられています。10月に報じられた漏えいも、自社ではなく委託先が破られたものでした。</p>
-      <p style="margin:0 0 28px;color:#4a5365">当社はお客様ごとに預け先の一覧を持ちます。ニュースで事故が出たら、巻き込まれたかどうかを [時間] 以内にお伝えします。</p>
+      <p style="margin:0 0 28px;color:#4a5365">当社はお客様ごとに委託先の一覧を持ちます。ニュースで事故が出たら、巻き込まれたかどうかを [時間] 以内にお伝えします。</p>
       <a href="emergency.html" style="display:inline-flex;align-items:center;gap:8px;font-weight:800;color:#0b1220;text-decoration:none;border-bottom:2px solid #c81e1e;padding-bottom:4px">今出ている事故を確かめる →</a>
     </div>
     <div class="rv" style="background:#0b1220;border-radius:12px;padding:30px;color:#ffffff">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <div style="font-weight:800">預け先の一覧</div>
+        <div style="font-weight:800">委託先の一覧</div>
         <div class="en" style="font-size:11px;font-weight:700;color:#8e9bb3;border:1px solid #23314f;border-radius:3px;padding:2px 8px">SAMPLE</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:1px;background:#23314f;border:1px solid #23314f;border-radius:8px;overflow:hidden;font-size:16px">
@@ -323,7 +323,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
     <div class="rv faq" style="max-width:900px;border-top:1px solid #e2e5ea">
       <details><summary>どのくらいの規模の会社が対象ですか</summary><div>情報システムの担当者がいない会社です。社員10人ほどから、店舗や事業所が分かれている会社まで。人数より、使っている外部サービスの数で手間が決まります。</div></details>
       <details><summary>社内に詳しい人がいなくても大丈夫ですか</summary><div>そのための月次報告書です。技術用語ではなく、翌月の実施計画と概算費用で記載します。読むのは、対策とお金を決める人です。中小企業では社長のことが多く、総務の担当者のこともあります。</div></details>
-      <details><summary>24時間対応してもらえますか</summary><div>していません。お約束するのは、毎月の点検と報告、それに預け先の事故が出たときにお答えすることです。今まさに被害が進んでいるときは、右上の「緊急対応」に最初の動き方をまとめています。</div></details>
+      <details><summary>24時間対応してもらえますか</summary><div>していません。お約束するのは、毎月の点検と報告、それに委託先の事故が出たときにお答えすることです。今まさに被害が進んでいるときは、右上の「緊急対応」に最初の動き方をまとめています。</div></details>
       <details><summary>サイバー攻撃を全部止めてもらえますか</summary><div>できません。攻撃をゼロにする方法はありません。当社がやるのは、脆弱性を毎月ふさぐこと、起きたときに何をするかを決めておくこと、やったことを記録に残すことの3つです。</div></details>
       <details><summary>診断で自社のサイトが止まることはありませんか</summary><div>はじめに見るのは、誰でも見られる記録（証明書の透明性ログ・公開DNS・WHOIS）だけで、貴社のサーバーには接続しません。疑似攻撃に進むのは、ご自身のドメインだと確かめていただき、実施する日時と緊急時に止める連絡先を決めてからです。</div></details>
       <details><summary>社員のパソコンにソフトを入れますか</summary><div>入れません。外からの検査はインターネット側から行います。AIの使い方を見るのは、当社が用意した会社用のAIの画面を社員の方に使っていただく形です。</div></details>
@@ -339,8 +339,8 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
 
 <section id="contact-sec" style="background:#0b1220;color:#ffffff">
   <div class="wrap rv" style="padding-top:96px;padding-bottom:96px">
-    <h2 style="margin:0 0 20px;font-size:42px;line-height:1.4;font-weight:900">まず、触らない調査だけ<br>やってみませんか。</h2>
-    <p style="margin:0 0 40px;color:#bac5d8;max-width:560px">相談は無料です。公開されている記録だけを使い、貴社のサーバーには接続せずに調べて、結果をお見せします。</p>
+    <h2 style="margin:0 0 20px;font-size:42px;line-height:1.4;font-weight:900">貴社のドメインを、<br>無料で調べます。</h2>
+    <p style="margin:0 0 40px;color:#bac5d8;max-width:560px">公開されている記録だけを照会するパッシブスキャンです。貴社のサーバーには接続しません。出た結果は、そのままお渡しします。</p>
     <a href="../index.html#contact" style="display:inline-block;background:#ffffff;color:#0b1220;text-decoration:none;font-weight:800;padding:20px 40px;border-radius:6px;font-size:18px">無料で相談する</a>
   </div>
 </section>

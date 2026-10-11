@@ -95,8 +95,8 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
 
     <div class="rv" style="border:1px solid #e2e5ea;border-radius:10px;overflow:hidden;margin-bottom:32px">
       <div style="background:#0b1220;color:#ffffff;padding:14px 22px;font-weight:800;font-size:15px">いま報じられている事故</div>
-      <div style="padding:20px 22px;border-bottom:1px solid #e2e5ea"><span class="en" style="font-size:13px;font-weight:700;color:#5c6577;margin-right:12px">2026.10.05</span>大和証券の委託先が不正アクセスを受け、顧客 約11万人分の情報が漏れた可能性。大和証券自身のシステムに侵入された形跡はなし。</div>
-      <div style="padding:20px 22px"><span class="en" style="font-size:13px;font-weight:700;color:#5c6577;margin-right:12px">2026.10.07</span>IDCFクラウドがランサムウェア被害。495の企業・自治体に影響。預けたデータの取り出しと復元が難しい見通し。</div>
+      <div style="padding:20px 22px;border-bottom:1px solid #e2e5ea"><span class="en" style="font-size:13px;font-weight:700;color:#5c6577;margin-right:12px">2026.10.05</span>証券会社の委託先が不正アクセスを受け、顧客 約11万人分の情報が漏れた可能性。委託元のシステムに侵入された形跡はなしと発表。</div>
+      <div style="padding:20px 22px"><span class="en" style="font-size:13px;font-weight:700;color:#5c6577;margin-right:12px">2026.10.07</span>国内のクラウド事業者がランサムウェア被害。495の企業・自治体に影響。預けたデータの取り出しと復元が難しい見通し。</div>
     </div>
 
     <div class="g2 rv" style="margin-bottom:36px">
@@ -140,11 +140,19 @@ if(instant){el.textContent=to.toFixed(dec);return;}
 var start=null,dur=1100;function step(ts){if(start===null)start=ts;var p=Math.min(1,(ts-start)/dur);
 var e=1-Math.pow(1-p,3);el.textContent=(to*e).toFixed(dec);if(p<1)requestAnimationFrame(step);}
 requestAnimationFrame(step);})(els[i]);}}
+function term(root,instant){var ts=root.querySelectorAll?root.querySelectorAll('.term-body'):[];
+for(var t=0;t<ts.length;t++){(function(body){if(body.dataset.done)return;body.dataset.done='1';
+var lines=body.querySelectorAll('.tl');
+if(instant){for(var i=0;i<lines.length;i++)lines[i].classList.add('on');return;}
+var caret=document.createElement('span');caret.className='caret';var i=0;
+(function next(){if(i>=lines.length)return;var el=lines[i];el.classList.add('on');el.appendChild(caret);
+var wait=/\[\d\/3\]/.test(el.textContent)?620:300;if(i===0)wait=520;i++;setTimeout(next,wait);})();
+})(ts[t]);}}
 var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var nodes=document.querySelectorAll('.rv');
-if(reduce||!('IntersectionObserver' in window)){for(var i=0;i<nodes.length;i++)nodes[i].classList.add('in');counts(document,true);return;}
+if(reduce||!('IntersectionObserver' in window)){for(var i=0;i<nodes.length;i++)nodes[i].classList.add('in');counts(document,true);term(document,true);return;}
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;
-e.target.classList.add('in');counts(e.target,false);io.unobserve(e.target);});},
+e.target.classList.add('in');counts(e.target,false);term(e.target,false);io.unobserve(e.target);});},
 {rootMargin:'0px 0px -12% 0px',threshold:0.15});
 for(var j=0;j<nodes.length;j++)io.observe(nodes[j]);
 })();

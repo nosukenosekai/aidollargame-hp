@@ -42,6 +42,24 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#c81e1e;animation:pl 1.8s ease-out infinite}
 @keyframes pl{0%{box-shadow:0 0 0 0 rgba(200,30,30,0.6)}70%{box-shadow:0 0 0 8px rgba(200,30,30,0)}100%{box-shadow:0 0 0 0 rgba(200,30,30,0)}}
 .bar{height:3px;background:#e2e5ea;overflow:hidden}
+.term{background:#060b16;border:1px solid #23314f;border-radius:10px;overflow:hidden;box-shadow:0 24px 50px rgba(0,0,0,.45)}
+.term-bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:#0b1526;border-bottom:1px solid #23314f}
+.tdot{width:10px;height:10px;border-radius:50%;background:#2c3850;flex:0 0 auto}
+.term-title{margin-left:8px;font-size:12.5px;color:#8e9bb3}
+.term-tag{margin-left:auto;font-size:10px;font-weight:700;color:#8e9bb3;border:1px solid #23314f;border-radius:3px;padding:1px 7px}
+.term-body{padding:18px 18px 20px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:13.5px;line-height:1.95;min-height:330px}
+.term-body .tl{opacity:0;transform:translateY(4px);transition:opacity .22s,transform .22s;color:#d7e0ef;white-space:normal}
+.term-body .tl.on{opacity:1;transform:none}
+.tp{color:#ff6b5e;font-weight:700}
+.tk{color:#6f8cc4}
+.tv{color:#ffffff;font-weight:700}
+.tind{padding-left:2.6em;color:#9fadc4}
+.tdim{color:#6f7d95}
+.twarn{color:#ffb4a8}
+.tbad{color:#ff6b5e;font-weight:700}
+.tok{color:#8fe3b0;font-weight:700;margin-top:6px}
+.term-body .caret{display:inline-block;width:8px;height:15px;background:#ff6b5e;vertical-align:-2px;margin-left:4px;animation:bl 1s steps(1) infinite}
+@keyframes bl{0%,50%{opacity:1}51%,100%{opacity:0}}
 .faq details{border-bottom:1px solid #e2e5ea}
 .faq summary{list-style:none;cursor:pointer;padding:18px 40px 18px 0;font-weight:800;font-size:17px;position:relative}
 .faq summary::-webkit-details-marker{display:none}
@@ -51,7 +69,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
 .faq details>div{padding:0 40px 20px 0;color:#4a5365}
 .bar i{display:block;height:100%;width:0;background:#c81e1e;transition:width 1.1s cubic-bezier(.22,.61,.36,1)}
 .in .bar i{width:var(--w)}
-@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.sweep::after,.dot{animation:none}.bar i{transition:none}}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.sweep::after,.dot,.term-body .caret{animation:none}.bar i{transition:none}.term-body .tl{opacity:1;transform:none;transition:none}}
 @media (max-width:980px){.hero,.anno,.g2,.four,.inc{grid-template-columns:minmax(0,1fr)}.g3,.steps{grid-template-columns:minmax(0,1fr)}.wrap{padding:0 18px}.navlinks{display:none !important}.h1{font-size:34px !important}.stack{height:430px !important}}
 </style>
 
@@ -68,9 +86,9 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
     </a>
     <nav class="navlinks" style="display:flex;gap:30px;font-size:15px;color:#d3dae6;white-space:nowrap">
       <a href="#cycle" style="text-decoration:none">やること</a>
-      <a href="#report" style="text-decoration:none">毎月の報告</a>
+      <a href="#report" style="text-decoration:none">月次報告書</a>
       <a href="#vendors" style="text-decoration:none">預け先の事故</a>
-      <a href="#tool" style="text-decoration:none">診断の見本</a>
+      <a href="#tool" style="text-decoration:none">MONOMI</a>
       <a href="#start" style="text-decoration:none">始め方</a>
       <a href="#faq" style="text-decoration:none">よくある質問</a>
     </nav>
@@ -85,10 +103,10 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
     <div>
       <div class="eyebrow" style="display:inline-flex;align-items:center;gap:12px;color:#c81e1e;margin-bottom:28px"><span style="width:30px;height:2px;background:#c81e1e"></span>MONTHLY SECURITY REPORT</div>
       <h1 class="h1" style="margin:0 0 28px;font-size:52px;line-height:1.32;font-weight:900;letter-spacing:-0.01em;white-space:nowrap">ハッカーより先に、<br>脆弱性を見つけます。</h1>
-      <p style="margin:0 0 38px;font-size:18px;line-height:1.95;color:#bac5d8;max-width:510px">書面で範囲と日時の許可をいただいたうえで、ハッカーと同じ手口で外から疑似攻撃をしかけ、脆弱性を洗い出します。情報システムの担当者がいない会社のかわりに、当社が毎月これを回し、その月に何があり来月何をするかを報告します。</p>
+      <p style="margin:0 0 38px;font-size:18px;line-height:1.95;color:#bac5d8;max-width:510px">書面で範囲と日時の許可をいただいたうえで、ハッカーと同じ手口で外から疑似攻撃をしかけ、脆弱性を洗い出します。情報システムの担当者がいない会社のかわりに、当社が毎月これを回し、その月の実施結果と翌月の計画を、月次報告書でご報告します。</p>
       <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">
         <a href="#contact-sec" style="background:#ffffff;color:#0b1220;text-decoration:none;font-weight:800;padding:18px 32px;border-radius:6px;font-size:17px">無料で相談する</a>
-        <a href="#report" style="color:#ffffff;text-decoration:none;font-weight:700;padding:18px 6px;border-bottom:1px solid rgba(255,255,255,0.45)">毎月の報告を見る</a>
+        <a href="#report" style="color:#ffffff;text-decoration:none;font-weight:700;padding:18px 6px;border-bottom:1px solid rgba(255,255,255,0.45)">月次報告書を見る</a>
       </div>
     </div>
 
@@ -97,7 +115,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       <div style="position:absolute;right:24px;top:24px;width:82%;height:410px;background:#dde3ee;border-radius:10px;transform:rotate(2deg)"></div>
       <div class="sweep" style="position:absolute;right:50px;top:0;width:85%;background:#ffffff;color:#0b1220;border-radius:10px;box-shadow:0 28px 56px rgba(0,0,0,0.5);padding:26px 28px;box-sizing:border-box">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-          <div><div class="eyebrow" style="color:#7a8597;font-size:11px">MONTHLY REPORT</div><div style="font-weight:900;font-size:20px;margin-top:2px;white-space:nowrap">2026年10月の報告</div></div>
+          <div><div class="eyebrow" style="color:#7a8597;font-size:11px">MONTHLY REPORT</div><div style="font-weight:900;font-size:20px;margin-top:2px;white-space:nowrap">2026年10月 月次報告書</div></div>
           <div class="en" style="font-size:11px;font-weight:700;color:#7a8597;border:1px solid #d2d7e0;border-radius:3px;padding:2px 8px">SAMPLE</div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#e2e5ea;border:1px solid #e2e5ea;border-radius:6px;overflow:hidden;margin-bottom:18px">
@@ -105,15 +123,15 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
           <div style="background:#ffffff;padding:13px 12px"><div class="en cnt" data-to="5" style="font-size:30px;font-weight:900;line-height:1">0</div><div style="font-size:11.5px;color:#5c6577;margin-top:5px;line-height:1.5;white-space:nowrap">止まった送信</div></div>
           <div style="background:#ffffff;padding:13px 12px"><div class="en cnt" data-to="2" style="font-size:30px;font-weight:900;line-height:1">0</div><div style="font-size:11.5px;color:#5c6577;margin-top:5px;line-height:1.5;white-space:nowrap">消した<br>アカウント</div></div>
         </div>
-        <div class="eyebrow" style="font-size:11px;color:#7a8597;margin-bottom:10px">今月起きたこと</div>
+        <div class="eyebrow" style="font-size:11px;color:#7a8597;margin-bottom:10px">今月の所見</div>
         <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:16px;font-size:13.5px;line-height:1.65">
           <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:0 0 48px;font-size:11px;font-weight:800;color:#5c6577;border:1px solid #d2d7e0;border-radius:3px;padding:1px 0;text-align:center;margin-top:3px">決まり</span><span>AIに社外秘を送ってよいかの決まりがない</span></div>
           <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:0 0 48px;font-size:11px;font-weight:800;color:#5c6577;border:1px solid #d2d7e0;border-radius:3px;padding:1px 0;text-align:center;margin-top:3px">仕組み</span><span>偽メール対策の設定が1つ抜けている</span></div>
           <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:0 0 48px;font-size:11px;font-weight:800;color:#5c6577;border:1px solid #d2d7e0;border-radius:3px;padding:1px 0;text-align:center;margin-top:3px">手ちがい</span><span>退職した2人のアカウントが残っていた</span></div>
         </div>
         <div style="border-top:1px solid #e2e5ea;padding-top:14px;display:flex;justify-content:space-between;gap:14px;font-size:13.5px;line-height:1.6">
-          <div><div class="eyebrow" style="font-size:11px;color:#7a8597;margin-bottom:2px">来月やること</div>AI利用の決まりを作る</div>
-          <div style="text-align:right;flex:0 0 auto"><div class="eyebrow" style="font-size:11px;color:#7a8597;margin-bottom:2px">かかるお金</div><span class="en" style="font-weight:800">[金額]</span></div>
+          <div><div class="eyebrow" style="font-size:11px;color:#7a8597;margin-bottom:2px">翌月の実施計画</div>AI利用の決まりを作る</div>
+          <div style="text-align:right;flex:0 0 auto"><div class="eyebrow" style="font-size:11px;color:#7a8597;margin-bottom:2px">概算費用</div><span class="en" style="font-weight:800">[金額]</span></div>
         </div>
       </div>
     </div>
@@ -128,18 +146,51 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       <div class="inc rv" style="border:1px solid #23314f">
         <a href="emergency.html" style="display:block;background:#0b1220;text-decoration:none;color:#ffffff;padding:26px 28px">
           <div class="en" style="font-size:12px;font-weight:700;color:#8e9bb3;margin-bottom:8px">2026.10.05</div>
-          <div style="font-size:19px;font-weight:800;line-height:1.6;margin-bottom:8px">大和証券の顧客 約11万人分の情報に不正アクセス。同社のシステムは無事だった。</div>
-          <div style="font-size:15.5px;color:#9fadc4;line-height:1.8">問い合わせの管理を任せていた委託先が攻撃を受けた。自社をどれだけ固めても、預け先が破られれば出ていく。</div>
+          <div style="font-size:19px;font-weight:800;line-height:1.6;margin-bottom:8px">問い合わせの管理を任せていた会社が不正アクセスを受け、顧客 約11万人分の情報が漏れた可能性。</div>
+          <div style="font-size:15.5px;color:#9fadc4;line-height:1.8">委託元の証券会社は、自社のシステムに侵入された形跡はないと発表した。自社をどれだけ固めても、預け先が破られれば出ていく。</div>
         </a>
         <a href="emergency.html" style="display:block;background:#0b1220;text-decoration:none;color:#ffffff;padding:26px 28px">
           <div class="en" style="font-size:12px;font-weight:700;color:#8e9bb3;margin-bottom:8px">2026.10.07</div>
-          <div style="font-size:19px;font-weight:800;line-height:1.6;margin-bottom:8px">IDCFクラウドがランサムウェア被害。495の企業と自治体が止まった。</div>
+          <div style="font-size:19px;font-weight:800;line-height:1.6;margin-bottom:8px">国内のクラウド事業者がランサムウェア被害。495の企業と自治体が止まった。</div>
           <div style="font-size:15.5px;color:#9fadc4;line-height:1.8">預けていたデータは取り出しも復元も難しい見通しと発表された。借りている側に打てる手はなかった。</div>
         </a>
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:16px">
-        <div style="font-size:13.5px;color:#8e9bb3">出典：ITmedia（10/7）、ScanNetSecurity（10/9）</div>
-        <a href="emergency.html" style="color:#ffffff;font-weight:800;text-decoration:none;border-bottom:2px solid #c81e1e;padding-bottom:3px">貴社は、この2社を使っていませんか →</a>
+        <div style="font-size:13.5px;color:#8e9bb3">いずれも報道による。出典：ITmedia（10/7）、ScanNetSecurity（10/9）</div>
+        <a href="emergency.html" style="color:#ffffff;font-weight:800;text-decoration:none;border-bottom:2px solid #c81e1e;padding-bottom:3px">貴社が情報を預けている先を、数えていますか →</a>
+      </div>
+  </div>
+</section>
+
+<section id="tool" style="background:#0f1930;color:#ffffff">
+  <div class="wrap g2" style="padding-top:96px;padding-bottom:96px;align-items:center">
+    <div class="rv">
+      <div class="eyebrow" style="color:#ff6b5e;margin-bottom:16px">MONOMI — VULNERABILITY ASSESSMENT</div>
+      <h2 style="margin:0 0 24px;font-size:38px;line-height:1.45;font-weight:900">診断は、<br>触らない調査から始めます。</h2>
+      <p style="margin:0 0 18px;color:#bac5d8">当社の脆弱性診断の道具が MONOMI です。はじめに使うのは、誰でも見られる記録だけ。証明書の透明性ログ（CT）、公開されているDNS、ドメインの登録情報（WHOIS）。この段階では、貴社のサーバーに一度も接続しません。</p>
+      <p style="margin:0 0 28px;color:#bac5d8">疑似攻撃に進むのは、ご自身のドメインだと確かめていただいた後です。許可のない診断は不正アクセス禁止法に当たるため、確かめる手順を飛ばせない作りにしてあります。</p>
+      <a href="../demo/monomi-whitehat-4f2b91.html" style="display:inline-flex;align-items:center;gap:8px;font-weight:800;color:#ffffff;text-decoration:none;border-bottom:2px solid #ff6b5e;padding-bottom:4px">MONOMI の画面を見る →</a>
+      <p style="margin:14px 0 0;font-size:14px;color:#8e9bb3">画面の見本です。出てくるドメイン名と所見は架空で、実在の組織とは関係ありません。</p>
+    </div>
+
+    <div class="rv">
+      <div class="term" aria-label="脆弱性診断の実行例（見本）">
+        <div class="term-bar"><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span><span class="term-title">MONOMI — passive scan</span><span class="term-tag en">SAMPLE</span></div>
+        <div class="term-body">
+          <div class="tl"><span class="tp">$</span> monomi scan <span class="tv">example.co.jp</span> --passive</div>
+          <div class="tl tdim">触らない調査を開始します。対象のサーバーには接続しません。</div>
+          <div class="tl"><span class="tk">[1/3]</span> 証明書の透明性ログ（CT）を照会</div>
+          <div class="tl tind">サブドメイン <span class="tv">12</span> 件（稼働 9 / 応答なし 3）</div>
+          <div class="tl tind twarn">応答なし 3 件に、テスト用と旧システムの名前が残っています</div>
+          <div class="tl"><span class="tk">[2/3]</span> 公開DNSを照会</div>
+          <div class="tl tind">SPF あり　DKIM あり　DMARC <span class="tbad">なし</span></div>
+          <div class="tl tind twarn">他人が貴社の名前で偽メールを送れる状態です</div>
+          <div class="tl"><span class="tk">[3/3]</span> ドメインの登録情報（WHOIS）を照会</div>
+          <div class="tl tind">有効期限 2027-03-14（残り 153 日）</div>
+          <div class="tl tok">完了　要対応 2 件 / 記録のみ 5 件</div>
+          <div class="tl tdim">ここまで、貴社のサーバーには一度も接続していません。</div>
+          <div class="tl tdim">続けるには、このドメインが自分のものだと確かめてください。</div>
+        </div>
       </div>
     </div>
   </div>
@@ -198,21 +249,21 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
 <section id="report" style="border-top:1px solid #e2e5ea">
   <div class="wrap" style="padding-top:104px;padding-bottom:96px">
     <div class="rv">
-      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">WHAT YOU GET</div>
-      <h2 style="margin:0 0 20px;font-size:40px;line-height:1.4;font-weight:900">やったことは、記録で残す。</h2>
-      <p style="margin:0 0 54px;color:#4a5365;max-width:620px">上の4つを回した結果を、毎月の報告にまとめてお渡しします。技術の細かい話は書きません。対策とお金を決める人が、5分で読み終えられる書き方にします。</p>
+      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">MONTHLY REPORT</div>
+      <h2 style="margin:0 0 20px;font-size:40px;line-height:1.4;font-weight:900">実施結果は、月次報告書にまとめます。</h2>
+      <p style="margin:0 0 54px;color:#4a5365;max-width:620px">上の4つの実施結果を、毎月決まった日に月次報告書としてお渡しします。技術的な詳細は記載しません。対策と予算を決める方が5分で読み終えられる構成にしています。</p>
     </div>
     <div class="anno">
       <div class="rv" style="border:1px solid #d2d7e0;border-radius:12px;padding:38px 42px">
         <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #0b1220;padding-bottom:16px;margin-bottom:26px">
-          <div style="font-weight:900;font-size:21px">株式会社〇〇 御中　2026年10月</div>
+          <div style="font-weight:900;font-size:21px">株式会社〇〇 御中　2026年10月度</div>
           <div class="en" style="font-size:11px;font-weight:700;color:#7a8597;border:1px solid #d2d7e0;border-radius:3px;padding:2px 8px">SAMPLE</div>
         </div>
         <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">1</span><div><div style="font-weight:800">脆弱性診断</div><div style="font-size:16px;color:#4a5365;line-height:1.8">新しく見つかった脆弱性 2件（うち至急 1件）</div></div></div>
         <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">2</span><div><div style="font-weight:800">アカウント</div><div style="font-size:16px;color:#4a5365;line-height:1.8">退職者2人分を停止。新しく使い始めたAI 1つ</div></div></div>
         <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">3</span><div><div style="font-weight:800">AIに送ろうとして止まったもの</div><div style="font-size:16px;color:#4a5365;line-height:1.8">5件（お客様の名前 3、電話番号 2）</div></div></div>
-        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:26px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">4</span><div><div style="font-weight:800">決まりと教育</div><div style="font-size:16px;color:#4a5365;line-height:1.8">確認済み 12人／まだ 3人</div></div></div>
-        <div style="background:#0b1220;color:#ffffff;border-radius:8px;padding:22px 24px;display:flex;gap:16px;align-items:flex-start"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#ffffff;color:#0b1220;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">5</span><div><div style="font-weight:800">来月やること</div><div style="font-size:16px;color:#bac5d8;line-height:1.8">AI利用の決まりを作り、全員に確認してもらう。かかるお金 [金額]</div></div></div>
+        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:26px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">4</span><div><div style="font-weight:800">社内規程と教育</div><div style="font-size:16px;color:#4a5365;line-height:1.8">確認済み 12人／まだ 3人</div></div></div>
+        <div style="background:#0b1220;color:#ffffff;border-radius:8px;padding:22px 24px;display:flex;gap:16px;align-items:flex-start"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#ffffff;color:#0b1220;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">5</span><div><div style="font-weight:800">翌月の実施計画</div><div style="font-size:16px;color:#bac5d8;line-height:1.8">AI利用に関する社内規程を整備し、全従業員の確認を取る。概算費用 [金額]</div></div></div>
       </div>
       <div style="display:flex;flex-direction:column;gap:32px;padding-top:8px">
         <div class="rv" style="display:flex;gap:20px"><span class="en" style="flex:0 0 auto;font-weight:900;font-size:20px;color:#c81e1e;width:30px">01</span><div><div style="font-weight:800;font-size:19px;margin-bottom:6px">前の月と比べられる</div><div style="color:#4a5365">毎月同じやり方で診断するので、増えた脆弱性と直した脆弱性が分かります。</div></div></div>
@@ -229,7 +280,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
     <div class="rv">
       <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">THIRD-PARTY INCIDENTS</div>
       <h2 style="margin:0 0 24px;font-size:38px;line-height:1.45;font-weight:900">漏れるのは、自社の<br>サーバーとは限らない。</h2>
-      <p style="margin:0 0 18px;color:#4a5365">問い合わせフォーム、名簿の置き場、チャット、クラウド。会社の情報は、いくつもの外部サービスに預けられています。10月の大和証券も、自社ではなく委託先が破られました。</p>
+      <p style="margin:0 0 18px;color:#4a5365">問い合わせフォーム、名簿の置き場、チャット、クラウド。会社の情報は、いくつもの外部サービスに預けられています。10月に報じられた漏えいも、自社ではなく委託先が破られたものでした。</p>
       <p style="margin:0 0 28px;color:#4a5365">当社はお客様ごとに預け先の一覧を持ちます。ニュースで事故が出たら、巻き込まれたかどうかを [時間] 以内にお伝えします。</p>
       <a href="emergency.html" style="display:inline-flex;align-items:center;gap:8px;font-weight:800;color:#0b1220;text-decoration:none;border-bottom:2px solid #c81e1e;padding-bottom:4px">今出ている事故を確かめる →</a>
     </div>
@@ -248,30 +299,6 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
   </div>
 </section>
 
-<section id="tool" style="border-top:1px solid #e2e5ea">
-  <div class="wrap g2" style="padding-top:104px;padding-bottom:104px;align-items:center">
-    <div class="rv">
-      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">VULNERABILITY ASSESSMENT</div>
-      <h2 style="margin:0 0 24px;font-size:38px;line-height:1.45;font-weight:900">脆弱性診断は、<br>触らない調査から始めます。</h2>
-      <p style="margin:0 0 18px;color:#4a5365">当社の脆弱性診断の道具です。はじめに使うのは、誰でも見られる記録だけです。証明書の透明性ログ、公開されているDNS、ドメインの登録情報（WHOIS）。この段階では、貴社のサーバーに一度も接続しません。</p>
-      <p style="margin:0 0 28px;color:#4a5365">疑似攻撃に進むのは、ご自身のドメインだと確かめていただいた後です。許可のない診断は不正アクセス禁止法に当たるため、手順として組み込んであります。</p>
-      <a href="../demo/monomi-whitehat-4f2b91.html" style="display:inline-flex;align-items:center;gap:8px;font-weight:800;color:#0b1220;text-decoration:none;border-bottom:2px solid #c81e1e;padding-bottom:4px">診断の画面を見る →</a>
-      <p style="margin:14px 0 0;font-size:14px;color:#5c6577">画面の見本です。出てくるドメイン名と所見は架空で、実在の組織とは関係ありません。</p>
-    </div>
-    <div class="rv" style="background:#0b1220;border-radius:12px;padding:30px;color:#ffffff">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <div style="font-weight:800">触らずに分かること</div>
-        <div class="en" style="font-size:11px;font-weight:700;color:#8e9bb3;border:1px solid #23314f;border-radius:3px;padding:2px 8px">PASSIVE</div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:1px;background:#23314f;border:1px solid #23314f;border-radius:8px;overflow:hidden;font-size:16px">
-        <div style="background:#111b2f;padding:15px 18px"><div style="font-weight:700">証明書の透明性ログ（CT）</div><div style="font-size:14px;color:#8e9bb3;line-height:1.75">忘れられたテスト用・旧システム用のサーバー名が残っていないか</div></div>
-        <div style="background:#111b2f;padding:15px 18px"><div style="font-weight:700">公開されているDNS</div><div style="font-size:14px;color:#8e9bb3;line-height:1.75">他人が貴社の名前で偽メールを送れる状態になっていないか</div></div>
-        <div style="background:#111b2f;padding:15px 18px"><div style="font-weight:700">ドメインの登録情報（WHOIS）</div><div style="font-size:14px;color:#8e9bb3;line-height:1.75">更新が切れそうなドメインと、連絡先の持ち主</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section id="start" style="border-top:1px solid #e2e5ea">
   <div class="wrap" style="padding-top:104px;padding-bottom:104px">
     <div class="rv">
@@ -279,10 +306,10 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       <h2 style="margin:0 0 54px;font-size:40px;line-height:1.4;font-weight:900">始め方</h2>
     </div>
     <div class="steps">
-      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">01</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">相談する</div><div style="font-size:16px;color:#4a5365;line-height:1.85">今の困りごとと、使っている外部サービスを伺い、報告の見本をお見せします。</div></div>
+      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">01</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">相談する</div><div style="font-size:16px;color:#4a5365;line-height:1.85">現状の課題と、利用中の外部サービスを伺い、月次報告書の見本をお見せします。</div></div>
       <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">02</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">書面で許可</div><div style="font-size:16px;color:#4a5365;line-height:1.85">調べる対象、期間、ご担当者、緊急時に止める連絡先を決めます。許可のない診断は不正アクセス禁止法に当たるためです。</div></div>
-      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">03</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">最初の報告</div><div style="font-size:16px;color:#4a5365;line-height:1.85">脆弱性診断を実施し、預け先の一覧を作り、最初の報告をお渡しします。<br>[初回の料金]</div></div>
-      <div class="rv" style="border-top:3px solid #c81e1e;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c81e1e">04</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">毎月続ける</div><div style="font-size:16px;color:#4a5365;line-height:1.85">毎月決まった日に報告が届きます。<br>[月額]</div></div>
+      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">03</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">初回の報告書</div><div style="font-size:16px;color:#4a5365;line-height:1.85">脆弱性診断を実施し、委託先の一覧を作成して、初回の月次報告書をお渡しします。<br>[初回の料金]</div></div>
+      <div class="rv" style="border-top:3px solid #c81e1e;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c81e1e">04</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">毎月続ける</div><div style="font-size:16px;color:#4a5365;line-height:1.85">毎月決まった日に月次報告書をお届けします。<br>[月額]</div></div>
     </div>
   </div>
 </section>
@@ -295,7 +322,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
     </div>
     <div class="rv faq" style="max-width:900px;border-top:1px solid #e2e5ea">
       <details><summary>どのくらいの規模の会社が対象ですか</summary><div>情報システムの担当者がいない会社です。社員10人ほどから、店舗や事業所が分かれている会社まで。人数より、使っている外部サービスの数で手間が決まります。</div></details>
-      <details><summary>社内に詳しい人がいなくても大丈夫ですか</summary><div>そのための報告です。技術の言葉ではなく、来月やることとかかるお金で書きます。読むのは、対策とお金を決める人です。中小企業では社長のことが多く、総務の担当者のこともあります。</div></details>
+      <details><summary>社内に詳しい人がいなくても大丈夫ですか</summary><div>そのための月次報告書です。技術用語ではなく、翌月の実施計画と概算費用で記載します。読むのは、対策とお金を決める人です。中小企業では社長のことが多く、総務の担当者のこともあります。</div></details>
       <details><summary>24時間対応してもらえますか</summary><div>していません。お約束するのは、毎月の点検と報告、それに預け先の事故が出たときにお答えすることです。今まさに被害が進んでいるときは、右上の「緊急対応」に最初の動き方をまとめています。</div></details>
       <details><summary>サイバー攻撃を全部止めてもらえますか</summary><div>できません。攻撃をゼロにする方法はありません。当社がやるのは、脆弱性を毎月ふさぐこと、起きたときに何をするかを決めておくこと、やったことを記録に残すことの3つです。</div></details>
       <details><summary>診断で自社のサイトが止まることはありませんか</summary><div>はじめに見るのは、誰でも見られる記録（証明書の透明性ログ・公開DNS・WHOIS）だけで、貴社のサーバーには接続しません。疑似攻撃に進むのは、ご自身のドメインだと確かめていただき、実施する日時と緊急時に止める連絡先を決めてからです。</div></details>
@@ -343,11 +370,19 @@ if(instant){el.textContent=to.toFixed(dec);return;}
 var start=null,dur=1100;function step(ts){if(start===null)start=ts;var p=Math.min(1,(ts-start)/dur);
 var e=1-Math.pow(1-p,3);el.textContent=(to*e).toFixed(dec);if(p<1)requestAnimationFrame(step);}
 requestAnimationFrame(step);})(els[i]);}}
+function term(root,instant){var ts=root.querySelectorAll?root.querySelectorAll('.term-body'):[];
+for(var t=0;t<ts.length;t++){(function(body){if(body.dataset.done)return;body.dataset.done='1';
+var lines=body.querySelectorAll('.tl');
+if(instant){for(var i=0;i<lines.length;i++)lines[i].classList.add('on');return;}
+var caret=document.createElement('span');caret.className='caret';var i=0;
+(function next(){if(i>=lines.length)return;var el=lines[i];el.classList.add('on');el.appendChild(caret);
+var wait=/\[\d\/3\]/.test(el.textContent)?620:300;if(i===0)wait=520;i++;setTimeout(next,wait);})();
+})(ts[t]);}}
 var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 var nodes=document.querySelectorAll('.rv');
-if(reduce||!('IntersectionObserver' in window)){for(var i=0;i<nodes.length;i++)nodes[i].classList.add('in');counts(document,true);return;}
+if(reduce||!('IntersectionObserver' in window)){for(var i=0;i<nodes.length;i++)nodes[i].classList.add('in');counts(document,true);term(document,true);return;}
 var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;
-e.target.classList.add('in');counts(e.target,false);io.unobserve(e.target);});},
+e.target.classList.add('in');counts(e.target,false);term(e.target,false);io.unobserve(e.target);});},
 {rootMargin:'0px 0px -12% 0px',threshold:0.15});
 for(var j=0;j<nodes.length;j++)io.observe(nodes[j]);
 })();

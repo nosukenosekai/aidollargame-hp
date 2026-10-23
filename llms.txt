@@ -160,6 +160,7 @@
 株式会社AIdollargameが note.com で公開している記事。一覧ページ: https://aidollargame.com/note.html
 アカウント: https://note.com/aidollargame
 
+- 2026-10-22｜PHPに緊急の修正が出た。修正版が出たのは4系統だけで、世界のPHPサイトの約48%は入っていない: https://note.com/aidollargame/n/n2ae1e0b90fe1
 - 2026-10-21｜AIが書き換えていいのは、AIが作ったファイルだけ。デジタル庁が職員18万人向けに決めたルールが公開された: https://note.com/aidollargame/n/n4c10b62bf68a
 - 2026-10-12｜AI時代は免許証の画像を送る本人確認が2027年4月で終わる。: https://note.com/aidollargame/n/nbfa1cae6d394
 - 2026-10-07｜顧客名簿をAIに入れる前に。氏名をIDに置き換えて消える義務と、消えない義務: https://note.com/aidollargame/n/nb22ce91508cb

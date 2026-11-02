@@ -109,6 +109,32 @@
 - 「あの人しか分からない」が会社を止める前に: https://aidollargame.com/articles/zokujinka-2026.html
 - 東京NBC起業塾で「事業承継 × AI」を発表——社長の頭の中を会社の資産に変える『承継OS』: https://aidollargame.com/articles/nbc-kigyojuku-2026-07.html
 - 「16時に電話します」の予約代行、16時を過ぎても音沙汰なし。運営会社に電話したら出たのはAIだった: https://aidollargame.com/articles/yoyaku-daiko-16ji-2026.html
+- AIを配って伸びたのは、新人ではなくベテランだった。6,000人・160店舗の現場実験: https://aidollargame.com/articles/ai-veteran-shinjin-2026.html
+- 検索を切ったAIが挙げた医者は、9割がその街に実在しなかった: https://aidollargame.com/articles/ai-suisen-jitsuzai-2026.html
+- 20代のプログラマーは15%減、30代は22%増。ノルウェーの雇用記録を全部数えた結果: https://aidollargame.com/articles/programmer-nenrei-norway-2026.html
+- AIが一日の中心だった日は5%。5万人の2か月分、6億6,700万件の操作を数えた研究: https://aidollargame.com/articles/ai-ichinichi-5percent-2026.html
+- AIに3行でまとめさせると、1人しか言っていない意見は86%消える: https://aidollargame.com/articles/ai-matome-shosuu-iken-2026.html
+- 「AIを月200回使え」のノルマを100回に下げたら、営業の売上が7%増えた: https://aidollargame.com/articles/ai-norma-200kai-2026.html
+- 「AIで36%増えた」が、測り方を変えると7〜25%に縮んだ。210万本の論文データ: https://aidollargame.com/articles/ai-koka-hakarikata-2026.html
+- AIが核融合の式を見つけた。渡せたのは、答え合わせが代入1回で終わる問いだったから: https://aidollargame.com/articles/ai-kakuyugo-kotaeawase-2026.html
+- 保守費を10年払っても、プログラムが自分のものとは限らない: https://aidollargame.com/articles/hoshuhi-10nen-program-2026.html
+- 顧客名簿をAIに入れる前に。氏名をIDに置き換えて消える義務と、消えない義務: https://aidollargame.com/articles/kokyaku-meibo-ai-id-2026.html
+- AIに値段を任せたら、1セントずつ刻んで買いそびれた: https://aidollargame.com/articles/ai-nedan-1cent-2026.html
+- 「攻撃を防ぎます」とは書かない。10月7日のクラウド障害で決めた: https://aidollargame.com/articles/cloud-shogai-1007-2026.html
+- 「3回当たったら法則」とAIに覚えさせたら、4回目で外した: https://aidollargame.com/articles/ai-housoku-3kai-2026.html
+- 20日のうち9日、納めたAIは一度も使われなかった: https://aidollargame.com/articles/ai-tsukawarenai-9nichi-2026.html
+- 免許証の画像を送る本人確認が2027年4月で終わる。顔も声も、鍵にはならない: https://aidollargame.com/articles/menkyosho-honnin-kakunin-2027.html
+- どの予算から払われるか分からない道具は、単独で売らない。候補を3つ書き出して決めた: https://aidollargame.com/articles/dougu-yosan-3kouho-2026.html
+- 人気のAIチャットが破産手続きに入った。全部足した収入が月530万ドル、計算機代が月1,000万ドル: https://aidollargame.com/articles/ai-chat-hasan-2026.html
+- メールのなりすまし対策を、いきなり一番強くしない。届かなくなるのは自社の請求書: https://aidollargame.com/articles/mail-narisumashi-taisaku-2026.html
+- 商談の最中は、AIに文章を作らせない。答えを45件、先に書いておいた: https://aidollargame.com/articles/shodan-ai-kaitou-45-2026.html
+- 値段を「1社いくら」から「1か所いくら」に変えた。仕事の量は、会社の数では増えない: https://aidollargame.com/articles/nedan-1kasho-2026.html
+- AIが書き換えていいのは、AIが作ったファイルだけ。デジタル庁が職員18万人向けに決めたルールが公開された: https://aidollargame.com/articles/digital-cho-ai-rule-2026.html
+- PHPに緊急の修正が出た。修正版が出たのは4系統だけで、世界のPHPサイトの約48%は入っていない: https://aidollargame.com/articles/php-kinkyu-shusei-2026.html
+- 「AIが使える」は、求める人材像の上位10位に入らなかった。1,333社が挙げた1位はコミュニケーション能力: https://aidollargame.com/articles/jinzai-ai-top10-2026.html
+- AI導入を止めている規制の情報提供が10月30日17時で締め切られる。中小企業向けの短期プランは年内にまとまる: https://aidollargame.com/articles/ai-kisei-teian-shimekiri-2026.html
+- パスワードを知られなくても、社員のメールは送られる。IPAの企業向け相談309件に載った「アクセスを許可」の事例: https://aidollargame.com/articles/ipa-soudan-access-kyoka-2026.html
+- AIで若手の書類はベテランより良くなった。AIを外して確かめると、力が伸びていたのはベテランだけだった: https://aidollargame.com/articles/ai-wakate-veteran-2026.html
 - AIで楽をした、その先に何をするか。東京NBCの番組で話したことと、話しきれなかったこと: https://aidollargame.com/articles/nbc-youtube-raku-tanoshii-2026.html
 - 東京NBC公式番組にAIdollargame代表・佐藤徳之介が出演 — メンバー紹介インタビュー（動画は2026年9月18日公開）: https://aidollargame.com/articles/nbc-2026-07.html
 - 定点観測 vol.2: https://aidollargame.com/articles/ai-teiten-2026-08.html

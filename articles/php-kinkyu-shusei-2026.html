@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHPに緊急の修正が出た。修正版が出たのは4系統だけで、世界のPHPサイトの約48%は入っていない | AIdollargame</title>
+<meta name="description" content="2026年10月21日の23時（日本時間）に、PHPの開発元が緊急の修正を公開しました。深刻度はCVSS v4.0で9.2、2件ともリモートからの任意コード実行です。IPAとJPCERT/CCは、翌22日にそれぞれ注意喚起を出しました。">
+<meta name="author" content="AIdollargame 編集部">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/articles/php-kinkyu-shusei-2026.html">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "ホーム",
+      "item": "https://aidollargame.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "記事一覧",
+      "item": "https://aidollargame.com/articles/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "PHPに緊急の修正が出た",
+      "item": "https://aidollargame.com/articles/php-kinkyu-shusei-2026.html"
+    }
+  ]
+}
+</script>
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="株式会社AIdollargame">
+<meta property="og:title" content="PHPに緊急の修正が出た">
+<meta property="og:description" content="2026年10月21日の23時（日本時間）に、PHPの開発元が緊急の修正を公開しました。深刻度はCVSS v4.0で9.2、2件ともリモートからの任意コード実行です。IPAとJPCERT/CCは、翌22日にそれぞれ注意喚起を出しました。">
+<meta property="og:url" content="https://aidollargame.com/articles/php-kinkyu-shusei-2026.html">
+<meta property="og:image" content="https://aidollargame.com/articles/php-kinkyu-shusei-2026-hero.jpg">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-10-22">
+<meta property="article:author" content="AIdollargame 編集部">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PHPに緊急の修正が出た">
+<meta name="twitter:description" content="2026年10月21日の23時（日本時間）に、PHPの開発元が緊急の修正を公開しました。深刻度はCVSS v4.0で9.2、2件ともリモートからの任意コード実行です。IPAとJPCERT/CCは、翌22日にそれぞれ注意喚起を出しました。">
+<meta name="twitter:image" content="https://aidollargame.com/articles/php-kinkyu-shusei-2026-hero.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "PHPに緊急の修正が出た",
+  "description": "2026年10月21日の23時（日本時間）に、PHPの開発元が緊急の修正を公開しました。深刻度はCVSS v4.0で9.2、2件ともリモートからの任意コード実行です。IPAとJPCERT/CCは、翌22日にそれぞれ注意喚起を出しました。",
+  "datePublished": "2026-10-22",
+  "author": {
+    "@type": "Organization",
+    "name": "AIdollargame 編集部"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AIdollargame",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://aidollargame.com/og-default.png"
+    }
+  },
+  "mainEntityOfPage": "https://aidollargame.com/articles/php-kinkyu-shusei-2026.html",
+  "image": "https://aidollargame.com/articles/php-kinkyu-shusei-2026-hero.jpg",
+  "inLanguage": "ja"
+}
+</script>
+
+<style>
+  :root{--cyan:#00d8ff;--blue:#000;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#000);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;background:#0a1238;}
+  body{background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;overflow-x:hidden;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,9,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Helvetica Neue","Yu Gothic Medium",Meiryo,sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);} .logo .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;} .logo .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
+  .nav-back{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.78rem;letter-spacing:0.12em;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .hero{padding:8rem 2rem 2.6rem;max-width:800px;margin:0 auto;}
+  .tag{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.7rem;letter-spacing:0.4em;color:var(--cyan);margin-bottom:1.2rem;display:flex;align-items:center;gap:0.8rem;}
+  .tag::before{content:'';display:inline-block;width:30px;height:1px;background:var(--cyan);}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;word-break:auto-phrase;}
+  .meta{display:flex;gap:2rem;align-items:center;font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}
+  .body{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}
+  .body h2{font-size:1.4rem;font-weight:900;margin:2.6rem 0 1rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}
+  .body h3{font-size:1.12rem;font-weight:800;margin:2.2rem 0 0.8rem;line-height:1.5;}
+  .body p{font-size:1.06rem;color:rgba(238,243,255,0.85);line-height:1.72;margin-bottom:1.05rem;}
+  .body strong{color:#fff;font-weight:700;}
+  .body ul{padding-left:1.5rem;margin-bottom:1.4rem;}
+  .body li{font-size:1.02rem;color:rgba(238,243,255,0.85);line-height:1.65;margin-bottom:0.4rem;}
+  .body .src{font-size:0.82rem;color:var(--muted);margin:0.2rem 0 0.4rem;}
+  .body .src a{color:var(--cyan);}
+  .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
+  .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
+  .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
+  .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2rem;color:#001428;font-weight:700;font-size:0.9rem;border-radius:8px;background:linear-gradient(110deg,#00d8ff 0%,#000 50%,#00d8ff 100%);background-size:220% 100%;text-decoration:none;transition:transform 0.25s,box-shadow 0.4s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(0,216,255,0.6);}
+  .related{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+  .related h3{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.72rem;letter-spacing:0.3em;color:var(--muted);margin-bottom:1.5rem;}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .rcard{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.4rem;text-decoration:none;color:inherit;transition:all 0.3s;display:block;}
+  .rcard:hover{border-color:rgba(0,216,255,0.35);transform:translateY(-4px);}
+  .rcard .rt{font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;font-size:0.65rem;color:var(--cyan);margin-bottom:0.5rem;}
+  .rcard .rttl{font-size:0.88rem;font-weight:700;line-height:1.5;}
+  footer{border-top:1px solid rgba(255,255,255,0.08);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:rgba(6,9,26,0.6);}
+  .fc{font-size:0.75rem;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,"SF Mono","Menlo","Hiragino Sans",monospace;}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.hero,.body,.related{padding-left:1.2rem;padding-right:1.2rem;}footer{padding:2rem 1.5rem;}}
+
+/* ============ LIGHT THEME OVERRIDE ============ */
+html { background:#ffffff !important; }
+body { background:#ffffff !important; color:#000 !important; }
+body::before { display:none !important; }
+nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.nav-home, .back-link, .nav-back { color:#000 !important; }
+.nav-home:hover, .back-link:hover { color:#000 !important; }
+.hero h1, h1, h2, h3 { color:#000 !important; }
+.hero p, p, .lead { color:#000 !important; }
+.tag { color:#000 !important; }
+.tag::before { background:#000 !important; }
+article, .article-body, .post-body, .post-content { color:#000 !important; }
+article p, .article-body p, .post-body p { color:#000 !important; }
+blockquote, .quote { background:#fafbfc !important; border-left-color:#000 !important; color:#000 !important; }
+.meta, .post-meta { color:#000 !important; }
+footer, .site-footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
+footer a { color:#000 !important; }
+.footer-copy, .fc { color:#000 !important; }
+a { color:#000; }
+.body p, .body li, .body blockquote p { color:#000 !important; }
+.body .src { color:#555 !important; }
+.body .src a { color:#2563eb !important; }
+.body blockquote { background:#fafbfc !important; color:#000 !important; }
+.body h2, .body h3 { color:#000 !important; }
+.body strong { color:#000 !important; font-weight:900 !important; }
+.cta { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.cta * { color:#000 !important; }
+.cta h2, .cta h3 { color:#000 !important; }
+.cta p { color:#000 !important; }
+.cta .btn, .btn { background:#000 !important; color:#fff !important; }
+.cta .btn:hover, .btn:hover { background:#222 !important; box-shadow:0 10px 30px -10px rgba(0,0,0,0.3) !important; }
+.related h3 { color:#000 !important; }
+.rcard { background:#fff !important; border:1px solid #e5e7eb !important; }
+.rcard:hover { border-color:#000 !important; box-shadow:0 14px 36px -16px rgba(0,0,0,0.18) !important; }
+.rcard .rt { color:#000 !important; }
+.rcard .rttl { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; }
+footer * { color:#000 !important; }
+.fc { color:#000 !important; opacity:0.6 !important; }
+</style>
+<!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8Q45D6XVQZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-8Q45D6XVQZ');
+</script>
+<style>
+/* 可読性調整: 太字900→700・行間/字間を拡大 (2026-07-24) */
+h1{font-weight:700 !important;line-height:1.5 !important;letter-spacing:0.04em !important;}
+.body h2,.body h3{font-weight:700 !important;letter-spacing:0.03em !important;line-height:1.5 !important;}
+.body p{line-height:1.95 !important;letter-spacing:0.04em !important;}
+.body li{line-height:1.85 !important;letter-spacing:0.04em !important;}
+.body strong{font-weight:700 !important;}
+.cta h3{font-weight:700 !important;line-height:1.6 !important;letter-spacing:0.04em !important;}
+.cta p{line-height:1.9 !important;letter-spacing:0.04em !important;}
+/* 出典一覧の長いURLが狭い画面で横にはみ出すのを防ぐ (2026-09-08) */
+.body a{overflow-wrap:anywhere;word-break:break-word;}
+</style>
+
+<style>
+/* 表（記事内データ） */
+.body .tw{overflow-x:auto;margin:1.6rem 0;border:1px solid #e5e7eb;border-radius:10px;background:#fff;}
+.body table{border-collapse:collapse;width:100%;font-size:0.92rem;font-variant-numeric:tabular-nums;}
+.body th,.body td{padding:0.6rem 0.85rem;text-align:right;white-space:nowrap;border-bottom:1px solid #e5e7eb;color:#000 !important;}
+.body th:first-child,.body td:first-child{text-align:left;}
+.body thead th{font-weight:700;font-size:0.8rem;color:#555 !important;}
+.body tbody tr:last-child td{border-bottom:0;}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
+  <a href="./index.html" class="nav-back">← ARTICLES</a>
+</nav>
+<div class="hero">
+  <div class="tag">NEWS</div>
+  <h1>PHPに緊急の修正が出た。修正版が出たのは4系統だけで、世界のPHPサイトの約48%は入っていない</h1>
+  <div class="meta"><span>2026 / 10 / 22</span><span>AIdollargame 編集部</span><span>読了 約9分</span></div>
+</div>
+<article class="body">
+
+<figure style="margin:0 0 2.6rem;">
+  <img src="php-kinkyu-shusei-2026-hero.jpg" alt="事務所のスイッチングハブに、青と灰色のLANケーブルが何十本も挿さってからまっている写真" style="width:100%;height:auto;border-radius:14px;display:block;">
+</figure>
+
+<p>2026年10月21日の23時（日本時間）に、PHPの開発元が緊急の修正を公開しました。深刻度はCVSS v4.0で9.2、2件ともリモートからの任意コード実行です。IPAとJPCERT/CCは、翌22日にそれぞれ注意喚起を出しました。</p>
+<p>PHPは、世界のウェブサイトの7割近くを動かしている言語です。つまり、自社のサイトがPHPで動いているかどうかを知らない会社も、これに当たっている可能性があります。</p>
+<p>この記事は、自社サイトの中身をベンダーに任せきりにしている中小企業向けに書きます。自分のサイトが何番のPHPで動いているかを、1行で調べる方法まで書きます。</p>
+<h2>何が出たのか</h2>
+<p>php.netの告知を開いて確認しました。修正版は4本です。</p>
+<ul>
+<li>PHP 8.5.12</li>
+<li>PHP 8.4.27</li>
+<li>PHP 8.3.36</li>
+<li>PHP 8.2.35</li>
+</ul>
+<p>脆弱性は2件。CVE-2026-109618（メモリ不足のときの処理に起因するもの）と、CVE-2026-109619（リクエストをまたいで古い状態が残るもの）です。この2件をまとめて「PHP2shell」と呼びます。IPAも、注意喚起のタイトルにこの名前を入れています。</p>
+<p>危ない構成について、php.netは告知の本文でこう書いています。ウェブのリクエストを処理しているPHPの設置はすべて危険にさらされている、中でもmod_phpが最も危険で、認証を通っていないリクエストが、アプリのコードが1行も動く前に攻撃を成立させる実証がある、と。</p>
+<p>つまり、自社で作ったプログラムに問題がなくても関係ありません。PHPそのものが、自社のコードに処理を渡す前の段階でやられます。</p>
+<h2>見つけたのは、AIを使った2チームだった</h2>
+<p>報告の経緯も原文で確認しました。Califというチームが2026年8月11日に1件目を、Wizというチームが8月24日に報告しています。</p>
+<p>Wizの解説記事のタイトルは「PHP2Shell: AI uncovers critical RCE vulnerabilities affecting 70% of the Internet」です。AIが見つけた、と自分たちで書いています。</p>
+<p>本文には、Wiz AtlasとGemini 4 Argon、GPT-5.6 Solを研究の全体で使ったとあり、Gemini 4 Argonについては、脆弱性の発見、実証コードの作成、攻撃の検知、修正の検証に計り知れない貢献をした、と書いています。実証コードを別のバージョンや設定に合わせて書き換える作業でも、AIが失敗を読んで直し続けた、としています。</p>
+<p>ただし、どう探させたのかという手順は書かれていません。ここは記事からは分かりません。</p>
+<p>言えるのは、今まで15年近く誰も見つけなかった穴が、AIを道具にした2つのチームによって、2か月足らずの間に別々に報告された、という事実です。IPAもJPCERT/CCも、注意喚起からWizのこの記事に直接リンクを張っています。</p>
+<h2>修正版が出たのは4系統だけ</h2>
+<p>ここが、この件でいちばん大事なところだと私は思います。</p>
+<p>PHP開発元が通常のリリースとして修正版を出したのは、8.2系・8.3系・8.4系・8.5系の4つだけです。8.1以前は、php.netの言葉で「no longer receive updates from the PHP project（PHPプロジェクトからの更新をもう受け取らない）」に当たります。</p>
+<p>では、世の中のサイトはどの系統で動いているのか。W3Techsが10月22日時点で公開している数字を見ました。</p>
+<p>サーバーで動く言語が判別できたサイトのうち、PHPを使っているのが69.3%。そのPHPサイトの内訳は、PHP 8が65.3%、PHP 7が26.9%、PHP 5が7.7%、PHP 4が0.1%。さらにPHP 8の中身は、8.0が5.8%、8.1が15.2%、8.2が27.7%、8.3が34.8%、8.4が12.1%、8.5が4.4%です。</p>
+<p>この2つの表を掛け合わせました。修正版が出た4系統（8.2以上）に入らないサイトは、PHP 8の中で13.7%ぶん、PHP 7以下で34.7%ぶん。合わせて約48%になります。</p>
+<p>PHPで動いているサイトの、ほぼ半分です。</p>
+<p>なお、この48%はW3Techsが書いている数字ではありません。私が2つの表を掛けて出した数字です。</p>
+<p>救いが1つだけあります。PHP開発チームは深刻さを踏まえて、7.4・8.0・8.1の3つについてだけ、最小限の修正を移植したものを用意しました。ただしこれは、自分でソースから組み立てる人や、長期サポート事業者と契約していない人のための材料です。サーバーに自動で降ってくる更新ではありません。7.3以下には、それもありません。</p>
+<h2>日本の2機関が、今日それぞれ出したもの</h2>
+<p>IPAは10月22日に注意喚起を公開しました。影響を受けるシステムとして8.2系から8.5系の4つを挙げたうえで、調査に関わったWizによればPHP 5.4以降は少なくともどちらかの影響を受ける、と付け加えています。</p>
+<p>IPAの文章で私が注目したのは、修正が難しい場合の案内です。全部で6段階あり、後半はもう技術の話ではありません。更新に必要な人員・予算・保守体制を確保できるかを、システム担当者だけでなく事業責任者や経営層も含めて検討してください、と書いています。そのうえで、体制の見通しが立たない場合は、現行システムの継続を前提とせず、提供機能の縮小、公開の終了やシステムの廃止も含めて検討してください、と続きます。</p>
+<p>公的機関が「サイトを閉じることも選択肢に入れてください」とここまで明確に書くのは、私は珍しいと思いました。</p>
+<p>JPCERT/CCも同じ10月22日に注意喚起を出しています（JPCERT-AT-2026-0033）。こちらは、直すだけでなく侵害の有無を調べてください、と書いている点が違います。確認すべき痕跡として挙がっているのは3つです。</p>
+<ul>
+<li>過去のHTTP応答で、不自然に長い、または異常な形式のPHPSESSIDクッキーが設定されていないか</li>
+<li>不審なmultipart/form-data形式のリクエストと、その前後のメモリ上限エラーやHTTP 500エラーがないか</li>
+<li>PHPのワーカープロセスが予期せず止まったり、頻繁に再起動した跡がないか</li>
+</ul>
+<p>同時にJPCERT/CCは、痕跡が確認されなくても攻撃を受けていないとは断定できない、とも書いています。ログの残り方によっては跡が残らないためです。</p>
+<h2>今日やれること</h2>
+<p>1つ目。自社サイトのPHPが何番かを調べます。ターミナルで次の1行です。</p>
+<p>```</p>
+<p>curl -sSI <a href="https://自社のドメイン/" target="_blank" rel="noopener">https://自社のドメイン/</a> | grep -i &quot;x-powered-by\|^server&quot;</p>
+<p>```</p>
+<p>`PHP/8.3.36` のような文字が返ってきたら、それが動いているバージョンです。何も返らない場合は、バージョンを隠す設定になっているか、PHPで動いていません。隠してあること自体は問題ではないので、その場合は次へ進みます。</p>
+<p>私は、運用を手伝っているサイトを21日の朝にこの1行で一通り測りました。結果は他社のものなのでここには書きませんが、測るのにかかった時間は全部で20分ほどでした。</p>
+<p>2つ目。番号が分かったら、8.2未満かどうかだけ見ます。8.2未満なら、通常の更新では直りません。ここから先は、自社で判断できる話ではなくなります。</p>
+<p>3つ目。借り方によって、頼む相手が変わります。共用のレンタルサーバーなら、PHPの系統は管理画面で契約者が選ぶ形になっていることが多く、自分で切り替えられます。VPSやクラウドの仮想サーバーを借りているなら、中身は借りた人の管理です。制作会社や保守の契約先に、今日の日付を添えて次の2つを聞いてください。今動いているPHPのバージョンは何番か、修正版への更新はいつ行うか。</p>
+<h2>おわりに</h2>
+<p>この件で私が重たいと感じたのは、9.2という点数ではありません。IPAが、人員と予算と保守体制が確保できないなら公開の終了も考えてください、とはっきり書いたことです。</p>
+<p>サイトは、作って公開したら終わりではなく、動いている限りずっと面倒を見る対象です。その面倒を見られないなら、持たないほうがいい。今回の注意喚起は、そう読めます。</p>
+<p>私たちは、AIで面倒な作業が減ったその先に何をするか、を一緒に考える会社です。ただ、その手前に「自社が何を持っているかを知っている」という状態があります。まず、自分のサイトが何番のPHPで動いているかを見るところからです。20分で済みます。</p>
+<h2>出典</h2>
+<p class="src">The PHP Group「Security advisory: Critical remote code execution vulnerabilities, update now」2026年10月21日（開発元の公式告知。本文を参照）</p>
+<p class="src">  <a href="https://www.php.net/archive/2026.php" target="_blank" rel="noopener">https://www.php.net/archive/2026.php</a></p>
+<p class="src">IPA「PHPの脆弱性対策について(CVE-2026-109618、CVE-2026-109619：PHP2shell)」2026年10月22日公開（公的機関の注意喚起）</p>
+<p class="src">  <a href="https://www.ipa.go.jp/security/security-alert/2026/alert20261022.html" target="_blank" rel="noopener">https://www.ipa.go.jp/security/security-alert/2026/alert20261022.html</a></p>
+<p class="src">JPCERT/CC「PHPにおける複数の脆弱性（CVE-2026-109618、CVE-2026-109619）に関する注意喚起」2026年10月22日公開（公的機関の注意喚起）</p>
+<p class="src">  <a href="https://www.jpcert.or.jp/at/2026/at260033.html" target="_blank" rel="noopener">https://www.jpcert.or.jp/at/2026/at260033.html</a></p>
+<p class="src">Wiz「PHP2Shell: AI uncovers critical RCE vulnerabilities affecting 70% of the Internet」2026年10月21日（発見した企業の解説。査読は経ていない）</p>
+<p class="src">  <a href="https://www.wiz.io/blog/php2shell-php-rce" target="_blank" rel="noopener">https://www.wiz.io/blog/php2shell-php-rce</a></p>
+<p class="src">Calif「PHP2Shell」2026年10月21日（報告者本人の解説。査読は経ていない）</p>
+<p class="src">  <a href="https://calif.io/php2shell/" target="_blank" rel="noopener">https://calif.io/php2shell/</a></p>
+<p class="src">W3Techs「Usage statistics of PHP for websites」2026年10月22日時点（商用の調査会社による集計。調査方法の詳細は公開されていない）</p>
+<p class="src">  <a href="https://w3techs.com/technologies/details/pl-php" target="_blank" rel="noopener">https://w3techs.com/technologies/details/pl-php</a></p>
+<p class="src">写真: Ethernet switch / CC0 / Openverse</p>
+
+<p class="src">この記事と同じ内容を、公式noteでも公開しています。 <a href="../note.html">公式note 記事一覧</a></p>
+
+<div class="cta">
+  <h3>研究の数字を、自社の業務に置き換えます</h3>
+  <p>どの業務なら役に立つのか、何を測れば効果が分かるのか。実際の業務に合わせて整理します。初回のご相談は無料です。</p>
+  <a href="../index.html#contact" class="btn">無料相談を予約する →</a>
+</div>
+</article>
+<div class="related">
+  <h3>RELATED ARTICLES</h3>
+  <div class="rgrid">
+    <a href="./ai-wakate-veteran-2026.html" class="rcard"><div class="rt">RESEARCH</div><div class="rttl">AIで若手の書類はベテランより良くなった</div></a>
+    <a href="./ipa-soudan-access-kyoka-2026.html" class="rcard"><div class="rt">NEWS</div><div class="rttl">パスワードを知られなくても、社員のメールは送られる</div></a>
+    <a href="./ai-kisei-teian-shimekiri-2026.html" class="rcard"><div class="rt">NEWS</div><div class="rttl">AI導入を止めている規制の情報提供が10月30日17時で締め切られる</div></a>
+    <a href="./jinzai-ai-top10-2026.html" class="rcard"><div class="rt">NEWS</div><div class="rttl">「AIが使える」は、求める人材像の上位10位に入らなかった</div></a>
+    <a href="./digital-cho-ai-rule-2026.html" class="rcard"><div class="rt">NEWS</div><div class="rttl">AIが書き換えていいのは、AIが作ったファイルだけ</div></a>
+  </div>
+</div>
+<div class="svc-links" style="max-width:820px;margin:0 auto 3rem;padding:1.5rem 1.6rem;background:#fafbfc;border:1px solid #e5e7eb;border-radius:12px;">
+  <div style="font-size:0.74rem;letter-spacing:0.18em;font-weight:700;color:#555;margin-bottom:0.6rem;">SERVICE &mdash; AIdollargameのサービス</div>
+  <p style="margin:0;font-size:0.92rem;color:#333 !important;line-height:2;">記事を読んで「うちでもできるか聞いてみたい」と思ったら
+    <a href="../ai-training.html" style="color:#2563eb !important;text-decoration:underline;">社員リスキリング研修</a> ／
+    <a href="../ai-consulting.html" style="color:#2563eb !important;text-decoration:underline;">AI導入支援・コンサルティング</a> ／
+    <a href="../manual-ai.html" style="color:#2563eb !important;text-decoration:underline;">社内ナレッジAI</a> ／
+    <a href="../shindan.html" style="color:#2563eb !important;text-decoration:underline;">1分でわかる無料AI診断</a>（初回相談は無料です）
+  </p>
+</div>
+<footer>
+  <a href="../index.html" class="logo">A<span class="heart-i">ı</span>dollargame</a>
+  <div class="fc">© <span class="cpy-y" data-since="2025">2025</span> 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
+</footer>
+<script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
+<script defer src="../scripts/ga-events.js?v=20260824"></script>
+</body>
+</html>

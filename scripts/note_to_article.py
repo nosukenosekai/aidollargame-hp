@@ -82,8 +82,7 @@ def parse(date, slug):
     short = head if rest else title
     card_desc = rest.strip() if rest.strip() else sents[0][:70]
     plain = re.sub(r'<[^>]+>', '', ''.join(body))
-    # 同じ日の2本目(2026-11-10-2.md)は、ファイル名だけ -2 が付き、公開日は同じ日にする
-    return dict(date=date[:10], src=date, slug=slug, title=title, short=short, alt=alt, cat=category(theme),
+    return dict(date=date, slug=slug, title=title, short=short, alt=alt, cat=category(theme),
                 desc=desc, card_desc=card_desc, body='\n'.join(body),
                 mins=max(3, round(len(plain) / 500)))
 
@@ -161,7 +160,7 @@ def main():
     for a in arts:
         rel = [r for r in newest if r is not a][:5]
         (A / f'{a["slug"]}.html').write_text(build(a, rel))
-        shutil.copyfile(R / 'content/note/img' / f'{a["src"]}.jpg', A / f'{a["slug"]}-hero.jpg')
+        shutil.copyfile(R / 'content/note/img' / f'{a["date"]}.jpg', A / f'{a["slug"]}-hero.jpg')
 
     # 10/5の5本の情報を記事ページから拾う
     prev = []

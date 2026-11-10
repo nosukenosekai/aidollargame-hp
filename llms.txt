@@ -109,6 +109,8 @@
 - 「あの人しか分からない」が会社を止める前に: https://aidollargame.com/articles/zokujinka-2026.html
 - 東京NBC起業塾で「事業承継 × AI」を発表——社長の頭の中を会社の資産に変える『承継OS』: https://aidollargame.com/articles/nbc-kigyojuku-2026-07.html
 - 「16時に電話します」の予約代行、16時を過ぎても音沙汰なし。運営会社に電話したら出たのはAIだった: https://aidollargame.com/articles/yoyaku-daiko-16ji-2026.html
+- AIがLinuxの弱点を948件見つけ、修正案まで書いた。1回の実行にかかったAPI費用は121万ドル: https://aidollargame.com/articles/linux-ai-948-2026.html
+- AIのデータセンター建設に住民が投票し、41件中40件で「制限する」が勝った。2日後、OpenAIは電気代の全額負担を約束した: https://aidollargame.com/articles/datacenter-tohyo-40-2026.html
 - AIを配って伸びたのは、新人ではなくベテランだった。6,000人・160店舗の現場実験: https://aidollargame.com/articles/ai-veteran-shinjin-2026.html
 - 検索を切ったAIが挙げた医者は、9割がその街に実在しなかった: https://aidollargame.com/articles/ai-suisen-jitsuzai-2026.html
 - 20代のプログラマーは15%減、30代は22%増。ノルウェーの雇用記録を全部数えた結果: https://aidollargame.com/articles/programmer-nenrei-norway-2026.html

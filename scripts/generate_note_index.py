@@ -49,6 +49,8 @@ HP_COUNTERPART = {
     "n37f645d1f3a3": ("articles/ai-overview-click-2026.html", "検索からの流入は本当に減ったのか"),
     "na2694c4836d4": ("articles/ai-productivity-gap-2026.html", "個人は15%速くなり、会社は0.29%しか動かなかった"),
     "n3379463ecd76": ("articles/shanai-ai-rule-2026.html", "AIは準備に使ってよく、判断には使わない"),
+    "naf17bf244f08": ("articles/linux-ai-948-2026.html", "AIがLinuxの弱点を948件見つけ、修正案まで書いた"),
+    "n8c216aed6601": ("articles/datacenter-tohyo-40-2026.html", "AIのデータセンター建設に住民が投票し、41件中40件で「制限する」が勝った"),
 }
 
 # 絵文字・記号の装飾は自社サイト側では出さない(サイト全体の表記ルール)。

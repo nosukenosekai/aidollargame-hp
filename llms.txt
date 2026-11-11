@@ -188,6 +188,7 @@
 株式会社AIdollargameが note.com で公開している記事。一覧ページ: https://aidollargame.com/note.html
 アカウント: https://note.com/aidollargame
 
+- 2026-11-10｜AIのデータセンター建設に住民が投票し、41件中40件で「制限する」が勝った。2日後、OpenAIは電気代の全額負担を約束した: https://note.com/aidollargame/n/n8c216aed6601
 - 2026-11-06｜AIがLinuxの弱点を948件見つけ、修正案まで書いた。1回の実行にかかったAPI費用は121万ドル: https://note.com/aidollargame/n/naf17bf244f08
 - 2026-11-02｜Redditの株価が1日で29%下がった。売上は53%増えていた。AIは中身を読むが、人を送り返さない: https://note.com/aidollargame/n/n156d4ee6982c
 - 2026-10-29｜10月21日の夜、「うちは大丈夫か」に何時間で答えられましたか｜PHPの事件から、情シスのいない会社が今週やること: https://note.com/aidollargame/n/n4ea2afe6cf45

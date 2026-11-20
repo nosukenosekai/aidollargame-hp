@@ -920,6 +920,56 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   .secu-report dl>div{grid-template-columns:1fr;gap:0.15rem;}
   .secu-posts a{grid-template-columns:1fr;gap:0.2rem;}
 }
+
+/* ===== 黒のトーン（2026-11-20） ===== */
+.hero{background:#000;}
+.hero-media{background:#000;}
+.hero-media video{filter:grayscale(1) brightness(.5) contrast(1.1);}
+.hero-media::after{background:linear-gradient(180deg,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.82) 100%);}
+.hero-sub{text-shadow:none;margin-top:1.4rem;}
+.hero-sub .hs-main{display:block;font-size:clamp(1.4rem,3vw,2.1rem);font-weight:800;letter-spacing:0.02em;}
+.hero-sub .hs-small{display:block;margin-top:0.7rem;font-size:clamp(0.9rem,1.4vw,1rem);font-weight:500;color:rgba(255,255,255,0.62);letter-spacing:0.08em;}
+.hero-cta .btn-hero.fill{background:#EE3524;color:#fff;box-shadow:none;}
+.hero-cta .btn-hero.fill:hover{background:#d42a1a;}
+.hero-cta .btn-hero.white{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.45);box-shadow:none;}
+.hero-cta .btn-hero.white:hover{background:rgba(255,255,255,0.08);}
+.notice{background:#000;border-bottom:1px solid rgba(255,255,255,0.1);}
+.notice .hb-badge{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.5);}
+.sec-black{background:#000;color:#fff;padding:128px 0 120px;}
+.sec-black .sb-label{font-size:0.8rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.5);}
+.sec-black .sb-title{font-size:clamp(2.4rem,6vw,4.6rem);font-weight:800;line-height:1.15;letter-spacing:-0.01em;margin:1.2rem 0 0;color:#fff;}
+.sec-black .sb-lead{font-size:clamp(1.05rem,1.8vw,1.3rem);color:rgba(255,255,255,0.7);margin:1.4rem 0 0;}
+.sec-black .sb-steps{list-style:none;margin:72px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(255,255,255,0.16);}
+.sec-black .sb-steps li{padding:26px 22px 0 0;display:flex;flex-direction:column;gap:0.5rem;}
+.sec-black .sb-steps span{font-family:var(--font-mono);font-size:0.78rem;color:rgba(255,255,255,0.45);}
+.sec-black .sb-steps b{font-size:1.12rem;font-weight:700;color:#fff;}
+.sec-black .sb-steps i{font-style:normal;font-size:0.95rem;line-height:1.7;color:rgba(255,255,255,0.6);}
+.sec-black .sb-cost{display:flex;align-items:flex-end;gap:2.4rem;margin-top:96px;flex-wrap:wrap;}
+.sec-black .sb-cost em{display:block;font-style:normal;font-size:0.9rem;color:rgba(255,255,255,0.55);margin-bottom:0.5rem;}
+.sec-black .sb-cost strong{display:block;font-size:clamp(2.2rem,5vw,3.6rem);font-weight:800;line-height:1;letter-spacing:-0.01em;}
+.sec-black .sb-cost div:first-child strong{color:rgba(255,255,255,0.4);}
+.sec-black .sb-cost small{font-size:0.4em;font-weight:700;margin-left:0.2em;letter-spacing:0;}
+.sec-black .sb-vs{font-size:1.6rem;color:rgba(255,255,255,0.4);padding-bottom:0.4rem;}
+.sec-black .sb-note{margin-top:14px;font-size:0.82rem;color:rgba(255,255,255,0.42);line-height:1.7;}
+.sec-black .sb-screens{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:96px;}
+.sec-black .sb-screens figure{margin:0;}
+.sec-black .sb-screens img{display:block;width:100%;height:auto;border-radius:6px;border:1px solid rgba(255,255,255,0.12);}
+.sec-black .sb-screens figcaption{margin-top:10px;font-size:0.9rem;color:rgba(255,255,255,0.7);}
+.sec-black .sb-red{display:inline-flex;align-items:center;gap:0.8rem;background:#EE3524;color:#fff;font-weight:800;font-size:1.05rem;padding:1.15rem 2.4rem;border-radius:999px;transition:background 0.3s var(--ease);}
+.sec-black .sb-red:hover{background:#d42a1a;}
+.sec-black .sb-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:72px;}
+.sec-black .sb-btn{display:inline-flex;align-items:center;padding:1rem 2rem;border-radius:999px;font-weight:700;font-size:0.98rem;border:1px solid rgba(255,255,255,0.4);color:#fff;transition:background 0.3s var(--ease);}
+.sec-black .sb-btn:hover{background:rgba(255,255,255,0.08);}
+.sec-black .sb-btn--fill{background:#fff;color:#000;border-color:#fff;}
+.sec-black .sb-btn--fill:hover{background:#e9e9e9;}
+@media (max-width:900px){
+  .sec-black{padding:88px 0 84px;}
+  .sec-black .sb-steps{grid-template-columns:1fr 1fr;row-gap:28px;margin-top:52px;}
+  .sec-black .sb-screens{grid-template-columns:1fr;margin-top:64px;}
+  .sec-black .sb-cost{margin-top:64px;gap:1.2rem;}
+  .sec-black .sb-vs{display:none;}
+  .sec-black .sb-cost{flex-direction:column;align-items:flex-start;}
+}
 </style>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
 <!-- Google tag (gtag.js) -->
@@ -953,7 +1003,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 
 <main id="main">
 <div class="notice">
-  <a href="https://whitehack.jp/" target="_blank" rel="noopener"><span class="hb-badge">無料</span><span data-edit="hero-banner">自社のサイトが<span class="mk">外からどう見えているか</span>を、ホワイトハック診断で調べられます</span><span aria-hidden="true">→</span></a>
+  <a href="https://whitehack.jp/" target="_blank" rel="noopener"><span class="hb-badge">無料</span><span data-edit="hero-banner">自社のサイトが外からどう見えているかを、ホワイトハックで調べる</span><span aria-hidden="true">→</span></a>
 </div>
 <section class="hero" id="hero">
   <div class="hero-media" aria-hidden="true">
@@ -961,7 +1011,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
   <div class="hero-body">
     <h1 data-rv="up" style="--d:160ms" aria-label="株式会社AIdollargame">A<span class="heart-i">ı</span>dollargame</h1>
-    <p class="hero-sub" data-rv="up" style="--d:400ms"><span>脆弱性診断とペネトレーションテストで穴を見つけ、</span><span>直すところまで。</span><span>社内にいないセキュリティ担当を代行します。</span></p>
+    <p class="hero-sub" data-rv="up" style="--d:400ms"><span class="hs-main">見つけた穴を、当社が塞ぐ。</span><span class="hs-small">脆弱性診断・ペネトレーションテスト・修正まで</span></p>
     <div class="hero-cta" data-rv="up" style="--d:620ms">
       <a href="https://whitehack.jp/" target="_blank" rel="noopener" class="btn-hero fill"><span data-edit="hero-cta1">無料でドメインを調べる</span></a>
       <a href="#contact" class="btn-hero white"><span data-edit="hero-cta2">セキュリティの相談をする</span></a>
@@ -998,66 +1048,25 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </div>
 
-<section class="sec sec--white sec-security" id="security">
+<section class="sec-black" id="security">
   <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-label" data-rv="up">Security</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="security-title">見つけるだけで終わらせない。<br>ペネトレーションテストから修正まで、当社が引き受けます</h2>
-      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="security-lead">診断の会社の多くは、見つけた穴を報告書にして渡すところまでです。直す人が社内にいなければ、何も変わりません。ホワイトハックは、社内にセキュリティ担当がいない会社に代わって、サイト・メール・VPN機器のペネトレーションテスト（承諾をいただいた範囲で、外から実際に入れるかを確かめる検査）を行い、見つけた穴を当社が塞ぎます。</p>
+    <div class="sb-label" data-rv="up">Security</div>
+    <h2 class="sb-title" data-rv="up" style="--d:80ms" data-edit="security-title">見つけるだけで、<br>終わらせない。</h2>
+    <p class="sb-lead" data-rv="up" style="--d:160ms" data-edit="security-lead">ペネトレーションテストから修正まで、当社が引き受けます。</p>
+    <ol class="sb-steps" data-rv="up" style="--d:220ms">
+      <li><span>01</span><b>無料の外部チェック</b><i>ドメインを入れるだけ</i></li>
+      <li><span>02</span><b>ペネトレーションテスト</b><i>承諾の範囲で、実際に入れるかを確かめる</i></li>
+      <li><span>03</span><b>当社が直す</b><i>影響を洗い出してから直す</i></li>
+      <li><span>04</span><b>稼働証明書</b><i>診断と修正の記録を毎月</i></li>
+    </ol>
+    <div class="sb-cost" data-rv="up" style="--d:120ms">
+      <div><em>専任者を1人雇う</em><strong>年 609.8<small>万円</small></strong></div>
+      <div class="sb-vs" aria-hidden="true">→</div>
+      <div><em>ホワイトハック</em><strong>月 3<small>万円から</small></strong></div>
     </div>
-    <div class="secu-grid">
-      <ol class="secu-four" data-rv="up" style="--d:120ms">
-        <li><span class="no">01</span><div><h3>無料の外部チェック</h3><p>whitehack.jp にドメインを入れるだけで、なりすましメールの対策や証明書の設定など、外から見えている弱点がその場で分かります。お客様のサーバーには接続しません。</p></div></li>
-        <li><span class="no">02</span><div><h3>承諾をいただいてから、ペネトレーションテスト</h3><p>ドメインの所有確認と書面の承諾が揃ってから、サイトの入力欄、VPN機器、委託先のサーバーまで、外から実際に入れるかを検証します。データの書き換えや削除はしません。</p></div></li>
-        <li><span class="no">03</span><div><h3>見つけた穴は、当社が直す</h3><p>直すとメールが届かなくなる、といった影響を先に洗い出してから直します。誰がいつ何を変えたかを記録に残します。</p></div></li>
-        <li><span class="no">04</span><div><h3>毎日見て、毎月記録を渡す</h3><p>新しい脆弱性は毎日公表されます。毎日診断して変化があった日にお知らせし、その月に行った診断と修正の記録を「稼働証明書」として毎月お渡しします。</p></div></li>
-      </ol>
-      <figure class="secu-report" data-rv="up" style="--d:220ms" aria-label="セキュリティ担当を雇う場合との比較">
-        <div class="rp-head"><b>担当者を雇う場合と比べる</b><span class="rp-en">COST</span><span class="rp-tag">税別</span></div>
-        <dl>
-          <div class="rp-hire"><dt>専任者を1人雇う</dt><dd>年 609.8万円<small>採用の費用と社会保険料は別。採れるまで対策は進まない</small></dd></div>
-          <div><dt>ホワイトハック ライト</dt><dd>年 36万円<em>約17分の1</em><small>毎日の診断、変化があった日のお知らせ、毎月の報告</small></dd></div>
-          <div><dt>ホワイトハック スタンダード</dt><dd>年 180万円<small>ライトに加え、見つかった穴を当社が直し、毎月の稼働証明書を発行</small></dd></div>
-          <div><dt>スポット診断</dt><dd>5万円〜<small>1回。承諾をいただいてから実際に試し、診断書を発行</small></dd></div>
-        </dl>
-        <figcaption>専任者の年収は厚生労働省 job tag の値。専任者0人の46.9%は、KPMGジャパンの調査（2026年10月公表・420社）。担当者が辞めても、診断と記録は止まりません。</figcaption>
-      </figure>
-    </div>
-    <div class="secu-screens" data-rv="up" style="--d:120ms">
-      <div class="ss-h"><span>ホワイトハックの実際の画面</span><small>当社のドメイン（aidollargame.com）で実行したもの</small></div>
-      <div class="ss-grid">
-        <figure><img src="images/whitehack/screen-free-check.png" alt="無料の外部チェックの画面。公開されている記録だけを読み、見つかった件数を重大度ごとに表示している" loading="lazy" width="1400" height="630"><figcaption><b>01 無料の外部チェック</b>読んだ記録と、見つかった件数を重大度ごとに出します。</figcaption></figure>
-        <figure><img src="images/whitehack/screen-findings.png" alt="見つかった弱点の一覧。弱点ごとに重大度と、DNSの設定で直るかどうかを表示している" loading="lazy" width="1400" height="597"><figcaption><b>02 見つかった穴</b>穴ごとに重大度と、「DNSの設定で直る」か「サーバー側の対応が要る」かを出します。</figcaption></figure>
-        <figure><img src="images/whitehack/screen-fix.png" alt="修正の画面。入れる値、直すと止まるもの、戻し方を1つの画面に並べている" loading="lazy" width="1400" height="656"><figcaption><b>03 当社が直す</b>入れる値、直すと止まるもの、戻し方を並べてから直し、直ったかを確かめて記録します。</figcaption></figure>
-      </div>
-    </div>
-    <div class="secu-links">
-      <a href="https://whitehack.jp/" target="_blank" rel="noopener" class="sl" data-rv="up" style="--d:0ms">
-        <span class="sl-k">FREE CHECK</span>
-        <span class="sl-t">ホワイトハック診断</span>
-        <span class="sl-d">自社のドメインを入れると、外から見えている範囲をその場で確かめられます。無料です。</span>
-        <span class="sl-a">whitehack.jp で調べる →</span>
-      </a>
-      <a href="security/" class="sl" data-rv="up" style="--d:100ms">
-        <span class="sl-k">MONTHLY</span>
-        <span class="sl-t">セキュリティ担当の代行</span>
-        <span class="sl-d">診断とペネトレーションテストの範囲、直す作業、毎月お渡しする記録の中身を説明しています。</span>
-        <span class="sl-a">サービスの詳細 →</span>
-      </a>
-      <a href="#contact" class="sl" data-rv="up" style="--d:200ms">
-        <span class="sl-k">CONTACT</span>
-        <span class="sl-t">まず相談する</span>
-        <span class="sl-d">無料の外部チェックの結果を一緒に見て、どこまで任せるかを決めます。スポット診断は5万円〜（税別）。</span>
-        <span class="sl-a">相談の申し込み →</span>
-      </a>
-    </div>
-    <div class="secu-posts" data-rv="up" style="--d:120ms">
-      <div class="sp-h">セキュリティの記事</div>
-      <a href="articles/linux-ai-948-2026.html"><span class="d">2026 / 11 / 06</span><span class="t">AIがLinuxの弱点を948件見つけ、修正案まで書いた。1回の実行にかかったAPI費用は121万ドル</span></a>
-      <a href="articles/php-joshisu-inai-2026.html"><span class="d">2026 / 10 / 29</span><span class="t">10月21日の夜、「うちは大丈夫か」に何時間で答えられましたか｜PHPの事件から、情シスのいない会社が今週やること</span></a>
-      <a href="articles/php-kinkyu-shusei-2026.html"><span class="d">2026 / 10 / 22</span><span class="t">PHPに緊急の修正が出た。修正版が出たのは4系統だけで、世界のPHPサイトの約48%は入っていない</span></a>
-      <a href="articles/cloud-shogai-1007-2026.html"><span class="d">2026 / 10 / 09</span><span class="t">「攻撃を防ぎます」とは書かない。10月7日のクラウド障害で決めた</span></a>
+    <p class="sb-note">税別。専任者の年収は厚生労働省 job tag の値で、採用の費用と社会保険料は含みません。</p>
+    <div class="sb-cta" data-rv="up">
+      <a href="https://whitehack.jp/" target="_blank" rel="noopener" class="sb-red">ホワイトハックを見る<span aria-hidden="true">→</span></a>
     </div>
   </div>
 </section>

@@ -312,6 +312,7 @@
 
 <style>
 html{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif}button,input,select,textarea{font-family:inherit}
+h1,h2,h3,h4,p,li,dt,dd,figcaption,summary,.sec-lead,.sec-title{word-break:auto-phrase;text-wrap:pretty}
 /* ============================================================
    aidollargame.com トップページ v2026-08 rev4
    参考: opthub.ai（構成を変えずに踏襲）
@@ -862,7 +863,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 /* ===== Security（2026-11-20 追加） ===== */
 .site-nav a{white-space:nowrap;}
 .site-nav a.em-link{display:inline-flex;align-items:center;gap:0.45rem;font-weight:700;color:var(--ink);}
-.site-nav a.em-link i{width:8px;height:8px;border-radius:50%;background:var(--accent);flex:none;}
+.site-nav a.em-link i{width:8px;height:8px;border-radius:50%;background:#EE3524;flex:none;}
 .hero-sub{margin-top:1.2rem;color:#fff;font-size:clamp(1.05rem,2vw,1.35rem);font-weight:700;line-height:1.8;letter-spacing:0.03em;text-shadow:0 1px 12px rgba(0,0,0,0.45);}
 .hero-sub span{display:inline-block;}
 .secu-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,0.92fr);gap:44px;align-items:start;margin-top:8px;}
@@ -871,15 +872,19 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 .secu-four .no{font-size:0.8rem;font-weight:700;color:var(--blue);letter-spacing:0.08em;min-width:2.2em;padding-top:0.3rem;}
 .secu-four h3{font-size:1.12rem;font-weight:700;color:var(--ink);margin:0 0 0.35rem;}
 .secu-four p{font-size:1rem;line-height:1.8;color:#3d4250;margin:0;}
-.secu-report{margin:0;background:var(--ink);color:#e9ecf3;border-radius:var(--radius);padding:26px 26px 22px;box-shadow:var(--shadow);}
-.secu-report .rp-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;font-weight:700;font-size:0.98rem;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.14);}
-.secu-report .rp-tag{font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:0.72rem;letter-spacing:0.14em;border:1px solid rgba(255,255,255,0.35);border-radius:4px;padding:0.15rem 0.5rem;color:#c9cfdc;}
-.secu-report dl{margin:0;}
-.secu-report dl>div{display:grid;grid-template-columns:11em 1fr;gap:0.8rem;padding:13px 0;border-bottom:1px dashed rgba(255,255,255,0.14);font-size:0.95rem;line-height:1.7;}
-.secu-report dt{color:#9aa3bb;font-weight:600;}
-.secu-report dd{margin:0;color:#fff;font-weight:600;}
-.secu-report dd em{font-style:normal;margin-left:0.6rem;background:var(--accent);color:#fff;font-size:0.8rem;font-weight:800;border-radius:4px;padding:0.1rem 0.45rem;white-space:nowrap;}
-.secu-report figcaption{margin-top:14px;font-size:0.86rem;color:#9aa3bb;line-height:1.7;}
+.secu-report{--wh-ink:#333;--wh-sub:#6B7280;--wh-dim:#6F7883;--wh-line:#E3E5E9;--wh-red:#EE3524;margin:0;background:#fff;border:1px solid var(--wh-line);border-radius:6px;padding:26px 28px;color:var(--wh-ink);}
+.secu-report .rp-head{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--wh-ink);padding-bottom:10px;}
+.secu-report .rp-head b{font-weight:800;font-size:17px;}
+.secu-report .rp-en{font-size:11.5px;font-weight:700;letter-spacing:.12em;color:var(--wh-dim);}
+.secu-report .rp-tag{margin-left:auto;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11.5px;color:var(--wh-dim);}
+.secu-report h4{margin:18px 0 4px;font-size:15.5px;font-weight:700;}
+.secu-report .rp-note{margin:4px 0 0;color:var(--wh-sub);font-size:13px;line-height:1.7;}
+.secu-report dl{margin:14px 0 0;border-top:1px solid var(--wh-line);}
+.secu-report dl>div{display:grid;grid-template-columns:11em 1fr;gap:0.8rem;padding:12px 2px;border-bottom:1px solid var(--wh-line);font-size:0.95rem;line-height:1.7;}
+.secu-report dt{color:var(--wh-sub);font-weight:500;font-size:0.88rem;padding-top:0.1rem;}
+.secu-report dd{margin:0;color:var(--wh-ink);font-weight:700;}
+.secu-report dd em{font-style:normal;margin-left:0.6rem;border:1px solid var(--wh-red);color:var(--wh-red);font-size:0.78rem;font-weight:700;border-radius:4px;padding:0.05rem 0.45rem;white-space:nowrap;}
+.secu-report figcaption{margin-top:14px;font-size:13px;color:var(--wh-sub);line-height:1.7;}
 .secu-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:44px;}
 .secu-links .sl{display:flex;flex-direction:column;gap:0.5rem;padding:24px 22px;border:1px solid var(--line);border-radius:var(--radius);background:#fff;transition:border-color 0.3s var(--ease),transform 0.3s var(--ease);}
 .secu-links .sl:hover{border-color:var(--blue);transform:translateY(-2px);}
@@ -887,10 +892,10 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 .secu-links .sl-t{font-size:1.15rem;font-weight:700;color:var(--ink);}
 .secu-links .sl-d{font-size:0.95rem;line-height:1.75;color:#3d4250;flex:1;}
 .secu-links .sl-a{font-size:0.92rem;font-weight:700;color:var(--blue);}
-.secu-links .sl--em{border-color:rgba(255,87,87,0.45);}
-.secu-links .sl--em:hover{border-color:var(--accent);}
-.secu-links .sl--em .sl-k,.secu-links .sl--em .sl-a{color:#d93a3a;}
-.secu-links .sl--em .sl-k i{width:8px;height:8px;border-radius:50%;background:var(--accent);}
+.secu-links .sl--em{border-color:rgba(238,53,36,0.4);}
+.secu-links .sl--em:hover{border-color:#EE3524;}
+.secu-links .sl--em .sl-k,.secu-links .sl--em .sl-a{color:#EE3524;}
+.secu-links .sl--em .sl-k i{width:8px;height:8px;border-radius:50%;background:#EE3524;}
 .secu-posts{margin-top:44px;border-top:2px solid var(--ink);}
 .secu-posts .sp-h{font-weight:700;font-size:1rem;padding:16px 4px 6px;}
 .secu-posts a{display:grid;grid-template-columns:8.5em 1fr;gap:1rem;padding:15px 4px;border-bottom:1px solid var(--line);font-size:0.98rem;line-height:1.7;transition:color 0.3s var(--ease);}
@@ -899,6 +904,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 @media (max-width:900px){
   .secu-grid{grid-template-columns:1fr;gap:28px;}
   .secu-links{grid-template-columns:1fr;}
+  .secu-report{padding:22px 18px;}
   .secu-report dl>div{grid-template-columns:1fr;gap:0.15rem;}
   .secu-posts a{grid-template-columns:1fr;gap:0.2rem;}
 }
@@ -940,7 +946,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 </div>
 <section class="hero" id="hero">
   <div class="hero-media" aria-hidden="true">
-    <video src="hero-night.mp4" muted autoplay loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture disableremoteplayback></video>
+    <video src="hero-security.mp4" muted autoplay loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture disableremoteplayback></video>
   </div>
   <div class="hero-body">
     <h1 data-rv="up" style="--d:160ms" aria-label="株式会社AIdollargame">A<span class="heart-i">ı</span>dollargame</h1>
@@ -997,7 +1003,9 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <li><span class="no">04</span><div><h3>決まりを古くしない</h3><p>AIの更新や世の中の事故に合わせて社内の決まりを差し替え、誰が確認したかを記録します。</p></div></li>
       </ol>
       <figure class="secu-report" data-rv="up" style="--d:220ms" aria-label="月次報告書の見本">
-        <div class="rp-head"><span>月次報告書　2026年10月度</span><span class="rp-tag">SAMPLE</span></div>
+        <div class="rp-head"><b>月次報告書</b><span class="rp-en">MONTHLY REPORT</span><span class="rp-tag">見本</span></div>
+        <h4>株式会社〇〇 御中　2026年10月度</h4>
+        <p class="rp-note">下記の4つについて、機械の記録をもとに確認しました。申告ではありません。</p>
         <dl>
           <div><dt>脆弱性診断</dt><dd>新しく見つかった脆弱性 2件<em>うち至急 1件</em></dd></div>
           <div><dt>アカウント</dt><dd>退職者2人分を停止。新しく使い始めたAI 1つ</dd></div>

@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>脆弱性診断とセキュリティの毎月点検｜情報システムの担当者がいない中小企業向け｜株式会社AIdollargame</title>
-<meta name="description" content="情報システムの担当者がいない会社のかわりに、当社が毎月、疑似攻撃で外から脆弱性を洗い出してふさぎ、社員のAIの使い方を点検します。その月に何があり来月何をするかを、毎月の報告でお渡しします。">
+<title>ホワイトハック｜脆弱性診断・ペネトレーションテストと修正を代行｜株式会社AIdollargame</title>
+<meta name="description" content="社内にセキュリティ担当がいない会社に代わって、サイト・メール・VPN機器の脆弱性診断とペネトレーションテストを行い、見つけた穴を当社が直す「ホワイトハック」。毎日診断し、直した記録を稼働証明書として毎月お渡しします。ライト月3万円・スタンダード月15万円（税別）。">
 <link rel="canonical" href="https://aidollargame.com/security/">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="株式会社AIdollargame">
-<meta property="og:title" content="脆弱性診断とセキュリティの毎月点検｜情報システムの担当者がいない中小企業向け｜株式会社AIdollargame">
-<meta property="og:description" content="情報システムの担当者がいない会社のかわりに、当社が毎月、疑似攻撃で外から脆弱性を洗い出してふさぎ、社員のAIの使い方を点検します。その月に何があり来月何をするかを、毎月の報告でお渡しします。">
+<meta property="og:title" content="ホワイトハック｜脆弱性診断・ペネトレーションテストと修正を代行｜株式会社AIdollargame">
+<meta property="og:description" content="社内にセキュリティ担当がいない会社に代わって、サイト・メール・VPN機器の脆弱性診断とペネトレーションテストを行い、見つけた穴を当社が直す「ホワイトハック」。毎日診断し、直した記録を稼働証明書として毎月お渡しします。ライト月3万円・スタンダード月15万円（税別）。">
 <meta property="og:url" content="https://aidollargame.com/security/">
 <meta property="og:image" content="https://aidollargame.com/og-default.png">
 <meta property="og:locale" content="ja_JP">
@@ -22,10 +22,10 @@
 {
   "@context": "https://schema.org",
   "@type": "Service",
-  "name": "セキュリティの毎月点検（ホワイトハック診断）",
-  "serviceType": "脆弱性診断・セキュリティ診断",
+  "name": "ホワイトハック（セキュリティ担当の代行）",
+  "serviceType": "脆弱性診断・ペネトレーションテスト・修正",
   "url": "https://aidollargame.com/security/",
-  "description": "情報システムの担当者がいない会社のかわりに、毎月、疑似攻撃で外から脆弱性を洗い出してふさぎ、辞めた社員のアカウントと社員のAIの使い方を点検し、結果を月次報告書でお渡しします。",
+  "description": "社内にセキュリティ担当がいない会社に代わって、サイト・メール・VPN機器の脆弱性診断とペネトレーションテストを行い、見つけた穴を当社が直す「ホワイトハック」。毎日診断し、直した記録を稼働証明書として毎月お渡しします。ライト月3万円・スタンダード月15万円（税別）。",
   "areaServed": "JP",
   "provider": {
     "@type": "Organization",
@@ -33,7 +33,30 @@
     "name": "株式会社AIdollargame",
     "url": "https://aidollargame.com/"
   },
-  "sameAs": "https://whitehack.jp/"
+  "sameAs": "https://whitehack.jp/",
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "スポット診断",
+      "price": "50000",
+      "priceCurrency": "JPY",
+      "description": "1回・診断書つき（5万円〜・税別）"
+    },
+    {
+      "@type": "Offer",
+      "name": "ライト",
+      "price": "30000",
+      "priceCurrency": "JPY",
+      "description": "月額・毎日の診断と毎月の報告（税別）"
+    },
+    {
+      "@type": "Offer",
+      "name": "スタンダード",
+      "price": "150000",
+      "priceCurrency": "JPY",
+      "description": "月額・修正と毎月の稼働証明書（税別）"
+    }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -124,54 +147,34 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
     </a>
     <nav class="navlinks" style="display:flex;gap:30px;font-size:15px;color:#d3dae6;white-space:nowrap">
       <a href="#cycle" style="text-decoration:none">やること</a>
-      <a href="#report" style="text-decoration:none">月次報告書</a>
-      <a href="#vendors" style="text-decoration:none">委託先の事故</a>
-      <a href="#tool" style="text-decoration:none">MONOMI</a>
-      <a href="#start" style="text-decoration:none">始め方</a>
+      <a href="#screens" style="text-decoration:none">実際の画面</a>
+      <a href="#report" style="text-decoration:none">稼働証明書</a>
+      <a href="#start" style="text-decoration:none">料金と始め方</a>
       <a href="#faq" style="text-decoration:none">よくある質問</a>
     </nav>
-    <a href="emergency.html" style="display:inline-flex;align-items:center;gap:10px;background:#c81e1e;color:#ffffff;text-decoration:none;font-weight:800;font-size:15px;padding:11px 20px;border-radius:5px;min-height:44px;box-sizing:border-box;white-space:nowrap">
-      <span class="dot" style="background:#ffffff"></span>緊急対応
-    </a>
+    <a href="https://whitehack.jp/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:#c81e1e;color:#ffffff;text-decoration:none;font-weight:800;font-size:15px;padding:11px 20px;border-radius:5px;min-height:44px;box-sizing:border-box;white-space:nowrap">無料でドメインを調べる</a>
   </div>
 </header>
 
 <section id="top" style="background:#0b1220;color:#ffffff">
   <div class="wrap hero" style="padding-top:88px;padding-bottom:80px">
     <div>
-      <div class="eyebrow" style="display:inline-flex;align-items:center;gap:12px;color:#c81e1e;margin-bottom:28px"><span style="width:30px;height:2px;background:#c81e1e"></span>MONTHLY SECURITY REPORT</div>
-      <h1 class="h1" style="margin:0 0 28px;font-size:52px;line-height:1.32;font-weight:900;letter-spacing:-0.01em;white-space:nowrap">ハッカーより先に、<br>脆弱性を見つけます。</h1>
-      <p style="margin:0 0 38px;font-size:18px;line-height:1.95;color:#bac5d8;max-width:510px">書面で範囲と日時の許可をいただいたうえで、ハッカーと同じ手口で外から疑似攻撃をしかけ、脆弱性を洗い出します。情報システムの担当者がいない会社のかわりに、当社が毎月実施し、その月の実施結果と翌月の計画を、月次報告書でご報告します。</p>
+      <div class="eyebrow" style="display:inline-flex;align-items:center;gap:12px;color:#c81e1e;margin-bottom:28px"><span style="width:30px;height:2px;background:#c81e1e"></span>WHITEHACK — PENETRATION TEST &amp; FIX</div>
+      <h1 class="h1" style="margin:0 0 28px;font-size:52px;line-height:1.32;font-weight:900;letter-spacing:-0.01em">見つけた穴を、<br>当社が塞ぎます。</h1>
+      <p style="margin:0 0 38px;font-size:18px;line-height:1.95;color:#bac5d8;max-width:520px">ホワイトハックは、社内にセキュリティ担当がいない会社に代わって、サイト・メール・VPN機器の脆弱性診断とペネトレーションテストを行い、見つけた穴を当社が直すサービスです。報告書を渡して終わりにはしません。専任者を1人雇うより安く、申し込んだ日から始まります。</p>
       <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">
-        <a href="#contact-sec" style="background:#ffffff;color:#0b1220;text-decoration:none;font-weight:800;padding:18px 32px;border-radius:6px;font-size:17px">無料で相談する</a>
-        <a href="#report" style="color:#ffffff;text-decoration:none;font-weight:700;padding:18px 6px;border-bottom:1px solid rgba(255,255,255,0.45)">月次報告書を見る</a>
+        <a href="https://whitehack.jp/" target="_blank" rel="noopener" style="background:#ffffff;color:#0b1220;text-decoration:none;font-weight:800;padding:18px 32px;border-radius:6px;font-size:17px">無料でドメインを調べる</a>
+        <a href="#start" style="color:#ffffff;text-decoration:none;font-weight:700;padding:18px 6px;border-bottom:1px solid rgba(255,255,255,0.45)">料金を見る</a>
       </div>
     </div>
 
     <div class="stack rv" style="position:relative;height:482px">
       <div style="position:absolute;right:0;top:44px;width:80%;height:400px;background:#18223a;border:1px solid #23314f;border-radius:10px;transform:rotate(5deg)"></div>
       <div style="position:absolute;right:24px;top:24px;width:82%;height:410px;background:#dde3ee;border-radius:10px;transform:rotate(2deg)"></div>
-      <div class="sweep" style="position:absolute;right:50px;top:0;width:85%;background:#ffffff;color:#0b1220;border-radius:10px;box-shadow:0 28px 56px rgba(0,0,0,0.5);padding:26px 28px;box-sizing:border-box">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
-          <div><div class="eyebrow" style="color:#7a8597;font-size:11px">MONTHLY REPORT</div><div style="font-weight:900;font-size:20px;margin-top:2px;white-space:nowrap">2026年10月 月次報告書</div></div>
-          <div class="en" style="font-size:11px;font-weight:700;color:#7a8597;border:1px solid #d2d7e0;border-radius:3px;padding:2px 8px">SAMPLE</div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#e2e5ea;border:1px solid #e2e5ea;border-radius:6px;overflow:hidden;margin-bottom:18px">
-          <div style="background:#ffffff;padding:13px 12px"><div class="en cnt" data-to="2" style="font-size:30px;font-weight:900;line-height:1">0</div><div style="font-size:11.5px;color:#5c6577;margin-top:5px;line-height:1.5;white-space:nowrap">至急の脆弱性</div></div>
-          <div style="background:#ffffff;padding:13px 12px"><div class="en cnt" data-to="5" style="font-size:30px;font-weight:900;line-height:1">0</div><div style="font-size:11.5px;color:#5c6577;margin-top:5px;line-height:1.5;white-space:nowrap">止まった送信</div></div>
-          <div style="background:#ffffff;padding:13px 12px"><div class="en cnt" data-to="2" style="font-size:30px;font-weight:900;line-height:1">0</div><div style="font-size:11.5px;color:#5c6577;margin-top:5px;line-height:1.5;white-space:nowrap">消した<br>アカウント</div></div>
-        </div>
-        <div class="eyebrow" style="font-size:11px;color:#7a8597;margin-bottom:10px">今月の所見</div>
-        <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:16px;font-size:13.5px;line-height:1.65">
-          <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:0 0 48px;font-size:11px;font-weight:800;color:#5c6577;border:1px solid #d2d7e0;border-radius:3px;padding:1px 0;text-align:center;margin-top:3px">決まり</span><span>AIに社外秘を送ってよいかの決まりがない</span></div>
-          <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:0 0 48px;font-size:11px;font-weight:800;color:#5c6577;border:1px solid #d2d7e0;border-radius:3px;padding:1px 0;text-align:center;margin-top:3px">仕組み</span><span>偽メール対策の設定が1つ抜けている</span></div>
-          <div style="display:flex;gap:10px;align-items:flex-start"><span style="flex:0 0 48px;font-size:11px;font-weight:800;color:#5c6577;border:1px solid #d2d7e0;border-radius:3px;padding:1px 0;text-align:center;margin-top:3px">手ちがい</span><span>退職した2人のアカウントが残っていた</span></div>
-        </div>
-        <div style="border-top:1px solid #e2e5ea;padding-top:14px;display:flex;justify-content:space-between;gap:14px;font-size:13.5px;line-height:1.6">
-          <div><div class="eyebrow" style="font-size:11px;color:#7a8597;margin-bottom:2px">翌月の実施計画</div>AI利用の決まりを作る</div>
-          <div style="text-align:right;flex:0 0 auto"><div class="eyebrow" style="font-size:11px;color:#7a8597;margin-bottom:2px">概算費用</div><span class="en" style="font-weight:800">[金額]</span></div>
-        </div>
-      </div>
+      <figure style="position:absolute;right:50px;top:0;width:85%;margin:0;background:#ffffff;color:#0b1220;border-radius:10px;box-shadow:0 28px 56px rgba(0,0,0,0.5);padding:18px 18px 16px;box-sizing:border-box">
+        <img src="../images/whitehack/screen-fix.png" alt="ホワイトハックの修正の画面。入れる値、直すと止まるもの、戻し方を並べている" style="display:block;width:100%;height:auto;border:1px solid #e2e5ea;border-radius:6px">
+        <figcaption style="margin-top:14px;font-size:14px;line-height:1.75;color:#4a5365"><b style="display:block;color:#0b1220;font-size:15px;margin-bottom:2px">修正の画面（当社のドメインで実行）</b>入れる値、直すと止まるもの、戻し方を確かめてから、当社が直します。</figcaption>
+      </figure>
     </div>
   </div>
 
@@ -182,12 +185,12 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
     </div>
     <div class="wrap" style="padding-bottom:30px">
       <div class="inc rv" style="border:1px solid #23314f">
-        <a href="emergency.html" style="display:block;background:#0b1220;text-decoration:none;color:#ffffff;padding:26px 28px">
+        <a href="#scope" style="display:block;background:#0b1220;text-decoration:none;color:#ffffff;padding:26px 28px">
           <div class="en" style="font-size:12px;font-weight:700;color:#8e9bb3;margin-bottom:8px">2026.10.05</div>
           <div style="font-size:19px;font-weight:800;line-height:1.6;margin-bottom:8px">問い合わせの管理を任せていた会社が不正アクセスを受け、顧客 約11万人分の情報が漏れた可能性。</div>
           <div style="font-size:15.5px;color:#9fadc4;line-height:1.8">委託元の証券会社は、自社のシステムに侵入された形跡はないと発表した。自社をどれだけ固めても、委託先が破られれば出ていく。</div>
         </a>
-        <a href="emergency.html" style="display:block;background:#0b1220;text-decoration:none;color:#ffffff;padding:26px 28px">
+        <a href="#scope" style="display:block;background:#0b1220;text-decoration:none;color:#ffffff;padding:26px 28px">
           <div class="en" style="font-size:12px;font-weight:700;color:#8e9bb3;margin-bottom:8px">2026.10.07</div>
           <div style="font-size:19px;font-weight:800;line-height:1.6;margin-bottom:8px">国内のクラウド事業者がランサムウェア被害。495の企業と自治体が止まった。</div>
           <div style="font-size:15.5px;color:#9fadc4;line-height:1.8">預けていたデータは取り出しも復元も難しい見通しと発表された。借りている側に打てる手はなかった。</div>
@@ -195,7 +198,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       </div>
       <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:16px">
         <div style="font-size:13.5px;color:#8e9bb3">いずれも報道による。出典：ITmedia（10/7）、ScanNetSecurity（10/9）</div>
-        <a href="emergency.html" style="color:#ffffff;font-weight:800;text-decoration:none;border-bottom:2px solid #c81e1e;padding-bottom:3px">貴社の委託先を、把握していますか →</a>
+        <a href="#scope" style="color:#ffffff;font-weight:800;text-decoration:none;border-bottom:2px solid #c81e1e;padding-bottom:3px">委託先のサーバーも、承諾があれば診断します →</a>
       </div>
   </div>
 </section>
@@ -203,20 +206,20 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
 <section id="tool" style="background:#0f1930;color:#ffffff">
   <div class="wrap g2" style="padding-top:96px;padding-bottom:96px;align-items:center">
     <div class="rv">
-      <div class="eyebrow" style="color:#ff6b5e;margin-bottom:16px">MONOMI — VULNERABILITY ASSESSMENT</div>
-      <h2 style="margin:0 0 24px;font-size:38px;line-height:1.45;font-weight:900">パッシブスキャンから<br>始めます。</h2>
-      <p style="margin:0 0 18px;color:#bac5d8">当社の脆弱性診断の道具が MONOMI です。はじめはパッシブスキャン、つまり公開されている記録だけを照会する調査から入ります。証明書の透明性ログ（CT）、公開DNS、ドメインの登録情報（WHOIS）の3つです。この段階では、貴社のサーバーに一度も接続しません。</p>
-      <p style="margin:0 0 28px;color:#bac5d8">疑似攻撃に進むのは、ご自身のドメインだと確かめていただいた後です。許可のない診断は不正アクセス禁止法に当たるため、確かめる手順を飛ばせない作りにしてあります。</p>
-      <a href="../demo/monomi-whitehat-4f2b91.html" style="display:inline-flex;align-items:center;gap:8px;font-weight:800;color:#ffffff;text-decoration:none;border-bottom:2px solid #ff6b5e;padding-bottom:4px">MONOMI の画面を見る →</a>
-      <p style="margin:14px 0 0;font-size:14px;color:#8e9bb3">画面の見本です。出てくるドメイン名と所見は架空で、実在の組織とは関係ありません。</p>
+      <div class="eyebrow" style="color:#ff6b5e;margin-bottom:16px">STEP 1 — FREE EXTERNAL CHECK</div>
+      <h2 style="margin:0 0 24px;font-size:38px;line-height:1.45;font-weight:900">まず無料で、<br>外から見える穴を出します。</h2>
+      <p style="margin:0 0 18px;color:#bac5d8">whitehack.jp にドメインを入れると、公開されている記録だけを読んで、なりすましメールの対策（SPF・DKIM・DMARC）、証明書の設定、ドメインの登録の期限、外から見えている管理画面などを確かめます。証明書の透明性ログ（CT）、公開DNS、ドメインの登録情報（WHOIS）の3つです。この段階では、貴社のサーバーに一度も接続しません。</p>
+      <p style="margin:0 0 28px;color:#bac5d8">ペネトレーションテストに進むのは、ドメインの所有確認と書面の承諾が揃ってからです。許可のない検査は不正アクセス禁止法に当たるため、この手順を飛ばせない作りにしてあります。</p>
+      <a href="https://whitehack.jp/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;font-weight:800;color:#ffffff;text-decoration:none;border-bottom:2px solid #ff6b5e;padding-bottom:4px">whitehack.jp で調べる →</a>
+      <p style="margin:14px 0 0;font-size:14px;color:#8e9bb3">右の画面は流れを示す見本です。ドメイン名と所見は架空で、実在の組織とは関係ありません。</p>
     </div>
 
     <div class="rv">
       <div class="term" aria-label="脆弱性診断の実行例（見本）">
-        <div class="term-bar"><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span><span class="term-title">MONOMI — passive scan</span><span class="term-tag en">SAMPLE</span></div>
+        <div class="term-bar"><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span><span class="term-title">WHITEHACK — free external check</span><span class="term-tag en">SAMPLE</span></div>
         <div class="term-body">
-          <div class="tl"><span class="tp">$</span> monomi scan <span class="tv">example.co.jp</span> --passive</div>
-          <div class="tl tdim">パッシブスキャンを開始します。対象のサーバーには接続しません。</div>
+          <div class="tl"><span class="tp">$</span> whitehack check <span class="tv">example.co.jp</span></div>
+          <div class="tl tdim">公開されている記録だけを読みます。対象のサーバーには接続しません。</div>
           <div class="tl"><span class="tk">[1/3]</span> 証明書の透明性ログ（CT）を照会</div>
           <div class="tl tind">サブドメイン <span class="tv">12</span> 件（稼働 9 / 応答なし 3）</div>
           <div class="tl tind twarn">応答なし 3 件に、テスト用と旧システムの名前が残っています</div>
@@ -243,10 +246,10 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       <div style="font-size:14px;color:#5c6577;line-height:1.85">確認された漏えい12,195件の分析。Verizon 2025 Data Breach Investigations Report</div>
     </div>
     <div class="rv" style="background:#ffffff;padding:52px 34px 46px">
-      <div style="display:flex;align-items:baseline"><span class="en cnt" data-to="15.6" style="font-size:62px;font-weight:900;line-height:1;letter-spacing:-0.02em">0</span><span class="en" style="font-size:30px;font-weight:900">%</span></div>
-      <div class="bar" style="--w:15.6%;margin:18px 0 16px"><i></i></div>
-      <div style="font-weight:800;margin-bottom:8px;line-height:1.7;font-size:17px">辞めた社員のアカウントが残っていた会社</div>
-      <div style="font-size:14px;color:#5c6577;line-height:1.85">従業員100〜500人の会社のIT・セキュリティ責任者109人への調査（2025年9月3日実施）</div>
+      <div style="display:flex;align-items:baseline"><span class="en" style="font-size:62px;font-weight:900;line-height:1;letter-spacing:-0.02em">6割</span><span class="en" style="font-size:30px;font-weight:900">以上</span></div>
+      <div class="bar" style="--w:60%;margin:18px 0 16px"><i></i></div>
+      <div style="font-weight:800;margin-bottom:8px;line-height:1.7;font-size:17px">ランサムウェアの侵入の入口が、VPN機器だった割合</div>
+      <div style="font-size:14px;color:#5c6577;line-height:1.85">警察庁「令和7年におけるサイバー空間をめぐる脅威の情勢等について」。被害に遭った企業・団体の約6割は中小企業</div>
     </div>
     <div class="rv" style="background:#ffffff;padding:52px 34px 46px">
       <div style="display:flex;align-items:baseline"><span class="en" style="font-size:62px;font-weight:900;line-height:1;letter-spacing:-0.02em">3–5</span><span class="en" style="font-size:30px;font-weight:900">日</span></div>
@@ -261,25 +264,40 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
   <div class="wrap" style="padding-top:104px;padding-bottom:104px">
     <div class="rv">
       <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">EVERY MONTH</div>
-      <h2 style="margin:0 0 54px;font-size:40px;line-height:1.4;font-weight:900">毎月まわしている4つ</h2>
+      <h2 style="margin:0 0 54px;font-size:40px;line-height:1.4;font-weight:900">ホワイトハックがやる4つ</h2>
     </div>
     <div class="four">
       <div class="rv" style="display:flex;gap:22px">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c81e1e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-        <div><div style="font-weight:800;font-size:21px;margin-bottom:10px">脆弱性診断</div><div style="color:#4a5365">疑似攻撃で外から脆弱性を洗い出し（脆弱性診断）、新しく公表された脆弱性にも当てて、直します。</div></div>
-      </div>
-      <div class="rv" style="display:flex;gap:22px">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c81e1e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg>
-        <div><div style="font-weight:800;font-size:21px;margin-bottom:10px">アカウントを数える</div><div style="color:#4a5365">辞めた人のアカウント、社員が新しく使い始めたAIやクラウドを、毎月数え直します。</div></div>
+        <div><div style="font-weight:800;font-size:21px;margin-bottom:10px">脆弱性診断とペネトレーションテスト</div><div style="color:#4a5365">承諾をいただいた範囲で、サイトの入力欄、VPN機器、委託先のサーバーまで、外から実際に入れるかを確かめます。データの書き換えや削除はしません。</div></div>
       </div>
       <div class="rv" style="display:flex;gap:22px">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c81e1e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <div><div style="font-weight:800;font-size:21px;margin-bottom:10px">AIの送信を見る</div><div style="color:#4a5365">会社用のAIの窓口を通る送信に、お客様の名前や電話番号が入っていれば、送る前に止めます。</div></div>
+        <div><div style="font-weight:800;font-size:21px;margin-bottom:10px">見つけた穴は、当社が直す</div><div style="color:#4a5365">直すとメールが届かなくなる、といった影響を先に洗い出してから直します。DNSの書き換えは、診断とは別の同意をいただいてから行います。</div></div>
+      </div>
+      <div class="rv" style="display:flex;gap:22px">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c81e1e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/></svg>
+        <div><div style="font-weight:800;font-size:21px;margin-bottom:10px">毎日診断し、変化を知らせる</div><div style="color:#4a5365">新しい脆弱性は毎日公表され、証明書の期限は毎年来ます。毎日診断して、変化があった日にお知らせします。</div></div>
       </div>
       <div class="rv" style="display:flex;gap:22px">
         <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#c81e1e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:7px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>
-        <div><div style="font-weight:800;font-size:21px;margin-bottom:10px">決まりを古くしない</div><div style="color:#4a5365">AIの更新や世の中の事故に合わせて社内の決まりを差し替え、誰が確認したかを記録します。</div></div>
+        <div><div style="font-weight:800;font-size:21px;margin-bottom:10px">毎月、記録を渡す</div><div style="color:#4a5365">その月に行った診断と修正の記録を、稼働証明書として毎月お渡しします。取引先からセキュリティの質問票が届いたときに、そのまま出せます。</div></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="screens" style="border-top:1px solid #e2e5ea">
+  <div class="wrap" style="padding-top:96px;padding-bottom:96px">
+    <div class="rv">
+      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">SCREENS</div>
+      <h2 style="margin:0 0 16px;font-size:40px;line-height:1.4;font-weight:900">実際の画面</h2>
+      <p style="margin:0 0 40px;color:#4a5365;max-width:620px">当社のドメイン（aidollargame.com）で実行したものです。</p>
+    </div>
+    <div class="rv" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px">
+      <figure style="margin:0;border:1px solid #d2d7e0;border-radius:10px;overflow:hidden;background:#ffffff"><img src="../images/whitehack/screen-free-check.png" alt="無料の外部チェックの画面" loading="lazy" style="display:block;width:100%;height:auto;border-bottom:1px solid #e2e5ea"><figcaption style="padding:16px 18px 18px;font-size:15px;line-height:1.75;color:#4a5365"><b style="display:block;color:#0b1220;margin-bottom:2px">無料の外部チェック</b>読んだ記録と、見つかった件数を重大度ごとに出します。</figcaption></figure>
+      <figure style="margin:0;border:1px solid #d2d7e0;border-radius:10px;overflow:hidden;background:#ffffff"><img src="../images/whitehack/screen-findings.png" alt="見つかった穴の一覧の画面" loading="lazy" style="display:block;width:100%;height:auto;border-bottom:1px solid #e2e5ea"><figcaption style="padding:16px 18px 18px;font-size:15px;line-height:1.75;color:#4a5365"><b style="display:block;color:#0b1220;margin-bottom:2px">見つかった穴</b>穴ごとに重大度と、「DNSの設定で直る」か「サーバー側の対応が要る」かを出します。1件だけ直してもらうこともできます。</figcaption></figure>
+      <figure style="margin:0;border:1px solid #d2d7e0;border-radius:10px;overflow:hidden;background:#ffffff"><img src="../images/whitehack/screen-fix.png" alt="修正の画面" loading="lazy" style="display:block;width:100%;height:auto;border-bottom:1px solid #e2e5ea"><figcaption style="padding:16px 18px 18px;font-size:15px;line-height:1.75;color:#4a5365"><b style="display:block;color:#0b1220;margin-bottom:2px">当社が直す</b>入れる値、直すと止まるもの、戻し方を並べてから直し、直ったかを確かめて記録します。</figcaption></figure>
     </div>
   </div>
 </section>
@@ -287,52 +305,51 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
 <section id="report" style="border-top:1px solid #e2e5ea">
   <div class="wrap" style="padding-top:104px;padding-bottom:96px">
     <div class="rv">
-      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">MONTHLY REPORT</div>
-      <h2 style="margin:0 0 20px;font-size:40px;line-height:1.4;font-weight:900">実施結果は、月次報告書にまとめます。</h2>
-      <p style="margin:0 0 54px;color:#4a5365;max-width:620px">上の4つの実施結果を、毎月決まった日に月次報告書としてお渡しします。技術的な詳細は記載しません。対策と予算を決める方が5分で読み終えられる構成にしています。</p>
+      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">OPERATION CERTIFICATE</div>
+      <h2 style="margin:0 0 20px;font-size:40px;line-height:1.4;font-weight:900">直した記録は、稼働証明書にして毎月お渡しします。</h2>
+      <p style="margin:0 0 54px;color:#4a5365;max-width:620px">稼働証明書は、その月に行った診断と修正の記録を当社がまとめて発行する書面です（スタンダードのプラン）。技術的な詳細は書かず、対策と予算を決める方が5分で読み終えられる形にしています。</p>
     </div>
     <div class="anno">
       <div class="rv" style="border:1px solid #d2d7e0;border-radius:12px;padding:38px 42px">
         <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid #0b1220;padding-bottom:16px;margin-bottom:26px">
-          <div style="font-weight:900;font-size:21px">株式会社〇〇 御中　2026年10月度</div>
-          <div class="en" style="font-size:11px;font-weight:700;color:#7a8597;border:1px solid #d2d7e0;border-radius:3px;padding:2px 8px">SAMPLE</div>
+          <div><div style="font-weight:900;font-size:21px">稼働証明書</div><div style="font-size:15px;font-weight:700;color:#4a5365;margin-top:4px">株式会社〇〇 御中　2026年10月度</div></div>
+          <div class="en" style="flex:none;font-size:11px;font-weight:700;color:#7a8597;border:1px solid #d2d7e0;border-radius:3px;padding:2px 8px;white-space:nowrap">見本</div>
         </div>
-        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">1</span><div><div style="font-weight:800">脆弱性診断</div><div style="font-size:16px;color:#4a5365;line-height:1.8">新しく見つかった脆弱性 2件（うち至急 1件）</div></div></div>
-        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">2</span><div><div style="font-weight:800">アカウント</div><div style="font-size:16px;color:#4a5365;line-height:1.8">退職者2人分を停止。新しく使い始めたAI 1つ</div></div></div>
-        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:20px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">3</span><div><div style="font-weight:800">AIに送ろうとして止まったもの</div><div style="font-size:16px;color:#4a5365;line-height:1.8">5件（お客様の名前 3、電話番号 2）</div></div></div>
-        <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:26px"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#0b1220;color:#ffffff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">4</span><div><div style="font-weight:800">社内規程と教育</div><div style="font-size:16px;color:#4a5365;line-height:1.8">確認済み 12人／まだ 3人</div></div></div>
-        <div style="background:#0b1220;color:#ffffff;border-radius:8px;padding:22px 24px;display:flex;gap:16px;align-items:flex-start"><span class="en" style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:#ffffff;color:#0b1220;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:4px">5</span><div><div style="font-weight:800">翌月の実施計画</div><div style="font-size:16px;color:#bac5d8;line-height:1.8">AI利用に関する社内規程を整備し、全従業員の確認を取る。概算費用 [金額]</div></div></div>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:22px">
+          <div style="border:1px solid #e2e5ea;border-radius:6px;padding:16px 18px"><div style="font-size:13px;color:#5c6577">その月の診断の回数</div><div class="en" style="font-size:28px;font-weight:900">31回</div></div>
+          <div style="border:1px solid #e2e5ea;border-radius:6px;padding:16px 18px"><div style="font-size:13px;color:#5c6577">見つかった穴</div><div class="en" style="font-size:28px;font-weight:900">3件</div></div>
+          <div style="border:1px solid #e2e5ea;border-radius:6px;padding:16px 18px"><div style="font-size:13px;color:#5c6577">当社が直した穴</div><div class="en" style="font-size:28px;font-weight:900">2件</div></div>
+          <div style="border:1px solid #c81e1e;border-radius:6px;padding:16px 18px"><div style="font-size:13px;color:#c81e1e">残っている穴と期限</div><div class="en" style="font-size:28px;font-weight:900">1件<span style="font-size:15px;font-weight:700;margin-left:8px">11月14日まで</span></div></div>
+        </div>
+        <div style="font-size:14px;color:#5c6577;line-height:1.8">見本の数字です。実際の証明書には、診断した日時、見つけた穴と直した日時、直した人と方法を載せます。</div>
       </div>
       <div style="display:flex;flex-direction:column;gap:32px;padding-top:8px">
-        <div class="rv" style="display:flex;gap:20px"><span class="en" style="flex:0 0 auto;font-weight:900;font-size:20px;color:#c81e1e;width:30px">01</span><div><div style="font-weight:800;font-size:19px;margin-bottom:6px">前の月と比べられる</div><div style="color:#4a5365">毎月同じやり方で診断するので、増えた脆弱性と直した脆弱性が分かります。</div></div></div>
-        <div class="rv" style="display:flex;gap:20px"><span class="en" style="flex:0 0 auto;font-weight:900;font-size:20px;color:#c81e1e;width:30px">02</span><div><div style="font-weight:800;font-size:19px;margin-bottom:6px">3つに分けて書く</div><div style="color:#4a5365">起きたことを「決まり」「仕組み」「人の手ちがい」に分けます。誰が直すかが決まります。</div></div></div>
-        <div class="rv" style="display:flex;gap:20px"><span class="en" style="flex:0 0 auto;font-weight:900;font-size:20px;color:#c81e1e;width:30px">03</span><div><div style="font-weight:800;font-size:19px;margin-bottom:6px">社員の名前は載せない</div><div style="color:#4a5365">誰が送ったかではなく、何が危なかったかを書きます。</div></div></div>
-        <div class="rv" style="display:flex;gap:20px"><span class="en" style="flex:0 0 auto;font-weight:900;font-size:20px;color:#c81e1e;width:30px">04</span><div><div style="font-weight:800;font-size:19px;margin-bottom:6px">聞かれたら、そのまま出せる</div><div style="color:#4a5365">取引先や保険会社に対策を聞かれたとき、毎月の記録がそのまま答えになります。</div></div></div>
+        <div class="rv" style="display:flex;gap:20px"><span class="en" style="flex:0 0 auto;font-weight:900;font-size:20px;color:#c81e1e;width:30px">01</span><div><div style="font-weight:800;font-size:19px;margin-bottom:6px">前の月と比べられる</div><div style="color:#4a5365">毎日同じやり方で診断するので、増えた穴と直した穴が分かります。</div></div></div>
+        <div class="rv" style="display:flex;gap:20px"><span class="en" style="flex:0 0 auto;font-weight:900;font-size:20px;color:#c81e1e;width:30px">02</span><div><div style="font-weight:800;font-size:19px;margin-bottom:6px">誰がいつ何を直したかが残る</div><div style="color:#4a5365">機械が直した分も、人が直した分も、同じ形で記録します。</div></div></div>
+        <div class="rv" style="display:flex;gap:20px"><span class="en" style="flex:0 0 auto;font-weight:900;font-size:20px;color:#c81e1e;width:30px">03</span><div><div style="font-weight:800;font-size:19px;margin-bottom:6px">聞かれたら、そのまま出せる</div><div style="color:#4a5365">取引先から「セキュリティ対策は何をしていますか」と聞かれたときに、そのまま出せる書類です。</div></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="vendors" style="border-top:1px solid #e2e5ea">
+<section id="scope" style="border-top:1px solid #e2e5ea">
   <div class="wrap g2" style="padding-top:104px;padding-bottom:104px;align-items:center">
     <div class="rv">
-      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">THIRD-PARTY INCIDENTS</div>
-      <h2 style="margin:0 0 24px;font-size:38px;line-height:1.45;font-weight:900">漏れるのは、自社の<br>サーバーとは限らない。</h2>
-      <p style="margin:0 0 18px;color:#4a5365">問い合わせフォーム、名簿の置き場、チャット、クラウド。会社の情報は、いくつもの外部サービスに預けられています。10月に報じられた漏えいも、自社ではなく委託先が破られたものでした。</p>
-      <p style="margin:0 0 28px;color:#4a5365">当社はお客様ごとに委託先の一覧を持ちます。ニュースで事故が出たら、巻き込まれたかどうかを [時間] 以内にお伝えします。</p>
-      <a href="emergency.html" style="display:inline-flex;align-items:center;gap:8px;font-weight:800;color:#0b1220;text-decoration:none;border-bottom:2px solid #c81e1e;padding-bottom:4px">今出ている事故を確かめる →</a>
+      <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">SCOPE</div>
+      <h2 style="margin:0 0 24px;font-size:38px;line-height:1.45;font-weight:900">引き受ける範囲と、<br>引き受けない範囲。</h2>
+      <p style="margin:0 0 18px;color:#4a5365">10月に報じられた漏えいは、自社ではなく委託先が破られたものでした。承諾をいただければ、レンタルサーバーなどの委託先も診断の対象に入れます。</p>
+      <p style="margin:0 0 28px;color:#4a5365">一方で、社員のパソコン1台ずつの管理、24時間の監視、事故が起きたときの駆けつけは、ホワイトハックには含みません。できることとできないことを、契約の前に書面でお伝えします。</p>
     </div>
     <div class="rv" style="background:#0b1220;border-radius:12px;padding:30px;color:#ffffff">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <div style="font-weight:800">委託先の一覧</div>
-        <div class="en" style="font-size:11px;font-weight:700;color:#8e9bb3;border:1px solid #23314f;border-radius:3px;padding:2px 8px">SAMPLE</div>
+      <div style="font-weight:800;margin-bottom:16px">引き受ける</div>
+      <div style="display:flex;flex-direction:column;gap:1px;background:#23314f;border:1px solid #23314f;border-radius:8px;overflow:hidden;font-size:16px;margin-bottom:22px">
+        <div style="background:#111b2f;padding:14px 18px">Webサイトと入力欄</div>
+        <div style="background:#111b2f;padding:14px 18px">ドメインとメールの設定（なりすまし対策）</div>
+        <div style="background:#111b2f;padding:14px 18px">VPN機器など、インターネットに出ている機器</div>
+        <div style="background:#111b2f;padding:14px 18px">委託先のサーバー（承諾がある場合）</div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:1px;background:#23314f;border:1px solid #23314f;border-radius:8px;overflow:hidden;font-size:16px">
-        <div style="display:flex;justify-content:space-between;align-items:center;background:#111b2f;padding:15px 18px"><span>問い合わせフォーム</span><span style="font-size:13px;color:#8e9bb3">問題なし</span></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;background:#111b2f;padding:15px 18px"><span>メール配信</span><span style="font-size:13px;color:#8e9bb3">問題なし</span></div>
-        <div class="sweep" style="display:flex;justify-content:space-between;align-items:center;background:#c81e1e;padding:15px 18px"><span style="font-weight:700">名簿の管理（[事業者名]）</span><span style="font-size:13px;font-weight:800">事故の報道あり</span></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;background:#111b2f;padding:15px 18px"><span>チャット</span><span style="font-size:13px;color:#8e9bb3">問題なし</span></div>
-      </div>
+      <div style="font-weight:800;margin-bottom:12px;color:#8e9bb3">含まない</div>
+      <div style="font-size:15px;color:#8e9bb3;line-height:1.9">社員のパソコンの管理／24時間の監視／事故のときの駆けつけ</div>
     </div>
   </div>
 </section>
@@ -341,13 +358,14 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
   <div class="wrap" style="padding-top:104px;padding-bottom:104px">
     <div class="rv">
       <div class="eyebrow" style="color:#c81e1e;margin-bottom:16px">HOW TO START</div>
-      <h2 style="margin:0 0 54px;font-size:40px;line-height:1.4;font-weight:900">始め方</h2>
+      <h2 style="margin:0 0 20px;font-size:40px;line-height:1.4;font-weight:900">料金と始め方</h2>
+      <p style="margin:0 0 54px;color:#4a5365;max-width:680px">料金はすべて税別です。セキュリティの専任者を1人雇うと年609.8万円（厚生労働省 job tag。採用の費用と社会保険料は別）。ライトは年36万円、スタンダードは年180万円です。</p>
     </div>
     <div class="steps">
-      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">01</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">相談する</div><div style="font-size:16px;color:#4a5365;line-height:1.85">現状の課題と、利用中の外部サービスを伺い、月次報告書の見本をお見せします。</div></div>
-      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">02</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">書面で許可</div><div style="font-size:16px;color:#4a5365;line-height:1.85">調べる対象、期間、ご担当者、緊急時に止める連絡先を決めます。許可のない診断は不正アクセス禁止法に当たるためです。</div></div>
-      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">03</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">初回の報告書</div><div style="font-size:16px;color:#4a5365;line-height:1.85">脆弱性診断を実施し、委託先の一覧を作成して、初回の月次報告書をお渡しします。<br>[初回の料金]</div></div>
-      <div class="rv" style="border-top:3px solid #c81e1e;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c81e1e">04</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">毎月続ける</div><div style="font-size:16px;color:#4a5365;line-height:1.85">毎月決まった日に月次報告書をお届けします。<br>[月額]</div></div>
+      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">01</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">無料の外部チェック</div><div style="font-size:16px;color:#4a5365;line-height:1.85">whitehack.jp にドメインを入れて、結果を見ます。そのあと無料で相談し、結果を一緒に見てプランを選びます。</div><div class="en" style="margin-top:14px;font-weight:900;font-size:22px">無料</div></div>
+      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">02</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">スポット診断</div><div style="font-size:16px;color:#4a5365;line-height:1.85">申込書と承諾書を出し、ドメインの所有確認を済ませてから、ペネトレーションテストを行い、診断書をお渡しします。</div><div class="en" style="margin-top:14px;font-weight:900;font-size:22px">5万円〜</div></div>
+      <div class="rv" style="border-top:3px solid #0b1220;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c3c9d4">03</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">ライト</div><div style="font-size:16px;color:#4a5365;line-height:1.85">毎日の診断、変化があった日のお知らせ、毎月の報告。</div><div class="en" style="margin-top:14px;font-weight:900;font-size:22px">月3万円</div></div>
+      <div class="rv" style="border-top:3px solid #c81e1e;padding-top:24px"><div class="en" style="font-weight:900;font-size:36px;line-height:1;color:#c81e1e">04</div><div style="font-weight:800;font-size:19px;margin:14px 0 10px">スタンダード</div><div style="font-size:16px;color:#4a5365;line-height:1.85">ライトに加え、見つかった穴を当社が直し、毎月の稼働証明書を発行します。サーバーの中の修正や移行は個別にお見積りします。</div><div class="en" style="margin-top:14px;font-weight:900;font-size:22px">月15万円</div></div>
     </div>
   </div>
 </section>
@@ -359,18 +377,16 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       <h2 style="margin:0 0 32px;font-size:40px;line-height:1.4;font-weight:900">よくある質問</h2>
     </div>
     <div class="rv faq" style="max-width:900px;border-top:1px solid #e2e5ea">
-      <details><summary>どのくらいの規模の会社が対象ですか</summary><div>情報システムの担当者がいない会社です。社員10人ほどから、店舗や事業所が分かれている会社まで。人数より、使っている外部サービスの数で手間が決まります。</div></details>
-      <details><summary>社内に詳しい人がいなくても大丈夫ですか</summary><div>そのための月次報告書です。技術用語ではなく、翌月の実施計画と概算費用で記載します。読むのは、対策とお金を決める人です。中小企業では社長のことが多く、総務の担当者のこともあります。</div></details>
-      <details><summary>24時間対応してもらえますか</summary><div>していません。お約束するのは、毎月の点検と報告、それに委託先の事故が出たときにお答えすることです。今まさに被害が進んでいるときは、右上の「緊急対応」に最初の動き方をまとめています。</div></details>
-      <details><summary>サイバー攻撃を全部止めてもらえますか</summary><div>できません。攻撃をゼロにする方法はありません。当社がやるのは、脆弱性を毎月ふさぐこと、起きたときに何をするかを決めておくこと、やったことを記録に残すことの3つです。</div></details>
-      <details><summary>診断で自社のサイトが止まることはありませんか</summary><div>はじめに見るのは、誰でも見られる記録（証明書の透明性ログ・公開DNS・WHOIS）だけで、貴社のサーバーには接続しません。疑似攻撃に進むのは、ご自身のドメインだと確かめていただき、実施する日時と緊急時に止める連絡先を決めてからです。</div></details>
-      <details><summary>社員のパソコンにソフトを入れますか</summary><div>入れません。外からの検査はインターネット側から行います。AIの使い方を見るのは、当社が用意した会社用のAIの画面を社員の方に使っていただく形です。</div></details>
-      <details><summary>社員が私物のスマホで使うAIも見られますか</summary><div>見られません。私物の端末や個人のアカウントから直接使われたAIは、当社の窓口を通らないので数えられません。全部を1か所で止めることは物理的にできないので、窓口以外のAIを仕事で使わないことを、社内の決まりとして定めていただく形にしています。</div></details>
-      <details><summary>報告に社員の名前は出ますか</summary><div>出しません。誰が送ったかではなく、何が危なかったかを書きます。止まった送信は、件数と中身の種類（お客様の名前、電話番号など）でお伝えします。</div></details>
-      <details><summary>他社のサイトを調べてもらえますか</summary><div>できません。調べるのは、お客様ご自身が管理しているサイトとサービスだけです。許可のない診断は不正アクセス禁止法に当たります。</div></details>
-      <details><summary>サイバー保険はどうなりますか</summary><div>当社は保険を販売していません。保険の加入や更新で対策の状況を聞かれたときに、そのまま出せる記録を毎月残します。</div></details>
-      <details><summary>どのくらいで始められますか</summary><div>ご相談から、書面で範囲を決めるまでが最初の段取りです。そこから最初の報告までの日数は、使っている外部サービスの数によります。相談のときに目安をお伝えします。</div></details>
-      <details><summary>途中でやめられますか</summary><div>やめられます。期間の縛りは設けていません。それまでにお渡しした報告と、作った社内の決まりは、そのままお使いいただけます。</div></details>
+      <details><summary>どのくらいの規模の会社が対象ですか</summary><div>社内にセキュリティ担当がいない会社です。サイトやITの面倒を見る人がいない会社、取引先からセキュリティの質問票が届く会社、問い合わせフォームや会員ページがある会社、法律事務所や会計事務所のように依頼人の秘密を預かっている会社などです。</div></details>
+      <details><summary>見つけた穴は、誰が直すのですか</summary><div>当社が直します（スタンダード）。直すとメールが届かなくなる、といった影響を先に洗い出し、登録を済ませてから直します。サーバーの中の修正や移行は、内容を見てお見積りします。</div></details>
+      <details><summary>ライトとスタンダードの違いは何ですか</summary><div>ライト（月3万円）は、毎日の診断、変化があった日のお知らせ、毎月の報告までです。スタンダード（月15万円）は、それに加えて見つかった穴を当社が直し、毎月の稼働証明書を発行します。いずれも税別です。</div></details>
+      <details><summary>診断で自社のサイトが止まることはありませんか</summary><div>はじめに見るのは、誰でも見られる記録（証明書の透明性ログ・公開DNS・WHOIS）だけで、貴社のサーバーには接続しません。ペネトレーションテストに進むのは、ドメインの所有確認と書面の承諾が揃ってからです。データの書き換えや削除はしません。</div></details>
+      <details><summary>24時間対応してもらえますか</summary><div>していません。24時間の監視と、事故が起きたときの駆けつけは、ホワイトハックには含みません。お約束するのは、毎日の診断と、見つけた穴を直すこと、その記録を毎月お渡しすることです。</div></details>
+      <details><summary>サイバー攻撃を全部止めてもらえますか</summary><div>できません。攻撃をゼロにする方法はありません。当社がやるのは、外から入れる穴を見つけて塞ぐことと、やったことを記録に残すことです。</div></details>
+      <details><summary>社員のパソコンにソフトを入れますか</summary><div>入れません。検査はインターネット側から行います。</div></details>
+      <details><summary>他社のサイトを調べてもらえますか</summary><div>できません。調べるのは、お客様ご自身が管理しているサイトとサービスだけです。許可のない検査は不正アクセス禁止法に当たります。</div></details>
+      <details><summary>どのくらいで始められますか</summary><div>無料の外部チェックは、ドメインを入れればその場で結果が出ます。スポット診断と月額のプランは、申込書と承諾書、ドメインの所有確認が揃ってから始めます。</div></details>
+      <details><summary>途中でやめられますか</summary><div>やめられます。それまでにお渡しした診断書と稼働証明書は、そのままお使いいただけます。</div></details>
     </div>
   </div>
 </section>
@@ -378,7 +394,8 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
 <section id="contact-sec" style="background:#0b1220;color:#ffffff">
   <div class="wrap rv" style="padding-top:96px;padding-bottom:96px">
     <h2 style="margin:0 0 20px;font-size:42px;line-height:1.4;font-weight:900">貴社のドメインを、<br>無料で調べます。</h2>
-    <p style="margin:0 0 40px;color:#bac5d8;max-width:560px">公開されている記録だけを照会するパッシブスキャンです。貴社のサーバーには接続しません。出た結果は、そのままお渡しします。</p>
+    <p style="margin:0 0 40px;color:#bac5d8;max-width:560px">公開されている記録だけを読む無料の外部チェックです。貴社のサーバーには接続しません。結果を見たうえで、どこまで任せるかを無料でご相談いただけます。</p>
+    <a href="https://whitehack.jp/" target="_blank" rel="noopener" style="display:inline-block;background:#c81e1e;color:#ffffff;text-decoration:none;font-weight:800;padding:20px 40px;border-radius:6px;font-size:18px;margin-right:14px">無料でドメインを調べる</a>
     <a href="../index.html#contact" style="display:inline-block;background:#ffffff;color:#0b1220;text-decoration:none;font-weight:800;padding:20px 40px;border-radius:6px;font-size:18px">無料で相談する</a>
   </div>
 </section>

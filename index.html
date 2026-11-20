@@ -1007,6 +1007,28 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   .sec-black .sb-vs{display:none;}
   .sec-black .sb-cost{flex-direction:column;align-items:flex-start;}
 }
+.wh-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid var(--line);}
+.wh-steps li{padding:26px 24px 28px 0;border-bottom:1px solid var(--line);}
+.wh-steps .n{display:block;font-family:var(--font-mono);font-size:0.78rem;color:#EE3524;margin-bottom:0.6rem;letter-spacing:0.08em;}
+.wh-steps b{display:block;font-size:1.08rem;line-height:1.6;color:var(--ink);margin-bottom:0.5rem;}
+.wh-steps p{font-size:0.95rem;line-height:1.8;color:#555;margin:0;}
+.wh-plans{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;}
+.wh-plans .pl{background:#fff;border:1px solid var(--line);border-radius:10px;padding:24px 22px;}
+.wh-plans .pl--main{border:2px solid #111;}
+.wh-plans em{display:block;font-style:normal;font-size:0.9rem;font-weight:700;color:#555;}
+.wh-plans strong{display:block;font-size:1.9rem;font-weight:800;margin:0.4rem 0 0.6rem;color:#111;}
+.wh-plans strong small{font-size:0.55em;margin-left:0.1em;}
+.wh-plans p{font-size:0.92rem;line-height:1.75;color:#444;margin:0;}
+.wh-note{margin-top:16px;font-size:0.88rem;color:#666;line-height:1.8;}
+.wh-scope{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px;}
+.wh-scope div{border-top:2px solid #111;padding-top:14px;}
+.wh-scope b{font-size:1rem;}
+.wh-scope p{font-size:0.95rem;line-height:1.8;color:#444;margin:0.4rem 0 0;}
+.wh-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px;}
+.wh-red{display:inline-flex;align-items:center;background:#EE3524;color:#fff;font-weight:800;padding:1rem 2.2rem;border-radius:999px;}
+.wh-red:hover{background:#d42a1a;}
+.wh-line{display:inline-flex;align-items:center;border:1px solid #111;color:#111;font-weight:700;padding:1rem 2.2rem;border-radius:999px;}
+@media (max-width:900px){.wh-steps{grid-template-columns:1fr;}.wh-plans{grid-template-columns:1fr 1fr;}.wh-scope{grid-template-columns:1fr;}}
 </style>
 <!-- Cloudflare Web Analytics --><script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f2249d4d1b044fc1a67981c0f896d861"}'></script><!-- End Cloudflare Web Analytics -->
 <!-- Google tag (gtag.js) -->
@@ -1028,7 +1050,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     <nav class="site-nav" id="siteNav">
       <a href="#security">セキュリティ</a>
       <a href="#products">事業内容</a>
-      <a href="#lab">開発実績</a>
+      <a href="#wh-start">始め方</a>
+      <a href="#wh-price">料金</a>
       <a href="jirei.html">導入事例</a>
       <a href="#column">記事</a>
       <a href="#faq">FAQ</a>
@@ -1131,154 +1154,58 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <div class="sec-label" data-rv="up">Check</div>
       <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="check-title">こんな状態になっていませんか？</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="check-lead">当てはまる項目を選ぶと、解決策のページに進めます。</p>
+      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="check-lead">セキュリティの担当者がいない会社では、こうしたことが起きています。ホワイトハックは、この「見つかっても直せない」をまるごと引き受けます。</p>
     </div>
     <div class="issues">
-      <a href="security/" data-rv="up" style="--d:0ms"><span class="no">01</span><span data-edit="chk-9">自社のサイトやメールに穴がないか、社内の誰も確かめていない</span></a>
-      <a href="security/" data-rv="up" style="--d:80ms"><span class="no">02</span><span data-edit="chk-10">社員が仕事でどのAIを使い、何を送っているか分からない</span></a>
-      <a href="line-ai-agent.html" data-rv="up" style="--d:160ms"><span class="no">03</span><span data-edit="chk-1">問い合わせ対応も、社内の「これどうやるんだっけ」も、特定の人頼み</span></a>
-      <a href="human-clone-ai.html" data-rv="up" style="--d:240ms"><span class="no">04</span><span data-edit="chk-2">社長が不在だと、決裁と相談が止まる</span></a>
-      <a href="human-clone-ai.html" data-rv="up" style="--d:320ms"><span class="no">05</span><span data-edit="chk-3">引き継ぎたいのに、ノウハウが社長の頭の中にしかない</span></a>
-      <a href="aiside.html" data-rv="up" style="--d:400ms"><span class="no">06</span><span data-edit="chk-4">予定調整とメールと雑務で、経営者の一日が終わる</span></a>
-      <a href="manual-ai.html" data-rv="up" style="--d:480ms"><span class="no">07</span><span data-edit="chk-5">マニュアルはあるのに、誰も読まずに毎回ベテランに聞いている</span></a>
-      <a href="ai-training.html" data-rv="up" style="--d:560ms"><span class="no">08</span><span data-edit="chk-6">セミナーは受けたのに、翌日から現場が何も変わらなかった</span></a>
-      <a href="ai-consulting.html" data-rv="up" style="--d:640ms"><span class="no">09</span><span data-edit="chk-7">AIを入れたい気持ちはあるが、何から手をつけるか分からない</span></a>
-      <a href="line-ai-agent.html" data-rv="up" style="--d:720ms"><span class="no">10</span><span data-edit="chk-8">見積もり・書類作成・データ入力などの事務作業に人手を取られている</span></a>
+      <a href="https://whitehack.jp/" data-rv="up" style="--d:0ms" target="_blank" rel="noopener"><span class="no">01</span><span>自社のサイトが外からどう見えているのか、確かめる方法がない</span></a>
+      <a href="security/" data-rv="up" style="--d:80ms"><span class="no">02</span><span>取引先からセキュリティの質問票が届くが、出せる記録がない</span></a>
+      <a href="security/" data-rv="up" style="--d:160ms"><span class="no">03</span><span>サイトは制作会社に作ってもらったきりで、保守の契約がない</span></a>
+      <a href="security/" data-rv="up" style="--d:240ms"><span class="no">04</span><span>診断ツールで警告が出ても、直し方が分からない</span></a>
+      <a href="security/" data-rv="up" style="--d:320ms"><span class="no">05</span><span>直したら自社のメールが届かなくなるのでは、と不安で手を付けられない</span></a>
+      <a href="security/" data-rv="up" style="--d:400ms"><span class="no">06</span><span>VPN機器やサーバーの更新を、社内の誰も確かめていない</span></a>
     </div>
   </div>
 </section>
 
-<section class="sec sec--white" id="about">
+<section class="sec sec--white" id="wh-start">
   <div class="wrap">
-    <div class="split">
-      <div>
-        <div class="sec-head">
-          <div class="sec-label" data-rv="up">About</div>
-          <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="about-title">「楽」ではなく「楽しい」を考える</h2>
-          <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-        </div>
-        <div class="msg" data-rv="up" style="--d:200ms">
-          <p data-edit="about-p1">繰り返しの作業はAIに任せれば、業務はぐっと「楽」になります。そこから生まれた時間で、人はもっと多くのことに本気で向き合えるはずです。</p>
-          <p data-edit="about-p2">本気で打ち込みたい仕事、家族との食卓、仲間との一杯。一つ一つに向き合えることが、新しい価値を生んでいく。それこそが私たちが目指す「楽しい」であり、つくり続けたい「舞台」です。</p>
-          <p data-edit="about-p3">株式会社AIdollargameは、AIプロダクトを自社で開発・運用しながら、企業の現場にAIを届けている会社です。</p>
-        </div>
-        <div style="margin-top:2rem;" data-rv="up">
-          <a href="company.html" class="arrow-link"><span class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>会社情報</a>
-        </div>
-      </div>
-      <div class="photo-pair" data-rv="right" style="--d:200ms">
-        <figure>
-          <div class="ph"><img src="aidollargame-ceo-sato-norinosuke-interview-960.webp" width="960" height="720" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介（対談収録の様子）" loading="lazy"></div>
-          <figcaption>対談収録の様子（代表取締役CEO 佐藤徳之介）</figcaption>
-        </figure>
-        <figure>
-          <div class="ph"><img src="aidollargame-ceo-sato-norinosuke-seminar-960.webp" width="960" height="720" alt="株式会社AIdollargame 代表取締役CEO 佐藤徳之介とエンジニア森によるセミナー登壇の様子（左：佐藤、右：森）" loading="lazy"></div>
-          <figcaption>セミナー登壇の様子（左：代表取締役CEO 佐藤徳之介、右：エンジニア 森）</figcaption>
-        </figure>
-        <figure>
-          <a class="ph" href="articles/nbc-kigyojuku-2026-07.html"><img src="articles/nbc-kigyojuku-2026-07-group-960.webp" width="960" height="715" alt="東京NBC起業塾に登壇した代表取締役CEO 佐藤徳之介と参加者の集合写真" loading="lazy" style="aspect-ratio:16/9;object-position:center 75%;"></a>
-          <figcaption>東京NBC起業塾に登壇（2026年7月16日、参加者の皆さんと）</figcaption>
-        </figure>
-        <figure>
-          <a class="ph" href="https://www.youtube.com/watch?v=eB3ZNJ4BT90" target="_blank" rel="noopener"><img src="articles/nbc-2026-09-youtube-960.webp" width="960" height="540" alt="東京NBC公式YouTube出演回のサムネイル（代表取締役CEO 佐藤徳之介）" loading="lazy" style="aspect-ratio:16/9;"></a>
-          <figcaption>東京NBC公式YouTubeに出演（2026年9月18日公開、クリックで動画へ）</figcaption>
-        </figure>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="sec" id="service">
-  <div class="wrap">
-    <div class="sec-head center">
-      <div class="sec-label" data-rv="up">Service</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="service-title">AIの最前線の技術を<br>現場で使える形に</h2>
+    <div class="sec-head">
+      <div class="sec-label" data-rv="up">How it works</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">ホワイトハックの始め方</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="service-lead">最新のAIをまず自社プロダクトで使い込み、成果が出たものだけを現場にお届けします。<br>現場で見つかった課題は、次のプロダクト開発に反映します。</p>
+      <p class="sec-lead" data-rv="up" style="--d:200ms">3から先は、ドメインの所有確認と書面の承諾が揃ってから進みます。</p>
     </div>
-    <div class="diagram" data-rv="up" style="--d:120ms">
-      <div class="dg-wide">
-      <svg viewBox="0 0 1000 330" role="img" aria-label="AIの最前線とAIdollargameと企業の現場が循環する関係図">
-        <circle class="dg-circle" cx="150" cy="165" r="112"></circle>
-        <g transform="translate(132,66)">
-          <rect class="dg-ic" x="6" y="6" width="24" height="24" rx="4"></rect>
-          <rect class="dg-ic" x="13" y="13" width="10" height="10" rx="2"></rect>
-          <path class="dg-ic" d="M18 1v5M18 30v5M1 18h5M30 18h5M11 1v5M25 1v5M11 30v5M25 30v5M1 11h5M1 25h5M30 11h5M30 25h5"></path>
-        </g>
-        <text class="dg-label" x="150" y="185" text-anchor="middle">AIの最前線</text>
-        <text class="dg-sub" x="150" y="212" text-anchor="middle">最新モデル・研究・論文</text>
+    <ol class="wh-steps">
+      <li data-rv="up" style="--d:0ms"><span class="n">STEP 1</span><b>whitehack.jp でドメインを入力し、無料診断の結果を見る</b><p>証明書の公開ログ、公開DNS、WHOISといった誰でも見られる記録だけを読みます。お客様のサーバーには接続しません。</p></li>
+      <li data-rv="up" style="--d:70ms"><span class="n">STEP 2</span><b>無料で相談する</b><p>結果を一緒に見て、どこまで任せるか、プランを選びます。</p></li>
+      <li data-rv="up" style="--d:140ms"><span class="n">STEP 3</span><b>申込書と承諾書を出し、ドメインの所有確認を済ませる</b><p>所有者の承諾なしに接続して調べると、不正アクセス禁止法に違反するおそれがあります。両方が揃うまで、1回も接続しません。</p></li>
+      <li data-rv="up" style="--d:210ms"><span class="n">STEP 4</span><b>当社が診断し、診断書をお渡しする</b><p>入力欄に検査用の文字列を送り、実際の攻撃と同じ手順で試します。データの書き換えや削除はしません。</p></li>
+      <li data-rv="up" style="--d:280ms"><span class="n">STEP 5</span><b>直すものを選ぶ。当社が直し、直ったかを確かめて記録する</b><p>直すと止まるもの（メール配信や予約システムなど）を先に洗い出し、登録を済ませてから直します。</p></li>
+      <li data-rv="up" style="--d:350ms"><span class="n">STEP 6</span><b>毎日の診断と、毎月の報告・稼働証明書</b><p>新しい脆弱性は毎日公表されます。毎日診断し、変化があった日にお知らせします（月額プラン）。</p></li>
+    </ol>
+  </div>
+</section>
 
-        <circle class="dg-circle dg-circle-main" cx="500" cy="165" r="128"></circle>
-        <text class="dg-label" x="500" y="140" text-anchor="middle" style="font-size:24px">AIdollargame</text>
-        <text class="dg-sub" x="500" y="172" text-anchor="middle">自社で開発して、自社で運用</text>
-        <text class="dg-sub" x="500" y="196" text-anchor="middle">AIプロダクト／AI研修／導入支援</text>
-        <line x1="424" y1="216" x2="576" y2="216" stroke="#dddddd" stroke-width="1.6"></line>
-        <text class="dg-flow" x="500" y="242" text-anchor="middle">実装と運用まで担当</text>
-
-        <circle class="dg-circle" cx="850" cy="165" r="112"></circle>
-        <g transform="translate(830,64)">
-          <path class="dg-ic" d="M4 34V9a2.5 2.5 0 0 1 2.5-2.5h11A2.5 2.5 0 0 1 20 9v25"></path>
-          <path class="dg-ic" d="M20 16h7.5a2.5 2.5 0 0 1 2.5 2.5V34"></path>
-          <path class="dg-ic" d="M9 13h6M9 19h6M9 25h6M24 22h2.5M24 28h2.5"></path>
-        </g>
-        <text class="dg-label" x="850" y="185" text-anchor="middle">企業の現場</text>
-        <text class="dg-sub" x="850" y="212" text-anchor="middle">問い合わせ・ナレッジ・判断</text>
-
-        <path class="dg-line" data-rv="draw" style="--d:300ms" d="M250 92 C 290 58, 330 52, 380 72"></path>
-        <polygon class="dg-arrow" points="380,72 366,63 365,79"></polygon>
-        <text class="dg-flow" x="315" y="38" text-anchor="middle">試して、選ぶ</text>
-
-        <path class="dg-line" data-rv="draw" style="--d:520ms" d="M620 72 C 670 52, 710 58, 750 92"></path>
-        <polygon class="dg-arrow" points="750,92 735,88 743,75"></polygon>
-        <text class="dg-flow" x="685" y="38" text-anchor="middle">使える形で届ける</text>
-
-        <path class="dg-line" data-rv="draw" style="--d:740ms" d="M750 238 C 710 272, 670 278, 620 258"></path>
-        <polygon class="dg-arrow" points="620,258 634,267 635,251"></polygon>
-        <text class="dg-flow" x="685" y="300" text-anchor="middle">現場の課題とデータ</text>
-
-        <path class="dg-line" data-rv="draw" style="--d:960ms" d="M380 258 C 330 278, 290 272, 250 238"></path>
-        <polygon class="dg-arrow" points="250,238 265,242 257,255"></polygon>
-        <text class="dg-flow" x="315" y="300" text-anchor="middle">次の開発に反映</text>
-      </svg>
-      </div>
-
-      <div class="dg-mobile">
-        <div class="dgm-node">
-          <svg class="dgm-ic" viewBox="0 0 36 36" aria-hidden="true">
-            <rect x="6" y="6" width="24" height="24" rx="4"></rect>
-            <rect x="13" y="13" width="10" height="10" rx="2"></rect>
-            <path d="M18 1v5M18 30v5M1 18h5M30 18h5M11 1v5M25 1v5M11 30v5M25 30v5M1 11h5M1 25h5M30 11h5M30 25h5"></path>
-          </svg>
-          <div class="dgm-ttl">AIの最前線</div>
-          <div class="dgm-sub">最新モデル・研究・論文</div>
-        </div>
-
-        <div class="dgm-step"><span>試して、選ぶ</span></div>
-
-        <div class="dgm-node dgm-node--main">
-          <div class="dgm-ttl">AIdollargame</div>
-          <div class="dgm-sub">自社で開発して、自社で運用<br>AIプロダクト／AI研修／導入支援</div>
-          <div class="dgm-tag">実装と運用まで担当</div>
-        </div>
-
-        <div class="dgm-step"><span>使える形で届ける</span></div>
-
-        <div class="dgm-node">
-          <svg class="dgm-ic" viewBox="0 0 34 38" aria-hidden="true">
-            <path d="M4 34V9a2.5 2.5 0 0 1 2.5-2.5h11A2.5 2.5 0 0 1 20 9v25"></path>
-            <path d="M20 16h7.5a2.5 2.5 0 0 1 2.5 2.5V34"></path>
-            <path d="M9 13h6M9 19h6M9 25h6M24 22h2.5M24 28h2.5"></path>
-          </svg>
-          <div class="dgm-ttl">企業の現場</div>
-          <div class="dgm-sub">問い合わせ・ナレッジ・判断</div>
-        </div>
-
-        <p class="dgm-loop">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V5"></path><path d="M6 11l6-6 6 6"></path></svg>
-          <span>現場の課題とデータを次の開発に反映</span>
-        </p>
-      </div>
+<section class="sec" id="wh-price">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label" data-rv="up">Price</div>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms">料金（税別）</h2>
+      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
+      <p class="sec-lead" data-rv="up" style="--d:200ms">セキュリティの専任者を1人雇うと、年収だけで年609.8万円（厚生労働省 job tag）。採れるまで対策は進みません。ホワイトハックは申し込んだ日から始まり、担当者が辞めても診断と記録は止まりません。</p>
     </div>
+    <div class="wh-plans">
+      <div class="pl" data-rv="up"><em>無料診断</em><strong>無料</strong><p>公開されている情報だけで、外から見えている弱点を出します。</p></div>
+      <div class="pl" data-rv="up" style="--d:80ms"><em>スポット診断</em><strong>5万円<small>〜</small></strong><p>1回・診断書つき。承諾の後に、実際につないで入力欄まで試します。</p></div>
+      <div class="pl" data-rv="up" style="--d:160ms"><em>ライト</em><strong>月3万円</strong><p>毎日の診断、変化があった日のお知らせ、毎月の報告。</p></div>
+      <div class="pl pl--main" data-rv="up" style="--d:240ms"><em>スタンダード</em><strong>月15万円</strong><p>ライトに加え、見つかった弱点を当社が直し、毎月の稼働証明書を発行します。</p></div>
+    </div>
+    <p class="wh-note">サーバーの中の修正、移行、改修は個別にお見積りします。稼働証明書は、その月に行った診断と修正の記録を当社がまとめて発行する書面です。</p>
+    <div class="wh-scope" data-rv="up">
+      <div><b>引き受けるもの</b><p>Webサイト・ドメイン・メールの設定と、インターネットに公開している機器（承諾をいただいたVPN機器や委託先のサーバーを含む）の診断と修正、その記録。</p></div>
+      <div><b>含まないもの</b><p>社員のパソコン1台ずつの管理、24時間の監視、事故が起きた時の駆けつけ。</p></div>
+    </div>
+    <div class="wh-cta" data-rv="up"><a href="https://whitehack.jp/" target="_blank" rel="noopener" class="wh-red">無料でドメインを調べる</a><a href="#contact" class="wh-line">相談する</a></div>
   </div>
 </section>
 
@@ -1286,9 +1213,9 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   <div class="wrap">
     <div class="sec-head">
       <div class="sec-label" data-rv="up">Products &amp; Service</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="products-title">セキュリティを軸に、AIの導入まで</h2>
+      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="products-title">そのほかのサービス</h2>
       <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="products-lead">セキュリティ担当の代行を軸に、助成金を使えるAI研修、自社開発のAIプロダクト、導入支援まで引き受けます。</p>
+      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="products-lead">ホワイトハックのほかに、助成金を使えるAI研修、自社開発のAIプロダクト、AIの導入支援も引き受けています。</p>
     </div>
     <div class="cards">
 <div class="card" data-rv="up" style="--d:0ms">
@@ -1353,180 +1280,14 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec" id="start">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-label" data-rv="up">How to Start</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="start-title">おすすめの始め方</h2>
-      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="start-lead">どれから頼めばいいか迷ったら、この対応表からどうぞ。どの入口でも、初回相談は無料です。</p>
-    </div>
-    <div class="start-first" data-rv="up">
-      <span class="sf-label" data-edit="sf-label">迷ったらここから</span>
-      <span class="sf-steps" data-edit="sf-steps"><b>① 1分の無料AI診断</b> → <b>② 30分の無料相談</b> → <b>③ 見積もり</b>（ここまで無料）</span>
-      <span class="sf-btns"><a class="f" href="shindan.html">1分で無料AI診断</a><a class="o" href="#contact">無料相談を予約</a></span>
-    </div>
-    <div class="start-rows">
-      <a class="start-row" href="ai-training.html" data-rv="up" style="--d:0ms">
-        <span class="who" data-edit="st1-who">初めてAIを入れる会社</span>
-        <span class="what" data-edit="st1-what">まずは<b>AI研修＋無料AI診断</b>。社員が使える状態を先につくります</span>
-        <span class="arw">→</span>
-      </a>
-      <a class="start-row" href="line-ai-agent.html" data-rv="up" style="--d:100ms">
-        <span class="who" data-edit="st2-who">問い合わせ対応・社内の質問対応に追われている会社</span>
-        <span class="what" data-edit="st2-what"><b>AIチャットエージェント</b>。人頼みの一次対応をAIに置き換えます</span>
-        <span class="arw">→</span>
-      </a>
-      <a class="start-row" href="human-clone-ai.html" data-rv="up" style="--d:200ms">
-        <span class="who" data-edit="st3-who">「社長にしか判断できない仕事」が多い会社</span>
-        <span class="what" data-edit="st3-what"><b>AIwill（社長クローンAI）</b>。判断の考え方を会社の資産にします</span>
-        <span class="arw">→</span>
-      </a>
-      <a class="start-row" href="aiside.html" data-rv="up" style="--d:300ms">
-        <span class="who" data-edit="st4-who">予定調整・メール・雑務で経営者の一日が終わる会社</span>
-        <span class="what" data-edit="st4-what"><b>AIside（付き人AI）</b>。日々の細かい仕事を先回りで代行します</span>
-        <span class="arw">→</span>
-      </a>
-    </div>
-    <div class="price-box" data-rv="up">
-      <h3 data-edit="price-t">料金の目安</h3>
-      <ul>
-        <li data-edit="price-1">AI導入支援・コンサルティング: 20万円〜（業務範囲により個別見積もり）</li>
-        <li data-edit="price-2">社内マニュアルAI／AIチャットエージェント: 構築＋月々の運用サポートの2階建て（マニュアルの量・利用人数・社外対応の有無で変動）</li>
-        <li data-edit="price-3">AI研修・社員リスキリング: 人数・回数・フォロー期間で変動（中小企業は訓練経費の最大75%が助成対象）</li>
-      </ul>
-      <p class="pnote" data-edit="price-note">実態に合わない一律の料金表は出していません。何で費用が決まるかは<a href="ryokin.html" style="color:var(--blue);text-decoration:underline;">料金の考え方</a>ですべて公開しています。初回相談・見積もりは無料、相見積もりの1社としてのご利用も歓迎です。</p>
-    </div>
-  </div>
-</section>
-
-
-
 <div class="midcta">
-  <h2 data-rv="up" data-edit="midcta-title">ここにない課題でも、ご相談ください</h2>
-  <p data-rv="up" style="--d:120ms" data-edit="midcta-lead">業務に合わせたAIをお作りします。まずは1分の無料診断で、AIに任せられる業務の目安をご確認ください。</p>
+  <h2 data-rv="up" data-edit="midcta-title">見つけた弱点を自分たちで直し、直した記録を毎月お渡しする。</h2>
+  <p data-rv="up" style="--d:120ms" data-edit="midcta-lead">弱点を見つけて報告書を渡すだけでは、直す人がいない会社は何も変わりません。そこまでを、私たちの仕事だと考えています。（代表取締役 佐藤徳之介）</p>
   <div class="btns" data-rv="up" style="--d:240ms">
-    <a href="shindan.html" class="btn btn-orange">1分で無料AI診断</a>
-    <a href="#contact" class="btn" style="background:var(--navy-deep);color:#fff;">お問い合わせはこちら</a>
+    <a href="https://whitehack.jp/" target="_blank" rel="noopener" class="btn btn-orange">無料でドメインを調べる</a>
+    <a href="#contact" class="btn" style="background:var(--navy-deep);color:#fff;">相談する</a>
   </div>
 </div>
-
-<section class="sec" id="lab">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-label" data-rv="up">Lab — つくってきたもの</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="lab-title">思いついた業務が、<br>その日のうちに動くデモになります</h2>
-      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="lab-lead">企業の現場にありそうな困りごとを、その日のうちに動くデモにしています。貴社のご相談も、まずはこの形でお見せするところから始まります。言葉で仕様を詰める前に、触れるものを見て「違う」と言えるほうが早いためです。<br><span style="font-size:0.8rem;opacity:0.75;">※下の6本はサンプルデータで動くデモです。実案件では貴社のデータと業務に合わせて作り込みます。</span></p>
-    </div>
-    <div class="stats stats--3">
-      <div class="stat2" data-rv="up" style="--d:0ms">
-        <div class="lbl" data-edit="lab-s1t">開発したプロダクト・社内ツール</div>
-        <div class="num" data-edit="lab-s1n">50本以上</div>
-        <p data-edit="lab-s1p">お客様向けのAI、自社の営業・経理・記事制作を回す社内ツール、毎日自動で動く定期処理まで。既製品を当てはめず、業務ごとに作っています。実験室のデモは含みません</p>
-      </div>
-      <div class="stat2" data-rv="up" style="--d:120ms">
-        <div class="lbl" data-edit="lab-s2t">実験室で公開した、動くデモ</div>
-        <div class="num" data-edit="lab-s2n">178本</div>
-        <p data-edit="lab-s2p">2026年7月9日から毎日1本。お題を決めたその日のうちに触れる形にします。お題は架空の現場で、納品物ではありません。すべて<a href="lab/" style="color:var(--blue);text-decoration:underline;">公開</a>していて、その場で触れます</p>
-      </div>
-      <div class="stat2" data-rv="up" style="--d:240ms">
-        <div class="lbl" data-edit="lab-s3t">デモのお題にした業種</div>
-        <div class="num" data-edit="lab-s3n">31業種</div>
-        <p data-edit="lab-s3p">農業、小売業、町工場、保育、駐車場、旅館。実案件の数ではなく、お題として扱った業種の数です。業種が変わっても同じやり方で形にしています</p>
-      </div>
-    </div>
-    <div class="posts">
-      <a class="post" href="lab/apps/2026-07-28_chokubaisho-nezuke-ai.html" data-rv="up" style="--d:0ms">
-        <div class="pbody">
-          <div class="meta-row"><span class="cat">直売所</span></div>
-          <div class="ptitle" data-edit="lab-0">直売所の値付け売り切りAI</div>
-          <div class="pdesc" data-edit="lab-0d">閉店までの残り時間・天気・曜日・残り数から、いくらで売れば売り切れるかを品目ごとに提案。値下げのしすぎを防ぎ、廃棄ロスを減らします。</div>
-        </div>
-      </a>
-      <a class="post" href="lab/apps/2026-07-28_daiko-uketsuke-ai.html" data-rv="up" style="--d:120ms">
-        <div class="pbody">
-          <div class="meta-row"><span class="cat">配車代行</span></div>
-          <div class="ptitle" data-edit="lab-1">夜間の電話を24時間受けて、配車票にする</div>
-          <div class="pdesc" data-edit="lab-1d">迎え場所・行き先・人数をAIが聞き取り、担当ドライバーへ配車票として渡します。運転中の取りこぼしをなくす作りです。</div>
-        </div>
-      </a>
-      <a class="post" href="lab/apps/2026-07-29_hanashite-hoiku-nisshi.html" data-rv="up" style="--d:240ms">
-        <div class="pbody">
-          <div class="meta-row"><span class="cat">保育</span></div>
-          <div class="ptitle" data-edit="lab-2">話すだけで、連絡帳と保育日誌が同時にできる</div>
-          <div class="pdesc" data-edit="lab-2d">保育士が話した内容から2種類の記録を同時に組み立てます。介護記録AIと同じ考え方を保育の現場に置いたものです。</div>
-        </div>
-      </a>
-      <a class="post" href="lab/apps/2026-07-13_salon-zaikoban.html" data-rv="up" style="--d:360ms">
-        <div class="pbody">
-          <div class="meta-row"><span class="cat">美容室</span></div>
-          <div class="ptitle" data-edit="lab-3">薬剤を切らす前に、発注カゴができている</div>
-          <div class="pdesc" data-edit="lab-3d">カラー剤の減りを使用量から見張り、なくなる前に発注内容を用意します。発注忘れそのものを起こさない作りです。</div>
-        </div>
-      </a>
-      <a class="post" href="lab/apps/2026-07-22_machikouba-tsunagi.html" data-rv="up" style="--d:480ms">
-        <div class="pbody">
-          <div class="meta-row"><span class="cat">町工場</span></div>
-          <div class="ptitle" data-edit="lab-4">こなしきれない受注を、近所の空いている設備へ</div>
-          <div class="pdesc" data-edit="lab-4d">図面の加工内容と設備の条件を突き合わせて、近隣の工場同士を匿名でつなぎます。断るしかなかった仕事を回せる形にするものです。</div>
-        </div>
-      </a>
-      <a class="post" href="lab/apps/2026-08-04_tanadori-naoshi.html" data-rv="up" style="--d:600ms">
-        <div class="pbody">
-          <div class="meta-row"><span class="cat">倉庫・物流</span></div>
-          <div class="ptitle" data-edit="lab-5">出荷実績から棚を並べかえて、歩く距離を減らす</div>
-          <div class="pdesc" data-edit="lab-5d">よく出るものを手前に寄せる並べかえを実績から計算します。人を増やさずにピッキングの時間を縮める考え方です。</div>
-        </div>
-      </a>
-    </div>
-    <div class="center" data-rv="up"><a href="#contact" class="arrow-link"><span class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>この形で、貴社の業務のデモをつくります</a></div>
-  </div>
-</section>
-
-<section class="sec sec--white" id="flow">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-label" data-rv="up">Process</div>
-      <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="flow-title">相談から運用開始まで、5ステップ。貴社側の作業は最小限です</h2>
-      <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-      <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="flow-lead">当社にご相談いただいてから運用が始まるまでの流れをそのまま公開します。ITに詳しい担当者がいなくても大丈夫です。</p>
-    </div>
-    <div class="flow">
-      <div class="step" data-rv="up" style="--d:0ms">
-        <div class="n">STEP 01</div>
-        <h3 data-edit="fl1-t">無料相談（30分〜1時間・オンライン可）</h3>
-        <p data-edit="fl1-b">いま困っていることを、そのまま話してください。「AIで何ができるのか分からない」段階で大丈夫です。売り込みはせず、AIで解決できること・できないことを正直にお伝えします。</p>
-        <div class="you" data-edit="fl1-y">貴社の作業: 話すだけ</div>
-      </div>
-      <div class="step" data-rv="up" style="--d:110ms">
-        <div class="n">STEP 02</div>
-        <h3 data-edit="fl2-t">業務ヒアリングと資料の確認</h3>
-        <p data-edit="fl2-b">対象の業務内容と、いまあるマニュアル・資料の状態を確認します。必要な資料の洗い出しはこちらで行います。</p>
-        <div class="you" data-edit="fl2-y">貴社の作業: 資料を渡すだけ</div>
-      </div>
-      <div class="step" data-rv="up" style="--d:220ms">
-        <div class="n">STEP 03</div>
-        <h3 data-edit="fl3-t">見積もりのご提示</h3>
-        <p data-edit="fl3-b">任せる範囲と金額を明記した見積もりをお出しします。契約前提ではなく、相見積もりの1社としてのご利用も歓迎です。</p>
-        <div class="you" data-edit="fl3-y">貴社の作業: 検討するだけ</div>
-      </div>
-      <div class="step" data-rv="up" style="--d:330ms">
-        <div class="n">STEP 04</div>
-        <h3 data-edit="fl4-t">試作 → 実際に触ってテスト</h3>
-        <p data-edit="fl4-b">実際の資料の一部でAIを作り、貴社のスタッフに触っていただきます。回答の精度をここで確認・調整します。「思っていたのと違う」となれば、この段階で止めて構いません。</p>
-        <div class="you" data-edit="fl4-y">貴社の作業: 使って感想を言うだけ</div>
-      </div>
-      <div class="step" data-rv="up" style="--d:440ms">
-        <div class="n">STEP 05</div>
-        <h3 data-edit="fl5-t">運用開始 — その後の面倒もこちらで</h3>
-        <p data-edit="fl5-b">本導入後の資料更新の反映・回答の改善・不具合対応は、こちらが行います。「導入して終わり」にしないことを標準にしています。</p>
-        <div class="you" data-edit="fl5-y">貴社の作業: 使うだけ</div>
-      </div>
-    </div>
-    <p class="flow-note" data-rv="up" data-edit="flow-note">期間は、任せる業務の範囲と資料の状態によって変わるため、一律の期間はお約束しません（実態と違う数字を掲げないためです）。初回相談で内容を伺えば、貴社のケースでの目安をその場でお伝えできます。</p>
-  </div>
-</section>
 
 <section class="sec" id="case">
   <div class="wrap">
@@ -1639,12 +1400,12 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     </div>
     <div class="trust-grid">
       <div class="trust" data-rv="up" style="--d:0ms">
-        <h3><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-4Z"></path><path d="m9 12 2 2 4-4"></path></svg><span data-edit="tr1-t">セキュリティ・データの取り扱い</span></h3>
+        <h3><svg viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-4Z"></path><path d="m9 12 2 2 4-4"></path></svg><span data-edit="tr1-t">診断の前に必ず踏む手順</span></h3>
         <ul>
-          <li data-edit="tr1-1">入力したデータがAIの学習に使われない設定の法人向けAPIのみを使用します</li>
-          <li data-edit="tr1-2">お預かりした資料は導入作業に必要な範囲でのみ使用し、契約終了時の削除に対応します</li>
-          <li data-edit="tr1-3">NDA（秘密保持契約）に対応します</li>
-          <li data-edit="tr1-4">個人情報の扱いは<a href="privacy.html" style="color:var(--blue);text-decoration:underline;">プライバシーポリシー</a>に明記しています</li>
+          <li>ドメインの所有確認と書面の承諾が揃うまで、お客様のサーバーには1回も接続しません</li>
+          <li>承諾番号は診断書に印字します。データの書き換えや削除はしません</li>
+          <li>DNSの書き換えは、診断の承諾とは別の同意をいただいてから行い、誰がいつ何を変えたかを記録に残します</li>
+          <li>NDA（秘密保持契約）に対応します。個人情報の扱いは<a href="privacy.html" style="color:var(--blue);text-decoration:underline;">プライバシーポリシー</a>に明記しています</li>
         </ul>
       </div>
       <div class="trust" data-rv="up" style="--d:110ms">

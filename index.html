@@ -1137,7 +1137,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
           <svg class="lv-dots" id="lvDots" viewBox="0 20 1000 400" aria-hidden="true"></svg>
         </div>
         <div class="lv-stats">
-          <div><em>昨日1日に観測された攻撃（確定値）</em><strong id="lvAttacks">—</strong><small>件　SANS Internet Storm Center のセンサー網・世界時の1日分</small></div>
+          <div><em>今日これまでに観測された攻撃</em><strong id="lvAttacks">—</strong><small>件以上　SANS Internet Storm Center のセンサー網。攻撃元の上位1,000か所の合計（日本時間9時から）</small></div>
           <div><em>今日公表された脆弱性</em><strong id="lvCves">—</strong><small>件　米国の脆弱性データベース（NVD）・日本時間0時から</small></div>
           <div><em>攻撃の送り元（国別・SANS ISCの直近の集計）</em><ol id="lvTop"><li>読み込み中</li></ol></div>
         </div>
@@ -1995,7 +1995,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   var jstMidnightUTC=new Date(Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate())-9*3600000);
   var ymd=now.toISOString().slice(0,10);
   if($('lvDate')) $('lvDate').textContent=jd.replace(/-/g,'.')+' '+hm+' 時点（日本時間）';
-  var KEY='lv4-'+jd+'-'+Math.floor(now.getTime()/1800000), cache=null;
+  var KEY='lv5-'+jd+'-'+Math.floor(now.getTime()/300000), cache=null;
   try{cache=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
   function render(v){
     if(v.attacks!=null) countTo($('lvAttacks'),v.attacks,'a');
@@ -2019,7 +2019,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   function load(){
     function save(){ try{ if(v.attacks!=null&&v.cves!=null&&v.countries) localStorage.setItem(KEY,JSON.stringify(v)); }catch(e){} }
     function j(u){return fetch(u,{cache:'no-store'}).then(function(r){if(!r.ok) throw 0; return r.json();});}
-    var yd=new Date(Date.now()-86400000).toISOString().slice(0,10); j('https://isc.sans.edu/api/dailysummary/'+yd+'?json').then(function(a){ var x=(a||[]).filter(function(o){return o.date===yd;})[0]; if(x){v.attacks=x.records;render(v);save();} }).catch(function(){});
+    j('https://isc.sans.edu/api/topips/records/1000/'+new Date().toISOString().slice(0,10)+'?json').then(function(a){ var t=0; (a||[]).forEach(function(o){ t+=Number(o.reports)||0; }); if(t>0){v.attacks=t;render(v);save();} }).catch(function(){});
     j('https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate='+jstMidnightUTC.toISOString().replace(/\.\d+Z$/,'.000Z')+'&pubEndDate='+now.toISOString().replace(/\.\d+Z$/,'.000Z')+'&resultsPerPage=1').then(function(a){ v.cves=a.totalResults; render(v); save(); }).catch(function(){});
     j('https://isc.sans.edu/api/country?json').then(function(list){
       var c={}; (list||[]).filter(function(o){return o.country&&C[o.country];}).sort(function(a,b){return b.reports-a.reports;}).slice(0,40).forEach(function(o){c[o.country]=o.reports;});
@@ -2027,7 +2027,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     }).catch(function(){ $('lvTop').innerHTML='<li>—</li>'; });
   }
   var started=false;
-  function start(){ if(started) return; started=true; render(v); setInterval(function(){ now=new Date(); jst=new Date(now.getTime()+9*3600000); hm=jst.toISOString().slice(11,16); if($('lvDate')) $('lvDate').textContent=jst.toISOString().slice(0,10).replace(/-/g,'.')+' '+hm+' 時点（日本時間）'; load(); },60000); }
+  function start(){ if(started) return; started=true; render(v); setInterval(function(){ now=new Date(); jst=new Date(now.getTime()+9*3600000); hm=jst.toISOString().slice(11,16); if($('lvDate')) $('lvDate').textContent=jst.toISOString().slice(0,10).replace(/-/g,'.')+' '+hm+' 時点（日本時間）'; load(); },300000); }
   var box=document.querySelector('.sb-live');
   if(box && 'IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ if(es.some(function(e){return e.isIntersecting;})){ io.disconnect(); start(); } },{threshold:0.35}); io.observe(box); }
   else start();

@@ -130,7 +130,7 @@
 - [保守費を10年払っても、プログラムが自分のものとは限らない](https://aidollargame.com/articles/hoshuhi-10nen-program-2026.html)
 - [顧客名簿をAIに入れる前に。氏名をIDに置き換えて消える義務と、消えない義務](https://aidollargame.com/articles/kokyaku-meibo-ai-id-2026.html)
 - [AIに値段を任せたら、1セントずつ刻んで買いそびれた](https://aidollargame.com/articles/ai-nedan-1cent-2026.html)
-- [10月7日、クラウドが破られて茨城県と時事通信のサイトが止まった。借りている側に打てる手はなかった](https://aidollargame.com/articles/cloud-shogai-1007-2026.html)
+- [10月7日、クラウドが破られて自治体と報道機関のサイトが止まった。借りている側に打てる手はなかった](https://aidollargame.com/articles/cloud-shogai-1007-2026.html)
 - [「3回当たったら法則」とAIに覚えさせたら、4回目で外した](https://aidollargame.com/articles/ai-housoku-3kai-2026.html)
 - [20日のうち9日、納めたAIは一度も使われなかった](https://aidollargame.com/articles/ai-tsukawarenai-9nichi-2026.html)
 - [免許証の画像を送る本人確認が2027年4月で終わる。顔も声も、鍵にはならない](https://aidollargame.com/articles/menkyosho-honnin-kakunin-2027.html)

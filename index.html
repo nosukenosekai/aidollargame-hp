@@ -973,6 +973,25 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 .sec-black .sb-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap;margin-top:72px;}
 .sec-black .sb-bottom .sb-cost{margin-top:0;}
 .sec-black .sb-bottom .sb-cta{margin-top:0;}
+.sec-black .sb-live{margin-top:72px;border-top:1px solid rgba(255,255,255,0.16);padding-top:22px;}
+.sec-black .lv-head{display:flex;align-items:center;gap:0.6rem;font-size:0.85rem;font-weight:700;letter-spacing:0.08em;color:rgba(255,255,255,0.6);}
+.sec-black .lv-head .lv-date{margin-left:auto;font-family:var(--font-mono);font-weight:500;color:rgba(255,255,255,0.45);}
+.sec-black .lv-dot{width:8px;height:8px;border-radius:50%;background:#EE3524;box-shadow:0 0 0 0 rgba(238,53,36,0.6);animation:lvPulse 2s infinite;}
+@keyframes lvPulse{0%{box-shadow:0 0 0 0 rgba(238,53,36,0.55);}70%{box-shadow:0 0 0 10px rgba(238,53,36,0);}100%{box-shadow:0 0 0 0 rgba(238,53,36,0);}}
+.sec-black .lv-body{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:40px;align-items:center;margin-top:18px;}
+.sec-black .lv-map{position:relative;}
+.sec-black .lv-map img{display:block;width:100%;height:auto;}
+.sec-black .lv-dots{position:absolute;inset:0;width:100%;height:100%;}
+.sec-black .lv-dots circle.c{fill:#EE3524;fill-opacity:0.85;}
+.sec-black .lv-dots circle.r{fill:none;stroke:#EE3524;stroke-width:1.2;opacity:0;animation:lvRing 2.4s ease-out infinite;transform-box:fill-box;transform-origin:center;}
+@keyframes lvRing{0%{opacity:0.7;transform:scale(1);}100%{opacity:0;transform:scale(3);}}
+.sec-black .lv-stats{display:flex;flex-direction:column;gap:26px;}
+.sec-black .lv-stats em{display:block;font-style:normal;font-size:0.85rem;color:rgba(255,255,255,0.55);margin-bottom:0.3rem;}
+.sec-black .lv-stats strong{font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums;}
+.sec-black .lv-stats small{display:block;margin-top:0.3rem;font-size:0.78rem;color:rgba(255,255,255,0.4);}
+.sec-black .lv-stats ol{list-style:none;margin:0.4rem 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0.25rem 1.2rem;font-size:0.9rem;color:rgba(255,255,255,0.8);}
+.sec-black .lv-stats ol b{font-weight:700;color:#fff;margin-right:0.4rem;font-variant-numeric:tabular-nums;}
+@media (max-width:900px){.sec-black .lv-body{grid-template-columns:1fr;gap:24px;}}
 .sec-black .sb-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:72px;}
 .sec-black .sb-btn{display:inline-flex;align-items:center;padding:1rem 2rem;border-radius:999px;font-weight:700;font-size:0.98rem;border:1px solid rgba(255,255,255,0.4);color:#fff;transition:background 0.3s var(--ease);}
 .sec-black .sb-btn:hover{background:rgba(255,255,255,0.08);}
@@ -1024,7 +1043,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     <video src="hero-security.mp4" muted autoplay loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture disableremoteplayback></video>
   </div>
   <div class="hero-body">
-    <a class="hero-pill" href="https://www.nitori-net.jp/ec/notices/info261109/" target="_blank" rel="noopener" data-rv="up"><span class="hp-tag"><i aria-hidden="true"></i>11月9日</span><span class="hp-t">ニトリが不正アクセスを公表。個人情報が最大3,762万件流出した可能性</span><span aria-hidden="true">→</span></a>
+    <a class="hero-pill" href="#security" data-rv="up"><span class="hp-tag"><i aria-hidden="true"></i>LIVE</span><span class="hp-t" id="lvPill">世界で昨日公表された脆弱性と、観測された攻撃の数</span><span aria-hidden="true">→</span></a>
     <h1 data-rv="up" style="--d:160ms" aria-label="株式会社AIdollargame">A<span class="heart-i">ı</span>dollargame</h1>
     <p class="hero-sub" data-rv="up" style="--d:400ms"><span class="hs-main">見つけた穴を、当社が塞ぐ。</span><span class="hs-small">外から入れる穴を見つけて、塞ぐまで</span></p>
     <div class="hero-cta" data-rv="up" style="--d:620ms">
@@ -1074,12 +1093,20 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <li><span>03</span><b>当社が直す</b><i>影響を洗い出してから直す</i></li>
       <li><span>04</span><b>稼働証明書</b><i>診断と修正の記録を毎月</i></li>
     </ol>
-    <div class="sb-log" data-rv="up" style="--d:120ms">
-      <div class="sl-h">最近、実際に起きたこと</div>
-      <a href="https://www.nitori-net.jp/ec/notices/info261109/" target="_blank" rel="noopener"><i aria-hidden="true"></i><span class="d">2026.11.09</span><span class="t">ニトリが不正アクセスを公表。個人情報が最大3,762万件流出した可能性（同社の発表）</span></a>
-      <a href="articles/linux-ai-948-2026.html"><i aria-hidden="true"></i><span class="d">2026.11.06</span><span class="t">AIがLinuxの弱点を948件見つけ、修正案まで書いた</span></a>
-      <a href="articles/php-kinkyu-shusei-2026.html"><i aria-hidden="true"></i><span class="d">2026.10.21</span><span class="t">PHPに緊急の修正。修正版が出たのは4系統だけで、世界のPHPサイトの約48%は入っていない</span></a>
-      <a href="articles/cloud-shogai-1007-2026.html"><i aria-hidden="true"></i><span class="d">2026.10.07</span><span class="t">クラウドが破られ、茨城県と時事通信のサイトが止まった</span></a>
+    <div class="sb-live" data-rv="up" style="--d:120ms">
+      <div class="lv-head"><span class="lv-dot" aria-hidden="true"></span>世界で、昨日起きたこと<span class="lv-date" id="lvDate"></span></div>
+      <div class="lv-body">
+        <div class="lv-map">
+          <img src="images/world-land.svg" alt="" width="1000" height="400">
+          <svg class="lv-dots" id="lvDots" viewBox="0 20 1000 400" aria-hidden="true"></svg>
+        </div>
+        <div class="lv-stats">
+          <div><em>観測された攻撃の記録</em><strong id="lvAttacks">—</strong><small>件　SANS Internet Storm Center のセンサー網</small></div>
+          <div><em>新しく公表された脆弱性</em><strong id="lvCves">—</strong><small>件　米国の脆弱性データベース（NVD）</small></div>
+          <div><em>いま攻撃の多い送り元（上位20か所を国別に）</em><ol id="lvTop"><li>読み込み中</li></ol></div>
+        </div>
+      </div>
+      <p class="sb-note">数字は、この画面を開いたときに各機関の公開データから読み込んでいます。日付は世界時（日本時間の9時に切り替わります）。</p>
     </div>
     <div class="sb-bottom">
       <div>
@@ -2200,6 +2227,49 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   } else {
     load();
   }
+})();
+</script>
+<script>
+/* 世界の攻撃と脆弱性（2026-11-20）。公開データを開いたときに読む。失敗したら「—」のまま */
+(function(){
+  var C={US:[-98,39,'米国'],CN:[104,35,'中国'],RU:[90,60,'ロシア'],NL:[5.3,52.1,'オランダ'],DE:[10,51,'ドイツ'],GB:[-2,54,'英国'],FR:[2,46,'フランス'],BG:[25,42.7,'ブルガリア'],RO:[25,46,'ルーマニア'],UA:[31,49,'ウクライナ'],PL:[19,52,'ポーランド'],SE:[15,62,'スウェーデン'],FI:[26,64,'フィンランド'],NO:[9,61,'ノルウェー'],DK:[10,56,'デンマーク'],IT:[12.5,42.8,'イタリア'],ES:[-3.7,40.4,'スペイン'],PT:[-8,39.6,'ポルトガル'],CH:[8.2,46.8,'スイス'],AT:[14.5,47.5,'オーストリア'],CZ:[15.5,49.8,'チェコ'],SK:[19.7,48.7,'スロバキア'],HU:[19.5,47.2,'ハンガリー'],LT:[23.9,55.2,'リトアニア'],LV:[24.6,56.9,'ラトビア'],EE:[25,58.6,'エストニア'],MD:[28.4,47.4,'モルドバ'],BY:[28,53.7,'ベラルーシ'],SC:[55.5,-4.7,'セーシェル'],PA:[-80,8.5,'パナマ'],BZ:[-88.5,17.2,'ベリーズ'],VG:[-64.6,18.4,'英領ヴァージン諸島'],CY:[33.4,35,'キプロス'],TR:[35,39,'トルコ'],IR:[53,32,'イラン'],IL:[34.9,31,'イスラエル'],AE:[54,24,'アラブ首長国連邦'],SA:[45,24,'サウジアラビア'],IN:[79,22,'インド'],PK:[69,30,'パキスタン'],BD:[90,24,'バングラデシュ'],VN:[106,16,'ベトナム'],TH:[101,15,'タイ'],MY:[102,4,'マレーシア'],SG:[103.8,1.35,'シンガポール'],ID:[118,-2,'インドネシア'],PH:[122,12,'フィリピン'],HK:[114.2,22.3,'香港'],TW:[121,23.7,'台湾'],KR:[128,36,'韓国'],JP:[138,37,'日本'],AU:[134,-25,'オーストラリア'],NZ:[174,-41,'ニュージーランド'],CA:[-106,57,'カナダ'],MX:[-102,23,'メキシコ'],BR:[-52,-10,'ブラジル'],AR:[-64,-34,'アルゼンチン'],CL:[-71,-30,'チリ'],CO:[-74,4,'コロンビア'],PE:[-76,-10,'ペルー'],VE:[-66,7,'ベネズエラ'],ZA:[24,-29,'南アフリカ'],EG:[30,26,'エジプト'],NG:[8,9,'ナイジェリア'],KE:[38,0,'ケニア'],MA:[-6,32,'モロッコ'],KZ:[67,48,'カザフスタン'],GE:[43.4,42.3,'ジョージア'],AM:[45,40,'アルメニア'],RS:[21,44,'セルビア'],GR:[22,39,'ギリシャ'],BE:[4.5,50.5,'ベルギー'],IE:[-8,53.4,'アイルランド'],LU:[6.1,49.8,'ルクセンブルク'],IS:[-19,65,'アイスランド']};
+  function P(lon,lat){return [(lon+180)/360*1000,(90-lat)/180*500];}
+  function fmt(n){return Number(n).toLocaleString('ja-JP');}
+  function $(id){return document.getElementById(id);}
+  var d=new Date(Date.now()-86400000), ymd=d.toISOString().slice(0,10);
+  if($('lvDate')) $('lvDate').textContent=ymd.replace(/-/g,'.')+' UTC';
+  var KEY='lv-'+ymd, cache=null;
+  try{cache=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
+  function render(v){
+    if(v.attacks!=null) $('lvAttacks').textContent=fmt(v.attacks);
+    if(v.cves!=null){ $('lvCves').textContent=fmt(v.cves); }
+    if(v.cves!=null&&v.attacks!=null&&$('lvPill')) $('lvPill').textContent='昨日、世界で公表された脆弱性 '+fmt(v.cves)+'件。観測された攻撃 '+fmt(v.attacks)+'件';
+    if(v.countries){
+      var g='', li='';
+      var arr=Object.keys(v.countries).map(function(k){return [k,v.countries[k]];}).sort(function(a,b){return b[1]-a[1];});
+      var max=arr.length?arr[0][1]:1;
+      arr.forEach(function(c,i){
+        var m=C[c[0]]; if(!m) return; var p=P(m[0],m[1]); var r=3+9*Math.sqrt(c[1]/max);
+        g+='<circle class="r" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+r.toFixed(1)+'" style="animation-delay:'+(i*0.25)+'s"></circle><circle class="c" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+r.toFixed(1)+'"></circle>';
+      });
+      arr.slice(0,6).forEach(function(c){ li+='<li><b>'+fmt(c[1])+'</b>'+((C[c[0]]&&C[c[0]][2])||c[0])+'</li>'; });
+      $('lvDots').innerHTML=g; $('lvTop').innerHTML=li||'<li>—</li>';
+    }
+  }
+  if(cache){render(cache);return;}
+  var v={attacks:null,cves:null,countries:null};
+  function save(){ try{ if(v.attacks!=null&&v.cves!=null&&v.countries) localStorage.setItem(KEY,JSON.stringify(v)); }catch(e){} }
+  function j(u){return fetch(u).then(function(r){if(!r.ok) throw 0; return r.json();});}
+  j('https://isc.sans.edu/api/dailysummary/'+ymd+'?json').then(function(a){ var x=(a||[]).filter(function(o){return o.date===ymd;})[0]; if(x){v.attacks=x.records;render(v);save();} }).catch(function(){});
+  j('https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate='+ymd+'T00:00:00.000&pubEndDate='+ymd+'T23:59:59.999&resultsPerPage=1').then(function(a){ v.cves=a.totalResults; render(v); save(); }).catch(function(){});
+  j('https://isc.sans.edu/api/sources/attacks/20?json').then(function(list){
+    return Promise.all((list||[]).map(function(o){
+      return j('https://isc.sans.edu/api/ip/'+o.ip+'?json').then(function(r){return [r&&r.ip&&r.ip.ascountry, o.count||0];}).catch(function(){return [null,0];});
+    }));
+  }).then(function(rows){
+    var c={}; rows.forEach(function(r){ if(r[0]) c[r[0]]=(c[r[0]]||0)+r[1]; });
+    v.countries=c; render(v); save();
+  }).catch(function(){ $('lvTop').innerHTML='<li>—</li>'; });
 })();
 </script>
 </body>

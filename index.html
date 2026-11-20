@@ -1971,7 +1971,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   function countTo(el,to,key){
     if(!el||!started) return; var from=shown[key]||0; shown[key]=to;
     if(from===to){ el.textContent=fmt(to); return; }
-    var t0=null, dur=from? 1200:1800;
+    var t0=null, dur=from? 1500:2600;
     function step(t){ if(!t0) t0=t; var p=Math.min(1,(t-t0)/dur); var e=1-Math.pow(1-p,3);
       el.textContent=fmt(Math.round(from+(to-from)*e)); if(p<1) requestAnimationFrame(step); }
     requestAnimationFrame(step);
@@ -2016,9 +2016,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   var started=false;
   function start(){ if(started) return; started=true; render(v); setInterval(function(){ now=new Date(); jst=new Date(now.getTime()+9*3600000); hm=jst.toISOString().slice(11,16); if($('lvDate')) $('lvDate').textContent=jst.toISOString().slice(0,10).replace(/-/g,'.')+' '+hm+' 時点（日本時間）'; load(); },60000); }
   var box=document.querySelector('.sb-live');
-  if(box && 'IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ if(es.some(function(e){return e.isIntersecting;})){ io.disconnect(); start(); } }); io.observe(box); }
+  if(box && 'IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ if(es.some(function(e){return e.isIntersecting;})){ io.disconnect(); start(); } },{threshold:0.35}); io.observe(box); }
   else start();
-  setTimeout(start,8000);
   if(!cache) load();
 })();
 </script>

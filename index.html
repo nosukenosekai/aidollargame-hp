@@ -957,6 +957,19 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 .sec-black .sb-screens figcaption{margin-top:10px;font-size:0.9rem;color:rgba(255,255,255,0.7);}
 .sec-black .sb-red{display:inline-flex;align-items:center;gap:0.8rem;background:#EE3524;color:#fff;font-weight:800;font-size:1.05rem;padding:1.15rem 2.4rem;border-radius:999px;transition:background 0.3s var(--ease);}
 .sec-black .sb-red:hover{background:#d42a1a;}
+.hero-pill{display:inline-flex;align-items:center;gap:0.7rem;margin-bottom:2.2rem;padding:0.45rem 1rem 0.45rem 0.5rem;border:1px solid rgba(255,255,255,0.22);border-radius:999px;color:#fff;font-size:0.88rem;background:rgba(0,0,0,0.35);max-width:100%;}
+.hero-pill:hover{border-color:rgba(255,255,255,0.5);}
+.hero-pill .hp-tag{display:inline-flex;align-items:center;gap:0.4rem;border:1px solid rgba(255,255,255,0.35);border-radius:999px;padding:0.15rem 0.65rem;font-size:0.78rem;font-weight:700;flex:none;}
+.hero-pill .hp-tag i{width:7px;height:7px;border-radius:50%;background:#EE3524;}
+.hero-pill .hp-t{color:rgba(255,255,255,0.85);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sec-black .sb-log{margin-top:88px;border-top:1px solid rgba(255,255,255,0.16);}
+.sec-black .sb-log .sl-h{font-size:0.8rem;font-weight:700;letter-spacing:0.12em;color:rgba(255,255,255,0.5);padding:22px 0 8px;}
+.sec-black .sb-log a{display:grid;grid-template-columns:10px 7.5em 1fr;align-items:baseline;gap:1rem;padding:16px 0;border-bottom:1px solid rgba(255,255,255,0.1);color:#fff;transition:color 0.25s var(--ease);}
+.sec-black .sb-log a:hover .t{text-decoration:underline;text-underline-offset:4px;}
+.sec-black .sb-log i{width:7px;height:7px;border-radius:50%;background:#EE3524;align-self:center;}
+.sec-black .sb-log .d{font-family:var(--font-mono);font-size:0.85rem;color:#EE3524;}
+.sec-black .sb-log .t{font-size:1rem;line-height:1.7;}
+@media (max-width:700px){.sec-black .sb-log a{grid-template-columns:10px 1fr;}.sec-black .sb-log .t{grid-column:2;}.hero-pill .hp-t{white-space:normal;text-align:left;}}
 .sec-black .sb-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:72px;}
 .sec-black .sb-btn{display:inline-flex;align-items:center;padding:1rem 2rem;border-radius:999px;font-weight:700;font-size:0.98rem;border:1px solid rgba(255,255,255,0.4);color:#fff;transition:background 0.3s var(--ease);}
 .sec-black .sb-btn:hover{background:rgba(255,255,255,0.08);}
@@ -1008,6 +1021,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     <video src="hero-security.mp4" muted autoplay loop playsinline webkit-playsinline preload="metadata" disablepictureinpicture disableremoteplayback></video>
   </div>
   <div class="hero-body">
+    <a class="hero-pill" href="articles/php-kinkyu-shusei-2026.html" data-rv="up"><span class="hp-tag"><i aria-hidden="true"></i>PHP</span><span class="hp-t">10月21日の緊急修正。世界のPHPサイトの約48%は修正版の外</span><span aria-hidden="true">→</span></a>
     <h1 data-rv="up" style="--d:160ms" aria-label="株式会社AIdollargame">A<span class="heart-i">ı</span>dollargame</h1>
     <p class="hero-sub" data-rv="up" style="--d:400ms"><span class="hs-main">見つけた穴を、当社が塞ぐ。</span><span class="hs-small">外から入れる穴を見つけて、塞ぐまで</span></p>
     <div class="hero-cta" data-rv="up" style="--d:620ms">
@@ -1057,6 +1071,12 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       <li><span>03</span><b>当社が直す</b><i>影響を洗い出してから直す</i></li>
       <li><span>04</span><b>稼働証明書</b><i>診断と修正の記録を毎月</i></li>
     </ol>
+    <div class="sb-log" data-rv="up" style="--d:120ms">
+      <div class="sl-h">最近、実際に起きたこと</div>
+      <a href="articles/linux-ai-948-2026.html"><i aria-hidden="true"></i><span class="d">2026.11.06</span><span class="t">AIがLinuxの弱点を948件見つけ、修正案まで書いた</span></a>
+      <a href="articles/php-kinkyu-shusei-2026.html"><i aria-hidden="true"></i><span class="d">2026.10.21</span><span class="t">PHPに緊急の修正。修正版が出たのは4系統だけで、世界のPHPサイトの約48%は入っていない</span></a>
+      <a href="articles/cloud-shogai-1007-2026.html"><i aria-hidden="true"></i><span class="d">2026.10.07</span><span class="t">クラウドが破られ、茨城県と時事通信のサイトが止まった</span></a>
+    </div>
     <div class="sb-cost" data-rv="up" style="--d:120ms">
       <div><em>専任者を1人雇う</em><strong>年 609.8<small>万円</small></strong></div>
       <div class="sb-vs" aria-hidden="true">→</div>

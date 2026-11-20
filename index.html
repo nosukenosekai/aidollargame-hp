@@ -70,7 +70,8 @@
     "addressCountry": "JP",
     "postalCode": "169-0074",
     "addressRegion": "東京都",
-    "addressLocality": "新宿区"
+    "addressLocality": "新宿区",
+    "streetAddress": "北新宿1-7-20 アルテビル北新宿"
   },
   "email": "info@aidollargame.com",
   "founder": {
@@ -303,7 +304,7 @@
       "name": "AIdollargameはどこにある、どんな会社ですか？",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "東京都新宿区北新宿1-7-20にある日本の法人です（法人番号1011101111386、2025年4月8日設立、代表取締役 佐藤徳之介）。中小企業向けのAI導入支援・AI研修と、AIチャットエージェント・AIside・AIwillなど自社AIプロダクトの開発を行うB2BのIT企業で、一般消費者向けの商品販売は行っていません。"
+        "text": "東京都新宿区北新宿1-7-20 アルテビル北新宿にある日本の法人です（法人番号1011101111386、2025年4月8日設立、代表取締役 佐藤徳之介）。中小企業向けのAI導入支援・AI研修と、AIチャットエージェント・AIside・AIwillなど自社AIプロダクトの開発を行うB2BのIT企業で、一般消費者向けの商品販売は行っていません。"
       }
     }
   ]
@@ -1103,10 +1104,10 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <div class="lv-stats">
           <div><em>今日これまでに観測された攻撃</em><strong id="lvAttacks">—</strong><small>件　SANS Internet Storm Center のセンサー網（日本時間9時からの集計。数時間遅れで増えます）</small></div>
           <div><em>今日公表された脆弱性</em><strong id="lvCves">—</strong><small>件　米国の脆弱性データベース（NVD）・日本時間0時から</small></div>
-          <div><em>いま攻撃の多い送り元（上位20か所を国別に）</em><ol id="lvTop"><li>読み込み中</li></ol></div>
+          <div><em>攻撃の送り元（国別・SANS ISCの直近の集計）</em><ol id="lvTop"><li>読み込み中</li></ol></div>
         </div>
       </div>
-      <p class="sb-note">数字は、この画面を開いたときに各機関の公開データから読み込んでいます。白い点が日本です。</p>
+      <p class="sb-note">数字は、この画面を開いたときに各機関の公開データから読み込んでいます。赤い点は攻撃の送り元の上位40か国で、大きいほど記録が多い国です。白い点が日本です。</p>
     </div>
     <div class="sb-bottom">
       <div>
@@ -1315,7 +1316,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
         <h3 data-edit="p2-title">AIチャットエージェント</h3>
         <p data-edit="p2-desc">自社を覚えたAIをひとつ育てて、自社サイトへの1行埋め込み・LINE等のSNS・社内ツールのどこにでも設置。問い合わせ対応・予約受付・見積もり案内から社内マニュアル参照まで、24時間365日自動化。CRMやカレンダーと連携し、社外の接客も社内のナレッジも、ひとつのAIでこなします。</p>
         <div class="tags"><span>サイト埋め込み</span><span>LINE</span><span>社内ナレッジ</span><span>24H対応</span></div>
-        <div class="card-foot"><a href="line-ai-agent.html" class="solid">詳しく見る</a><a href="#agent-demo" class="thin">動くデモを見る</a></div>
+        <div class="card-foot"><a href="line-ai-agent.html" class="solid">詳しく見る</a></div>
       </div>
 <div class="card" data-rv="up" style="--d:0ms">
         <div class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.4"></circle><path d="M3 20c0-3.3 2.7-5.4 6-5.4 1.2 0 2.3.3 3.2.8"></path><path d="M14.5 17.5l2 2 4-4.5"></path></svg></div>
@@ -1399,39 +1400,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   </div>
 </section>
 
-<section class="sec sec--white" id="agent-demo">
-  <div class="wrap">
-    <div class="agent">
-      <div>
-        <div class="sec-head">
-          <div class="sec-label" data-rv="up">AI Agent — LINE実装イメージ</div>
-          <h2 class="sec-title" data-rv="up" style="--d:100ms" data-edit="agent-title">業界に特化した<br>対話型AIエージェント</h2>
-          <div class="sec-rule" data-rv="line" style="--d:260ms"></div>
-          <p class="sec-lead" data-rv="up" style="--d:200ms" data-edit="agent-lead">問い合わせ・比較提案・予約・決済まで、ユーザーが話しかけるだけで完結するAIをLINE公式アカウントに実装します。CRM連動・カレンダー連携対応。<br><span style="font-size:0.8rem;opacity:0.75;">※デモ画面はサンプルです。実装は業種に合わせてカスタマイズします。</span></p>
-        </div>
-        <div class="industries" data-rv="up" style="--d:260ms">
-          <span>介護・福祉</span><span>不動産</span><span>医療</span><span>飲食</span><span>フィットネス</span><span>EC・小売</span>
-        </div>
-        <a href="#contact" class="arrow-link" data-rv="up" style="--d:340ms"><span class="circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>導入を相談する</a>
-      </div>
-      <div class="phone-stage" data-rv="right" style="--d:200ms">
-        <div class="phone-frame">
-          <div class="phone-screen">
-            <div class="phone-bar">
-              <span class="phone-back">‹</span>
-              <div class="phone-title-wrap">
-                <div class="phone-title">AI Concierge — Demo</div>
-                <div class="phone-sub">オンライン</div>
-              </div>
-              <div class="phone-actions">⌕ ☰</div>
-            </div>
-            <div class="chat-stream" id="chatStream"><!-- JSがループ再生 --></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <div class="midcta">
   <h2 data-rv="up" data-edit="midcta-title">ここにない課題でも、ご相談ください</h2>
@@ -1893,7 +1862,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       </details>
       <details>
         <summary>AIdollargameはどこにある、どんな会社ですか？</summary>
-        <div class="a">東京都新宿区北新宿1-7-20にある日本の法人です（法人番号1011101111386、2025年4月8日設立、代表取締役 佐藤徳之介）。中小企業向けのAI導入支援・AI研修と、AIチャットエージェント・AIside・AIwillなど自社AIプロダクトの開発を行うB2BのIT企業で、一般消費者向けの商品販売は行っていません。</div>
+        <div class="a">東京都新宿区北新宿1-7-20 アルテビル北新宿にある日本の法人です（法人番号1011101111386、2025年4月8日設立、代表取締役 佐藤徳之介）。中小企業向けのAI導入支援・AI研修と、AIチャットエージェント・AIside・AIwillなど自社AIプロダクトの開発を行うB2BのIT企業で、一般消費者向けの商品販売は行っていません。</div>
       </details>
     </div>
   </div>
@@ -1954,14 +1923,14 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
     <div class="foot-top">
       <div>
         <div class="brand">A<span class="heart-i">ı</span>dollargame</div>
-        <div class="foot-addr">株式会社AIdollargame<br>〒169-0074 東京都新宿区北新宿1-7-20<br>info@aidollargame.com</div>
+        <div class="foot-addr">株式会社AIdollargame<br>〒169-0074 東京都新宿区北新宿1-7-20 アルテビル北新宿<br>info@aidollargame.com</div>
       </div>
       <div class="foot-links">
         <a href="company.html">会社概要</a>
         <a href="ryokin.html">料金</a>
         <a href="donyu-flow.html">導入の流れ</a>
         <a href="jirei.html">導入事例</a>
-        <a href="security/">セキュリティの毎月点検</a>
+        <a href="security/">ホワイトハック（セキュリティ担当の代行）</a>
         <a href="./articles/">記事一覧</a>
         <a href="note.html">公式note</a>
         <a href="shindan.html">無料AI診断</a>
@@ -2097,6 +2066,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   function maybeStart(){
     if(started)return;
     var sec=document.getElementById('agent-demo');
+    if(!sec){ started=true; return; }
     var vh=window.innerHeight || document.documentElement.clientHeight || 0;
     if(!vh){ started=true; step(); return; }
     var r=sec.getBoundingClientRect();
@@ -2232,7 +2202,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
 <script>
 /* 世界の攻撃と脆弱性（2026-11-20）。公開データを開いたときに読む。失敗したら「—」のまま */
 (function(){
-  var C={US:[-98,39,'米国'],CN:[104,35,'中国'],RU:[90,60,'ロシア'],NL:[5.3,52.1,'オランダ'],DE:[10,51,'ドイツ'],GB:[-2,54,'英国'],FR:[2,46,'フランス'],BG:[25,42.7,'ブルガリア'],RO:[25,46,'ルーマニア'],UA:[31,49,'ウクライナ'],PL:[19,52,'ポーランド'],SE:[15,62,'スウェーデン'],FI:[26,64,'フィンランド'],NO:[9,61,'ノルウェー'],DK:[10,56,'デンマーク'],IT:[12.5,42.8,'イタリア'],ES:[-3.7,40.4,'スペイン'],PT:[-8,39.6,'ポルトガル'],CH:[8.2,46.8,'スイス'],AT:[14.5,47.5,'オーストリア'],CZ:[15.5,49.8,'チェコ'],SK:[19.7,48.7,'スロバキア'],HU:[19.5,47.2,'ハンガリー'],LT:[23.9,55.2,'リトアニア'],LV:[24.6,56.9,'ラトビア'],EE:[25,58.6,'エストニア'],MD:[28.4,47.4,'モルドバ'],BY:[28,53.7,'ベラルーシ'],SC:[55.5,-4.7,'セーシェル'],PA:[-80,8.5,'パナマ'],BZ:[-88.5,17.2,'ベリーズ'],VG:[-64.6,18.4,'英領ヴァージン諸島'],CY:[33.4,35,'キプロス'],TR:[35,39,'トルコ'],IR:[53,32,'イラン'],IL:[34.9,31,'イスラエル'],AE:[54,24,'アラブ首長国連邦'],SA:[45,24,'サウジアラビア'],IN:[79,22,'インド'],PK:[69,30,'パキスタン'],BD:[90,24,'バングラデシュ'],VN:[106,16,'ベトナム'],TH:[101,15,'タイ'],MY:[102,4,'マレーシア'],SG:[103.8,1.35,'シンガポール'],ID:[118,-2,'インドネシア'],PH:[122,12,'フィリピン'],HK:[114.2,22.3,'香港'],TW:[121,23.7,'台湾'],KR:[128,36,'韓国'],JP:[138,37,'日本'],AU:[134,-25,'オーストラリア'],NZ:[174,-41,'ニュージーランド'],CA:[-106,57,'カナダ'],MX:[-102,23,'メキシコ'],BR:[-52,-10,'ブラジル'],AR:[-64,-34,'アルゼンチン'],CL:[-71,-30,'チリ'],CO:[-74,4,'コロンビア'],PE:[-76,-10,'ペルー'],VE:[-66,7,'ベネズエラ'],ZA:[24,-29,'南アフリカ'],EG:[30,26,'エジプト'],NG:[8,9,'ナイジェリア'],KE:[38,0,'ケニア'],MA:[-6,32,'モロッコ'],KZ:[67,48,'カザフスタン'],GE:[43.4,42.3,'ジョージア'],AM:[45,40,'アルメニア'],RS:[21,44,'セルビア'],GR:[22,39,'ギリシャ'],BE:[4.5,50.5,'ベルギー'],IE:[-8,53.4,'アイルランド'],LU:[6.1,49.8,'ルクセンブルク'],IS:[-19,65,'アイスランド']};
+  var C={US:[-98,39,'米国'],CN:[104,35,'中国'],RU:[90,60,'ロシア'],NL:[5.3,52.1,'オランダ'],DE:[10,51,'ドイツ'],GB:[-2,54,'英国'],FR:[2,46,'フランス'],BG:[25,42.7,'ブルガリア'],RO:[25,46,'ルーマニア'],UA:[31,49,'ウクライナ'],PL:[19,52,'ポーランド'],SE:[15,62,'スウェーデン'],FI:[26,64,'フィンランド'],NO:[9,61,'ノルウェー'],DK:[10,56,'デンマーク'],IT:[12.5,42.8,'イタリア'],ES:[-3.7,40.4,'スペイン'],PT:[-8,39.6,'ポルトガル'],CH:[8.2,46.8,'スイス'],AT:[14.5,47.5,'オーストリア'],CZ:[15.5,49.8,'チェコ'],SK:[19.7,48.7,'スロバキア'],HU:[19.5,47.2,'ハンガリー'],LT:[23.9,55.2,'リトアニア'],LV:[24.6,56.9,'ラトビア'],EE:[25,58.6,'エストニア'],MD:[28.4,47.4,'モルドバ'],BY:[28,53.7,'ベラルーシ'],SC:[55.5,-4.7,'セーシェル'],PA:[-80,8.5,'パナマ'],BZ:[-88.5,17.2,'ベリーズ'],VG:[-64.6,18.4,'英領ヴァージン諸島'],CY:[33.4,35,'キプロス'],TR:[35,39,'トルコ'],IR:[53,32,'イラン'],IL:[34.9,31,'イスラエル'],AE:[54,24,'アラブ首長国連邦'],SA:[45,24,'サウジアラビア'],IN:[79,22,'インド'],PK:[69,30,'パキスタン'],BD:[90,24,'バングラデシュ'],VN:[106,16,'ベトナム'],TH:[101,15,'タイ'],MY:[102,4,'マレーシア'],SG:[103.8,1.35,'シンガポール'],ID:[118,-2,'インドネシア'],PH:[122,12,'フィリピン'],HK:[114.2,22.3,'香港'],TW:[121,23.7,'台湾'],KR:[128,36,'韓国'],JP:[138,37,'日本'],AU:[134,-25,'オーストラリア'],NZ:[174,-41,'ニュージーランド'],CA:[-106,57,'カナダ'],MX:[-102,23,'メキシコ'],BR:[-52,-10,'ブラジル'],AR:[-64,-34,'アルゼンチン'],CL:[-71,-30,'チリ'],CO:[-74,4,'コロンビア'],PE:[-76,-10,'ペルー'],VE:[-66,7,'ベネズエラ'],ZA:[24,-29,'南アフリカ'],EG:[30,26,'エジプト'],NG:[8,9,'ナイジェリア'],KE:[38,0,'ケニア'],MA:[-6,32,'モロッコ'],KZ:[67,48,'カザフスタン'],GE:[43.4,42.3,'ジョージア'],AM:[45,40,'アルメニア'],RS:[21,44,'セルビア'],GR:[22,39,'ギリシャ'],BE:[4.5,50.5,'ベルギー'],IE:[-8,53.4,'アイルランド'],LU:[6.1,49.8,'ルクセンブルク'],IS:[-19,65,'アイスランド'],AD:[1.5,42.5,'アンドラ'],AL:[20,41,'アルバニア'],BA:[17.8,44,'ボスニア'],HR:[15.5,45.2,'クロアチア'],SI:[14.8,46.1,'スロベニア'],MK:[21.7,41.6,'北マケドニア'],ME:[19.3,42.7,'モンテネグロ'],MT:[14.4,35.9,'マルタ'],AZ:[47.6,40.1,'アゼルバイジャン'],UZ:[64.6,41.4,'ウズベキスタン'],KG:[74.8,41.2,'キルギス'],TJ:[71,38.9,'タジキスタン'],TM:[59.6,39,'トルクメニスタン'],MN:[103.8,46.9,'モンゴル'],KH:[105,12.6,'カンボジア'],LA:[102.5,19.9,'ラオス'],MM:[96,21.9,'ミャンマー'],NP:[84.1,28.4,'ネパール'],LK:[80.8,7.9,'スリランカ'],AF:[67.7,33.9,'アフガニスタン'],IQ:[43.7,33.2,'イラク'],SY:[38.9,34.8,'シリア'],JO:[36.2,30.6,'ヨルダン'],LB:[35.9,33.9,'レバノン'],KW:[47.5,29.3,'クウェート'],QA:[51.2,25.4,'カタール'],BH:[50.6,26,'バーレーン'],OM:[55.9,21.5,'オマーン'],YE:[48.5,15.6,'イエメン'],DZ:[1.7,28,'アルジェリア'],TN:[9.5,33.9,'チュニジア'],LY:[17.2,26.3,'リビア'],SD:[30.2,12.9,'スーダン'],ET:[40.5,9.1,'エチオピア'],TZ:[34.9,-6.4,'タンザニア'],UG:[32.3,1.4,'ウガンダ'],GH:[-1,7.9,'ガーナ'],CI:[-5.5,7.5,'コートジボワール'],SN:[-14.5,14.5,'セネガル'],CM:[12.4,7.4,'カメルーン'],AO:[17.9,-11.2,'アンゴラ'],ZW:[29.2,-19,'ジンバブエ'],MZ:[35.5,-18.7,'モザンビーク'],MG:[46.9,-18.8,'マダガスカル'],MU:[57.6,-20.3,'モーリシャス'],EC:[-78.2,-1.8,'エクアドル'],BO:[-63.6,-16.3,'ボリビア'],PY:[-58.4,-23.4,'パラグアイ'],UY:[-55.8,-32.5,'ウルグアイ'],CR:[-84,9.7,'コスタリカ'],GT:[-90.2,15.8,'グアテマラ'],HN:[-86.2,15.2,'ホンジュラス'],SV:[-88.9,13.8,'エルサルバドル'],NI:[-85.2,12.9,'ニカラグア'],DO:[-70.2,18.7,'ドミニカ共和国'],PR:[-66.6,18.2,'プエルトリコ'],JM:[-77.3,18.1,'ジャマイカ'],TT:[-61.2,10.7,'トリニダード・トバゴ'],BS:[-77.4,25,'バハマ'],KY:[-81.3,19.3,'ケイマン諸島'],BM:[-64.8,32.3,'バミューダ'],CU:[-77.8,21.5,'キューバ'],MO:[113.5,22.2,'マカオ'],BN:[114.7,4.5,'ブルネイ'],FJ:[178,-17.7,'フィジー'],PG:[143.9,-6.3,'パプアニューギニア'],GI:[-5.35,36.1,'ジブラルタル'],LI:[9.55,47.15,'リヒテンシュタイン'],MC:[7.4,43.7,'モナコ'],IM:[-4.5,54.2,'マン島'],JE:[-2.1,49.2,'ジャージー'],GG:[-2.6,49.5,'ガーンジー'],RE:[55.5,-21.1,'レユニオン'],NC:[165.6,-21.3,'ニューカレドニア'],GU:[144.8,13.4,'グアム']};
   function P(lon,lat){return [(((lon-145+540)%360))/360*1000,(90-lat)/180*500];}
   function fmt(n){return Number(n).toLocaleString('ja-JP');}
   function $(id){return document.getElementById(id);}
@@ -2241,7 +2211,7 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   var jstMidnightUTC=new Date(Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate())-9*3600000);
   var ymd=now.toISOString().slice(0,10);
   if($('lvDate')) $('lvDate').textContent=jd.replace(/-/g,'.')+' '+hm+' 時点（日本時間）';
-  var KEY='lv2-'+jd+'-'+Math.floor(now.getTime()/1800000), cache=null;
+  var KEY='lv3-'+jd+'-'+Math.floor(now.getTime()/1800000), cache=null;
   try{cache=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
   function render(v){
     if(v.attacks!=null) $('lvAttacks').textContent=fmt(v.attacks);
@@ -2252,8 +2222,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       var arr=Object.keys(v.countries).map(function(k){return [k,v.countries[k]];}).sort(function(a,b){return b[1]-a[1];});
       var max=arr.length?arr[0][1]:1;
       arr.forEach(function(c,i){
-        var m=C[c[0]]; if(!m) return; var p=P(m[0],m[1]); var r=3+9*Math.sqrt(c[1]/max);
-        g+='<circle class="r" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+r.toFixed(1)+'" style="animation-delay:'+(i*0.25)+'s"></circle><circle class="c" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+r.toFixed(1)+'"></circle>';
+        var m=C[c[0]]; if(!m) return; var p=P(m[0],m[1]); var r=2.2+10*Math.sqrt(c[1]/max);
+        g+='<circle class="r" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+r.toFixed(1)+'" style="animation-delay:'+((i%12)*0.2)+'s"></circle><circle class="c" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="'+r.toFixed(1)+'"></circle>';
       });
       arr.slice(0,6).forEach(function(c){ li+='<li><b>'+fmt(c[1])+'</b>'+((C[c[0]]&&C[c[0]][2])||c[0])+'</li>'; });
       var jp=P(138,36); g+='<circle cx="'+jp[0].toFixed(1)+'" cy="'+jp[1].toFixed(1)+'" r="3.5" fill="#fff"></circle><text x="'+(jp[0]+7).toFixed(1)+'" y="'+(jp[1]+4).toFixed(1)+'" fill="#fff" font-size="12" font-weight="700">日本</text>';
@@ -2266,12 +2236,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   function j(u){return fetch(u).then(function(r){if(!r.ok) throw 0; return r.json();});}
   j('https://isc.sans.edu/api/dailysummary/'+ymd+'?json').then(function(a){ var x=(a||[]).filter(function(o){return o.date===ymd;})[0]; if(x){v.attacks=x.records;render(v);save();} }).catch(function(){});
   j('https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate='+jstMidnightUTC.toISOString().replace(/\.\d+Z$/,'.000Z')+'&pubEndDate='+now.toISOString().replace(/\.\d+Z$/,'.000Z')+'&resultsPerPage=1').then(function(a){ v.cves=a.totalResults; render(v); save(); }).catch(function(){});
-  j('https://isc.sans.edu/api/sources/attacks/20?json').then(function(list){
-    return Promise.all((list||[]).map(function(o){
-      return j('https://isc.sans.edu/api/ip/'+o.ip+'?json').then(function(r){return [r&&r.ip&&r.ip.ascountry, o.count||0];}).catch(function(){return [null,0];});
-    }));
-  }).then(function(rows){
-    var c={}; rows.forEach(function(r){ if(r[0]) c[r[0]]=(c[r[0]]||0)+r[1]; });
+  j('https://isc.sans.edu/api/country?json').then(function(list){
+    var c={}; (list||[]).filter(function(o){return o.country&&C[o.country];}).sort(function(a,b){return b.reports-a.reports;}).slice(0,40).forEach(function(o){c[o.country]=o.reports;});
     v.countries=c; render(v); save();
   }).catch(function(){ $('lvTop').innerHTML='<li>—</li>'; });
 })();

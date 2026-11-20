@@ -1967,6 +1967,16 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   function P(lon,lat){return [(((lon-145+540)%360))/360*1000,(90-lat)/180*500];}
   function fmt(n){return Number(n).toLocaleString('ja-JP');}
   function $(id){return document.getElementById(id);}
+  var shown={};
+  function countTo(el,to,key){
+    if(!el||!started) return; var from=shown[key]||0; shown[key]=to;
+    if(from===to){ el.textContent=fmt(to); return; }
+    var t0=null, dur=from? 1200:1800;
+    function step(t){ if(!t0) t0=t; var p=Math.min(1,(t-t0)/dur); var e=1-Math.pow(1-p,3);
+      el.textContent=fmt(Math.round(from+(to-from)*e)); if(p<1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+    setTimeout(function(){ if(shown[key]===to) el.textContent=fmt(to); }, dur+400);
+  }
   var now=new Date(), jst=new Date(now.getTime()+9*3600000);
   var jd=jst.toISOString().slice(0,10), hm=jst.toISOString().slice(11,16);
   var jstMidnightUTC=new Date(Date.UTC(jst.getUTCFullYear(),jst.getUTCMonth(),jst.getUTCDate())-9*3600000);
@@ -1975,8 +1985,8 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
   var KEY='lv3-'+jd+'-'+Math.floor(now.getTime()/1800000), cache=null;
   try{cache=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){}
   function render(v){
-    if(v.attacks!=null) $('lvAttacks').textContent=fmt(v.attacks);
-    if(v.cves!=null){ $('lvCves').textContent=fmt(v.cves); }
+    if(v.attacks!=null) countTo($('lvAttacks'),v.attacks,'a');
+    if(v.cves!=null){ countTo($('lvCves'),v.cves,'c'); }
     if(v.cves!=null&&$('lvPill')) $('lvPill').textContent='今日、世界で公表された脆弱性 '+fmt(v.cves)+'件（'+hm+' 時点）';
     if(v.countries){
       var g='', li='';
@@ -1991,16 +2001,25 @@ footer.site .brand{color:#fff;font-size:1.2rem;}
       $('lvDots').innerHTML=g; $('lvTop').innerHTML=li||'<li>—</li>';
     }
   }
-  if(cache){render(cache);return;}
   var v={attacks:null,cves:null,countries:null};
-  function save(){ try{ if(v.attacks!=null&&v.cves!=null&&v.countries) localStorage.setItem(KEY,JSON.stringify(v)); }catch(e){} }
-  function j(u){return fetch(u).then(function(r){if(!r.ok) throw 0; return r.json();});}
-  j('https://isc.sans.edu/api/dailysummary/'+ymd+'?json').then(function(a){ var x=(a||[]).filter(function(o){return o.date===ymd;})[0]; if(x){v.attacks=x.records;render(v);save();} }).catch(function(){});
-  j('https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate='+jstMidnightUTC.toISOString().replace(/\.\d+Z$/,'.000Z')+'&pubEndDate='+now.toISOString().replace(/\.\d+Z$/,'.000Z')+'&resultsPerPage=1').then(function(a){ v.cves=a.totalResults; render(v); save(); }).catch(function(){});
-  j('https://isc.sans.edu/api/country?json').then(function(list){
-    var c={}; (list||[]).filter(function(o){return o.country&&C[o.country];}).sort(function(a,b){return b.reports-a.reports;}).slice(0,40).forEach(function(o){c[o.country]=o.reports;});
-    v.countries=c; render(v); save();
-  }).catch(function(){ $('lvTop').innerHTML='<li>—</li>'; });
+  if(cache){ v=cache; }
+  function load(){
+    function save(){ try{ if(v.attacks!=null&&v.cves!=null&&v.countries) localStorage.setItem(KEY,JSON.stringify(v)); }catch(e){} }
+    function j(u){return fetch(u,{cache:'no-store'}).then(function(r){if(!r.ok) throw 0; return r.json();});}
+    j('https://isc.sans.edu/api/dailysummary/'+ymd+'?json').then(function(a){ var x=(a||[]).filter(function(o){return o.date===ymd;})[0]; if(x){v.attacks=x.records;render(v);save();} }).catch(function(){});
+    j('https://services.nvd.nist.gov/rest/json/cves/2.0?pubStartDate='+jstMidnightUTC.toISOString().replace(/\.\d+Z$/,'.000Z')+'&pubEndDate='+now.toISOString().replace(/\.\d+Z$/,'.000Z')+'&resultsPerPage=1').then(function(a){ v.cves=a.totalResults; render(v); save(); }).catch(function(){});
+    j('https://isc.sans.edu/api/country?json').then(function(list){
+      var c={}; (list||[]).filter(function(o){return o.country&&C[o.country];}).sort(function(a,b){return b.reports-a.reports;}).slice(0,40).forEach(function(o){c[o.country]=o.reports;});
+      v.countries=c; render(v); save();
+    }).catch(function(){ $('lvTop').innerHTML='<li>—</li>'; });
+  }
+  var started=false;
+  function start(){ if(started) return; started=true; render(v); setInterval(function(){ now=new Date(); jst=new Date(now.getTime()+9*3600000); hm=jst.toISOString().slice(11,16); if($('lvDate')) $('lvDate').textContent=jst.toISOString().slice(0,10).replace(/-/g,'.')+' '+hm+' 時点（日本時間）'; load(); },60000); }
+  var box=document.querySelector('.sb-live');
+  if(box && 'IntersectionObserver' in window){ var io=new IntersectionObserver(function(es){ if(es.some(function(e){return e.isIntersecting;})){ io.disconnect(); start(); } }); io.observe(box); }
+  else start();
+  setTimeout(start,8000);
+  if(!cache) load();
 })();
 </script>
 </body>

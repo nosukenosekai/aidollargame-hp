@@ -192,45 +192,45 @@
 
 <!-- NOTE-INDEX-START -->
 ## 公式note (Official note articles)
-株式会社AIdollargameが note.com で公開している記事。一覧ページ: [https://aidollargame.com/note.html](https://aidollargame.com/note.html)
-アカウント: [https://note.com/aidollargame](https://note.com/aidollargame)
+株式会社AIdollargameが note.com で公開している記事。一覧ページ: https://aidollargame.com/note.html
+アカウント: https://note.com/aidollargame
 
-- [2026-11-16｜社員の4人に1人が、AIで自分で作ったアプリで仕事をしていた。上司に頼まれて作った人は1,970人中9人](https://note.com/aidollargame/n/n28ea6217d3f4)
-- [2026-11-10｜AIのデータセンター建設に住民が投票し、41件中40件で「制限する」が勝った。2日後、OpenAIは電気代の全額負担を約束した](https://note.com/aidollargame/n/n8c216aed6601)
-- [2026-11-06｜AIがLinuxの弱点を948件見つけ、修正案まで書いた。1回の実行にかかったAPI費用は121万ドル](https://note.com/aidollargame/n/naf17bf244f08)
-- [2026-11-02｜Redditの株価が1日で29%下がった。売上は53%増えていた。AIは中身を読むが、人を送り返さない](https://note.com/aidollargame/n/n156d4ee6982c)
-- [2026-10-29｜10月21日の夜、「うちは大丈夫か」に何時間で答えられましたか｜PHPの事件から、情シスのいない会社が今週やること](https://note.com/aidollargame/n/n4ea2afe6cf45)
-- [2026-10-22｜PHPに緊急の修正が出た。修正版が出たのは4系統だけで、世界のPHPサイトの約48%は入っていない](https://note.com/aidollargame/n/n2ae1e0b90fe1)
-- [2026-10-21｜AIが書き換えていいのは、AIが作ったファイルだけ。デジタル庁が職員18万人向けに決めたルールが公開された](https://note.com/aidollargame/n/n4c10b62bf68a)
-- [2026-10-12｜AI時代は免許証の画像を送る本人確認が2027年4月で終わる。](https://note.com/aidollargame/n/nbfa1cae6d394)
-- [2026-10-07｜顧客名簿をAIに入れる前に。氏名をIDに置き換えて消える義務と、消えない義務](https://note.com/aidollargame/n/nb22ce91508cb)
-- [2026-10-05｜【衝撃】AIが核融合の式を見つけた？！](https://note.com/aidollargame/n/n16ad58f2a828)
-- [2026-09-30｜660万件と57万件の情報漏洩。漏れてからでは遅い。企業が今週やるべき３つのこと](https://note.com/aidollargame/n/n3019e37cdcdf)
-- [2026-09-27｜20代のプログラマーは15%減、30代は22%増。ノルウェーの雇用記録を全部数えた結果](https://note.com/aidollargame/n/n45c2ddfc93b8)
-- [2026-09-22｜「16時に電話します」の予約代行AI、16時を過ぎても音沙汰なし。運営会社に電話したら出たのはAIだった、、。](https://note.com/aidollargame/n/n7b8c8f56a885)
-- [2026-09-14｜AI大手3社が「開発速度を落とすべき」で一致。AI時代はこの先どうなるのか？](https://note.com/aidollargame/n/n4665836446ab)
-- [2026-09-09｜2026年9月に登場した最新AIモデル4つは何が違うのか？！徹底比較してみました！！](https://note.com/aidollargame/n/n13e050cfd77c)
-- [2026-09-03｜ニューヨーク市が小中学生60万人のAIを1年止めた。社内ルールへの応用方法。](https://note.com/aidollargame/n/n3379463ecd76)
-- [2026-09-01｜家族の安否確認の方法を決めている人は15.1%だった。AIと決める防災対策](https://note.com/aidollargame/n/n8ede6e400fda)
-- [2026-08-31｜AIを入れて売上が16.3%伸びた業務と、まったく動かなかった業務があった｜同じ会社が7つの業務で試した結果](https://note.com/aidollargame/n/na1bdcab3ec2d)
-- [2026-08-24｜社員がAIを使えるようになっても、会社の生産性は3年で0.29%しか動かなかった｜6,000社の調査と5,172人の事例](https://note.com/aidollargame/n/na2694c4836d4)
-- [2026-08-20｜67%減った検索と、18%増えた検索｜24億回の表示からわかること](https://note.com/aidollargame/n/n37f645d1f3a3)
-- [2026-08-18｜AIで雇用は減っていないが...。給与データ数百万人分を読む](https://note.com/aidollargame/n/n37843927e437)
-- [2026-08-17｜AIで書いた文章が「他社と同じ」になる仕組み｜願書37万通の分析から作った、同質化を外す手順](https://note.com/aidollargame/n/n29daf4118186)
-- [2026-08-14｜AIに面接をやらせたら内定が12%増えた。でも採用にかかる日数は4日のびた｜応募者7万人の実験を読む](https://note.com/aidollargame/n/nfcaf9c186d8e)
-- [2026-08-10｜AIで差は縮むのか、広がるのか。2つの実験が出した逆の答え](https://note.com/aidollargame/n/n2406b93d2880)
-- [2026-08-07｜AIを使っている会社は69% なのに9割の経営者が「うちは何も変わっていない」と答えた...](https://note.com/aidollargame/n/n121d1703a4c3)
-- [2026-08-04｜AIで研修すると人は育つのか｜学習効果が2倍になった実験と、成績が17%下がった実験を並べて読む](https://note.com/aidollargame/n/nd8c8aad2400c)
-- [2026-07-30｜AI導入が「利益・コスト・時間」に効いた実例10選｜数字と出典つき（2026年最新版）](https://note.com/aidollargame/n/nf4c86cbd6660)
-- [2026-07-28｜100円ショップのセリアが、代表電話の約75%をAIに任せた。中小企業が真似できるのはどこか?](https://note.com/aidollargame/n/nba5295a09b05)
-- [2026-07-22｜「AIに仕事を奪われる」は本当か？ 「人手不足」の日本で、2026年の予測を煽らず並べてみた](https://note.com/aidollargame/n/n29bd8b4acd64)
-- [2026-07-15｜【W杯2026・優勝予想 総決算】 統計はスペイン、それでもAIはアルゼンチンに賭けた！！](https://note.com/aidollargame/n/n7ae963481c14)
-- [2026-07-08｜冷蔵庫を取るだけ！！今夜の献立をAIに丸投げする遊び方](https://note.com/aidollargame/n/n26b7f8bf5ce1)
-- [2026-06-28｜「AIで優勝予想」の“中身”を、全部見せます2026W杯・最新版](https://note.com/aidollargame/n/n3701ab4837ac)
-- [2026-06-25｜その電話、AIかもしれません 新しいAI詐欺の手口と今日からできる対策](https://note.com/aidollargame/n/n4c7244ca59ee)
-- [2026-06-22｜AI時代の椅子取りゲームはもう始まっている](https://note.com/aidollargame/n/nb4ed5df64f62)
-- [2026-06-18｜呪文に見えるAI用語を身近なものに例えて解説します。](https://note.com/aidollargame/n/nfd9c26d7fc23)
-- [2026-06-16｜マイクロソフトCEOが教えてくれた、AI時代に会社が生き残る条件](https://note.com/aidollargame/n/n7888c888dc23)
-- [2026-06-13｜「強い」と「勝つ」は違う 2026W杯の優勝国をAIで予想してみた](https://note.com/aidollargame/n/nc3ca72d7a7b0)
-- [2026-06-12｜コードが一行も書けない私が、AIだけで会社のサイトを作成し公開した話](https://note.com/aidollargame/n/n8934236c7a1f)
+- 2026-11-16｜社員の4人に1人が、AIで自分で作ったアプリで仕事をしていた。上司に頼まれて作った人は1,970人中9人: https://note.com/aidollargame/n/n28ea6217d3f4
+- 2026-11-10｜AIのデータセンター建設に住民が投票し、41件中40件で「制限する」が勝った。2日後、OpenAIは電気代の全額負担を約束した: https://note.com/aidollargame/n/n8c216aed6601
+- 2026-11-06｜AIがLinuxの弱点を948件見つけ、修正案まで書いた。1回の実行にかかったAPI費用は121万ドル: https://note.com/aidollargame/n/naf17bf244f08
+- 2026-11-02｜Redditの株価が1日で29%下がった。売上は53%増えていた。AIは中身を読むが、人を送り返さない: https://note.com/aidollargame/n/n156d4ee6982c
+- 2026-10-29｜10月21日の夜、「うちは大丈夫か」に何時間で答えられましたか｜PHPの事件から、情シスのいない会社が今週やること: https://note.com/aidollargame/n/n4ea2afe6cf45
+- 2026-10-22｜PHPに緊急の修正が出た。修正版が出たのは4系統だけで、世界のPHPサイトの約48%は入っていない: https://note.com/aidollargame/n/n2ae1e0b90fe1
+- 2026-10-21｜AIが書き換えていいのは、AIが作ったファイルだけ。デジタル庁が職員18万人向けに決めたルールが公開された: https://note.com/aidollargame/n/n4c10b62bf68a
+- 2026-10-12｜AI時代は免許証の画像を送る本人確認が2027年4月で終わる。: https://note.com/aidollargame/n/nbfa1cae6d394
+- 2026-10-07｜顧客名簿をAIに入れる前に。氏名をIDに置き換えて消える義務と、消えない義務: https://note.com/aidollargame/n/nb22ce91508cb
+- 2026-10-05｜【衝撃】AIが核融合の式を見つけた？！: https://note.com/aidollargame/n/n16ad58f2a828
+- 2026-09-30｜660万件と57万件の情報漏洩。漏れてからでは遅い。企業が今週やるべき３つのこと: https://note.com/aidollargame/n/n3019e37cdcdf
+- 2026-09-27｜20代のプログラマーは15%減、30代は22%増。ノルウェーの雇用記録を全部数えた結果: https://note.com/aidollargame/n/n45c2ddfc93b8
+- 2026-09-22｜「16時に電話します」の予約代行AI、16時を過ぎても音沙汰なし。運営会社に電話したら出たのはAIだった、、。: https://note.com/aidollargame/n/n7b8c8f56a885
+- 2026-09-14｜AI大手3社が「開発速度を落とすべき」で一致。AI時代はこの先どうなるのか？: https://note.com/aidollargame/n/n4665836446ab
+- 2026-09-09｜2026年9月に登場した最新AIモデル4つは何が違うのか？！徹底比較してみました！！: https://note.com/aidollargame/n/n13e050cfd77c
+- 2026-09-03｜ニューヨーク市が小中学生60万人のAIを1年止めた。社内ルールへの応用方法。: https://note.com/aidollargame/n/n3379463ecd76
+- 2026-09-01｜家族の安否確認の方法を決めている人は15.1%だった。AIと決める防災対策: https://note.com/aidollargame/n/n8ede6e400fda
+- 2026-08-31｜AIを入れて売上が16.3%伸びた業務と、まったく動かなかった業務があった｜同じ会社が7つの業務で試した結果: https://note.com/aidollargame/n/na1bdcab3ec2d
+- 2026-08-24｜社員がAIを使えるようになっても、会社の生産性は3年で0.29%しか動かなかった｜6,000社の調査と5,172人の事例: https://note.com/aidollargame/n/na2694c4836d4
+- 2026-08-20｜67%減った検索と、18%増えた検索｜24億回の表示からわかること: https://note.com/aidollargame/n/n37f645d1f3a3
+- 2026-08-18｜AIで雇用は減っていないが...。給与データ数百万人分を読む: https://note.com/aidollargame/n/n37843927e437
+- 2026-08-17｜AIで書いた文章が「他社と同じ」になる仕組み｜願書37万通の分析から作った、同質化を外す手順: https://note.com/aidollargame/n/n29daf4118186
+- 2026-08-14｜AIに面接をやらせたら内定が12%増えた。でも採用にかかる日数は4日のびた｜応募者7万人の実験を読む: https://note.com/aidollargame/n/nfcaf9c186d8e
+- 2026-08-10｜AIで差は縮むのか、広がるのか。2つの実験が出した逆の答え: https://note.com/aidollargame/n/n2406b93d2880
+- 2026-08-07｜AIを使っている会社は69% なのに9割の経営者が「うちは何も変わっていない」と答えた...: https://note.com/aidollargame/n/n121d1703a4c3
+- 2026-08-04｜AIで研修すると人は育つのか｜学習効果が2倍になった実験と、成績が17%下がった実験を並べて読む: https://note.com/aidollargame/n/nd8c8aad2400c
+- 2026-07-30｜AI導入が「利益・コスト・時間」に効いた実例10選｜数字と出典つき（2026年最新版）: https://note.com/aidollargame/n/nf4c86cbd6660
+- 2026-07-28｜100円ショップのセリアが、代表電話の約75%をAIに任せた。中小企業が真似できるのはどこか?: https://note.com/aidollargame/n/nba5295a09b05
+- 2026-07-22｜「AIに仕事を奪われる」は本当か？ 「人手不足」の日本で、2026年の予測を煽らず並べてみた: https://note.com/aidollargame/n/n29bd8b4acd64
+- 2026-07-15｜【W杯2026・優勝予想 総決算】 統計はスペイン、それでもAIはアルゼンチンに賭けた！！: https://note.com/aidollargame/n/n7ae963481c14
+- 2026-07-08｜冷蔵庫を取るだけ！！今夜の献立をAIに丸投げする遊び方: https://note.com/aidollargame/n/n26b7f8bf5ce1
+- 2026-06-28｜「AIで優勝予想」の“中身”を、全部見せます2026W杯・最新版: https://note.com/aidollargame/n/n3701ab4837ac
+- 2026-06-25｜その電話、AIかもしれません 新しいAI詐欺の手口と今日からできる対策: https://note.com/aidollargame/n/n4c7244ca59ee
+- 2026-06-22｜AI時代の椅子取りゲームはもう始まっている: https://note.com/aidollargame/n/nb4ed5df64f62
+- 2026-06-18｜呪文に見えるAI用語を身近なものに例えて解説します。: https://note.com/aidollargame/n/nfd9c26d7fc23
+- 2026-06-16｜マイクロソフトCEOが教えてくれた、AI時代に会社が生き残る条件: https://note.com/aidollargame/n/n7888c888dc23
+- 2026-06-13｜「強い」と「勝つ」は違う 2026W杯の優勝国をAIで予想してみた: https://note.com/aidollargame/n/nc3ca72d7a7b0
+- 2026-06-12｜コードが一行も書けない私が、AIだけで会社のサイトを作成し公開した話: https://note.com/aidollargame/n/n8934236c7a1f
 <!-- NOTE-INDEX-END -->

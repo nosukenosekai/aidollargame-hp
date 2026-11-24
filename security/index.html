@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ホワイトハック｜脆弱性診断・ペネトレーションテストと修正を代行｜株式会社AIdollargame</title>
+<title>ホワイトハック｜情シスのいない中小企業のセキュリティ担当を代行（脆弱性診断・ペネトレーションテスト・修正）｜株式会社AIdollargame</title>
 <meta name="description" content="社内にセキュリティ担当がいない会社に代わって、サイト・メール・VPN機器の脆弱性診断とペネトレーションテストを行い、見つけた穴を当社が直す「ホワイトハック」。毎日診断し、直した記録を稼働証明書として毎月お渡しします。ライト月3万円・スタンダード月15万円（税別）。">
 <link rel="canonical" href="https://aidollargame.com/security/">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
@@ -18,6 +18,118 @@
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "情シスがいない会社でも頼めますか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "頼めます。社内に情シスやセキュリティ担当がいない会社が対象です。サイト・メール・VPN機器の脆弱性診断とペネトレーションテストを当社が行い、見つけた穴を当社が直します。セキュリティを任せる社員を1人雇うより安く始められます。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "脆弱性診断とペネトレーションテストは何が違いますか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "脆弱性診断は、サイトや機器に既に知られている弱点が残っていないかを一覧で確かめる検査です。ペネトレーションテストは、外から実際に入れるかを試す検査です。ホワイトハックは、承諾をいただいた範囲で両方を行い、データの書き換えや削除はしません。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "料金はいくらですか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "無料の外部チェックは0円です（whitehack.jp にドメインを入れるとその場で結果が出ます）。スポット診断は5万円から、ライトは月3万円、スタンダードは月15万円です。いずれも税別です。サーバーの中の修正や移行は個別にお見積りします。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "どのくらいの規模の会社が対象ですか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "社内にセキュリティ担当がいない会社です。サイトやITの面倒を見る人がいない会社、取引先からセキュリティの質問票が届く会社、問い合わせフォームや会員ページがある会社、法律事務所や会計事務所のように依頼人の秘密を預かっている会社などです。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "見つけた穴は、誰が直すのですか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "当社が直します（スタンダード）。直すとメールが届かなくなる、といった影響を先に洗い出し、登録を済ませてから直します。サーバーの中の修正や移行は、内容を見てお見積りします。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ライトとスタンダードの違いは何ですか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ライト（月3万円）は、毎日の診断、変化があった日のお知らせ、毎月の報告までです。スタンダード（月15万円）は、それに加えて見つかった穴を当社が直し、毎月の稼働証明書を発行します。いずれも税別です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "診断で自社のサイトが止まることはありませんか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "はじめに見るのは、誰でも見られる記録（証明書の透明性ログ・公開DNS・WHOIS）だけで、貴社のサーバーには接続しません。ペネトレーションテストに進むのは、ドメインの所有確認と書面の承諾が揃ってからです。データの書き換えや削除はしません。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "24時間対応してもらえますか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "していません。24時間の監視と、事故が起きたときの駆けつけは、ホワイトハックには含みません。お約束するのは、毎日の診断と、見つけた穴を直すこと、その記録を毎月お渡しすることです。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "サイバー攻撃を全部止めてもらえますか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "できません。攻撃をゼロにする方法はありません。当社がやるのは、外から入れる穴を見つけて塞ぐことと、やったことを記録に残すことです。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "社員のパソコンにソフトを入れますか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "入れません。検査はインターネット側から行います。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "他社のサイトを調べてもらえますか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "できません。調べるのは、お客様ご自身が管理しているサイトとサービスだけです。許可のない検査は不正アクセス禁止法に当たります。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "どのくらいで始められますか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "無料の外部チェックは、ドメインを入れればその場で結果が出ます。スポット診断と月額のプランは、申込書と承諾書、ドメインの所有確認が揃ってから始めます。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "途中でやめられますか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "やめられます。それまでにお渡しした診断書と稼働証明書は、そのままお使いいただけます。"
+   }
+  }
+ ]
+}
+</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -153,7 +265,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       <a href="#start" style="text-decoration:none">料金と始め方</a>
       <a href="#faq" style="text-decoration:none">よくある質問</a>
     </nav>
-    <a href="https://whitehack.jp/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:#c81e1e;color:#ffffff;text-decoration:none;font-weight:800;font-size:15px;padding:11px 20px;border-radius:5px;min-height:44px;box-sizing:border-box;white-space:nowrap"><span class="hd-long">無料でドメインを</span>調べる</a>
+    <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:#c81e1e;color:#ffffff;text-decoration:none;font-weight:800;font-size:15px;padding:11px 20px;border-radius:5px;min-height:44px;box-sizing:border-box;white-space:nowrap"><span class="hd-long">無料でドメインを</span>調べる</a>
   </div>
 </header>
 
@@ -164,7 +276,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       <h1 class="h1" style="margin:0 0 28px;font-size:52px;line-height:1.32;font-weight:900;letter-spacing:-0.01em">見つけた穴を、<br>当社が塞ぎます。</h1>
       <p style="margin:0 0 38px;font-size:18px;line-height:1.95;color:#bac5d8;max-width:520px">ホワイトハックは、社内にセキュリティ担当がいない会社に代わって、サイト・メール・VPN機器の脆弱性診断とペネトレーションテストを行い、見つけた穴を当社が直すサービスです。報告書を渡して終わりにはしません。セキュリティを任せる社員を1人雇うより安く、申し込んだ日から始まります。</p>
       <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">
-        <a href="https://whitehack.jp/" target="_blank" rel="noopener" style="background:#ffffff;color:#0b1220;text-decoration:none;font-weight:800;padding:18px 32px;border-radius:6px;font-size:17px">無料でドメインを調べる</a>
+        <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security" target="_blank" rel="noopener" style="background:#ffffff;color:#0b1220;text-decoration:none;font-weight:800;padding:18px 32px;border-radius:6px;font-size:17px">無料でドメインを調べる</a>
         <a href="#start" style="color:#ffffff;text-decoration:none;font-weight:700;padding:18px 6px;border-bottom:1px solid rgba(255,255,255,0.45)">料金を見る</a>
       </div>
     </div>
@@ -211,7 +323,7 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       <h2 style="margin:0 0 24px;font-size:38px;line-height:1.45;font-weight:900">まず無料で、<br>外から見える穴を出します。</h2>
       <p style="margin:0 0 18px;color:#bac5d8">whitehack.jp にドメインを入れると、公開されている記録だけを読んで、なりすましメールの対策（SPF・DKIM・DMARC）、証明書の設定、ドメインの登録の期限、外から見えている管理画面などを確かめます。証明書の透明性ログ（CT）、公開DNS、ドメインの登録情報（WHOIS）の3つです。この段階では、貴社のサーバーに一度も接続しません。</p>
       <p style="margin:0 0 28px;color:#bac5d8">ペネトレーションテストに進むのは、ドメインの所有確認と書面の承諾が揃ってからです。許可のない検査は不正アクセス禁止法に当たるため、この手順を飛ばせない作りにしてあります。</p>
-      <a href="https://whitehack.jp/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;font-weight:800;color:#ffffff;text-decoration:none;border-bottom:2px solid #ff6b5e;padding-bottom:4px">whitehack.jp で調べる →</a>
+      <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;font-weight:800;color:#ffffff;text-decoration:none;border-bottom:2px solid #ff6b5e;padding-bottom:4px">whitehack.jp で調べる →</a>
       <p style="margin:14px 0 0;font-size:14px;color:#8e9bb3">右の画面は流れを示す見本です。ドメイン名と所見は架空で、実在の組織とは関係ありません。</p>
     </div>
 
@@ -378,6 +490,9 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       <h2 style="margin:0 0 32px;font-size:40px;line-height:1.4;font-weight:900">よくある質問</h2>
     </div>
     <div class="rv faq" style="max-width:900px;border-top:1px solid #e2e5ea">
+      <details><summary>情シスがいない会社でも頼めますか</summary><div>頼めます。社内に情シスやセキュリティ担当がいない会社が対象です。サイト・メール・VPN機器の脆弱性診断とペネトレーションテストを当社が行い、見つけた穴を当社が直します。セキュリティを任せる社員を1人雇うより安く始められます。</div></details>
+      <details><summary>脆弱性診断とペネトレーションテストは何が違いますか</summary><div>脆弱性診断は、サイトや機器に既に知られている弱点が残っていないかを一覧で確かめる検査です。ペネトレーションテストは、外から実際に入れるかを試す検査です。ホワイトハックは、承諾をいただいた範囲で両方を行い、データの書き換えや削除はしません。</div></details>
+      <details><summary>料金はいくらですか</summary><div>無料の外部チェックは0円です（whitehack.jp にドメインを入れるとその場で結果が出ます）。スポット診断は5万円から、ライトは月3万円、スタンダードは月15万円です。いずれも税別です。サーバーの中の修正や移行は個別にお見積りします。</div></details>
       <details><summary>どのくらいの規模の会社が対象ですか</summary><div>社内にセキュリティ担当がいない会社です。サイトやITの面倒を見る人がいない会社、取引先からセキュリティの質問票が届く会社、問い合わせフォームや会員ページがある会社、法律事務所や会計事務所のように依頼人の秘密を預かっている会社などです。</div></details>
       <details><summary>見つけた穴は、誰が直すのですか</summary><div>当社が直します（スタンダード）。直すとメールが届かなくなる、といった影響を先に洗い出し、登録を済ませてから直します。サーバーの中の修正や移行は、内容を見てお見積りします。</div></details>
       <details><summary>ライトとスタンダードの違いは何ですか</summary><div>ライト（月3万円）は、毎日の診断、変化があった日のお知らせ、毎月の報告までです。スタンダード（月15万円）は、それに加えて見つかった穴を当社が直し、毎月の稼働証明書を発行します。いずれも税別です。</div></details>
@@ -392,11 +507,23 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
   </div>
 </section>
 
+<section id="guides" style="background:#ffffff">
+  <div class="wrap" style="padding-top:8px;padding-bottom:72px">
+    <div class="eyebrow" style="color:#c81e1e;margin-bottom:12px">GUIDES</div>
+    <h2 style="margin:0 0 20px;font-size:28px;line-height:1.5;font-weight:900">他社と比べたい方へ</h2>
+    <ul style="margin:0;padding-left:1.2em;line-height:2.1;font-size:17px">
+      <li><a href="../articles/security-daiko-hikaku-2026.html" style="color:#0b1220;text-decoration:underline">情シスがいない中小企業のセキュリティを任せられる会社はどこか（4つの形と9社の比較）</a></li>
+      <li><a href="../articles/zeijakusei-shindan-ryokin-2026.html" style="color:#0b1220;text-decoration:underline">脆弱性診断・ペネトレーションテストの料金はいくらか（公式に料金を出している9サービス）</a></li>
+      <li><a href="../articles/security-soudan-saki-2026.html" style="color:#0b1220;text-decoration:underline">情シスがいない会社は、セキュリティを誰に相談すればいいか（公的な窓口と制度）</a></li>
+    </ul>
+  </div>
+</section>
+
 <section id="contact-sec" style="background:#0b1220;color:#ffffff">
   <div class="wrap rv" style="padding-top:96px;padding-bottom:96px">
     <h2 style="margin:0 0 20px;font-size:42px;line-height:1.4;font-weight:900">貴社のドメインを、<br>無料で調べます。</h2>
     <p style="margin:0 0 40px;color:#bac5d8;max-width:560px">公開されている記録だけを読む無料の外部チェックです。貴社のサーバーには接続しません。結果を見たうえで、どこまで任せるかを無料でご相談いただけます。</p>
-    <a href="https://whitehack.jp/" target="_blank" rel="noopener" style="display:inline-block;background:#c81e1e;color:#ffffff;text-decoration:none;font-weight:800;padding:20px 40px;border-radius:6px;font-size:18px;margin-right:14px">無料でドメインを調べる</a>
+    <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security" target="_blank" rel="noopener" style="display:inline-block;background:#c81e1e;color:#ffffff;text-decoration:none;font-weight:800;padding:20px 40px;border-radius:6px;font-size:18px;margin-right:14px">無料でドメインを調べる</a>
     <a href="../index.html#contact" style="display:inline-block;background:#ffffff;color:#0b1220;text-decoration:none;font-weight:800;padding:20px 40px;border-radius:6px;font-size:18px">無料で相談する</a>
   </div>
 </section>

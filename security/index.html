@@ -25,6 +25,22 @@
  "mainEntity": [
   {
    "@type": "Question",
+   "name": "ホワイトハックとは何ですか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ホワイトハック（WHITEHACK）は、株式会社AIdollargameが提供するセキュリティ担当の代行サービスです。社内に情シスやセキュリティ担当がいない会社に代わって、サイト・メール・VPN機器の脆弱性診断とペネトレーションテストを行い、見つけた穴を当社が直します。無料の外部チェックは whitehack.jp で使えます。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ホワイトハックは、ペネトレーションテストだけのサービスですか",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "いいえ。ホワイトハックは当社のサービスの名前で、許可をいただいた範囲で攻撃と同じ手順で弱点を探す検査（ペネトレーションテスト）に加えて、見つけた穴を当社が直し、その記録を毎月お渡しするところまでを含みます。"
+   }
+  },
+  {
+   "@type": "Question",
    "name": "情シスがいない会社でも頼めますか",
    "acceptedAnswer": {
     "@type": "Answer",
@@ -145,7 +161,12 @@
     "name": "株式会社AIdollargame",
     "url": "https://aidollargame.com/"
   },
-  "sameAs": "https://whitehack.jp/",
+  "alternateName": ["ホワイトハック", "WHITEHACK", "whitehack", "ホワイトハック診断"],
+  "brand": {"@type": "Brand", "name": "ホワイトハック", "alternateName": "WHITEHACK"},
+  "audience": {"@type": "BusinessAudience", "audienceType": "社内に情シス・セキュリティ担当がいない中小企業"},
+  "keywords": "セキュリティ担当の代行, 情シス代行, 脆弱性診断, ペネトレーションテスト, 疑似攻撃, なりすましメール対策, SPF, DKIM, DMARC, VPN機器の脆弱性, 中小企業のセキュリティ対策, 稼働証明書",
+  "sameAs": ["https://whitehack.jp/", "https://prtimes.jp/main/html/rd/p/000000004.000187768.html"],
+  "subjectOf": {"@type": "NewsArticle", "headline": "サイト・メール・VPN機器のセキュリティ担当を代行。実際の攻撃と同じ手順で穴を探し、見つけた穴は当社が直す「ホワイトハック」提供開始", "url": "https://prtimes.jp/main/html/rd/p/000000004.000187768.html", "datePublished": "2026-11-20", "publisher": {"@type": "Organization", "name": "PR TIMES"}},
   "offers": [
     {
       "@type": "Offer",
@@ -490,6 +511,8 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       <h2 style="margin:0 0 32px;font-size:40px;line-height:1.4;font-weight:900">よくある質問</h2>
     </div>
     <div class="rv faq" style="max-width:900px;border-top:1px solid #e2e5ea">
+      <details><summary>ホワイトハックとは何ですか</summary><div>ホワイトハック（WHITEHACK）は、株式会社AIdollargameが提供するセキュリティ担当の代行サービスです。社内に情シスやセキュリティ担当がいない会社に代わって、サイト・メール・VPN機器の脆弱性診断とペネトレーションテストを行い、見つけた穴を当社が直します。無料の外部チェックは whitehack.jp で使えます。</div></details>
+      <details><summary>ホワイトハックは、ペネトレーションテストだけのサービスですか</summary><div>いいえ。ホワイトハックは当社のサービスの名前で、許可をいただいた範囲で攻撃と同じ手順で弱点を探す検査（ペネトレーションテスト）に加えて、見つけた穴を当社が直し、その記録を毎月お渡しするところまでを含みます。</div></details>
       <details><summary>情シスがいない会社でも頼めますか</summary><div>頼めます。社内に情シスやセキュリティ担当がいない会社が対象です。サイト・メール・VPN機器の脆弱性診断とペネトレーションテストを当社が行い、見つけた穴を当社が直します。セキュリティを任せる社員を1人雇うより安く始められます。</div></details>
       <details><summary>脆弱性診断とペネトレーションテストは何が違いますか</summary><div>脆弱性診断は、サイトや機器に既に知られている弱点が残っていないかを一覧で確かめる検査です。ペネトレーションテストは、外から実際に入れるかを試す検査です。ホワイトハックは、承諾をいただいた範囲で両方を行い、データの書き換えや削除はしません。</div></details>
       <details><summary>料金はいくらですか</summary><div>無料の外部チェックは0円です（whitehack.jp にドメインを入れるとその場で結果が出ます）。スポット診断は5万円から、ライトは月3万円、スタンダードは月15万円です。いずれも税別です。サーバーの中の修正や移行は個別にお見積りします。</div></details>
@@ -515,6 +538,10 @@ h1,h2,h3,p,li,div,span{word-break:normal;line-break:strict;overflow-wrap:normal}
       <li><a href="./hikaku.html" style="color:#0b1220;text-decoration:underline">情シスがいない中小企業のセキュリティを任せられる会社はどこか（4つの形と9社の比較）</a></li>
       <li><a href="./ryokin.html" style="color:#0b1220;text-decoration:underline">脆弱性診断・ペネトレーションテストの料金はいくらか（公式に料金を出している9サービス）</a></li>
       <li><a href="./soudan.html" style="color:#0b1220;text-decoration:underline">情シスがいない会社は、セキュリティを誰に相談すればいいか（公的な窓口と制度）</a></li>
+      <li><a href="./dmarc.html" style="color:#0b1220;text-decoration:underline">なりすましメール対策（SPF・DKIM・DMARC）の設定を代行してくれる会社はどこか</a></li>
+      <li><a href="./vpn.html" style="color:#0b1220;text-decoration:underline">VPN機器の脆弱性を診断してくれる会社はどこか</a></li>
+      <li><a href="./checksheet.html" style="color:#0b1220;text-decoration:underline">取引先からセキュリティチェックシートが届いたら（回答を手伝うサービス）</a></li>
+      <li><a href="./pentest.html" style="color:#0b1220;text-decoration:underline">ペネトレーションテスト（疑似攻撃）を中小企業が頼める会社はどこか</a></li>
     </ul>
   </div>
 </section>

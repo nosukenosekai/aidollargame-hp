@@ -270,11 +270,43 @@ footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important;
 footer a { color:#000 !important; }
 .fc { color:#000 !important; }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-.wh-box{border:2px solid #000;border-radius:12px;padding:1.6rem 1.6rem 1.4rem;margin:2.4rem 0;background:#fff}
-.wh-box .k{font-size:0.72rem;letter-spacing:0.18em;font-weight:700;color:#555 !important;margin-bottom:0.4rem}
-.wh-box p{margin-bottom:0.9rem}
-.wh-box a.btn{margin-top:0.2rem}
+/* ホワイトハック系の記事。/security/ と同じ配色(白・文字#333・赤#EE3524・山吹#C87409・青#157CA5) */
+:root{--wh-ink:#333;--wh-sub:#6B7280;--wh-line:#E3E5E9;--wh-soft:#F5F6F8;--wh-red:#EE3524;--wh-amber:#C87409;--wh-blue:#157CA5;--wh-grad:linear-gradient(90deg,#F20045 0%,#FF6F00 100%)}
+body{font-family:Montserrat,"Noto Sans JP","Hiragino Sans","ヒラギノ角ゴシック",system-ui,sans-serif !important;color:var(--wh-ink) !important}
+.hero h1, h1{color:var(--wh-ink) !important;font-weight:800;letter-spacing:0.01em}
+.hero .en{font-family:Montserrat,sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.16em;color:var(--wh-blue);margin-bottom:0.9rem}
+.body p,.body li,p{color:var(--wh-ink) !important}
+.body h2{border-left:none !important;padding-left:0;margin-top:4rem;color:var(--wh-ink) !important;font-weight:800}
+.body h2[data-en]::before{content:attr(data-en);display:block;font-family:Montserrat,sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.16em;color:var(--wh-red);margin-bottom:0.35rem}
+.body h2[data-en].blue::before{color:var(--wh-blue)} .body h2[data-en].amber::before{color:var(--wh-amber)}
+table.cmp th{background:var(--wh-soft)} table.cmp tr.self td{background:#FFF4F2}
+.disclosure{background:var(--wh-soft) !important;border-color:var(--wh-line) !important}
+.btn{background:var(--wh-grad) !important;color:#fff !important;border-radius:4px !important;font-weight:700}
+.kadai{background:var(--wh-soft);border-radius:6px;padding:2rem 1.6rem;margin:2.6rem 0}
+.kadai .q{font-size:1.4rem;font-weight:800;text-align:center;margin:0 0 0.2rem}
+.kadai .qe{font-family:Montserrat,sans-serif;font-size:0.76rem;font-weight:700;letter-spacing:0.14em;color:var(--wh-blue);text-align:center;margin-bottom:1.6rem}
+.kadai .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.kadai .c{background:#fff;border:1px solid var(--wh-line);border-radius:6px;padding:1.1rem 1.1rem 0.6rem;min-width:0}
+.kadai .c .t{font-weight:800;font-size:1.02rem;margin-bottom:0.1rem}
+.kadai .c .e{font-family:Montserrat,sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:var(--wh-red);margin-bottom:0.6rem}
+.kadai .c ul{padding-left:1.1rem;margin-bottom:0.4rem} .kadai .c li{font-size:0.94rem;line-height:1.7}
+.wh-box{border:1px solid var(--wh-line);border-top:4px solid var(--wh-red);border-radius:6px;padding:1.8rem 1.6rem 1.6rem;margin:2.8rem 0;background:#fff}
+.wh-box .k{font-family:Montserrat,sans-serif;font-size:0.76rem;letter-spacing:0.16em;font-weight:700;color:var(--wh-red) !important;margin-bottom:0.3rem}
+.wh-box .h{font-size:1.25rem;font-weight:800;margin-bottom:0.8rem}
+.wh-box p{margin-bottom:1rem}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0.8rem;margin:0.4rem 0 1.4rem;padding:0;list-style:none}
+.steps li{border:1px solid var(--wh-line);border-radius:6px;padding:0.9rem 1rem;margin:0;min-width:0}
+.steps .s{font-family:Montserrat,sans-serif;font-size:0.72rem;font-weight:800;letter-spacing:0.14em;color:var(--wh-blue)}
+.steps b{display:block;font-size:1rem;margin:0.1rem 0 0.2rem}
+.steps span{font-size:0.88rem;color:var(--wh-sub)}
+.cta{background:#2A2D33 !important;border:none !important;border-radius:6px !important;color:#fff}
+.cta h3{color:#fff !important;font-size:1.5rem !important}
+.cta h3 em{font-style:normal;color:#FF5A47}
+.cta p,.cta p a{color:#D6D9DE !important}
+@media(max-width:600px){.cta{padding:2rem 1.2rem !important}.kadai{padding:1.6rem 1rem}}
 </style>
 </head>
 <body>
@@ -283,6 +315,7 @@ footer a { color:#000 !important; }
   <a href="./index.html" class="nav-back">← ARTICLES</a>
 </nav>
 <div class="hero">
+  <div class="en">PRICING GUIDE</div>
   <h1>脆弱性診断・ペネトレーションテストの料金はいくらか｜公式に料金を出している9サービスの比較【2026年版】</h1>
   <div class="meta"><span>2026 / 11 / 24</span><span>AIdollargame 編集部</span><span>読了 約7分</span></div>
 </div>
@@ -299,14 +332,16 @@ footer a { color:#000 !important; }
 <p>「脆弱性診断はいくらかかるのか」と調べると、まとめ記事の「相場」がたくさん出てきます。ただ、診断の中身が違うものを同じ相場に並べているため、数字の幅が広すぎて見積もりの判断に使えません。</p>
 <p>この記事では、公式サイト・公式発表に料金を載せているサービスだけを集め、何を調べてその金額なのかを並べます。比較サイトやまとめ記事の数字は使っていません。</p>
 
-<h2>料金は3つの帯に分かれる</h2>
+<div class="kadai"><p class="q">こんな困りごとはありませんか？</p><div class="qe">脆弱性診断の見積もりを取る前に、迷うところ</div><div class="g"><div class="c"><div class="t">相場の幅が広すぎる</div><div class="e">RANGE</div><ul><li>公式の料金だけでも、ツールの月330円から専門家の1回60万円以上まで幅がある</li><li>自社がどの帯に入るのか分からない</li></ul></div><div class="c"><div class="t">何個分の金額か分からない</div><div class="e">UNIT</div><ul><li>1 IP、1 FQDN、1機能、1アプリと数え方が違う</li><li>サイトが3つあると3倍になる料金もある</li></ul></div><div class="c"><div class="t">直す費用が別にかかる</div><div class="e">FIX</div><ul><li>料金に修正の作業が入っていない</li><li>直す会社を別に探すことになる</li></ul></div></div></div>
+
+<h2 data-en="PRICE RANGE" class="blue">料金は3つの帯に分かれる</h2>
 <ul>
   <li>ツールの自動診断: 月数百円〜月数万円。決まった項目をツールが繰り返し調べる。毎日実行するものもある。</li>
   <li>専門家の診断（1回ごと）: 1回6万円〜60万円以上。対象のIPアドレスの数、サイトの機能や画面の数で金額が変わる。</li>
   <li>継続の契約（年間・月額）: クラウドやWebアプリをまとめて見るものは年79.2万円〜300万円。</li>
 </ul>
 
-<h2>公式に料金を出しているサービスの比較表</h2>
+<h2 data-en="COMPARISON">公式に料金を出しているサービスの比較表</h2>
 <p class="note" style="margin-top:0;">2026年11月24日時点で、各社の公式ページ・公式発表で確認した金額です。税込・税別の表記がないものは「表記なし」としています。</p>
 <div class="tblwrap">
 <table class="cmp">
@@ -326,10 +361,10 @@ footer a { color:#000 !important; }
 </div>
 <p class="note">当社の行だけ背景色を変えています。AeyeScan（エーアイセキュリティラボ）、Vex（ユービーセキュア）は公式ページに金額がなく、個別見積のため表に入れていません。</p>
 
-<h2>参考: 監視と駆け付けの公的な価格の上限</h2>
+<h2 data-en="REFERENCE" class="blue">参考: 監視と駆け付けの公的な価格の上限</h2>
 <p>IPAの「サイバーセキュリティお助け隊サービス」は、脆弱性診断ではなく、監視・事故のときの初動対応・簡易サイバー保険・相談窓口をまとめた中小企業向けのサービスです。IPAの基準（2.1版）では、1類の月額の上限がネットワーク監視で月1万円（税抜）、端末監視で1台あたり月2,000円（税抜）、初期費用の合計の上限がネットワーク監視・端末監視それぞれ50万円（税抜）と決まっています。例えば、NTT東日本の「おまかせサイバーみまもり」はStandardが月12,100円（税込）です。</p>
 
-<h2>金額を比べる前に確かめる3つ</h2>
+<h2 data-en="CHECKLIST" class="amber">金額を比べる前に確かめる3つ</h2>
 <ol>
   <li>何個分の金額か。1 IP、1 FQDN、1機能、1アプリなど、数える単位が会社ごとに違います。サイトが3つあれば3倍になる料金もあります。</li>
   <li>本番環境を診断できるか。検証環境だけが対象のツールもあります。</li>
@@ -338,11 +373,17 @@ footer a { color:#000 !important; }
 
 <div class="wh-box">
   <div class="k">FREE CHECK — 無料の外部チェック</div>
+  <div class="h">まず、外から見える穴を無料で数えます</div>
   <p>見積もりを取る前に、自社のドメインで何が見つかるかを無料で確かめられます。whitehack.jp にドメインを入れると、公開されている記録だけを読んで、なりすましメールの対策（SPF・DKIM・DMARC）、証明書、ドメインの期限、外から見えている管理画面を確かめます。貴社のサーバーには接続しません。見つかった件数が分かると、どの診断にいくら払うかを決めやすくなります。</p>
+  <ol class="steps">
+    <li><div class="s">STEP 1</div><b>ドメインを入れる</b><span>whitehack.jp に会社のドメインを入れる。公開されている記録だけを読む</span></li>
+    <li><div class="s">STEP 2</div><b>見つかった穴を見る</b><span>重大度ごとの件数と、直し方、直すと何が止まるかが出る</span></li>
+    <li><div class="s">STEP 3</div><b>直すかを決める</b><span>自社で直すか、当社に任せるかを無料で相談できる</span></li>
+  </ol>
   <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=zeijakusei-shindan-ryokin-2026" class="btn" target="_blank" rel="noopener">whitehack.jp で自社のドメインを調べる →</a>
 </div>
 
-<h2>当社について、正直に書きます</h2>
+<h2 data-en="ABOUT US">当社について、正直に書きます</h2>
 <p>当社のホワイトハックは、診断だけでなく、見つけた穴を当社が直すところまでを月額で請け負います（スタンダード 月15万円・税別）。セキュリティを任せる社員を1人雇うと、給料だけで年609.8万円かかります（厚生労働省 job tag）。スタンダードは年180万円です。</p>
 <p>一方で、Webアプリの画面を1つずつ手で調べる大規模な診断や、社員のパソコンの監視は引き受けていません。それが必要な場合は、上の表の専門家の診断や、お助け隊サービスが合っています。各社の違いは<a href="./security-daiko-hikaku-2026.html" style="color:#111111;text-decoration:underline;">中小企業のセキュリティを任せられる会社の比較</a>に、公的な相談先は<a href="./security-soudan-saki-2026.html" style="color:#111111;text-decoration:underline;">情シスがいない会社のセキュリティの相談先</a>にまとめました。</p>
 
@@ -374,7 +415,7 @@ footer a { color:#000 !important; }
 </div>
 
 <div class="cta">
-  <h3>見積もりの前に、自社のドメインを無料で調べられます</h3>
+  <h3>見積もりの前に、<em>穴がいくつあるか</em>知っていますか？</h3>
   <p>whitehack.jp は公開されている記録だけを読む無料の外部チェックです。貴社のサーバーには接続しません。結果を見たうえで、どこまで任せるかを無料でご相談いただけます。</p>
   <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=zeijakusei-shindan-ryokin-2026" class="btn" target="_blank" rel="noopener">whitehack.jp で無料で調べる →</a>
   <p style="margin:1.2rem 0 0;font-size:0.85rem;"><a href="../index.html#contact" style="color:#111111;text-decoration:underline;">先に相談したい場合はこちら（無料）</a></p>

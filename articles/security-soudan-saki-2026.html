@@ -223,11 +223,43 @@ footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important;
 footer a { color:#000 !important; }
 .fc { color:#000 !important; }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-.wh-box{border:2px solid #000;border-radius:12px;padding:1.6rem 1.6rem 1.4rem;margin:2.4rem 0;background:#fff}
-.wh-box .k{font-size:0.72rem;letter-spacing:0.18em;font-weight:700;color:#555 !important;margin-bottom:0.4rem}
-.wh-box p{margin-bottom:0.9rem}
-.wh-box a.btn{margin-top:0.2rem}
+/* ホワイトハック系の記事。/security/ と同じ配色(白・文字#333・赤#EE3524・山吹#C87409・青#157CA5) */
+:root{--wh-ink:#333;--wh-sub:#6B7280;--wh-line:#E3E5E9;--wh-soft:#F5F6F8;--wh-red:#EE3524;--wh-amber:#C87409;--wh-blue:#157CA5;--wh-grad:linear-gradient(90deg,#F20045 0%,#FF6F00 100%)}
+body{font-family:Montserrat,"Noto Sans JP","Hiragino Sans","ヒラギノ角ゴシック",system-ui,sans-serif !important;color:var(--wh-ink) !important}
+.hero h1, h1{color:var(--wh-ink) !important;font-weight:800;letter-spacing:0.01em}
+.hero .en{font-family:Montserrat,sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.16em;color:var(--wh-blue);margin-bottom:0.9rem}
+.body p,.body li,p{color:var(--wh-ink) !important}
+.body h2{border-left:none !important;padding-left:0;margin-top:4rem;color:var(--wh-ink) !important;font-weight:800}
+.body h2[data-en]::before{content:attr(data-en);display:block;font-family:Montserrat,sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.16em;color:var(--wh-red);margin-bottom:0.35rem}
+.body h2[data-en].blue::before{color:var(--wh-blue)} .body h2[data-en].amber::before{color:var(--wh-amber)}
+table.cmp th{background:var(--wh-soft)} table.cmp tr.self td{background:#FFF4F2}
+.disclosure{background:var(--wh-soft) !important;border-color:var(--wh-line) !important}
+.btn{background:var(--wh-grad) !important;color:#fff !important;border-radius:4px !important;font-weight:700}
+.kadai{background:var(--wh-soft);border-radius:6px;padding:2rem 1.6rem;margin:2.6rem 0}
+.kadai .q{font-size:1.4rem;font-weight:800;text-align:center;margin:0 0 0.2rem}
+.kadai .qe{font-family:Montserrat,sans-serif;font-size:0.76rem;font-weight:700;letter-spacing:0.14em;color:var(--wh-blue);text-align:center;margin-bottom:1.6rem}
+.kadai .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.kadai .c{background:#fff;border:1px solid var(--wh-line);border-radius:6px;padding:1.1rem 1.1rem 0.6rem;min-width:0}
+.kadai .c .t{font-weight:800;font-size:1.02rem;margin-bottom:0.1rem}
+.kadai .c .e{font-family:Montserrat,sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:var(--wh-red);margin-bottom:0.6rem}
+.kadai .c ul{padding-left:1.1rem;margin-bottom:0.4rem} .kadai .c li{font-size:0.94rem;line-height:1.7}
+.wh-box{border:1px solid var(--wh-line);border-top:4px solid var(--wh-red);border-radius:6px;padding:1.8rem 1.6rem 1.6rem;margin:2.8rem 0;background:#fff}
+.wh-box .k{font-family:Montserrat,sans-serif;font-size:0.76rem;letter-spacing:0.16em;font-weight:700;color:var(--wh-red) !important;margin-bottom:0.3rem}
+.wh-box .h{font-size:1.25rem;font-weight:800;margin-bottom:0.8rem}
+.wh-box p{margin-bottom:1rem}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0.8rem;margin:0.4rem 0 1.4rem;padding:0;list-style:none}
+.steps li{border:1px solid var(--wh-line);border-radius:6px;padding:0.9rem 1rem;margin:0;min-width:0}
+.steps .s{font-family:Montserrat,sans-serif;font-size:0.72rem;font-weight:800;letter-spacing:0.14em;color:var(--wh-blue)}
+.steps b{display:block;font-size:1rem;margin:0.1rem 0 0.2rem}
+.steps span{font-size:0.88rem;color:var(--wh-sub)}
+.cta{background:#2A2D33 !important;border:none !important;border-radius:6px !important;color:#fff}
+.cta h3{color:#fff !important;font-size:1.5rem !important}
+.cta h3 em{font-style:normal;color:#FF5A47}
+.cta p,.cta p a{color:#D6D9DE !important}
+@media(max-width:600px){.cta{padding:2rem 1.2rem !important}.kadai{padding:1.6rem 1rem}}
 </style>
 </head>
 <body>
@@ -236,6 +268,7 @@ footer a { color:#000 !important; }
   <a href="./index.html" class="nav-back">← ARTICLES</a>
 </nav>
 <div class="hero">
+  <div class="en">WHERE TO ASK</div>
   <h1>情シスがいない会社は、セキュリティを誰に相談すればいいか｜公的な窓口8つと民間サービスの分け方【2026年版】</h1>
   <div class="meta"><span>2026 / 11 / 24</span><span>AIdollargame 編集部</span><span>読了 約7分</span></div>
 </div>
@@ -252,13 +285,15 @@ footer a { color:#000 !important; }
 <p>社内にセキュリティ担当（情シス）がいない会社で「うちは大丈夫か」「怪しいメールを開いてしまった」と思ったとき、最初に連絡する先は、まだ何も起きていないのか、既に被害が出ているのかで変わります。</p>
 <p>この記事では、中小企業が使える公的な窓口と制度を、公式ページで確かめた事実だけで並べます。そのうえで、民間に頼む場合のサービスの分かれ方を書きます。</p>
 
-<h2>まず分けるのは「起きる前」か「起きた後」か</h2>
+<div class="kadai"><p class="q">こんな困りごとはありませんか？</p><div class="qe">情シスがいない会社で、いざという時に止まるところ</div><div class="g"><div class="c"><div class="t">どこに連絡するか分からない</div><div class="e">WHERE</div><ul><li>IPA・警察・JPCERT/CCのどれに先に連絡するか決まっていない</li><li>電話で相談できる窓口が会社向けか分からない</li></ul></div><div class="c"><div class="t">報告の期限を知らない</div><div class="e">DEADLINE</div><ul><li>個人情報が漏れたときの報告に期限がある</li><li>速報と確報の2段階がある</li></ul></div><div class="c"><div class="t">備えの手順が分からない</div><div class="e">READINESS</div><ul><li>何から手を付けるかが決まっていない</li><li>使える制度や助成金を知らない</li></ul></div></div></div>
+
+<h2 data-en="BEFORE / AFTER" class="blue">まず分けるのは「起きる前」か「起きた後」か</h2>
 <ul>
   <li>起きる前（備えたい）: 何から手を付けるかを決める。公的なガイドラインと自社診断、SECURITY ACTION の宣言、民間の診断や監視のサービスが相談先になります。</li>
   <li>起きた後（被害が出た・疑いがある）: 初動の助言を受ける先と、報告しなければならない先が別にあります。個人情報が漏れた可能性があるときは、個人情報保護委員会への報告に期限があります。</li>
 </ul>
 
-<h2>公的な窓口と制度（公式ページで確認できる事実のみ）</h2>
+<h2 data-en="PUBLIC SUPPORT">公的な窓口と制度（公式ページで確認できる事実のみ）</h2>
 <p class="note" style="margin-top:0;">2026年11月24日時点で確認して作成。「記載なし」は開いたページに書いていなかったという意味です。</p>
 <div class="tblwrap">
 <table class="cmp">
@@ -276,10 +311,10 @@ footer a { color:#000 !important; }
 </table>
 </div>
 
-<h2>IPAの電話の相談窓口は、個人向け</h2>
+<h2 data-en="NOTE" class="amber">IPAの電話の相談窓口は、個人向け</h2>
 <p>IPAには電話で相談できる「情報セキュリティ安心相談窓口」（平日10時〜17時）もあります。ただし公式ページには「企業・組織の方は企業／組織向け窓口へ」と書かれていて、こちらは個人の方の窓口です。会社として相談するときは、上の表の「企業組織向けサイバーセキュリティ相談窓口」にメールで連絡します。</p>
 
-<h2>個人情報が漏れた可能性があるときの期限</h2>
+<h2 data-en="DEADLINE">個人情報が漏れた可能性があるときの期限</h2>
 <p>個人情報保護法の施行規則第8条で、報告は2段階に決まっています。</p>
 <ul>
   <li>速報: 知ったあと「速やかに」。委員会のガイドラインでは、おおむね3〜5日以内が目安とされています。</li>
@@ -287,7 +322,7 @@ footer a { color:#000 !important; }
 </ul>
 <p>報告が必要になるのは、要配慮個人情報が含まれるとき、財産的な被害のおそれがあるとき、不正の目的によるおそれがあるとき、本人の数が1,000人を超えるときの4つです。当社の<a href="../security/emergency.html" style="color:#111111;text-decoration:underline;">被害に遭ったときの初動</a>のページにも、最初の手順をまとめています。</p>
 
-<h2>民間に頼む場合は、3つの形に分かれる</h2>
+<h2 data-en="PRIVATE SERVICES" class="blue">民間に頼む場合は、3つの形に分かれる</h2>
 <p>公的な窓口は、助言と受付が中心です。自社のサイトやメールを実際に見て手を動かしてもらうなら、民間のサービスになります。中身は大きく3つに分かれます。</p>
 <ul>
   <li>監視と駆け付け型: 社内のネットワークやパソコンを見張り、異常があれば技術者が来る。上のお助け隊サービスがこの形です。</li>
@@ -297,11 +332,17 @@ footer a { color:#000 !important; }
 
 <div class="wh-box">
   <div class="k">FREE CHECK — 無料の外部チェック</div>
+  <div class="h">まず、外から見える穴を無料で数えます</div>
   <p>どこに相談するか決める前に、自社のドメインが外からどう見えているかを確かめておくと、相談のときに話が早く進みます。whitehack.jp にドメインを入れると、公開されている記録だけを読んで、なりすましメールの対策（SPF・DKIM・DMARC）、証明書、ドメインの期限、外から見えている管理画面を確かめます。貴社のサーバーには接続しません。無料です。</p>
+  <ol class="steps">
+    <li><div class="s">STEP 1</div><b>ドメインを入れる</b><span>whitehack.jp に会社のドメインを入れる。公開されている記録だけを読む</span></li>
+    <li><div class="s">STEP 2</div><b>見つかった穴を見る</b><span>重大度ごとの件数と、直し方、直すと何が止まるかが出る</span></li>
+    <li><div class="s">STEP 3</div><b>直すかを決める</b><span>自社で直すか、当社に任せるかを無料で相談できる</span></li>
+  </ol>
   <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-soudan-saki-2026" class="btn" target="_blank" rel="noopener">whitehack.jp で自社のドメインを調べる →</a>
 </div>
 
-<h2>当社について、正直に書きます</h2>
+<h2 data-en="ABOUT US">当社について、正直に書きます</h2>
 <p>株式会社AIdollargameの「<a href="../security/" style="color:#111111;text-decoration:underline;">ホワイトハック</a>」は、3つの形のうち、セキュリティ担当の代行型です。サイト・メール・VPN機器の脆弱性診断とペネトレーションテストを行い、見つけた穴を当社が直して、その記録を毎月お渡しします。料金はライトが月3万円、スタンダードが月15万円（税別）です。</p>
 <p>一方で、社員のパソコンの監視、24時間の見張り、事故が起きたときの駆け付けはしていません。それが必要な会社には、お助け隊サービスの方が合っています。相談の段階でそう判断したときは、その旨をお伝えします。</p>
 
@@ -337,7 +378,7 @@ footer a { color:#000 !important; }
 </div>
 
 <div class="cta">
-  <h3>相談の前に、自社のドメインを外から調べられます</h3>
+  <h3>相談の前に、<em>外から見える穴</em>を確かめませんか？</h3>
   <p>whitehack.jp は公開されている記録だけを読む無料の外部チェックです。貴社のサーバーには接続しません。結果を見たうえで、どこまで任せるかを無料でご相談いただけます。</p>
   <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-soudan-saki-2026" class="btn" target="_blank" rel="noopener">whitehack.jp で無料で調べる →</a>
   <p style="margin:1.2rem 0 0;font-size:0.85rem;"><a href="../index.html#contact" style="color:#111111;text-decoration:underline;">先に相談したい場合はこちら（無料）</a></p>

@@ -115,7 +115,7 @@
 - [「16時に電話します」の予約代行、16時を過ぎても音沙汰なし。運営会社に電話したら出たのはAIだった](https://aidollargame.com/articles/yoyaku-daiko-16ji-2026.html)
 - 日本でAIエージェントを使う社員は、1年で27%から61%に増えた。AIの研修を受けた人は77%から67%に減っている。36か国4万500人の調査: https://aidollargame.com/articles/ai-agent-shain-chosa-36kakoku-2026.html
 - AIに財務責任者のふりをさせると、本人の過去の答えを渡した時だけ本人の答えに近づいた。言い当てられた割合は10%から49%へ。米国CFOの回答6,075件の論文: https://aidollargame.com/articles/cfo-llm-nber-36057-2026.html
-- 167年解けなかったリーマン予想を、AIと組んだ数学者が証明した。機械は「正しい」と認めたが、人間はまだ証明を読み解けていない: https://aidollargame.com/articles/riemann-hypothesis-lean-proof-2026.html
+- 167年解けなかったリーマン予想がAI時代に証明されたことは何を意味するのか？: https://aidollargame.com/articles/riemann-hypothesis-lean-proof-2026.html
 - [10月21日の夜、「うちは大丈夫か」に何時間で答えられましたか｜PHPの事件から、情シスのいない会社が今週やること](https://aidollargame.com/articles/php-joshisu-inai-2026.html)
 - [Redditの株価が1日で29%下がった。売上は53%増えていた。AIは中身を読むが、人を送り返さない](https://aidollargame.com/articles/reddit-kabuka-29-2026.html)
 - [社員の4人に1人が、AIで自分で作ったアプリで仕事をしていた。上司に頼まれて作った人は1,970人中9人](https://aidollargame.com/articles/jisaku-app-4nin-1nin-2026.html)

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECサイトの脆弱性診断は義務化された？｜クレジットカード・セキュリティガイドライン6.1版の要件、罰則と契約解除、EC-CUBE | AIdollargame</title>
+<meta name="description" content="クレジットカードを扱うEC加盟店は2025年4月から、クレジットカード・セキュリティガイドラインの指針対策として脆弱性診断またはペネトレーションテストの定期実施と修正が求められている（6.1版 5-2-2-1）。求められる5つの対策、割賦販売法との関係、罰則（措置自体には無し、報告・検査には罰金）と加盟店契約の解除、申告書、EC-CUBEの脆弱性と改ざん事例を一次情報だけでまとめた。">
+<meta name="author" content="AIdollargame 編集部">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/security/ec.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="株式会社AIdollargame">
+<meta property="og:title" content="ECサイトの脆弱性診断は義務化された？｜クレジットカード・セキュリティガイドライン6.1版の要件、罰則と契約解除、EC-CUBE">
+<meta property="og:description" content="ECサイトの脆弱性診断の義務化。ガイドライン6.1版の5つの対策、罰則と契約解除、申告書、EC-CUBEの脆弱性。">
+<meta property="og:url" content="https://aidollargame.com/security/ec.html">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-11-24">
+<meta property="article:author" content="AIdollargame 編集部">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ECサイトの脆弱性診断の義務化【2026年版】">
+<meta name="twitter:description" content="ECサイトの脆弱性診断の義務化。ガイドライン6.1版の5つの対策、罰則と契約解除、申告書、EC-CUBEの脆弱性。">
+<meta name="twitter:image" content="https://aidollargame.com/og-default.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "ホーム",
+   "item": "https://aidollargame.com/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "ホワイトハック",
+   "item": "https://aidollargame.com/security/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "ECサイトの脆弱性診断の義務化",
+   "item": "https://aidollargame.com/security/ec.html"
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Article",
+ "headline": "ECサイトの脆弱性診断は義務化された？｜クレジットカード・セキュリティガイドライン6.1版の要件、罰則と契約解除、EC-CUBE",
+ "description": "クレジットカードを扱うEC加盟店は2025年4月から、クレジットカード・セキュリティガイドラインの指針対策として脆弱性診断またはペネトレーションテストの定期実施と修正が求められている（6.1版 5-2-2-1）。求められる5つの対策、割賦販売法との関係、罰則（措置自体には無し、報告・検査には罰金）と加盟店契約の解除、申告書、EC-CUBEの脆弱性と改ざん事例を一次情報だけでまとめた。",
+ "datePublished": "2026-11-24",
+ "dateModified": "2026-11-24",
+ "author": {
+  "@type": "Organization",
+  "name": "AIdollargame 編集部"
+ },
+ "publisher": {
+  "@type": "Organization",
+  "name": "AIdollargame",
+  "logo": {
+   "@type": "ImageObject",
+   "url": "https://aidollargame.com/og-default.png"
+  }
+ },
+ "mainEntityOfPage": "https://aidollargame.com/security/ec.html",
+ "image": "https://aidollargame.com/og-default.png",
+ "inLanguage": "ja",
+ "about": [
+  {
+   "@type": "Thing",
+   "name": "ECサイト 脆弱性診断 義務化"
+  },
+  {
+   "@type": "Thing",
+   "name": "クレジットカード・セキュリティガイドライン"
+  },
+  {
+   "@type": "Thing",
+   "name": "割賦販売法"
+  },
+  {
+   "@type": "Thing",
+   "name": "EC-CUBE 脆弱性"
+  },
+  {
+   "@type": "Thing",
+   "name": "EC加盟店"
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "ECサイトの脆弱性診断は義務ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "クレジットカードを扱うEC加盟店は、2025年4月からクレジットカード・セキュリティガイドラインの指針対策として「脆弱性診断又はペネトレーションテストを定期的に実施し、必要な修正対応を行う」ことが求められています（6.1版 5-2-2-1）。根拠は割賦販売法で、カード情報を保持していないECサイトも対象です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ECサイトの脆弱性対策をしないと罰則はありますか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ガイドラインのFAQは、対策をとらないこと自体に罰金等の罰則規定はないとしています。ただし行政への報告を怠る・偽る、立入検査を拒むと50万円以下の罰金があり、カード会社の指導に従わない場合は加盟店契約が解除されることがあります。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ECサイトの脆弱性診断はどのくらいの頻度で必要ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ガイドラインは「定期的に」とだけ書いていて、回数の決まりはありません。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ECサイトの脆弱性対策で求められることは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "管理画面のアクセス制限と2段階認証・アカウントロック、データディレクトリの露見対策、脆弱性診断またはペネトレーションテストの定期実施と修正、ウイルス対策ソフト、悪質な有効性確認・クレジットマスターへの対策の5つすべてです。"
+   }
+  }
+ ]
+}
+</script>
+
+<style>
+html{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif}button,input,select,textarea{font-family:inherit}
+h1,h2,h3,h4,p,li,dt,dd,figcaption,summary,.sec-lead,.sec-title{word-break:auto-phrase;text-wrap:pretty}
+  :root{--cyan:#00d8ff;--blue:#000;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#000);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;background:#0a1238;}
+  body{background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;overflow-x:hidden;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,9,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);} .logo .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;} .logo .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
+  .nav-back{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .hero{padding:9rem 2rem 4rem;max-width:800px;margin:0 auto;}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;word-break:auto-phrase;}
+  .meta{display:flex;gap:2rem;align-items:center;font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}
+  .body{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}
+  .body h2{font-size:1.4rem;font-weight:900;margin:3.5rem 0 1.2rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}
+  .body h3{font-size:1.12rem;font-weight:800;margin:2.2rem 0 0.8rem;line-height:1.5;}
+  .body p{font-size:1.06rem;color:rgba(238,243,255,0.85);line-height:1.9;margin-bottom:1.4rem;}
+  .body strong{color:#fff;font-weight:700;}
+  .body ul,.body ol{padding-left:1.5rem;margin-bottom:1.4rem;}
+  .body li{font-size:1.02rem;color:rgba(238,243,255,0.85);line-height:1.8;margin-bottom:0.4rem;}
+  .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
+  .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
+  .tblwrap{overflow-x:auto;margin:1.5rem 0 2rem;-webkit-overflow-scrolling:touch;}
+  table.cmp{border-collapse:collapse;width:100%;min-width:720px;font-size:0.92rem;line-height:1.6;}
+  table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:0.7rem 0.8rem;text-align:left;vertical-align:top;}
+  table.cmp th{background:#f3f4f6;font-weight:700;white-space:nowrap;}
+  table.cmp td.n{white-space:nowrap;font-weight:700;}
+  table.cmp tr.self td{background:#f4f4f4;}
+  .note{font-size:0.86rem;color:#555 !important;margin-top:-1rem;margin-bottom:2rem;}
+  .disclosure{border:1px solid #e5e7eb;background:#fafbfc;border-radius:10px;padding:1.2rem 1.4rem;margin:0 0 2.4rem;font-size:0.95rem;line-height:1.8;}
+  .sources{margin:3rem 0 0;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.08);}
+  .sources h3{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.7rem;letter-spacing:0.2em;color:var(--muted);margin-bottom:1rem;}
+  .sources li{font-size:0.82rem;line-height:1.7;margin-bottom:0.5rem;}
+  .sources a{color:var(--muted);text-decoration:underline;}
+  .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
+  .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2rem;color:#001428;font-weight:700;font-size:0.9rem;border-radius:8px;background:linear-gradient(110deg,#00d8ff 0%,#000 50%,#00d8ff 100%);background-size:220% 100%;text-decoration:none;transition:transform 0.25s,box-shadow 0.4s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(0,216,255,0.6);}
+  .related{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+  .related h3{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.72rem;letter-spacing:0.3em;color:var(--muted);margin-bottom:1.5rem;}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .rcard{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.4rem;text-decoration:none;color:inherit;transition:all 0.3s;display:block;}
+  .rcard:hover{border-color:rgba(0,216,255,0.35);transform:translateY(-4px);}
+  .rcard .rt{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.65rem;color:var(--cyan);margin-bottom:0.5rem;}
+  .rcard .rttl{font-size:0.88rem;font-weight:700;line-height:1.5;}
+  footer{border-top:1px solid rgba(255,255,255,0.08);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:rgba(6,9,26,0.6);}
+  .fc{font-size:0.75rem;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.hero,.body,.related{padding-left:1.2rem;padding-right:1.2rem;}footer{padding:2rem 1.5rem;}}
+
+/* ============ LIGHT THEME OVERRIDE ============ */
+html { background:#ffffff !important; }
+body { background:#ffffff !important; color:#000 !important; }
+body::before { display:none !important; }
+nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.nav-back { color:#000 !important; }
+.hero h1, h1, h2, h3 { color:#000 !important; }
+.hero p, p { color:#000 !important; }
+.body li { color:#000 !important; }
+.body strong { color:#000 !important; }
+.body h2 { border-left-color:#000 !important; }
+blockquote { background:#fafbfc !important; border-left-color:#000 !important; color:#000 !important; }
+blockquote p { color:#000 !important; }
+.meta { color:#000 !important; border-bottom-color:#e5e7eb !important; }
+.sources { border-top-color:#e5e7eb !important; }
+.sources h3, .sources a { color:#444 !important; }
+.cta { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.cta p { color:#333 !important; }
+.btn { background:#000 !important; color:#fff !important; }
+.related h3 { color:#000 !important; }
+.rcard { background:#ffffff !important; border:1px solid #e5e7eb !important; color:#000 !important; }
+.rcard .rt { color:#111111 !important; }
+.rcard .rttl { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
+footer a { color:#000 !important; }
+.fc { color:#000 !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ホワイトハック系の記事。/security/ と同じ配色(白・文字#333・赤#EE3524・山吹#C87409・青#157CA5) */
+:root{--wh-ink:#333;--wh-sub:#6B7280;--wh-line:#E3E5E9;--wh-soft:#F5F6F8;--wh-red:#EE3524;--wh-amber:#C87409;--wh-blue:#157CA5;--wh-grad:linear-gradient(90deg,#F20045 0%,#FF6F00 100%)}
+body{font-family:Montserrat,"Noto Sans JP","Hiragino Sans","ヒラギノ角ゴシック",system-ui,sans-serif !important;color:var(--wh-ink) !important}
+.hero h1, h1{color:var(--wh-ink) !important;font-weight:800;letter-spacing:0.01em}
+.hero .en{font-family:Montserrat,sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.16em;color:var(--wh-blue);margin-bottom:0.9rem}
+.body p,.body li,p{color:var(--wh-ink) !important}
+.body h2{border-left:none !important;padding-left:0;margin-top:4rem;color:var(--wh-ink) !important;font-weight:800}
+.body h2[data-en]::before{content:attr(data-en);display:block;font-family:Montserrat,sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.16em;color:var(--wh-red);margin-bottom:0.35rem}
+.body h2[data-en].blue::before{color:var(--wh-blue)} .body h2[data-en].amber::before{color:var(--wh-amber)}
+table.cmp th{background:var(--wh-soft)} table.cmp tr.self td{background:#FFF4F2}
+.disclosure{background:var(--wh-soft) !important;border-color:var(--wh-line) !important}
+.btn{background:var(--wh-grad) !important;color:#fff !important;border-radius:4px !important;font-weight:700}
+.kadai{background:var(--wh-soft);border-radius:6px;padding:2rem 1.6rem;margin:2.6rem 0}
+.kadai .q{font-size:1.4rem;font-weight:800;text-align:center;margin:0 0 0.2rem}
+.kadai .qe{font-family:Montserrat,sans-serif;font-size:0.76rem;font-weight:700;letter-spacing:0.14em;color:var(--wh-blue);text-align:center;margin-bottom:1.6rem}
+.kadai .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.kadai .c{background:#fff;border:1px solid var(--wh-line);border-radius:6px;padding:1.1rem 1.1rem 0.6rem;min-width:0}
+.kadai .c .t{font-weight:800;font-size:1.02rem;margin-bottom:0.1rem}
+.kadai .c .e{font-family:Montserrat,sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:var(--wh-red);margin-bottom:0.6rem}
+.kadai .c ul{padding-left:1.1rem;margin-bottom:0.4rem} .kadai .c li{font-size:0.94rem;line-height:1.7}
+.wh-box{border:1px solid var(--wh-line);border-top:4px solid var(--wh-red);border-radius:6px;padding:1.8rem 1.6rem 1.6rem;margin:2.8rem 0;background:#fff}
+.wh-box .k{font-family:Montserrat,sans-serif;font-size:0.76rem;letter-spacing:0.16em;font-weight:700;color:var(--wh-red) !important;margin-bottom:0.3rem}
+.wh-box .h{font-size:1.25rem;font-weight:800;margin-bottom:0.8rem}
+.wh-box p{margin-bottom:1rem}
+.sources a{word-break:break-all}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0.8rem;margin:0.4rem 0 1.4rem;padding:0;list-style:none}
+.steps li{border:1px solid var(--wh-line);border-radius:6px;padding:0.9rem 1rem;margin:0;min-width:0}
+.steps .s{font-family:Montserrat,sans-serif;font-size:0.72rem;font-weight:800;letter-spacing:0.14em;color:var(--wh-blue)}
+.steps b{display:block;font-size:1rem;margin:0.1rem 0 0.2rem}
+.steps span{font-size:0.88rem;color:var(--wh-sub)}
+.cta{background:#2A2D33 !important;border:none !important;border-radius:6px !important;color:#fff}
+.cta h3{color:#fff !important;font-size:1.5rem !important}
+.cta h3 em{font-style:normal;color:#FF5A47}
+.cta p,.cta p a{color:#D6D9DE !important}
+@media(max-width:600px){.cta{padding:2rem 1.2rem !important}.kadai{padding:1.6rem 1rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
+  <a href="./" class="nav-back">← WHITEHACK</a>
+</nav>
+<div class="hero">
+  <div class="en">E-COMMERCE SECURITY GUIDE</div>
+  <h1>ECサイトの脆弱性診断は義務化された？｜クレジットカード・セキュリティガイドライン6.1版の要件、罰則と契約解除、EC-CUBE</h1>
+  <div class="meta"><span>2026 / 11 / 24</span><span>AIdollargame 編集部</span><span>読了 約7分</span></div>
+</div>
+<article class="body">
+
+<figure style="margin:0 0 2.6rem;">
+  <img src="../articles/php-joshisu-inai-2026-hero.jpg" alt="画面に表示されたPHPのプログラム" style="width:100%;height:auto;border-radius:14px;display:block;">
+</figure>
+
+<div class="disclosure">
+  この記事の立場を先に書きます。書いているのは、社内にセキュリティ担当がいない会社に代わってサイト・メール・VPN機器の穴を見つけて直す「ホワイトハック」を提供している株式会社AIdollargameです。比較表には当社も入れています。各社の説明は公式サイト・公式発表に書いてある事実だけに限り、順位や評価は付けていません。
+</div>
+
+<p>クレジットカードを扱うECサイトは、2025年4月から、クレジットカード・セキュリティガイドライン（経済産業省・クレジット取引セキュリティ対策協議会）で「脆弱性対策」が指針対策になりました。最新の6.1版（2026年3月11日）も同じ内容を求めています。カード情報を自社で持っていない（非保持化している）ECサイトも対象です。</p>
+
+<div class="kadai"><p class="q">こんな困りごとはありませんか？</p><div class="qe">ECサイトの事業者が止まるところ</div><div class="g"><div class="c"><div class="t">何をすれば足りるのか分からない</div><div class="e">WHAT</div><ul><li>「脆弱性診断の義務化」と聞いたが、頻度や範囲が分からない</li><li>申告書に何と書けばいいか分からない</li></ul></div><div class="c"><div class="t">制作会社に任せている</div><div class="e">VENDOR</div><ul><li>ECサイトの構築・保守を外に出している</li><li>プラグインやEC-CUBEの更新を誰がしているか知らない</li></ul></div><div class="c"><div class="t">守らないとどうなるか不安</div><div class="e">RISK</div><ul><li>罰則があるのか</li><li>カード会社との契約はどうなるのか</li></ul></div></div></div>
+
+<h2 data-en="REQUIREMENTS" class="blue">EC加盟店に求められる脆弱性対策（6.1版 5-2-2-1）</h2>
+<p>ガイドラインは「下記のすべての対策を講じる」としています。</p>
+<ol>
+  <li>管理画面のアクセス制限とID/パスワードの管理: 管理画面に入れるIPアドレスを制限する（できなければベーシック認証など）、2段階認証か多要素認証を使う、10回以下のログイン失敗でアカウントをロックする。</li>
+  <li>データディレクトリの露見対策: 公開ディレクトリに重要なファイルを置かない、アップロードできる拡張子・ファイルを制限する。</li>
+  <li>Webアプリケーションの脆弱性対策: 「脆弱性診断又はペネトレーションテストを定期的に実施し、必要な修正対応を行う」。最新のプラグインを使い、ソフトウェアを更新する。自社で開発・カスタマイズしている場合はソースコードレビュー。</li>
+  <li>ウイルス対策ソフトの導入と運用。</li>
+  <li>悪質な有効性確認・クレジットマスターへの対策（1つ以上）。</li>
+</ol>
+<p>診断の頻度は「定期的に」とだけ書かれ、回数の決まりはありません。構築・運用を外部に任せている場合は、委託先にこの対策を理解したうえで構築・運用するよう求めることとされています。導入ガイドは、オープンソースのソフトを使う場合、導入後のパッチ更新は「EC加盟店の責任」としています。</p>
+
+<h2 data-en="LEGAL" class="amber">「義務化」と罰則の関係</h2>
+<ul>
+  <li>根拠は割賦販売法です。加盟店はクレジットカード番号等の適切な管理（第35条の16）と不正利用の防止（第35条の17の15）のために必要な措置を講じなければなりません。ガイドラインは、その「実務上の指針」と位置づけられています。</li>
+  <li>ガイドラインのFAQは、対策をとらないこと自体に「罰金等の罰則規定はありません」と答えています。一方、行政への報告をしない・偽る、立入検査を拒むと、50万円以下の罰金です（第53条）。</li>
+  <li>カード会社（アクワイアラー）は、加盟店が基準に合わない場合、指導し、従わなければ加盟店契約を解除します（第35条の17の8、施行規則第133条の9）。FAQも「加盟店契約が解除される場合がございます」としています。</li>
+  <li>新規に申し込む加盟店は、「ECサイトのセキュリティ対策実施状況申告書（例）」で、必要な対策がすべてできていることを確かめて提出します。既存の加盟店も完了の報告をします。</li>
+</ul>
+
+<h2 data-en="EC-CUBE" class="blue">EC-CUBEを使っている場合</h2>
+<ul>
+  <li>2026年3月: EC-CUBE本体に、管理者のIDとパスワードを手に入れた第三者が二要素認証を回避できる脆弱性（JVN#63765888）。4.1.2-p5・4.2.3-p2・4.3.1-p1より前が対象です。</li>
+  <li>2026年10月: EC-CUBE 4系の公式AmazonPayプラグインの脆弱性（JVN#43511918）。開発者によると、悪用した攻撃が既に確認されています。</li>
+  <li>JPCERT/CCの四半期レポートは、2025年7〜9月と2026年7〜9月の両方で、EC-CUBEで作られた国内の複数のECサイトに、カード情報を盗むことを狙ったコードが埋め込まれた事例を報告しています。</li>
+</ul>
+
+<div class="wh-box">
+  <div class="k">FREE CHECK — 無料の外部チェック</div>
+  <div class="h">まず、ECサイトのドメインを外から無料で確かめる</div>
+  <p>ECサイトのドメインで、外から何が見えているかは whitehack.jp で無料で確かめられます。管理画面のサブドメインやメールの設定を、公開されている記録だけで確かめます。サイトには接続しません。</p>
+  <ol class="steps">
+    <li><div class="s">STEP 1</div><b>ドメインを入れる</b><span>whitehack.jp に会社のドメインを入れる。公開されている記録だけを見る</span></li>
+    <li><div class="s">STEP 2</div><b>見つかった穴を見る</b><span>重大度ごとの件数と、直し方、直すと何が止まるかが出る</span></li>
+    <li><div class="s">STEP 3</div><b>直すかを決める</b><span>自社で直すか、当社に任せるかを無料で相談できる</span></li>
+  </ol>
+  <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-ec" class="btn" target="_blank" rel="noopener">whitehack.jp で自社のドメインを調べる →</a>
+</div>
+
+<h2 data-en="ABOUT US">当社について、正直に書きます</h2>
+<p>ホワイトハックは、承諾をいただいた範囲で、ECサイトの脆弱性診断とペネトレーションテストを行い、見つけた穴を当社が直して、その記録を毎月お渡しするセキュリティ担当の代行です（スポット診断 5万円〜、スタンダード 月15万円・税別）。ガイドラインの「定期的に実施し、必要な修正対応を行う」の部分を引き受けます。EMV 3-Dセキュアの導入、決済代行会社の選定、カード会社への申告書の提出そのものは行っていません。申告の内容はカード会社か決済代行会社に確かめてください。</p>
+
+
+<h2>よくある質問</h2>
+<h3>ECサイトの脆弱性診断は義務ですか？</h3>
+<p>クレジットカードを扱うEC加盟店は、2025年4月からクレジットカード・セキュリティガイドラインの指針対策として「脆弱性診断又はペネトレーションテストを定期的に実施し、必要な修正対応を行う」ことが求められています（6.1版 5-2-2-1）。根拠は割賦販売法で、カード情報を保持していないECサイトも対象です。</p>
+<h3>ECサイトの脆弱性対策をしないと罰則はありますか？</h3>
+<p>ガイドラインのFAQは、対策をとらないこと自体に罰金等の罰則規定はないとしています。ただし行政への報告を怠る・偽る、立入検査を拒むと50万円以下の罰金があり、カード会社の指導に従わない場合は加盟店契約が解除されることがあります。</p>
+<h3>ECサイトの脆弱性診断はどのくらいの頻度で必要ですか？</h3>
+<p>ガイドラインは「定期的に」とだけ書いていて、回数の決まりはありません。</p>
+<h3>ECサイトの脆弱性対策で求められることは何ですか？</h3>
+<p>管理画面のアクセス制限と2段階認証・アカウントロック、データディレクトリの露見対策、脆弱性診断またはペネトレーションテストの定期実施と修正、ウイルス対策ソフト、悪質な有効性確認・クレジットマスターへの対策の5つすべてです。</p>
+
+<div class="sources">
+  <h3>出典（日本クレジット協会・経済産業省・e-Gov・JVN・JPCERT/CCの公表資料。2026年11月24日確認）</h3>
+  <ul>
+    <li>クレジットカード・セキュリティガイドライン 6.1版（PDF） <a href="https://www.j-credit.or.jp/security/pdf/Creditcardsecurityguidelines_6.1_published.pdf" target="_blank" rel="noopener">www.j-credit.or.jp/security/pdf/Creditcardsecurityguidelines_6.1_published.pdf</a></li>
+    <li>6.1版 改訂について（PDF） <a href="https://www.j-credit.or.jp/security/pdf/Creditcardsecurityguidelines_6.1_revisionpoint.pdf" target="_blank" rel="noopener">www.j-credit.or.jp/security/pdf/Creditcardsecurityguidelines_6.1_revisionpoint.pdf</a></li>
+    <li>附属文書20 EC加盟店におけるセキュリティ対策 導入ガイド（PDF） <a href="https://www.j-credit.or.jp/security/pdf/security_measures_for_EC_member_stores_installation_guide.pdf" target="_blank" rel="noopener">www.j-credit.or.jp/security/pdf/security_measures_for_EC_member_stores_installation_guide.pdf</a></li>
+    <li>別紙a セキュリティ対策一覧（PDF） <a href="https://www.j-credit.or.jp/security/pdf/supporting_document_a.pdf" target="_blank" rel="noopener">www.j-credit.or.jp/security/pdf/supporting_document_a.pdf</a></li>
+    <li>別紙c FAQ（PDF） <a href="https://www.j-credit.or.jp/security/pdf/supporting_document_c_FAQ.pdf" target="_blank" rel="noopener">www.j-credit.or.jp/security/pdf/supporting_document_c_FAQ.pdf</a></li>
+    <li>ガイドライン6.0版 FAQ（PDF） <a href="https://www.j-credit.or.jp/security/pdf/creditcardsecurityguidelines_6.0_FAQ.pdf" target="_blank" rel="noopener">www.j-credit.or.jp/security/pdf/creditcardsecurityguidelines_6.0_FAQ.pdf</a></li>
+    <li>経済産業省 6.0版の公表（2025年3月5日） <a href="https://www.meti.go.jp/press/2024/03/20250305002/20250305002.html" target="_blank" rel="noopener">www.meti.go.jp/press/2024/03/20250305002/20250305002.html</a></li>
+    <li>e-Gov 割賦販売法 <a href="https://laws.e-gov.go.jp/law/336AC0000000159" target="_blank" rel="noopener">laws.e-gov.go.jp/law/336AC0000000159</a></li>
+    <li>IPA ECサイト構築・運用セキュリティガイドライン <a href="https://www.ipa.go.jp/security/guide/vuln/guideforecsite.html" target="_blank" rel="noopener">www.ipa.go.jp/security/guide/vuln/guideforecsite.html</a></li>
+    <li>JVN#63765888 EC-CUBE <a href="https://jvn.jp/jp/JVN63765888/" target="_blank" rel="noopener">jvn.jp/jp/JVN63765888/</a></li>
+    <li>JVN#43511918 EC-CUBE AmazonPayプラグイン <a href="https://jvn.jp/jp/JVN43511918/" target="_blank" rel="noopener">jvn.jp/jp/JVN43511918/</a></li>
+    <li>JPCERT/CC 四半期レポート 2026年7〜9月（PDF） <a href="https://www.jpcert.or.jp/qr/2026/QR_FY2026-Q2.pdf" target="_blank" rel="noopener">www.jpcert.or.jp/qr/2026/QR_FY2026-Q2.pdf</a></li>
+  </ul>
+</div>
+
+<div class="cta">
+  <h3>そのECサイト、<em>最後に診断</em>したのはいつですか？</h3>
+  <p>whitehack.jp は公開されている記録だけを見る無料の外部チェックです。サイトには接続しません。</p>
+  <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-ec" class="btn" target="_blank" rel="noopener">whitehack.jp で無料で調べる →</a>
+  <p style="margin:1.2rem 0 0;font-size:0.85rem;"><a href="../index.html#contact" style="color:#111111;text-decoration:underline;">先に相談したい場合はこちら（無料）</a></p>
+</div>
+</article>
+<div class="related">
+  <h3>RELATED ARTICLES</h3>
+  <div class="rgrid">
+    <a href="./kaizan.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">Webサイトの改ざん対策と改ざん検知サービス</div></a>
+    <a href="./ryokin.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">脆弱性診断・ペネトレーションテストの費用相場と料金比較</div></a>
+    <a href="./pentest.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">ペネトレーションテストの費用相場と依頼先の比較</div></a>
+    <a href="./wordpress.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">WordPressの脆弱性診断・保守を頼める会社</div></a>
+  </div>
+</div>
+<div class="svc-links" style="max-width:820px;margin:0 auto 3rem;padding:1.5rem 1.6rem;background:#fafbfc;border:1px solid #e5e7eb;border-radius:12px;">
+  <div style="font-size:0.74rem;letter-spacing:0.18em;font-weight:700;color:#555;margin-bottom:0.6rem;">SECURITY &mdash; AIdollargameのセキュリティ</div>
+  <p style="margin:0;font-size:0.92rem;color:#333 !important;line-height:2;">
+    <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-ec" target="_blank" rel="noopener" style="color:#111111 !important;text-decoration:underline;">whitehack.jp（無料の外部チェック）</a> ／
+    <a href="./" style="color:#111111 !important;text-decoration:underline;">ホワイトハック（セキュリティ担当の代行）</a> ／
+    <a href="./#start" style="color:#111111 !important;text-decoration:underline;">料金と始め方</a> ／
+    <a href="./emergency.html" style="color:#111111 !important;text-decoration:underline;">被害に遭ったときの初動</a>
+  </p>
+</div>
+<footer>
+  <a href="../index.html" class="logo">A<span class="heart-i">ı</span>dollargame</a>
+  <div class="fc">© <span class="cpy-y" data-since="2025">2025</span> 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
+</footer>
+<script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
+<script defer src="../scripts/ga-events.js?v=20260824"></script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>税理士・会計事務所・法律事務所のセキュリティ対策｜弁護士情報セキュリティ規程、税理士会の指針、士業の被害事例 | AIdollargame</title>
+<meta name="description" content="税理士・会計事務所・法律事務所・社労士事務所のセキュリティ対策を、弁護士情報セキュリティ規程（2024年6月施行、基本的な取扱方法の策定義務）、日本税理士会連合会の指針、社労士会のSRP認証とIT-BCP、国税庁のなりすましメールの注意喚起、税理士法人の被害事例（ランサムウェア、Chatworkの乗っ取り）から、公式の事実だけでまとめた。">
+<meta name="author" content="AIdollargame 編集部">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/security/shigyo.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="株式会社AIdollargame">
+<meta property="og:title" content="税理士・会計事務所・法律事務所のセキュリティ対策｜弁護士情報セキュリティ規程、税理士会の指針、士業の被害事例">
+<meta property="og:description" content="士業の事務所のセキュリティ対策。弁護士情報セキュリティ規程、税理士会の指針、公表された被害事例、最初にやること。">
+<meta property="og:url" content="https://aidollargame.com/security/shigyo.html">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-11-24">
+<meta property="article:author" content="AIdollargame 編集部">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="士業の事務所のセキュリティ対策【2026年版】">
+<meta name="twitter:description" content="士業の事務所のセキュリティ対策。弁護士情報セキュリティ規程、税理士会の指針、公表された被害事例、最初にやること。">
+<meta name="twitter:image" content="https://aidollargame.com/og-default.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "ホーム",
+   "item": "https://aidollargame.com/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "ホワイトハック",
+   "item": "https://aidollargame.com/security/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "士業の事務所のセキュリティ対策",
+   "item": "https://aidollargame.com/security/shigyo.html"
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Article",
+ "headline": "税理士・会計事務所・法律事務所のセキュリティ対策｜弁護士情報セキュリティ規程、税理士会の指針、士業の被害事例",
+ "description": "税理士・会計事務所・法律事務所・社労士事務所のセキュリティ対策を、弁護士情報セキュリティ規程（2024年6月施行、基本的な取扱方法の策定義務）、日本税理士会連合会の指針、社労士会のSRP認証とIT-BCP、国税庁のなりすましメールの注意喚起、税理士法人の被害事例（ランサムウェア、Chatworkの乗っ取り）から、公式の事実だけでまとめた。",
+ "datePublished": "2026-11-24",
+ "dateModified": "2026-11-24",
+ "author": {
+  "@type": "Organization",
+  "name": "AIdollargame 編集部"
+ },
+ "publisher": {
+  "@type": "Organization",
+  "name": "AIdollargame",
+  "logo": {
+   "@type": "ImageObject",
+   "url": "https://aidollargame.com/og-default.png"
+  }
+ },
+ "mainEntityOfPage": "https://aidollargame.com/security/shigyo.html",
+ "image": "https://aidollargame.com/og-default.png",
+ "inLanguage": "ja",
+ "about": [
+  {
+   "@type": "Thing",
+   "name": "税理士事務所 セキュリティ対策"
+  },
+  {
+   "@type": "Thing",
+   "name": "会計事務所 セキュリティ"
+  },
+  {
+   "@type": "Thing",
+   "name": "弁護士情報セキュリティ規程"
+  },
+  {
+   "@type": "Thing",
+   "name": "士業 セキュリティ"
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "弁護士情報セキュリティ規程で、何が義務になりましたか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "2024年6月1日施行の弁護士情報セキュリティ規程（会規第117号）では、事務所の規模・業務に応じて情報の「基本的な取扱方法」を定めることが義務（第3条第2項）で、事故時の対応（第7条）や事務職員に対策を講じさせること（第4条第2項）も求められています。多くの条文は努力義務です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "税理士事務所のセキュリティ対策の指針はありますか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "日本税理士会連合会が「税理士事務所等の内部規律及び内部管理体制に関する指針」（2023年3月改訂）と情報管理チェックリストのモデル、2026年9月に「税理士事務所のためのAI・クラウド活用ガイドライン」を出しています（会員向け）。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "士業の事務所で実際に起きた被害は？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "税理士法人高野総合会計事務所ほか（2024年）は、通信機器の更新時の設定ミスからランサムウェアの被害を受けたと発表しました。税理士法人ハガックス（2026年）は、フィッシングでChatworkのアカウントが乗っ取られたと発表しました。"
+   }
+  }
+ ]
+}
+</script>
+
+<style>
+html{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif}button,input,select,textarea{font-family:inherit}
+h1,h2,h3,h4,p,li,dt,dd,figcaption,summary,.sec-lead,.sec-title{word-break:auto-phrase;text-wrap:pretty}
+  :root{--cyan:#00d8ff;--blue:#000;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#000);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;background:#0a1238;}
+  body{background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;overflow-x:hidden;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,9,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);} .logo .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;} .logo .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
+  .nav-back{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .hero{padding:9rem 2rem 4rem;max-width:800px;margin:0 auto;}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;word-break:auto-phrase;}
+  .meta{display:flex;gap:2rem;align-items:center;font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}
+  .body{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}
+  .body h2{font-size:1.4rem;font-weight:900;margin:3.5rem 0 1.2rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}
+  .body h3{font-size:1.12rem;font-weight:800;margin:2.2rem 0 0.8rem;line-height:1.5;}
+  .body p{font-size:1.06rem;color:rgba(238,243,255,0.85);line-height:1.9;margin-bottom:1.4rem;}
+  .body strong{color:#fff;font-weight:700;}
+  .body ul,.body ol{padding-left:1.5rem;margin-bottom:1.4rem;}
+  .body li{font-size:1.02rem;color:rgba(238,243,255,0.85);line-height:1.8;margin-bottom:0.4rem;}
+  .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
+  .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
+  .tblwrap{overflow-x:auto;margin:1.5rem 0 2rem;-webkit-overflow-scrolling:touch;}
+  table.cmp{border-collapse:collapse;width:100%;min-width:720px;font-size:0.92rem;line-height:1.6;}
+  table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:0.7rem 0.8rem;text-align:left;vertical-align:top;}
+  table.cmp th{background:#f3f4f6;font-weight:700;white-space:nowrap;}
+  table.cmp td.n{white-space:nowrap;font-weight:700;}
+  table.cmp tr.self td{background:#f4f4f4;}
+  .note{font-size:0.86rem;color:#555 !important;margin-top:-1rem;margin-bottom:2rem;}
+  .disclosure{border:1px solid #e5e7eb;background:#fafbfc;border-radius:10px;padding:1.2rem 1.4rem;margin:0 0 2.4rem;font-size:0.95rem;line-height:1.8;}
+  .sources{margin:3rem 0 0;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.08);}
+  .sources h3{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.7rem;letter-spacing:0.2em;color:var(--muted);margin-bottom:1rem;}
+  .sources li{font-size:0.82rem;line-height:1.7;margin-bottom:0.5rem;}
+  .sources a{color:var(--muted);text-decoration:underline;}
+  .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
+  .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2rem;color:#001428;font-weight:700;font-size:0.9rem;border-radius:8px;background:linear-gradient(110deg,#00d8ff 0%,#000 50%,#00d8ff 100%);background-size:220% 100%;text-decoration:none;transition:transform 0.25s,box-shadow 0.4s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(0,216,255,0.6);}
+  .related{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+  .related h3{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.72rem;letter-spacing:0.3em;color:var(--muted);margin-bottom:1.5rem;}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .rcard{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.4rem;text-decoration:none;color:inherit;transition:all 0.3s;display:block;}
+  .rcard:hover{border-color:rgba(0,216,255,0.35);transform:translateY(-4px);}
+  .rcard .rt{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.65rem;color:var(--cyan);margin-bottom:0.5rem;}
+  .rcard .rttl{font-size:0.88rem;font-weight:700;line-height:1.5;}
+  footer{border-top:1px solid rgba(255,255,255,0.08);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:rgba(6,9,26,0.6);}
+  .fc{font-size:0.75rem;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.hero,.body,.related{padding-left:1.2rem;padding-right:1.2rem;}footer{padding:2rem 1.5rem;}}
+
+/* ============ LIGHT THEME OVERRIDE ============ */
+html { background:#ffffff !important; }
+body { background:#ffffff !important; color:#000 !important; }
+body::before { display:none !important; }
+nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.nav-back { color:#000 !important; }
+.hero h1, h1, h2, h3 { color:#000 !important; }
+.hero p, p { color:#000 !important; }
+.body li { color:#000 !important; }
+.body strong { color:#000 !important; }
+.body h2 { border-left-color:#000 !important; }
+blockquote { background:#fafbfc !important; border-left-color:#000 !important; color:#000 !important; }
+blockquote p { color:#000 !important; }
+.meta { color:#000 !important; border-bottom-color:#e5e7eb !important; }
+.sources { border-top-color:#e5e7eb !important; }
+.sources h3, .sources a { color:#444 !important; }
+.cta { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.cta p { color:#333 !important; }
+.btn { background:#000 !important; color:#fff !important; }
+.related h3 { color:#000 !important; }
+.rcard { background:#ffffff !important; border:1px solid #e5e7eb !important; color:#000 !important; }
+.rcard .rt { color:#111111 !important; }
+.rcard .rttl { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
+footer a { color:#000 !important; }
+.fc { color:#000 !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ホワイトハック系の記事。/security/ と同じ配色(白・文字#333・赤#EE3524・山吹#C87409・青#157CA5) */
+:root{--wh-ink:#333;--wh-sub:#6B7280;--wh-line:#E3E5E9;--wh-soft:#F5F6F8;--wh-red:#EE3524;--wh-amber:#C87409;--wh-blue:#157CA5;--wh-grad:linear-gradient(90deg,#F20045 0%,#FF6F00 100%)}
+body{font-family:Montserrat,"Noto Sans JP","Hiragino Sans","ヒラギノ角ゴシック",system-ui,sans-serif !important;color:var(--wh-ink) !important}
+.hero h1, h1{color:var(--wh-ink) !important;font-weight:800;letter-spacing:0.01em}
+.hero .en{font-family:Montserrat,sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.16em;color:var(--wh-blue);margin-bottom:0.9rem}
+.body p,.body li,p{color:var(--wh-ink) !important}
+.body h2{border-left:none !important;padding-left:0;margin-top:4rem;color:var(--wh-ink) !important;font-weight:800}
+.body h2[data-en]::before{content:attr(data-en);display:block;font-family:Montserrat,sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.16em;color:var(--wh-red);margin-bottom:0.35rem}
+.body h2[data-en].blue::before{color:var(--wh-blue)} .body h2[data-en].amber::before{color:var(--wh-amber)}
+table.cmp th{background:var(--wh-soft)} table.cmp tr.self td{background:#FFF4F2}
+.disclosure{background:var(--wh-soft) !important;border-color:var(--wh-line) !important}
+.btn{background:var(--wh-grad) !important;color:#fff !important;border-radius:4px !important;font-weight:700}
+.kadai{background:var(--wh-soft);border-radius:6px;padding:2rem 1.6rem;margin:2.6rem 0}
+.kadai .q{font-size:1.4rem;font-weight:800;text-align:center;margin:0 0 0.2rem}
+.kadai .qe{font-family:Montserrat,sans-serif;font-size:0.76rem;font-weight:700;letter-spacing:0.14em;color:var(--wh-blue);text-align:center;margin-bottom:1.6rem}
+.kadai .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.kadai .c{background:#fff;border:1px solid var(--wh-line);border-radius:6px;padding:1.1rem 1.1rem 0.6rem;min-width:0}
+.kadai .c .t{font-weight:800;font-size:1.02rem;margin-bottom:0.1rem}
+.kadai .c .e{font-family:Montserrat,sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:var(--wh-red);margin-bottom:0.6rem}
+.kadai .c ul{padding-left:1.1rem;margin-bottom:0.4rem} .kadai .c li{font-size:0.94rem;line-height:1.7}
+.wh-box{border:1px solid var(--wh-line);border-top:4px solid var(--wh-red);border-radius:6px;padding:1.8rem 1.6rem 1.6rem;margin:2.8rem 0;background:#fff}
+.wh-box .k{font-family:Montserrat,sans-serif;font-size:0.76rem;letter-spacing:0.16em;font-weight:700;color:var(--wh-red) !important;margin-bottom:0.3rem}
+.wh-box .h{font-size:1.25rem;font-weight:800;margin-bottom:0.8rem}
+.wh-box p{margin-bottom:1rem}
+.sources a{word-break:break-all}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0.8rem;margin:0.4rem 0 1.4rem;padding:0;list-style:none}
+.steps li{border:1px solid var(--wh-line);border-radius:6px;padding:0.9rem 1rem;margin:0;min-width:0}
+.steps .s{font-family:Montserrat,sans-serif;font-size:0.72rem;font-weight:800;letter-spacing:0.14em;color:var(--wh-blue)}
+.steps b{display:block;font-size:1rem;margin:0.1rem 0 0.2rem}
+.steps span{font-size:0.88rem;color:var(--wh-sub)}
+.cta{background:#2A2D33 !important;border:none !important;border-radius:6px !important;color:#fff}
+.cta h3{color:#fff !important;font-size:1.5rem !important}
+.cta h3 em{font-style:normal;color:#FF5A47}
+.cta p,.cta p a{color:#D6D9DE !important}
+@media(max-width:600px){.cta{padding:2rem 1.2rem !important}.kadai{padding:1.6rem 1rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
+  <a href="./" class="nav-back">← WHITEHACK</a>
+</nav>
+<div class="hero">
+  <div class="en">PROFESSIONAL FIRMS GUIDE</div>
+  <h1>税理士・会計事務所・法律事務所のセキュリティ対策｜弁護士情報セキュリティ規程、税理士会の指針、士業の被害事例</h1>
+  <div class="meta"><span>2026 / 11 / 24</span><span>AIdollargame 編集部</span><span>読了 約5分</span></div>
+</div>
+<article class="body">
+
+<figure style="margin:0 0 2.6rem;">
+  <img src="../articles/ipa-soudan-access-kyoka-2026-hero.jpg" alt="鍵と錠前の図（1930年代の水彩画）" style="width:100%;height:auto;border-radius:14px;display:block;">
+</figure>
+
+<div class="disclosure">
+  この記事の立場を先に書きます。書いているのは、社内にセキュリティ担当がいない会社に代わってサイト・メール・VPN機器の穴を見つけて直す「ホワイトハック」を提供している株式会社AIdollargameです。比較表には当社も入れています。各社の説明は公式サイト・公式発表に書いてある事実だけに限り、順位や評価は付けていません。
+</div>
+
+<p>税理士・会計事務所、法律事務所、司法書士・社労士事務所は、依頼人の財務・身分・家族の情報を大量に預かっています。日本弁護士連合会は「弁護士情報セキュリティ規程」を2024年6月1日に施行し、すべての弁護士に情報の「基本的な取扱方法」を定めることを義務にしました。2024年には、税理士法人がランサムウェアの被害を公表しています。</p>
+
+<div class="kadai"><p class="q">こんな困りごとはありませんか？</p><div class="qe">士業の事務所が止まるところ</div><div class="g"><div class="c"><div class="t">事務所に担当者がいない</div><div class="e">WHO</div><ul><li>所長が全部見ている</li><li>ネットワークの設定は業者任せ</li></ul></div><div class="c"><div class="t">規程が無い</div><div class="e">RULES</div><ul><li>基本的な取扱方法をまだ定めていない</li><li>職員への教育をしていない</li></ul></div><div class="c"><div class="t">チャットやメールが乗っ取られる</div><div class="e">ACCOUNT</div><ul><li>Chatworkやメールのアカウントに二段階認証が無い</li><li>知人を装ったメッセージのリンクを開いてしまう</li></ul></div></div></div>
+
+<h2 data-en="RULES" class="blue">各士業の決まりごと</h2>
+<div class="tblwrap">
+<table class="cmp">
+<thead><tr><th>士業</th><th>決まりごと（公式）</th><th>中身</th></tr></thead>
+<tbody>
+<tr><td class="n">弁護士</td><td>弁護士情報セキュリティ規程（会規第117号、2024年6月1日施行）</td><td>事務所の規模・業務に応じて「基本的な取扱方法」を定めることが義務（第3条第2項）。事故が起きたら影響範囲を把握し、被害拡大の防止・原因調査・再発防止策の検討をする（第7条）。事務職員にも必要な対策を講じさせる（第4条第2項）</td></tr>
+<tr><td class="n">税理士</td><td>日本税理士会連合会「税理士事務所等の内部規律及び内部管理体制に関する指針」（2023年3月改訂）ほか</td><td>付属資料に情報管理チェックリストのモデル。2026年9月に「税理士事務所のためのAI・クラウド活用ガイドライン」を策定（いずれも会員向け）</td></tr>
+<tr><td class="n">社会保険労務士</td><td>全国社会保険労務士会連合会 SRP認証制度、IT-BCP事前対策チェックリスト</td><td>個人情報保護の事務所認証。IT-BCPはサイバー攻撃も想定</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2 data-en="CASES" class="amber">士業の事務所で公表された被害</h2>
+<ul>
+  <li>税理士法人高野総合会計事務所ほか（2024年）: 第3報で、インターネット接続点の通信機器を更新したときに委託業者が設定を誤り、データサーバに外から入れる状態になっていたと発表しました。海外から不正アクセスを受け、取引先から預かったデータを含むファイルが暗号化されました。</li>
+  <li>税理士法人ハガックス（2026年3月）: 知人を装ったメッセージからフィッシングサイトに誘導され、Chatworkのアカウントが乗っ取られ、16分間で不審なメッセージが40件送られたと発表しました。</li>
+</ul>
+<p>国税庁は、e-Taxの「税務署からのお知らせ」に似せたなりすましメールが確認されているとして、送信元が info@e-tax.nta.go.jp であること、本文に原則としてURLが無いことを案内しています。</p>
+
+<h2 data-en="TODO" class="blue">小さな事務所が最初にやること</h2>
+<ol>
+  <li>メール・チャット・クラウドのアカウントに二段階認証を入れる。</li>
+  <li>インターネットの出入口の機器（ルーター・VPN）の設定を、業者任せにせず年1回確かめる。高野総合の例は、更新時の設定ミスが入口でした。</li>
+  <li>事務所の「基本的な取扱方法」（預かった情報をどこに保存し、誰が見られ、どう捨てるか）を紙1枚で決める。</li>
+  <li>自事務所のドメインに SPF・DKIM・DMARC を入れ、事務所の名前で偽メールを出せないようにする（<a href="./dmarc.html" style="color:#111111;text-decoration:underline;">設定代行の比較</a>）。</li>
+</ol>
+
+<div class="wh-box">
+  <div class="k">FREE CHECK — 無料の外部チェック</div>
+  <div class="h">まず、事務所のドメインを外から無料で確かめる</div>
+  <p>事務所のドメインで、外から何が見えているかは whitehack.jp で無料で確かめられます。なりすましメールの対策・証明書・外に出ているサブドメインを、公開されている記録だけで確かめます。事務所のサーバーには接続しません。</p>
+  <ol class="steps">
+    <li><div class="s">STEP 1</div><b>ドメインを入れる</b><span>whitehack.jp に会社のドメインを入れる。公開されている記録だけを見る</span></li>
+    <li><div class="s">STEP 2</div><b>見つかった穴を見る</b><span>重大度ごとの件数と、直し方、直すと何が止まるかが出る</span></li>
+    <li><div class="s">STEP 3</div><b>直すかを決める</b><span>自社で直すか、当社に任せるかを無料で相談できる</span></li>
+  </ol>
+  <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-shigyo" class="btn" target="_blank" rel="noopener">whitehack.jp で自社のドメインを調べる →</a>
+</div>
+
+
+<h2>よくある質問</h2>
+<h3>弁護士情報セキュリティ規程で、何が義務になりましたか？</h3>
+<p>2024年6月1日施行の弁護士情報セキュリティ規程（会規第117号）では、事務所の規模・業務に応じて情報の「基本的な取扱方法」を定めることが義務（第3条第2項）で、事故時の対応（第7条）や事務職員に対策を講じさせること（第4条第2項）も求められています。多くの条文は努力義務です。</p>
+<h3>税理士事務所のセキュリティ対策の指針はありますか？</h3>
+<p>日本税理士会連合会が「税理士事務所等の内部規律及び内部管理体制に関する指針」（2023年3月改訂）と情報管理チェックリストのモデル、2026年9月に「税理士事務所のためのAI・クラウド活用ガイドライン」を出しています（会員向け）。</p>
+<h3>士業の事務所で実際に起きた被害は？</h3>
+<p>税理士法人高野総合会計事務所ほか（2024年）は、通信機器の更新時の設定ミスからランサムウェアの被害を受けたと発表しました。税理士法人ハガックス（2026年）は、フィッシングでChatworkのアカウントが乗っ取られたと発表しました。</p>
+
+<div class="sources">
+  <h3>出典（各士業の連合会・国税庁・当事者の公式発表。2026年11月24日確認）</h3>
+  <ul>
+    <li>日本弁護士連合会 弁護士情報セキュリティ規程（PDF） <a href="https://www.nichibenren.or.jp/library/pdf/jfba_info/rules/kaiki/kaiki_no_117.pdf" target="_blank" rel="noopener">www.nichibenren.or.jp/library/pdf/jfba_info/rules/kaiki/kaiki_no_117.pdf</a></li>
+    <li>日弁連新聞 第600号 <a href="https://www.nichibenren.or.jp/document/newspaper/year/2024/600.html" target="_blank" rel="noopener">www.nichibenren.or.jp/document/newspaper/year/2024/600.html</a></li>
+    <li>日本税理士会連合会 内部規律及び内部管理体制に関する指針 <a href="https://www.nichizeiren.or.jp/datalibrary/business/governance/p20230323/" target="_blank" rel="noopener">www.nichizeiren.or.jp/datalibrary/business/governance/p20230323/</a></li>
+    <li>全国社会保険労務士会連合会 社労士事務所における個人情報保護 <a href="https://www.shakaihokenroumushi.jp/organization/tabid/507/Default.aspx" target="_blank" rel="noopener">www.shakaihokenroumushi.jp/organization/tabid/507/Default.aspx</a></li>
+    <li>国税庁 e-Tax「税務署からのお知らせ」等のメールが届いた方へ <a href="https://www.e-tax.nta.go.jp/topics/topics_oshirase_mail.htm" target="_blank" rel="noopener">www.e-tax.nta.go.jp/topics/topics_oshirase_mail.htm</a></li>
+    <li>税理士法人高野総合会計事務所 第3報 <a href="https://www.takanosogo.com/info/2024/09/3-5.php" target="_blank" rel="noopener">www.takanosogo.com/info/2024/09/3-5.php</a></li>
+    <li>税理士法人ハガックス Chatworkアカウントの不正利用について <a href="https://www.hagax.com/2026chatwork/" target="_blank" rel="noopener">www.hagax.com/2026chatwork/</a></li>
+  </ul>
+</div>
+
+<div class="cta">
+  <h3>事務所の名前で、<em>偽メール</em>が出せる状態ではありませんか？</h3>
+  <p>whitehack.jp は公開されている記録だけを見る無料の外部チェックです。事務所のサーバーには接続しません。</p>
+  <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-shigyo" class="btn" target="_blank" rel="noopener">whitehack.jp で無料で調べる →</a>
+  <p style="margin:1.2rem 0 0;font-size:0.85rem;"><a href="../index.html#contact" style="color:#111111;text-decoration:underline;">先に相談したい場合はこちら（無料）</a></p>
+</div>
+</article>
+<div class="related">
+  <h3>RELATED ARTICLES</h3>
+  <div class="rgrid">
+    <a href="./dmarc.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">DMARC・SPF・DKIMの設定代行と料金比較</div></a>
+    <a href="./bec.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">ビジネスメール詐欺（BEC）の対策</div></a>
+    <a href="./hikaku.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">セキュリティ対策の外注先の比較</div></a>
+    <a href="./jirei.html" class="rcard"><div class="rt">CASES</div><div class="rttl">2026年のサイバー攻撃・情報漏えいの事例19件</div></a>
+  </div>
+</div>
+<div class="svc-links" style="max-width:820px;margin:0 auto 3rem;padding:1.5rem 1.6rem;background:#fafbfc;border:1px solid #e5e7eb;border-radius:12px;">
+  <div style="font-size:0.74rem;letter-spacing:0.18em;font-weight:700;color:#555;margin-bottom:0.6rem;">SECURITY &mdash; AIdollargameのセキュリティ</div>
+  <p style="margin:0;font-size:0.92rem;color:#333 !important;line-height:2;">
+    <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-shigyo" target="_blank" rel="noopener" style="color:#111111 !important;text-decoration:underline;">whitehack.jp（無料の外部チェック）</a> ／
+    <a href="./" style="color:#111111 !important;text-decoration:underline;">ホワイトハック（セキュリティ担当の代行）</a> ／
+    <a href="./#start" style="color:#111111 !important;text-decoration:underline;">料金と始め方</a> ／
+    <a href="./emergency.html" style="color:#111111 !important;text-decoration:underline;">被害に遭ったときの初動</a>
+  </p>
+</div>
+<footer>
+  <a href="../index.html" class="logo">A<span class="heart-i">ı</span>dollargame</a>
+  <div class="fc">© <span class="cpy-y" data-since="2025">2025</span> 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
+</footer>
+<script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
+<script defer src="../scripts/ga-events.js?v=20260824"></script>
+</body>
+</html>

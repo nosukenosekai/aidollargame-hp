@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASM診断とは｜外から見える資産の洗い出しと、サブドメイン乗っ取り。中小企業が頼める5つのサービス【2026年版】 | AIdollargame</title>
+<meta name="description" content="ASM（Attack Surface Management）の定義と3つの手順を経済産業省のASM導入ガイダンスから、サブドメイン乗っ取り（ダングリングレコード）をJPRS・デジタル庁の資料からまとめ、NTTドコモビジネス・Securify・GMO・NTT東日本・当社のASMのサービスを公式の事実だけで比較。2026年11月の総務省の事務連絡も。">
+<meta name="author" content="AIdollargame 編集部">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/security/asm.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="株式会社AIdollargame">
+<meta property="og:title" content="ASM診断とは｜外から見える資産の洗い出しと、サブドメイン乗っ取り。中小企業が頼める5つのサービス【2026年版】">
+<meta property="og:description" content="ASMの定義と手順、サブドメイン乗っ取りの仕組み、中小企業が頼めるASMのサービス5つ。">
+<meta property="og:url" content="https://aidollargame.com/security/asm.html">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-11-24">
+<meta property="article:author" content="AIdollargame 編集部">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ASM診断とサブドメイン乗っ取り【2026年版】">
+<meta name="twitter:description" content="ASMの定義と手順、サブドメイン乗っ取りの仕組み、中小企業が頼めるASMのサービス5つ。">
+<meta name="twitter:image" content="https://aidollargame.com/og-default.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "ホーム",
+   "item": "https://aidollargame.com/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "ホワイトハック",
+   "item": "https://aidollargame.com/security/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "ASM診断とサブドメイン乗っ取り",
+   "item": "https://aidollargame.com/security/asm.html"
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Article",
+ "headline": "ASM診断とは｜外から見える資産の洗い出しと、サブドメイン乗っ取り。中小企業が頼める5つのサービス【2026年版】",
+ "description": "ASM（Attack Surface Management）の定義と3つの手順を経済産業省のASM導入ガイダンスから、サブドメイン乗っ取り（ダングリングレコード）をJPRS・デジタル庁の資料からまとめ、NTTドコモビジネス・Securify・GMO・NTT東日本・当社のASMのサービスを公式の事実だけで比較。2026年11月の総務省の事務連絡も。",
+ "datePublished": "2026-11-24",
+ "dateModified": "2026-11-24",
+ "author": {
+  "@type": "Organization",
+  "name": "AIdollargame 編集部"
+ },
+ "publisher": {
+  "@type": "Organization",
+  "name": "AIdollargame",
+  "logo": {
+   "@type": "ImageObject",
+   "url": "https://aidollargame.com/og-default.png"
+  }
+ },
+ "mainEntityOfPage": "https://aidollargame.com/security/asm.html",
+ "image": "https://aidollargame.com/og-default.png",
+ "inLanguage": "ja",
+ "about": [
+  {
+   "@type": "Thing",
+   "name": "ASM"
+  },
+  {
+   "@type": "Thing",
+   "name": "Attack Surface Management"
+  },
+  {
+   "@type": "Thing",
+   "name": "サブドメイン乗っ取り"
+  },
+  {
+   "@type": "Thing",
+   "name": "ダングリングレコード"
+  },
+  {
+   "@type": "Thing",
+   "name": "外部公開資産"
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "ItemList",
+ "name": "ASMのサービス（2026年11月時点）",
+ "itemListOrder": "https://schema.org/ItemListUnordered",
+ "numberOfItems": 5,
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "NTTドコモビジネス ASM",
+   "url": "https://www.ntt.com/business/services/security/security-management/wideangle/lp/lp04.html"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "Securify ASM",
+   "url": "https://www.securify.jp/pricing/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "GMO ネットde診断 Lite",
+   "url": "https://group.gmo/pdf/news/gmo_news_9875.pdf"
+  },
+  {
+   "@type": "ListItem",
+   "position": 4,
+   "name": "NTT東日本 BizDrive ASM",
+   "url": "https://business.ntt-east.co.jp/content/bizdrive-asm/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 5,
+   "name": "ホワイトハック（株式会社AIdollargame）",
+   "url": "https://aidollargame.com/security/"
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "ASM診断とは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "経済産業省のASM導入ガイダンス（2023年5月29日）では、ASMを「組織の外部（インターネット）からアクセス可能なIT資産を発見し、それらに存在する脆弱性などのリスクを継続的に検出・評価する一連のプロセス」と定義しています。手順は、攻撃面の発見、情報収集、リスク評価の3つです。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ASMと脆弱性診断の違いは？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ASMは、外から見える資産を洗い出して、脆弱性がある可能性を継続的に見つけるものです。ガイダンスは「脆弱性が存在する可能性の検知にとどまる」と書いています。脆弱性診断は、特定のサイトや機器を対象に、弱点が残っていないかを詳しく検査します。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "サブドメイン乗っ取りを防ぐには？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "JPRSは、レンタルサーバーやCDNを解約した後に残ったCNAMEやNSのレコード（ダングリングレコード）が乗っ取りに使われるとして、サイトの公開を終えるときにDNSの設定を削除・変更するよう求めています。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "中小企業でも使えるASMはありますか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "GMOのネットde診断 Liteは1ドメイン月4,280円（税抜）で、把握していないドメインの探索を含みます。株式会社AIdollargameの whitehack.jp は、証明書の記録から外部公開のサブドメインを無料で洗い出します。"
+   }
+  }
+ ]
+}
+</script>
+
+<style>
+html{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif}button,input,select,textarea{font-family:inherit}
+h1,h2,h3,h4,p,li,dt,dd,figcaption,summary,.sec-lead,.sec-title{word-break:auto-phrase;text-wrap:pretty}
+  :root{--cyan:#00d8ff;--blue:#000;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#000);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;background:#0a1238;}
+  body{background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;overflow-x:hidden;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,9,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);} .logo .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;} .logo .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
+  .nav-back{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .hero{padding:9rem 2rem 4rem;max-width:800px;margin:0 auto;}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;word-break:auto-phrase;}
+  .meta{display:flex;gap:2rem;align-items:center;font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}
+  .body{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}
+  .body h2{font-size:1.4rem;font-weight:900;margin:3.5rem 0 1.2rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}
+  .body h3{font-size:1.12rem;font-weight:800;margin:2.2rem 0 0.8rem;line-height:1.5;}
+  .body p{font-size:1.06rem;color:rgba(238,243,255,0.85);line-height:1.9;margin-bottom:1.4rem;}
+  .body strong{color:#fff;font-weight:700;}
+  .body ul,.body ol{padding-left:1.5rem;margin-bottom:1.4rem;}
+  .body li{font-size:1.02rem;color:rgba(238,243,255,0.85);line-height:1.8;margin-bottom:0.4rem;}
+  .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
+  .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
+  .tblwrap{overflow-x:auto;margin:1.5rem 0 2rem;-webkit-overflow-scrolling:touch;}
+  table.cmp{border-collapse:collapse;width:100%;min-width:720px;font-size:0.92rem;line-height:1.6;}
+  table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:0.7rem 0.8rem;text-align:left;vertical-align:top;}
+  table.cmp th{background:#f3f4f6;font-weight:700;white-space:nowrap;}
+  table.cmp td.n{white-space:nowrap;font-weight:700;}
+  table.cmp tr.self td{background:#f4f4f4;}
+  .note{font-size:0.86rem;color:#555 !important;margin-top:-1rem;margin-bottom:2rem;}
+  .disclosure{border:1px solid #e5e7eb;background:#fafbfc;border-radius:10px;padding:1.2rem 1.4rem;margin:0 0 2.4rem;font-size:0.95rem;line-height:1.8;}
+  .sources{margin:3rem 0 0;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.08);}
+  .sources h3{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.7rem;letter-spacing:0.2em;color:var(--muted);margin-bottom:1rem;}
+  .sources li{font-size:0.82rem;line-height:1.7;margin-bottom:0.5rem;}
+  .sources a{color:var(--muted);text-decoration:underline;}
+  .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
+  .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2rem;color:#001428;font-weight:700;font-size:0.9rem;border-radius:8px;background:linear-gradient(110deg,#00d8ff 0%,#000 50%,#00d8ff 100%);background-size:220% 100%;text-decoration:none;transition:transform 0.25s,box-shadow 0.4s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(0,216,255,0.6);}
+  .related{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+  .related h3{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.72rem;letter-spacing:0.3em;color:var(--muted);margin-bottom:1.5rem;}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .rcard{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.4rem;text-decoration:none;color:inherit;transition:all 0.3s;display:block;}
+  .rcard:hover{border-color:rgba(0,216,255,0.35);transform:translateY(-4px);}
+  .rcard .rt{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.65rem;color:var(--cyan);margin-bottom:0.5rem;}
+  .rcard .rttl{font-size:0.88rem;font-weight:700;line-height:1.5;}
+  footer{border-top:1px solid rgba(255,255,255,0.08);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:rgba(6,9,26,0.6);}
+  .fc{font-size:0.75rem;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.hero,.body,.related{padding-left:1.2rem;padding-right:1.2rem;}footer{padding:2rem 1.5rem;}}
+
+/* ============ LIGHT THEME OVERRIDE ============ */
+html { background:#ffffff !important; }
+body { background:#ffffff !important; color:#000 !important; }
+body::before { display:none !important; }
+nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.nav-back { color:#000 !important; }
+.hero h1, h1, h2, h3 { color:#000 !important; }
+.hero p, p { color:#000 !important; }
+.body li { color:#000 !important; }
+.body strong { color:#000 !important; }
+.body h2 { border-left-color:#000 !important; }
+blockquote { background:#fafbfc !important; border-left-color:#000 !important; color:#000 !important; }
+blockquote p { color:#000 !important; }
+.meta { color:#000 !important; border-bottom-color:#e5e7eb !important; }
+.sources { border-top-color:#e5e7eb !important; }
+.sources h3, .sources a { color:#444 !important; }
+.cta { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.cta p { color:#333 !important; }
+.btn { background:#000 !important; color:#fff !important; }
+.related h3 { color:#000 !important; }
+.rcard { background:#ffffff !important; border:1px solid #e5e7eb !important; color:#000 !important; }
+.rcard .rt { color:#111111 !important; }
+.rcard .rttl { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
+footer a { color:#000 !important; }
+.fc { color:#000 !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ホワイトハック系の記事。/security/ と同じ配色(白・文字#333・赤#EE3524・山吹#C87409・青#157CA5) */
+:root{--wh-ink:#333;--wh-sub:#6B7280;--wh-line:#E3E5E9;--wh-soft:#F5F6F8;--wh-red:#EE3524;--wh-amber:#C87409;--wh-blue:#157CA5;--wh-grad:linear-gradient(90deg,#F20045 0%,#FF6F00 100%)}
+body{font-family:Montserrat,"Noto Sans JP","Hiragino Sans","ヒラギノ角ゴシック",system-ui,sans-serif !important;color:var(--wh-ink) !important}
+.hero h1, h1{color:var(--wh-ink) !important;font-weight:800;letter-spacing:0.01em}
+.hero .en{font-family:Montserrat,sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.16em;color:var(--wh-blue);margin-bottom:0.9rem}
+.body p,.body li,p{color:var(--wh-ink) !important}
+.body h2{border-left:none !important;padding-left:0;margin-top:4rem;color:var(--wh-ink) !important;font-weight:800}
+.body h2[data-en]::before{content:attr(data-en);display:block;font-family:Montserrat,sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.16em;color:var(--wh-red);margin-bottom:0.35rem}
+.body h2[data-en].blue::before{color:var(--wh-blue)} .body h2[data-en].amber::before{color:var(--wh-amber)}
+table.cmp th{background:var(--wh-soft)} table.cmp tr.self td{background:#FFF4F2}
+.disclosure{background:var(--wh-soft) !important;border-color:var(--wh-line) !important}
+.btn{background:var(--wh-grad) !important;color:#fff !important;border-radius:4px !important;font-weight:700}
+.kadai{background:var(--wh-soft);border-radius:6px;padding:2rem 1.6rem;margin:2.6rem 0}
+.kadai .q{font-size:1.4rem;font-weight:800;text-align:center;margin:0 0 0.2rem}
+.kadai .qe{font-family:Montserrat,sans-serif;font-size:0.76rem;font-weight:700;letter-spacing:0.14em;color:var(--wh-blue);text-align:center;margin-bottom:1.6rem}
+.kadai .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.kadai .c{background:#fff;border:1px solid var(--wh-line);border-radius:6px;padding:1.1rem 1.1rem 0.6rem;min-width:0}
+.kadai .c .t{font-weight:800;font-size:1.02rem;margin-bottom:0.1rem}
+.kadai .c .e{font-family:Montserrat,sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:var(--wh-red);margin-bottom:0.6rem}
+.kadai .c ul{padding-left:1.1rem;margin-bottom:0.4rem} .kadai .c li{font-size:0.94rem;line-height:1.7}
+.wh-box{border:1px solid var(--wh-line);border-top:4px solid var(--wh-red);border-radius:6px;padding:1.8rem 1.6rem 1.6rem;margin:2.8rem 0;background:#fff}
+.wh-box .k{font-family:Montserrat,sans-serif;font-size:0.76rem;letter-spacing:0.16em;font-weight:700;color:var(--wh-red) !important;margin-bottom:0.3rem}
+.wh-box .h{font-size:1.25rem;font-weight:800;margin-bottom:0.8rem}
+.wh-box p{margin-bottom:1rem}
+.sources a{word-break:break-all}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0.8rem;margin:0.4rem 0 1.4rem;padding:0;list-style:none}
+.steps li{border:1px solid var(--wh-line);border-radius:6px;padding:0.9rem 1rem;margin:0;min-width:0}
+.steps .s{font-family:Montserrat,sans-serif;font-size:0.72rem;font-weight:800;letter-spacing:0.14em;color:var(--wh-blue)}
+.steps b{display:block;font-size:1rem;margin:0.1rem 0 0.2rem}
+.steps span{font-size:0.88rem;color:var(--wh-sub)}
+.cta{background:#2A2D33 !important;border:none !important;border-radius:6px !important;color:#fff}
+.cta h3{color:#fff !important;font-size:1.5rem !important}
+.cta h3 em{font-style:normal;color:#FF5A47}
+.cta p,.cta p a{color:#D6D9DE !important}
+@media(max-width:600px){.cta{padding:2rem 1.2rem !important}.kadai{padding:1.6rem 1rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
+  <a href="./" class="nav-back">← WHITEHACK</a>
+</nav>
+<div class="hero">
+  <div class="en">ASM GUIDE</div>
+  <h1>ASM診断とは｜外から見える資産の洗い出しと、サブドメイン乗っ取り。中小企業が頼める5つのサービス【2026年版】</h1>
+  <div class="meta"><span>2026 / 11 / 24</span><span>AIdollargame 編集部</span><span>読了 約6分</span></div>
+</div>
+<article class="body">
+
+<figure style="margin:0 0 2.6rem;">
+  <img src="../articles/cloud-shogai-1007-2026-hero.jpg" alt="青い照明のデータセンターに並ぶサーバーのラック" style="width:100%;height:auto;border-radius:14px;display:block;">
+</figure>
+
+<div class="disclosure">
+  この記事の立場を先に書きます。書いているのは、社内にセキュリティ担当がいない会社に代わってサイト・メール・VPN機器の穴を見つけて直す「ホワイトハック」を提供している株式会社AIdollargameです。比較表には当社も入れています。各社の説明は公式サイト・公式発表に書いてある事実だけに限り、順位や評価は付けていません。
+</div>
+
+<p>ASM（Attack Surface Management）は、経済産業省の「ASM導入ガイダンス」（2023年5月29日）で「組織の外部（インターネット）からアクセス可能なIT資産を発見し、それらに存在する脆弱性などのリスクを継続的に検出・評価する一連のプロセス」と定義されています。2026年11月5日には、総務省が国家サイバー統括室の通知を転送し、ASMなどで外から見える資産を探して内部の管理情報と突き合わせるよう求めました。</p>
+
+<div class="kadai"><p class="q">こんな困りごとはありませんか？</p><div class="qe">ASMについて、中小企業が止まるところ</div><div class="g"><div class="c"><div class="t">何が外に出ているか分からない</div><div class="e">ASSETS</div><ul><li>昔のキャンペーンサイトや試験用のサーバーが残っている</li><li>制作会社に任せたサブドメインを把握していない</li></ul></div><div class="c"><div class="t">解約した後の設定が残っている</div><div class="e">DANGLING</div><ul><li>レンタルサーバーやCDNを解約したのにDNSの設定が残っている</li><li>第三者に乗っ取られる余地がある</li></ul></div><div class="c"><div class="t">ASMのツールが大げさ</div><div class="e">SIZE</div><ul><li>大企業向けの月数万円〜のツールしか見当たらない</li><li>中小企業にはまず何をすればいいか分からない</li></ul></div></div></div>
+
+<h2 data-en="STEPS" class="blue">ASMの3つの手順（経済産業省のガイダンス）</h2>
+<ol>
+  <li>攻撃面の発見: 組織名からドメインを特定し、DNSの検索などでIPアドレスとホスト名の一覧を得る。</li>
+  <li>攻撃面の情報収集: OS、ソフトとそのバージョン、開いているポートを調べる。</li>
+  <li>攻撃面のリスク評価: 既知の脆弱性の情報と突き合わせる。</li>
+</ol>
+<p>ガイダンスは、外から見える情報だけで判断するため「脆弱性が存在する可能性の検知にとどまる」こと、対象に通信する型で他社のシステムを調べるときは事前に承認を得るべきことも書いています。</p>
+
+<h2 data-en="TAKEOVER" class="amber">サブドメイン乗っ取り（ダングリングレコード）</h2>
+<p>JPRS（日本レジストリサービス）は2025年1月21日、「サービス終了後に残っているDNS設定を利用したサブドメインの乗っ取り」について注意を呼びかけました。レンタルサーバーやCDNを解約した後も CNAME や NS のレコードが残っていると、第三者が参照先の事業者に登録し直して、そのサブドメインを使えてしまいます。フィッシングや個人情報の窃取に使われるおそれがあり、期間限定のキャンペーンサイトが狙われやすい例として挙がっています。デジタル庁のドメイン管理ガイドライン（2025年5月27日）も、サイトを廃止するときは外部サービス用のレコードも含めて削除し、残っていないか定期的に確かめるよう求めています。</p>
+
+<h2 data-en="COMPARISON">ASMのサービス（公式サイトで確認できる事実のみ）</h2>
+<p class="note" style="margin-top:0;">2026年11月24日時点で確認して作成。</p>
+<div class="tblwrap">
+<table class="cmp">
+<thead><tr><th>会社・サービス</th><th>中身</th><th>料金（公式）</th></tr></thead>
+<tbody>
+<tr><td class="n">NTTドコモビジネス ASM（WideAngle）</td><td>ドメインを示すだけでスキャンを始め、IPアドレス・ドメイン・脆弱性を見つけて監視し続ける。サブドメインは最大99まで</td><td>ASMプラン 1ドメイン月49,500円（税込）、最低12か月</td></tr>
+<tr><td class="n">株式会社スリーシェイク Securify ASM</td><td>ドメイン・IP・クラウドを起点に、外から見える資産を探し続ける</td><td>個別見積り（起点の数で決まる）、年間契約</td></tr>
+<tr><td class="n">GMOサイバーセキュリティ byイエラエ ネットde診断 Lite</td><td>把握していないドメインの探索と、毎日の自動の脆弱性診断</td><td>1ドメイン月4,280円（税抜）、30日間無料</td></tr>
+<tr><td class="n">NTT東日本 BizDrive ASM</td><td>ASMの導入から運用までをエンジニアが担うマネージドサービス</td><td>記載なし</td></tr>
+<tr class="self"><td class="n">ホワイトハック（株式会社AIdollargame・当社）</td><td>無料の外部チェックで、証明書の記録から外部公開のサブドメインを洗い出す（相手のサーバーに接続しない）。月額のプランは毎日診断し、承諾の範囲でペネトレーションテスト</td><td>外部チェック 0円、ライト 月3万円、スタンダード 月15万円（税別）</td></tr>
+</tbody>
+</table>
+</div>
+<p class="note">当社の行だけ背景色を変えています。IPAは2026年3月、中小企業126社を対象にASM診断の実証を行った報告書（概要版）を公表しています。</p>
+
+<div class="wh-box">
+  <div class="k">FREE CHECK — 無料の外部チェック</div>
+  <div class="h">まず、外に出ているサブドメインを無料で洗い出す</div>
+  <p>whitehack.jp にドメインを入れると、証明書の透明性ログに残っているサブドメインを一覧にします。昔のキャンペーンサイトや試験用の名前が残っていないかの手がかりになります。公開されている記録だけを見るので、貴社のサーバーには接続しません。</p>
+  <ol class="steps">
+    <li><div class="s">STEP 1</div><b>ドメインを入れる</b><span>whitehack.jp に会社のドメインを入れる。公開されている記録だけを見る</span></li>
+    <li><div class="s">STEP 2</div><b>見つかった穴を見る</b><span>重大度ごとの件数と、直し方、直すと何が止まるかが出る</span></li>
+    <li><div class="s">STEP 3</div><b>直すかを決める</b><span>自社で直すか、当社に任せるかを無料で相談できる</span></li>
+  </ol>
+  <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-asm" class="btn" target="_blank" rel="noopener">whitehack.jp で自社のドメインを調べる →</a>
+</div>
+
+
+<h2>よくある質問</h2>
+<h3>ASM診断とは何ですか？</h3>
+<p>経済産業省のASM導入ガイダンス（2023年5月29日）では、ASMを「組織の外部（インターネット）からアクセス可能なIT資産を発見し、それらに存在する脆弱性などのリスクを継続的に検出・評価する一連のプロセス」と定義しています。手順は、攻撃面の発見、情報収集、リスク評価の3つです。</p>
+<h3>ASMと脆弱性診断の違いは？</h3>
+<p>ASMは、外から見える資産を洗い出して、脆弱性がある可能性を継続的に見つけるものです。ガイダンスは「脆弱性が存在する可能性の検知にとどまる」と書いています。脆弱性診断は、特定のサイトや機器を対象に、弱点が残っていないかを詳しく検査します。</p>
+<h3>サブドメイン乗っ取りを防ぐには？</h3>
+<p>JPRSは、レンタルサーバーやCDNを解約した後に残ったCNAMEやNSのレコード（ダングリングレコード）が乗っ取りに使われるとして、サイトの公開を終えるときにDNSの設定を削除・変更するよう求めています。</p>
+<h3>中小企業でも使えるASMはありますか？</h3>
+<p>GMOのネットde診断 Liteは1ドメイン月4,280円（税抜）で、把握していないドメインの探索を含みます。株式会社AIdollargameの whitehack.jp は、証明書の記録から外部公開のサブドメインを無料で洗い出します。</p>
+
+<div class="sources">
+  <h3>出典（経済産業省・総務省・IPA・JPRS・デジタル庁・各社の公式ページ。2026年11月24日確認）</h3>
+  <ul>
+    <li>経済産業省 ASM導入ガイダンス 公表（2023年5月29日） <a href="https://www.meti.go.jp/press/2023/05/20230529001/20230529001.html" target="_blank" rel="noopener">www.meti.go.jp/press/2023/05/20230529001/20230529001.html</a></li>
+    <li>経済産業省 ASM導入ガイダンス（PDF） <a href="https://www.meti.go.jp/policy/netsecurity/wg1/ASMguidance.pdf" target="_blank" rel="noopener">www.meti.go.jp/policy/netsecurity/wg1/ASMguidance.pdf</a></li>
+    <li>総務省 事務連絡（2026年11月5日） <a href="https://www.soumu.go.jp/main_content/001102128.pdf" target="_blank" rel="noopener">www.soumu.go.jp/main_content/001102128.pdf</a></li>
+    <li>IPA ASM診断および事例集作成業務 実施報告書概要版（2026年3月） <a href="https://www.ipa.go.jp/security/reports/sme/rcu1hd0000009k82-att/asm-report-outline.pdf" target="_blank" rel="noopener">www.ipa.go.jp/security/reports/sme/rcu1hd0000009k82-att/asm-report-outline.pdf</a></li>
+    <li>JPRS サービス終了後に残っているDNS設定を利用したサブドメインの乗っ取りについて <a href="https://jprs.jp/tech/security/2025-01-21-danglingrecords.html" target="_blank" rel="noopener">jprs.jp/tech/security/2025-01-21-danglingrecords.html</a></li>
+    <li>デジタル庁 DS-900 ドメイン管理ガイドライン（PDF） <a href="https://www.digital.go.jp/assets/contents/node/basic_page/field_ref_resources/e2a06143-ed29-4f1d-9c31-0f06fca67afc/addca50c/20250619_resources_standard_guidelines_guideline_09.pdf" target="_blank" rel="noopener">www.digital.go.jp/assets/contents/node/basic_page/field_ref_resources/e2a06143-ed29-4f1d-9c31-0f06fca67afc/addca50c/20250619_resources_standard_guidelines_guideline_09.pdf</a></li>
+    <li>NTTドコモビジネス ASM <a href="https://www.ntt.com/business/services/security/security-management/wideangle/lp/lp04.html" target="_blank" rel="noopener">www.ntt.com/business/services/security/security-management/wideangle/lp/lp04.html</a></li>
+    <li>Securify 料金 <a href="https://www.securify.jp/pricing/" target="_blank" rel="noopener">www.securify.jp/pricing/</a></li>
+    <li>GMOインターネットグループ ネットde診断 Lite 発表（PDF） <a href="https://group.gmo/pdf/news/gmo_news_9875.pdf" target="_blank" rel="noopener">group.gmo/pdf/news/gmo_news_9875.pdf</a></li>
+    <li>NTT東日本 BizDrive ASM <a href="https://business.ntt-east.co.jp/content/bizdrive-asm/" target="_blank" rel="noopener">business.ntt-east.co.jp/content/bizdrive-asm/</a></li>
+  </ul>
+</div>
+
+<div class="cta">
+  <h3>解約したサイトの<em>名前</em>、残っていませんか？</h3>
+  <p>whitehack.jp は公開されている記録だけを見る無料の外部チェックです。外部公開のサブドメインがその場で分かります。貴社のサーバーには接続しません。</p>
+  <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-asm" class="btn" target="_blank" rel="noopener">whitehack.jp で無料で調べる →</a>
+  <p style="margin:1.2rem 0 0;font-size:0.85rem;"><a href="../index.html#contact" style="color:#111111;text-decoration:underline;">先に相談したい場合はこちら（無料）</a></p>
+</div>
+</article>
+<div class="related">
+  <h3>RELATED ARTICLES</h3>
+  <div class="rgrid">
+    <a href="./muryo.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">無料のセキュリティ診断の比較</div></a>
+    <a href="./vpn.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">VPN機器の脆弱性を診断してくれる会社はどこか</div></a>
+    <a href="./ryokin.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">脆弱性診断・ペネトレーションテストの料金の比較</div></a>
+    <a href="./hikaku.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">中小企業のセキュリティを任せられる会社はどこか</div></a>
+  </div>
+</div>
+<div class="svc-links" style="max-width:820px;margin:0 auto 3rem;padding:1.5rem 1.6rem;background:#fafbfc;border:1px solid #e5e7eb;border-radius:12px;">
+  <div style="font-size:0.74rem;letter-spacing:0.18em;font-weight:700;color:#555;margin-bottom:0.6rem;">SECURITY &mdash; AIdollargameのセキュリティ</div>
+  <p style="margin:0;font-size:0.92rem;color:#333 !important;line-height:2;">
+    <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-asm" target="_blank" rel="noopener" style="color:#111111 !important;text-decoration:underline;">whitehack.jp（無料の外部チェック）</a> ／
+    <a href="./" style="color:#111111 !important;text-decoration:underline;">ホワイトハック（セキュリティ担当の代行）</a> ／
+    <a href="./#start" style="color:#111111 !important;text-decoration:underline;">料金と始め方</a> ／
+    <a href="./emergency.html" style="color:#111111 !important;text-decoration:underline;">被害に遭ったときの初動</a>
+  </p>
+</div>
+<footer>
+  <a href="../index.html" class="logo">A<span class="heart-i">ı</span>dollargame</a>
+  <div class="fc">© <span class="cpy-y" data-since="2025">2025</span> 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
+</footer>
+<script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
+<script defer src="../scripts/ga-events.js?v=20260824"></script>
+</body>
+</html>

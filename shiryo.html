@@ -32,24 +32,24 @@ h1,h2,h3,h4,p,li,dt,dd,figcaption,summary,.sec-lead,.sec-title{word-break:auto-p
   *{margin:0;padding:0;box-sizing:border-box;}
   body{background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;line-height:1.9;}
   nav{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 2rem;background:rgba(245,244,240,0.95);border-bottom:1px solid var(--line);}
-  .logo{font-size:1.2rem;font-weight:900;color:var(--ink);text-decoration:none;}
+  .logo{font-size:1.2rem;font-weight:800;color:var(--ink);text-decoration:none;}
   .back-link{font-size:0.8rem;color:var(--muted);text-decoration:none;letter-spacing:0.08em;}
   .back-link:hover{color:var(--accent);}
   .wrap{max-width:980px;margin:0 auto;padding:4.5rem 1.5rem 6rem;}
   .tag{font-size:0.72rem;letter-spacing:0.3em;color:var(--accent);font-weight:700;margin-bottom:1rem;}
-  h1{font-size:clamp(1.6rem,4.6vw,2.5rem);font-weight:900;line-height:1.55;margin-bottom:1.4rem;}
+  h1{font-size:clamp(1.6rem,4.6vw,2.5rem);font-weight:800;line-height:1.55;margin-bottom:1.4rem;}
   h1 .hl{background:linear-gradient(transparent 62%, var(--marker) 62%);}
   .lead{color:var(--muted);max-width:640px;margin-bottom:2.5rem;}
   .grid{display:grid;grid-template-columns:1fr;gap:2.5rem;align-items:start;}
   @media(min-width:820px){.grid{grid-template-columns:1.1fr 0.9fr;}}
   .doc-box{background:#fff;border:1px solid var(--line);padding:2rem;}
-  .doc-box h2{font-size:1.05rem;font-weight:900;margin-bottom:1rem;}
+  .doc-box h2{font-size:1.05rem;font-weight:800;margin-bottom:1rem;}
   .doc-box ol{list-style:none;}
   .doc-box li{padding:0.55rem 0 0.55rem 1.6em;text-indent:-1.6em;border-bottom:1px solid rgba(16,18,24,0.07);font-size:0.95rem;font-weight:700;}
   .doc-box li::before{content:"☐ ";color:var(--accent);font-weight:400;}
   .doc-note{font-size:0.8rem;color:var(--muted);margin-top:1.2rem;}
   .form-box{background:#fff;border:1px solid var(--line);padding:2rem;}
-  .form-box h2{font-size:1.05rem;font-weight:900;margin-bottom:0.6rem;}
+  .form-box h2{font-size:1.05rem;font-weight:800;margin-bottom:0.6rem;}
   .form-box p{font-size:0.85rem;color:var(--muted);margin-bottom:1.4rem;}
   .fg{margin-bottom:1.1rem;}
   .fl{display:block;font-size:0.72rem;letter-spacing:0.15em;color:var(--muted);font-weight:700;margin-bottom:0.4rem;}
@@ -59,10 +59,12 @@ h1,h2,h3,h4,p,li,dt,dd,figcaption,summary,.sec-lead,.sec-title{word-break:auto-p
   .privacy-note{font-size:0.75rem;color:var(--muted);margin-top:1rem;}
   .privacy-note a{color:var(--accent);}
   footer{border-top:1px solid var(--line);padding:2rem;text-align:center;font-size:0.75rem;color:var(--muted);}
+.heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;}
+.heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
 </style>
 </head>
 <body>
-<nav><a class="logo" href="/">AIdollargame</a><a class="back-link" href="/">← トップへ戻る</a></nav>
+<nav><a class="logo" href="/">A<span class="heart-i">ı</span>dollargame</a><a class="back-link" href="/">← トップへ戻る</a></nav>
 <div class="wrap">
   <div class="tag">FREE DOWNLOAD — 無料資料</div>
   <h1>AI導入はじめの一歩<br><span class="hl">チェックリスト20</span>（PDF）</h1>
@@ -92,7 +94,7 @@ h1,h2,h3,h4,p,li,dt,dd,figcaption,summary,.sec-lead,.sec-title{word-break:auto-p
         <div class="fg"><label class="fl">YOUR NAME（任意）</label><input type="text" name="name" class="fi" placeholder="山田 太郎" autocomplete="name"></div>
         <div class="fg"><label class="fl">EMAIL（必須）</label><input type="email" name="email" class="fi" placeholder="email@example.com" autocomplete="email" required></div>
         <button class="btn" type="submit">無料でダウンロードする →</button>
-        <p class="privacy-note">ご入力いただいた情報は、資料の提供とご案内のためにのみ使用します。送信内容は米国 Formspree 社のサーバーに保存されます。<a href="/privacy.html#foreign" target="_blank" rel="noopener">プライバシーポリシー06</a>に同意のうえ送信してください。</p>
+        <p class="privacy-note">ご入力いただいた情報は、資料の提供とご案内のためにのみ使用します。送信内容は米国 Formspree 社のサーバーに保存されます。<a href="/privacy.html#foreign" target="_blank" rel="noopener">プライバシーポリシー</a>に同意のうえ送信してください。</p>
       </form>
     </div>
   </div>

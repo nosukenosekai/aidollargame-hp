@@ -113,7 +113,7 @@
 - [「あの人しか分からない」が会社を止める前に](https://aidollargame.com/articles/zokujinka-2026.html)
 - [東京NBC起業塾で「事業承継 × AI」を発表——社長の頭の中を会社の資産に変える『承継OS』](https://aidollargame.com/articles/nbc-kigyojuku-2026-07.html)
 - [「16時に電話します」の予約代行、16時を過ぎても音沙汰なし。運営会社に電話したら出たのはAIだった](https://aidollargame.com/articles/yoyaku-daiko-16ji-2026.html)
-- 167年解けなかったリーマン予想を、AIと組んだ数学者が証明した。機械は「正しい」と認め、人間はまだ「なぜか」を説明できない: https://aidollargame.com/articles/riemann-hypothesis-lean-proof-2026.html
+- 167年解けなかったリーマン予想を、AIと組んだ数学者が証明した。機械は「正しい」と認めたが、人間はまだ証明を読み解けていない: https://aidollargame.com/articles/riemann-hypothesis-lean-proof-2026.html
 - [10月21日の夜、「うちは大丈夫か」に何時間で答えられましたか｜PHPの事件から、情シスのいない会社が今週やること](https://aidollargame.com/articles/php-joshisu-inai-2026.html)
 - [Redditの株価が1日で29%下がった。売上は53%増えていた。AIは中身を読むが、人を送り返さない](https://aidollargame.com/articles/reddit-kabuka-29-2026.html)
 - [社員の4人に1人が、AIで自分で作ったアプリで仕事をしていた。上司に頼まれて作った人は1,970人中9人](https://aidollargame.com/articles/jisaku-app-4nin-1nin-2026.html)

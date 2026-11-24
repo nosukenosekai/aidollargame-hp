@@ -46,6 +46,7 @@
 - [ECサイトの脆弱性診断は義務化された？｜クレジットカード・セキュリティガイドライン6.1版の要件、罰則と契約解除、EC-CUBE](https://aidollargame.com/security/ec.html)
 - [セキュリティ顧問・SOC・運用代行の比較｜中小企業が頼める9サービスの料金と、直す作業まで頼めるか【2026年版】](https://aidollargame.com/security/komon.html)
 - [NASのランサムウェア対策｜Synologyが2026年10月に攻撃を発表。メーカー5社の公式の対策と、今すぐ確かめる5つ](https://aidollargame.com/security/nas.html)
+- [DMARC・SPF・DKIMの設定場所をレンタルサーバー別に｜エックスサーバー・ロリポップ・さくら・お名前.com・KAGOYAほか11社](https://aidollargame.com/security/server.html)
 - [セキュリティの全ページの要約とよくある質問の全文（AI向け）](https://aidollargame.com/llms-full.txt)
 
 ## 公式画像 (Official Images)

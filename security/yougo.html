@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>サイバーセキュリティ用語集（中小企業向け）｜UTM・IDS/IPS・WAF・EDR/XDR/MDR・SOC/SIEM・ゼロトラスト/SASE・多要素認証・パスキーとは | AIdollargame</title>
+<meta name="description" content="中小企業がサイバーセキュリティの会社やサービスを比べるときに出てくる37の用語を、何をするものか・中小企業で気にすべきかでまとめた用語集。UTM、IDSとIPSの違い、WAF、EPP・EDR・XDR・MDR・NDR、SOC・SIEM・CSIRT、ゼロトラスト・SASE、ASM、多要素認証とパスキー、SPF・DKIM・DMARC、BYOD、ランサムウェア、エモテットほか。">
+<meta name="author" content="AIdollargame 編集部">
+<meta name="theme-color" content="#0a1238">
+<link rel="canonical" href="https://aidollargame.com/security/yougo.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="株式会社AIdollargame">
+<meta property="og:title" content="サイバーセキュリティ用語集（中小企業向け）｜UTM・IDS/IPS・WAF・EDR/XDR/MDR・SOC/SIEM・ゼロトラスト/SASE・多要素認証・パスキーとは">
+<meta property="og:description" content="中小企業向けのサイバーセキュリティ用語集。UTM・EDR・SOC・ゼロトラストほか。">
+<meta property="og:url" content="https://aidollargame.com/security/yougo.html">
+<meta property="og:image" content="https://aidollargame.com/og-default.png">
+<meta property="og:locale" content="ja_JP">
+<meta property="article:published_time" content="2026-11-25">
+<meta property="article:author" content="AIdollargame 編集部">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="サイバーセキュリティ用語集【2026年版】">
+<meta name="twitter:description" content="中小企業向けのサイバーセキュリティ用語集。UTM・EDR・SOC・ゼロトラストほか。">
+<meta name="twitter:image" content="https://aidollargame.com/og-default.png">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [
+  {
+   "@type": "ListItem",
+   "position": 1,
+   "name": "ホーム",
+   "item": "https://aidollargame.com/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 2,
+   "name": "ホワイトハック",
+   "item": "https://aidollargame.com/security/"
+  },
+  {
+   "@type": "ListItem",
+   "position": 3,
+   "name": "サイバーセキュリティ用語集",
+   "item": "https://aidollargame.com/security/yougo.html"
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Article",
+ "headline": "サイバーセキュリティ用語集（中小企業向け）｜UTM・IDS/IPS・WAF・EDR/XDR/MDR・SOC/SIEM・ゼロトラスト/SASE・多要素認証・パスキーとは",
+ "description": "中小企業がサイバーセキュリティの会社やサービスを比べるときに出てくる37の用語を、何をするものか・中小企業で気にすべきかでまとめた用語集。UTM、IDSとIPSの違い、WAF、EPP・EDR・XDR・MDR・NDR、SOC・SIEM・CSIRT、ゼロトラスト・SASE、ASM、多要素認証とパスキー、SPF・DKIM・DMARC、BYOD、ランサムウェア、エモテットほか。",
+ "datePublished": "2026-11-25",
+ "dateModified": "2026-11-25",
+ "author": {
+  "@type": "Organization",
+  "name": "AIdollargame 編集部"
+ },
+ "publisher": {
+  "@type": "Organization",
+  "name": "AIdollargame",
+  "logo": {
+   "@type": "ImageObject",
+   "url": "https://aidollargame.com/og-default.png"
+  }
+ },
+ "mainEntityOfPage": "https://aidollargame.com/security/yougo.html",
+ "image": "https://aidollargame.com/og-default.png",
+ "inLanguage": "ja",
+ "about": [
+  {
+   "@type": "Thing",
+   "name": "サイバーセキュリティ 用語"
+  },
+  {
+   "@type": "Thing",
+   "name": "UTM とは"
+  },
+  {
+   "@type": "Thing",
+   "name": "IDS IPS 違い"
+  },
+  {
+   "@type": "Thing",
+   "name": "EDR XDR 違い"
+  },
+  {
+   "@type": "Thing",
+   "name": "ゼロトラスト とは"
+  },
+  {
+   "@type": "Thing",
+   "name": "SASE とは"
+  },
+  {
+   "@type": "Thing",
+   "name": "多要素認証 二段階認証 違い"
+  }
+ ]
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "サイバー攻撃とは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "インターネットやネットワークを通じて、他人のコンピュータやサービスに入り込んだり、止めたり、情報を盗んだり壊したりする行為です。不正アクセス、ランサムウェア、フィッシング、DDoS攻撃などがあります。 社員が数人の会社でも狙われます。IPA の調査では、中小企業の約2割が2023年度に被害に遭った（可能性が高い）と答えています。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "サイバーセキュリティとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "サイバー攻撃からコンピュータ、ネットワーク、データを守ることです。単に「セキュリティ」と言うと警備や防犯も含みますが、サイバーセキュリティはネットとITの守りを指します。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "情報セキュリティの3要素（CIA）とは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "機密性（見てよい人だけが見られる）、完全性（勝手に書き換えられていない）、可用性（使いたいときに使える）の3つです。情報セキュリティは、この3つを保つことと説明されます。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "脆弱性とは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ソフトや機器、設定にある、攻撃に使われてしまう弱点です。メーカーが修正版（パッチ）を出したら、適用するまでは弱点が残ります。 古いままのサイトのソフトや VPN 機器が、そのまま入口になります。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "脆弱性診断とは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "サイトや機器に、既に知られている弱点が残っていないかを一覧で確かめる検査です。ツールによる自動診断と、専門家による手動の診断があります。 外に公開しているサイトや機器があれば、年1回以上は受けるのが目安です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ペネトレーションテストとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "許可を得たうえで、実際の攻撃と同じ手順で、外から本当に中まで入れるかを試す検査です。脆弱性診断が「弱点の一覧」なら、ペネトレーションテストは「その弱点で本当に入れるか」を確かめます。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ハッキングとクラッキングとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ハッキングはもともと、コンピュータを深く理解して使いこなすことを指す言葉です。他人のシステムに不正に入り込む行為は、区別してクラッキングと呼ばれます。許可を得て、守る側のために攻撃の手順で調べる人を、ホワイトハッカーと呼ぶことがあります。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "マルウェアとウイルスとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "マルウェアは、悪意のあるソフトの総称です。コンピュータウイルスはその一種で、ほかのファイルに入り込んで広がるものを指します。ほかに、ワーム、トロイの木馬、スパイウェア、ランサムウェアなどがあります。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ランサムウェアとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "パソコンやサーバーのデータを暗号化して使えなくし、元に戻す代わりに身代金を求めるマルウェアです。最近は、データを盗んだうえで「払わなければ公開する」と脅す二重脅迫が多くなっています。 警察庁によると、2025年の被害報告226件のうち約6割が中小企業でした。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "エモテットとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "メールの添付ファイルなどから感染し、感染したパソコンからメールのやり取りを盗んで、実際の返信を装ったメールで広がるマルウェアです。IPA が注意を呼びかけています。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "フィッシングとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "銀行や通販、取引先などを装ったメールや SMS で偽のサイトに誘い、ID やパスワード、カード番号を入力させて盗む手口です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ビジネスメール詐欺とは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "取引先や社長を装ったメールで、偽の振込先にお金を振り込ませる詐欺です。 振込先の変更は、電話など別の手段で確かめることが基本です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "標的型攻撃とは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "特定の会社や人を狙って、業務に関係があるように見せたメールを送り、添付ファイルやリンクから感染させる攻撃です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "不正アクセスとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "許可なく他人の ID・パスワードを使ったり、弱点を突いたりして、システムに入り込むことです。日本では不正アクセス禁止法で禁じられています。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ファイアウォールとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ネットワークの出入口で、許可した通信だけを通し、それ以外を止める仕組みです。パソコンに入っているものと、ネットワーク機器として置くものがあります。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "UTMとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ファイアウォール、ウイルス対策、不正侵入の検知・防御、Webフィルタなど、複数の守りを1台にまとめたネットワーク機器です。 1台で複数の守りを入れられるため、中小企業でよく使われます。UTM 自体のファームウェアも更新が必要です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "IDS と IPSとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "IDS（侵入検知システム）は、怪しい通信を見つけて知らせる仕組み、IPS（侵入防御システム）は、見つけた怪しい通信を止めるところまで行う仕組みです。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "WAFとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Webサイトへの攻撃（入力欄からの不正な命令など）を見分けて止める仕組みです。通常のファイアウォールが通信の出入口を見るのに対して、WAF はサイトへのリクエストの中身を見ます。 問い合わせフォームや会員ページのあるサイトでは、選択肢になります。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "VPNとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "インターネット上に、社内とつながる専用の通り道を作る仕組みです。テレワークや拠点間の接続で使われます。 VPN 機器はランサムウェアの侵入口になりやすく、2025年の被害では侵入経路の6割以上が VPN 機器でした（警察庁）。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "EPP と EDRとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "EPP は、ウイルス対策ソフトのように、マルウェアが入るのを防ぐ仕組みです。EDR は、入られたあとの怪しい動きを見つけて、調べたり隔離したりする仕組みです。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "XDRとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "パソコンだけでなく、メール、ネットワーク、クラウドなど複数の場所の記録をまとめて見て、攻撃を見つけて対応する仕組みです。EDR の範囲を広げたものです。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "MDRとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "EDR などの記録を、専門の会社が代わりに見張り、異常があれば対応するサービスです。社内に見る人がいない会社向けです。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "NDRとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ネットワークを流れる通信を見て、怪しい動きを見つける仕組みです。パソコンに入れなくても、ネットワーク側から見られます。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "SOCとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "機器やソフトの記録を常に見張り、攻撃を見つけて知らせる組織やサービスです。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "SIEMとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "いろいろな機器やソフトの記録（ログ）を1か所に集めて、まとめて分析する仕組みです。SOC が見張りに使う道具の1つです。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "CSIRTとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "社内でセキュリティの事故が起きたときに対応するチームです。SOC が見張り、CSIRT が対応する、という分担で説明されることがあります。 小さな会社では、事故のときに誰が何をするかを決めておくことが、CSIRT の代わりになります。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ゼロトラストとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "社内のネットワークだから安全、と考えず、すべてのアクセスをその都度確かめる考え方です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "SASE と SSEとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "SASE は、ネットワークの機能とセキュリティの機能をクラウドでまとめて提供する仕組みです。SSE は、そのうちセキュリティの部分だけを指します。ゼロトラストを実現する方法の1つです。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ASMとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "外から見える自社の資産（サイト、サブドメイン、公開している機器など）を洗い出し、弱点を継続して確かめることです。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "多要素認証と二段階認証とは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "多要素認証は、パスワード（知っているもの）に加えて、スマートフォン（持っているもの）や指紋（体の特徴）など、種類の違う要素を組み合わせて本人を確かめる方法です。二段階認証は確認を2回行うことで、2回とも同じ種類の要素だと多要素認証にはなりません。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "パスキーとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "パスワードの代わりに、スマートフォンやパソコンの生体認証や画面ロックでログインする仕組みです。偽サイトに入力させて盗む手口が通りにくくなります。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "SPF・DKIM・DMARCとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "メールの送信元が本物かを確かめる3つの設定です。DMARC を強い設定（隔離・拒否）にすると、他人が自社の名前で送った偽メールを、受け取った側で止められます。 当社の調査では、中小企業・地域の法人の93%が、偽メールを止められない設定でした。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "BYODとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "社員の私物のパソコンやスマートフォンを、仕事に使うことです。 私物の端末を仕事に使う場合のルールを決めることは、IPA の自社診断の項目にも入っています。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "フォレンジックとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "事故が起きたあと、パソコンやサーバーの記録を調べて、何が起きたか、何が漏れたかを明らかにする調査です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ISMS と Pマークとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ISMS（ISO/IEC 27001）は、会社の情報セキュリティの管理の仕組みについての国際規格の認証です。Pマーク（プライバシーマーク）は、個人情報の扱いについての日本の制度です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "SECURITY ACTIONとは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "中小企業が情報セキュリティ対策に取り組むことを自分で宣言する、IPA の制度です。一つ星と二つ星があり、無料です。 デジタル化・AI導入補助金の申請の要件になっています。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "SCS評価制度とは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "サプライチェーン全体のセキュリティを高めるために、取引先の対策の段階を評価する国の制度です。星3・星4などの段階があります。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "IDSとIPSの違いは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "IDS は怪しい通信を見つけて知らせるだけ、IPS は見つけた通信を止めるところまで行います。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "EDRとXDRの違いは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "EDR はパソコンなどの端末の動きを見て攻撃を見つけます。XDR は端末に加えて、メール、ネットワーク、クラウドなど複数の場所の記録をまとめて見ます。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "UTMとファイアウォールの違いは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ファイアウォールは許可した通信だけを通す仕組みです。UTM はファイアウォールに、ウイルス対策や不正侵入の防御などを加えて1台にまとめた機器です。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "WAFとファイアウォールの違いは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ファイアウォールは通信の出入口で通す・止めるを決めます。WAF は Webサイトへのリクエストの中身を見て、入力欄からの不正な命令などの攻撃を止めます。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "ハッキングとクラッキングの違いは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "ハッキングはもともとコンピュータを深く理解して使いこなすことを指し、他人のシステムに不正に入り込む行為はクラッキングと呼んで区別します。"
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "SOCとCSIRTの違いは何ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "SOC は記録を常に見張って攻撃を見つける役割、CSIRT は事故が起きたときに社内で対応する役割として説明されることが多いです。"
+   }
+  }
+ ]
+}
+</script>
+
+<style>
+html{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif}button,input,select,textarea{font-family:inherit}
+h1,h2,h3,h4,p,li,dt,dd,figcaption,summary,.sec-lead,.sec-title{word-break:auto-phrase;text-wrap:pretty}
+  :root{--cyan:#00d8ff;--blue:#000;--accent:#ff5757;--dark:#0a1238;--text:#eef3ff;--muted:#9aa8d0;--grad:linear-gradient(135deg,#00d8ff,#000);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;background:#0a1238;}
+  body{background:linear-gradient(180deg,#0a1238 0%,#0c1542 50%,#0a1340 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;overflow-x:hidden;line-height:1.8;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 3rem;background:rgba(6,9,26,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,245,255,0.1);}
+  .logo{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:1.4rem;font-weight:700;color:white;text-decoration:none;}
+  .logo .ai{color:var(--cyan);text-shadow:0 0 20px rgba(0,245,255,0.6);} .logo .heart-i{position:relative;display:inline-block;line-height:1;color:#ff5757 !important;} .logo .heart-i::after{content:"\2665";position:absolute;left:50%;bottom:75%;transform:translateX(-50%);font-size:0.42em;line-height:1;color:#ff5757 !important;pointer-events:none;}
+  .nav-back{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.78rem;letter-spacing:0.12em;color:var(--muted);text-decoration:none;transition:color 0.3s;}
+  .nav-back:hover{color:var(--cyan);}
+  .hero{padding:9rem 2rem 4rem;max-width:800px;margin:0 auto;}
+  h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.25;margin-bottom:1.5rem;word-break:auto-phrase;}
+  .meta{display:flex;gap:2rem;align-items:center;font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);flex-wrap:wrap;}
+  .body{max-width:800px;margin:0 auto;padding:3rem 2rem 6rem;}
+  .body h2{font-size:1.4rem;font-weight:900;margin:3.5rem 0 1.2rem;padding-left:1rem;border-left:3px solid var(--cyan);line-height:1.4;}
+  .body h3{font-size:1.12rem;font-weight:800;margin:2.2rem 0 0.8rem;line-height:1.5;}
+  .body p{font-size:1.06rem;color:rgba(238,243,255,0.85);line-height:1.9;margin-bottom:1.4rem;}
+  .body strong{color:#fff;font-weight:700;}
+  .body ul,.body ol{padding-left:1.5rem;margin-bottom:1.4rem;}
+  .body li{font-size:1.02rem;color:rgba(238,243,255,0.85);line-height:1.8;margin-bottom:0.4rem;}
+  .body blockquote{border-left:3px solid var(--accent);padding:1.2rem 1.5rem;margin:2rem 0;background:rgba(255,87,87,0.06);border-radius:0 6px 6px 0;}
+  .body blockquote p{margin-bottom:0;font-style:italic;color:var(--text);font-size:1.05rem;}
+  .tblwrap{overflow-x:auto;margin:1.5rem 0 2rem;-webkit-overflow-scrolling:touch;}
+  table.cmp{border-collapse:collapse;width:100%;min-width:720px;font-size:0.92rem;line-height:1.6;}
+  table.cmp th,table.cmp td{border:1px solid #e5e7eb;padding:0.7rem 0.8rem;text-align:left;vertical-align:top;}
+  table.cmp th{background:#f3f4f6;font-weight:700;white-space:nowrap;}
+  table.cmp td.n{white-space:nowrap;font-weight:700;}
+  table.cmp tr.self td{background:#f4f4f4;}
+  .note{font-size:0.86rem;color:#555 !important;margin-top:-1rem;margin-bottom:2rem;}
+  .disclosure{border:1px solid #e5e7eb;background:#fafbfc;border-radius:10px;padding:1.2rem 1.4rem;margin:0 0 2.4rem;font-size:0.95rem;line-height:1.8;}
+  .sources{margin:3rem 0 0;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.08);}
+  .sources h3{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.7rem;letter-spacing:0.2em;color:var(--muted);margin-bottom:1rem;}
+  .sources li{font-size:0.82rem;line-height:1.7;margin-bottom:0.5rem;}
+  .sources a{color:var(--muted);text-decoration:underline;}
+  .cta{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(0,216,255,0.2);border-radius:10px;padding:3rem;margin:4rem 0 0;text-align:center;}
+  .cta h3{font-size:1.3rem;font-weight:900;margin-bottom:0.8rem;}
+  .cta p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
+  .btn{display:inline-flex;align-items:center;gap:0.6rem;padding:0.9rem 2rem;color:#001428;font-weight:700;font-size:0.9rem;border-radius:8px;background:linear-gradient(110deg,#00d8ff 0%,#000 50%,#00d8ff 100%);background-size:220% 100%;text-decoration:none;transition:transform 0.25s,box-shadow 0.4s;}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 36px -8px rgba(0,216,255,0.6);}
+  .related{max-width:800px;margin:0 auto;padding:0 2rem 6rem;}
+  .related h3{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.72rem;letter-spacing:0.3em;color:var(--muted);margin-bottom:1.5rem;}
+  .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;}
+  .rcard{background:linear-gradient(180deg,rgba(28,38,80,0.9),rgba(16,24,60,0.95));border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:1.4rem;text-decoration:none;color:inherit;transition:all 0.3s;display:block;}
+  .rcard:hover{border-color:rgba(0,216,255,0.35);transform:translateY(-4px);}
+  .rcard .rt{font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;font-size:0.65rem;color:var(--cyan);margin-bottom:0.5rem;}
+  .rcard .rttl{font-size:0.88rem;font-weight:700;line-height:1.5;}
+  footer{border-top:1px solid rgba(255,255,255,0.08);padding:2.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:rgba(6,9,26,0.6);}
+  .fc{font-size:0.75rem;color:var(--muted);font-family:-apple-system,BlinkMacSystemFont,'SF Pro JP','SF Pro Text','Hiragino Sans','Hiragino Kaku Gothic ProN',sans-serif;}
+  @media(max-width:768px){nav{padding:1rem 1.2rem;}.hero,.body,.related{padding-left:1.2rem;padding-right:1.2rem;}footer{padding:2rem 1.5rem;}}
+
+/* ============ LIGHT THEME OVERRIDE ============ */
+html { background:#ffffff !important; }
+body { background:#ffffff !important; color:#000 !important; }
+body::before { display:none !important; }
+nav { background:rgba(255,255,255,0.92) !important; border-bottom:1px solid #e5e7eb !important; }
+.logo { color:#000 !important; }
+.logo .ai { color:#000 !important; text-shadow:none !important; }
+.nav-back { color:#000 !important; }
+.hero h1, h1, h2, h3 { color:#000 !important; }
+.hero p, p { color:#000 !important; }
+.body li { color:#000 !important; }
+.body strong { color:#000 !important; }
+.body h2 { border-left-color:#000 !important; }
+blockquote { background:#fafbfc !important; border-left-color:#000 !important; color:#000 !important; }
+blockquote p { color:#000 !important; }
+.meta { color:#000 !important; border-bottom-color:#e5e7eb !important; }
+.sources { border-top-color:#e5e7eb !important; }
+.sources h3, .sources a { color:#444 !important; }
+.cta { background:#fafbfc !important; border:1px solid #e5e7eb !important; }
+.cta p { color:#333 !important; }
+.btn { background:#000 !important; color:#fff !important; }
+.related h3 { color:#000 !important; }
+.rcard { background:#ffffff !important; border:1px solid #e5e7eb !important; color:#000 !important; }
+.rcard .rt { color:#111111 !important; }
+.rcard .rttl { color:#000 !important; }
+footer { background:#fafbfc !important; border-top:1px solid #e5e7eb !important; color:#000 !important; }
+footer a { color:#000 !important; }
+.fc { color:#000 !important; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* ホワイトハック系の記事。/security/ と同じ配色(白・文字#333・赤#EE3524・山吹#C87409・青#157CA5) */
+:root{--wh-ink:#333;--wh-sub:#6B7280;--wh-line:#E3E5E9;--wh-soft:#F5F6F8;--wh-red:#EE3524;--wh-amber:#C87409;--wh-blue:#157CA5;--wh-grad:linear-gradient(90deg,#F20045 0%,#FF6F00 100%)}
+body{font-family:Montserrat,"Noto Sans JP","Hiragino Sans","ヒラギノ角ゴシック",system-ui,sans-serif !important;color:var(--wh-ink) !important}
+.hero h1, h1{color:var(--wh-ink) !important;font-weight:800;letter-spacing:0.01em}
+.hero .en{font-family:Montserrat,sans-serif;font-weight:700;font-size:0.8rem;letter-spacing:0.16em;color:var(--wh-blue);margin-bottom:0.9rem}
+.body p,.body li,p{color:var(--wh-ink) !important}
+.body h2{border-left:none !important;padding-left:0;margin-top:4rem;color:var(--wh-ink) !important;font-weight:800}
+.body h2[data-en]::before{content:attr(data-en);display:block;font-family:Montserrat,sans-serif;font-size:0.78rem;font-weight:700;letter-spacing:0.16em;color:var(--wh-red);margin-bottom:0.35rem}
+.body h2[data-en].blue::before{color:var(--wh-blue)} .body h2[data-en].amber::before{color:var(--wh-amber)}
+table.cmp th{background:var(--wh-soft)} table.cmp tr.self td{background:#FFF4F2}
+.disclosure{background:var(--wh-soft) !important;border-color:var(--wh-line) !important}
+.btn{background:var(--wh-grad) !important;color:#fff !important;border-radius:4px !important;font-weight:700}
+.kadai{background:var(--wh-soft);border-radius:6px;padding:2rem 1.6rem;margin:2.6rem 0}
+.kadai .q{font-size:1.4rem;font-weight:800;text-align:center;margin:0 0 0.2rem}
+.kadai .qe{font-family:Montserrat,sans-serif;font-size:0.76rem;font-weight:700;letter-spacing:0.14em;color:var(--wh-blue);text-align:center;margin-bottom:1.6rem}
+.kadai .g{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem}
+.kadai .c{background:#fff;border:1px solid var(--wh-line);border-radius:6px;padding:1.1rem 1.1rem 0.6rem;min-width:0}
+.kadai .c .t{font-weight:800;font-size:1.02rem;margin-bottom:0.1rem}
+.kadai .c .e{font-family:Montserrat,sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:var(--wh-red);margin-bottom:0.6rem}
+.kadai .c ul{padding-left:1.1rem;margin-bottom:0.4rem} .kadai .c li{font-size:0.94rem;line-height:1.7}
+.wh-box{border:1px solid var(--wh-line);border-top:4px solid var(--wh-red);border-radius:6px;padding:1.8rem 1.6rem 1.6rem;margin:2.8rem 0;background:#fff}
+.wh-box .k{font-family:Montserrat,sans-serif;font-size:0.76rem;letter-spacing:0.16em;font-weight:700;color:var(--wh-red) !important;margin-bottom:0.3rem}
+.wh-box .h{font-size:1.25rem;font-weight:800;margin-bottom:0.8rem}
+.wh-box p{margin-bottom:1rem}
+.sources a{word-break:break-all}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0.8rem;margin:0.4rem 0 1.4rem;padding:0;list-style:none}
+.steps li{border:1px solid var(--wh-line);border-radius:6px;padding:0.9rem 1rem;margin:0;min-width:0}
+.steps .s{font-family:Montserrat,sans-serif;font-size:0.72rem;font-weight:800;letter-spacing:0.14em;color:var(--wh-blue)}
+.steps b{display:block;font-size:1rem;margin:0.1rem 0 0.2rem}
+.steps span{font-size:0.88rem;color:var(--wh-sub)}
+.cta{background:#2A2D33 !important;border:none !important;border-radius:6px !important;color:#fff}
+.cta h3{color:#fff !important;font-size:1.5rem !important}
+.cta h3 em{font-style:normal;color:#FF5A47}
+.cta p,.cta p a{color:#D6D9DE !important}
+@media(max-width:600px){.cta{padding:2rem 1.2rem !important}.kadai{padding:1.6rem 1rem}}
+</style>
+<style>.answer{border-left:4px solid var(--wh-red,#EE3524);background:#fff6f4;padding:16px 20px;margin:20px 0 28px;border-radius:6px;line-height:1.9}.answer b{display:block;font-size:14px;letter-spacing:.08em;color:#EE3524;margin-bottom:6px}</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="logo" style="display:inline-flex;align-items:center">A<span class="heart-i">ı</span>dollargame</a>
+  <a href="./" class="nav-back">← WHITEHACK</a>
+</nav>
+<div class="hero">
+  <div class="en">GLOSSARY</div>
+  <h1>サイバーセキュリティ用語集（中小企業向け）｜UTM・IDS/IPS・WAF・EDR/XDR/MDR・SOC/SIEM・ゼロトラスト/SASE・多要素認証・パスキーとは</h1>
+  <div class="meta"><span>2026 / 11 / 25</span><span>AIdollargame 編集部</span><span>読了 約8分</span></div>
+</div>
+<article class="body">
+
+<figure style="margin:0 0 2.6rem;">
+  <img src="../articles/ipa-soudan-access-kyoka-2026-hero.jpg" alt="鍵と錠前の図（1930年代の水彩画）" style="width:100%;height:auto;border-radius:14px;display:block;">
+</figure>
+
+<div class="disclosure">
+  この記事の立場を先に書きます。書いているのは、社内にセキュリティ担当がいない会社に代わってサイト・メール・VPN機器の穴を見つけて直す「ホワイトハック」を提供している株式会社AIdollargameです。比較表には当社も入れています。各社の説明は公式サイト・公式発表に書いてある事実だけに限り、順位や評価は付けていません。
+</div>
+
+<div class="answer"><b>この用語集について</b>中小企業がサイバーセキュリティの会社やサービスを比べるときに出てくる言葉を、37個まとめました。それぞれ、何をするものか、中小企業で気にすべきかを短く書いています。数字は IPA・警察庁などの一次資料から取っています。</div>
+
+<h2 data-en="INDEX" class="blue">用語の一覧</h2>
+<ul style="columns:2;-webkit-columns:2;column-gap:24px"><li><a href="#t0" style="color:#111111;text-decoration:underline;">サイバー攻撃</a></li><li><a href="#t1" style="color:#111111;text-decoration:underline;">サイバーセキュリティ</a></li><li><a href="#t2" style="color:#111111;text-decoration:underline;">情報セキュリティの3要素（CIA）</a></li><li><a href="#t3" style="color:#111111;text-decoration:underline;">脆弱性</a></li><li><a href="#t4" style="color:#111111;text-decoration:underline;">脆弱性診断</a></li><li><a href="#t5" style="color:#111111;text-decoration:underline;">ペネトレーションテスト</a></li><li><a href="#t6" style="color:#111111;text-decoration:underline;">ハッキングとクラッキング</a></li><li><a href="#t7" style="color:#111111;text-decoration:underline;">マルウェアとウイルス</a></li><li><a href="#t8" style="color:#111111;text-decoration:underline;">ランサムウェア</a></li><li><a href="#t9" style="color:#111111;text-decoration:underline;">エモテット</a></li><li><a href="#t10" style="color:#111111;text-decoration:underline;">フィッシング</a></li><li><a href="#t11" style="color:#111111;text-decoration:underline;">ビジネスメール詐欺</a></li><li><a href="#t12" style="color:#111111;text-decoration:underline;">標的型攻撃</a></li><li><a href="#t13" style="color:#111111;text-decoration:underline;">不正アクセス</a></li><li><a href="#t14" style="color:#111111;text-decoration:underline;">ファイアウォール</a></li><li><a href="#t15" style="color:#111111;text-decoration:underline;">UTM</a></li><li><a href="#t16" style="color:#111111;text-decoration:underline;">IDS と IPS</a></li><li><a href="#t17" style="color:#111111;text-decoration:underline;">WAF</a></li><li><a href="#t18" style="color:#111111;text-decoration:underline;">VPN</a></li><li><a href="#t19" style="color:#111111;text-decoration:underline;">EPP と EDR</a></li><li><a href="#t20" style="color:#111111;text-decoration:underline;">XDR</a></li><li><a href="#t21" style="color:#111111;text-decoration:underline;">MDR</a></li><li><a href="#t22" style="color:#111111;text-decoration:underline;">NDR</a></li><li><a href="#t23" style="color:#111111;text-decoration:underline;">SOC</a></li><li><a href="#t24" style="color:#111111;text-decoration:underline;">SIEM</a></li><li><a href="#t25" style="color:#111111;text-decoration:underline;">CSIRT</a></li><li><a href="#t26" style="color:#111111;text-decoration:underline;">ゼロトラスト</a></li><li><a href="#t27" style="color:#111111;text-decoration:underline;">SASE と SSE</a></li><li><a href="#t28" style="color:#111111;text-decoration:underline;">ASM</a></li><li><a href="#t29" style="color:#111111;text-decoration:underline;">多要素認証と二段階認証</a></li><li><a href="#t30" style="color:#111111;text-decoration:underline;">パスキー</a></li><li><a href="#t31" style="color:#111111;text-decoration:underline;">SPF・DKIM・DMARC</a></li><li><a href="#t32" style="color:#111111;text-decoration:underline;">BYOD</a></li><li><a href="#t33" style="color:#111111;text-decoration:underline;">フォレンジック</a></li><li><a href="#t34" style="color:#111111;text-decoration:underline;">ISMS と Pマーク</a></li><li><a href="#t35" style="color:#111111;text-decoration:underline;">SECURITY ACTION</a></li><li><a href="#t36" style="color:#111111;text-decoration:underline;">SCS評価制度</a></li></ul>
+
+<h2 data-en="GLOSSARY" class="amber">用語の説明</h2>
+<h3 id="t0">サイバー攻撃（サイバーアタック）</h3>
+<p>インターネットやネットワークを通じて、他人のコンピュータやサービスに入り込んだり、止めたり、情報を盗んだり壊したりする行為です。不正アクセス、ランサムウェア、フィッシング、DDoS攻撃などがあります。</p>
+<p>中小企業では: 社員が数人の会社でも狙われます。IPA の調査では、中小企業の約2割が2023年度に被害に遭った（可能性が高い）と答えています。</p>
+<p>くわしく: <a href="./higai.html" style="color:#111111;text-decoration:underline;">中小企業のサイバー攻撃被害の実態</a></p>
+<h3 id="t1">サイバーセキュリティ</h3>
+<p>サイバー攻撃からコンピュータ、ネットワーク、データを守ることです。単に「セキュリティ」と言うと警備や防犯も含みますが、サイバーセキュリティはネットとITの守りを指します。</p>
+<p>くわしく: <a href="./checklist.html" style="color:#111111;text-decoration:underline;">サイバーセキュリティ対策チェックリスト</a></p>
+<h3 id="t2">情報セキュリティの3要素（CIA）（機密性・完全性・可用性）</h3>
+<p>機密性（見てよい人だけが見られる）、完全性（勝手に書き換えられていない）、可用性（使いたいときに使える）の3つです。情報セキュリティは、この3つを保つことと説明されます。</p>
+<h3 id="t3">脆弱性（ぜいじゃくせい）</h3>
+<p>ソフトや機器、設定にある、攻撃に使われてしまう弱点です。メーカーが修正版（パッチ）を出したら、適用するまでは弱点が残ります。</p>
+<p>中小企業では: 古いままのサイトのソフトや VPN 機器が、そのまま入口になります。</p>
+<p>くわしく: <a href="./vpn.html" style="color:#111111;text-decoration:underline;">VPN機器の脆弱性診断</a></p>
+<h3 id="t4">脆弱性診断（セキュリティ診断）</h3>
+<p>サイトや機器に、既に知られている弱点が残っていないかを一覧で確かめる検査です。ツールによる自動診断と、専門家による手動の診断があります。</p>
+<p>中小企業では: 外に公開しているサイトや機器があれば、年1回以上は受けるのが目安です。</p>
+<p>くわしく: <a href="./ryokin.html" style="color:#111111;text-decoration:underline;">脆弱性診断の費用相場</a></p>
+<h3 id="t5">ペネトレーションテスト（侵入テスト・疑似攻撃）</h3>
+<p>許可を得たうえで、実際の攻撃と同じ手順で、外から本当に中まで入れるかを試す検査です。脆弱性診断が「弱点の一覧」なら、ペネトレーションテストは「その弱点で本当に入れるか」を確かめます。</p>
+<p>くわしく: <a href="./pentest.html" style="color:#111111;text-decoration:underline;">ペネトレーションテストの依頼先と費用</a></p>
+<h3 id="t6">ハッキングとクラッキング（ホワイトハッカー）</h3>
+<p>ハッキングはもともと、コンピュータを深く理解して使いこなすことを指す言葉です。他人のシステムに不正に入り込む行為は、区別してクラッキングと呼ばれます。許可を得て、守る側のために攻撃の手順で調べる人を、ホワイトハッカーと呼ぶことがあります。</p>
+<p>くわしく: <a href="./whitehack.html" style="color:#111111;text-decoration:underline;">ホワイトハックとは</a></p>
+<h3 id="t7">マルウェアとウイルス</h3>
+<p>マルウェアは、悪意のあるソフトの総称です。コンピュータウイルスはその一種で、ほかのファイルに入り込んで広がるものを指します。ほかに、ワーム、トロイの木馬、スパイウェア、ランサムウェアなどがあります。</p>
+<h3 id="t8">ランサムウェア</h3>
+<p>パソコンやサーバーのデータを暗号化して使えなくし、元に戻す代わりに身代金を求めるマルウェアです。最近は、データを盗んだうえで「払わなければ公開する」と脅す二重脅迫が多くなっています。</p>
+<p>中小企業では: 警察庁によると、2025年の被害報告226件のうち約6割が中小企業でした。</p>
+<p>くわしく: <a href="./ransomware.html" style="color:#111111;text-decoration:underline;">ランサムウェア対策の相談先</a></p>
+<h3 id="t9">エモテット（Emotet）</h3>
+<p>メールの添付ファイルなどから感染し、感染したパソコンからメールのやり取りを盗んで、実際の返信を装ったメールで広がるマルウェアです。IPA が注意を呼びかけています。</p>
+<h3 id="t10">フィッシング</h3>
+<p>銀行や通販、取引先などを装ったメールや SMS で偽のサイトに誘い、ID やパスワード、カード番号を入力させて盗む手口です。</p>
+<p>くわしく: <a href="./bec.html" style="color:#111111;text-decoration:underline;">ビジネスメール詐欺の対策</a></p>
+<h3 id="t11">ビジネスメール詐欺（BEC）</h3>
+<p>取引先や社長を装ったメールで、偽の振込先にお金を振り込ませる詐欺です。</p>
+<p>中小企業では: 振込先の変更は、電話など別の手段で確かめることが基本です。</p>
+<p>くわしく: <a href="./bec.html" style="color:#111111;text-decoration:underline;">ビジネスメール詐欺（BEC）の対策</a></p>
+<h3 id="t12">標的型攻撃（標的型メール）</h3>
+<p>特定の会社や人を狙って、業務に関係があるように見せたメールを送り、添付ファイルやリンクから感染させる攻撃です。</p>
+<h3 id="t13">不正アクセス</h3>
+<p>許可なく他人の ID・パスワードを使ったり、弱点を突いたりして、システムに入り込むことです。日本では不正アクセス禁止法で禁じられています。</p>
+<p>くわしく: <a href="./taishoku.html" style="color:#111111;text-decoration:underline;">退職者のアカウント削除</a></p>
+<h3 id="t14">ファイアウォール</h3>
+<p>ネットワークの出入口で、許可した通信だけを通し、それ以外を止める仕組みです。パソコンに入っているものと、ネットワーク機器として置くものがあります。</p>
+<h3 id="t15">UTM（統合脅威管理）</h3>
+<p>ファイアウォール、ウイルス対策、不正侵入の検知・防御、Webフィルタなど、複数の守りを1台にまとめたネットワーク機器です。</p>
+<p>中小企業では: 1台で複数の守りを入れられるため、中小企業でよく使われます。UTM 自体のファームウェアも更新が必要です。</p>
+<h3 id="t16">IDS と IPS（侵入検知・侵入防御）</h3>
+<p>IDS（侵入検知システム）は、怪しい通信を見つけて知らせる仕組み、IPS（侵入防御システム）は、見つけた怪しい通信を止めるところまで行う仕組みです。</p>
+<h3 id="t17">WAF（ウェブアプリケーションファイアウォール）</h3>
+<p>Webサイトへの攻撃（入力欄からの不正な命令など）を見分けて止める仕組みです。通常のファイアウォールが通信の出入口を見るのに対して、WAF はサイトへのリクエストの中身を見ます。</p>
+<p>中小企業では: 問い合わせフォームや会員ページのあるサイトでは、選択肢になります。</p>
+<p>くわしく: <a href="./kaizan.html" style="color:#111111;text-decoration:underline;">サイトの改ざん対策</a></p>
+<h3 id="t18">VPN</h3>
+<p>インターネット上に、社内とつながる専用の通り道を作る仕組みです。テレワークや拠点間の接続で使われます。</p>
+<p>中小企業では: VPN 機器はランサムウェアの侵入口になりやすく、2025年の被害では侵入経路の6割以上が VPN 機器でした（警察庁）。</p>
+<p>くわしく: <a href="./vpn.html" style="color:#111111;text-decoration:underline;">VPN機器の脆弱性診断</a></p>
+<h3 id="t19">EPP と EDR</h3>
+<p>EPP は、ウイルス対策ソフトのように、マルウェアが入るのを防ぐ仕組みです。EDR は、入られたあとの怪しい動きを見つけて、調べたり隔離したりする仕組みです。</p>
+<p>くわしく: <a href="./komon.html" style="color:#111111;text-decoration:underline;">セキュリティ顧問・SOC・運用代行の比較</a></p>
+<h3 id="t20">XDR</h3>
+<p>パソコンだけでなく、メール、ネットワーク、クラウドなど複数の場所の記録をまとめて見て、攻撃を見つけて対応する仕組みです。EDR の範囲を広げたものです。</p>
+<h3 id="t21">MDR</h3>
+<p>EDR などの記録を、専門の会社が代わりに見張り、異常があれば対応するサービスです。社内に見る人がいない会社向けです。</p>
+<p>くわしく: <a href="./komon.html" style="color:#111111;text-decoration:underline;">セキュリティ顧問・SOC・運用代行の比較</a></p>
+<h3 id="t22">NDR</h3>
+<p>ネットワークを流れる通信を見て、怪しい動きを見つける仕組みです。パソコンに入れなくても、ネットワーク側から見られます。</p>
+<h3 id="t23">SOC（セキュリティオペレーションセンター）</h3>
+<p>機器やソフトの記録を常に見張り、攻撃を見つけて知らせる組織やサービスです。</p>
+<p>くわしく: <a href="./komon.html" style="color:#111111;text-decoration:underline;">SOC・運用代行の比較</a></p>
+<h3 id="t24">SIEM</h3>
+<p>いろいろな機器やソフトの記録（ログ）を1か所に集めて、まとめて分析する仕組みです。SOC が見張りに使う道具の1つです。</p>
+<h3 id="t25">CSIRT（シーサート）</h3>
+<p>社内でセキュリティの事故が起きたときに対応するチームです。SOC が見張り、CSIRT が対応する、という分担で説明されることがあります。</p>
+<p>中小企業では: 小さな会社では、事故のときに誰が何をするかを決めておくことが、CSIRT の代わりになります。</p>
+<p>くわしく: <a href="./sareta.html" style="color:#111111;text-decoration:underline;">サイバー攻撃を受けたら</a></p>
+<h3 id="t26">ゼロトラスト</h3>
+<p>社内のネットワークだから安全、と考えず、すべてのアクセスをその都度確かめる考え方です。</p>
+<h3 id="t27">SASE と SSE（サシー）</h3>
+<p>SASE は、ネットワークの機能とセキュリティの機能をクラウドでまとめて提供する仕組みです。SSE は、そのうちセキュリティの部分だけを指します。ゼロトラストを実現する方法の1つです。</p>
+<h3 id="t28">ASM（アタックサーフェスマネジメント）</h3>
+<p>外から見える自社の資産（サイト、サブドメイン、公開している機器など）を洗い出し、弱点を継続して確かめることです。</p>
+<p>くわしく: <a href="./asm.html" style="color:#111111;text-decoration:underline;">ASM診断とサブドメイン乗っ取り</a></p>
+<h3 id="t29">多要素認証と二段階認証（MFA）</h3>
+<p>多要素認証は、パスワード（知っているもの）に加えて、スマートフォン（持っているもの）や指紋（体の特徴）など、種類の違う要素を組み合わせて本人を確かめる方法です。二段階認証は確認を2回行うことで、2回とも同じ種類の要素だと多要素認証にはなりません。</p>
+<p>くわしく: <a href="./m365.html" style="color:#111111;text-decoration:underline;">Microsoft 365・Google Workspace の設定</a></p>
+<h3 id="t30">パスキー</h3>
+<p>パスワードの代わりに、スマートフォンやパソコンの生体認証や画面ロックでログインする仕組みです。偽サイトに入力させて盗む手口が通りにくくなります。</p>
+<h3 id="t31">SPF・DKIM・DMARC</h3>
+<p>メールの送信元が本物かを確かめる3つの設定です。DMARC を強い設定（隔離・拒否）にすると、他人が自社の名前で送った偽メールを、受け取った側で止められます。</p>
+<p>中小企業では: 当社の調査では、中小企業・地域の法人の93%が、偽メールを止められない設定でした。</p>
+<p>くわしく: <a href="./dmarc-chosa.html" style="color:#111111;text-decoration:underline;">1,571ドメインのDMARC調査</a></p>
+<h3 id="t32">BYOD</h3>
+<p>社員の私物のパソコンやスマートフォンを、仕事に使うことです。</p>
+<p>中小企業では: 私物の端末を仕事に使う場合のルールを決めることは、IPA の自社診断の項目にも入っています。</p>
+<p>くわしく: <a href="./checklist.html" style="color:#111111;text-decoration:underline;">チェックリスト（25項目）</a></p>
+<h3 id="t33">フォレンジック（デジタルフォレンジック）</h3>
+<p>事故が起きたあと、パソコンやサーバーの記録を調べて、何が起きたか、何が漏れたかを明らかにする調査です。</p>
+<p>くわしく: <a href="./sareta.html" style="color:#111111;text-decoration:underline;">サイバー攻撃を受けたら</a></p>
+<h3 id="t34">ISMS と Pマーク</h3>
+<p>ISMS（ISO/IEC 27001）は、会社の情報セキュリティの管理の仕組みについての国際規格の認証です。Pマーク（プライバシーマーク）は、個人情報の扱いについての日本の制度です。</p>
+<p>くわしく: <a href="./kitei.html" style="color:#111111;text-decoration:underline;">情報セキュリティ規程の雛形</a></p>
+<h3 id="t35">SECURITY ACTION（セキュリティアクション）</h3>
+<p>中小企業が情報セキュリティ対策に取り組むことを自分で宣言する、IPA の制度です。一つ星と二つ星があり、無料です。</p>
+<p>中小企業では: デジタル化・AI導入補助金の申請の要件になっています。</p>
+<p>くわしく: <a href="./kitei.html" style="color:#111111;text-decoration:underline;">SECURITY ACTION 二つ星の要件</a></p>
+<h3 id="t36">SCS評価制度</h3>
+<p>サプライチェーン全体のセキュリティを高めるために、取引先の対策の段階を評価する国の制度です。星3・星4などの段階があります。</p>
+<p>くわしく: <a href="./scs.html" style="color:#111111;text-decoration:underline;">SCS評価制度とは</a></p>
+
+
+<div class="wh-box">
+  <div class="k">FREE CHECK — 無料の外部チェック</div>
+  <div class="h">言葉より先に、自社の状態を無料で確かめる</div>
+  <p>自社のサイトやドメインに、外から入れる弱点が残っていないかは、whitehack.jp で無料で確かめられます。公開されている記録だけを見るので、貴社のサーバーには接続しません。</p>
+  <ol class="steps">
+    <li><div class="s">STEP 1</div><b>ドメインを入れる</b><span>whitehack.jp に会社のドメインを入れる。公開されている記録だけを見る</span></li>
+    <li><div class="s">STEP 2</div><b>見つかった穴を見る</b><span>重大度ごとの件数と、直し方、直すと何が止まるかが出る</span></li>
+    <li><div class="s">STEP 3</div><b>直すかを決める</b><span>自社で直すか、当社に任せるかを無料で相談できる</span></li>
+  </ol>
+  <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-yougo" class="btn" target="_blank" rel="noopener">whitehack.jp で自社のドメインを調べる →</a>
+</div>
+
+
+<h2>よくある質問</h2>
+<h3>サイバー攻撃とは何ですか？</h3>
+<p>インターネットやネットワークを通じて、他人のコンピュータやサービスに入り込んだり、止めたり、情報を盗んだり壊したりする行為です。不正アクセス、ランサムウェア、フィッシング、DDoS攻撃などがあります。 社員が数人の会社でも狙われます。IPA の調査では、中小企業の約2割が2023年度に被害に遭った（可能性が高い）と答えています。</p>
+<h3>サイバーセキュリティとは何ですか？</h3>
+<p>サイバー攻撃からコンピュータ、ネットワーク、データを守ることです。単に「セキュリティ」と言うと警備や防犯も含みますが、サイバーセキュリティはネットとITの守りを指します。</p>
+<h3>情報セキュリティの3要素（CIA）とは何ですか？</h3>
+<p>機密性（見てよい人だけが見られる）、完全性（勝手に書き換えられていない）、可用性（使いたいときに使える）の3つです。情報セキュリティは、この3つを保つことと説明されます。</p>
+<h3>脆弱性とは何ですか？</h3>
+<p>ソフトや機器、設定にある、攻撃に使われてしまう弱点です。メーカーが修正版（パッチ）を出したら、適用するまでは弱点が残ります。 古いままのサイトのソフトや VPN 機器が、そのまま入口になります。</p>
+<h3>脆弱性診断とは何ですか？</h3>
+<p>サイトや機器に、既に知られている弱点が残っていないかを一覧で確かめる検査です。ツールによる自動診断と、専門家による手動の診断があります。 外に公開しているサイトや機器があれば、年1回以上は受けるのが目安です。</p>
+<h3>ペネトレーションテストとは何ですか？</h3>
+<p>許可を得たうえで、実際の攻撃と同じ手順で、外から本当に中まで入れるかを試す検査です。脆弱性診断が「弱点の一覧」なら、ペネトレーションテストは「その弱点で本当に入れるか」を確かめます。</p>
+<h3>ハッキングとクラッキングとは何ですか？</h3>
+<p>ハッキングはもともと、コンピュータを深く理解して使いこなすことを指す言葉です。他人のシステムに不正に入り込む行為は、区別してクラッキングと呼ばれます。許可を得て、守る側のために攻撃の手順で調べる人を、ホワイトハッカーと呼ぶことがあります。</p>
+<h3>マルウェアとウイルスとは何ですか？</h3>
+<p>マルウェアは、悪意のあるソフトの総称です。コンピュータウイルスはその一種で、ほかのファイルに入り込んで広がるものを指します。ほかに、ワーム、トロイの木馬、スパイウェア、ランサムウェアなどがあります。</p>
+<h3>ランサムウェアとは何ですか？</h3>
+<p>パソコンやサーバーのデータを暗号化して使えなくし、元に戻す代わりに身代金を求めるマルウェアです。最近は、データを盗んだうえで「払わなければ公開する」と脅す二重脅迫が多くなっています。 警察庁によると、2025年の被害報告226件のうち約6割が中小企業でした。</p>
+<h3>エモテットとは何ですか？</h3>
+<p>メールの添付ファイルなどから感染し、感染したパソコンからメールのやり取りを盗んで、実際の返信を装ったメールで広がるマルウェアです。IPA が注意を呼びかけています。</p>
+<h3>フィッシングとは何ですか？</h3>
+<p>銀行や通販、取引先などを装ったメールや SMS で偽のサイトに誘い、ID やパスワード、カード番号を入力させて盗む手口です。</p>
+<h3>ビジネスメール詐欺とは何ですか？</h3>
+<p>取引先や社長を装ったメールで、偽の振込先にお金を振り込ませる詐欺です。 振込先の変更は、電話など別の手段で確かめることが基本です。</p>
+<h3>標的型攻撃とは何ですか？</h3>
+<p>特定の会社や人を狙って、業務に関係があるように見せたメールを送り、添付ファイルやリンクから感染させる攻撃です。</p>
+<h3>不正アクセスとは何ですか？</h3>
+<p>許可なく他人の ID・パスワードを使ったり、弱点を突いたりして、システムに入り込むことです。日本では不正アクセス禁止法で禁じられています。</p>
+<h3>ファイアウォールとは何ですか？</h3>
+<p>ネットワークの出入口で、許可した通信だけを通し、それ以外を止める仕組みです。パソコンに入っているものと、ネットワーク機器として置くものがあります。</p>
+<h3>UTMとは何ですか？</h3>
+<p>ファイアウォール、ウイルス対策、不正侵入の検知・防御、Webフィルタなど、複数の守りを1台にまとめたネットワーク機器です。 1台で複数の守りを入れられるため、中小企業でよく使われます。UTM 自体のファームウェアも更新が必要です。</p>
+<h3>IDS と IPSとは何ですか？</h3>
+<p>IDS（侵入検知システム）は、怪しい通信を見つけて知らせる仕組み、IPS（侵入防御システム）は、見つけた怪しい通信を止めるところまで行う仕組みです。</p>
+<h3>WAFとは何ですか？</h3>
+<p>Webサイトへの攻撃（入力欄からの不正な命令など）を見分けて止める仕組みです。通常のファイアウォールが通信の出入口を見るのに対して、WAF はサイトへのリクエストの中身を見ます。 問い合わせフォームや会員ページのあるサイトでは、選択肢になります。</p>
+<h3>VPNとは何ですか？</h3>
+<p>インターネット上に、社内とつながる専用の通り道を作る仕組みです。テレワークや拠点間の接続で使われます。 VPN 機器はランサムウェアの侵入口になりやすく、2025年の被害では侵入経路の6割以上が VPN 機器でした（警察庁）。</p>
+<h3>EPP と EDRとは何ですか？</h3>
+<p>EPP は、ウイルス対策ソフトのように、マルウェアが入るのを防ぐ仕組みです。EDR は、入られたあとの怪しい動きを見つけて、調べたり隔離したりする仕組みです。</p>
+<h3>XDRとは何ですか？</h3>
+<p>パソコンだけでなく、メール、ネットワーク、クラウドなど複数の場所の記録をまとめて見て、攻撃を見つけて対応する仕組みです。EDR の範囲を広げたものです。</p>
+<h3>MDRとは何ですか？</h3>
+<p>EDR などの記録を、専門の会社が代わりに見張り、異常があれば対応するサービスです。社内に見る人がいない会社向けです。</p>
+<h3>NDRとは何ですか？</h3>
+<p>ネットワークを流れる通信を見て、怪しい動きを見つける仕組みです。パソコンに入れなくても、ネットワーク側から見られます。</p>
+<h3>SOCとは何ですか？</h3>
+<p>機器やソフトの記録を常に見張り、攻撃を見つけて知らせる組織やサービスです。</p>
+<h3>SIEMとは何ですか？</h3>
+<p>いろいろな機器やソフトの記録（ログ）を1か所に集めて、まとめて分析する仕組みです。SOC が見張りに使う道具の1つです。</p>
+<h3>CSIRTとは何ですか？</h3>
+<p>社内でセキュリティの事故が起きたときに対応するチームです。SOC が見張り、CSIRT が対応する、という分担で説明されることがあります。 小さな会社では、事故のときに誰が何をするかを決めておくことが、CSIRT の代わりになります。</p>
+<h3>ゼロトラストとは何ですか？</h3>
+<p>社内のネットワークだから安全、と考えず、すべてのアクセスをその都度確かめる考え方です。</p>
+<h3>SASE と SSEとは何ですか？</h3>
+<p>SASE は、ネットワークの機能とセキュリティの機能をクラウドでまとめて提供する仕組みです。SSE は、そのうちセキュリティの部分だけを指します。ゼロトラストを実現する方法の1つです。</p>
+<h3>ASMとは何ですか？</h3>
+<p>外から見える自社の資産（サイト、サブドメイン、公開している機器など）を洗い出し、弱点を継続して確かめることです。</p>
+<h3>多要素認証と二段階認証とは何ですか？</h3>
+<p>多要素認証は、パスワード（知っているもの）に加えて、スマートフォン（持っているもの）や指紋（体の特徴）など、種類の違う要素を組み合わせて本人を確かめる方法です。二段階認証は確認を2回行うことで、2回とも同じ種類の要素だと多要素認証にはなりません。</p>
+<h3>パスキーとは何ですか？</h3>
+<p>パスワードの代わりに、スマートフォンやパソコンの生体認証や画面ロックでログインする仕組みです。偽サイトに入力させて盗む手口が通りにくくなります。</p>
+<h3>SPF・DKIM・DMARCとは何ですか？</h3>
+<p>メールの送信元が本物かを確かめる3つの設定です。DMARC を強い設定（隔離・拒否）にすると、他人が自社の名前で送った偽メールを、受け取った側で止められます。 当社の調査では、中小企業・地域の法人の93%が、偽メールを止められない設定でした。</p>
+<h3>BYODとは何ですか？</h3>
+<p>社員の私物のパソコンやスマートフォンを、仕事に使うことです。 私物の端末を仕事に使う場合のルールを決めることは、IPA の自社診断の項目にも入っています。</p>
+<h3>フォレンジックとは何ですか？</h3>
+<p>事故が起きたあと、パソコンやサーバーの記録を調べて、何が起きたか、何が漏れたかを明らかにする調査です。</p>
+<h3>ISMS と Pマークとは何ですか？</h3>
+<p>ISMS（ISO/IEC 27001）は、会社の情報セキュリティの管理の仕組みについての国際規格の認証です。Pマーク（プライバシーマーク）は、個人情報の扱いについての日本の制度です。</p>
+<h3>SECURITY ACTIONとは何ですか？</h3>
+<p>中小企業が情報セキュリティ対策に取り組むことを自分で宣言する、IPA の制度です。一つ星と二つ星があり、無料です。 デジタル化・AI導入補助金の申請の要件になっています。</p>
+<h3>SCS評価制度とは何ですか？</h3>
+<p>サプライチェーン全体のセキュリティを高めるために、取引先の対策の段階を評価する国の制度です。星3・星4などの段階があります。</p>
+<h3>IDSとIPSの違いは何ですか？</h3>
+<p>IDS は怪しい通信を見つけて知らせるだけ、IPS は見つけた通信を止めるところまで行います。</p>
+<h3>EDRとXDRの違いは何ですか？</h3>
+<p>EDR はパソコンなどの端末の動きを見て攻撃を見つけます。XDR は端末に加えて、メール、ネットワーク、クラウドなど複数の場所の記録をまとめて見ます。</p>
+<h3>UTMとファイアウォールの違いは何ですか？</h3>
+<p>ファイアウォールは許可した通信だけを通す仕組みです。UTM はファイアウォールに、ウイルス対策や不正侵入の防御などを加えて1台にまとめた機器です。</p>
+<h3>WAFとファイアウォールの違いは何ですか？</h3>
+<p>ファイアウォールは通信の出入口で通す・止めるを決めます。WAF は Webサイトへのリクエストの中身を見て、入力欄からの不正な命令などの攻撃を止めます。</p>
+<h3>ハッキングとクラッキングの違いは何ですか？</h3>
+<p>ハッキングはもともとコンピュータを深く理解して使いこなすことを指し、他人のシステムに不正に入り込む行為はクラッキングと呼んで区別します。</p>
+<h3>SOCとCSIRTの違いは何ですか？</h3>
+<p>SOC は記録を常に見張って攻撃を見つける役割、CSIRT は事故が起きたときに社内で対応する役割として説明されることが多いです。</p>
+
+<div class="sources">
+  <h3>出典（IPA・NISC・警察庁の公開資料。2026年11月25日確認）</h3>
+  <ul>
+    <li>IPA 情報セキュリティ10大脅威 2026 <a href="https://www.ipa.go.jp/security/10threats/10threats2026.html" target="_blank" rel="noopener">www.ipa.go.jp/security/10threats/10threats2026.html</a></li>
+    <li>IPA Emotet（エモテット）関連情報 <a href="https://www.ipa.go.jp/security/emotet/index.html" target="_blank" rel="noopener">www.ipa.go.jp/security/emotet/index.html</a></li>
+    <li>IPA 中小企業の情報セキュリティ対策ガイドライン <a href="https://www.ipa.go.jp/security/guide/sme/about.html" target="_blank" rel="noopener">www.ipa.go.jp/security/guide/sme/about.html</a></li>
+    <li>NISC インターネットの安全・安心ハンドブック <a href="https://security-portal.nisc.go.jp/guidance/handbook.html" target="_blank" rel="noopener">security-portal.nisc.go.jp/guidance/handbook.html</a></li>
+    <li>警察庁 令和7年におけるサイバー空間をめぐる脅威の情勢等について（PDF） <a href="https://www.npa.go.jp/publications/statistics/cybersecurity/data/R7/R07_cyber_jousei.pdf" target="_blank" rel="noopener">www.npa.go.jp/publications/statistics/cybersecurity/data/R7/R07_cyber_jousei.pdf</a></li>
+  </ul>
+</div>
+
+<div class="cta">
+  <h3>言葉より先に、<em>自社の状態</em>を確かめませんか？</h3>
+  <p>whitehack.jp は公開されている記録だけを見る無料の外部チェックです。貴社のサーバーには接続しません。</p>
+  <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-yougo" class="btn" target="_blank" rel="noopener">whitehack.jp で無料で調べる →</a>
+  <p style="margin:1.2rem 0 0;font-size:0.85rem;"><a href="../index.html#contact" style="color:#111111;text-decoration:underline;">先に相談したい場合はこちら（無料）</a></p>
+</div>
+</article>
+<div class="related">
+  <h3>RELATED ARTICLES</h3>
+  <div class="rgrid">
+    <a href="./checklist.html" class="rcard"><div class="rt">CHECKLIST</div><div class="rttl">サイバーセキュリティ対策チェックリスト（25項目）</div></a>
+    <a href="./hikaku.html" class="rcard"><div class="rt">COMPARE</div><div class="rttl">中小企業におすすめのサイバーセキュリティ会社の比較</div></a>
+    <a href="./10dai.html" class="rcard"><div class="rt">GUIDE</div><div class="rttl">情報セキュリティ10大脅威 2026とサイバー攻撃の種類</div></a>
+    <a href="./higai.html" class="rcard"><div class="rt">DATA</div><div class="rttl">中小企業のサイバー攻撃被害の実態</div></a>
+  </div>
+</div>
+<div class="svc-links" style="max-width:820px;margin:0 auto 3rem;padding:1.5rem 1.6rem;background:#fafbfc;border:1px solid #e5e7eb;border-radius:12px;">
+  <div style="font-size:0.74rem;letter-spacing:0.18em;font-weight:700;color:#555;margin-bottom:0.6rem;">SECURITY &mdash; AIdollargameのセキュリティ</div>
+  <p style="margin:0;font-size:0.92rem;color:#333 !important;line-height:2;">
+    <a href="https://whitehack.jp/?utm_source=aidollargame&amp;utm_campaign=security-yougo" target="_blank" rel="noopener" style="color:#111111 !important;text-decoration:underline;">whitehack.jp（無料の外部チェック）</a> ／
+    <a href="./" style="color:#111111 !important;text-decoration:underline;">ホワイトハック（セキュリティ担当の代行）</a> ／
+    <a href="./#start" style="color:#111111 !important;text-decoration:underline;">料金と始め方</a> ／
+    <a href="./emergency.html" style="color:#111111 !important;text-decoration:underline;">被害に遭ったときの初動</a>
+  </p>
+</div>
+<footer>
+  <a href="../index.html" class="logo">A<span class="heart-i">ı</span>dollargame</a>
+  <div class="fc">© <span class="cpy-y" data-since="2025">2025</span> 株式会社AIdollargame. ALL RIGHTS RESERVED.</div>
+</footer>
+<script>/*cpy-year*/(function(){var y=new Date().getFullYear();document.querySelectorAll(".cpy-y").forEach(function(e){var s=parseInt(e.getAttribute("data-since")||e.textContent,10)||2025;e.textContent=(y>s)?s+"-"+y:s;});})();</script>
+<script defer src="../scripts/ga-events.js?v=20260824"></script>
+</body>
+</html>

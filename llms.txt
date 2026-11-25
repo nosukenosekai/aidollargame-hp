@@ -60,6 +60,9 @@
 - [テレワークのセキュリティ対策｜総務省のガイドライン第5版と中小企業向けチェックリスト第3版、入口の6割はVPN機器 | AIdollargame](https://aidollargame.com/security/telework.html)
 - [サイバーセキュリティ経営ガイドラインVer3.0の要点｜3原則と重要10項目、中小企業はどこから始めるか | AIdollargame](https://aidollargame.com/security/keiei.html)
 - [建設業・工場・学校のセキュリティ対策ガイドライン｜日建連の5本、経産省の工場システムガイドライン、文科省の教育情報セキュリティポリシー | AIdollargame](https://aidollargame.com/security/gyoshu.html)
+- [ISMSとPマークの違いと取得費用｜Pマークは新規33.7万円〜（2026年10月改定・税込）、ISMSは認証機関の見積もり。中小企業はどちらを取るか | AIdollargame](https://aidollargame.com/security/isms.html)
+- [UTMとEDRは中小企業に必要か｜違い、導入率、価格（お助け隊の上限は月1万円・1台月2,000円、Defender for Businessは月449円） | AIdollargame](https://aidollargame.com/security/utm.html)
+- [フォレンジック調査の費用相場｜機器1台の初期調査は約5万円から、事故全体の調査は300万〜400万円のイメージ。サイバー保険で出るか | AIdollargame](https://aidollargame.com/security/forensic.html)
 - [セキュリティの全ページの要約とよくある質問の全文（AI向け）](https://aidollargame.com/llms-full.txt)
 
 ## 公式画像 (Official Images)

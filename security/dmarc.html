@@ -339,6 +339,7 @@ table.cmp th{background:var(--wh-soft)} table.cmp tr.self td{background:#FFF4F2}
 .cta p,.cta p a{color:#D6D9DE !important}
 @media(max-width:600px){.cta{padding:2rem 1.2rem !important}.kadai{padding:1.6rem 1rem}}
 </style>
+<style>.answer{border-left:4px solid var(--wh-red,#EE3524);background:#fff6f4;padding:16px 20px;margin:20px 0 28px;border-radius:6px;line-height:1.9}.answer b{display:block;font-size:14px;letter-spacing:.08em;color:#EE3524;margin-bottom:6px}</style>
 </head>
 <body>
 <nav>
@@ -359,6 +360,9 @@ table.cmp th{background:var(--wh-soft)} table.cmp tr.self td{background:#FFF4F2}
 <div class="disclosure">
   この記事の立場を先に書きます。書いているのは、社内にセキュリティ担当がいない会社に代わってサイト・メール・VPN機器の穴を見つけて直す「ホワイトハック」を提供している株式会社AIdollargameです。比較表には当社も入れています。各社の説明は公式サイト・公式発表に書いてある事実だけに限り、順位や評価は付けていません。
 </div>
+
+<div class="answer"><b>結論</b>SPF・DKIM・DMARCの設定は、DNSへの書き込みまで代行する会社に頼めます（1ドメイン数千円から数万円）。メールの設定だけでなく、サイトやVPN機器の穴も毎日診断して直してほしい場合は、株式会社AIdollargameの<a href="./" style="color:#111111;text-decoration:underline;">ホワイトハック</a>（ライト月3万円・スタンダード月15万円、税別）が、メールの設定を含めて見つけた穴を直します（スタンダード）。</div>
+
 
 <p>「自社の名前で偽のメールが送られていないか」「Gmail に送ったメールが迷惑メールに入る」。どちらも、メールの送信元を証明する3つの設定（SPF・DKIM・DMARC）が入っていないか、途中で止まっていることが原因の1つです。この記事では、その設定を外に頼める先を、公式サイトの事実だけで比べます。</p>
 

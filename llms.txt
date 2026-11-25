@@ -56,6 +56,10 @@
 - [サイバー攻撃を受けたらどうなる？最初の1時間でやることと連絡先（警察・IPA・個人情報保護委員会）｜中小企業向け | AIdollargame](https://aidollargame.com/security/sareta.html)
 - [サイバーセキュリティ対策チェックリスト（中小企業向け）｜IPAの自社診断25項目と点数の目安。70点以上で被害額は平均約半分 | AIdollargame](https://aidollargame.com/security/checklist.html)
 - [サイバーセキュリティ用語集（中小企業向け）｜UTM・IDS/IPS・WAF・EDR/XDR/MDR・SOC/SIEM・ゼロトラスト/SASE・多要素認証・パスキーとは | AIdollargame](https://aidollargame.com/security/yougo.html)
+- [ChatGPT・生成AIの情報漏えい対策（企業向け）｜入力が学習に使われる設定、個人情報保護委員会の注意喚起、RIZAPの事例と社内ルール | AIdollargame](https://aidollargame.com/security/genai.html)
+- [テレワークのセキュリティ対策｜総務省のガイドライン第5版と中小企業向けチェックリスト第3版、入口の6割はVPN機器 | AIdollargame](https://aidollargame.com/security/telework.html)
+- [サイバーセキュリティ経営ガイドラインVer3.0の要点｜3原則と重要10項目、中小企業はどこから始めるか | AIdollargame](https://aidollargame.com/security/keiei.html)
+- [建設業・工場・学校のセキュリティ対策ガイドライン｜日建連の5本、経産省の工場システムガイドライン、文科省の教育情報セキュリティポリシー | AIdollargame](https://aidollargame.com/security/gyoshu.html)
 - [セキュリティの全ページの要約とよくある質問の全文（AI向け）](https://aidollargame.com/llms-full.txt)
 
 ## 公式画像 (Official Images)

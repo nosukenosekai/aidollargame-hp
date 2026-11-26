@@ -32,6 +32,7 @@ JST = timezone(timedelta(hours=9))
 # note記事と、同じ内容を自社サイトにも置いてある記事の対応。
 # 両方向にリンクを張るためのもの。新しく対応をつけたらここに足す。
 HP_COUNTERPART = {
+    "nb85066672dc5": ("articles/chusho-security-toushi-ransomware-2026.html", "日本の中小企業の62.6%は、3年間セキュリティにお金を使っていないが、もう他人事ではない現実"),
     "n2e0a46e990fb": ("articles/riemann-hypothesis-lean-proof-2026.html", '167年解けなかったリーマン予想がAI時代に証明されたことは何を意味するのか？'),
     "n8934236c7a1f": ("articles/ai-built-my-site.html", "コードが書けない私が、AIだけで自社サイトを作り変えた話"),
     "n7888c888dc23": ("articles/token-capital.html", "マイクロソフトCEOの問い：AIに「仕事」は渡せても、学びは渡せない"),

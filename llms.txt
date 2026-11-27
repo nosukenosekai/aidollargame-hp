@@ -159,6 +159,7 @@
 - [「あの人しか分からない」が会社を止める前に](https://aidollargame.com/articles/zokujinka-2026.html)
 - [東京NBC起業塾で「事業承継 × AI」を発表——社長の頭の中を会社の資産に変える『承継OS』](https://aidollargame.com/articles/nbc-kigyojuku-2026-07.html)
 - [「16時に電話します」の予約代行、16時を過ぎても音沙汰なし。運営会社に電話したら出たのはAIだった](https://aidollargame.com/articles/yoyaku-daiko-16ji-2026.html)
+- 人型ロボットの87%は中国製になった。日本は工場のロボットの導入台数でも米国に抜かれて3位。: https://aidollargame.com/articles/jinkei-robot-chugoku-nihon-kachisuji-2026.html
 - 日本の中小企業の62.6%は、3年間セキュリティにお金を使っていないが、もう他人事ではない現実: https://aidollargame.com/articles/chusho-security-toushi-ransomware-2026.html
 - 日本でAIエージェントを使う社員は、1年で27%から61%に増えた。AIの研修を受けた人は77%から67%に減っている。36か国4万500人の調査: https://aidollargame.com/articles/ai-agent-shain-chosa-36kakoku-2026.html
 - AIに財務責任者のふりをさせると、本人の過去の答えを渡した時だけ本人の答えに近づいた。言い当てられた割合は10%から49%へ。米国CFOの回答6,075件の論文: https://aidollargame.com/articles/cfo-llm-nber-36057-2026.html

@@ -6,14 +6,14 @@
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="../favicon-180.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>中小企業・地域の法人の93%は、なりすましメールを止める設定になっていなかった｜1,571ドメインのDMARC調査（2026年11月） | AIdollargame</title>
+<title>中小企業のDMARC導入率は45.7%、93%はなりすましメールを止められない設定｜1,571ドメインの調査と他調査の比較（2026年11月） | AIdollargame</title>
 <meta name="description" content="株式会社AIdollargame（ホワイトハック）が2026年11月24日に中小企業・地域の法人の1,571ドメインを公開DNSで調査。DMARCを入れていたのは45.7%、受信拒否・隔離まで進んでいたのは6.8%で、93.2%は自社の名前を名乗る偽メールを止められない状態だった。日経225企業（94.7%・69.8%）との比較、ドメインの種類ごとの違い、調べ方。">
 <meta name="author" content="AIdollargame 編集部">
 <meta name="theme-color" content="#0a1238">
 <link rel="canonical" href="https://aidollargame.com/security/dmarc-chosa.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="株式会社AIdollargame">
-<meta property="og:title" content="中小企業・地域の法人の93%は、なりすましメールを止める設定になっていなかった｜1,571ドメインのDMARC調査（2026年11月）">
+<meta property="og:title" content="中小企業のDMARC導入率は45.7%、93%はなりすましメールを止められない設定｜1,571ドメインの調査と他調査の比較（2026年11月）">
 <meta property="og:description" content="中小企業・地域の法人1,571ドメインのDMARC調査。導入45.7%、受信拒否・隔離は6.8%。日経225企業は94.7%・69.8%。">
 <meta property="og:url" content="https://aidollargame.com/security/dmarc-chosa.html">
 <meta property="og:image" content="https://aidollargame.com/og-default.png">
@@ -54,10 +54,10 @@
 {
  "@context": "https://schema.org",
  "@type": "Article",
- "headline": "中小企業・地域の法人の93%は、なりすましメールを止める設定になっていなかった｜1,571ドメインのDMARC調査（2026年11月）",
+ "headline": "中小企業のDMARC導入率は45.7%、93%はなりすましメールを止められない設定｜1,571ドメインの調査と他調査の比較（2026年11月）",
  "description": "株式会社AIdollargame（ホワイトハック）が2026年11月24日に中小企業・地域の法人の1,571ドメインを公開DNSで調査。DMARCを入れていたのは45.7%、受信拒否・隔離まで進んでいたのは6.8%で、93.2%は自社の名前を名乗る偽メールを止められない状態だった。日経225企業（94.7%・69.8%）との比較、ドメインの種類ごとの違い、調べ方。",
  "datePublished": "2026-11-24",
- "dateModified": "2026-11-24",
+ "dateModified": "2026-11-28",
  "author": {
   "@type": "Organization",
   "name": "AIdollargame 編集部"
@@ -102,6 +102,14 @@
  "@context": "https://schema.org",
  "@type": "FAQPage",
  "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "中小企業のDMARC導入率は何%ですか？",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "2026年11月の2つの調査で、中小企業のDMARCの導入率は5割弱でした。株式会社AIdollargameの1,571ドメインの調査では導入45.7%（未設定54.3%）、隔離・拒否まで設定は6.8%。PRIMOPOSTの健康経営優良法人2026・中小規模法人部門20,034社の調査では未設定53.2%、隔離・拒否は7.5%です。日経225企業は導入94.7%、強いポリシー69.8%（TwoFive、2026年5月時点）です。"
+   }
+  },
   {
    "@type": "Question",
    "name": "中小企業のDMARCの導入率はどのくらいですか？",
@@ -258,7 +266,7 @@ table.cmp th{background:var(--wh-soft)} table.cmp tr.self td{background:#FFF4F2}
 </nav>
 <div class="hero">
   <div class="en">RESEARCH — 2026.11</div>
-  <h1>中小企業・地域の法人の93%は、なりすましメールを止める設定になっていなかった｜1,571ドメインのDMARC調査（2026年11月）</h1>
+  <h1>中小企業のDMARC導入率は45.7%、93%はなりすましメールを止められない設定｜1,571ドメインの調査と他調査の比較（2026年11月）</h1>
   <div class="meta"><span>2026 / 11 / 24</span><span>AIdollargame 編集部</span><span>読了 約5分</span></div>
 </div>
 <article class="body">
@@ -307,6 +315,21 @@ table.cmp th{background:var(--wh-soft)} table.cmp tr.self td{background:#FFF4F2}
 <p>DMARC を「p=none」で入れると、受け取った側は認証に失敗したメールを見つけても、そのまま受信箱に届けます。偽の請求書メールや、取引先を装った振込先の変更メールが、自社の名前のまま相手に届く状態です。警察庁は「サイバー警察局便り」2026 Vol.11（2026年9月）で、企業に「DMARC が None のままか確認する」「Quarantine か Reject への移行を検討する」よう呼びかけています。</p>
 <p>一方で、急いで reject に上げると、会計ソフトの請求書メールや予約システムの通知など、自社の名前で送っている正規のメールまで届かなくなることがあります。送っている仕組みを先に洗い出し、段階的に上げるのが一般的な進め方です。設定を頼める先は<a href="./dmarc.html" style="color:#111111;text-decoration:underline;">なりすましメール対策の設定代行の比較</a>にまとめました。</p>
 
+<h2 data-en="OTHER SURVEYS" class="amber">ほかの調査との比較</h2>
+<p>2026年11月には、ほかにもDMARCの調査が公表されています。対象の選び方と数え方（ドメイン単位か会社単位か）が違うので、数字は目安として並べます。</p>
+<div class="tblwrap">
+<table class="cmp">
+<thead><tr><th>調査</th><th>対象</th><th>DMARC未設定</th><th>隔離・拒否まで設定</th></tr></thead>
+<tbody>
+<tr><td class="n">当社（2026年11月24日）</td><td>中小企業・地域の法人の1,571ドメイン</td><td>54.3%</td><td>6.8%</td></tr>
+<tr><td class="n">PRIMOPOST（2026年11月25日公表）</td><td>健康経営優良法人2026の中小規模法人部門 20,034社</td><td>53.2%</td><td>7.5%</td></tr>
+<tr><td class="n">PRIMOPOST（同）</td><td>同 大規模法人部門</td><td>28.6%</td><td>19.7%</td></tr>
+<tr><td class="n">TwoFive（2026年5月時点）</td><td>日経225企業</td><td>5.3%（導入94.7%）</td><td>69.8%</td></tr>
+</tbody>
+</table>
+</div>
+<p>別々に集めた2つの中小企業の調査で、未設定は53〜54%、隔離・拒否まで進んでいるのは7%前後と、ほぼ同じ結果になりました。中小企業の半数超はDMARCを入れておらず、入れていても9割以上は偽メールを止めない設定のまま、というのが2026年11月時点の姿です。</p>
+
 <h2 data-en="MAIL PLATFORM">メールの基盤と、ほかのDNSの設定</h2>
 <p>同じドメインについて、メールの受け口（MXレコード）と、ほかのDNSの設定も数えました（1,562ドメインで応答を確認）。</p>
 <ul>
@@ -352,6 +375,7 @@ table.cmp th{background:var(--wh-soft)} table.cmp tr.self td{background:#FFF4F2}
 <div class="sources">
   <h3>出典（公開DNSの記録・各機関の公表資料。2026年11月24日確認）</h3>
   <ul>
+    <li>PRIMOPOST 中小約2万社を含む2万3千社を調査（2026年11月25日） <a href="https://primoposto.co.jp/news/dmarc-survey-2026/" target="_blank" rel="noopener">primoposto.co.jp/news/dmarc-survey-2026/</a></li>
     <li>TwoFive 日経225企業のDMARC導入状況（2026年5月21日） <a href="https://www.twofive25.com/news/20260521_dmarc_report.html" target="_blank" rel="noopener">www.twofive25.com/news/20260521_dmarc_report.html</a></li>
     <li>警察庁 サイバー警察局便り 2026 Vol.11 <a href="https://www.npa.go.jp/bureau/cyber/pdf/R8_Vol.11cpal.pdf" target="_blank" rel="noopener">www.npa.go.jp/bureau/cyber/pdf/R8_Vol.11cpal.pdf</a></li>
     <li>Google メール送信者のガイドライン <a href="https://support.google.com/a/answer/81126?hl=ja" target="_blank" rel="noopener">support.google.com/a/answer/81126?hl=ja</a></li>
